@@ -1,10 +1,11 @@
 import 'source-map-support/register'
 
-import { XyoBoundWitnessJson, XyoBoundWitnessSchema } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitnessBuilder, XyoBoundWitnessJson, XyoBoundWitnessSchema } from '@xyo-network/sdk-xyo-client-js'
 import { assertEx } from '@xyo-network/sdk-xyo-js'
 import Ajv, { ErrorObject } from 'ajv'
 import lambda from 'aws-lambda'
 import dotenv from 'dotenv'
+import pick from 'lodash/pick'
 
 import {
   getArchivistBoundWitnessesMongoSdk,
@@ -20,13 +21,40 @@ interface XyoArchivistBoundWitnessBody {
   payloads?: Record<string, any>[][]
 }
 
-const validateBody = (body: XyoArchivistBoundWitnessBody): ErrorObject[] => {
-  const validate = ajv.compile(XyoBoundWitnessSchema)
-  if (validate(body)) {
-    return []
-  } else {
-    return validate.errors ?? []
+const validateBoundWitnessHash = (bw: XyoBoundWitnessJson): ValidationError[] => {
+  const hashable = pick(bw, ['addresses', 'payload_hashes', 'payload_schemas', 'previous_hashes'])
+  console.log(`hashable: ${JSON.stringify(hashable, null, 2)}`)
+  const calculatedHash = XyoBoundWitnessBuilder.hash(hashable)
+  if (calculatedHash != bw._hash) {
+    return [{ message: `Calc/Existing: ${calculatedHash}!=${bw._hash}`, name: 'Invalid Hash' }]
   }
+  return []
+}
+
+interface ValidationError extends Error {
+  ajv?: ErrorObject
+}
+
+const validateBody = (body: XyoArchivistBoundWitnessBody): ValidationError[] => {
+  const validate = ajv.compile(XyoBoundWitnessSchema)
+  const x = body.boundWitnesses.map((bw) => {
+    if (validate(bw)) {
+      return validateBoundWitnessHash(bw)
+    } else {
+      return (
+        validate.errors?.map((ajv) => {
+          const result: ValidationError = {
+            ajv,
+            message: `${ajv?.instancePath}-${ajv?.message}`,
+            name: 'JSON Validation Error',
+          }
+          return result
+        }) ?? []
+      )
+    }
+  })
+
+  return x.reduce((acc, value) => acc.concat(value), [])
 }
 
 const storeBoundWitnesses = async (archive: string, boundWitnesses: XyoBoundWitnessJson[]) => {
@@ -44,10 +72,12 @@ export const entryPoint = async (
   await trapServerError(callback, async () => {
     dotenv.config()
     const body = JSON.parse(assertEx(event?.body, 'Missing post body')) as XyoArchivistBoundWitnessBody
+    console.log(`RawBody: ${JSON.stringify(body, null, 2)}`)
     const validationErrors = validateBody(body)
 
     if (validationErrors.length > 0) {
-      Result.BadRequest(callback, new Error(validationErrors[0].message))
+      console.log(`Error: ${validationErrors[0].message}`)
+      Result.BadRequest(callback, validationErrors[0].message)
     } else {
       let bwResult: number | undefined
       let payloadsResult: number | undefined
@@ -66,7 +96,7 @@ export const entryPoint = async (
           `Payload Storage Failed [${payloadsResult}/${body.payloads.length}]`
         )
       }
-      return Result.Ok(callback, { bw: bwResult, payloads: payloadsResult })
+      return Result.Ok(callback, { boundWitnesses: bwResult, payloads: payloadsResult })
     }
   })
 }

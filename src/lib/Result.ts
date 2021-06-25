@@ -9,12 +9,19 @@ const defaultHeaders = {
 const Result = {
   BadRequest: (
     callback: lambda.APIGatewayProxyCallback,
-    error?: Error,
+    body?: any,
     headers?: Record<string, number | string | boolean>
   ) => {
-    console.log(`${StatusCodes.BAD_REQUEST}:${error}`)
+    let bodyString
+    if (body === undefined) {
+      bodyString = ReasonPhrases.BAD_REQUEST
+    } else if (typeof body === 'string') {
+      bodyString = body
+    } else {
+      bodyString = body.message ?? JSON.stringify(body)
+    }
     callback(null, {
-      body: error ? `${JSON.stringify(error)}` : ReasonPhrases.BAD_REQUEST,
+      body: bodyString,
       headers: { ...defaultHeaders, ...headers },
       statusCode: StatusCodes.BAD_REQUEST,
     })
