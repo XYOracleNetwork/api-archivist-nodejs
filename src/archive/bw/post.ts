@@ -23,7 +23,6 @@ interface XyoArchivistBoundWitnessBody {
 
 const validateBoundWitnessHash = (bw: XyoBoundWitnessJson): ValidationError[] => {
   const hashable = pick(bw, ['addresses', 'payload_hashes', 'payload_schemas', 'previous_hashes'])
-  console.log(`hashable: ${JSON.stringify(hashable, null, 2)}`)
   const calculatedHash = XyoBoundWitnessBuilder.hash(hashable)
   if (calculatedHash != bw._hash) {
     return [{ message: `Calc/Existing: ${calculatedHash}!=${bw._hash}`, name: 'Invalid Hash' }]
@@ -72,7 +71,6 @@ export const entryPoint = async (
   await trapServerError(callback, async () => {
     dotenv.config()
     const body = JSON.parse(assertEx(event?.body, 'Missing post body')) as XyoArchivistBoundWitnessBody
-    console.log(`RawBody: ${JSON.stringify(body, null, 2)}`)
     const validationErrors = validateBody(body)
 
     if (validationErrors.length > 0) {
