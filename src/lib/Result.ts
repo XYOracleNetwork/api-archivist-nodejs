@@ -9,7 +9,7 @@ const defaultHeaders = {
 const Result = {
   BadRequest: (
     callback: lambda.APIGatewayProxyCallback,
-    body?: any,
+    body?: { message?: string },
     headers?: Record<string, number | string | boolean>
   ) => {
     let bodyString
@@ -61,7 +61,11 @@ const Result = {
     })
   },
 
-  Ok: (callback: lambda.APIGatewayProxyCallback, body: any, headers?: Record<string, number | string | boolean>) => {
+  Ok: (
+    callback: lambda.APIGatewayProxyCallback,
+    body: unknown,
+    headers?: Record<string, number | string | boolean>
+  ) => {
     let bodyString
     if (typeof body === 'string') {
       bodyString = body

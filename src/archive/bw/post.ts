@@ -18,7 +18,7 @@ const ajv = new Ajv()
 
 interface XyoArchivistBoundWitnessBody {
   boundWitnesses: XyoBoundWitnessJson[]
-  payloads?: Record<string, any>[][]
+  payloads?: Record<string, unknown>[][]
 }
 
 const validateBoundWitnessHash = (bw: XyoBoundWitnessJson): ValidationError[] => {
@@ -75,7 +75,7 @@ export const entryPoint = async (
 
     if (validationErrors.length > 0) {
       console.log(`Error: ${validationErrors[0].message}`)
-      Result.BadRequest(callback, validationErrors[0].message)
+      Result.BadRequest(callback, { message: validationErrors[0].message })
     } else {
       let bwResult: number | undefined
       let payloadsResult: number | undefined
