@@ -36,24 +36,31 @@ interface ValidationError extends Error {
 
 const validateBody = (body: XyoArchivistBoundWitnessBody): ValidationError[] => {
   const validate = ajv.compile(XyoBoundWitnessSchema)
-  const x = body.boundWitnesses.map((bw) => {
-    if (validate(bw)) {
-      return validateBoundWitnessHash(bw)
-    } else {
-      return (
-        validate.errors?.map((ajv) => {
-          const result: ValidationError = {
-            ajv,
-            message: `${ajv?.instancePath}-${ajv?.message}`,
-            name: 'JSON Validation Error',
-          }
-          return result
-        }) ?? []
-      )
+  if (Array.isArray(body.boundWitnesses)) {
+    const x = body.boundWitnesses.map((bw) => {
+      if (validate(bw)) {
+        return validateBoundWitnessHash(bw)
+      } else {
+        return (
+          validate.errors?.map((ajv) => {
+            const result: ValidationError = {
+              ajv,
+              message: `${ajv?.instancePath}-${ajv?.message}`,
+              name: 'JSON Validation Error',
+            }
+            return result
+          }) ?? []
+        )
+      }
+    })
+    return x.reduce((acc, value) => acc.concat(value), [])
+  } else {
+    const result: ValidationError = {
+      message: 'boundWitnesses must be array',
+      name: 'JSON Validation Error',
     }
-  })
-
-  return x.reduce((acc, value) => acc.concat(value), [])
+    return [result]
+  }
 }
 
 const storeBoundWitnesses = async (archive: string, boundWitnesses: XyoBoundWitnessJson[]) => {
