@@ -1,7 +1,17 @@
 {
   "root": true,
-  "parserOptions": {
-    "project": "./tsconfig.json"
-  },
-  "extends": ["../.eslintrc"]
+  "extends": [
+    "@xylabs"
+  ],
+  "rules": {
+    "import/no-internal-modules": [
+      "warn", {
+        "allow": [
+          "*/img/**",
+          "source-map-support/**",
+          "lodash/**"
+        ]
+      }
+    ]
+  }
 }

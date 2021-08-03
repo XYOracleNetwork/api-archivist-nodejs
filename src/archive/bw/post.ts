@@ -1,10 +1,11 @@
 import 'source-map-support/register'
 
-import { XyoBoundWitnessJson, XyoBoundWitnessSchema } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitnessBuilder, XyoBoundWitnessJson, XyoBoundWitnessSchema } from '@xyo-network/sdk-xyo-client-js'
 import { assertEx } from '@xyo-network/sdk-xyo-js'
 import Ajv, { ErrorObject } from 'ajv'
 import lambda from 'aws-lambda'
 import dotenv from 'dotenv'
+import pick from 'lodash/pick'
 
 import {
   getArchivistBoundWitnessesMongoSdk,
@@ -17,15 +18,48 @@ const ajv = new Ajv()
 
 interface XyoArchivistBoundWitnessBody {
   boundWitnesses: XyoBoundWitnessJson[]
-  payloads?: Record<string, any>[][]
+  payloads?: Record<string, unknown>[][]
 }
 
-const validateBody = (body: XyoArchivistBoundWitnessBody): ErrorObject[] => {
+const validateBoundWitnessHash = (bw: XyoBoundWitnessJson): ValidationError[] => {
+  const hashable = pick(bw, ['addresses', 'payload_hashes', 'payload_schemas', 'previous_hashes'])
+  const calculatedHash = XyoBoundWitnessBuilder.hash(hashable)
+  if (calculatedHash != bw._hash) {
+    return [{ message: `Calc/Existing: ${calculatedHash}!=${bw._hash}`, name: 'Invalid Hash' }]
+  }
+  return []
+}
+
+interface ValidationError extends Error {
+  ajv?: ErrorObject
+}
+
+const validateBody = (body: XyoArchivistBoundWitnessBody): ValidationError[] => {
   const validate = ajv.compile(XyoBoundWitnessSchema)
-  if (validate(body)) {
-    return []
+  if (Array.isArray(body.boundWitnesses)) {
+    const x = body.boundWitnesses.map((bw) => {
+      if (validate(bw)) {
+        return validateBoundWitnessHash(bw)
+      } else {
+        return (
+          validate.errors?.map((ajv) => {
+            const result: ValidationError = {
+              ajv,
+              message: `${ajv?.instancePath}-${ajv?.message}`,
+              name: 'JSON Validation Error',
+            }
+            return result
+          }) ?? []
+        )
+      }
+    })
+    return x.reduce((acc, value) => acc.concat(value), [])
   } else {
-    return validate.errors ?? []
+    const result: ValidationError = {
+      message: 'boundWitnesses must be array',
+      name: 'JSON Validation Error',
+    }
+    return [result]
   }
 }
 
@@ -47,7 +81,8 @@ export const entryPoint = async (
     const validationErrors = validateBody(body)
 
     if (validationErrors.length > 0) {
-      Result.BadRequest(callback, new Error(validationErrors[0].message))
+      console.log(`Error: ${validationErrors[0].message}`)
+      Result.BadRequest(callback, { message: validationErrors[0].message })
     } else {
       let bwResult: number | undefined
       let payloadsResult: number | undefined
@@ -66,7 +101,7 @@ export const entryPoint = async (
           `Payload Storage Failed [${payloadsResult}/${body.payloads.length}]`
         )
       }
-      return Result.Ok(callback, { bw: bwResult, payloads: payloadsResult })
+      return Result.Ok(callback, { boundWitnesses: bwResult, payloads: payloadsResult })
     }
   })
 }

@@ -1,15 +1,15 @@
 import 'source-map-support/register'
 
-import { CoinError } from '@xylabs/sdk-coin-js'
 import lambda from 'aws-lambda'
 
 import Result from './Result'
+import XyoError from './XyoError'
 
 const trapServerError = async (callback: lambda.APIGatewayProxyCallback, closure: () => Promise<void>) => {
   try {
     await closure()
   } catch (ex) {
-    const coinError = ex as CoinError
+    const coinError = ex as XyoError
     if (coinError.status) {
       delete coinError.internalError
       delete coinError.stack
