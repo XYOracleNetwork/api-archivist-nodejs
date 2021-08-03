@@ -59,6 +59,13 @@ functions:
           path: /archive/{archive}/bw
           method: POST
           cors: true
+  block-get:
+    handler: src/archive/bw/get.entryPoint
+    events:
+      - http:
+          path: /archive/{archive}/bw/{hash}
+          method: GET
+          cors: true
   reflect-get:
     handler: src/reflect/get.entryPoint
     events:
