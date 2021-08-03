@@ -63,7 +63,12 @@ const validateBody = (body: XyoArchivistBoundWitnessBody): ValidationError[] => 
   }
 }
 
-const storeBoundWitnesses = async (archive: string, boundWitnesses: XyoBoundWitnessJson[]) => {
+interface XyoBoundWitnessMongoJson extends XyoBoundWitnessJson {
+  _source_ip?: string | null
+  _user_agent?: string | null
+}
+
+const storeBoundWitnesses = async (archive: string, boundWitnesses: XyoBoundWitnessMongoJson[]) => {
   const bwSdk = getArchivistBoundWitnessesMongoSdk(archive)
   return await bwSdk.insertMany(boundWitnesses)
 }
@@ -74,6 +79,8 @@ export const entryPoint = async (
   callback: lambda.APIGatewayProxyCallback
 ) => {
   const archive = assertEx(event.pathParameters?.['archive'], 'Missing archive name')
+  const _source_ip = event.requestContext.identity.sourceIp
+  const _user_agent = event.requestContext.identity.userAgent
 
   await trapServerError(callback, async () => {
     dotenv.config()
@@ -87,7 +94,12 @@ export const entryPoint = async (
       let bwResult: number | undefined
       let payloadsResult: number | undefined
       if (body.boundWitnesses) {
-        bwResult = await storeBoundWitnesses(archive, body.boundWitnesses)
+        bwResult = await storeBoundWitnesses(
+          archive,
+          body.boundWitnesses.map((bw) => {
+            return { ...bw, _source_ip, _user_agent }
+          })
+        )
         assertEx(
           bwResult === body.boundWitnesses.length,
           `Boundwitness Storage Failed [${bwResult}/${body.boundWitnesses.length}]`
