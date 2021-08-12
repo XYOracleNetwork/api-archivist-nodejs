@@ -1,6 +1,6 @@
 import 'source-map-support/register'
 
-import { XyoBoundWitnessBuilder, XyoBoundWitnessJson, XyoBoundWitnessSchema } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitness, XyoBoundWitnessBuilder, XyoBoundWitnessSchema } from '@xyo-network/sdk-xyo-client-js'
 import { assertEx } from '@xyo-network/sdk-xyo-js'
 import Ajv, { ErrorObject } from 'ajv'
 import lambda from 'aws-lambda'
@@ -17,11 +17,11 @@ import {
 const ajv = new Ajv()
 
 interface XyoArchivistBoundWitnessBody {
-  boundWitnesses: XyoBoundWitnessJson[]
+  boundWitnesses: XyoBoundWitness[]
   payloads?: Record<string, unknown>[][]
 }
 
-const validateBoundWitnessHash = (bw: XyoBoundWitnessJson): ValidationError[] => {
+const validateBoundWitnessHash = (bw: XyoBoundWitness): ValidationError[] => {
   const hashable = pick(bw, ['addresses', 'payload_hashes', 'payload_schemas', 'previous_hashes'])
   const calculatedHash = XyoBoundWitnessBuilder.hash(hashable)
   if (calculatedHash != bw._hash) {
@@ -63,12 +63,7 @@ const validateBody = (body: XyoArchivistBoundWitnessBody): ValidationError[] => 
   }
 }
 
-interface XyoBoundWitnessMongoJson extends XyoBoundWitnessJson {
-  _source_ip?: string | null
-  _user_agent?: string | null
-}
-
-const storeBoundWitnesses = async (archive: string, boundWitnesses: XyoBoundWitnessMongoJson[]) => {
+const storeBoundWitnesses = async (archive: string, boundWitnesses: XyoBoundWitness[]) => {
   const bwSdk = getArchivistBoundWitnessesMongoSdk(archive)
   return await bwSdk.insertMany(boundWitnesses)
 }
@@ -79,8 +74,8 @@ export const entryPoint = async (
   callback: lambda.APIGatewayProxyCallback
 ) => {
   const archive = assertEx(event.pathParameters?.['archive'], 'Missing archive name')
-  const _source_ip = event.requestContext.identity.sourceIp
-  const _user_agent = event.requestContext.identity.userAgent
+  const _source_ip = event.requestContext.identity.sourceIp ?? undefined
+  const _user_agent = event.requestContext.identity.userAgent ?? undefined
 
   await trapServerError(callback, async () => {
     dotenv.config()
