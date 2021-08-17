@@ -53,17 +53,28 @@ custom:
 
 functions:
   block-post:
-    handler: src/archive/bw/post.entryPoint
+    handler: src/archive/block/post/index.entryPoint
     events:
+      - http:
+          path: /archive/{archive}/block
+          method: POST
+          cors: true
       - http:
           path: /archive/{archive}/bw
           method: POST
           cors: true
-  block-get:
-    handler: src/archive/bw/get.entryPoint
+  block-sample:
+    handler: src/archive/block/sample/get.entryPoint
     events:
       - http:
-          path: /archive/{archive}/bw/{hash}
+          path: /archive/{archive}/block/sample/{size}
+          method: GET
+          cors: true
+  block-get:
+    handler: src/archive/block/hash/get.entryPoint
+    events:
+      - http:
+          path: /archive/{archive}/block/hash/{hash}
           method: GET
           cors: true
   reflect-get:
