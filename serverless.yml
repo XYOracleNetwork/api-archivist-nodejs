@@ -53,7 +53,7 @@ custom:
 
 functions:
   block-post:
-    handler: src/archive/block/post.entryPoint
+    handler: src/archive/block/post/index.entryPoint
     events:
       - http:
           path: /archive/{archive}/block
