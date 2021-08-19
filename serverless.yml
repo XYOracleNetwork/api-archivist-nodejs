@@ -70,11 +70,18 @@ functions:
           path: /archive/{archive}/block/sample/{size}
           method: GET
           cors: true
-  block-get:
+  block-get-hash:
     handler: src/archive/block/hash/get.entryPoint
     events:
       - http:
           path: /archive/{archive}/block/hash/{hash}
+          method: GET
+          cors: true
+  block-get-recent:
+    handler: src/archive/block/recent/get.entryPoint
+    events:
+      - http:
+          path: /archive/{archive}/block/recent/{limit}
           method: GET
           cors: true
   reflect-get:

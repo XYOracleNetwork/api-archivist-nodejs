@@ -1,6 +1,6 @@
 {
   "name": "api-archivist-nodejs",
-  "version": "2.0.65",
+  "version": "2.0.69",
   "description": "XYO Archivist Serverless API",
   "sideeffects": false,
   "engines": {
@@ -23,7 +23,7 @@
     "reinstall": "rm -r -f ./node_modules && rm -f ./yarn.lock && rm -f ./yarn-error.log && yarn install && yarn outdated",
     "license": "yarn license-checker --exclude 'MIT, ISC, Apache-2.0, BSD, BSD-2-Clause, CC-BY-4.0, Unlicense, CC-BY-3.0, CC0-1.0'",
     "up": "yarn ncu",
-    "updo": "yarn ncu -u && yarn install",
+    "updo": "yarn upgrade && yarn ncu -u && yarn install",
     "tsprune": "yarn ts-prune",
     "deps": "yarn depcheck"
   },
@@ -31,7 +31,7 @@
   "license": "ISC",
   "dependencies": {
     "@xylabs/eslint-config": "^2.0.16",
-    "@xyo-network/sdk-xyo-client-js": "^2.1.42",
+    "@xyo-network/sdk-xyo-client-js": "^2.1.44",
     "@xyo-network/sdk-xyo-js": "^2.1.36",
     "@xyo-network/sdk-xyo-mongo-js": "^2.1.17",
     "aws-lambda": "^1.0.6",
@@ -53,7 +53,7 @@
     "eslint": "^7.32.0",
     "license-checker": "^25.0.1",
     "npm-check-updates": "^11.8.3",
-    "serverless": "^2.54.0",
+    "serverless": "^2.55.0",
     "serverless-api-gateway-caching": "^1.7.4",
     "serverless-bundle": "^4.4.0",
     "serverless-domain-manager": "^5.1.5",
