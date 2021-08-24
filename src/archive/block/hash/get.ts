@@ -1,5 +1,6 @@
 import 'source-map-support/register'
 
+import { XyoBoundWitness, XyoBoundWitnessWrapper } from '@xyo-network/sdk-xyo-client-js'
 import { assertEx } from '@xyo-network/sdk-xyo-js'
 import lambda from 'aws-lambda'
 
@@ -10,6 +11,13 @@ const getBoundWitness = async (archive: string, hash: string) => {
   return await bwSdk.findByHash(hash)
 }
 
+const scrubBoundWitnesses = (boundWitnesses: XyoBoundWitness[]) => {
+  return boundWitnesses?.map((boundWitness) => {
+    const bwWrapper = new XyoBoundWitnessWrapper(boundWitness)
+    return bwWrapper.scrubbed
+  })
+}
+
 export const entryPoint = async (
   event: lambda.APIGatewayProxyEvent,
   context: lambda.Context,
@@ -18,10 +26,6 @@ export const entryPoint = async (
   const archive = assertEx(event.pathParameters?.['archive'], 'Missing archive name')
   const hash = assertEx(event.pathParameters?.['hash'], 'Missing hash')
   await trapServerError(callback, async () => {
-    const bw = await getBoundWitness(archive, hash)
-    return Result.Ok(
-      callback,
-      bw?.map(({ _payloads, ...clean }) => clean)
-    )
+    return Result.Ok(callback, scrubBoundWitnesses((await getBoundWitness(archive, hash)) ?? []))
   })
 }

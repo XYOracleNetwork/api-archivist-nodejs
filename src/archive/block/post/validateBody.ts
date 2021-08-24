@@ -1,6 +1,6 @@
 import { XyoBoundWitnessWrapper } from '@xyo-network/sdk-xyo-client-js'
 
-import reduceArray from './reduceArray'
+import flattenArray from './flattenArray'
 import XyoArchivistBoundWitnessBody from './XyoArchivistBoundWitnessBody'
 
 const validateBody = (body: XyoArchivistBoundWitnessBody): Error[] => {
@@ -9,7 +9,7 @@ const validateBody = (body: XyoArchivistBoundWitnessBody): Error[] => {
       const wrapper = new XyoBoundWitnessWrapper(bw)
       return wrapper.validator.all()
     })
-    return reduceArray(errors)
+    return flattenArray(errors)
   } else {
     return [Error('boundWitnesses must be array')]
   }
