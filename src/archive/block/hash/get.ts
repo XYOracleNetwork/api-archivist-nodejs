@@ -14,7 +14,7 @@ const getBoundWitness = async (archive: string, hash: string) => {
 const scrubBoundWitnesses = (boundWitnesses: XyoBoundWitness[]) => {
   return boundWitnesses?.map((boundWitness) => {
     const bwWrapper = new XyoBoundWitnessWrapper(boundWitness)
-    return bwWrapper.scrubbed
+    return bwWrapper.scrubbedFields
   })
 }
 
