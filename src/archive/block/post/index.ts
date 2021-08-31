@@ -1,16 +1,12 @@
 import 'source-map-support/register'
 
-import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitness, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { assertEx } from '@xyo-network/sdk-xyo-js'
 import lambda from 'aws-lambda'
 import dotenv from 'dotenv'
 
-import {
-  getArchivistBoundWitnessesMongoSdk,
-  getArchivistPayloadForwardingMongoSdk,
-  Result,
-  trapServerError,
-} from '../../../lib'
+import { getArchivistBoundWitnessesMongoSdk, getArchivistPayloadMongoSdk, Result, trapServerError } from '../../../lib'
+import flattenArray from './flattenArray'
 import validateBody from './validateBody'
 
 interface XyoArchivistBoundWitnessBody {
@@ -48,19 +44,27 @@ export const entryPoint = async (
       let bwResult: number | undefined
       let payloadsResult: number | undefined
       if (body.boundWitnesses) {
-        bwResult = await storeBoundWitnesses(archive, body.boundWitnesses)
+        const payloadLists: XyoPayload[][] = []
+        const sanitizedBoundWitnesses = body.boundWitnesses.map((boundWitness) => {
+          const { _payloads, ...sanitixedBoundWitness } = boundWitness
+          payloadLists.push(_payloads ?? [])
+          return sanitixedBoundWitness
+        })
+        bwResult = await storeBoundWitnesses(archive, sanitizedBoundWitnesses)
         assertEx(
           bwResult === body.boundWitnesses.length,
           `Boundwitness Storage Failed [${bwResult}/${body.boundWitnesses.length}]`
         )
-      }
-      if (body.payloads) {
-        const payloadSdk = getArchivistPayloadForwardingMongoSdk()
-        payloadsResult = await payloadSdk.insertMany(assertEx(body.payloads))
-        assertEx(
-          payloadsResult === body.payloads.length,
-          `Payload Storage Failed [${payloadsResult}/${body.payloads.length}]`
-        )
+
+        const payloads = flattenArray(payloadLists).map((payload) => {
+          return { ...payload, _archive: archive }
+        })
+
+        if (payloads.length > 0) {
+          const payloadSdk = getArchivistPayloadMongoSdk()
+          payloadsResult = await payloadSdk.insertMany(assertEx(payloads))
+          assertEx(payloadsResult === payloads.length, `Payload Storage Failed [${payloadsResult}/${payloads.length}]`)
+        }
       }
       return Result.Ok(callback, { boundWitnesses: bwResult, payloads: payloadsResult })
     }
