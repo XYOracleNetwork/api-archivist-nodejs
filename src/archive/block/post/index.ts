@@ -46,9 +46,9 @@ export const entryPoint = async (
       if (body.boundWitnesses) {
         const payloadLists: XyoPayload[][] = []
         const sanitizedBoundWitnesses = body.boundWitnesses.map((boundWitness) => {
-          const { _payloads, ...sanitixedBoundWitness } = boundWitness
+          const { _payloads, ...sanitized } = boundWitness
           payloadLists.push(_payloads ?? [])
-          return sanitixedBoundWitness
+          return sanitized
         })
         bwResult = await storeBoundWitnesses(archive, sanitizedBoundWitnesses)
         assertEx(
