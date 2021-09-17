@@ -1,6 +1,6 @@
 import 'source-map-support/register'
 
-import { XyoBoundWitness, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitness, XyoPayload, XyoPayloadWrapper } from '@xyo-network/sdk-xyo-client-js'
 import { assertEx } from '@xyo-network/sdk-xyo-js'
 import lambda from 'aws-lambda'
 import dotenv from 'dotenv'
@@ -57,7 +57,8 @@ export const entryPoint = async (
         )
 
         const payloads = flattenArray(payloadLists).map((payload) => {
-          return { ...payload, _archive: archive }
+          const wrapper = new XyoPayloadWrapper(payload)
+          return { ...payload, _archive: archive, _hash: wrapper.sortedHash() }
         })
 
         if (payloads.length > 0) {

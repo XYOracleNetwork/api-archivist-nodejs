@@ -2,7 +2,7 @@ import { XyoArchivistPayloadMongoSdk } from '@xyo-network/sdk-xyo-client-js'
 import { assertEx } from '@xyo-network/sdk-xyo-js'
 import dotenv from 'dotenv'
 
-const getArchivistPayloadForwardingMongoSdk = () => {
+const getArchivistPayloadMongoSdk = () => {
   dotenv.config()
   return new XyoArchivistPayloadMongoSdk({
     collection: 'payloads',
@@ -13,4 +13,4 @@ const getArchivistPayloadForwardingMongoSdk = () => {
   })
 }
 
-export default getArchivistPayloadForwardingMongoSdk
+export default getArchivistPayloadMongoSdk
