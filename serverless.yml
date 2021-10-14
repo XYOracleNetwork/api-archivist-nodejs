@@ -63,7 +63,7 @@ functions:
           path: /archive/{archive}/bw
           method: POST
           cors: true
-  block-sample:
+  block-get-sample:
     handler: src/archive/block/sample/get.entryPoint
     events:
       - http:
@@ -82,6 +82,27 @@ functions:
     events:
       - http:
           path: /archive/{archive}/block/recent/{limit}
+          method: GET
+          cors: true
+  payload-get-sample:
+    handler: src/archive/payload/sample/get.entryPoint
+    events:
+      - http:
+          path: /archive/{archive}/payload/sample/{size}
+          method: GET
+          cors: true
+  payload-get-hash:
+    handler: src/archive/payload/hash/get.entryPoint
+    events:
+      - http:
+          path: /archive/{archive}/payload/hash/{hash}
+          method: GET
+          cors: true
+  payload-get-recent:
+    handler: src/archive/payload/recent/get.entryPoint
+    events:
+      - http:
+          path: /archive/{archive}/payload/recent/{limit}
           method: GET
           cors: true
   reflect-get:

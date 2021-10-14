@@ -62,7 +62,7 @@ export const entryPoint = async (
         })
 
         if (payloads.length > 0) {
-          const payloadSdk = getArchivistPayloadMongoSdk()
+          const payloadSdk = getArchivistPayloadMongoSdk(archive)
           payloadsResult = await payloadSdk.insertMany(assertEx(payloads))
           assertEx(payloadsResult === payloads.length, `Payload Storage Failed [${payloadsResult}/${payloads.length}]`)
         }
