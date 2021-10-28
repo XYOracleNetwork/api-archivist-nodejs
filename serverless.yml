@@ -70,6 +70,13 @@ functions:
           path: /archive/{archive}/block/sample/{size}
           method: GET
           cors: true
+  block-get-stats:
+    handler: src/archive/block/stats/get.entryPoint
+    events:
+      - http:
+          path: /archive/{archive}/block/stats
+          method: GET
+          cors: true
   block-get-hash:
     handler: src/archive/block/hash/get.entryPoint
     events:
@@ -89,6 +96,13 @@ functions:
     events:
       - http:
           path: /archive/{archive}/payload/sample/{size}
+          method: GET
+          cors: true
+  payload-get-stats:
+    handler: src/archive/payload/stats/get.entryPoint
+    events:
+      - http:
+          path: /archive/{archive}/payload/stats
           method: GET
           cors: true
   payload-get-hash:
