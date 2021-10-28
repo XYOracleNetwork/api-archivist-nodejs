@@ -19,7 +19,8 @@ const trapServerError = async (callback: lambda.APIGatewayProxyCallback, closure
         statusCode: coinError.status,
       })
     } else {
-      return Result.InternalServerError(callback, ex)
+      const error = ex as Error
+      return Result.InternalServerError(callback, error)
     }
   }
 }
