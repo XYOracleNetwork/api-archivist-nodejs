@@ -1,6 +1,6 @@
 {
   "name": "api-archivist-nodejs",
-  "version": "2.0.88",
+  "version": "2.0.89",
   "description": "XYO Archivist Serverless API",
   "sideeffects": false,
   "engines": {
@@ -23,7 +23,7 @@
   "author": "Arie Trouw",
   "license": "ISC",
   "dependencies": {
-    "@xyo-network/sdk-xyo-client-js": "^2.1.72",
+    "@xyo-network/sdk-xyo-client-js": "^2",
     "@xyo-network/sdk-xyo-js": "^2.1.47",
     "@xyo-network/sdk-xyo-mongo-js": "^2.1.19",
     "aws-lambda": "^1.0.6",
@@ -37,7 +37,7 @@
     "tslib": "^2.3.1"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.84",
+    "@types/aws-lambda": "^8.10.85",
     "@types/lodash": "^4.14.176",
     "@types/node": "^16",
     "@types/source-map-support": "0.5.4",
