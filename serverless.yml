@@ -70,6 +70,13 @@ functions:
           path: /archive/{archive}/block/stats
           method: GET
           cors: true
+  block-get-hash-payloads:
+    handler: src/archive/block/hash/payloads/get.entryPoint
+    events:
+      - http:
+          path: /archive/{archive}/block/hash/{hash}/payloads
+          method: GET
+          cors: true
   block-get-hash:
     handler: src/archive/block/hash/get.entryPoint
     events:
