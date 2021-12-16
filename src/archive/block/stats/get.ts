@@ -1,23 +1,18 @@
 import 'source-map-support/register'
 
-import { assertEx } from '@xyo-network/sdk-xyo-js'
-import lambda from 'aws-lambda'
+import { NextFunction, Request, Response } from 'express'
 
-import { getArchivistBoundWitnessesMongoSdk, Result, trapServerError } from '../../../lib'
+import { getArchivistBoundWitnessesMongoSdk } from '../../../lib'
 
 const getCount = async (archive: string) => {
-  const bwSdk = getArchivistBoundWitnessesMongoSdk(archive)
-  return await bwSdk.fetchCount()
+  const sdk = await getArchivistBoundWitnessesMongoSdk(archive)
+  return await sdk.fetchCount()
 }
 
-export const entryPoint = async (
-  event: lambda.APIGatewayProxyEvent,
-  context: lambda.Context,
-  callback: lambda.APIGatewayProxyCallback
-) => {
-  const archive = assertEx(event.pathParameters?.['archive'], 'Missing archive name')
-  await trapServerError(callback, async () => {
-    const count = await getCount(archive)
-    return Result.Ok(callback, { count })
+export const getArchiveBlockStats = async (req: Request, res: Response, next: NextFunction) => {
+  const { archive } = req.params
+  res.json({
+    count: await getCount(archive),
   })
+  next()
 }

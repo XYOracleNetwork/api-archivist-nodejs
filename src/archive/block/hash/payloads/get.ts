@@ -1,38 +1,26 @@
 import 'source-map-support/register'
 
-import { assertEx } from '@xyo-network/sdk-xyo-js'
-import lambda from 'aws-lambda'
+import { NextFunction, Request, Response } from 'express'
 
-import {
-  getArchivistBoundWitnessesMongoSdk,
-  getArchivistPayloadMongoSdk,
-  Result,
-  trapServerError,
-} from '../../../../lib'
+import { getArchivistBoundWitnessesMongoSdk, getArchivistPayloadMongoSdk } from '../../../../lib'
 
 const getBoundWitness = async (archive: string, hash: string) => {
-  const bwSdk = getArchivistBoundWitnessesMongoSdk(archive)
-  return await bwSdk.findByHash(hash)
+  const sdk = await getArchivistBoundWitnessesMongoSdk(archive)
+  return await sdk.findByHash(hash)
 }
 
 const getPayloads = async (archive: string, hashes: string[]) => {
-  const bwSdk = getArchivistPayloadMongoSdk(archive)
-  return await bwSdk.findByHashes(hashes)
+  const sdk = await getArchivistPayloadMongoSdk(archive)
+  return await sdk.findByHashes(hashes)
 }
 
-export const entryPoint = async (
-  event: lambda.APIGatewayProxyEvent,
-  context: lambda.Context,
-  callback: lambda.APIGatewayProxyCallback
-) => {
-  const archive = assertEx(event.pathParameters?.['archive'], 'Missing archive name')
-  const hash = assertEx(event.pathParameters?.['hash'], 'Missing hash')
-  await trapServerError(callback, async () => {
-    const bw = await getBoundWitness(archive, hash)
-    if (bw && bw.length > 0) {
-      return Result.Ok(callback, await getPayloads(archive, bw[0].payload_hashes))
-    } else {
-      return Result.BadRequest(callback, { message: 'Block not found' })
-    }
-  })
+export const getArchiveBlockHashPayloads = async (req: Request, res: Response, next: NextFunction) => {
+  const { archive, hash } = req.params
+  const bw = await getBoundWitness(archive, hash)
+  if (bw && bw.length > 0) {
+    res.json(await getPayloads(archive, bw[0].payload_hashes))
+    next()
+  } else {
+    next({ message: 'Block not found' })
+  }
 }
