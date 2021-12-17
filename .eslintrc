@@ -3,13 +3,15 @@
   "extends": [
     "@xylabs"
   ],
+  "ignorePatterns": ["node_modules", "build", "dist", "bin", "package.json", "*.d.ts", "rollup.config.js"],
   "rules": {
     "import/no-internal-modules": [
       "warn", {
         "allow": [
-          "*/img/**",
-          "source-map-support/**",
-          "lodash/**"
+          "source-map-support/*",
+          "lodash/*",
+          "aws-sdk/**/*",
+          "types/*"
         ]
       }
     ]
