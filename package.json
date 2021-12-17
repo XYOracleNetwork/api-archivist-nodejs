@@ -22,7 +22,7 @@
   "module": "dist/index.js",
   "scripts": {
     "start": "nodemon --ext .ts --watch ./src --exec \"node --max-old-space-size=8192 --experimental-specifier-resolution=node --loader ts-node/esm ./src/index.ts\"",
-    "launch": "echo Launching... && node --max-old-space-size=8192 --experimental-specifier-resolution=node ./dist/node-esm/index.js",
+    "launch": "node --max-old-space-size=8192 --experimental-specifier-resolution=node ./dist/node-esm/index.js",
     "build": "yarn lint && yarn compile",
     "clean": "rm -f tsconfig.tsbuildinfo && rm -r -f ./build && rm -r -f ./.serverless && rm -r -f ./.webpack",
     "compile": "rm -r -f ./dist && NODE_OPTIONS=--max-old-space-size=8192 yarn compile-rollup",
