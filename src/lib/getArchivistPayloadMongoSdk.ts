@@ -1,10 +1,9 @@
+import { getEnvFromAws } from '@xylabs/sdk-api-express-ecs'
 import { assertEx } from '@xylabs/sdk-js'
 import { XyoArchivistPayloadMongoSdk } from '@xyo-network/sdk-xyo-client-js'
 
-import { getEnvFromAws } from './getEnvFromAws'
-
 export const getArchivistPayloadMongoSdk = async (archive: string) => {
-  const env = await getEnvFromAws('api-xyo-archivist')
+  const env = await getEnvFromAws('arn:aws:secretsmanager:us-east-1:434114103920:secret:api-xyo-archivist-aWFucj')
   return new XyoArchivistPayloadMongoSdk(
     {
       collection: 'payloads',

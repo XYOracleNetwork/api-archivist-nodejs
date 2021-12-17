@@ -1,9 +1,10 @@
 import 'source-map-support/register'
 
+import { tryParseInt } from '@xylabs/sdk-api-express-ecs'
 import { assertEx } from '@xylabs/sdk-js'
 import { NextFunction, Request, Response } from 'express'
 
-import { getArchivistPayloadMongoSdk, tryParseInt } from '../../../lib'
+import { getArchivistPayloadMongoSdk } from '../../../lib'
 
 const getPayloads = async (archive: string, limit: number) => {
   const sdk = await getArchivistPayloadMongoSdk(archive)
