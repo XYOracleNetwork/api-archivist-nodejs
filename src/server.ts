@@ -1,3 +1,4 @@
+import bodyParser from 'body-parser'
 import express, { NextFunction, Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
@@ -24,6 +25,8 @@ const server = (port = 80) => {
 
   app.set('etag', false)
 
+  app.use(bodyParser.json())
+
   app.get('/', (req, res, next) => {
     res.json({ alive: true })
     next()
@@ -32,20 +35,20 @@ const server = (port = 80) => {
   app.get('/archive', getNotImplemented)
   app.get('/archive/:archive', getNotImplemented)
 
-  app.get('/archive/archive:/payload/schema', getNotImplemented)
-  app.get('/archive/archive:/payload/schema/:schema', getNotImplemented)
-  app.get('/archive/archive:/payload/schema/:schema/stats', getNotImplemented)
-  app.get('/archive/archive:/payload/schema/:schema/recent/limit', getNotImplemented)
+  app.get('/archive/:archive/payload/schema', getNotImplemented)
+  app.get('/archive/:archive/payload/schema/:schema', getNotImplemented)
+  app.get('/archive/:archive/payload/schema/:schema/stats', getNotImplemented)
+  app.get('/archive/:archive/payload/schema/:schema/recent/limit', getNotImplemented)
 
-  app.post('/archive/archive:/block', asyncHandler(postArchiveBlock))
-  app.get('/archive/archive:/block/stats', asyncHandler(getArchiveBlockStats))
-  app.get('/archive/archive:/block/hash:', asyncHandler(getArchiveBlockHash))
-  app.get('/archive/archive:/block/recent/limit:', asyncHandler(getArchiveBlockRecent))
+  app.post('/archive/:archive/block', asyncHandler(postArchiveBlock))
+  app.get('/archive/:archive/block/stats', asyncHandler(getArchiveBlockStats))
+  app.get('/archive/:archive/block/hash:', asyncHandler(getArchiveBlockHash))
+  app.get('/archive/:archive/block/recent/limit:', asyncHandler(getArchiveBlockRecent))
 
-  app.get('/archive/archive:/payload/stats', asyncHandler(getArchiveBlockStats))
-  app.get('/archive/archive:/payload/hash:', asyncHandler(getArchivePayloadHash))
-  app.get('/archive/archive:/payload/hash:/repair', asyncHandler(getArchivePayloadRepair))
-  app.get('/archive/archive:/payload/recent/limit:', asyncHandler(getArchivePayloadRecent))
+  app.get('/archive/:archive/payload/stats', asyncHandler(getArchiveBlockStats))
+  app.get('/archive/:archive/payload/hash:', asyncHandler(getArchivePayloadHash))
+  app.get('/archive/:archive/payload/hash:/repair', asyncHandler(getArchivePayloadRepair))
+  app.get('/archive/:archive/payload/recent/limit:', asyncHandler(getArchivePayloadRecent))
 
   app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`)

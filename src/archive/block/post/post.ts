@@ -25,7 +25,7 @@ export const postArchiveBlock = async (req: Request, res: Response, next: NextFu
   const _user_agent = req.headers['user-agent'] ?? undefined
   const _timestamp = Date.now()
 
-  const body = JSON.parse(assertEx(req.body, 'Missing post body')) as XyoArchivistBoundWitnessBody
+  const body = req.body as XyoArchivistBoundWitnessBody
   body.boundWitnesses = body.boundWitnesses.map((bw) => {
     return { ...bw, _source_ip, _timestamp, _user_agent }
   })
