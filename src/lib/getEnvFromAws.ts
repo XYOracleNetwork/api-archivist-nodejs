@@ -29,9 +29,9 @@ const testError = (err: AWSError) => {
 
 const envCache = new NodeCache({ stdTTL: 3600 * 24 })
 
-export const getEnvFromAws = (secretName: string) => {
+export const getEnvFromAws = (secretId: string) => {
   return new Promise<Record<string, string>>((resolve, reject) => {
-    const cacheResult = envCache.get<Record<string, string>>(secretName)
+    const cacheResult = envCache.get<Record<string, string>>(secretId)
 
     if (!cacheResult) {
       const region = 'us-east-1'
@@ -40,17 +40,17 @@ export const getEnvFromAws = (secretName: string) => {
         region: region,
       })
 
-      client.getSecretValue({ SecretId: secretName }, (err, data) => {
+      client.getSecretValue({ SecretId: secretId }, (err, data) => {
         try {
           testError(err)
         } catch (ex) {
           reject(ex)
         }
-        console.log(`ENV read from AWS Success [${data?.Name}]`)
+        console.log(`ENV read from AWS Success [${data?.Name}, ${!!data?.SecretString}, ${!!data?.SecretBinary}]`)
         if (data?.SecretString) {
           const secretObject = JSON.parse(data?.SecretString) as Record<string, string>
           console.log(`ENV read from AWS [${Object.entries(secretObject).length}]`)
-          envCache.set(secretName, secretObject)
+          envCache.set(secretId, secretObject)
           resolve(secretObject)
         } else {
           reject(Error('Missing SecretString'))
