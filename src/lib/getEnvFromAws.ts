@@ -46,6 +46,7 @@ export const getEnvFromAws = (secretName: string) => {
         } catch (ex) {
           reject(ex)
         }
+        console.log(`ENV read from AWS Success [${data?.Name}]`)
         if (data?.SecretString) {
           const secretObject = JSON.parse(data?.SecretString) as Record<string, string>
           console.log(`ENV read from AWS [${Object.entries(secretObject).length}]`)
