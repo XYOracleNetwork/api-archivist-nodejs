@@ -37,7 +37,7 @@ const server = (port = 80) => {
   app.get('/archive/archive:/payload/schema/:schema/stats', getNotImplemented)
   app.get('/archive/archive:/payload/schema/:schema/recent/limit', getNotImplemented)
 
-  app.get('/archive/archive:/block', asyncHandler(postArchiveBlock))
+  app.post('/archive/archive:/block', asyncHandler(postArchiveBlock))
   app.get('/archive/archive:/block/stats', asyncHandler(getArchiveBlockStats))
   app.get('/archive/archive:/block/hash:', asyncHandler(getArchiveBlockHash))
   app.get('/archive/archive:/block/recent/limit:', asyncHandler(getArchiveBlockRecent))
