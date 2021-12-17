@@ -5,7 +5,7 @@ import strip from '@rollup/plugin-strip'
 import typescriptPlugin from 'rollup-plugin-typescript2'
 import typescript from 'typescript'
 
-import pkg from './package.json'
+import pkg from '../package.json'
 
 const deps = Object.keys(Object.assign({}, pkg.peerDependencies, pkg.dependencies))
 

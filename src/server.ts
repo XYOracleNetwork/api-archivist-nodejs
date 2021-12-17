@@ -1,3 +1,4 @@
+import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
 import bodyParser from 'body-parser'
 import express, { NextFunction, Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
@@ -11,7 +12,6 @@ import {
   getArchivePayloadRepair,
   postArchiveBlock,
 } from './archive'
-import { asyncHandler } from './lib'
 
 const server = (port = 80) => {
   const app = express()

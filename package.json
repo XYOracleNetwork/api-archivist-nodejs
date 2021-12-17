@@ -1,4 +1,5 @@
 {
+  "$schema": "http://json.schemastore.org/package.json",
   "name": "api-archivist-nodejs",
   "version": "2.0.96",
   "description": "XYO Archivist Serverless API",
@@ -26,7 +27,7 @@
     "build": "yarn lint && yarn compile",
     "clean": "rm -f tsconfig.tsbuildinfo && rm -r -f ./build && rm -r -f ./.serverless && rm -r -f ./.webpack",
     "compile": "rm -r -f ./dist && NODE_OPTIONS=--max-old-space-size=8192 yarn compile-rollup",
-    "compile-rollup": "rollup -c rollup.config.js",
+    "compile-rollup": "rollup -c rollup-config/index.js",
     "compile-tsc": "tsc -p tsconfig.build.json",
     "reinstall": "rm -r -f ./node_modules && rm -f ./yarn.lock && rm -f ./yarn-error.log && yarn install && yarn outdated",
     "license": "yarn license-checker --exclude 'MIT, ISC, Apache-2.0, BSD, BSD-2-Clause, CC-BY-4.0, Unlicense, CC-BY-3.0, CC0-1.0'"
@@ -41,6 +42,7 @@
     "@rollup/plugin-strip": "^2.1.0",
     "@xyo-network/sdk-xyo-client-js": "^2",
     "@xylabs/sdk-js": "^2.3.2",
+    "@xylabs/sdk-api-express-ecs": "^1.0.2",
     "@xyo-network/sdk-xyo-mongo-js": "^2.1.24",
     "axios": "^0.24.0",
     "body-parser": "^1.19.1",
@@ -68,6 +70,7 @@
     "@types/source-map-support": "0.5.4",
     "@xylabs/eslint-config": "^2.1.6",
     "@xylabs/ts-scripts": "^1.0.24",
+    "@xylabs/tsconfig": "^1.0.5",
     "depcheck": "^1.4.2",
     "elliptic": "^6.5.4",
     "eslint": "^8.4.1",
