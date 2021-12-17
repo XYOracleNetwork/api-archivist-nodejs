@@ -13,6 +13,10 @@ import {
   postArchiveBlock,
 } from './archive'
 
+interface ExpressError extends Error {
+  statusCode?: number
+}
+
 const server = (port = 80) => {
   const app = express()
 
@@ -49,6 +53,15 @@ const server = (port = 80) => {
   app.get('/archive/:archive/payload/hash:', asyncHandler(getArchivePayloadHash))
   app.get('/archive/:archive/payload/hash:/repair', asyncHandler(getArchivePayloadRepair))
   app.get('/archive/:archive/payload/recent/limit:', asyncHandler(getArchivePayloadRecent))
+
+  app.use((error: ExpressError, req: Request, res: Response, next: NextFunction) => {
+    if (error) {
+      console.error(error.message)
+      if (!error.statusCode) error.statusCode = 500
+      res.status(error.statusCode).send({ error: error.message })
+    }
+    next(error)
+  })
 
   app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`)
