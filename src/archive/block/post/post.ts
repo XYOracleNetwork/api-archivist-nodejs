@@ -1,13 +1,13 @@
 import 'source-map-support/register'
 
 import { assertEx } from '@xylabs/sdk-js'
-import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitness, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { NextFunction, Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
-import { getArchivistPayloadMongoSdk } from '../../../lib'
 import { prepareBoundWitnesses } from './prepareBoundWitnesses'
 import { storeBoundWitnesses } from './storeBoundWitnesses'
+import { storePayloads } from './storePayloads'
 import { validateBody } from './validateBody'
 
 interface XyoArchivistBoundWitnessBody {
@@ -32,25 +32,14 @@ export const postArchiveBlock = async (req: Request, res: Response, next: NextFu
     console.log(`Error: ${validationErrors[0].message}`)
     res.sendStatus(StatusCodes.BAD_REQUEST)
     next({ message: validationErrors[0].message })
-  } else {
-    let bwResult: number | undefined
-    let payloadsResult: number | undefined
-    if (body.boundWitnesses) {
-      const { payloads, sanitized } = prepareBoundWitnesses(body.boundWitnesses, boundWitnessMetaData, payloadMetaData)
-
-      bwResult = await storeBoundWitnesses(archive, sanitized)
-      assertEx(
-        bwResult === body.boundWitnesses.length,
-        `Boundwitness Storage Failed [${bwResult}/${body.boundWitnesses.length}]`
-      )
-
-      if (payloads.length > 0) {
-        const sdk = await getArchivistPayloadMongoSdk(archive)
-        payloadsResult = await sdk.insertMany(assertEx(payloads))
-        assertEx(payloadsResult === payloads.length, `Payload Storage Failed [${payloadsResult}/${payloads.length}]`)
-      }
-    }
-    res.json({ boundWitnesses: bwResult, payloads: payloadsResult })
-    next()
+    return
   }
+
+  const { payloads, sanitized } = prepareBoundWitnesses(body.boundWitnesses, boundWitnessMetaData, payloadMetaData)
+
+  const bwResult = await storeBoundWitnesses(archive, sanitized)
+  const payloadsResult = storePayloads(archive, payloads)
+  res.json({ boundWitnesses: bwResult, payloads: payloadsResult })
+
+  next()
 }
