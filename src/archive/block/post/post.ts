@@ -1,22 +1,18 @@
 import 'source-map-support/register'
 
 import { assertEx } from '@xylabs/sdk-js'
-import { XyoBoundWitness, XyoPayload, XyoPayloadWrapper } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
 import { NextFunction, Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
-import { getArchivistBoundWitnessesMongoSdk, getArchivistPayloadMongoSdk } from '../../../lib'
-import flattenArray from './flattenArray'
-import validateBody from './validateBody'
+import { getArchivistPayloadMongoSdk } from '../../../lib'
+import { prepareBoundWitnesses } from './prepareBoundWitnesses'
+import { storeBoundWitnesses } from './storeBoundWitnesses'
+import { validateBody } from './validateBody'
 
 interface XyoArchivistBoundWitnessBody {
   boundWitnesses: XyoBoundWitness[]
-  payloads?: Record<string, unknown>[][]
-}
-
-const storeBoundWitnesses = async (archive: string, boundWitnesses: XyoBoundWitness[]) => {
-  const sdk = await getArchivistBoundWitnessesMongoSdk(archive)
-  return await sdk.insertMany(boundWitnesses)
+  payloads: Record<string, unknown>[][]
 }
 
 export const postArchiveBlock = async (req: Request, res: Response, next: NextFunction) => {
@@ -26,9 +22,10 @@ export const postArchiveBlock = async (req: Request, res: Response, next: NextFu
   const _timestamp = Date.now()
 
   const body = req.body as XyoArchivistBoundWitnessBody
-  body.boundWitnesses = body.boundWitnesses.map((bw) => {
-    return { ...bw, _source_ip, _timestamp, _user_agent }
-  })
+
+  const boundWitnessMetaData = { _source_ip, _timestamp, _user_agent }
+  const payloadMetaData = { _archive: archive }
+
   const validationErrors = validateBody(body)
 
   if (validationErrors.length > 0) {
@@ -39,22 +36,13 @@ export const postArchiveBlock = async (req: Request, res: Response, next: NextFu
     let bwResult: number | undefined
     let payloadsResult: number | undefined
     if (body.boundWitnesses) {
-      const payloadLists: XyoPayload[][] = []
-      const sanitizedBoundWitnesses = body.boundWitnesses.map((boundWitness) => {
-        const { _payloads, ...sanitized } = boundWitness
-        payloadLists.push(_payloads ?? [])
-        return sanitized
-      })
-      bwResult = await storeBoundWitnesses(archive, sanitizedBoundWitnesses)
+      const { payloads, sanitized } = prepareBoundWitnesses(body.boundWitnesses, boundWitnessMetaData, payloadMetaData)
+
+      bwResult = await storeBoundWitnesses(archive, sanitized)
       assertEx(
         bwResult === body.boundWitnesses.length,
         `Boundwitness Storage Failed [${bwResult}/${body.boundWitnesses.length}]`
       )
-
-      const payloads = flattenArray(payloadLists).map((payload) => {
-        const wrapper = new XyoPayloadWrapper(payload)
-        return { ...payload, _archive: archive, _hash: wrapper.sortedHash() }
-      })
 
       if (payloads.length > 0) {
         const sdk = await getArchivistPayloadMongoSdk(archive)
