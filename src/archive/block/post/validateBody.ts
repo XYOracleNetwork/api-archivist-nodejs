@@ -1,9 +1,9 @@
 //import { XyoBoundWitnessWrapper } from '@xyo-network/sdk-xyo-client-js'
 
 //import flattenArray from './flattenArray'
-import XyoArchivistBoundWitnessBody from './XyoArchivistBoundWitnessBody'
+import { XyoArchivistBoundWitnessBody } from './XyoArchivistBoundWitnessBody'
 
-const validateBody = (body: XyoArchivistBoundWitnessBody): Error[] => {
+export const validateBody = (body: XyoArchivistBoundWitnessBody): Error[] => {
   if (Array.isArray(body.boundWitnesses)) {
     /*const errors = body.boundWitnesses.map((bw) => {
       const wrapper = new XyoBoundWitnessWrapper(bw)
@@ -14,5 +14,3 @@ const validateBody = (body: XyoArchivistBoundWitnessBody): Error[] => {
     return [Error('boundWitnesses must be array')]
   }
 }
-
-export default validateBody
