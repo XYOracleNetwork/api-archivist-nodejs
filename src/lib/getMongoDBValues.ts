@@ -2,7 +2,7 @@ import { getEnvFromAws } from '@xylabs/sdk-api-express-ecs'
 
 export const getMongoDBConfig = async () => {
   let env
-  if (typeof process.env.MONGO_ENVS !== undefined) {
+  if (typeof process.env.MONGO_DOMAIN !== undefined) {
     const envsFromAWS = await getEnvFromAws(
       'arn:aws:secretsmanager:us-east-1:434114103920:secret:api-xyo-archivist-aWFucj'
     )
