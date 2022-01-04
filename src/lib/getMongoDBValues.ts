@@ -15,7 +15,7 @@ export const getMongoDBConfig = async () => {
       MONGO_DATABASE: process.env.MONGO_DATABASE,
       MONGO_DOMAIN: process.env.MONGO_DOMAIN,
       MONGO_PASSWORD: process.env.MONGO_PASSWORD,
-      MONGO_USERNAME: process.env.USERNAME,
+      MONGO_USERNAME: process.env.MONGO_USERNAME,
     }
   }
 
