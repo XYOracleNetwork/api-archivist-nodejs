@@ -29,7 +29,7 @@
     "compile": "rimraf ./dist && yarn compile-rollup",
     "compile-rollup": "rollup -c rollup-config/index.js",
     "compile-tsc": "tsc -p tsconfig.build.json",
-    "reinstall": "rimraf ./node_modules && rimraf ./yarn.lock && rimraf ./yarn-error.log && yarn install && yarn outdated",
+    "reinstall": "rimraf ./yarn.lock && rimraf ./yarn-error.log && rimraf ./node_modules && yarn install && yarn outdated",
     "license": "yarn license-checker --exclude \"MIT, ISC, Apache-2.0, BSD, BSD-2-Clause, CC-BY-4.0, Unlicense, CC-BY-3.0, CC0-1.0\""
   },
   "author": "Arie Trouw",
