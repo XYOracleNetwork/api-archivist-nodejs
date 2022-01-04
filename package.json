@@ -25,12 +25,12 @@
     "start": "nodemon --ext .ts --watch ./src --exec \"node --max-old-space-size=8192 --experimental-specifier-resolution=node --loader ts-node/esm ./src/index.ts\"",
     "launch": "node --max-old-space-size=8192 --experimental-specifier-resolution=node ./dist/node-esm/index.js",
     "build": "yarn lint && yarn compile",
-    "clean": "rm -f tsconfig.tsbuildinfo && rm -r -f ./build && rm -r -f ./.serverless && rm -r -f ./.webpack",
-    "compile": "rm -r -f ./dist && NODE_OPTIONS=--max-old-space-size=8192 yarn compile-rollup",
+    "clean": "rimraf tsconfig.tsbuildinfo && rimraf ./build && rimraf ./.serverless && rimraf ./.webpack",
+    "compile": "rimraf ./dist && yarn compile-rollup",
     "compile-rollup": "rollup -c rollup-config/index.js",
     "compile-tsc": "tsc -p tsconfig.build.json",
-    "reinstall": "rm -r -f ./node_modules && rm -f ./yarn.lock && rm -f ./yarn-error.log && yarn install && yarn outdated",
-    "license": "yarn license-checker --exclude 'MIT, ISC, Apache-2.0, BSD, BSD-2-Clause, CC-BY-4.0, Unlicense, CC-BY-3.0, CC0-1.0'"
+    "reinstall": "rimraf ./node_modules && rimraf ./yarn.lock && rimraf ./yarn-error.log && yarn install && yarn outdated",
+    "license": "yarn license-checker --exclude \"MIT, ISC, Apache-2.0, BSD, BSD-2-Clause, CC-BY-4.0, Unlicense, CC-BY-3.0, CC0-1.0\""
   },
   "author": "Arie Trouw",
   "license": "LGPL-3.0",
@@ -76,6 +76,7 @@
     "license-checker": "^25.0.1",
     "npm-check-updates": "^12.0.5",
     "prettier": "^2.5.1",
+    "rimraf": "^3.0.2",
     "ts-node": "^10.4.0",
     "ts-toolbelt": "^9.6.0",
     "typescript": "^4"
