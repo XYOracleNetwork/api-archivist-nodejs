@@ -4,6 +4,8 @@ services:
     container_name: mongo
     image: mongo:4.4
     restart: always
+    ports:
+      - "27017:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
@@ -11,6 +13,8 @@ services:
     container_name: mongo-express
     image: mongo-express:1.0.0-alpha
     restart: always
+    depends_on:
+      - mongo
     ports:
       - 8081:8081
     environment:
@@ -20,6 +24,9 @@ services:
   archivist:
     container_name: archivist
     build: .
+    restart: always
+    depends_on:
+      - mongo
     ports:
       - "8080:8080"
     environment:
