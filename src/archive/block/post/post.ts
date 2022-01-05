@@ -1,7 +1,6 @@
 import 'source-map-support/register'
 
-import { assertEx } from '@xylabs/sdk-js'
-import { XyoBoundWitness, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
 import { NextFunction, Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
