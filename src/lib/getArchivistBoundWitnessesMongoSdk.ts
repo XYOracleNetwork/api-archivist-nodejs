@@ -9,6 +9,7 @@ export const getArchivistBoundWitnessesMongoSdk = async (archive: string) => {
   return new XyoArchivistBoundWitnessMongoSdk(
     {
       collection: 'bound_witnesses',
+      dbConnectionString: env.MONGO_CONNECTION_STRING,
       dbDomain: assertEx(env.MONGO_DOMAIN, 'Missing Mongo Domain'),
       dbName: assertEx(env.MONGO_DATABASE, 'Missing Mongo Database'),
       dbPassword: assertEx(env.MONGO_PASSWORD, 'Missing Mongo Password'),
