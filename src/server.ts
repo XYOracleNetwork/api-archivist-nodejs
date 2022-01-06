@@ -1,5 +1,7 @@
 import { asyncHandler, errorToJsonHandler } from '@xylabs/sdk-api-express-ecs'
 import bodyParser from 'body-parser'
+import * as cors from 'cors'
+import { CorsOptions } from 'cors'
 import express, { Express, NextFunction, Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
@@ -51,6 +53,11 @@ const server = (port = 80) => {
 
   app.set('etag', false)
 
+  if (process.env.CORS_ALLOWED_ORIGINS) {
+    const origin = process.env.CORS_ALLOWED_ORIGINS.split(',')
+    const corsOptions: CorsOptions = { origin }
+    app.use(cors.default(corsOptions))
+  }
   app.use(bodyParser.json())
 
   app.get('/', (req, res, next) => {
