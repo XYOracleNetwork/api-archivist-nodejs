@@ -38,7 +38,7 @@ export const postArchiveBlock = async (req: Request, res: Response, next: NextFu
   const { payloads, sanitized } = prepareBoundWitnesses(body.boundWitnesses, boundWitnessMetaData, payloadMetaData)
 
   const bwResult = await storeBoundWitnesses(archive, sanitized)
-  const payloadsResult = storePayloads(archive, payloads)
+  const payloadsResult = await storePayloads(archive, payloads)
   res.json({ boundWitnesses: bwResult, payloads: payloadsResult })
 
   next()
