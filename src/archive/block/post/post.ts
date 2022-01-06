@@ -1,7 +1,6 @@
 import 'source-map-support/register'
 
-import { assertEx } from '@xylabs/sdk-js'
-import { XyoBoundWitness, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
 import { NextFunction, Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
@@ -38,7 +37,7 @@ export const postArchiveBlock = async (req: Request, res: Response, next: NextFu
   const { payloads, sanitized } = prepareBoundWitnesses(body.boundWitnesses, boundWitnessMetaData, payloadMetaData)
 
   const bwResult = await storeBoundWitnesses(archive, sanitized)
-  const payloadsResult = storePayloads(archive, payloads)
+  const payloadsResult = await storePayloads(archive, payloads)
   res.json({ boundWitnesses: bwResult, payloads: payloadsResult })
 
   next()
