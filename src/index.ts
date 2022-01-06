@@ -1,8 +1,8 @@
 import { tryParseInt } from '@xylabs/sdk-api-express-ecs'
-import dotenv from 'dotenv'
+import { config } from 'dotenv'
 
 import { server } from './server'
 
-dotenv.config()
+config()
 
 server(tryParseInt(process.env.APP_PORT))
