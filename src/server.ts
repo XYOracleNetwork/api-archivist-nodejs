@@ -1,5 +1,6 @@
 import { asyncHandler, errorToJsonHandler } from '@xylabs/sdk-api-express-ecs'
 import bodyParser from 'body-parser'
+import cors from 'cors'
 import express, { Express, NextFunction, Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
@@ -49,9 +50,21 @@ const addBlockRoutes = (app: Express) => {
 const server = (port = 80) => {
   const app = express()
 
+  const bodyParserInstance = bodyParser.json()
+
+  app.use(cors())
+
   app.set('etag', false)
 
-  app.use(bodyParser.json())
+  //if we do not trap this error, then it dumps too much to log, usually happens if request aborted
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    try {
+      bodyParserInstance(req, res, next)
+    } catch (ex) {
+      const error = ex as Error
+      console.log(`bodyParser failed [${error.name}]: ${error.message}`)
+    }
+  })
 
   app.get('/', (req, res, next) => {
     res.json({ alive: true })
@@ -65,9 +78,11 @@ const server = (port = 80) => {
 
   app.use(errorToJsonHandler)
 
-  app.listen(port, () => {
+  const server = app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`)
   })
+
+  server.setTimeout(3000)
 }
 
 export { server }
