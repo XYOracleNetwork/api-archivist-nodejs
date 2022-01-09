@@ -6,11 +6,13 @@ import { StatusCodes } from 'http-status-codes'
 
 import {
   getArchiveBlockHash,
+  getArchiveBlockHashPayloads,
   getArchiveBlockRecent,
   getArchiveBlockStats,
   getArchivePayloadHash,
   getArchivePayloadRecent,
   getArchivePayloadRepair,
+  getArchivePayloadStats,
   postArchiveBlock,
 } from './archive'
 
@@ -27,9 +29,9 @@ const addArchiveRoutes = (app: Express) => {
 }
 
 const addPayloadRoutes = (app: Express) => {
-  app.get('/archive/:archive/payload/stats', asyncHandler(getArchiveBlockStats))
-  app.get('/archive/:archive/payload/:hash', asyncHandler(getArchivePayloadHash))
-  app.get('/archive/:archive/payload/:hash/repair', asyncHandler(getArchivePayloadRepair))
+  app.get('/archive/:archive/payload/stats', asyncHandler(getArchivePayloadStats))
+  app.get('/archive/:archive/payload/hash/:hash', asyncHandler(getArchivePayloadHash))
+  app.get('/archive/:archive/payload/hash/:hash/repair', asyncHandler(getArchivePayloadRepair))
   app.get('/archive/:archive/payload/recent/:limit', asyncHandler(getArchivePayloadRecent))
 }
 
@@ -43,7 +45,8 @@ const addPayloadSchemaRoutes = (app: Express) => {
 const addBlockRoutes = (app: Express) => {
   app.post('/archive/:archive/block', asyncHandler(postArchiveBlock))
   app.get('/archive/:archive/block/stats', asyncHandler(getArchiveBlockStats))
-  app.get('/archive/:archive/block/:hash', asyncHandler(getArchiveBlockHash))
+  app.get('/archive/:archive/block/hash/:hash', asyncHandler(getArchiveBlockHash))
+  app.get('/archive/:archive/block/hash/:hash/payloads', asyncHandler(getArchiveBlockHashPayloads))
   app.get('/archive/:archive/block/recent/:limit', asyncHandler(getArchiveBlockRecent))
 }
 
