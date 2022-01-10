@@ -11,7 +11,8 @@
         "--max-old-space-size=8192",
         "--experimental-specifier-resolution=node"
       ],
-      "envFile": "${workspaceFolder}/.env"
+      "envFile": "${workspaceFolder}/.env",
+      "preLaunchTask": "build"
     }
   ]
 }

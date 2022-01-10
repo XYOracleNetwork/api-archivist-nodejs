@@ -2,10 +2,10 @@ import { getEnvFromAws } from '@xylabs/sdk-api-express-ecs'
 
 export const getMongoDBConfig = async (): Promise<Record<string, string | undefined>> => {
   let env: Record<string, string | undefined> = {}
-  if (typeof process.env.MONGO_CONNECTION_STRING !== undefined) {
+  if (process.env.MONGO_CONNECTION_STRING) {
     env.MONGO_CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING
   }
-  if (typeof process.env.MONGO_DOMAIN !== undefined) {
+  if (process.env.MONGO_DOMAIN) {
     env.MONGO_DATABASE = process.env.MONGO_DATABASE
     env.MONGO_DOMAIN = process.env.MONGO_DOMAIN
     env.MONGO_PASSWORD = process.env.MONGO_PASSWORD
