@@ -2,7 +2,9 @@ import { asyncHandler, errorToJsonHandler } from '@xylabs/sdk-api-express-ecs'
 import bodyParser from 'body-parser'
 import cors, { CorsOptions } from 'cors'
 import express, { Express, NextFunction, Request, Response } from 'express'
+import session, { MemoryStore } from 'express-session'
 import { StatusCodes } from 'http-status-codes'
+import KeycloakConnect from 'keycloak-connect'
 
 import {
   getArchiveBlockHash,
@@ -52,14 +54,26 @@ const addBlockRoutes = (app: Express) => {
   app.get('/archive/:archive/block/sample/:size', getNotImplemented)
 }
 
+const bodyParserInstance = bodyParser.json()
+
 const server = (port = 80) => {
   const app = express()
-
-  const bodyParserInstance = bodyParser.json()
-
+  app.set('etag', false)
   app.use(cors())
 
-  app.set('etag', false)
+  if (process.env.USE_AUTH) {
+    const store = new MemoryStore()
+    app.use(
+      session({
+        resave: false,
+        saveUninitialized: true,
+        secret: 'mySecret',
+        store,
+      })
+    )
+    const keycloak = new KeycloakConnect({ store })
+    app.use(keycloak.middleware())
+  }
 
   //if we do not trap this error, then it dumps too much to log, usually happens if request aborted
   app.use((req: Request, res: Response, next: NextFunction) => {
