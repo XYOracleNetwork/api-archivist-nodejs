@@ -88,7 +88,9 @@ const server = (port = 80) => {
   addPayloadSchemaRoutes(app)
   addBlockRoutes(app)
 
-  app.use('/user', middleware())
+  if (process.env.USE_AUTH) {
+    app.use('/user', middleware())
+  }
 
   app.use(errorToJsonHandler)
 
