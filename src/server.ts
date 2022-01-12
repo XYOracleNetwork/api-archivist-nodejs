@@ -15,6 +15,7 @@ import {
   getArchivePayloadStats,
   postArchiveBlock,
 } from './archive'
+import { middleware } from './middleware'
 
 const getNotImplemented = (req: Request, res: Response, next: NextFunction) => {
   res.sendStatus(StatusCodes.NOT_IMPLEMENTED)
@@ -86,6 +87,10 @@ const server = (port = 80) => {
   addPayloadRoutes(app)
   addPayloadSchemaRoutes(app)
   addBlockRoutes(app)
+
+  if (process.env.USE_AUTH) {
+    app.use('/user', middleware())
+  }
 
   app.use(errorToJsonHandler)
 
