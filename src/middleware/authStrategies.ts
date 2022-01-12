@@ -1,3 +1,4 @@
+import { compare, hash } from 'bcrypt'
 import passport from 'passport'
 import { ExtractJwt, Strategy as JWTStrategy, StrategyOptions } from 'passport-jwt'
 import { IStrategyOptions, Strategy as LocalStrategy } from 'passport-local'
@@ -5,7 +6,7 @@ import { IStrategyOptions, Strategy as LocalStrategy } from 'passport-local'
 interface IUser {
   _id: string
   email: string
-  password: string
+  passwordHash: string
 }
 const shamefulInMemoryUserStore: Record<string, IUser | undefined> = {}
 const localStrategyOptions: IStrategyOptions = {
@@ -29,7 +30,7 @@ const defaultJWTStrategyOptions: StrategyOptions = {
     'PS512',
   ],
   audience: 'archivist',
-  ignoreExpiration: true, // TODO: false
+  ignoreExpiration: false,
   issuer: 'archivist',
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: 'TOP_SECRET',
@@ -40,15 +41,17 @@ export const configureAuthStrategies = (audience = 'archivist', issuer = 'archiv
     'signup',
     new LocalStrategy(localStrategyOptions, async (email, password, done) => {
       try {
-        // TODO: Create user
-        await Promise.resolve()
-        const user: IUser = {
-          _id: `${++lastUserId}`,
-          email,
-          password,
-        }
-        shamefulInMemoryUserStore[email] = user
-        return done(null, user)
+        // Create user
+        const passwordHash = await hash(password, 10)
+        const _id = `${++lastUserId}`
+        const createdUser: IUser = { _id, email, passwordHash }
+
+        // Store the user
+        shamefulInMemoryUserStore[email] = createdUser
+
+        // Return the user
+        const returnedUser = { _id, email }
+        return done(null, returnedUser)
       } catch (error) {
         done(error)
       }
@@ -59,14 +62,14 @@ export const configureAuthStrategies = (audience = 'archivist', issuer = 'archiv
     'login',
     new LocalStrategy(localStrategyOptions, async (email, password, done) => {
       try {
-        // TODO: Find user
+        // Find user
         await Promise.resolve()
         const user = shamefulInMemoryUserStore[email]
         if (!user) {
           return done(null, false, { message: 'User not found' })
         }
-        // TODO: Validate password
-        const validate = await Promise.resolve(true)
+        // Validate user's password
+        const validate = await compare(password, user.passwordHash)
         if (!validate) {
           return done(null, false, { message: 'Wrong Password' })
         }
