@@ -1,8 +1,8 @@
 import express, { Router } from 'express'
-import jwt from 'jsonwebtoken'
+import jwt, { SignOptions } from 'jsonwebtoken'
 import passport from 'passport'
 
-import { configureAuth } from './auth'
+import { configureAuthStrategies } from './authStrategies'
 import { postLogin } from './login'
 import { getProfile } from './profile'
 import { postSignup } from './signup'
@@ -18,9 +18,19 @@ router.post('/login', (req, res, next) => {
       }
       req.login(user, { session: false }, (error) => {
         if (error) return next(error)
-        const body = { _id: user._id, email: user.email }
+        const body = {
+          _id: user._id,
+          email: user.email,
+        }
+        const options: SignOptions = {
+          algorithm: 'HS256', // 'HS512' once we perf
+          audience: 'archivist',
+          expiresIn: '1 day',
+          issuer: 'archivist',
+          subject: user._id,
+        }
         // eslint-disable-next-line import/no-named-as-default-member
-        const token = jwt.sign({ user: body }, 'TOP_SECRET')
+        const token = jwt.sign({ user: body }, 'TOP_SECRET', options)
         return res.json({ token })
       })
     } catch (error) {
@@ -28,10 +38,16 @@ router.post('/login', (req, res, next) => {
     }
   })(req, res, next)
 })
-router.get('/profile', getProfile)
+router.get('/profile', passport.authenticate('jwt', { session: false }), getProfile)
 router.post('/signup', passport.authenticate('signup', { session: false }), postSignup)
 
-export const middleware: () => Router = () => {
-  configureAuth()
+export interface IMiddlewareConfig {
+  secretOrKey?: string | Buffer | undefined
+  issuer?: string | undefined
+  audience?: string | undefined
+}
+
+export const middleware: (config?: IMiddlewareConfig) => Router = () => {
+  configureAuthStrategies()
   return router
 }
