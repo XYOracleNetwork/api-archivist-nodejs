@@ -1,11 +1,10 @@
 import 'source-map-support/register'
 
 import { RequestHandler } from 'express'
-import { StatusCodes } from 'http-status-codes'
 
-export const getProfile: RequestHandler = (req, res, next) => {
-  res.sendStatus(StatusCodes.NOT_IMPLEMENTED)
-  next({
-    message: 'Not Implemented',
+export const getProfile: RequestHandler = (req, res, _next) => {
+  res.json({
+    token: req.query.secret_token,
+    user: req.user,
   })
 }
