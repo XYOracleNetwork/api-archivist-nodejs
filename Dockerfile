@@ -1,6 +1,5 @@
 # syntax=docker/dockerfile:1
 FROM node:16 AS builder
-EXPOSE 80
 WORKDIR /app
 COPY . .
 RUN yarn install
