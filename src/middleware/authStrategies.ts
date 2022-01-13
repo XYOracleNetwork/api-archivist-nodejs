@@ -3,12 +3,8 @@ import passport from 'passport'
 import { ExtractJwt, Strategy as JWTStrategy, StrategyOptions } from 'passport-jwt'
 import { IStrategyOptions, Strategy as LocalStrategy } from 'passport-local'
 
-interface IUser {
-  _id: string
-  email: string
-  passwordHash: string
-}
-const shamefulInMemoryUserStore: Record<string, IUser | undefined> = {}
+import { InMemoryUserStore, IWeb2User, User } from './userStore'
+
 const localStrategyOptions: IStrategyOptions = {
   passwordField: 'password',
   usernameField: 'email',
@@ -35,23 +31,21 @@ const defaultJWTStrategyOptions: StrategyOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: 'TOP_SECRET',
 }
-let lastUserId = 0
 export const configureAuthStrategies = (audience = 'archivist', issuer = 'archivist', secretOrKey = 'TOP_SECRET') => {
+  const userStore = new InMemoryUserStore()
   passport.use(
     'signup',
     new LocalStrategy(localStrategyOptions, async (email, password, done) => {
       try {
         // Create user
         const passwordHash = await hash(password, 10)
-        const _id = `${++lastUserId}`
-        const createdUser: IUser = { _id, email, passwordHash }
+        const userToCreate: IWeb2User = { email, passwordHash }
 
         // Store the user
-        shamefulInMemoryUserStore[email] = createdUser
+        const createdUser: User = await userStore.create(userToCreate)
 
         // Return the user
-        const returnedUser = { _id, email }
-        return done(null, returnedUser)
+        return done(null, createdUser)
       } catch (error) {
         done(error)
       }
@@ -64,8 +58,9 @@ export const configureAuthStrategies = (audience = 'archivist', issuer = 'archiv
       try {
         // Find user
         await Promise.resolve()
-        const user = shamefulInMemoryUserStore[email]
-        if (!user) {
+        const user = (await userStore.getByEmail(email)) as IWeb2User | null
+        // If we didn't find the user or they have no passwordHash
+        if (!user || !user?.passwordHash) {
           return done(null, false, { message: 'User not found' })
         }
         // Validate user's password
