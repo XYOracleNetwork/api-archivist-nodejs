@@ -4,6 +4,7 @@ import { ExtractJwt, Strategy as JWTStrategy, StrategyOptions } from 'passport-j
 import { IStrategyOptions, Strategy as LocalStrategy } from 'passport-local'
 
 import { IUserStore, IWeb2User, User } from './userStore'
+import { Web3AuthStrategy } from './web3AuthStrategy'
 
 const localStrategyOptions: IStrategyOptions = {
   passwordField: 'password',
@@ -78,6 +79,8 @@ export const configureAuthStrategies = (
       }
     })
   )
+
+  passport.use('web3', new Web3AuthStrategy(userStore))
 
   const jwtStrategyOptions: StrategyOptions = { ...defaultJWTStrategyOptions, audience, issuer, secretOrKey }
   passport.use(

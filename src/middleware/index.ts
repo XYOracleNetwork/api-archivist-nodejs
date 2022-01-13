@@ -11,6 +11,8 @@ import { getWalletChallenge, postWalletVerify } from './wallet'
 // eslint-disable-next-line import/no-named-as-default-member
 const router: Router = express.Router()
 
+const noSession = { session: false }
+
 export const loginUser = (user: User, req: Request, res: Response, next: NextFunction) => {
   try {
     req.login(user, { session: false }, (error) => {
@@ -47,12 +49,12 @@ router.post('/login', (req, res, next) => {
     return loginUser(user, req, res, next)
   })(req, res, next)
 })
-router.get('/profile', passport.authenticate('jwt', { session: false }), getProfile)
-router.post('/signup', passport.authenticate('signup', { session: false }), postSignup)
+router.get('/profile', passport.authenticate('jwt', noSession), getProfile)
+router.post('/signup', passport.authenticate('signup', noSession), postSignup)
 
 // TODO: Separate out into separate middleware
 router.get('/wallet/challenge/:publicKey', getWalletChallenge)
-router.post('/wallet/verify/:publicKey', postWalletVerify)
+router.post('/wallet/verify/:publicKey', passport.authenticate('web3', noSession), postWalletVerify)
 
 export interface IMiddlewareConfig {
   secretOrKey?: string | Buffer | undefined
