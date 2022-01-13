@@ -19,9 +19,9 @@ export const postWalletVerify: RequestHandler = (req, res, _next) => {
     return
   }
   if (verifyPublicKey(message, signature, publicKey)) {
-    // TODO: Validated, issue JWT
     res.json({
-      token: 'TODO: JWT',
+      token: req.query.secret_token,
+      user: req.user,
     })
   }
   res.sendStatus(StatusCodes.UNAUTHORIZED)

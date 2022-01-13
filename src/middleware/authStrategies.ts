@@ -3,12 +3,13 @@ import passport from 'passport'
 import { ExtractJwt, Strategy as JWTStrategy, StrategyOptions } from 'passport-jwt'
 import { IStrategyOptions, Strategy as LocalStrategy } from 'passport-local'
 
-import { InMemoryUserStore, IWeb2User, User } from './userStore'
+import { IUserStore, IWeb2User, User } from './userStore'
 
 const localStrategyOptions: IStrategyOptions = {
   passwordField: 'password',
   usernameField: 'email',
 }
+
 const defaultJWTStrategyOptions: StrategyOptions = {
   // NOTE: Anything but NONE here
   algorithms: [
@@ -31,8 +32,12 @@ const defaultJWTStrategyOptions: StrategyOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: 'TOP_SECRET',
 }
-export const configureAuthStrategies = (audience = 'archivist', issuer = 'archivist', secretOrKey = 'TOP_SECRET') => {
-  const userStore = new InMemoryUserStore()
+export const configureAuthStrategies = (
+  userStore: IUserStore<User>,
+  audience = 'archivist',
+  issuer = 'archivist',
+  secretOrKey = 'TOP_SECRET'
+) => {
   passport.use(
     'signup',
     new LocalStrategy(localStrategyOptions, async (email, password, done) => {
@@ -57,8 +62,7 @@ export const configureAuthStrategies = (audience = 'archivist', issuer = 'archiv
     new LocalStrategy(localStrategyOptions, async (email, password, done) => {
       try {
         // Find user
-        await Promise.resolve()
-        const user = (await userStore.getByEmail(email)) as IWeb2User | null
+        const user = ((await (userStore as Required<IUserStore<User>>)?.getByEmail(email)) || null) as IWeb2User | null
         // If we didn't find the user or they have no passwordHash
         if (!user || !user?.passwordHash) {
           return done(null, false, { message: 'User not found' })

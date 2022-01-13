@@ -1,44 +1,50 @@
-import express, { Router } from 'express'
+import express, { NextFunction, Request, Response, Router } from 'express'
 import jwt, { SignOptions } from 'jsonwebtoken'
 import passport from 'passport'
 
 import { configureAuthStrategies } from './authStrategies'
 import { getProfile } from './profile'
 import { postSignup } from './signup'
+import { InMemoryUserStore, IWeb2User, IWeb3User, User } from './userStore'
 import { getWalletChallenge, postWalletVerify } from './wallet'
 
 // eslint-disable-next-line import/no-named-as-default-member
 const router: Router = express.Router()
+
+export const loginUser = (user: User, req: Request, res: Response, next: NextFunction) => {
+  try {
+    req.login(user, { session: false }, (error) => {
+      if (error) return next(error)
+      const options: SignOptions = {
+        algorithm: 'HS256', // 'HS512' once we perf
+        audience: 'archivist',
+        expiresIn: '1 day',
+        issuer: 'archivist',
+        subject: user.id,
+      }
+
+      // TODO: Something smarter than needing to
+      // remember to sanitize response data
+      // Omit sensitive data
+      delete (user as Partial<IWeb2User>).passwordHash
+      delete (user as Partial<IWeb3User>).publicKey
+
+      // eslint-disable-next-line import/no-named-as-default-member
+      const token = jwt.sign({ user }, 'TOP_SECRET', options)
+      return res.json({ token })
+    })
+  } catch (error) {
+    return next(error)
+  }
+}
+
 router.post('/login', (req, res, next) => {
   passport.authenticate('login', (err, user, _info) => {
-    try {
-      if (err || !user) {
-        const error = new Error('An error occurred.')
-        return next(error)
-      }
-      req.login(user, { session: false }, (error) => {
-        if (error) return next(error)
-        const options: SignOptions = {
-          algorithm: 'HS256', // 'HS512' once we perf
-          audience: 'archivist',
-          expiresIn: '1 day',
-          issuer: 'archivist',
-          subject: user.id,
-        }
-
-        // TODO: Something smarter than needing to
-        // remember to sanitize response data
-        // Omit sensitive data
-        delete user.passwordHash
-        delete user.publicKey
-
-        // eslint-disable-next-line import/no-named-as-default-member
-        const token = jwt.sign({ user }, 'TOP_SECRET', options)
-        return res.json({ token })
-      })
-    } catch (error) {
+    if (err || !user) {
+      const error = new Error('An error occurred.')
       return next(error)
     }
+    return loginUser(user, req, res, next)
   })(req, res, next)
 })
 router.get('/profile', passport.authenticate('jwt', { session: false }), getProfile)
@@ -55,6 +61,8 @@ export interface IMiddlewareConfig {
 }
 
 export const middleware: (config?: IMiddlewareConfig) => Router = () => {
-  configureAuthStrategies()
+  // TODO: Don't use in-memory user store
+  const userStore = new InMemoryUserStore()
+  configureAuthStrategies(userStore)
   return router
 }
