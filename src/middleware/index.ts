@@ -6,7 +6,7 @@ import { configureAuthStrategies } from './authStrategies'
 import { getProfile } from './profile'
 import { postSignup } from './signup'
 import { InMemoryUserStore, IWeb2User, IWeb3User, User } from './userStore'
-import { getWalletChallenge, postWalletSignup, postWalletVerify } from './wallet'
+import { getWalletChallenge, postWalletSignup } from './wallet'
 
 // eslint-disable-next-line import/no-named-as-default-member
 const router: Router = express.Router()
@@ -58,7 +58,15 @@ router.post('/signup', passport.authenticate('signup', noSession), postSignup)
 // TODO: Separate out into separate middleware
 router.post('/wallet/signup/:publicKey', postWalletSignup(userStore))
 router.get('/wallet/challenge/:publicKey', getWalletChallenge)
-router.post('/wallet/verify/:publicKey', passport.authenticate('web3', noSession), postWalletVerify)
+router.post('/wallet/verify/:publicKey', (req, res, next) => {
+  passport.authenticate('web3', (err, user, _info) => {
+    if (err || !user) {
+      const error = new Error('An error occurred.')
+      return next(error)
+    }
+    return loginUser(user, req, res, next)
+  })(req, res, next)
+})
 
 export interface IMiddlewareConfig {
   secretOrKey?: string | Buffer | undefined
