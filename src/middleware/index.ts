@@ -3,9 +3,9 @@ import jwt, { SignOptions } from 'jsonwebtoken'
 import passport from 'passport'
 
 import { configureAuthStrategies } from './authStrategies'
-import { postLogin } from './login'
 import { getProfile } from './profile'
 import { postSignup } from './signup'
+import { getWalletChallenge, postWalletVerify } from './wallet'
 
 // eslint-disable-next-line import/no-named-as-default-member
 const router: Router = express.Router()
@@ -40,6 +40,10 @@ router.post('/login', (req, res, next) => {
 })
 router.get('/profile', passport.authenticate('jwt', { session: false }), getProfile)
 router.post('/signup', passport.authenticate('signup', { session: false }), postSignup)
+
+// TODO: Separate out into separate middleware
+router.get('/wallet/challenge/:publicKey', getWalletChallenge)
+router.post('/wallet/verify/:publicKey', postWalletVerify)
 
 export interface IMiddlewareConfig {
   secretOrKey?: string | Buffer | undefined
