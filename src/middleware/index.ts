@@ -18,19 +18,22 @@ router.post('/login', (req, res, next) => {
       }
       req.login(user, { session: false }, (error) => {
         if (error) return next(error)
-        const body = {
-          _id: user._id,
-          email: user.email,
-        }
         const options: SignOptions = {
           algorithm: 'HS256', // 'HS512' once we perf
           audience: 'archivist',
           expiresIn: '1 day',
           issuer: 'archivist',
-          subject: user._id,
+          subject: user.id,
         }
+
+        // TODO: Something smarter than needing to
+        // remember to sanitize response data
+        // Omit sensitive data
+        delete user.passwordHash
+        delete user.publicKey
+
         // eslint-disable-next-line import/no-named-as-default-member
-        const token = jwt.sign({ user: body }, 'TOP_SECRET', options)
+        const token = jwt.sign({ user }, 'TOP_SECRET', options)
         return res.json({ token })
       })
     } catch (error) {
