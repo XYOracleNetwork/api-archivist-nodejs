@@ -7,8 +7,13 @@ import { IUserStore, IWeb3User, User } from './userStore'
 const web3 = new Web3()
 
 const verifyPublicKey = (message: string, signature: string, publicKey: string) => {
-  const key = web3.eth.accounts.recover(message, signature)
-  return publicKey === key
+  try {
+    const key = web3.eth.accounts.recover(message, signature)
+    return publicKey === key
+  } catch (error) {
+    // TODO: Logging
+    return false
+  }
 }
 
 export class Web3AuthStrategy extends Strategy {
