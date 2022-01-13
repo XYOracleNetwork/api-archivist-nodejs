@@ -9,7 +9,7 @@ const web3 = new Web3()
 const verifyPublicKey = (message: string, signature: string, publicKey: string) => {
   try {
     const key = web3.eth.accounts.recover(message, signature)
-    return publicKey === key
+    return publicKey.toLowerCase() === key.toLowerCase()
   } catch (error) {
     // TODO: Logging
     return false

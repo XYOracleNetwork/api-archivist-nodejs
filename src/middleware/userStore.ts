@@ -24,6 +24,7 @@ export class InMemoryUserStore implements IUserStore<User> {
   create(user: Omit<User, 'id'>): Promise<User> {
     const id = `${++this.lastUserId}`
     const userWithId: User = { id, ...user }
+    // TODO: Lowercase values here for performance later
     this.userStore[id] = userWithId
     return Promise.resolve(userWithId)
   }
@@ -31,11 +32,19 @@ export class InMemoryUserStore implements IUserStore<User> {
     return Promise.resolve(this.userStore[id])
   }
   getByEmail(email: string): Promise<User | null> {
-    const user = Object.values(this.userStore).find((user) => (user as IWeb2User)?.email === email)
+    if (!email) {
+      return Promise.resolve(null)
+    }
+    const value = email?.toLowerCase()
+    const user = Object.values(this.userStore).find((user) => (user as IWeb2User)?.email?.toLowerCase() === value)
     return Promise.resolve(user || null)
   }
   getByPublicKey(publicKey: string): Promise<User | null> {
-    const user = Object.values(this.userStore).find((user) => (user as IWeb3User)?.publicKey === publicKey)
+    if (!publicKey) {
+      return Promise.resolve(null)
+    }
+    const value = publicKey?.toLowerCase()
+    const user = Object.values(this.userStore).find((user) => (user as IWeb3User)?.publicKey?.toLowerCase() === value)
     return Promise.resolve(user || null)
   }
 }
