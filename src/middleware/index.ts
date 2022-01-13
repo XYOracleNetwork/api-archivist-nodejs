@@ -6,12 +6,15 @@ import { configureAuthStrategies } from './authStrategies'
 import { getProfile } from './profile'
 import { postSignup } from './signup'
 import { InMemoryUserStore, IWeb2User, IWeb3User, User } from './userStore'
-import { getWalletChallenge, postWalletVerify } from './wallet'
+import { getWalletChallenge, postWalletSignup, postWalletVerify } from './wallet'
 
 // eslint-disable-next-line import/no-named-as-default-member
 const router: Router = express.Router()
 
 const noSession = { session: false }
+
+// TODO: Don't use in-memory user store
+const userStore = new InMemoryUserStore()
 
 export const loginUser = (user: User, req: Request, res: Response, next: NextFunction) => {
   try {
@@ -53,6 +56,7 @@ router.get('/profile', passport.authenticate('jwt', noSession), getProfile)
 router.post('/signup', passport.authenticate('signup', noSession), postSignup)
 
 // TODO: Separate out into separate middleware
+router.post('/wallet/signup/:publicKey', postWalletSignup(userStore))
 router.get('/wallet/challenge/:publicKey', getWalletChallenge)
 router.post('/wallet/verify/:publicKey', passport.authenticate('web3', noSession), postWalletVerify)
 
@@ -63,8 +67,6 @@ export interface IMiddlewareConfig {
 }
 
 export const middleware: (config?: IMiddlewareConfig) => Router = () => {
-  // TODO: Don't use in-memory user store
-  const userStore = new InMemoryUserStore()
   configureAuthStrategies(userStore)
   return router
 }
