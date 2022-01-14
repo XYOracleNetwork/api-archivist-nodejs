@@ -1,6 +1,6 @@
-import express, { NextFunction, Request, Response, Router } from 'express'
+import express, { NextFunction, Request, RequestHandler, Response, Router } from 'express'
 import jwt, { SignOptions } from 'jsonwebtoken'
-import passport from 'passport'
+import passport, { AuthenticateOptions } from 'passport'
 
 import { InMemoryUserStore, IWeb2User, IWeb3User, User } from './model'
 import { configureJwtStrategy, configureLocalStrategy, configureWeb3Strategy } from './passport'
@@ -9,7 +9,9 @@ import { getProfile, getWalletChallenge, postSignup, postWalletSignup } from './
 // eslint-disable-next-line import/no-named-as-default-member
 const router: Router = express.Router()
 
-const noSession = { session: false }
+const noSession: AuthenticateOptions = { session: false }
+export const jwtRequiredHandler: RequestHandler = passport.authenticate('jwt', noSession)
+export const noAuthHandler: RequestHandler = (_req, _res, next) => next()
 
 // TODO: Don't use in-memory user store
 const userStore = new InMemoryUserStore()
@@ -50,7 +52,7 @@ router.post('/login', (req, res, next) => {
     return loginUser(user, req, res, next)
   })(req, res, next)
 })
-router.get('/profile', passport.authenticate('jwt', noSession), getProfile)
+router.get('/profile', jwtRequiredHandler, getProfile)
 router.post('/signup', passport.authenticate('signup', noSession), postSignup)
 
 // TODO: Separate out into separate middleware
