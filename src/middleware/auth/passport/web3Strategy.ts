@@ -1,14 +1,12 @@
+import { utils } from 'ethers'
 import { Request } from 'express'
 import passport, { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
-import Web3 from 'web3'
 
 import { IUserStore, IWeb3User, User } from '../model'
 
-const web3 = new Web3()
-
 const verifyPublicKey = (message: string, signature: string, publicKey: string) => {
   try {
-    const key = web3.eth.accounts.recover(message, signature)
+    const key = utils.verifyMessage(message, signature)
     return publicKey.toLowerCase() === key.toLowerCase()
   } catch (error) {
     // TODO: Logging
