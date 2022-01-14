@@ -1,5 +1,5 @@
 import { Request } from 'express'
-import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
+import passport, { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 import Web3 from 'web3'
 
 import { IUserStore, IWeb3User, User } from '../model'
@@ -16,7 +16,7 @@ const verifyPublicKey = (message: string, signature: string, publicKey: string) 
   }
 }
 
-export class Web3AuthStrategy extends Strategy {
+class Web3AuthStrategy extends Strategy {
   constructor(protected readonly userStore: IUserStore<User>) {
     super()
   }
@@ -47,4 +47,8 @@ export class Web3AuthStrategy extends Strategy {
     this.success(user)
     return
   }
+}
+
+export const configureWeb3Strategy = (userStore: IUserStore<User>) => {
+  passport.use('web3', new Web3AuthStrategy(userStore))
 }

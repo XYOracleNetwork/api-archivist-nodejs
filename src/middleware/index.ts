@@ -2,8 +2,8 @@ import express, { NextFunction, Request, Response, Router } from 'express'
 import jwt, { SignOptions } from 'jsonwebtoken'
 import passport from 'passport'
 
-import { configureAuthStrategies } from './passport/authStrategies'
 import { InMemoryUserStore, IWeb2User, IWeb3User, User } from './model'
+import { configureJwtStrategy, configureLocalStrategy, configureWeb3Strategy } from './passport'
 import { getProfile, getWalletChallenge, postSignup, postWalletSignup } from './routes'
 
 // eslint-disable-next-line import/no-named-as-default-member
@@ -73,6 +73,8 @@ export interface IMiddlewareConfig {
 }
 
 export const middleware: (config?: IMiddlewareConfig) => Router = () => {
-  configureAuthStrategies(userStore)
+  configureJwtStrategy()
+  configureLocalStrategy(userStore)
+  configureWeb3Strategy(userStore)
   return router
 }
