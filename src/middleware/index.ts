@@ -2,11 +2,9 @@ import express, { NextFunction, Request, Response, Router } from 'express'
 import jwt, { SignOptions } from 'jsonwebtoken'
 import passport from 'passport'
 
-import { configureAuthStrategies } from './authStrategies'
-import { getProfile } from './routes/profile'
-import { postSignup } from './routes/signup'
-import { InMemoryUserStore, IWeb2User, IWeb3User, User } from './userStore'
-import { getWalletChallenge, postWalletSignup } from './routes/wallet'
+import { configureAuthStrategies } from './passport/authStrategies'
+import { InMemoryUserStore, IWeb2User, IWeb3User, User } from './model'
+import { getProfile, getWalletChallenge, postSignup, postWalletSignup } from './routes'
 
 // eslint-disable-next-line import/no-named-as-default-member
 const router: Router = express.Router()

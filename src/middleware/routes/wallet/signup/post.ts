@@ -3,7 +3,7 @@ import 'source-map-support/register'
 import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
-import { IUserStore, IWeb3User, User } from '../../../userStore'
+import { IUserStore, IWeb3User, User } from '../../../model/userStore'
 
 export const postWalletSignup =
   (userStore: IUserStore<User>): RequestHandler =>

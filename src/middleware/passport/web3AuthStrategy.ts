@@ -2,7 +2,7 @@ import { Request } from 'express'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 import Web3 from 'web3'
 
-import { IUserStore, IWeb3User, User } from './userStore'
+import { IUserStore, IWeb3User, User } from '../model'
 
 const web3 = new Web3()
 

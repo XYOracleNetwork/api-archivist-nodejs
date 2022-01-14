@@ -3,7 +3,7 @@ import passport from 'passport'
 import { ExtractJwt, Strategy as JWTStrategy, StrategyOptions } from 'passport-jwt'
 import { IStrategyOptions, Strategy as LocalStrategy } from 'passport-local'
 
-import { IUserStore, IWeb2User, User } from './userStore'
+import { IUserStore, IWeb2User, User } from '../model'
 import { Web3AuthStrategy } from './web3AuthStrategy'
 
 const localStrategyOptions: IStrategyOptions = {
