@@ -3,10 +3,10 @@ import jwt, { SignOptions } from 'jsonwebtoken'
 import passport from 'passport'
 
 import { configureAuthStrategies } from './authStrategies'
-import { getProfile } from './profile'
-import { postSignup } from './signup'
+import { getProfile } from './routes/profile'
+import { postSignup } from './routes/signup'
 import { InMemoryUserStore, IWeb2User, IWeb3User, User } from './userStore'
-import { getWalletChallenge, postWalletSignup } from './wallet'
+import { getWalletChallenge, postWalletSignup } from './routes/wallet'
 
 // eslint-disable-next-line import/no-named-as-default-member
 const router: Router = express.Router()
