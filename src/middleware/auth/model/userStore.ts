@@ -6,7 +6,7 @@ export interface IWeb2User {
   passwordHash: string
 }
 export interface IWeb3User {
-  publicKey: string
+  address: string
 }
 
 export type User = IUser & Partial<IWeb2User | IWeb3User>
@@ -15,7 +15,7 @@ export interface IUserStore<TUser extends IUser> {
   create(user: Omit<TUser, 'id'>): Promise<TUser>
   getById(id: string): Promise<TUser | null>
   getByEmail?(id: string): Promise<TUser | null>
-  getByPublicKey?(publicKey: string): Promise<TUser | null>
+  getByWallet?(address: string): Promise<TUser | null>
 }
 
 export class InMemoryUserStore implements IUserStore<User> {
@@ -39,12 +39,12 @@ export class InMemoryUserStore implements IUserStore<User> {
     const user = Object.values(this.userStore).find((user) => (user as IWeb2User)?.email?.toLowerCase() === value)
     return Promise.resolve(user || null)
   }
-  getByPublicKey(publicKey: string): Promise<User | null> {
-    if (!publicKey) {
+  getByWallet(address: string): Promise<User | null> {
+    if (!address) {
       return Promise.resolve(null)
     }
-    const value = publicKey?.toLowerCase()
-    const user = Object.values(this.userStore).find((user) => (user as IWeb3User)?.publicKey?.toLowerCase() === value)
+    const value = address?.toLowerCase()
+    const user = Object.values(this.userStore).find((user) => (user as IWeb3User)?.address?.toLowerCase() === value)
     return Promise.resolve(user || null)
   }
 }

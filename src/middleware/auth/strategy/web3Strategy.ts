@@ -4,12 +4,12 @@ import passport, { Strategy, StrategyCreated, StrategyCreatedStatic } from 'pass
 
 import { IUserStore, IWeb3User, User } from '../model'
 
-const verifyPublicKey = (message: string, signature: string, publicKey: string) => {
+const verifyWallet = (message: string, signature: string, address: string) => {
   try {
     const key = utils.verifyMessage(message, signature)
-    return publicKey.toLowerCase() === key.toLowerCase()
+    return address.toLowerCase() === key.toLowerCase()
   } catch (error) {
-    // TODO: Logging
+    console.error(error)
     return false
   }
 }
@@ -24,19 +24,18 @@ class Web3AuthStrategy extends Strategy {
     req: Request,
     _options?: unknown
   ) {
-    const { publicKey } = req.params
-    const { message, signature } = req.body
-    if (!publicKey || !message || !signature) {
+    const { address, message, signature } = req.body
+    if (!address || !message || !signature) {
       this.error({ message: 'Missing request values' })
       return
     }
-    if (!verifyPublicKey(message, signature, publicKey)) {
+    if (!verifyWallet(message, signature, address)) {
       this.fail()
       return
     }
     const user =
-      ((await ((this as unknown as Web3AuthStrategy).userStore as Required<IUserStore<User>>)?.getByPublicKey(
-        publicKey
+      ((await ((this as unknown as Web3AuthStrategy).userStore as Required<IUserStore<User>>)?.getByWallet(
+        address
       )) as IWeb3User) || null
     if (!user) {
       this.error({ message: 'User not found' })

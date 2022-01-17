@@ -1,15 +1,17 @@
-import express, { NextFunction, Request, Response, Router } from 'express'
+import express, { NextFunction, Request, RequestHandler, Response, Router } from 'express'
 import jwt, { SignOptions } from 'jsonwebtoken'
-import passport from 'passport'
+import passport, { AuthenticateOptions } from 'passport'
 
 import { InMemoryUserStore, IWeb2User, IWeb3User, User } from './model'
-import { configureJwtStrategy, configureLocalStrategy, configureWeb3Strategy } from './passport'
-import { getProfile, getWalletChallenge, postSignup, postWalletSignup } from './routes'
+import { getProfile, postSignup, postWalletChallenge, postWalletSignup } from './routes'
+import { configureJwtStrategy, configureLocalStrategy, configureWeb3Strategy } from './strategy'
 
 // eslint-disable-next-line import/no-named-as-default-member
 const router: Router = express.Router()
 
-const noSession = { session: false }
+const noSession: AuthenticateOptions = { session: false }
+export const jwtRequiredHandler: RequestHandler = passport.authenticate('jwt', noSession)
+export const noAuthHandler: RequestHandler = (_req, _res, next) => next()
 
 // TODO: Don't use in-memory user store
 const userStore = new InMemoryUserStore()
@@ -29,11 +31,12 @@ export const loginUser = (user: User, req: Request, res: Response, next: NextFun
       // TODO: Something smarter than needing to
       // remember to sanitize response data
       // Omit sensitive data
-      delete (user as Partial<IWeb2User>).passwordHash
-      delete (user as Partial<IWeb3User>).publicKey
+      const responseUser: Partial<IWeb2User> & Partial<IWeb3User> = { ...user }
+      delete responseUser.passwordHash
+      delete responseUser.address
 
       // eslint-disable-next-line import/no-named-as-default-member
-      const token = jwt.sign({ user }, 'TOP_SECRET', options)
+      const token = jwt.sign({ user: responseUser }, 'TOP_SECRET', options)
       return res.json({ token })
     })
   } catch (error) {
@@ -44,23 +47,21 @@ export const loginUser = (user: User, req: Request, res: Response, next: NextFun
 router.post('/login', (req, res, next) => {
   passport.authenticate('login', (err, user, _info) => {
     if (err || !user) {
-      const error = new Error('An error occurred.')
-      return next(error)
+      return next(new Error('An error occurred.'))
     }
     return loginUser(user, req, res, next)
   })(req, res, next)
 })
-router.get('/profile', passport.authenticate('jwt', noSession), getProfile)
+router.get('/profile', jwtRequiredHandler, getProfile)
 router.post('/signup', passport.authenticate('signup', noSession), postSignup)
 
-// TODO: Separate out into separate middleware
-router.post('/wallet/signup/:publicKey', postWalletSignup(userStore))
-router.get('/wallet/challenge/:publicKey', getWalletChallenge)
-router.post('/wallet/verify/:publicKey', (req, res, next) => {
+// NOTE: Should separate out into separate middleware
+router.post('/wallet/signup', postWalletSignup(userStore))
+router.post('/wallet/challenge', postWalletChallenge)
+router.post('/wallet/verify', (req, res, next) => {
   passport.authenticate('web3', (err, user, _info) => {
     if (err || !user) {
-      const error = new Error('An error occurred.')
-      return next(error)
+      return next(new Error('An error occurred.'))
     }
     return loginUser(user, req, res, next)
   })(req, res, next)
