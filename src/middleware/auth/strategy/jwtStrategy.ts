@@ -63,10 +63,12 @@ export const configureJwtStrategy = (secretOrKey: string): JwtLoginFunction => {
 
         // eslint-disable-next-line import/no-named-as-default-member
         const token = jwt.sign({ user: responseUser }, secretOrKey, options)
-        return res.json({ token })
+        res.json({ token })
+        return
       })
     } catch (error) {
-      return next(error)
+      next(error)
+      return
     }
   }
   return loginUser
