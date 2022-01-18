@@ -15,7 +15,7 @@ import {
   getArchivePayloadStats,
   postArchiveBlock,
 } from './archive'
-import { configureAuth, jwtRequiredHandler, noAuthHandler } from './middleware'
+import { configureAuth, IAuthConfig, jwtRequiredHandler, noAuthHandler } from './middleware'
 
 const authHandler = process.env.USE_AUTH ? jwtRequiredHandler : noAuthHandler
 
@@ -91,7 +91,11 @@ const server = (port = 80) => {
   addBlockRoutes(app)
 
   if (process.env.USE_AUTH) {
-    app.use('/user', configureAuth())
+    const authConfig: IAuthConfig = {
+      apiKey: process.env.API_KEY,
+      secretOrKey: process.env.JWT_SECRET,
+    }
+    app.use('/user', configureAuth(authConfig))
   }
 
   app.use(errorToJsonHandler)

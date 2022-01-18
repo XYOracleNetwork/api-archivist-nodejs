@@ -1,5 +1,14 @@
+import { RequestHandler } from 'express'
+import jwt, { SignOptions } from 'jsonwebtoken'
 import passport from 'passport'
 import { ExtractJwt, Strategy as JWTStrategy, StrategyOptions } from 'passport-jwt'
+
+import { toUserDto, UserDto } from '../dto'
+import { User } from '../model'
+
+const algorithm = 'HS256' // 'HS512' once we perf
+const audience = 'archivist'
+const issuer = 'archivist'
 
 const defaultJWTStrategyOptions: StrategyOptions = {
   // NOTE: Anything but NONE here
@@ -17,14 +26,31 @@ const defaultJWTStrategyOptions: StrategyOptions = {
     'PS384',
     'PS512',
   ],
-  audience: 'archivist',
+  audience,
   ignoreExpiration: false,
-  issuer: 'archivist',
+  issuer,
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: 'TOP_SECRET',
 }
-export const configureJwtStrategy = (audience = 'archivist', issuer = 'archivist', secretOrKey = 'TOP_SECRET') => {
-  const jwtStrategyOptions: StrategyOptions = { ...defaultJWTStrategyOptions, audience, issuer, secretOrKey }
+
+const signJwt = async (user: UserDto, secretOrKey: string, options: SignOptions): Promise<string | undefined> => {
+  return await new Promise<string | undefined>((resolve, reject) => {
+    // eslint-disable-next-line import/no-named-as-default-member
+    jwt.sign({ user }, secretOrKey, options, (err: Error | null, encoded?: string) => {
+      if (err) {
+        console.log('Error signing JWT')
+        console.log(err)
+        // Don't reject with anything so we don't leak sensitive information
+        reject()
+      } else {
+        resolve(encoded)
+      }
+    })
+  })
+}
+
+export const configureJwtStrategy = (secretOrKey: string): RequestHandler => {
+  const jwtStrategyOptions: StrategyOptions = { ...defaultJWTStrategyOptions, secretOrKey }
+
   passport.use(
     new JWTStrategy(jwtStrategyOptions, (token, done) => {
       try {
@@ -34,4 +60,29 @@ export const configureJwtStrategy = (audience = 'archivist', issuer = 'archivist
       }
     })
   )
+
+  const respondWithJwt: RequestHandler = (req, res, next) => {
+    try {
+      const user = req.user as User
+      req.login(user, { session: false }, async (error) => {
+        if (error) {
+          return next(error)
+        }
+        const options: SignOptions = {
+          algorithm,
+          audience,
+          expiresIn: '1 day',
+          issuer,
+          subject: user.id,
+        }
+        const token = await signJwt(toUserDto(user), secretOrKey, options)
+        res.json({ token })
+        return
+      })
+    } catch (error) {
+      next(error)
+      return
+    }
+  }
+  return respondWithJwt
 }

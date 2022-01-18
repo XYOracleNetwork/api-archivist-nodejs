@@ -1,10 +1,15 @@
-import express, { NextFunction, Request, RequestHandler, Response, Router } from 'express'
-import jwt, { SignOptions } from 'jsonwebtoken'
+import { assertEx } from '@xylabs/sdk-js'
+import express, { RequestHandler, Router } from 'express'
 import passport, { AuthenticateOptions } from 'passport'
 
-import { InMemoryUserStore, IWeb2User, IWeb3User, User } from './model'
-import { getProfile, postSignup, postWalletChallenge, postWalletSignup } from './routes'
-import { configureJwtStrategy, configureLocalStrategy, configureWeb3Strategy } from './strategy'
+import { InMemoryUserStore } from './model'
+import { getProfile, postSignup, postWalletChallenge } from './routes'
+import {
+  configureApiKeyStrategy,
+  configureJwtStrategy,
+  configureLocalStrategy,
+  configureWeb3Strategy,
+} from './strategy'
 
 // eslint-disable-next-line import/no-named-as-default-member
 const router: Router = express.Router()
@@ -15,67 +20,37 @@ export const noAuthHandler: RequestHandler = (_req, _res, next) => next()
 
 // TODO: Don't use in-memory user store
 const userStore = new InMemoryUserStore()
-
-export const loginUser = (user: User, req: Request, res: Response, next: NextFunction) => {
-  try {
-    req.login(user, { session: false }, (error) => {
-      if (error) return next(error)
-      const options: SignOptions = {
-        algorithm: 'HS256', // 'HS512' once we perf
-        audience: 'archivist',
-        expiresIn: '1 day',
-        issuer: 'archivist',
-        subject: user.id,
-      }
-
-      // TODO: Something smarter than needing to
-      // remember to sanitize response data
-      // Omit sensitive data
-      const responseUser: Partial<IWeb2User> & Partial<IWeb3User> = { ...user }
-      delete responseUser.passwordHash
-      delete responseUser.address
-
-      // eslint-disable-next-line import/no-named-as-default-member
-      const token = jwt.sign({ user: responseUser }, 'TOP_SECRET', options)
-      return res.json({ token })
-    })
-  } catch (error) {
-    return next(error)
-  }
+let respondWithJwt: RequestHandler = () => {
+  throw new Error('JWT Auth Incorrectly Configured')
 }
 
-router.post('/login', (req, res, next) => {
-  passport.authenticate('login', (err, user, _info) => {
-    if (err || !user) {
-      return next(new Error('An error occurred.'))
-    }
-    return loginUser(user, req, res, next)
-  })(req, res, next)
-})
-router.get('/profile', jwtRequiredHandler, getProfile)
-router.post('/signup', passport.authenticate('signup', noSession), postSignup)
+// web2 flow
+router.post('/login', passport.authenticate('login', noSession), (req, res, next) => respondWithJwt(req, res, next))
+router.post('/signup', passport.authenticate('apiKeyUserSignup', noSession), postSignup)
 
-// NOTE: Should separate out into separate middleware
-router.post('/wallet/signup', postWalletSignup(userStore))
+// web3 flow
 router.post('/wallet/challenge', postWalletChallenge)
-router.post('/wallet/verify', (req, res, next) => {
-  passport.authenticate('web3', (err, user, _info) => {
-    if (err || !user) {
-      return next(new Error('An error occurred.'))
-    }
-    return loginUser(user, req, res, next)
-  })(req, res, next)
-})
+router.post('/wallet/verify', passport.authenticate('web3', noSession), (req, res, next) =>
+  respondWithJwt(req, res, next)
+)
+
+router.get('/profile', jwtRequiredHandler, getProfile)
 
 export interface IAuthConfig {
-  secretOrKey?: string | Buffer | undefined
-  issuer?: string | undefined
-  audience?: string | undefined
+  secretOrKey?: string
+  apiKey?: string
 }
 
-export const configureAuth: (config?: IAuthConfig) => Router = () => {
-  configureJwtStrategy()
+export const configureAuth: (config?: IAuthConfig) => Router = (config) => {
+  assertEx(config?.secretOrKey, 'Missing JWT secretOrKey')
+  const secretOrKey = config?.secretOrKey as string
+  assertEx(config?.apiKey, 'Missing API Key')
+  const apiKey = config?.apiKey as string
+
+  respondWithJwt = configureJwtStrategy(secretOrKey)
   configureLocalStrategy(userStore)
   configureWeb3Strategy(userStore)
+  configureApiKeyStrategy(userStore, apiKey)
+
   return router
 }
