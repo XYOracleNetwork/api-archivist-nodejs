@@ -1,7 +1,8 @@
 import { IUserStore, IWeb2User, IWeb3User, User } from '.'
 
 export class InMemoryUserStore implements IUserStore<User> {
-  constructor(private lastUserId = 0, private readonly userStore: Record<string, User> = {}) {}
+  private lastUserId = 0
+  private readonly userStore: Record<string, User> = {}
 
   create(user: Omit<User, 'id'>): Promise<User> {
     const id = `${++this.lastUserId}`

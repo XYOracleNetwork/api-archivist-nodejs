@@ -1,8 +1,7 @@
-import { compare, hash } from 'bcrypt'
 import passport from 'passport'
 import { IStrategyOptions, Strategy } from 'passport-local'
 
-import { IUserStore, IWeb2User, User } from '../model'
+import { IUserStore, IWeb2User, passwordHasher, User } from '../model'
 
 const localStrategyOptions: IStrategyOptions = {
   passwordField: 'password',
@@ -15,7 +14,7 @@ export const configureLocalStrategy = (userStore: IUserStore<User>) => {
     new Strategy(localStrategyOptions, async (email, password, done) => {
       try {
         // Create user
-        const passwordHash = await hash(password, 10)
+        const passwordHash = await passwordHasher.hash(password)
         const userToCreate: IWeb2User = { email, passwordHash }
 
         // Store the user
@@ -31,7 +30,7 @@ export const configureLocalStrategy = (userStore: IUserStore<User>) => {
 
   passport.use(
     'login',
-    new Strategy(localStrategyOptions, async (email, password, done) => {
+    new Strategy(localStrategyOptions, async (email, providedPassword, done) => {
       try {
         if (!userStore?.getByEmail) {
           return done(null, false, { message: 'Unable to obtain users by email' })
@@ -43,8 +42,8 @@ export const configureLocalStrategy = (userStore: IUserStore<User>) => {
           return done(null, false, { message: 'User not found' })
         }
         // Validate user's password
-        const validate = await compare(password, user.passwordHash)
-        if (!validate) {
+        const valid = await passwordHasher.verify(user, providedPassword)
+        if (!valid) {
           return done(null, false, { message: 'Wrong Password' })
         }
         return done(null, user, { message: 'Logged in Successfully' })
