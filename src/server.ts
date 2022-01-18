@@ -92,6 +92,7 @@ const server = (port = 80) => {
 
   if (process.env.USE_AUTH) {
     const authConfig: IAuthConfig = {
+      apiKey: process.env.API_KEY,
       secretOrKey: process.env.JWT_SECRET,
     }
     app.use('/user', configureAuth(authConfig))

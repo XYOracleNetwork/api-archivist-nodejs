@@ -50,10 +50,9 @@ const verifyWallet = (message: string, signature: string, address: string) => {
 }
 
 class Web3AuthStrategy extends Strategy {
-  constructor(protected readonly userStore: IUserStore<User>) {
+  constructor(public readonly userStore: IUserStore<User>) {
     super()
   }
-
   override async authenticate(
     this: StrategyCreated<this, this & StrategyCreatedStatic>,
     req: Request,
@@ -72,10 +71,11 @@ class Web3AuthStrategy extends Strategy {
       this.fail('Invalid message')
       return
     }
-    const user =
-      ((await ((this as unknown as Web3AuthStrategy).userStore as Required<IUserStore<User>>)?.getByWallet(
-        address
-      )) as IWeb3User) || null
+    if (!this.userStore?.getByWallet) {
+      this.error({ message: 'Unable to obtain users by wallet' })
+      return
+    }
+    const user = await this.userStore?.getByWallet(address)
     if (!user) {
       this.error({ message: 'User not found' })
       return
