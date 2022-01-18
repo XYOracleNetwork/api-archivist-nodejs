@@ -1,7 +1,7 @@
 import passport from 'passport'
 import { IStrategyOptions, Strategy } from 'passport-local'
 
-import { IUserStore, IWeb2User, passwordHasher, User } from '../model'
+import { IUserStore, passwordHasher, User } from '../model'
 
 const localStrategyOptions: IStrategyOptions = {
   passwordField: 'password',
@@ -9,25 +9,6 @@ const localStrategyOptions: IStrategyOptions = {
 }
 
 export const configureLocalStrategy = (userStore: IUserStore<User>) => {
-  passport.use(
-    'signup',
-    new Strategy(localStrategyOptions, async (email, password, done) => {
-      try {
-        // Create user
-        const passwordHash = await passwordHasher.hash(password)
-        const userToCreate: IWeb2User = { email, passwordHash }
-
-        // Store the user
-        const createdUser: User = await userStore.create(userToCreate)
-
-        // Return the user
-        return done(null, createdUser)
-      } catch (error) {
-        done(error)
-      }
-    })
-  )
-
   passport.use(
     'login',
     new Strategy(localStrategyOptions, async (email, providedPassword, done) => {

@@ -24,16 +24,17 @@ let respondWithJwt: RequestHandler = () => {
   throw new Error('JWT Auth Incorrectly Configured')
 }
 
+// web2 flow
 router.post('/login', passport.authenticate('login', noSession), (req, res, next) => respondWithJwt(req, res, next))
-router.get('/profile', jwtRequiredHandler, getProfile)
-router.post('/signup', passport.authenticate('signup', noSession), postSignup)
+router.post('/signup', passport.authenticate('apiKeyUserSignup', noSession), postSignup)
 
-// NOTE: Should separate out into separate middleware
-router.post('/wallet/signup', passport.authenticate('apiKey', noSession), postSignup)
+// web3 flow
 router.post('/wallet/challenge', postWalletChallenge)
 router.post('/wallet/verify', passport.authenticate('web3', noSession), (req, res, next) =>
   respondWithJwt(req, res, next)
 )
+
+router.get('/profile', jwtRequiredHandler, getProfile)
 
 export interface IAuthConfig {
   secretOrKey?: string
