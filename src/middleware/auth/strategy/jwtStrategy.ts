@@ -1,12 +1,10 @@
-import { NextFunction, Request, Response } from 'express'
+import { RequestHandler } from 'express'
 import jwt, { SignOptions } from 'jsonwebtoken'
 import passport from 'passport'
 import { ExtractJwt, Strategy as JWTStrategy, StrategyOptions } from 'passport-jwt'
 
 import { toUserDto, UserDto } from '../dto'
 import { User } from '../model'
-
-export type JwtLoginFunction = (user: User, req: Request, res: Response, next: NextFunction) => void
 
 const algorithm = 'HS256' // 'HS512' once we perf
 const audience = 'archivist'
@@ -50,7 +48,7 @@ const signJwt = async (user: UserDto, secretOrKey: string, options: SignOptions)
   })
 }
 
-export const configureJwtStrategy = (secretOrKey: string): JwtLoginFunction => {
+export const configureJwtStrategy = (secretOrKey: string): RequestHandler => {
   const jwtStrategyOptions: StrategyOptions = { ...defaultJWTStrategyOptions, secretOrKey }
 
   passport.use(
@@ -63,8 +61,9 @@ export const configureJwtStrategy = (secretOrKey: string): JwtLoginFunction => {
     })
   )
 
-  const loginUser: JwtLoginFunction = (user, req, res, next) => {
+  const respondWithJwt: RequestHandler = (req, res, next) => {
     try {
+      const user = req.user as User
       req.login(user, { session: false }, async (error) => {
         if (error) {
           return next(error)
@@ -85,5 +84,5 @@ export const configureJwtStrategy = (secretOrKey: string): JwtLoginFunction => {
       return
     }
   }
-  return loginUser
+  return respondWithJwt
 }

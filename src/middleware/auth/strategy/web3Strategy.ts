@@ -6,15 +6,16 @@ import { validate } from 'uuid'
 import { IUserStore, IWeb3User, User } from '../model'
 
 const GREGORIAN_OFFSET = 122192928000000000
+const oneHourInMs = 3600000
 
-const getTimeFromUuid = (uuid_str: string) => {
-  const parts = uuid_str.split('-')
+const getTimeFromUuid = (uuidV1: string) => {
+  const parts = uuidV1.split('-')
   const time = [parts[2].substring(1), parts[1], parts[0]].join('')
   return parseInt(time, 16)
 }
 
-const getDateFromUuid = (uuid_str: string) => {
-  const time = getTimeFromUuid(uuid_str) - GREGORIAN_OFFSET
+const getDateFromUuid = (uuidV1: string) => {
+  const time = getTimeFromUuid(uuidV1) - GREGORIAN_OFFSET
   const milliseconds = Math.floor(time / 10000)
   return new Date(milliseconds)
 }
@@ -27,11 +28,10 @@ const getDateFromUuid = (uuid_str: string) => {
 const verifyUuid = (uuid: string): boolean => {
   try {
     if (validate(uuid)) {
-      const date = getDateFromUuid(uuid)
+      const uuidDate = getDateFromUuid(uuid)
       const now = new Date()
-      return (
-        date.getFullYear() === now.getFullYear() && date.getMonth() === now.getMonth() && date.getDay() === now.getDay()
-      )
+      const timeSinceIssuance = now.getTime() - uuidDate.getTime()
+      return timeSinceIssuance < oneHourInMs
     }
   } catch (error) {
     return false
@@ -61,15 +61,15 @@ class Web3AuthStrategy extends Strategy {
   ) {
     const { address, message, signature } = req.body
     if (!address || !message || !signature) {
-      this.error({ message: 'Missing request values' })
+      this.fail('Missing request values')
       return
     }
     if (!verifyWallet(message, signature, address)) {
-      this.fail()
+      this.fail('Invalid signature')
       return
     }
     if (!verifyUuid(message)) {
-      this.fail()
+      this.fail('Invalid message')
       return
     }
     const user =
