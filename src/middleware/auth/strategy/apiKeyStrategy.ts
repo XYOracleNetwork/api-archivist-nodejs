@@ -34,6 +34,8 @@ class ApiKeyStrategy extends Strategy {
       this.success(user)
       return
     }
+    this.success({})
+    return
   }
 }
 
