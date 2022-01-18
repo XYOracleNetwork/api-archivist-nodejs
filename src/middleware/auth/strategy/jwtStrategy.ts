@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express'
-import { sign, SignOptions } from 'jsonwebtoken'
+import jwt, { SignOptions } from 'jsonwebtoken'
 import passport from 'passport'
 import { ExtractJwt, Strategy as JWTStrategy, StrategyOptions } from 'passport-jwt'
 
-import { toUserDto } from '../dto'
+import { toUserDto, UserDto } from '../dto'
 import { User } from '../model'
 
 export type JwtLoginFunction = (user: User, req: Request, res: Response, next: NextFunction) => void
@@ -34,6 +34,22 @@ const defaultJWTStrategyOptions: StrategyOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
 }
 
+const signJwt = async (user: UserDto, secretOrKey: string, options: SignOptions): Promise<string | undefined> => {
+  return await new Promise<string | undefined>((resolve, reject) => {
+    // eslint-disable-next-line import/no-named-as-default-member
+    jwt.sign({ user }, secretOrKey, options, (err: Error | null, encoded?: string) => {
+      if (err) {
+        console.log('Error signing JWT')
+        console.log(err)
+        // Don't reject with anything so we don't leak sensitive information
+        reject()
+      } else {
+        resolve(encoded)
+      }
+    })
+  })
+}
+
 export const configureJwtStrategy = (secretOrKey: string): JwtLoginFunction => {
   const jwtStrategyOptions: StrategyOptions = { ...defaultJWTStrategyOptions, secretOrKey }
 
@@ -49,7 +65,7 @@ export const configureJwtStrategy = (secretOrKey: string): JwtLoginFunction => {
 
   const loginUser: JwtLoginFunction = (user, req, res, next) => {
     try {
-      req.login(user, { session: false }, (error) => {
+      req.login(user, { session: false }, async (error) => {
         if (error) {
           return next(error)
         }
@@ -60,7 +76,7 @@ export const configureJwtStrategy = (secretOrKey: string): JwtLoginFunction => {
           issuer,
           subject: user.id,
         }
-        const token = sign({ user: toUserDto(user) }, secretOrKey, options)
+        const token = await signJwt(toUserDto(user), secretOrKey, options)
         res.json({ token })
         return
       })
