@@ -25,6 +25,7 @@ class ApiKeyStrategy extends Strategy {
       const userToCreate = req.body
       if (userToCreate.password) {
         userToCreate.passwordHash = await passwordHasher.hash(userToCreate.password)
+        delete userToCreate.password
       }
       const user = await this.userStore.create(userToCreate)
       if (!user) {
