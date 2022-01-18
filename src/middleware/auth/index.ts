@@ -1,10 +1,10 @@
-import express, { NextFunction, Request, RequestHandler, Response, Router } from 'express'
-import jwt, { SignOptions } from 'jsonwebtoken'
+import { assertEx } from '@xylabs/sdk-js'
+import express, { RequestHandler, Router } from 'express'
 import passport, { AuthenticateOptions } from 'passport'
 
-import { InMemoryUserStore, IWeb2User, IWeb3User, User } from './model'
+import { InMemoryUserStore } from './model'
 import { getProfile, postSignup, postWalletChallenge, postWalletSignup } from './routes'
-import { configureJwtStrategy, configureLocalStrategy, configureWeb3Strategy } from './strategy'
+import { configureJwtStrategy, configureLocalStrategy, configureWeb3Strategy, JwtLoginFunction } from './strategy'
 
 // eslint-disable-next-line import/no-named-as-default-member
 const router: Router = express.Router()
@@ -15,33 +15,8 @@ export const noAuthHandler: RequestHandler = (_req, _res, next) => next()
 
 // TODO: Don't use in-memory user store
 const userStore = new InMemoryUserStore()
-
-export const loginUser = (user: User, req: Request, res: Response, next: NextFunction) => {
-  try {
-    req.login(user, { session: false }, (error) => {
-      if (error) return next(error)
-      const options: SignOptions = {
-        algorithm: 'HS256', // 'HS512' once we perf
-        audience: 'archivist',
-        expiresIn: '1 day',
-        issuer: 'archivist',
-        subject: user.id,
-      }
-
-      // TODO: Something smarter than needing to
-      // remember to sanitize response data
-      // Omit sensitive data
-      const responseUser: Partial<IWeb2User> & Partial<IWeb3User> = { ...user }
-      delete responseUser.passwordHash
-      delete responseUser.address
-
-      // eslint-disable-next-line import/no-named-as-default-member
-      const token = jwt.sign({ user: responseUser }, 'TOP_SECRET', options)
-      return res.json({ token })
-    })
-  } catch (error) {
-    return next(error)
-  }
+let loginUser: JwtLoginFunction = () => {
+  throw new Error('JWT Auth Incorrectly Configured')
 }
 
 router.post('/login', (req, res, next) => {
@@ -68,13 +43,12 @@ router.post('/wallet/verify', (req, res, next) => {
 })
 
 export interface IAuthConfig {
-  secretOrKey?: string | Buffer | undefined
-  issuer?: string | undefined
-  audience?: string | undefined
+  secretOrKey?: string
 }
 
-export const configureAuth: (config?: IAuthConfig) => Router = () => {
-  configureJwtStrategy()
+export const configureAuth: (config?: IAuthConfig) => Router = (config) => {
+  assertEx(config?.secretOrKey, 'Missing JWT secretOrKey')
+  loginUser = configureJwtStrategy(config?.secretOrKey as string)
   configureLocalStrategy(userStore)
   configureWeb3Strategy(userStore)
   return router
