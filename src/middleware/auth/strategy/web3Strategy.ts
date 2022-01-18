@@ -3,9 +3,9 @@ import { Request } from 'express'
 import passport, { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 import { validate } from 'uuid'
 
-import { IUserStore, IWeb3User, User } from '../model'
+import { IUserStore, User } from '../model'
 
-const GREGORIAN_OFFSET = 122192928000000000
+const gregorianOffset = 122192928000000000
 const oneHourInMs = 3600000
 
 const getTimeFromUuid = (uuidV1: string) => {
@@ -15,7 +15,7 @@ const getTimeFromUuid = (uuidV1: string) => {
 }
 
 const getDateFromUuid = (uuidV1: string) => {
-  const time = getTimeFromUuid(uuidV1) - GREGORIAN_OFFSET
+  const time = getTimeFromUuid(uuidV1) - gregorianOffset
   const milliseconds = Math.floor(time / 10000)
   return new Date(milliseconds)
 }
