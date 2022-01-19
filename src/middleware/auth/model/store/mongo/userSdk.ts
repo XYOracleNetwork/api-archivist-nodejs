@@ -1,7 +1,7 @@
 import { BaseMongoSdk, BaseMongoSdkConfig } from '@xyo-network/sdk-xyo-mongo-js'
 import { Collection, WithId } from 'mongodb'
 
-import { User } from '../../user'
+import { User, UserWithoutId } from '../../user'
 
 interface IUpsertFilter {
   $or: {
@@ -15,12 +15,12 @@ class UserMongoSdk extends BaseMongoSdk<User> {
     super(config)
   }
 
-  public async upsert(user: User): Promise<string> {
-    return await this.useCollection(async (collection: Collection<User>) => {
+  public async upsert(user: UserWithoutId): Promise<WithId<User>> {
+    return await this.useCollection(async (collection) => {
       const filter: IUpsertFilter = { $or: [] }
       const { address, email } = user
       if (!address && !email) {
-        throw new Error('Invalid user creation attempted. Missing email & address.')
+        throw new Error('Invalid user creation attempted. Either email or address is required.')
       }
       if (address) {
         filter.$or.push({ address })
@@ -28,12 +28,18 @@ class UserMongoSdk extends BaseMongoSdk<User> {
       if (email) {
         filter.$or.push({ email })
       }
-      const result = await collection.findOneAndUpdate(filter, { $set: user }, { upsert: true })
+      const result = await collection.findOneAndUpdate(
+        filter,
+        { $set: user },
+        { returnDocument: 'after', upsert: true }
+      )
       if (result.ok && result.value) {
-        return (result.value as WithId<User>)._id.toHexString()
-      } else {
-        throw new Error('Insert Failed')
+        const created = result.value as WithId<User>
+        if (created?._id) {
+          return created
+        }
       }
+      throw new Error('Insert Failed')
     })
   }
 

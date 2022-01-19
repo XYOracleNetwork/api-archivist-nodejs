@@ -3,7 +3,7 @@ import { Request } from 'express'
 import passport, { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 import { validate } from 'uuid'
 
-import { IUserStore, User } from '../model'
+import { IUserStore } from '../model'
 
 const gregorianOffset = 122192928000000000
 const oneHourInMs = 3600000
@@ -50,7 +50,7 @@ const verifyWallet = (message: string, signature: string, address: string) => {
 }
 
 class Web3AuthStrategy extends Strategy {
-  constructor(public readonly userStore: IUserStore<User>) {
+  constructor(public readonly userStore: IUserStore) {
     super()
   }
   override async authenticate(
@@ -85,6 +85,6 @@ class Web3AuthStrategy extends Strategy {
   }
 }
 
-export const configureWeb3Strategy = (userStore: IUserStore<User>) => {
+export const configureWeb3Strategy = (userStore: IUserStore) => {
   passport.use('web3', new Web3AuthStrategy(userStore))
 }

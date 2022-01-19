@@ -1,4 +1,4 @@
-export interface IUser {
+export interface IIdentifiable {
   id: string
 }
 export interface IWeb2User {
@@ -9,4 +9,5 @@ export interface IWeb3User {
   address: string
 }
 
-export type User = IUser & Partial<IWeb2User> & Partial<IWeb3User>
+export type UserWithoutId = Partial<IWeb2User> & Partial<IWeb3User>
+export type User = IIdentifiable & UserWithoutId

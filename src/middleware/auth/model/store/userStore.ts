@@ -1,8 +1,8 @@
-import { IUser } from '../user'
+import { User, UserWithoutId } from '../user'
 
-export interface IUserStore<TUser extends IUser> {
-  create(user: Omit<TUser, 'id'>): Promise<TUser>
-  getById(id: string): Promise<TUser | null>
-  getByEmail?(id: string): Promise<TUser | null>
-  getByWallet?(address: string): Promise<TUser | null>
+export interface IUserStore {
+  create(user: UserWithoutId): Promise<User>
+  getById(id: string): Promise<User | null>
+  getByEmail?(id: string): Promise<User | null>
+  getByWallet?(address: string): Promise<User | null>
 }
