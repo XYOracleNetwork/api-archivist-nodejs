@@ -5,4 +5,4 @@ import { server } from './server'
 
 config()
 
-server(tryParseInt(process.env.APP_PORT))
+void server(tryParseInt(process.env.APP_PORT))
