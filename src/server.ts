@@ -19,7 +19,7 @@ import { configureAuth, IAuthConfig, jwtRequiredHandler, noAuthHandler } from '.
 
 const authHandler = process.env.USE_AUTH ? jwtRequiredHandler : noAuthHandler
 
-const getNotImplemented = (req: Request, res: Response, next: NextFunction) => {
+const getNotImplemented = (_req: Request, res: Response, next: NextFunction) => {
   res.sendStatus(StatusCodes.NOT_IMPLEMENTED)
   next({
     message: 'Not Implemented',
@@ -91,7 +91,7 @@ const server = async (port = 80) => {
     app.use(cors(corsOptions))
   }
 
-  app.get('/', (req, res, next) => {
+  app.get('/', (_req, res, next) => {
     res.json({ alive: true })
     next()
   })
