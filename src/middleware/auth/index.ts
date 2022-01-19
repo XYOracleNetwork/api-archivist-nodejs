@@ -2,8 +2,7 @@ import { assertEx } from '@xylabs/sdk-js'
 import express, { RequestHandler, Router } from 'express'
 import passport, { AuthenticateOptions } from 'passport'
 
-import { MongoDBUserStore } from './model'
-import { getUserMongoSdk } from './model/store/mongo/getUserMongoSdk'
+import { getUserMongoSdk, MongoDBUserStore } from './model'
 import { getProfile, postSignup, postWalletChallenge } from './routes'
 import {
   configureApiKeyStrategy,

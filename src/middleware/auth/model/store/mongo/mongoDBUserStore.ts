@@ -1,26 +1,23 @@
-import { IUserStore, User } from '../userStore'
+import { WithId } from 'mongodb'
+
+import { User } from '../../user'
+import { IUserStore } from '../userStore'
 import { UserMongoSdk } from './userSdk'
 
-interface ToHexStringable {
-  toHexString(): string
-}
-interface WithId extends User {
-  _id?: ToHexStringable
-}
 const toEntity = (user: User) => {
-  const fromDb = user as WithId
+  const fromDb = user as WithId<User>
   const id = fromDb?._id?.toHexString()
   if (id) {
     user.id = id
-    delete (user as WithId)?._id
+    delete (user as Partial<WithId<User>>)?._id
   }
   return user
 }
 const fromEntity = (user: Omit<User, 'id'>) => {
-  if (user.email) {
+  if (user?.email) {
     user.email = user.email.toLowerCase()
   }
-  if (user.address) {
+  if (user?.address) {
     user.address = user.address.toLowerCase()
   }
   return user

@@ -1,3 +1,3 @@
 export * from './passwordHasher'
-export * from './store/mongo/mongoDBUserStore'
-export * from './store/userStore'
+export * from './store'
+export * from './user'
