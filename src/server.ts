@@ -1,4 +1,4 @@
-import { asyncHandler, errorToJsonHandler } from '@xylabs/sdk-api-express-ecs'
+import { asyncHandler, errorToJsonHandler, getEnvFromAws } from '@xylabs/sdk-api-express-ecs'
 import bodyParser from 'body-parser'
 import cors, { CorsOptions } from 'cors'
 import express, { Express, NextFunction, Request, Response } from 'express'
@@ -55,7 +55,16 @@ const addBlockRoutes = (app: Express) => {
   app.get('/archive/:archive/block/sample/:size', getNotImplemented)
 }
 
-const server = (port = 80) => {
+const server = async (port = 80) => {
+  // If an AWS ARN was supplied for Secrets Manager
+  const awsEnvSecret = process.env.AWS_ENV_SECRET_ARN
+  if (awsEnvSecret) {
+    // Merge the values from there into the current ENV
+    // with AWS taking preference
+    const awsEnv = await getEnvFromAws(awsEnvSecret)
+    Object.assign(process.env, awsEnv)
+  }
+
   const app = express()
 
   const bodyParserInstance = bodyParser.json()
@@ -75,6 +84,8 @@ const server = (port = 80) => {
   })
 
   if (process.env.CORS_ALLOWED_ORIGINS) {
+    // origin can be an array of allowed origins so we support
+    // a list of comma delimited CORS origins
     const origin = process.env.CORS_ALLOWED_ORIGINS.split(',')
     const corsOptions: CorsOptions = { origin }
     app.use(cors(corsOptions))
