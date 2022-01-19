@@ -49,21 +49,9 @@ class UserMongoSdk extends BaseMongoSdk<User> {
     })
   }
 
-  public async updateByAddress(address: string, user: User) {
-    return await this.useCollection(async (collection: Collection<User>) => {
-      return await collection.updateOne({ address }, { $set: user }, { maxTimeMS: this._maxTime })
-    })
-  }
-
   public async findByEmail(email: string) {
     return await this.useCollection(async (collection: Collection<User>) => {
       return await collection.findOne({ email }, { maxTimeMS: this._maxTime })
-    })
-  }
-
-  public async updateByEmail(email: string, user: User) {
-    return await this.useCollection(async (collection: Collection<User>) => {
-      return await collection.updateOne({ email }, { $set: user }, { maxTimeMS: this._maxTime })
     })
   }
 }
