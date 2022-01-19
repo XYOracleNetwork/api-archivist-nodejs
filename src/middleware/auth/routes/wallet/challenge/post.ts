@@ -4,7 +4,7 @@ import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { v1 } from 'uuid'
 
-export const postWalletChallenge: RequestHandler = (req, res, _next) => {
+export const postWalletChallenge: RequestHandler = (req, res, next) => {
   const { address } = req.body
   if (!address) {
     res.sendStatus(StatusCodes.BAD_REQUEST)
@@ -15,4 +15,5 @@ export const postWalletChallenge: RequestHandler = (req, res, _next) => {
   // within a reasonable window later.
   const state = v1()
   res.json({ state })
+  next()
 }
