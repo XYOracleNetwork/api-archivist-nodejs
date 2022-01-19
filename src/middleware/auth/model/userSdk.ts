@@ -1,5 +1,5 @@
 import { BaseMongoSdk, BaseMongoSdkConfig } from '@xyo-network/sdk-xyo-mongo-js'
-import { Collection } from 'mongodb'
+import { Collection, WithId } from 'mongodb'
 
 import { User } from '.'
 
@@ -29,8 +29,8 @@ class UserMongoSdk extends BaseMongoSdk<User> {
         filter.$or.push({ email })
       }
       const result = await collection.findOneAndUpdate(filter, { $set: user }, { upsert: true })
-      if (result.ok) {
-        return (result.value as any)._id.toHexString()
+      if (result.ok && result.value) {
+        return (result.value as WithId<User>)._id.toHexString()
       } else {
         throw new Error('Insert Failed')
       }
