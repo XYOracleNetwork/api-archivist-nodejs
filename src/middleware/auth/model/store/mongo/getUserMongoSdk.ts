@@ -1,6 +1,6 @@
 import { assertEx } from '@xylabs/sdk-js'
 
-import { getMongoDBConfig } from '../../../lib'
+import { getMongoDBConfig } from '../../../../../lib'
 import { UserMongoSdk } from './userSdk'
 
 export const getUserMongoSdk = async () => {

@@ -3,7 +3,7 @@ import express, { RequestHandler, Router } from 'express'
 import passport, { AuthenticateOptions } from 'passport'
 
 import { MongoDBUserStore } from './model'
-import { getUserMongoSdk } from './model/getUserMongoSdk'
+import { getUserMongoSdk } from './model/store/mongo/getUserMongoSdk'
 import { getProfile, postSignup, postWalletChallenge } from './routes'
 import {
   configureApiKeyStrategy,

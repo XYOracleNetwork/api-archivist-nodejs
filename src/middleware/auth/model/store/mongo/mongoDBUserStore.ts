@@ -1,4 +1,4 @@
-import { IUserStore, User } from '.'
+import { IUserStore, User } from '../userStore'
 import { UserMongoSdk } from './userSdk'
 
 interface ToHexStringable {
