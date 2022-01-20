@@ -47,7 +47,8 @@ const addPayloadSchemaRoutes = (app: Express) => {
 }
 
 const addBlockRoutes = (app: Express) => {
-  app.post('/archive/:archive/block', authHandler, asyncHandler(postArchiveBlock))
+  app.post('/archive/:archive/bw', asyncHandler(postArchiveBlock))
+  app.post('/archive/:archive/block', asyncHandler(postArchiveBlock))
   app.get('/archive/:archive/block/stats', authHandler, asyncHandler(getArchiveBlockStats))
   app.get('/archive/:archive/block/hash/:hash', authHandler, asyncHandler(getArchiveBlockHash))
   app.get('/archive/:archive/block/hash/:hash/payloads', authHandler, asyncHandler(getArchiveBlockHashPayloads))
@@ -72,6 +73,14 @@ const server = async (port = 80) => {
   app.use(cors())
 
   app.set('etag', false)
+
+  app.use((req: Request, _res: Response, next: NextFunction) => {
+    const contentType = req.headers['content-type']
+    if (contentType?.includes('text/json')) {
+      req.headers['content-type'] = contentType.replace('text/json', 'application/json')
+    }
+    next()
+  })
 
   //if we do not trap this error, then it dumps too much to log, usually happens if request aborted
   app.use((req: Request, res: Response, next: NextFunction) => {
