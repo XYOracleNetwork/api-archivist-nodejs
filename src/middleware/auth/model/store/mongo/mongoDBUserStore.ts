@@ -5,11 +5,11 @@ import { IUserStore } from '../userStore'
 import { UserMongoSdk } from './userSdk'
 
 const fromDbEntity = (user: WithId<User>): User => {
-  if (user?._id) {
-    const id = user?._id?.toHexString()
+  const id = user?._id?.toHexString?.()
+  if (id) {
     user.id = id
-    delete (user as Partial<WithId<User>>)?._id
   }
+  delete (user as Partial<WithId<User>>)?._id
   return user
 }
 
