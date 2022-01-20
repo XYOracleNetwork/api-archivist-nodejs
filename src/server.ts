@@ -47,7 +47,7 @@ const addPayloadSchemaRoutes = (app: Express) => {
 }
 
 const addBlockRoutes = (app: Express) => {
-  app.post('/archive/:archive/block', authHandler, asyncHandler(postArchiveBlock))
+  app.post('/archive/:archive/block', asyncHandler(postArchiveBlock))
   app.get('/archive/:archive/block/stats', authHandler, asyncHandler(getArchiveBlockStats))
   app.get('/archive/:archive/block/hash/:hash', authHandler, asyncHandler(getArchiveBlockHash))
   app.get('/archive/:archive/block/hash/:hash/payloads', authHandler, asyncHandler(getArchiveBlockHashPayloads))
