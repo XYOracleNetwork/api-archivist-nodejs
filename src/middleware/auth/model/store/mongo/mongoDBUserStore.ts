@@ -30,7 +30,7 @@ export class MongoDBUserStore implements IUserStore {
     return fromDbEntity(created)
   }
   getById(_id: string): Promise<User | null> {
-    throw new Error('Not implemented')
+    throw new Error('getById not implemented for this user store')
   }
   async getByEmail(email: string): Promise<User | null> {
     const user = await this.mongo.findByEmail(email.toLowerCase())

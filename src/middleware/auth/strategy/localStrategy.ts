@@ -13,9 +13,6 @@ export const configureLocalStrategy = (userStore: IUserStore) => {
     'login',
     new Strategy(localStrategyOptions, async (email, providedPassword, done) => {
       try {
-        if (!userStore?.getByEmail) {
-          return done(null, false, { message: 'Unable to obtain users by email' })
-        }
         // Find user
         const user = await userStore.getByEmail(email)
         // If we didn't find the user or they have no passwordHash
