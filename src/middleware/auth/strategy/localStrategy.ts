@@ -1,21 +1,18 @@
 import passport from 'passport'
 import { IStrategyOptions, Strategy } from 'passport-local'
 
-import { IUserStore, passwordHasher, User } from '../model'
+import { IUserStore, passwordHasher } from '../model'
 
 const localStrategyOptions: IStrategyOptions = {
   passwordField: 'password',
   usernameField: 'email',
 }
 
-export const configureLocalStrategy = (userStore: IUserStore<User>) => {
+export const configureLocalStrategy = (userStore: IUserStore) => {
   passport.use(
     'login',
     new Strategy(localStrategyOptions, async (email, providedPassword, done) => {
       try {
-        if (!userStore?.getByEmail) {
-          return done(null, false, { message: 'Unable to obtain users by email' })
-        }
         // Find user
         const user = await userStore.getByEmail(email)
         // If we didn't find the user or they have no passwordHash

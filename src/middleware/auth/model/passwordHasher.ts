@@ -1,6 +1,6 @@
 import { compare, hash } from 'bcrypt'
 
-import { User } from '.'
+import { User } from './user'
 
 export interface IPasswordHasher<TUser> {
   hash(password: string): Promise<string>

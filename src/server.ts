@@ -106,7 +106,8 @@ const server = async (port = 80) => {
       apiKey: process.env.API_KEY,
       secretOrKey: process.env.JWT_SECRET,
     }
-    app.use('/user', configureAuth(authConfig))
+    const auth = await configureAuth(authConfig)
+    app.use('/user', auth)
   }
 
   app.use(errorToJsonHandler)

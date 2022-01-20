@@ -19,6 +19,25 @@
         "!**/node_modules/**"
       ],
       "pauseForSourceMap": true,
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Build & Debug",
+      "program": "${workspaceFolder}/src/index.ts",
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+      "runtimeArgs": [
+        "--max-old-space-size=8192",
+        "--experimental-specifier-resolution=node",
+        "--loader=ts-node/esm",
+      ],
+      "envFile": "${workspaceFolder}/.env",
+      "sourceMaps": true,
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/src/**",
+        "!**/node_modules/**"
+      ],
+      "pauseForSourceMap": true,
       "preLaunchTask": "build"
     }
   ]

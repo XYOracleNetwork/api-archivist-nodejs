@@ -2,7 +2,7 @@ import { assertEx } from '@xylabs/sdk-js'
 import express, { RequestHandler, Router } from 'express'
 import passport, { AuthenticateOptions } from 'passport'
 
-import { InMemoryUserStore } from './model'
+import { getUserMongoSdk, MongoDBUserStore } from './model'
 import { getProfile, postSignup, postWalletChallenge } from './routes'
 import {
   configureApiKeyStrategy,
@@ -18,8 +18,6 @@ const noSession: AuthenticateOptions = { session: false }
 export const jwtRequiredHandler: RequestHandler = passport.authenticate('jwt', noSession)
 export const noAuthHandler: RequestHandler = (_req, _res, next) => next()
 
-// TODO: Don't use in-memory user store
-const userStore = new InMemoryUserStore()
 let respondWithJwt: RequestHandler = () => {
   throw new Error('JWT Auth Incorrectly Configured')
 }
@@ -41,11 +39,14 @@ export interface IAuthConfig {
   apiKey?: string
 }
 
-export const configureAuth: (config?: IAuthConfig) => Router = (config) => {
+export const configureAuth: (config?: IAuthConfig) => Promise<Router> = async (config) => {
   assertEx(config?.secretOrKey, 'Missing JWT secretOrKey')
   const secretOrKey = config?.secretOrKey as string
   assertEx(config?.apiKey, 'Missing API Key')
   const apiKey = config?.apiKey as string
+
+  const userMongoSdk = await getUserMongoSdk()
+  const userStore = new MongoDBUserStore(userMongoSdk)
 
   respondWithJwt = configureJwtStrategy(secretOrKey)
   configureLocalStrategy(userStore)

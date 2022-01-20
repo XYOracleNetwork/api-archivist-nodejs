@@ -3,7 +3,7 @@ import { Request } from 'express'
 import passport, { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 import { validate } from 'uuid'
 
-import { IUserStore, User } from '../model'
+import { IUserStore } from '../model'
 
 const gregorianOffset = 122192928000000000
 const oneHourInMs = 3600000
@@ -50,7 +50,7 @@ const verifyWallet = (message: string, signature: string, address: string) => {
 }
 
 class Web3AuthStrategy extends Strategy {
-  constructor(public readonly userStore: IUserStore<User>) {
+  constructor(public readonly userStore: IUserStore) {
     super()
   }
   override async authenticate(
@@ -58,33 +58,33 @@ class Web3AuthStrategy extends Strategy {
     req: Request,
     _options?: unknown
   ) {
-    const { address, message, signature } = req.body
-    if (!address || !message || !signature) {
-      this.fail('Missing request values')
+    try {
+      const { address, message, signature } = req.body
+      if (!address || !message || !signature) {
+        this.fail('Missing request values')
+        return
+      }
+      if (!verifyWallet(message, signature, address)) {
+        this.fail('Invalid signature')
+        return
+      }
+      if (!verifyUuid(message)) {
+        this.fail('Invalid message')
+        return
+      }
+      const user = await this.userStore.getByWallet(address)
+      if (!user) {
+        this.error({ message: 'User not found' })
+        return
+      }
+      this.success(user)
       return
+    } catch (error) {
+      this.error({ message: 'Web3 Auth Error' })
     }
-    if (!verifyWallet(message, signature, address)) {
-      this.fail('Invalid signature')
-      return
-    }
-    if (!verifyUuid(message)) {
-      this.fail('Invalid message')
-      return
-    }
-    if (!this.userStore?.getByWallet) {
-      this.error({ message: 'Unable to obtain users by wallet' })
-      return
-    }
-    const user = await this.userStore?.getByWallet(address)
-    if (!user) {
-      this.error({ message: 'User not found' })
-      return
-    }
-    this.success(user)
-    return
   }
 }
 
-export const configureWeb3Strategy = (userStore: IUserStore<User>) => {
+export const configureWeb3Strategy = (userStore: IUserStore) => {
   passport.use('web3', new Web3AuthStrategy(userStore))
 }
