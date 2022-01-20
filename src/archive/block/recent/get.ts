@@ -13,7 +13,7 @@ const getBoundWitness = async (archive: string, limit: number) => {
 
 export const getArchiveBlockRecent = async (req: Request, res: Response, next: NextFunction) => {
   const { archive, limit } = req.params
-  const limitNumber = tryParseInt(limit) ?? 50
+  const limitNumber = tryParseInt(limit) ?? 20
   assertEx(limitNumber > 0 && limitNumber <= 100, 'limit must be between 1 and 100')
   const bw = await getBoundWitness(archive, limitNumber)
   res.json(bw?.map(({ _payloads, ...clean }) => clean))
