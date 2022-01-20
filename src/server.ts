@@ -15,7 +15,13 @@ import {
   getArchivePayloadStats,
   postArchiveBlock,
 } from './archive'
-import { configureAuth, IAuthConfig, jwtRequiredHandler, noAuthHandler } from './middleware'
+import {
+  configureAuth,
+  IAuthConfig,
+  jwtRequiredHandler,
+  noAuthHandler,
+  translateLegacyJsonContentTypes,
+} from './middleware'
 
 const authHandler = process.env.USE_AUTH ? jwtRequiredHandler : noAuthHandler
 
@@ -74,13 +80,7 @@ const server = async (port = 80) => {
 
   app.set('etag', false)
 
-  app.use((req: Request, _res: Response, next: NextFunction) => {
-    const contentType = req.headers['content-type']
-    if (contentType?.includes('text/json')) {
-      req.headers['content-type'] = contentType.replace('text/json', 'application/json')
-    }
-    next()
-  })
+  app.use(translateLegacyJsonContentTypes)
 
   //if we do not trap this error, then it dumps too much to log, usually happens if request aborted
   app.use((req: Request, res: Response, next: NextFunction) => {
