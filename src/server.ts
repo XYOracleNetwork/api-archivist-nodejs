@@ -3,6 +3,7 @@ import bodyParser from 'body-parser'
 import cors, { CorsOptions } from 'cors'
 import express, { Express, NextFunction, Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
+import { inspect } from 'util'
 
 import {
   getArchiveBlockHash,
@@ -79,6 +80,14 @@ const server = async (port = 80) => {
 
   app.set('etag', false)
 
+  //noisy logger - req
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    console.log(`Req-path: ${inspect(req.path)}`)
+    console.log(`Req-headers: ${inspect(req.headers)}`)
+    console.log(`Req-body: ${inspect(req.body)}`)
+    next()
+  })
+
   //if we do not trap this error, then it dumps too much to log, usually happens if request aborted
   app.use((req: Request, res: Response, next: NextFunction) => {
     try {
@@ -117,6 +126,12 @@ const server = async (port = 80) => {
   }
 
   app.use(errorToJsonHandler)
+
+  //noisy logger - res
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    console.log(`Res-status: ${inspect(res.statusCode)}: ${inspect(res.statusMessage)}`)
+    next()
+  })
 
   const server = app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`)
