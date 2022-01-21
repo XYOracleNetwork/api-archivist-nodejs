@@ -3,7 +3,6 @@ import bodyParser from 'body-parser'
 import cors, { CorsOptions } from 'cors'
 import express, { Express, NextFunction, Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
-import { inspect } from 'util'
 
 import {
   getArchiveBlockHash,
@@ -81,20 +80,11 @@ const server = async (port = 80) => {
 
   app.set('etag', false)
 
-  //noisy logger - req
+  //global counters
   app.use((req: Request, res: Response, next: NextFunction) => {
-    console.log(`Req-path: ${inspect(req.path)}`)
-    console.log(`Req-headers: ${inspect(req.headers)}`)
-    console.log(`Req-body: ${inspect(req.body)}`)
-    const start = Date.now()
     Counters.inc(req.path)
-    next()
-    const duration = Date.now() - start
-    Counters.inc('_totalTime', duration)
-    Counters.min('_totalTimeMin', duration)
-    Counters.max('_totalTimeMax', duration)
     Counters.inc('_calls')
-    console.log(`Res-satus: ${inspect(res.statusCode)}: ${inspect(res.statusMessage)}`)
+    next()
   })
 
   //if we do not trap this error, then it dumps too much to log, usually happens if request aborted
