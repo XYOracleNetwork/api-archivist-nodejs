@@ -17,7 +17,7 @@ import {
 } from './archive'
 import { configureAuth, IAuthConfig, jwtRequiredHandler, noAuthHandler } from './middleware'
 
-const authHandler = process.env.USE_AUTH ? jwtRequiredHandler : noAuthHandler
+let authHandler = noAuthHandler
 
 const getNotImplemented = (_req: Request, res: Response, next: NextFunction) => {
   res.sendStatus(StatusCodes.NOT_IMPLEMENTED)
@@ -59,10 +59,16 @@ const server = async (port = 80) => {
   // If an AWS ARN was supplied for Secrets Manager
   const awsEnvSecret = process.env.AWS_ENV_SECRET_ARN
   if (awsEnvSecret) {
+    console.log('Bootstrapping ENV from AWS')
     // Merge the values from AWS into the current ENV
     // with AWS taking precedence
     const awsEnv = await getEnvFromAws(awsEnvSecret)
     Object.assign(process.env, awsEnv)
+  }
+
+  if (process.env.USE_AUTH) {
+    authHandler = jwtRequiredHandler
+    console.log('Using JWT auth for routes')
   }
 
   const app = express()
