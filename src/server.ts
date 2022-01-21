@@ -75,7 +75,7 @@ const server = async (port = 80) => {
 
   const app = express()
 
-  const bodyParserInstance = bodyParser.json()
+  const bodyParserInstance = bodyParser.json({ type: ['application/json', 'text/json'] })
 
   app.use(cors())
 
@@ -86,9 +86,6 @@ const server = async (port = 80) => {
     console.log(`Req-path: ${inspect(req.path)}`)
     console.log(`Req-headers: ${inspect(req.headers)}`)
     console.log(`Req-body: ${inspect(req.body)}`)
-    if (req.headers['content-type'] === 'text/json') {
-      req.headers['content-type'] = 'application/json'
-    }
     next()
   })
 
