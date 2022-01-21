@@ -49,6 +49,7 @@ const addPayloadSchemaRoutes = (app: Express) => {
 
 const addBlockRoutes = (app: Express) => {
   app.post('/archive/:archive/block', asyncHandler(postArchiveBlock))
+  app.post('/archive/:archive/bw', asyncHandler(postArchiveBlock))
   app.get('/archive/:archive/block/stats', authHandler, asyncHandler(getArchiveBlockStats))
   app.get('/archive/:archive/block/hash/:hash', authHandler, asyncHandler(getArchiveBlockHash))
   app.get('/archive/:archive/block/hash/:hash/payloads', authHandler, asyncHandler(getArchiveBlockHashPayloads))
@@ -85,6 +86,9 @@ const server = async (port = 80) => {
     console.log(`Req-path: ${inspect(req.path)}`)
     console.log(`Req-headers: ${inspect(req.headers)}`)
     console.log(`Req-body: ${inspect(req.body)}`)
+    if (req.headers['content-type'] === 'text/json') {
+      req.headers['content-type'] = 'application/json'
+    }
     next()
   })
 
@@ -126,12 +130,6 @@ const server = async (port = 80) => {
   }
 
   app.use(errorToJsonHandler)
-
-  //noisy logger - res
-  app.use((req: Request, res: Response, next: NextFunction) => {
-    console.log(`Res-status: ${inspect(res.statusCode)}: ${inspect(res.statusMessage)}`)
-    next()
-  })
 
   const server = app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`)
