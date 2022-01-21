@@ -3,6 +3,7 @@ import bodyParser from 'body-parser'
 import cors, { CorsOptions } from 'cors'
 import express, { Express, NextFunction, Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
+import { inspect } from 'util'
 
 import {
   getArchiveBlockHash,
@@ -23,7 +24,7 @@ import {
   translateLegacyJsonContentTypes,
 } from './middleware'
 
-const authHandler = process.env.USE_AUTH ? jwtRequiredHandler : noAuthHandler
+let authHandler = noAuthHandler
 
 const getNotImplemented = (_req: Request, res: Response, next: NextFunction) => {
   res.sendStatus(StatusCodes.NOT_IMPLEMENTED)
@@ -55,6 +56,7 @@ const addPayloadSchemaRoutes = (app: Express) => {
 const addBlockRoutes = (app: Express) => {
   app.post('/archive/:archive/bw', asyncHandler(postArchiveBlock))
   app.post('/archive/:archive/block', asyncHandler(postArchiveBlock))
+  app.post('/archive/:archive/bw', asyncHandler(postArchiveBlock))
   app.get('/archive/:archive/block/stats', authHandler, asyncHandler(getArchiveBlockStats))
   app.get('/archive/:archive/block/hash/:hash', authHandler, asyncHandler(getArchiveBlockHash))
   app.get('/archive/:archive/block/hash/:hash/payloads', authHandler, asyncHandler(getArchiveBlockHashPayloads))
@@ -66,21 +68,35 @@ const server = async (port = 80) => {
   // If an AWS ARN was supplied for Secrets Manager
   const awsEnvSecret = process.env.AWS_ENV_SECRET_ARN
   if (awsEnvSecret) {
+    console.log('Bootstrapping ENV from AWS')
     // Merge the values from AWS into the current ENV
     // with AWS taking precedence
     const awsEnv = await getEnvFromAws(awsEnvSecret)
     Object.assign(process.env, awsEnv)
   }
 
+  if (process.env.USE_AUTH) {
+    authHandler = jwtRequiredHandler
+    console.log('Using JWT auth for routes')
+  }
+
   const app = express()
 
-  const bodyParserInstance = bodyParser.json()
+  const bodyParserInstance = bodyParser.json({ type: ['application/json', 'text/json'] })
 
   app.use(cors())
 
   app.set('etag', false)
 
   app.use(translateLegacyJsonContentTypes)
+
+  //noisy logger - req
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    console.log(`Req-path: ${inspect(req.path)}`)
+    console.log(`Req-headers: ${inspect(req.headers)}`)
+    console.log(`Req-body: ${inspect(req.body)}`)
+    next()
+  })
 
   //if we do not trap this error, then it dumps too much to log, usually happens if request aborted
   app.use((req: Request, res: Response, next: NextFunction) => {
