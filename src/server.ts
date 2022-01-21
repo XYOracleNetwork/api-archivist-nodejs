@@ -1,4 +1,4 @@
-import { asyncHandler, errorToJsonHandler, getEnvFromAws } from '@xylabs/sdk-api-express-ecs'
+import { asyncHandler, Counters, errorToJsonHandler, getEnvFromAws } from '@xylabs/sdk-api-express-ecs'
 import bodyParser from 'body-parser'
 import cors, { CorsOptions } from 'cors'
 import express, { Express, NextFunction, Request, Response } from 'express'
@@ -86,7 +86,15 @@ const server = async (port = 80) => {
     console.log(`Req-path: ${inspect(req.path)}`)
     console.log(`Req-headers: ${inspect(req.headers)}`)
     console.log(`Req-body: ${inspect(req.body)}`)
+    const start = Date.now()
+    Counters.inc(req.path)
     next()
+    const duration = Date.now() - start
+    Counters.inc('_totalTime', duration)
+    Counters.min('_totalTimeMin', duration)
+    Counters.max('_totalTimeMax', duration)
+    Counters.inc('_calls')
+    console.log(`Res-satus: ${inspect(res.statusCode)}: ${inspect(res.statusMessage)}`)
   })
 
   //if we do not trap this error, then it dumps too much to log, usually happens if request aborted
@@ -109,6 +117,15 @@ const server = async (port = 80) => {
 
   app.get('/', (_req, res, next) => {
     res.json({ alive: true })
+    next()
+  })
+
+  app.get('/stats', (req, res, next) => {
+    res.json({
+      alive: true,
+      avgTime: `${((Counters.counters['_totalTime'] ?? 0) / (Counters.counters['_calls'] ?? 1)).toFixed(2)}ms`,
+      counters: Counters.counters,
+    })
     next()
   })
 
