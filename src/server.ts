@@ -14,7 +14,9 @@ import {
   getArchivePayloadRepair,
   getArchivePayloadStats,
   postArchiveBlock,
+  putArchiveOwner,
 } from './archive'
+import { getArchivesByOwner } from './archive/get/getArchivesByOwner'
 import { configureAuth, IAuthConfig, jwtRequiredHandler, noAuthHandler } from './middleware'
 
 let authHandler = noAuthHandler
@@ -27,8 +29,9 @@ const getNotImplemented = (_req: Request, res: Response, next: NextFunction) => 
 }
 
 const addArchiveRoutes = (app: Express) => {
-  app.get('/archive', getNotImplemented)
+  app.get('/archive', authHandler, getArchivesByOwner)
   app.get('/archive/:archive', getNotImplemented)
+  app.put('/archive/:archive', authHandler, putArchiveOwner)
 }
 
 const addPayloadRoutes = (app: Express) => {
