@@ -40,14 +40,7 @@ class XyoArchiveOwnerMongoSdk extends BaseMongoSdk<IArchiveOwner> {
 
   public async insert(item: IArchiveOwner) {
     return await this.useCollection(async (collection: Collection<IArchiveOwner>) => {
-      const result = await collection.insertOne({
-        ...item,
-      })
-      if (result.acknowledged) {
-        return result.insertedId
-      } else {
-        throw new Error('Insert Failed')
-      }
+      return await collection.insertOne({ ...item })
     })
   }
 }
