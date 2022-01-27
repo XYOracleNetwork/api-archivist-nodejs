@@ -5,7 +5,7 @@ import { storeArchiveOwner } from './storeArchiveOwner'
 interface IUserWithId {
   id?: string
 }
-export const putArchiveOwner = async (req: Request, res: Response, next: NextFunction) => {
+export const putArchive = async (req: Request, res: Response, next: NextFunction) => {
   const { archive } = req.params
   const user = req.user as IUserWithId
   if (!user || !user?.id) {
