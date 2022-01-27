@@ -3,17 +3,11 @@ import { StatusCodes } from 'http-status-codes'
 
 import { getArchivesByOwner } from './getArchivesByOwner'
 
-interface IUserWithId {
-  id?: string
-}
-
 export const getArchives = async (req: Request, res: Response, next: NextFunction) => {
-  const user = req.user as IUserWithId
+  const { user } = req
   if (!user || !user?.id) {
     res.sendStatus(StatusCodes.BAD_REQUEST)
-    next({
-      message: 'Invalid User',
-    })
+    next({ message: 'Invalid User' })
     return
   }
   const archives = await getArchivesByOwner(user?.id)

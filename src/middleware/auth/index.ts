@@ -2,7 +2,7 @@ import { assertEx } from '@xylabs/sdk-js'
 import express, { RequestHandler, Router } from 'express'
 import passport, { AuthenticateOptions } from 'passport'
 
-import { getUserMongoSdk, MongoDBUserStore } from './model'
+import { getUserMongoSdk, MongoDBUserStore, UserWithoutId } from './model'
 import { getProfile, postSignup, postWalletChallenge } from './routes'
 import {
   configureApiKeyStrategy,
@@ -54,4 +54,19 @@ export const configureAuth: (config?: IAuthConfig) => Promise<Router> = async (c
   configureApiKeyStrategy(userStore, apiKey)
 
   return router
+}
+
+// Since Passport augments each successfully auth'd request
+// with our User, we need to redefine the default Express
+// User (just an empty Object) to be our User so we don't
+// have to cast every request
+// https://github.com/DefinitelyTyped/DefinitelyTyped/commit/91c229dbdb653dbf0da91992f525905893cbeb91#r34812715
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace Express {
+    // eslint-disable-next-line @typescript-eslint/no-empty-interface
+    interface User extends UserWithoutId {
+      id?: string
+    }
+  }
 }
