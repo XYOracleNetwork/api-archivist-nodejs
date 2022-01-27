@@ -1830,23 +1830,17 @@
     prettier "^2"
     remark-preset-lint-markdown-style-guide "^5"
 
-"@xylabs/rollup-config@^1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@xylabs/rollup-config/-/rollup-config-1.0.5.tgz#59c60a8fd679119f79cb37cc89778dadaeaf0db3"
-  integrity sha512-lTct7aMqZoJgbPV5IDGDDySTIZuPSUU++wp7KtNTBlrwpYmz4fiaI3yDVetPaZLrcmdyW8o4C+GD5KffTdgsFw==
+"@xylabs/rollup-config@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@xylabs/rollup-config/-/rollup-config-1.1.1.tgz#06cf68a0aeaab655ab500737984e7f8f2beea295"
+  integrity sha512-SxEWcRjSblMWpqyfZERc4hT+CYGCocFI1nGJlzU9bekmkmO3JPvjZaO6Ud0fL5hdH22o8cOCeEp8RgMNIPqXIQ==
   dependencies:
     "@rollup/plugin-image" "^2.1.1"
     "@rollup/plugin-json" "^4.1.0"
     "@rollup/plugin-replace" "^3.0.1"
     "@rollup/plugin-strip" "^2.1.0"
     "@rollup/plugin-typescript" "^8.3.0"
-    depcheck "^1.4.2"
-    eslint-plugin-sonarjs "^0.10.0"
-    npm-check-updates "^12"
-    npm-package-json-lint "^5.4.2"
-    npm-package-json-lint-config-default "^3.0.0"
     rollup "^2.63.0"
-    ts-prune "^0.10"
 
 "@xylabs/sdk-api-express-ecs@^1.0.8":
   version "1.0.8"
@@ -3135,11 +3129,6 @@ eslint-plugin-simple-import-sort@^7:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-simple-import-sort/-/eslint-plugin-simple-import-sort-7.0.0.tgz#a1dad262f46d2184a90095a60c66fef74727f0f8"
   integrity sha512-U3vEDB5zhYPNfxT5TYR7u01dboFZp+HNpnGhkDB2g/2E4wZ/g1Q9Ton8UwCLfRV9yAKyYqDh62oHOamvkFxsvw==
-
-eslint-plugin-sonarjs@^0.10.0:
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-sonarjs/-/eslint-plugin-sonarjs-0.10.0.tgz#2b520c6d0dbdecbea98cd82f5cb84fc5c3d2b954"
-  integrity sha512-FBRIBmWQh2UAfuLSnuYEfmle33jIup9hfkR0X8pkfjeCKNpHUG8qyZI63ahs3aw8CJrv47QJ9ccdK3ZxKH016A==
 
 eslint-plugin-sonarjs@^0.11.0:
   version "0.11.0"
@@ -7248,6 +7237,13 @@ rollup@^2.63.0:
   version "2.63.0"
   resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.63.0.tgz#fe2f7fec2133f3fab9e022b9ac245628d817c6bb"
   integrity sha512-nps0idjmD+NXl6OREfyYXMn/dar3WGcyKn+KBzPdaLecub3x/LrId0wUcthcr8oZUAcZAR8NKcfGGFlNgGL1kQ==
+  optionalDependencies:
+    fsevents "~2.3.2"
+
+rollup@^2.66.1:
+  version "2.66.1"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.66.1.tgz#366b0404de353c4331d538c3ad2963934fcb4937"
+  integrity sha512-crSgLhSkLMnKr4s9iZ/1qJCplgAgrRY+igWv8KhG/AjKOJ0YX/WpmANyn8oxrw+zenF3BXWDLa7Xl/QZISH+7w==
   optionalDependencies:
     fsevents "~2.3.2"
 
