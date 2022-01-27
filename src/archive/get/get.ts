@@ -10,7 +10,7 @@ export const getArchives = async (req: Request, res: Response, next: NextFunctio
     next({ message: 'Invalid User' })
     return
   }
-  const archives = await getArchivesByOwner(user?.id)
+  const archives = await getArchivesByOwner(user.id)
   res.json(archives)
   next()
 }

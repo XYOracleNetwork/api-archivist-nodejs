@@ -29,9 +29,9 @@ const getNotImplemented = (_req: Request, res: Response, next: NextFunction) => 
 }
 
 const addArchiveRoutes = (app: Express) => {
-  app.get('/archive', authHandler, getArchives)
+  app.get('/archive', authHandler, asyncHandler(getArchives))
   app.get('/archive/:archive', getNotImplemented)
-  app.put('/archive/:archive', authHandler, putArchive)
+  app.put('/archive/:archive', authHandler, asyncHandler(putArchive))
 }
 
 const addPayloadRoutes = (app: Express) => {

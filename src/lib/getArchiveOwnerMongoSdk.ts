@@ -18,7 +18,7 @@ export const getArchiveOwnerMongoSdk = async () => {
 }
 
 interface IArchiveOwner {
-  archive: string
+  _id: string
   user: string
 }
 
@@ -29,7 +29,7 @@ class XyoArchiveOwnerMongoSdk extends BaseMongoSdk<IArchiveOwner> {
 
   public async findByArchive(archive: string) {
     return await this.useCollection(async (collection: Collection<IArchiveOwner>) => {
-      return await collection.find({ archive }).maxTimeMS(this._maxTime).toArray()
+      return await collection.findOne({ _id: archive })
     })
   }
   public async findByUser(user: string) {
