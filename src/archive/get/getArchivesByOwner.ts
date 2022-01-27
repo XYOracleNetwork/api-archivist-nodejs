@@ -1,10 +1,7 @@
-import { assertEx } from '@xylabs/sdk-js'
-
 import { getArchiveOwnerMongoSdk } from '../../lib'
 
-export const getArchivesByOwner = async (user: string): Promise<void> => {
+export const getArchivesByOwner = async (user: string): Promise<string[]> => {
   const sdk = await getArchiveOwnerMongoSdk()
   const result = await sdk.findByUser(user)
-  assertEx(result !== null, 'Archive Claim Failed')
-  return
+  return result.map((archive) => archive.archive)
 }
