@@ -11,9 +11,7 @@ export const putArchive = async (req: Request, res: Response, next: NextFunction
     next({ message: 'Invalid User' })
     return
   }
-  // TODO: 200 vs 204 vs 404
   await storeArchiveOwner(archive, user.id)
-  res.json({})
-
+  res.sendStatus(StatusCodes.NO_CONTENT)
   next()
 }
