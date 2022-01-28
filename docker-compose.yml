@@ -10,6 +10,8 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
       MONGO_INITDB_DATABASE: archivist
+    volumes:
+      - ./scripts/mongo/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
   archivist:
     container_name: archivist
     build: .

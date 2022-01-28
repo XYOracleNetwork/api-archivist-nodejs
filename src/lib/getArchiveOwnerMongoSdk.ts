@@ -8,7 +8,7 @@ export const getArchiveOwnerMongoSdk = async () => {
   const env = await getMongoDBConfig()
 
   return new XyoArchiveOwnerMongoSdk({
-    collection: 'archive_owner',
+    collection: 'archive_owners',
     dbConnectionString: env.MONGO_CONNECTION_STRING,
     dbDomain: assertEx(env.MONGO_DOMAIN, 'Missing Mongo Domain'),
     dbName: assertEx(env.MONGO_DATABASE, 'Missing Mongo Database'),
