@@ -2,7 +2,7 @@ import { assertEx } from '@xylabs/sdk-js'
 import express, { RequestHandler, Router } from 'express'
 import passport, { AuthenticateOptions } from 'passport'
 
-import { getUserMongoSdk, MongoDBUserStore, UserWithoutId } from './model'
+import { ArchiveOwnerStore, GetArchivesByUserFn, getUserMongoSdk, MongoDBUserStore, UserWithoutId } from './model'
 import { getProfile, postSignup, postWalletChallenge } from './routes'
 import {
   configureApiKeyStrategy,
@@ -40,9 +40,10 @@ router.get('/profile', jwtAuth, getProfile)
 export interface IAuthConfig {
   secretOrKey?: string
   apiKey?: string
+  getUserArchives: GetArchivesByUserFn
 }
 
-export const configureAuth: (config?: IAuthConfig) => Promise<Router> = async (config) => {
+export const configureAuth: (config: IAuthConfig) => Promise<Router> = async (config) => {
   assertEx(config?.secretOrKey, 'Missing JWT secretOrKey')
   const secretOrKey = config?.secretOrKey as string
   assertEx(config?.apiKey, 'Missing API Key')
@@ -50,12 +51,13 @@ export const configureAuth: (config?: IAuthConfig) => Promise<Router> = async (c
 
   const userMongoSdk = await getUserMongoSdk()
   const userStore = new MongoDBUserStore(userMongoSdk)
+  const archvieOwnerStore = new ArchiveOwnerStore(config?.getUserArchives)
 
   respondWithJwt = configureJwtStrategy(secretOrKey)
   configureLocalStrategy(userStore)
   configureWeb3Strategy(userStore)
   configureApiKeyStrategy(userStore, apiKey)
-  configureArchiveOwnerStrategy()
+  configureArchiveOwnerStrategy(archvieOwnerStore)
 
   return router
 }

@@ -14,6 +14,7 @@ import {
   getArchivePayloadRepair,
   getArchivePayloadStats,
   getArchives,
+  getArchivesByOwner,
   postArchiveBlock,
   putArchive,
 } from './archive'
@@ -132,6 +133,7 @@ const server = async (port = 80) => {
   if (process.env.USE_AUTH) {
     const authConfig: IAuthConfig = {
       apiKey: process.env.API_KEY,
+      getUserArchives: getArchivesByOwner,
       secretOrKey: process.env.JWT_SECRET,
     }
     const userRoutes = await configureAuth(authConfig)

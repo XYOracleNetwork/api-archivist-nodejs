@@ -1,21 +1,27 @@
 import { Request } from 'express'
 import passport, { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
-const verifyArchiveOwner = (req: Request): Promise<boolean> => {
+import { IArchiveOwnerStore } from '../model'
+
+const verifyArchiveOwner = async (req: Request, store: IArchiveOwnerStore): Promise<boolean> => {
+  // Validate user from request
   const { user } = req
-  if (!user) {
+  if (!user || !user?.id) {
     return Promise.resolve(false)
   }
+  // Validate archive from request
   const { archive } = req.params
   if (!archive) {
     return Promise.resolve(false)
   }
-  // TODO: Verify user owns archive from path
-  return Promise.resolve(true)
+  // Get archives owned by the user
+  const userArchives = await store.getArchivesOwnedByUser(user.id)
+  // Verify user owns archive from path
+  return userArchives.some((userArchive) => userArchive === archive)
 }
 
 class ArchiveOwnerStrategy extends Strategy {
-  constructor() {
+  constructor(public readonly store: IArchiveOwnerStore) {
     super()
   }
   override async authenticate(
@@ -29,7 +35,7 @@ class ArchiveOwnerStrategy extends Strategy {
         this.fail('Invalid user')
         return
       }
-      const isArchiveOwner = await verifyArchiveOwner(req)
+      const isArchiveOwner = await verifyArchiveOwner(req, this.store)
       if (!isArchiveOwner) {
         this.fail('User not authorized for archive')
         return
@@ -42,6 +48,6 @@ class ArchiveOwnerStrategy extends Strategy {
   }
 }
 
-export const configureArchiveOwnerStrategy = () => {
-  passport.use('archiveOwner', new ArchiveOwnerStrategy())
+export const configureArchiveOwnerStrategy = (store: IArchiveOwnerStore) => {
+  passport.use('archiveOwner', new ArchiveOwnerStrategy(store))
 }
