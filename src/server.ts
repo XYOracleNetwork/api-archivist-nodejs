@@ -1,7 +1,7 @@
 import { asyncHandler, Counters, errorToJsonHandler, getEnvFromAws } from '@xylabs/sdk-api-express-ecs'
 import bodyParser from 'body-parser'
 import cors, { CorsOptions } from 'cors'
-import express, { Express, NextFunction, Request, Response } from 'express'
+import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
 import {
@@ -17,9 +17,10 @@ import {
   postArchiveBlock,
   putArchive,
 } from './archive'
-import { configureAuth, IAuthConfig, jwtRequiredHandler, noAuthHandler } from './middleware'
+import { archiveOwnerAuth, configureAuth, IAuthConfig, jwtAuth, noAuth } from './middleware'
 
-let authHandler = noAuthHandler
+let requireLoggedIn: RequestHandler[] = [noAuth]
+let requireArchiveOwner: RequestHandler[] = [noAuth]
 
 const getNotImplemented = (_req: Request, res: Response, next: NextFunction) => {
   res.sendStatus(StatusCodes.NOT_IMPLEMENTED)
@@ -29,17 +30,17 @@ const getNotImplemented = (_req: Request, res: Response, next: NextFunction) => 
 }
 
 const addArchiveRoutes = (app: Express) => {
-  app.get('/archive', authHandler, asyncHandler(getArchives))
+  app.get('/archive', requireLoggedIn, asyncHandler(getArchives))
   app.get('/archive/:archive', getNotImplemented)
-  app.put('/archive/:archive', authHandler, asyncHandler(putArchive))
+  app.put('/archive/:archive', requireLoggedIn, asyncHandler(putArchive))
 }
 
 const addPayloadRoutes = (app: Express) => {
-  app.get('/archive/:archive/payload/stats', authHandler, asyncHandler(getArchivePayloadStats))
-  app.get('/archive/:archive/payload/hash/:hash', authHandler, asyncHandler(getArchivePayloadHash))
-  app.get('/archive/:archive/payload/hash/:hash/repair', authHandler, asyncHandler(getArchivePayloadRepair))
-  app.get('/archive/:archive/payload/recent/:limit?', authHandler, asyncHandler(getArchivePayloadRecent))
-  app.get('/archive/:archive/payload/sample/:size?', authHandler, getNotImplemented)
+  app.get('/archive/:archive/payload/stats', requireArchiveOwner, asyncHandler(getArchivePayloadStats))
+  app.get('/archive/:archive/payload/hash/:hash', requireArchiveOwner, asyncHandler(getArchivePayloadHash))
+  app.get('/archive/:archive/payload/hash/:hash/repair', requireArchiveOwner, asyncHandler(getArchivePayloadRepair))
+  app.get('/archive/:archive/payload/recent/:limit?', requireArchiveOwner, asyncHandler(getArchivePayloadRecent))
+  app.get('/archive/:archive/payload/sample/:size?', requireArchiveOwner, getNotImplemented)
 }
 
 const addPayloadSchemaRoutes = (app: Express) => {
@@ -52,10 +53,10 @@ const addPayloadSchemaRoutes = (app: Express) => {
 const addBlockRoutes = (app: Express) => {
   app.post('/archive/:archive/block', asyncHandler(postArchiveBlock))
   app.post('/archive/:archive/bw', asyncHandler(postArchiveBlock))
-  app.get('/archive/:archive/block/stats', authHandler, asyncHandler(getArchiveBlockStats))
-  app.get('/archive/:archive/block/hash/:hash', authHandler, asyncHandler(getArchiveBlockHash))
-  app.get('/archive/:archive/block/hash/:hash/payloads', authHandler, asyncHandler(getArchiveBlockHashPayloads))
-  app.get('/archive/:archive/block/recent/:limit?', authHandler, asyncHandler(getArchiveBlockRecent))
+  app.get('/archive/:archive/block/stats', requireArchiveOwner, asyncHandler(getArchiveBlockStats))
+  app.get('/archive/:archive/block/hash/:hash', requireArchiveOwner, asyncHandler(getArchiveBlockHash))
+  app.get('/archive/:archive/block/hash/:hash/payloads', requireArchiveOwner, asyncHandler(getArchiveBlockHashPayloads))
+  app.get('/archive/:archive/block/recent/:limit?', requireArchiveOwner, asyncHandler(getArchiveBlockRecent))
   app.get('/archive/:archive/block/sample/:size?', getNotImplemented)
 }
 
@@ -71,7 +72,8 @@ const server = async (port = 80) => {
   }
 
   if (process.env.USE_AUTH) {
-    authHandler = jwtRequiredHandler
+    requireLoggedIn = [jwtAuth]
+    requireArchiveOwner = [jwtAuth, archiveOwnerAuth]
     console.log('Using JWT auth for routes')
   }
 
@@ -132,8 +134,8 @@ const server = async (port = 80) => {
       apiKey: process.env.API_KEY,
       secretOrKey: process.env.JWT_SECRET,
     }
-    const auth = await configureAuth(authConfig)
-    app.use('/user', auth)
+    const userRoutes = await configureAuth(authConfig)
+    app.use('/user', userRoutes)
   }
 
   app.use(errorToJsonHandler)

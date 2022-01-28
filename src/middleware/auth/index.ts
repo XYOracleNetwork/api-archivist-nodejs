@@ -6,6 +6,7 @@ import { getUserMongoSdk, MongoDBUserStore, UserWithoutId } from './model'
 import { getProfile, postSignup, postWalletChallenge } from './routes'
 import {
   configureApiKeyStrategy,
+  configureArchiveOwnerStrategy,
   configureJwtStrategy,
   configureLocalStrategy,
   configureWeb3Strategy,
@@ -15,8 +16,10 @@ import {
 const router: Router = express.Router()
 
 const noSession: AuthenticateOptions = { session: false }
-export const jwtRequiredHandler: RequestHandler = passport.authenticate('jwt', noSession)
-export const noAuthHandler: RequestHandler = (_req, _res, next) => next()
+
+export const jwtAuth: RequestHandler = passport.authenticate('jwt', noSession)
+export const archiveOwnerAuth: RequestHandler = passport.authenticate('archiveOwner', noSession)
+export const noAuth: RequestHandler = (_req, _res, next) => next()
 
 let respondWithJwt: RequestHandler = () => {
   throw new Error('JWT Auth Incorrectly Configured')
@@ -32,7 +35,7 @@ router.post('/wallet/verify', passport.authenticate('web3', noSession), (req, re
   respondWithJwt(req, res, next)
 )
 
-router.get('/profile', jwtRequiredHandler, getProfile)
+router.get('/profile', jwtAuth, getProfile)
 
 export interface IAuthConfig {
   secretOrKey?: string
@@ -52,6 +55,7 @@ export const configureAuth: (config?: IAuthConfig) => Promise<Router> = async (c
   configureLocalStrategy(userStore)
   configureWeb3Strategy(userStore)
   configureApiKeyStrategy(userStore, apiKey)
+  configureArchiveOwnerStrategy()
 
   return router
 }
