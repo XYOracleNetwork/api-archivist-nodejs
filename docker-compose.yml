@@ -9,6 +9,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: archivist
   archivist:
     container_name: archivist
     build: .
@@ -21,7 +22,7 @@ services:
       APP_PORT: 8080
       CORS_ALLOWED_ORIGINS: http://localhost:3000
       MONGO_CONNECTION_STRING: mongodb://root:example@mongo:27017/?retryWrites=true&w=majority
-      MONGO_DATABASE: local
+      MONGO_DATABASE: archivist
       MONGO_DOMAIN: "mongo"
       MONGO_PASSWORD: example
       MONGO_USERNAME: root
