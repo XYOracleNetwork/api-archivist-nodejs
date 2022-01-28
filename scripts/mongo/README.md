@@ -1,4 +1,4 @@
-#  MongoDB Scripts
+# MongoDB Scripts
 
 The following scripts exist to initialize the local MongoDB instance
 appropriately. From [their docs](https://hub.docker.com/_/mongo):
@@ -12,7 +12,7 @@ appropriately. From [their docs](https://hub.docker.com/_/mongo):
 
 It doesn't look like they support:
 
- - `await`
- - `console`
+-   `await`
+-   `console`
 
 so be sure to code your scripts accordingly.
