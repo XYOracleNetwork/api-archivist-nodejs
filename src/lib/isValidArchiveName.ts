@@ -1,4 +1,4 @@
-const pattern = /^[a-zA-Z0-9-_]+$/
+const pattern = /^[a-z0-9-]+$/
 
 export const isValidArchiveName = (archive: string) => {
   return pattern.test(archive)
