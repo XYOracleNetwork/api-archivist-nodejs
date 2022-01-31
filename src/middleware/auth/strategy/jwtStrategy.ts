@@ -4,7 +4,6 @@ import passport from 'passport'
 import { ExtractJwt, Strategy as JWTStrategy, StrategyOptions } from 'passport-jwt'
 
 import { toUserDto, UserDto } from '../dto'
-import { User } from '../model'
 
 const algorithm = 'HS256' // 'HS512' once we perf
 const audience = 'archivist'
@@ -63,7 +62,11 @@ export const configureJwtStrategy = (secretOrKey: string): RequestHandler => {
 
   const respondWithJwt: RequestHandler = (req, res, next) => {
     try {
-      const user = req.user as User
+      const { user } = req
+      if (!user || !user?.id) {
+        next({ message: 'Invalid User' })
+        return
+      }
       req.login(user, { session: false }, async (error) => {
         if (error) {
           return next(error)

@@ -72,10 +72,9 @@ class Web3AuthStrategy extends Strategy {
         this.fail('Invalid message')
         return
       }
-      const user = await this.userStore.getByWallet(address)
+      let user = await this.userStore.getByWallet(address)
       if (!user) {
-        this.error({ message: 'User not found' })
-        return
+        user = await this.userStore.create({ address })
       }
       this.success(user)
       return
