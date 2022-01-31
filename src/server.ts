@@ -14,10 +14,10 @@ import {
   getArchivePayloadRepair,
   getArchivePayloadStats,
   getArchives,
-  getArchivesByOwner,
   postArchiveBlock,
   putArchive,
 } from './archive'
+import { getArchivesByOwner } from './lib'
 import { archiveOwnerAuth, configureAuth, IAuthConfig, jwtAuth, noAuth } from './middleware'
 
 let requireLoggedIn: RequestHandler[] = [noAuth]
