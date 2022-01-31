@@ -32,7 +32,7 @@ const getNotImplemented = (_req: Request, res: Response, next: NextFunction) => 
 
 const addArchiveRoutes = (app: Express) => {
   app.get('/archive', requireLoggedIn, asyncHandler(getArchives))
-  app.get('/archive/:archive', getNotImplemented)
+  app.get('/archive/:archive', requireArchiveOwner, getNotImplemented)
   app.put('/archive/:archive', requireLoggedIn, asyncHandler(putArchive))
 }
 
@@ -45,10 +45,10 @@ const addPayloadRoutes = (app: Express) => {
 }
 
 const addPayloadSchemaRoutes = (app: Express) => {
-  app.get('/archive/:archive/payload/schema', getNotImplemented)
-  app.get('/archive/:archive/payload/schema/:schema', getNotImplemented)
-  app.get('/archive/:archive/payload/schema/:schema/stats', getNotImplemented)
-  app.get('/archive/:archive/payload/schema/:schema/recent/limit', getNotImplemented)
+  app.get('/archive/:archive/payload/schema', requireArchiveOwner, getNotImplemented)
+  app.get('/archive/:archive/payload/schema/:schema', requireArchiveOwner, getNotImplemented)
+  app.get('/archive/:archive/payload/schema/:schema/stats', requireArchiveOwner, getNotImplemented)
+  app.get('/archive/:archive/payload/schema/:schema/recent/limit', requireArchiveOwner, getNotImplemented)
 }
 
 const addBlockRoutes = (app: Express) => {
@@ -58,7 +58,7 @@ const addBlockRoutes = (app: Express) => {
   app.get('/archive/:archive/block/hash/:hash', requireArchiveOwner, asyncHandler(getArchiveBlockHash))
   app.get('/archive/:archive/block/hash/:hash/payloads', requireArchiveOwner, asyncHandler(getArchiveBlockHashPayloads))
   app.get('/archive/:archive/block/recent/:limit?', requireArchiveOwner, asyncHandler(getArchiveBlockRecent))
-  app.get('/archive/:archive/block/sample/:size?', getNotImplemented)
+  app.get('/archive/:archive/block/sample/:size?', requireArchiveOwner, getNotImplemented)
 }
 
 const server = async (port = 80) => {

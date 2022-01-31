@@ -43,7 +43,7 @@ class ArchiveOwnerStrategy extends Strategy {
       this.success(user)
       return
     } catch (error) {
-      this.error({ message: 'Web3 Auth Error' })
+      this.error({ message: 'ArchiveOwner Auth Error' })
     }
   }
 }
