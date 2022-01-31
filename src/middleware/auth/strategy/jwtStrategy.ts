@@ -1,4 +1,5 @@
 import { RequestHandler } from 'express'
+import { StatusCodes } from 'http-status-codes'
 import jwt, { SignOptions } from 'jsonwebtoken'
 import passport from 'passport'
 import { ExtractJwt, Strategy as JWTStrategy, StrategyOptions } from 'passport-jwt'
@@ -64,7 +65,7 @@ export const configureJwtStrategy = (secretOrKey: string): RequestHandler => {
     try {
       const { user } = req
       if (!user || !user?.id) {
-        next({ message: 'Invalid User' })
+        next({ message: 'Invalid User', statusCode: StatusCodes.UNAUTHORIZED })
         return
       }
       req.login(user, { session: false }, async (error) => {

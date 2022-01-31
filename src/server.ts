@@ -2,7 +2,7 @@ import { asyncHandler, Counters, errorToJsonHandler, getEnvFromAws } from '@xyla
 import bodyParser from 'body-parser'
 import cors, { CorsOptions } from 'cors'
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express'
-import { StatusCodes } from 'http-status-codes'
+import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import {
   getArchiveBlockHash,
@@ -23,11 +23,8 @@ import { archiveOwnerAuth, configureAuth, IAuthConfig, jwtAuth, noAuth } from '.
 let requireLoggedIn: RequestHandler[] = [noAuth]
 let requireArchiveOwner: RequestHandler[] = [noAuth]
 
-const getNotImplemented = (_req: Request, res: Response, next: NextFunction) => {
-  res.sendStatus(StatusCodes.NOT_IMPLEMENTED)
-  next({
-    message: 'Not Implemented',
-  })
+const getNotImplemented: RequestHandler = (_req, _res, next) => {
+  next({ message: ReasonPhrases.NOT_IMPLEMENTED, statusCode: StatusCodes.NOT_IMPLEMENTED })
 }
 
 const addArchiveRoutes = (app: Express) => {

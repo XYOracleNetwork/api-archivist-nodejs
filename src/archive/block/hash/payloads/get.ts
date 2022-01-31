@@ -1,6 +1,7 @@
 import 'source-map-support/register'
 
 import { NextFunction, Request, Response } from 'express'
+import { StatusCodes } from 'http-status-codes'
 
 import { getArchivistBoundWitnessesMongoSdk, getArchivistPayloadMongoSdk } from '../../../../lib'
 
@@ -21,6 +22,6 @@ export const getArchiveBlockHashPayloads = async (req: Request, res: Response, n
     res.json(await getPayloads(archive, bw[0].payload_hashes))
     next()
   } else {
-    next({ message: 'Block not found' })
+    next({ message: 'Block not found', statusCode: StatusCodes.NOT_FOUND })
   }
 }

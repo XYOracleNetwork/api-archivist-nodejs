@@ -25,7 +25,6 @@ export const getArchivePayloadRepair = async (req: Request, res: Response, next:
     res.json(await updatePayload(archive, hash, payload))
     next()
   } else {
-    res.sendStatus(StatusCodes.NOT_FOUND)
-    next({ message: ReasonPhrases.NOT_FOUND })
+    next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
   }
 }
