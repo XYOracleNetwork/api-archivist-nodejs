@@ -7,12 +7,12 @@ const verifyArchiveOwner = async (req: Request, store: IArchiveOwnerStore): Prom
   // Validate user from request
   const { user } = req
   if (!user || !user?.id) {
-    return Promise.resolve(false)
+    return false
   }
   // Validate archive from request
   const { archive } = req.params
   if (!archive) {
-    return Promise.resolve(false)
+    return false
   }
   // Get archives owned by the user
   const userArchives = await store.getArchivesOwnedByUser(user.id)
