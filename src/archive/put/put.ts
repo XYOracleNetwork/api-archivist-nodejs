@@ -5,17 +5,15 @@ import { isValidArchiveName } from '../../lib'
 import { storeArchiveOwner } from './storeArchiveOwner'
 
 export const putArchive = async (req: Request, res: Response, next: NextFunction) => {
-  const archive = req.params.archive?.toLowerCase()
-  if (!isValidArchiveName(archive)) {
-    res.sendStatus(StatusCodes.BAD_REQUEST)
-    next({ message: 'Invalid Archive Name' })
+  const { user } = req
+  if (!user || !user?.id) {
+    next({ message: 'Invalid User', statusCode: StatusCodes.UNAUTHORIZED })
     return
   }
 
-  const { user } = req
-  if (!user || !user?.id) {
-    res.sendStatus(StatusCodes.BAD_REQUEST)
-    next({ message: 'Invalid User' })
+  const archive = req.params.archive?.toLowerCase()
+  if (!isValidArchiveName(archive)) {
+    next({ message: 'Invalid Archive Name', statusCode: StatusCodes.BAD_REQUEST })
     return
   }
 
@@ -24,7 +22,6 @@ export const putArchive = async (req: Request, res: Response, next: NextFunction
     res.json(response)
     next()
   } else {
-    res.sendStatus(StatusCodes.UNAUTHORIZED)
-    next({ message: ReasonPhrases.UNAUTHORIZED })
+    next({ message: ReasonPhrases.UNAUTHORIZED, statusCode: StatusCodes.UNAUTHORIZED })
   }
 }

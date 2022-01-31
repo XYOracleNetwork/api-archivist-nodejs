@@ -6,8 +6,7 @@ import { getArchivesByOwner } from '../../lib'
 export const getArchives = async (req: Request, res: Response, next: NextFunction) => {
   const { user } = req
   if (!user || !user?.id) {
-    res.sendStatus(StatusCodes.BAD_REQUEST)
-    next({ message: 'Invalid User' })
+    next({ message: 'Invalid User', statusCode: StatusCodes.UNAUTHORIZED })
     return
   }
   const archives = await getArchivesByOwner(user.id)

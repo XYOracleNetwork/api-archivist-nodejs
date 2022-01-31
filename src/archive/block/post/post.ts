@@ -29,8 +29,7 @@ export const postArchiveBlock = async (req: Request, res: Response, next: NextFu
 
   if (validationErrors.length > 0) {
     console.log(`Error: ${validationErrors[0].message}`)
-    res.sendStatus(StatusCodes.BAD_REQUEST)
-    next({ message: validationErrors[0].message })
+    next({ message: validationErrors[0].message, statusCode: StatusCodes.BAD_REQUEST })
     return
   }
 
