@@ -49,15 +49,15 @@ export const configureAuth: (config: IAuthConfig) => Promise<Router> = async (co
   assertEx(config?.apiKey, 'Missing API Key')
   const apiKey = config?.apiKey as string
 
+  const archiveOwnerStore = new ArchiveOwnerStore(config.getUserArchives)
   const userMongoSdk = await getUserMongoSdk()
   const userStore = new MongoDBUserStore(userMongoSdk)
-  const archvieOwnerStore = new ArchiveOwnerStore(config?.getUserArchives)
 
   respondWithJwt = configureJwtStrategy(secretOrKey)
   configureLocalStrategy(userStore)
   configureWeb3Strategy(userStore)
   configureApiKeyStrategy(userStore, apiKey)
-  configureArchiveOwnerStrategy(archvieOwnerStore)
+  configureArchiveOwnerStrategy(archiveOwnerStore)
 
   return router
 }

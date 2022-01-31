@@ -1,4 +1,4 @@
-import { getArchiveOwnerMongoSdk } from '../../lib'
+import { getArchiveOwnerMongoSdk } from './getArchiveOwnerMongoSdk'
 
 export const getArchivesByOwner = async (user: string): Promise<string[]> => {
   const sdk = await getArchiveOwnerMongoSdk()
