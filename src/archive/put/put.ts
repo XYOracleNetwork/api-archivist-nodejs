@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from 'express'
-import { StatusCodes } from 'http-status-codes'
+import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import { isValidArchiveName } from '../../lib'
 import { storeArchiveOwner } from './storeArchiveOwner'
 
 export const putArchive = async (req: Request, res: Response, next: NextFunction) => {
-  const { archive } = req.params
+  const archive = req.params.archive?.toLowerCase()
   if (!isValidArchiveName(archive)) {
     res.sendStatus(StatusCodes.BAD_REQUEST)
     next({ message: 'Invalid Archive Name' })
@@ -19,8 +19,12 @@ export const putArchive = async (req: Request, res: Response, next: NextFunction
     return
   }
 
-  const owner = await storeArchiveOwner(archive, user.id)
-  const statusCode = owner && owner === user.id ? StatusCodes.NO_CONTENT : StatusCodes.UNAUTHORIZED
-  res.sendStatus(statusCode)
-  next()
+  const response = await storeArchiveOwner(archive, user.id)
+  if (response && response.owner === user.id) {
+    res.json(response)
+    next()
+  } else {
+    res.sendStatus(StatusCodes.UNAUTHORIZED)
+    next({ message: ReasonPhrases.UNAUTHORIZED })
+  }
 }
