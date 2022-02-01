@@ -58,88 +58,92 @@ const addBlockRoutes = (app: Express) => {
   app.get('/archive/:archive/block/sample/:size?', requireArchiveOwner, getNotImplemented)
 }
 
-const app = express()
-
-// If an AWS ARN was supplied for Secrets Manager
-const awsEnvSecret = process.env.AWS_ENV_SECRET_ARN
-if (awsEnvSecret) {
-  // HACK: Promisify to remove async but this won't
-  // work on AWS as is since we'll initialize before
-  // we merge with process.env
-  getEnvFromAws(awsEnvSecret)
-    .then((awsEnv) => {
-      Object.assign(process.env, awsEnv)
-    })
-    .catch((err) => {
-      throw err
-    })
-}
-
-// Merge the values from AWS into the current ENV
-// with AWS taking precedence
-if (process.env.USE_AUTH) {
-  requireLoggedIn = [jwtAuth]
-  requireArchiveOwner = [jwtAuth, archiveOwnerAuth]
-  console.log('Using JWT auth for routes')
-}
-if (process.env.CORS_ALLOWED_ORIGINS) {
-  // origin can be an array of allowed origins so we support
-  // a list of comma delimited CORS origins
-  const origin = process.env.CORS_ALLOWED_ORIGINS.split(',')
-  const corsOptions: CorsOptions = { origin }
-  app.use(cors(corsOptions))
-}
-
-const bodyParserInstance = bodyParser.json({ type: ['application/json', 'text/json'] })
-
-app.use(cors())
-
-app.set('etag', false)
-
-//global counters
-app.use((req: Request, res: Response, next: NextFunction) => {
-  Counters.inc(req.path)
-  Counters.inc('_calls')
-  next()
-})
-
-//if we do not trap this error, then it dumps too much to log, usually happens if request aborted
-app.use((req: Request, res: Response, next: NextFunction) => {
-  try {
-    bodyParserInstance(req, res, next)
-  } catch (ex) {
-    const error = ex as Error
-    console.log(`bodyParser failed [${error.name}]: ${error.message}`)
+const server = async (port = 80) => {
+  // If an AWS ARN was supplied for Secrets Manager
+  const awsEnvSecret = process.env.AWS_ENV_SECRET_ARN
+  if (awsEnvSecret) {
+    console.log('Bootstrapping ENV from AWS')
+    // Merge the values from AWS into the current ENV
+    // with AWS taking precedence
+    const awsEnv = await getEnvFromAws(awsEnvSecret)
+    Object.assign(process.env, awsEnv)
   }
-})
 
-app.get('/', (_req, res, next) => {
-  res.json({ alive: true })
-  next()
-})
+  if (process.env.USE_AUTH) {
+    requireLoggedIn = [jwtAuth]
+    requireArchiveOwner = [jwtAuth, archiveOwnerAuth]
+    console.log('Using JWT auth for routes')
+  }
 
-app.get('/stats', (req, res, next) => {
-  res.json({
-    alive: true,
-    avgTime: `${((Counters.counters['_totalTime'] ?? 0) / (Counters.counters['_calls'] ?? 1)).toFixed(2)}ms`,
-    counters: Counters.counters,
+  const app = express()
+
+  const bodyParserInstance = bodyParser.json({ type: ['application/json', 'text/json'] })
+
+  app.use(cors())
+
+  app.set('etag', false)
+
+  //global counters
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    Counters.inc(req.path)
+    Counters.inc('_calls')
+    next()
   })
-  next()
-})
 
-addArchiveRoutes(app)
-addPayloadRoutes(app)
-addPayloadSchemaRoutes(app)
-addBlockRoutes(app)
+  //if we do not trap this error, then it dumps too much to log, usually happens if request aborted
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    try {
+      bodyParserInstance(req, res, next)
+    } catch (ex) {
+      const error = ex as Error
+      console.log(`bodyParser failed [${error.name}]: ${error.message}`)
+    }
+  })
 
-const authConfig: IAuthConfig = {
-  apiKey: process.env.API_KEY,
-  getUserArchives: getArchivesByOwner,
-  secretOrKey: process.env.JWT_SECRET,
+  if (process.env.CORS_ALLOWED_ORIGINS) {
+    // origin can be an array of allowed origins so we support
+    // a list of comma delimited CORS origins
+    const origin = process.env.CORS_ALLOWED_ORIGINS.split(',')
+    const corsOptions: CorsOptions = { origin }
+    app.use(cors(corsOptions))
+  }
+
+  app.get('/', (_req, res, next) => {
+    res.json({ alive: true })
+    next()
+  })
+
+  app.get('/stats', (req, res, next) => {
+    res.json({
+      alive: true,
+      avgTime: `${((Counters.counters['_totalTime'] ?? 0) / (Counters.counters['_calls'] ?? 1)).toFixed(2)}ms`,
+      counters: Counters.counters,
+    })
+    next()
+  })
+
+  addArchiveRoutes(app)
+  addPayloadRoutes(app)
+  addPayloadSchemaRoutes(app)
+  addBlockRoutes(app)
+
+  if (process.env.USE_AUTH) {
+    const authConfig: IAuthConfig = {
+      apiKey: process.env.API_KEY,
+      getUserArchives: getArchivesByOwner,
+      secretOrKey: process.env.JWT_SECRET,
+    }
+    const userRoutes = await configureAuth(authConfig)
+    app.use('/user', userRoutes)
+  }
+
+  app.use(errorToJsonHandler)
+
+  const server = app.listen(port, () => {
+    console.log(`Server listening at http://localhost:${port}`)
+  })
+
+  server.setTimeout(3000)
 }
-const userRoutes = configureAuth(authConfig)
-app.use('/user', userRoutes)
 
-app.use(errorToJsonHandler)
-
-export { app }
+export { server }
