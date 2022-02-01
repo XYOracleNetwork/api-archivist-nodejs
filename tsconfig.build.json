@@ -1,9 +1,5 @@
 {
-  "compilerOptions": {
-    "module": "esnext",
-    "outDir": "dist"
-  },
   "exclude": ["src/**/*.spec.ts"],
-  "extends": "@xylabs/tsconfig",
+  "extends": "./tsconfig.json",
   "include": ["src"]
 }
