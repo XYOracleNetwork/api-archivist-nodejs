@@ -1,8 +1,9 @@
 import { tryParseInt } from '@xylabs/sdk-api-express-ecs'
 import { config } from 'dotenv'
 
-import { server } from './server'
+import { app } from './server'
 
 config()
 
-void server(tryParseInt(process.env.APP_PORT))
+const server = app.listen(tryParseInt(process.env.APP_PORT))
+server.setTimeout(3000)

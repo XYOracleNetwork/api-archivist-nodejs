@@ -2,7 +2,7 @@ import { assertEx } from '@xylabs/sdk-js'
 import express, { RequestHandler, Router } from 'express'
 import passport, { AuthenticateOptions } from 'passport'
 
-import { ArchiveOwnerStore, GetArchivesByUserFn, getUserMongoSdk, MongoDBUserStore, UserWithoutId } from './model'
+import { ArchiveOwnerStore, GetArchivesByUserFn, MongoDBUserStore, UserWithoutId } from './model'
 import { getProfile, postSignup, postWalletChallenge } from './routes'
 import {
   configureApiKeyStrategy,
@@ -43,15 +43,14 @@ export interface IAuthConfig {
   getUserArchives: GetArchivesByUserFn
 }
 
-export const configureAuth: (config: IAuthConfig) => Promise<Router> = async (config) => {
+export const configureAuth: (config: IAuthConfig) => Router = (config) => {
   assertEx(config?.secretOrKey, 'Missing JWT secretOrKey')
   const secretOrKey = config?.secretOrKey as string
   assertEx(config?.apiKey, 'Missing API Key')
   const apiKey = config?.apiKey as string
 
   const archiveOwnerStore = new ArchiveOwnerStore(config.getUserArchives)
-  const userMongoSdk = await getUserMongoSdk()
-  const userStore = new MongoDBUserStore(userMongoSdk)
+  const userStore = new MongoDBUserStore()
 
   respondWithJwt = configureJwtStrategy(secretOrKey)
   configureLocalStrategy(userStore)
