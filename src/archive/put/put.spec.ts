@@ -1,41 +1,38 @@
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
-import supertest from 'supertest'
-import { v4 } from 'uuid'
 
-const request = supertest(`http://localhost:${process.env.APP_PORT}`)
+import { getArchiveName, getArchivist, getExistingWeb2User, ITestWeb2User, signInWeb2User } from '../../test'
 
 describe('/archive', () => {
   let token = ''
-  let user: { email: string; password: string } = {
+  let user: ITestWeb2User = {
     email: '',
     password: '',
   }
-  const apiKey = process.env.API_KEY as string
   beforeEach(async () => {
-    user = {
-      email: `test-user-${v4()}@test.com`,
-      password: 'password',
-    }
-    await request.post('/user/signup').set('x-api-key', apiKey).send(user).expect(StatusCodes.OK)
-    const tokenResponse = await request.post('/user/login').send(user).expect(StatusCodes.OK)
-    token = tokenResponse.body.token
+    user = await getExistingWeb2User()
+    token = await signInWeb2User(user)
   })
   it('Allows the user to claim an unclaimed archive', async () => {
-    const archive = v4()
-    const response = await request.put(`/archive/${archive}`).auth(token, { type: 'bearer' }).expect(StatusCodes.OK)
+    const archive = getArchiveName()
+    const response = await getArchivist()
+      .put(`/archive/${archive}`)
+      .auth(token, { type: 'bearer' })
+      .expect(StatusCodes.OK)
     expect(response.body.archive).toEqual(archive)
   })
   it(`Returns ${ReasonPhrases.UNAUTHORIZED} if user claims an already claimed archive`, async () => {
-    const archive = v4()
-    const response = await request.put(`/archive/${archive}`).auth(token, { type: 'bearer' }).expect(StatusCodes.OK)
+    const archive = getArchiveName()
+    const response = await getArchivist()
+      .put(`/archive/${archive}`)
+      .auth(token, { type: 'bearer' })
+      .expect(StatusCodes.OK)
     expect(response.body.archive).toEqual(archive)
-    const user2 = {
-      email: `test-user-${v4()}@test.com`,
-      password: 'password',
-    }
-    await request.post('/user/signup').set('x-api-key', apiKey).send(user2).expect(StatusCodes.OK)
-    const tokenResponse = await request.post('/user/login').send(user2).expect(StatusCodes.OK)
-    const user2token = tokenResponse.body.token
-    await request.put(`/archive/${archive}`).auth(user2token, { type: 'bearer' }).expect(StatusCodes.UNAUTHORIZED)
+
+    const user2 = await getExistingWeb2User()
+    const user2Token = await signInWeb2User(user2)
+    await getArchivist()
+      .put(`/archive/${archive}`)
+      .auth(user2Token, { type: 'bearer' })
+      .expect(StatusCodes.UNAUTHORIZED)
   })
 })
