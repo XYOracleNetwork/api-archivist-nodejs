@@ -34,7 +34,7 @@ const addArchiveRoutes = (app: Express) => {
 }
 
 const addPayloadRoutes = (app: Express) => {
-  app.get('/archive/:archive/payload/stats', requireArchiveOwner, asyncHandler(getArchivePayloadStats))
+  app.get('/archive/:archive/payload/stats', asyncHandler(getArchivePayloadStats))
   app.get('/archive/:archive/payload/hash/:hash', requireArchiveOwner, asyncHandler(getArchivePayloadHash))
   app.get('/archive/:archive/payload/hash/:hash/repair', requireArchiveOwner, asyncHandler(getArchivePayloadRepair))
   app.get('/archive/:archive/payload/recent/:limit?', requireArchiveOwner, asyncHandler(getArchivePayloadRecent))
@@ -51,7 +51,7 @@ const addPayloadSchemaRoutes = (app: Express) => {
 const addBlockRoutes = (app: Express) => {
   app.post('/archive/:archive/block', asyncHandler(postArchiveBlock))
   app.post('/archive/:archive/bw', asyncHandler(postArchiveBlock))
-  app.get('/archive/:archive/block/stats', requireArchiveOwner, asyncHandler(getArchiveBlockStats))
+  app.get('/archive/:archive/block/stats', asyncHandler(getArchiveBlockStats))
   app.get('/archive/:archive/block/hash/:hash', requireArchiveOwner, asyncHandler(getArchiveBlockHash))
   app.get('/archive/:archive/block/hash/:hash/payloads', requireArchiveOwner, asyncHandler(getArchiveBlockHashPayloads))
   app.get('/archive/:archive/block/recent/:limit?', requireArchiveOwner, asyncHandler(getArchiveBlockRecent))

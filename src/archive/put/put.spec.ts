@@ -20,7 +20,7 @@ describe('/archive', () => {
       .expect(StatusCodes.OK)
     expect(response.body.archive).toEqual(archive)
   })
-  it(`Returns ${ReasonPhrases.UNAUTHORIZED} if user claims an already claimed archive`, async () => {
+  it(`Returns ${ReasonPhrases.CONFLICT} if user claims an already claimed archive`, async () => {
     const archive = getArchiveName()
     const response = await getArchivist()
       .put(`/archive/${archive}`)
@@ -30,9 +30,6 @@ describe('/archive', () => {
 
     const user2 = await getExistingWeb2User()
     const user2Token = await signInWeb2User(user2)
-    await getArchivist()
-      .put(`/archive/${archive}`)
-      .auth(user2Token, { type: 'bearer' })
-      .expect(StatusCodes.UNAUTHORIZED)
+    await getArchivist().put(`/archive/${archive}`).auth(user2Token, { type: 'bearer' }).expect(StatusCodes.CONFLICT)
   })
 })

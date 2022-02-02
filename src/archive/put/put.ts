@@ -22,6 +22,6 @@ export const putArchive = async (req: Request, res: Response, next: NextFunction
     res.json(response)
     next()
   } else {
-    next({ message: ReasonPhrases.UNAUTHORIZED, statusCode: StatusCodes.UNAUTHORIZED })
+    next({ message: ReasonPhrases.CONFLICT, statusCode: StatusCodes.CONFLICT })
   }
 }
