@@ -1,10 +1,19 @@
-import { NextFunction, Request, Response } from 'express'
+import { NextFunction, Request, RequestHandler, Response } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import { isValidArchiveName } from '../../lib'
 import { storeArchiveOwner } from './storeArchiveOwner'
 
-export const putArchive = async (req: Request, res: Response, next: NextFunction) => {
+export interface IPutArchiveResponse {
+  archive: string
+  owner: string
+}
+
+export const putArchive: RequestHandler = async (
+  req: Request,
+  res: Response<IPutArchiveResponse>,
+  next: NextFunction
+) => {
   const { user } = req
   if (!user || !user?.id) {
     next({ message: 'Invalid User', statusCode: StatusCodes.UNAUTHORIZED })
@@ -18,8 +27,8 @@ export const putArchive = async (req: Request, res: Response, next: NextFunction
   }
 
   const response = await storeArchiveOwner(archive, user.id)
-  if (response && response.owner === user.id) {
-    res.json(response)
+  if (response && response?.owner === user.id) {
+    res.json(response as IPutArchiveResponse)
     next()
   } else {
     next({ message: ReasonPhrases.CONFLICT, statusCode: StatusCodes.CONFLICT })

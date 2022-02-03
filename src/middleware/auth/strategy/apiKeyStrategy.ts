@@ -30,7 +30,7 @@ class ApiKeyStrategy extends Strategy {
         }
         const user = await this.userStore.create(userToCreate)
         if (!user) {
-          this.error({ messag: 'Error creating user' })
+          this.error({ message: 'Error creating user' })
           return
         }
         this.success(user)

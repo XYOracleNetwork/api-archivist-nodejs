@@ -1,9 +1,9 @@
-import { NextFunction, Request, Response } from 'express'
+import { NextFunction, Request, RequestHandler, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
 import { getArchivesByOwner } from '../../lib'
 
-export const getArchives = async (req: Request, res: Response, next: NextFunction) => {
+export const getArchives: RequestHandler = async (req: Request, res: Response<string[]>, next: NextFunction) => {
   const { user } = req
   if (!user || !user?.id) {
     next({ message: 'Invalid User', statusCode: StatusCodes.UNAUTHORIZED })

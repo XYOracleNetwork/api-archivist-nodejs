@@ -1,35 +1,24 @@
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
-import { getArchiveName, getArchivist, getExistingWeb2User, ITestWeb2User, signInWeb2User } from '../../test'
+import { claimArchive, getArchiveName, getArchivist, getTokenForNewUser } from '../../test'
 
 describe('/archive', () => {
   let token = ''
-  let user: ITestWeb2User = {
-    email: '',
-    password: '',
-  }
+  let archive = ''
   beforeEach(async () => {
-    user = await getExistingWeb2User()
-    token = await signInWeb2User(user)
+    token = await getTokenForNewUser()
+    archive = getArchiveName()
   })
   it('Allows the user to claim an unclaimed archive', async () => {
-    const archive = getArchiveName()
-    const response = await getArchivist()
-      .put(`/archive/${archive}`)
-      .auth(token, { type: 'bearer' })
-      .expect(StatusCodes.OK)
-    expect(response.body.archive).toEqual(archive)
+    const response = await claimArchive(token, archive)
+    expect(response.archive).toEqual(archive)
   })
   it(`Returns ${ReasonPhrases.CONFLICT} if user claims an already claimed archive`, async () => {
-    const archive = getArchiveName()
-    const response = await getArchivist()
-      .put(`/archive/${archive}`)
-      .auth(token, { type: 'bearer' })
-      .expect(StatusCodes.OK)
-    expect(response.body.archive).toEqual(archive)
+    // User 1 claims archive
+    await claimArchive(token, archive)
 
-    const user2 = await getExistingWeb2User()
-    const user2Token = await signInWeb2User(user2)
+    // User 2 attempts to claim archive
+    const user2Token = await getTokenForNewUser()
     await getArchivist().put(`/archive/${archive}`).auth(user2Token, { type: 'bearer' }).expect(StatusCodes.CONFLICT)
   })
 })

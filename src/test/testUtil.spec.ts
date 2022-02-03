@@ -3,6 +3,8 @@ import { StatusCodes } from 'http-status-codes'
 import supertest, { SuperTest, Test } from 'supertest'
 import { v4 } from 'uuid'
 
+import { IGetArchiveSettingsKeysResponse, IPostArchiveSettingsKeysResponse, IPutArchiveResponse } from '../archive'
+
 test('Must have API_KEY ENV VAR defined', () => {
   expect(process.env.API_KEY).toBeTruthy()
 })
@@ -74,4 +76,37 @@ export const signInWeb3User = async (user: ITestWeb3User): Promise<string> => {
   }
   const tokenResponse = await request.post('/user/wallet/verify').send(verifyBody).expect(StatusCodes.OK)
   return tokenResponse.body.token
+}
+
+export const getTokenForNewUser = async (): Promise<string> => {
+  return signInWeb2User(await getExistingWeb2User())
+}
+
+export const claimArchive = async (token: string, archive?: string): Promise<IPutArchiveResponse> => {
+  if (!archive) archive = getArchiveName()
+  const response = await getArchivist()
+    .put(`/archive/${archive}`)
+    .auth(token, { type: 'bearer' })
+    .expect(StatusCodes.OK)
+  return response.body
+}
+
+export const createArchiveKey = async (
+  token: string,
+  archive: string,
+  expectedStatus: StatusCodes = StatusCodes.OK
+): Promise<IPostArchiveSettingsKeysResponse> => {
+  const response = await getArchivist()
+    .post(`/archive/${archive}/settings/keys`)
+    .auth(token, { type: 'bearer' })
+    .expect(expectedStatus)
+  return response.body
+}
+
+export const getArchiveKeys = async (token: string, archive: string): Promise<IGetArchiveSettingsKeysResponse[]> => {
+  const response = await getArchivist()
+    .get(`/archive/${archive}/settings/keys`)
+    .auth(token, { type: 'bearer' })
+    .expect(StatusCodes.OK)
+  return response.body
 }

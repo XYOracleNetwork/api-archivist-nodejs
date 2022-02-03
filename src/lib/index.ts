@@ -1,3 +1,4 @@
+export * from './getArchiveKeysMongoSdk'
 export * from './getArchiveOwnerMongoSdk'
 export * from './getArchivesByOwner'
 export * from './getArchivistBoundWitnessesMongoSdk'
