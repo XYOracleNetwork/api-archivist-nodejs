@@ -91,11 +91,15 @@ export const claimArchive = async (token: string, archive?: string): Promise<IPu
   return response.body
 }
 
-export const createArchiveKey = async (token: string, archive: string): Promise<IPostArchiveSettingsKeysResponse> => {
+export const createArchiveKey = async (
+  token: string,
+  archive: string,
+  expectedStatus: StatusCodes = StatusCodes.OK
+): Promise<IPostArchiveSettingsKeysResponse> => {
   const response = await getArchivist()
     .post(`/archive/${archive}/settings/keys`)
     .auth(token, { type: 'bearer' })
-    .expect(StatusCodes.OK)
+    .expect(expectedStatus)
   return response.body
 }
 

@@ -1,3 +1,4 @@
+import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 import { validate } from 'uuid'
 
 import { claimArchive, createArchiveKey, getTokenForNewUser } from '../../../../test'
@@ -29,5 +30,8 @@ describe('/archive/:archive/settings/keys', () => {
   it('Allows multiple keys to be created for the archive', async () => {
     await createArchiveKey(token, archive)
     await createArchiveKey(token, archive)
+  })
+  it(`Returns ${ReasonPhrases.UNAUTHORIZED} when user attempts to create keys for archive they do not own`, async () => {
+    await createArchiveKey(token, 'user-does-not-own-this-archive', StatusCodes.UNAUTHORIZED)
   })
 })
