@@ -1,11 +1,11 @@
 import { getArchiveOwnerMongoSdk } from '../../lib'
 
-export interface IPutArchiveOwnerResponse {
+export interface IStoreArchiveOwnerResponse {
   archive: string
   owner: string
 }
 
-export const storeArchiveOwner = async (archive: string, user: string): Promise<IPutArchiveOwnerResponse | null> => {
+export const storeArchiveOwner = async (archive: string, user: string): Promise<IStoreArchiveOwnerResponse | null> => {
   const sdk = await getArchiveOwnerMongoSdk()
   try {
     await sdk.insert({ archive, user })

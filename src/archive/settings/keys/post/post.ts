@@ -1,7 +1,15 @@
-import { RequestHandler } from 'express'
+import { NextFunction, Request, RequestHandler, Response } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
-export const postArchiveSettingsKeys: RequestHandler = (req, res, next) => {
+export interface IPostArchiveSettingsKeysResponse {
+  key: string
+}
+
+export const postArchiveSettingsKeys: RequestHandler = (
+  req: Request,
+  res: Response<IPostArchiveSettingsKeysResponse>,
+  next: NextFunction
+) => {
   const { user } = req
   if (!user || !user?.id) {
     next({ message: 'Invalid User', statusCode: StatusCodes.UNAUTHORIZED })
