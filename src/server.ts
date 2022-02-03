@@ -20,10 +20,10 @@ import {
   putArchive,
 } from './archive'
 import { getArchivesByOwner } from './lib'
-import { archiveOwnerAuth, configureAuth, IAuthConfig, jwtAuth, noAuth } from './middleware'
+import { archiveOwnerAuth, configureAuth, IAuthConfig, jwtAuth } from './middleware'
 
-let requireLoggedIn: RequestHandler[] = [noAuth]
-let requireArchiveOwner: RequestHandler[] = [noAuth]
+const requireLoggedIn: RequestHandler[] = [jwtAuth]
+const requireArchiveOwner: RequestHandler[] = [jwtAuth, archiveOwnerAuth]
 
 const notImplemented: RequestHandler = (_req, _res, next) => {
   next({ message: ReasonPhrases.NOT_IMPLEMENTED, statusCode: StatusCodes.NOT_IMPLEMENTED })
@@ -71,12 +71,6 @@ const server = async (port = 80) => {
     // with AWS taking precedence
     const awsEnv = await getEnvFromAws(awsEnvSecret)
     Object.assign(process.env, awsEnv)
-  }
-
-  if (process.env.USE_AUTH) {
-    requireLoggedIn = [jwtAuth]
-    requireArchiveOwner = [jwtAuth, archiveOwnerAuth]
-    console.log('Using JWT auth for routes')
   }
 
   const app = express()
@@ -131,15 +125,13 @@ const server = async (port = 80) => {
   addPayloadSchemaRoutes(app)
   addBlockRoutes(app)
 
-  if (process.env.USE_AUTH) {
-    const authConfig: IAuthConfig = {
-      apiKey: process.env.API_KEY,
-      getUserArchives: getArchivesByOwner,
-      secretOrKey: process.env.JWT_SECRET,
-    }
-    const userRoutes = await configureAuth(authConfig)
-    app.use('/user', userRoutes)
+  const authConfig: IAuthConfig = {
+    apiKey: process.env.API_KEY,
+    getUserArchives: getArchivesByOwner,
+    secretOrKey: process.env.JWT_SECRET,
   }
+  const userRoutes = await configureAuth(authConfig)
+  app.use('/user', userRoutes)
 
   app.use(errorToJsonHandler)
 
