@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes'
 
-import { claimArchive, createArchiveKey, getArchivist, getTokenForNewUser } from '../../../../test'
+import { claimArchive, createArchiveKey, getArchiveKeys, getArchivist, getTokenForNewUser } from '../../../../test'
 
 describe('/archive/:archive/settings/keys', () => {
   let token = ''
@@ -11,11 +11,9 @@ describe('/archive/:archive/settings/keys', () => {
   })
   it('Returns the keys for the archive', async () => {
     const createKeyResponse = await createArchiveKey(token, archive)
-    const response = await getArchivist()
-      .get(`/archive/${archive}/settings/keys`)
-      .auth(token, { type: 'bearer' })
-      .expect(StatusCodes.OK)
-    expect(response.body).toEqual([createKeyResponse.key])
+    const response = await getArchiveKeys(token, archive)
+    expect(response.length).toEqual(1)
+    expect(response[0].key).toEqual(createKeyResponse.key)
   })
   it('Returns any empty array if there are no keys for the archive', async () => {
     const response = await getArchivist()

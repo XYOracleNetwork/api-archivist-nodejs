@@ -4,9 +4,14 @@ import { StatusCodes } from 'http-status-codes'
 import { isValidArchiveName } from '../../../../lib'
 import { getArchiveKeys } from './getArchiveKeys'
 
+export interface IGetArchiveSettingsKeysResponse {
+  created: string
+  key: string
+}
+
 export const getArchiveSettingsKeys: RequestHandler = async (
   req: Request,
-  res: Response<string[]>,
+  res: Response<IGetArchiveSettingsKeysResponse[]>,
   next: NextFunction
 ) => {
   const { user } = req

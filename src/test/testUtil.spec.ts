@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes'
 import supertest, { SuperTest, Test } from 'supertest'
 import { v4 } from 'uuid'
 
-import { IPostArchiveSettingsKeysResponse, IPutArchiveResponse } from '../archive'
+import { IGetArchiveSettingsKeysResponse, IPostArchiveSettingsKeysResponse, IPutArchiveResponse } from '../archive'
 
 test('Must have API_KEY ENV VAR defined', () => {
   expect(process.env.API_KEY).toBeTruthy()
@@ -94,6 +94,14 @@ export const claimArchive = async (token: string, archive?: string): Promise<IPu
 export const createArchiveKey = async (token: string, archive: string): Promise<IPostArchiveSettingsKeysResponse> => {
   const response = await getArchivist()
     .post(`/archive/${archive}/settings/keys`)
+    .auth(token, { type: 'bearer' })
+    .expect(StatusCodes.OK)
+  return response.body
+}
+
+export const getArchiveKeys = async (token: string, archive: string): Promise<IGetArchiveSettingsKeysResponse[]> => {
+  const response = await getArchivist()
+    .get(`/archive/${archive}/settings/keys`)
     .auth(token, { type: 'bearer' })
     .expect(StatusCodes.OK)
   return response.body
