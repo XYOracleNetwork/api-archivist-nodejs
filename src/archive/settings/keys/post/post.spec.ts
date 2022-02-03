@@ -1,4 +1,8 @@
+import { validate } from 'uuid'
+
 import { claimArchive, createArchiveKey, getTokenForNewUser } from '../../../../test'
+
+const oneMinuteInMs = 1 * 60 * 1000
 
 describe('/archive/:archive/settings/keys', () => {
   let token = ''
@@ -9,8 +13,21 @@ describe('/archive/:archive/settings/keys', () => {
   })
   it('Creates a key for the archive', async () => {
     const response = await createArchiveKey(token, archive)
+
     expect(response).toBeTruthy()
-    expect(response.key).toBeTruthy()
-    expect(response.key).toBeInstanceOf('string')
+
+    const { created, key } = response
+
+    expect(key).toBeTruthy()
+    expect(validate(key)).toBeTruthy()
+
+    expect(created).toBeTruthy()
+    const createdDate = new Date(created)
+    const now = new Date()
+    expect(now.getTime() - createdDate.getTime()).toBeLessThan(oneMinuteInMs)
+  })
+  it('Allows multiple keys to be created for the archive', async () => {
+    await createArchiveKey(token, archive)
+    await createArchiveKey(token, archive)
   })
 })

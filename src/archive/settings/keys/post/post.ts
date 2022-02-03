@@ -1,11 +1,15 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express'
-import { ReasonPhrases, StatusCodes } from 'http-status-codes'
+import { StatusCodes } from 'http-status-codes'
+
+import { isValidArchiveName } from '../../../../lib'
+import { generateArchiveKey } from './generateArchiveKey'
 
 export interface IPostArchiveSettingsKeysResponse {
+  created: string
   key: string
 }
 
-export const postArchiveSettingsKeys: RequestHandler = (
+export const postArchiveSettingsKeys: RequestHandler = async (
   req: Request,
   res: Response<IPostArchiveSettingsKeysResponse>,
   next: NextFunction
@@ -15,5 +19,14 @@ export const postArchiveSettingsKeys: RequestHandler = (
     next({ message: 'Invalid User', statusCode: StatusCodes.UNAUTHORIZED })
     return
   }
-  next({ message: ReasonPhrases.NOT_IMPLEMENTED, statusCode: StatusCodes.NOT_IMPLEMENTED })
+
+  const archive = req.params.archive?.toLowerCase()
+  if (!isValidArchiveName(archive)) {
+    next({ message: 'Invalid Archive Name', statusCode: StatusCodes.BAD_REQUEST })
+    return
+  }
+
+  const response = await generateArchiveKey(archive)
+  res.json(response as IPostArchiveSettingsKeysResponse)
+  next()
 }
