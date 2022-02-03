@@ -75,3 +75,13 @@ export const signInWeb3User = async (user: ITestWeb3User): Promise<string> => {
   const tokenResponse = await request.post('/user/wallet/verify').send(verifyBody).expect(StatusCodes.OK)
   return tokenResponse.body.token
 }
+
+export const claimArchive = async (token: string, archive?: string): Promise<string> => {
+  if (!archive) archive = getArchiveName()
+  const response = await getArchivist()
+    .put(`/archive/${archive}`)
+    .auth(token, { type: 'bearer' })
+    .expect(StatusCodes.OK)
+  // TODO: Import strongly typed response here and return as Promise type
+  return response.body.archive
+}

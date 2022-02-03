@@ -14,7 +14,9 @@ import {
   getArchivePayloadRepair,
   getArchivePayloadStats,
   getArchives,
+  getArchiveSettingsKeys,
   postArchiveBlock,
+  postArchiveSettingsKeys,
   putArchive,
 } from './archive'
 import { getArchivesByOwner } from './lib'
@@ -23,14 +25,16 @@ import { archiveOwnerAuth, configureAuth, IAuthConfig, jwtAuth, noAuth } from '.
 let requireLoggedIn: RequestHandler[] = [noAuth]
 let requireArchiveOwner: RequestHandler[] = [noAuth]
 
-const getNotImplemented: RequestHandler = (_req, _res, next) => {
+const notImplemented: RequestHandler = (_req, _res, next) => {
   next({ message: ReasonPhrases.NOT_IMPLEMENTED, statusCode: StatusCodes.NOT_IMPLEMENTED })
 }
 
 const addArchiveRoutes = (app: Express) => {
   app.get('/archive', requireLoggedIn, asyncHandler(getArchives))
-  app.get('/archive/:archive', requireArchiveOwner, getNotImplemented)
+  app.get('/archive/:archive', requireArchiveOwner, notImplemented)
   app.put('/archive/:archive', requireLoggedIn, asyncHandler(putArchive))
+  app.get('/archive/:archive/settings/keys', requireArchiveOwner, asyncHandler(getArchiveSettingsKeys))
+  app.post('/archive/:archive/settings/keys', requireArchiveOwner, asyncHandler(postArchiveSettingsKeys))
 }
 
 const addPayloadRoutes = (app: Express) => {
@@ -38,14 +42,14 @@ const addPayloadRoutes = (app: Express) => {
   app.get('/archive/:archive/payload/hash/:hash', requireArchiveOwner, asyncHandler(getArchivePayloadHash))
   app.get('/archive/:archive/payload/hash/:hash/repair', requireArchiveOwner, asyncHandler(getArchivePayloadRepair))
   app.get('/archive/:archive/payload/recent/:limit?', requireArchiveOwner, asyncHandler(getArchivePayloadRecent))
-  app.get('/archive/:archive/payload/sample/:size?', requireArchiveOwner, getNotImplemented)
+  app.get('/archive/:archive/payload/sample/:size?', requireArchiveOwner, notImplemented)
 }
 
 const addPayloadSchemaRoutes = (app: Express) => {
-  app.get('/archive/:archive/payload/schema', requireArchiveOwner, getNotImplemented)
-  app.get('/archive/:archive/payload/schema/:schema', requireArchiveOwner, getNotImplemented)
-  app.get('/archive/:archive/payload/schema/:schema/stats', requireArchiveOwner, getNotImplemented)
-  app.get('/archive/:archive/payload/schema/:schema/recent/limit', requireArchiveOwner, getNotImplemented)
+  app.get('/archive/:archive/payload/schema', requireArchiveOwner, notImplemented)
+  app.get('/archive/:archive/payload/schema/:schema', requireArchiveOwner, notImplemented)
+  app.get('/archive/:archive/payload/schema/:schema/stats', requireArchiveOwner, notImplemented)
+  app.get('/archive/:archive/payload/schema/:schema/recent/limit', requireArchiveOwner, notImplemented)
 }
 
 const addBlockRoutes = (app: Express) => {
@@ -55,7 +59,7 @@ const addBlockRoutes = (app: Express) => {
   app.get('/archive/:archive/block/hash/:hash', requireArchiveOwner, asyncHandler(getArchiveBlockHash))
   app.get('/archive/:archive/block/hash/:hash/payloads', requireArchiveOwner, asyncHandler(getArchiveBlockHashPayloads))
   app.get('/archive/:archive/block/recent/:limit?', requireArchiveOwner, asyncHandler(getArchiveBlockRecent))
-  app.get('/archive/:archive/block/sample/:size?', requireArchiveOwner, getNotImplemented)
+  app.get('/archive/:archive/block/sample/:size?', requireArchiveOwner, notImplemented)
 }
 
 const server = async (port = 80) => {
