@@ -2,7 +2,7 @@ import 'source-map-support/register'
 
 import { XyoBoundWitness, XyoPayload, XyoPayloadWrapper } from '@xyo-network/sdk-xyo-client-js'
 
-import flattenArray from './flattenArray'
+import { flattenArray } from './flattenArray'
 
 export interface PrepareBoundWitnessesResult {
   payloads: XyoPayload[]
