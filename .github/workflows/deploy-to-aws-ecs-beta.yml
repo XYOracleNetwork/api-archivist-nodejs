@@ -55,6 +55,8 @@ jobs:
           task-definition: ${{ secrets.ECS_TASK_DEFINITION }}
           container-name: ${{ secrets.CONTAINER_NAME }}
           image: ${{ steps.build-image.outputs.image }}
+          environment-variables: |
+            AWS_ENV_SECRET_ARN=${{ secrets.AWS_ENV_SECRET_ARN }}
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@de0132cf8cdedb79975c6d42b77eb7ea193cf28e
