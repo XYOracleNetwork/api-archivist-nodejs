@@ -6,13 +6,8 @@ on: workflow_dispatch
 #     branches:
 #       - main
 
-# env:
-#   AWS_REGION: us-east-1
-#   ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
-#   ECS_SERVICE: ${{ secrets.ECS_SERVICE }}
-#   ECS_CLUSTER: ${{ secrets.ECS_CLUSTER }}
-#   ECS_TASK_DEFINITION: .aws/task-definition-beta.json
-#   CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
+env:
+  AWS_REGION: us-east-1
 
 jobs:
   deploy:
