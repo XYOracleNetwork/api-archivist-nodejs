@@ -1,4 +1,4 @@
-import { asyncHandler, Counters, errorToJsonHandler, getEnvFromAws } from '@xylabs/sdk-api-express-ecs'
+import { asyncHandler, errorToJsonHandler, getEnvFromAws } from '@xylabs/sdk-api-express-ecs'
 import bodyParser from 'body-parser'
 import cors, { CorsOptions } from 'cors'
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express'
