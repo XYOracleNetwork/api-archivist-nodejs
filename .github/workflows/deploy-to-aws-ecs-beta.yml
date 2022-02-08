@@ -8,6 +8,7 @@ on: workflow_dispatch
 
 env:
   AWS_REGION: us-east-1
+  CONTAINER_NAME: api-xyo-archivist
 
 jobs:
   deploy:
@@ -48,7 +49,7 @@ jobs:
         uses: aws-actions/amazon-ecs-render-task-definition@374ee96751fffe528c09b5f427848da60469bb55
         with:
           task-definition: ${{ secrets.ECS_TASK_DEFINITION }}
-          container-name: ${{ secrets.CONTAINER_NAME }}
+          container-name: ${{ env.CONTAINER_NAME }}
           image: ${{ steps.build-image.outputs.image }}
           environment-variables: |
             AWS_ENV_SECRET_ARN=${{ secrets.AWS_ENV_SECRET_ARN }}
