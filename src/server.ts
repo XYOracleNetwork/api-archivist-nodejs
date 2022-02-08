@@ -20,7 +20,7 @@ import {
   putArchive,
 } from './archive'
 import { getArchivesByOwner } from './lib'
-import { archiveOwnerAuth, configureAuth, IAuthConfig, jwtAuth } from './middleware'
+import { archiveOwnerAuth, configureAuth, IAuthConfig, jwtAuth, useRequestCounters } from './middleware'
 
 const requireLoggedIn: RequestHandler[] = [jwtAuth]
 const requireArchiveOwner: RequestHandler[] = [jwtAuth, archiveOwnerAuth]
@@ -81,14 +81,7 @@ const server = async (port = 80) => {
 
   app.set('etag', false)
 
-  //global counters
-  app.use((req: Request, res: Response, next: NextFunction) => {
-    Counters.inc(req.path)
-    Counters.inc('_calls')
-    next()
-  })
-
-  //if we do not trap this error, then it dumps too much to log, usually happens if request aborted
+  // If we do not trap this error, then it dumps too much to log, usually happens if request aborted
   app.use((req: Request, res: Response, next: NextFunction) => {
     try {
       bodyParserInstance(req, res, next)
@@ -111,14 +104,7 @@ const server = async (port = 80) => {
     next()
   })
 
-  app.get('/stats', (req, res, next) => {
-    res.json({
-      alive: true,
-      avgTime: `${((Counters.counters['_totalTime'] ?? 0) / (Counters.counters['_calls'] ?? 1)).toFixed(2)}ms`,
-      counters: Counters.counters,
-    })
-    next()
-  })
+  useRequestCounters(app)
 
   addArchiveRoutes(app)
   addPayloadRoutes(app)
