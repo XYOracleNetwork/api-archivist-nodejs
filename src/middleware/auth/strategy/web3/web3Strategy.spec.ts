@@ -1,4 +1,4 @@
-import { getExistingWeb3User, getNewWeb3User, signInWeb3User } from '../../../test'
+import { getExistingWeb3User, getNewWeb3User, signInWeb3User } from '../../../../test'
 
 describe('Web3AuthStrategy', () => {
   it('Can sign-in existing user', async () => {

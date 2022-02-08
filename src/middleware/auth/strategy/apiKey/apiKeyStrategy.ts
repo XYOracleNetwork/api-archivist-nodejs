@@ -1,9 +1,9 @@
 import { Request } from 'express'
-import passport, { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
+import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
-import { IUserStore, passwordHasher } from '../model'
+import { IUserStore, passwordHasher } from '../../model'
 
-class ApiKeyStrategy extends Strategy {
+export class ApiKeyStrategy extends Strategy {
   constructor(
     public readonly userStore: IUserStore,
     public readonly apiKey: string,
@@ -42,12 +42,4 @@ class ApiKeyStrategy extends Strategy {
       this.error({ message: 'API Key Auth Error' })
     }
   }
-}
-
-export const configureApiKeyStrategy = (userStore: IUserStore, apiKey: string) => {
-  // Use for any routes we want to protect
-  passport.use('apiKey', new ApiKeyStrategy(userStore, apiKey, false))
-  // Used specifically for /user/signup since we want to both protect
-  // the route and create the user
-  passport.use('apiKeyUserSignup', new ApiKeyStrategy(userStore, apiKey, true))
 }

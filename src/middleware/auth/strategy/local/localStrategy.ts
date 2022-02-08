@@ -1,7 +1,7 @@
 import passport from 'passport'
 import { IStrategyOptions, Strategy } from 'passport-local'
 
-import { IUserStore, passwordHasher } from '../model'
+import { IUserStore, passwordHasher } from '../../model'
 
 const localStrategyOptions: IStrategyOptions = {
   passwordField: 'password',
