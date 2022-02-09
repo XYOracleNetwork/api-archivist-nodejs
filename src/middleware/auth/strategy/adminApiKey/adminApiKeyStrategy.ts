@@ -2,7 +2,7 @@ import { Request } from 'express'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
 import { IUserStore } from '../../model'
-import { createUser } from './createUser'
+import { createUserFromRequest } from './createUserFromRequest'
 
 export class AdminApiKeyStrategy extends Strategy {
   constructor(
@@ -24,7 +24,7 @@ export class AdminApiKeyStrategy extends Strategy {
         return
       }
       if (this.createUser) {
-        const user = await createUser(req, this.userStore)
+        const user = await createUserFromRequest(req, this.userStore)
         if (!user) {
           this.error({ message: 'Error creating user' })
           return

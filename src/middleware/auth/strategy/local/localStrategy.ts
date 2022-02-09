@@ -3,15 +3,18 @@ import { IStrategyOptions, Strategy } from 'passport-local'
 
 import { IUserStore, passwordHasher } from '../../model'
 
-const localStrategyOptions: IStrategyOptions = {
+const strategyOptions: IStrategyOptions = {
   passwordField: 'password',
   usernameField: 'email',
 }
 
+const LOCAL_STRATEGY_NAME = 'local'
+export const localStrategy = passport.authenticate(LOCAL_STRATEGY_NAME, { session: false })
+
 export const configureLocalStrategy = (userStore: IUserStore) => {
   passport.use(
-    'login',
-    new Strategy(localStrategyOptions, async (email, providedPassword, done) => {
+    LOCAL_STRATEGY_NAME,
+    new Strategy(strategyOptions, async (email, providedPassword, done) => {
       try {
         // Find user
         const user = await userStore.getByEmail(email)

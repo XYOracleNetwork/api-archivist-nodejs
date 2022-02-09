@@ -33,10 +33,14 @@ const defaultJWTStrategyOptions: StrategyOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
 }
 
+export const JWT_STRATEGY_NAME = 'jwt'
+export const jwtStrategy = passport.authenticate(JWT_STRATEGY_NAME, { session: false })
+
 export const configureJwtStrategy = (secretOrKey: string): RequestHandler => {
   const jwtStrategyOptions: StrategyOptions = { ...defaultJWTStrategyOptions, secretOrKey }
 
   passport.use(
+    JWT_STRATEGY_NAME,
     new JWTStrategy(jwtStrategyOptions, (token, done) => {
       try {
         return done(null, token.user)
