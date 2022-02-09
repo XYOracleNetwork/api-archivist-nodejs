@@ -29,8 +29,9 @@ export class MongoDBUserStore implements IUserStore {
     const created = await this.mongo.upsert(toDbEntity(user))
     return fromDbEntity(created)
   }
-  getById(_id: string): Promise<User | null> {
-    throw new Error('getById not implemented for this user store')
+  async getById(id: string): Promise<User | null> {
+    const user = await this.mongo.findById(id.toLowerCase())
+    return user ? fromDbEntity(user) : null
   }
   async getByEmail(email: string): Promise<User | null> {
     const user = await this.mongo.findByEmail(email.toLowerCase())
