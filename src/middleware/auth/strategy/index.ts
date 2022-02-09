@@ -1,4 +1,4 @@
-export * from './apiKey'
+export * from './adminApiKey'
 export * from './archiveOwner'
 export * from './jwt'
 export * from './local'

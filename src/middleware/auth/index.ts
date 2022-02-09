@@ -5,7 +5,7 @@ import passport, { AuthenticateOptions } from 'passport'
 import { ArchiveOwnerStore, GetArchivesByUserFn, getUserMongoSdk, MongoDBUserStore, UserWithoutId } from './model'
 import { getProfile, postSignup, postWalletChallenge } from './routes'
 import {
-  configureApiKeyStrategy,
+  configureAdminApiKeyStrategy,
   configureArchiveOwnerStrategy,
   configureJwtStrategy,
   configureLocalStrategy,
@@ -27,7 +27,7 @@ let respondWithJwt: RequestHandler = () => {
 
 // web2 flow
 router.post('/login', passport.authenticate('login', noSession), (req, res, next) => respondWithJwt(req, res, next))
-router.post('/signup', passport.authenticate('apiKeyUserSignup', noSession), postSignup)
+router.post('/signup', passport.authenticate('adminApiKeyUserSignup', noSession), postSignup)
 
 // web3 flow
 router.post('/wallet/challenge', postWalletChallenge)
@@ -56,7 +56,7 @@ export const configureAuth: (config: IAuthConfig) => Promise<Router> = async (co
   respondWithJwt = configureJwtStrategy(secretOrKey)
   configureLocalStrategy(userStore)
   configureWeb3Strategy(userStore)
-  configureApiKeyStrategy(userStore, apiKey)
+  configureAdminApiKeyStrategy(userStore, apiKey)
   configureArchiveOwnerStrategy(archiveOwnerStore)
 
   return router

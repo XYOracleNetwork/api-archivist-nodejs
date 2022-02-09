@@ -3,7 +3,7 @@ import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
 import { IUserStore, passwordHasher } from '../../model'
 
-export class ApiKeyStrategy extends Strategy {
+export class AdminApiKeyStrategy extends Strategy {
   constructor(
     public readonly userStore: IUserStore,
     public readonly apiKey: string,
