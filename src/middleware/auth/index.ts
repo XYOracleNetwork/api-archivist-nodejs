@@ -6,6 +6,7 @@ import { ArchiveOwnerStore, GetArchivesByUserFn, getUserMongoSdk, MongoDBUserSto
 import { getProfile, postSignup, postWalletChallenge } from './routes'
 import {
   configureAdminApiKeyStrategy,
+  configureArchiveApiKeyStrategy,
   configureArchiveOwnerStrategy,
   configureJwtStrategy,
   configureLocalStrategy,
@@ -17,8 +18,10 @@ const router: Router = express.Router()
 
 const noSession: AuthenticateOptions = { session: false }
 
-export const jwtAuth: RequestHandler = passport.authenticate('jwt', noSession)
+export const archiveApiKeyAuth: RequestHandler = passport.authenticate('archiveApiKey', noSession)
 export const archiveOwnerAuth: RequestHandler = passport.authenticate('archiveOwner', noSession)
+export const archiveAuth: RequestHandler = passport.authenticate(['archiveApiKey', 'archiveOwner'], noSession)
+export const jwtAuth: RequestHandler = passport.authenticate('jwt', noSession)
 export const noAuth: RequestHandler = (_req, _res, next) => next()
 
 let respondWithJwt: RequestHandler = () => {
@@ -53,11 +56,12 @@ export const configureAuth: (config: IAuthConfig) => Promise<Router> = async (co
   const userMongoSdk = await getUserMongoSdk()
   const userStore = new MongoDBUserStore(userMongoSdk)
 
+  configureAdminApiKeyStrategy(userStore, apiKey)
+  configureArchiveApiKeyStrategy(userStore)
+  configureArchiveOwnerStrategy(archiveOwnerStore)
   respondWithJwt = configureJwtStrategy(secretOrKey)
   configureLocalStrategy(userStore)
   configureWeb3Strategy(userStore)
-  configureAdminApiKeyStrategy(userStore, apiKey)
-  configureArchiveOwnerStrategy(archiveOwnerStore)
 
   return router
 }

@@ -20,7 +20,15 @@ import {
   putArchive,
 } from './archive'
 import { getArchivesByOwner } from './lib'
-import { archiveOwnerAuth, configureAuth, IAuthConfig, jwtAuth, useRequestCounters } from './middleware'
+import {
+  archiveApiKeyAuth,
+  archiveAuth,
+  archiveOwnerAuth,
+  configureAuth,
+  IAuthConfig,
+  jwtAuth,
+  useRequestCounters,
+} from './middleware'
 
 const requireLoggedIn: RequestHandler[] = [jwtAuth]
 const requireArchiveOwner: RequestHandler[] = [jwtAuth, archiveOwnerAuth]
