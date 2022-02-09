@@ -4,7 +4,7 @@ import jwt, { SignOptions } from 'jsonwebtoken'
 import passport from 'passport'
 import { ExtractJwt, Strategy as JWTStrategy, StrategyOptions } from 'passport-jwt'
 
-import { toUserDto, UserDto } from '../dto'
+import { toUserDto, UserDto } from '../../dto'
 
 const algorithm = 'HS256' // 'HS512' once we perf
 const audience = 'archivist'

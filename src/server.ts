@@ -1,6 +1,6 @@
-import { asyncHandler, Counters, errorToJsonHandler, getEnvFromAws } from '@xylabs/sdk-api-express-ecs'
+import { asyncHandler, errorToJsonHandler, getEnvFromAws } from '@xylabs/sdk-api-express-ecs'
 import bodyParser from 'body-parser'
-import cors, { CorsOptions } from 'cors'
+import cors from 'cors'
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
@@ -20,19 +20,16 @@ import {
   putArchive,
 } from './archive'
 import { getArchivesByOwner } from './lib'
-import { archiveOwnerAuth, configureAuth, IAuthConfig, jwtAuth } from './middleware'
-
-const requireLoggedIn: RequestHandler[] = [jwtAuth]
-const requireArchiveOwner: RequestHandler[] = [jwtAuth, archiveOwnerAuth]
+import { configureAuth, requireArchiveOwner, requireAuth, useRequestCounters } from './middleware'
 
 const notImplemented: RequestHandler = (_req, _res, next) => {
   next({ message: ReasonPhrases.NOT_IMPLEMENTED, statusCode: StatusCodes.NOT_IMPLEMENTED })
 }
 
 const addArchiveRoutes = (app: Express) => {
-  app.get('/archive', requireLoggedIn, asyncHandler(getArchives))
+  app.get('/archive', requireAuth, asyncHandler(getArchives))
   app.get('/archive/:archive', requireArchiveOwner, notImplemented)
-  app.put('/archive/:archive', requireLoggedIn, asyncHandler(putArchive))
+  app.put('/archive/:archive', requireAuth, asyncHandler(putArchive))
   app.get('/archive/:archive/settings/keys', requireArchiveOwner, asyncHandler(getArchiveSettingsKeys))
   app.post('/archive/:archive/settings/keys', requireArchiveOwner, asyncHandler(postArchiveSettingsKeys))
 }
@@ -62,6 +59,8 @@ const addBlockRoutes = (app: Express) => {
   app.get('/archive/:archive/block/sample/:size?', requireArchiveOwner, notImplemented)
 }
 
+const bodyParserInstance = bodyParser.json({ type: ['application/json', 'text/json'] })
+
 const server = async (port = 80) => {
   // If an AWS ARN was supplied for Secrets Manager
   const awsEnvSecret = process.env.AWS_ENV_SECRET_ARN
@@ -75,20 +74,9 @@ const server = async (port = 80) => {
 
   const app = express()
 
-  const bodyParserInstance = bodyParser.json({ type: ['application/json', 'text/json'] })
-
-  app.use(cors())
-
   app.set('etag', false)
 
-  //global counters
-  app.use((req: Request, res: Response, next: NextFunction) => {
-    Counters.inc(req.path)
-    Counters.inc('_calls')
-    next()
-  })
-
-  //if we do not trap this error, then it dumps too much to log, usually happens if request aborted
+  // If we do not trap this error, then it dumps too much to log, usually happens if request aborted
   app.use((req: Request, res: Response, next: NextFunction) => {
     try {
       bodyParserInstance(req, res, next)
@@ -99,11 +87,10 @@ const server = async (port = 80) => {
   })
 
   if (process.env.CORS_ALLOWED_ORIGINS) {
-    // origin can be an array of allowed origins so we support
+    // CORS_ALLOWED_ORIGINS can be an array of allowed origins so we support
     // a list of comma delimited CORS origins
     const origin = process.env.CORS_ALLOWED_ORIGINS.split(',')
-    const corsOptions: CorsOptions = { origin }
-    app.use(cors(corsOptions))
+    app.use(cors({ origin }))
   }
 
   app.get('/', (_req, res, next) => {
@@ -111,26 +98,18 @@ const server = async (port = 80) => {
     next()
   })
 
-  app.get('/stats', (req, res, next) => {
-    res.json({
-      alive: true,
-      avgTime: `${((Counters.counters['_totalTime'] ?? 0) / (Counters.counters['_calls'] ?? 1)).toFixed(2)}ms`,
-      counters: Counters.counters,
-    })
-    next()
-  })
+  useRequestCounters(app)
 
   addArchiveRoutes(app)
   addPayloadRoutes(app)
   addPayloadSchemaRoutes(app)
   addBlockRoutes(app)
 
-  const authConfig: IAuthConfig = {
+  const userRoutes = await configureAuth({
     apiKey: process.env.API_KEY,
     getUserArchives: getArchivesByOwner,
     secretOrKey: process.env.JWT_SECRET,
-  }
-  const userRoutes = await configureAuth(authConfig)
+  })
   app.use('/user', userRoutes)
 
   app.use(errorToJsonHandler)

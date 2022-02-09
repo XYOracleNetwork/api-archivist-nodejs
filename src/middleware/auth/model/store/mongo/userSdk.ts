@@ -1,5 +1,5 @@
 import { BaseMongoSdk, BaseMongoSdkConfig } from '@xyo-network/sdk-xyo-mongo-js'
-import { Collection, WithId } from 'mongodb'
+import { Collection, ObjectId, WithId } from 'mongodb'
 
 import { User, UserWithoutId } from '../../user'
 
@@ -52,6 +52,12 @@ class UserMongoSdk extends BaseMongoSdk<User> {
   public async findByEmail(email: string) {
     return await this.useCollection(async (collection: Collection<User>) => {
       return await collection.findOne({ email }, { maxTimeMS: this._maxTime })
+    })
+  }
+
+  public async findById(id: string) {
+    return await this.useCollection(async (collection: Collection<User>) => {
+      return await collection.findOne({ _id: new ObjectId(id) }, { maxTimeMS: this._maxTime })
     })
   }
 }

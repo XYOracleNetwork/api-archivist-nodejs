@@ -1,41 +1,71 @@
 import { assertEx } from '@xylabs/sdk-js'
 import express, { RequestHandler, Router } from 'express'
-import passport, { AuthenticateOptions } from 'passport'
+import passport from 'passport'
 
 import { ArchiveOwnerStore, GetArchivesByUserFn, getUserMongoSdk, MongoDBUserStore, UserWithoutId } from './model'
 import { getProfile, postSignup, postWalletChallenge } from './routes'
 import {
-  configureApiKeyStrategy,
+  adminApiKeyUserSignupStrategy,
+  archiveApiKeyStrategy,
+  archiveApiKeyStrategyName,
+  archiveOwnerStrategy,
+  configureAdminApiKeyStrategy,
+  configureArchiveApiKeyStrategy,
   configureArchiveOwnerStrategy,
   configureJwtStrategy,
   configureLocalStrategy,
   configureWeb3Strategy,
+  jwtStrategy,
+  jwtStrategyName,
+  localStrategy,
+  web3Strategy,
 } from './strategy'
 
 // eslint-disable-next-line import/no-named-as-default-member
 const router: Router = express.Router()
 
-const noSession: AuthenticateOptions = { session: false }
+/**
+ * Require an Archive API Key in the appropriate request header
+ */
+export const requireArchiveApiKey: RequestHandler = archiveApiKeyStrategy
 
-export const jwtAuth: RequestHandler = passport.authenticate('jwt', noSession)
-export const archiveOwnerAuth: RequestHandler = passport.authenticate('archiveOwner', noSession)
-export const noAuth: RequestHandler = (_req, _res, next) => next()
+/**
+ * Require logged-in user as evidenced by a JWT in the request Auth header
+ */
+export const requireLoggedIn: RequestHandler = jwtStrategy
 
+/**
+ * Require either an API key OR logged-in user
+ */
+export const requireAuth: RequestHandler = passport.authenticate([archiveApiKeyStrategyName, jwtStrategyName], {
+  session: false,
+})
+
+/**
+ * Require an auth'd request AND that the account owns the archive being requested
+ */
+export const requireArchiveOwner: RequestHandler[] = [requireAuth, archiveOwnerStrategy]
+
+/**
+ * Allow anonymous requests
+ */
+export const allowAnonymous: RequestHandler = (_req, _res, next) => next()
+
+// Properly initialized after auth is configured
 let respondWithJwt: RequestHandler = () => {
   throw new Error('JWT Auth Incorrectly Configured')
 }
 
+router.post('/signup', adminApiKeyUserSignupStrategy, postSignup)
+
 // web2 flow
-router.post('/login', passport.authenticate('login', noSession), (req, res, next) => respondWithJwt(req, res, next))
-router.post('/signup', passport.authenticate('apiKeyUserSignup', noSession), postSignup)
+router.post('/login', localStrategy, (req, res, next) => respondWithJwt(req, res, next))
 
 // web3 flow
 router.post('/wallet/challenge', postWalletChallenge)
-router.post('/wallet/verify', passport.authenticate('web3', noSession), (req, res, next) =>
-  respondWithJwt(req, res, next)
-)
+router.post('/wallet/verify', web3Strategy, (req, res, next) => respondWithJwt(req, res, next))
 
-router.get('/profile', jwtAuth, getProfile)
+router.get('/profile', requireLoggedIn, getProfile)
 
 export interface IAuthConfig {
   secretOrKey?: string
@@ -53,11 +83,12 @@ export const configureAuth: (config: IAuthConfig) => Promise<Router> = async (co
   const userMongoSdk = await getUserMongoSdk()
   const userStore = new MongoDBUserStore(userMongoSdk)
 
+  configureAdminApiKeyStrategy(userStore, apiKey)
+  configureArchiveApiKeyStrategy(userStore)
+  configureArchiveOwnerStrategy(archiveOwnerStore)
   respondWithJwt = configureJwtStrategy(secretOrKey)
   configureLocalStrategy(userStore)
   configureWeb3Strategy(userStore)
-  configureApiKeyStrategy(userStore, apiKey)
-  configureArchiveOwnerStrategy(archiveOwnerStore)
 
   return router
 }

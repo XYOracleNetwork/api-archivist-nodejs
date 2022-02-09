@@ -1,8 +1,7 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
-import { isValidArchiveName } from '../../../../lib'
-import { getArchiveKeys } from './getArchiveKeys'
+import { getArchiveKeys, isValidArchiveName } from '../../../../lib'
 
 export interface IGetArchiveSettingsKeysResponse {
   created: string

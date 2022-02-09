@@ -82,12 +82,24 @@ export const getTokenForNewUser = async (): Promise<string> => {
   return signInWeb2User(await getExistingWeb2User())
 }
 
-export const claimArchive = async (token: string, archive?: string): Promise<IPutArchiveResponse> => {
+export const getArchives = async (
+  token: string,
+  expectedStatus: StatusCodes = StatusCodes.OK
+): Promise<IPutArchiveResponse> => {
+  const response = await getArchivist().get('/archive').auth(token, { type: 'bearer' }).expect(expectedStatus)
+  return response.body
+}
+
+export const claimArchive = async (
+  token: string,
+  archive?: string,
+  expectedStatus: StatusCodes = StatusCodes.OK
+): Promise<IPutArchiveResponse> => {
   if (!archive) archive = getArchiveName()
   const response = await getArchivist()
     .put(`/archive/${archive}`)
     .auth(token, { type: 'bearer' })
-    .expect(StatusCodes.OK)
+    .expect(expectedStatus)
   return response.body
 }
 
@@ -103,10 +115,14 @@ export const createArchiveKey = async (
   return response.body
 }
 
-export const getArchiveKeys = async (token: string, archive: string): Promise<IGetArchiveSettingsKeysResponse[]> => {
+export const getArchiveKeys = async (
+  token: string,
+  archive: string,
+  expectedStatus: StatusCodes = StatusCodes.OK
+): Promise<IGetArchiveSettingsKeysResponse[]> => {
   const response = await getArchivist()
     .get(`/archive/${archive}/settings/keys`)
     .auth(token, { type: 'bearer' })
-    .expect(StatusCodes.OK)
+    .expect(expectedStatus)
   return response.body
 }
