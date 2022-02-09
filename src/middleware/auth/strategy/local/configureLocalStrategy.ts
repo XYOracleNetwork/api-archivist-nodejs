@@ -8,12 +8,12 @@ const strategyOptions: IStrategyOptions = {
   usernameField: 'email',
 }
 
-const LOCAL_STRATEGY_NAME = 'local'
-export const localStrategy = passport.authenticate(LOCAL_STRATEGY_NAME, { session: false })
+export const localStrategyName = 'local'
+export const localStrategy = passport.authenticate(localStrategyName, { session: false })
 
 export const configureLocalStrategy = (userStore: IUserStore) => {
   passport.use(
-    LOCAL_STRATEGY_NAME,
+    localStrategyName,
     new Strategy(strategyOptions, async (email, providedPassword, done) => {
       try {
         // Find user

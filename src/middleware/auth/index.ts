@@ -6,8 +6,8 @@ import { ArchiveOwnerStore, GetArchivesByUserFn, getUserMongoSdk, MongoDBUserSto
 import { getProfile, postSignup, postWalletChallenge } from './routes'
 import {
   adminApiKeyUserSignupStrategy,
-  ARCHIVE_API_KEY_STRATEGY_NAME,
   archiveApiKeyStrategy,
+  archiveApiKeyStrategyName,
   archiveOwnerStrategy,
   configureAdminApiKeyStrategy,
   configureArchiveApiKeyStrategy,
@@ -15,8 +15,8 @@ import {
   configureJwtStrategy,
   configureLocalStrategy,
   configureWeb3Strategy,
-  JWT_STRATEGY_NAME,
   jwtStrategy,
+  jwtStrategyName,
   localStrategy,
   web3Strategy,
 } from './strategy'
@@ -37,7 +37,7 @@ export const requireLoggedIn: RequestHandler = jwtStrategy
 /**
  * Require either an API key OR logged-in user
  */
-export const requireAuth: RequestHandler = passport.authenticate([ARCHIVE_API_KEY_STRATEGY_NAME, JWT_STRATEGY_NAME], {
+export const requireAuth: RequestHandler = passport.authenticate([archiveApiKeyStrategyName, jwtStrategyName], {
   session: false,
 })
 

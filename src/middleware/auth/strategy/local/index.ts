@@ -1,1 +1,1 @@
-export * from './localStrategy'
+export * from './configureLocalStrategy'
