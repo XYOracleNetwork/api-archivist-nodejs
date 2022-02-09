@@ -20,27 +20,16 @@ import {
   putArchive,
 } from './archive'
 import { getArchivesByOwner } from './lib'
-import {
-  archiveApiKeyAuth,
-  archiveAuth,
-  archiveOwnerAuth,
-  configureAuth,
-  IAuthConfig,
-  jwtAuth,
-  useRequestCounters,
-} from './middleware'
-
-const requireLoggedIn: RequestHandler[] = [jwtAuth]
-const requireArchiveOwner: RequestHandler[] = [jwtAuth, archiveOwnerAuth]
+import { configureAuth, requireArchiveOwner, requireAuth, useRequestCounters } from './middleware'
 
 const notImplemented: RequestHandler = (_req, _res, next) => {
   next({ message: ReasonPhrases.NOT_IMPLEMENTED, statusCode: StatusCodes.NOT_IMPLEMENTED })
 }
 
 const addArchiveRoutes = (app: Express) => {
-  app.get('/archive', requireLoggedIn, asyncHandler(getArchives))
+  app.get('/archive', requireAuth, asyncHandler(getArchives))
   app.get('/archive/:archive', requireArchiveOwner, notImplemented)
-  app.put('/archive/:archive', requireLoggedIn, asyncHandler(putArchive))
+  app.put('/archive/:archive', requireAuth, asyncHandler(putArchive))
   app.get('/archive/:archive/settings/keys', requireArchiveOwner, asyncHandler(getArchiveSettingsKeys))
   app.post('/archive/:archive/settings/keys', requireArchiveOwner, asyncHandler(postArchiveSettingsKeys))
 }
@@ -119,12 +108,11 @@ const server = async (port = 80) => {
   addPayloadSchemaRoutes(app)
   addBlockRoutes(app)
 
-  const authConfig: IAuthConfig = {
+  const userRoutes = await configureAuth({
     apiKey: process.env.API_KEY,
     getUserArchives: getArchivesByOwner,
     secretOrKey: process.env.JWT_SECRET,
-  }
-  const userRoutes = await configureAuth(authConfig)
+  })
   app.use('/user', userRoutes)
 
   app.use(errorToJsonHandler)

@@ -18,11 +18,11 @@ const router: Router = express.Router()
 
 const noSession: AuthenticateOptions = { session: false }
 
-export const archiveApiKeyAuth: RequestHandler = passport.authenticate('archiveApiKey', noSession)
-export const archiveOwnerAuth: RequestHandler = passport.authenticate('archiveOwner', noSession)
-export const archiveAuth: RequestHandler = passport.authenticate(['archiveApiKey', 'archiveOwner'], noSession)
-export const jwtAuth: RequestHandler = passport.authenticate('jwt', noSession)
-export const noAuth: RequestHandler = (_req, _res, next) => next()
+export const requireArchiveApiKey: RequestHandler = passport.authenticate('archiveApiKey', noSession)
+export const requireLoggedIn: RequestHandler = passport.authenticate('jwt', noSession)
+export const requireAuth: RequestHandler = passport.authenticate(['archiveApiKey', 'jwt'], noSession)
+export const requireArchiveOwner: RequestHandler[] = [requireAuth, passport.authenticate('archiveOwner', noSession)]
+export const allowAnonymous: RequestHandler = (_req, _res, next) => next()
 
 let respondWithJwt: RequestHandler = () => {
   throw new Error('JWT Auth Incorrectly Configured')
@@ -38,7 +38,7 @@ router.post('/wallet/verify', passport.authenticate('web3', noSession), (req, re
   respondWithJwt(req, res, next)
 )
 
-router.get('/profile', jwtAuth, getProfile)
+router.get('/profile', requireLoggedIn, getProfile)
 
 export interface IAuthConfig {
   secretOrKey?: string
