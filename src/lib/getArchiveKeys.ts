@@ -1,4 +1,4 @@
-import { getArchiveKeysMongoSdk } from '../../../../lib'
+import { getArchiveKeysMongoSdk } from './getArchiveKeysMongoSdk'
 
 export interface IGetArchiveKeyResult {
   archive: string

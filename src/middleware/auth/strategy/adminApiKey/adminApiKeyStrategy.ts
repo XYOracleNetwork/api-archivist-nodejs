@@ -1,7 +1,8 @@
 import { Request } from 'express'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
-import { IUserStore, passwordHasher } from '../../model'
+import { IUserStore } from '../../model'
+import { createUser } from './createUser'
 
 export class AdminApiKeyStrategy extends Strategy {
   constructor(
@@ -23,12 +24,7 @@ export class AdminApiKeyStrategy extends Strategy {
         return
       }
       if (this.createUser) {
-        const userToCreate = req.body
-        if (userToCreate.password) {
-          userToCreate.passwordHash = await passwordHasher.hash(userToCreate.password)
-          delete userToCreate.password
-        }
-        const user = await this.userStore.create(userToCreate)
+        const user = await createUser(req, this.userStore)
         if (!user) {
           this.error({ message: 'Error creating user' })
           return
@@ -39,7 +35,7 @@ export class AdminApiKeyStrategy extends Strategy {
       this.success({})
       return
     } catch (error) {
-      this.error({ message: 'API Key Auth Error' })
+      this.error({ message: 'Admin API Key Auth Error' })
     }
   }
 }
