@@ -1,7 +1,6 @@
 import { asyncHandler, errorToJsonHandler, getEnvFromAws } from '@xylabs/sdk-api-express-ecs'
-import bodyParser from 'body-parser'
 import cors from 'cors'
-import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express'
+import express, { Express, RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import {
@@ -20,7 +19,14 @@ import {
   putArchive,
 } from './archive'
 import { getArchivesByOwner } from './lib'
-import { configureAuth, requireArchiveOwner, requireAuth, useRequestCounters } from './middleware'
+import {
+  configureAuth,
+  jsonBodyParser,
+  requireArchiveOwner,
+  requireAuth,
+  standardResponses,
+  useRequestCounters,
+} from './middleware'
 
 const notImplemented: RequestHandler = (_req, _res, next) => {
   next({ message: ReasonPhrases.NOT_IMPLEMENTED, statusCode: StatusCodes.NOT_IMPLEMENTED })
@@ -59,8 +65,6 @@ const addBlockRoutes = (app: Express) => {
   app.get('/archive/:archive/block/sample/:size?', requireArchiveOwner, notImplemented)
 }
 
-const bodyParserInstance = bodyParser.json({ type: ['application/json', 'text/json'] })
-
 const server = async (port = 80) => {
   // If an AWS ARN was supplied for Secrets Manager
   const awsEnvSecret = process.env.AWS_ENV_SECRET_ARN
@@ -76,15 +80,7 @@ const server = async (port = 80) => {
 
   app.set('etag', false)
 
-  // If we do not trap this error, then it dumps too much to log, usually happens if request aborted
-  app.use((req: Request, res: Response, next: NextFunction) => {
-    try {
-      bodyParserInstance(req, res, next)
-    } catch (ex) {
-      const error = ex as Error
-      console.log(`bodyParser failed [${error.name}]: ${error.message}`)
-    }
-  })
+  app.use(jsonBodyParser)
 
   if (process.env.CORS_ALLOWED_ORIGINS) {
     // CORS_ALLOWED_ORIGINS can be an array of allowed origins so we support
@@ -113,6 +109,7 @@ const server = async (port = 80) => {
   app.use('/user', userRoutes)
 
   app.use(errorToJsonHandler)
+  app.use(standardResponses)
 
   const server = app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`)
