@@ -13,6 +13,6 @@ export const standardErrors = (error: ExpressError, req: Request, res: Response,
     status: `${error.statusCode}`,
     title: error.name,
   }
-  res.status(error.statusCode).json({ errors: [body] })
+  res.status(error.statusCode).json({ errors: [body], meta: {} })
   next(error)
 }
