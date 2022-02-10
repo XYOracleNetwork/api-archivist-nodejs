@@ -54,7 +54,7 @@ export const getExistingWeb2User = async (): Promise<ITestWeb2User> => {
 
 export const signInWeb2User = async (user: ITestWeb2User): Promise<string> => {
   const tokenResponse = await request.post('/user/login').send(user).expect(StatusCodes.OK)
-  return tokenResponse.body.token
+  return tokenResponse.body.data.token
 }
 
 export const getExistingWeb3User = async (): Promise<ITestWeb3User> => {
@@ -66,7 +66,7 @@ export const getExistingWeb3User = async (): Promise<ITestWeb3User> => {
 
 export const signInWeb3User = async (user: ITestWeb3User): Promise<string> => {
   const challengeResponse = await request.post('/user/wallet/challenge').send(user).expect(StatusCodes.OK)
-  const { state } = challengeResponse.body
+  const { state } = challengeResponse.body.data
   const wallet = new Wallet(user.privateKey)
   const signature = await wallet.signMessage(state)
   const verifyBody = {
@@ -75,7 +75,7 @@ export const signInWeb3User = async (user: ITestWeb3User): Promise<string> => {
     signature,
   }
   const tokenResponse = await request.post('/user/wallet/verify').send(verifyBody).expect(StatusCodes.OK)
-  return tokenResponse.body.token
+  return tokenResponse.body.data.token
 }
 
 export const getTokenForNewUser = async (): Promise<string> => {
@@ -87,7 +87,7 @@ export const getArchives = async (
   expectedStatus: StatusCodes = StatusCodes.OK
 ): Promise<IPutArchiveResponse> => {
   const response = await getArchivist().get('/archive').auth(token, { type: 'bearer' }).expect(expectedStatus)
-  return response.body
+  return response.body.data
 }
 
 export const claimArchive = async (
@@ -100,7 +100,7 @@ export const claimArchive = async (
     .put(`/archive/${archive}`)
     .auth(token, { type: 'bearer' })
     .expect(expectedStatus)
-  return response.body
+  return response.body.data
 }
 
 export const createArchiveKey = async (
@@ -112,7 +112,7 @@ export const createArchiveKey = async (
     .post(`/archive/${archive}/settings/keys`)
     .auth(token, { type: 'bearer' })
     .expect(expectedStatus)
-  return response.body
+  return response.body.data
 }
 
 export const getArchiveKeys = async (
@@ -124,5 +124,5 @@ export const getArchiveKeys = async (
     .get(`/archive/${archive}/settings/keys`)
     .auth(token, { type: 'bearer' })
     .expect(expectedStatus)
-  return response.body
+  return response.body.data
 }
