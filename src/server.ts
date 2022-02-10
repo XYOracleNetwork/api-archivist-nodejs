@@ -1,4 +1,4 @@
-import { asyncHandler, errorToJsonHandler, getEnvFromAws } from '@xylabs/sdk-api-express-ecs'
+import { asyncHandler, getEnvFromAws } from '@xylabs/sdk-api-express-ecs'
 import cors from 'cors'
 import express, { Express, RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
@@ -24,6 +24,7 @@ import {
   jsonBodyParser,
   requireArchiveOwner,
   requireAuth,
+  standardErrors,
   standardResponses,
   useRequestCounters,
 } from './middleware'
@@ -81,6 +82,7 @@ const server = async (port = 80) => {
   app.set('etag', false)
 
   app.use(jsonBodyParser)
+  app.use(standardResponses)
 
   if (process.env.CORS_ALLOWED_ORIGINS) {
     // CORS_ALLOWED_ORIGINS can be an array of allowed origins so we support
@@ -108,8 +110,7 @@ const server = async (port = 80) => {
   })
   app.use('/user', userRoutes)
 
-  app.use(errorToJsonHandler)
-  app.use(standardResponses)
+  app.use(standardErrors)
 
   const server = app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`)
