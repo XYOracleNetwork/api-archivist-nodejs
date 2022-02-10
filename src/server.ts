@@ -24,6 +24,7 @@ import {
   jsonBodyParser,
   requireArchiveOwner,
   requireAuth,
+  responseProfiler,
   standardErrors,
   standardResponses,
   useRequestCounters,
@@ -78,6 +79,8 @@ const server = async (port = 80) => {
   }
 
   const app = express()
+
+  app.use(responseProfiler)
 
   app.set('etag', false)
 

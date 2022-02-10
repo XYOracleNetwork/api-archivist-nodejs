@@ -1,6 +1,8 @@
 import { ExpressError } from '@xylabs/sdk-api-express-ecs'
 import { NextFunction, Request, Response } from 'express'
 
+import { profileResponse } from '../metrics'
+
 export const standardErrors = (error: ExpressError, req: Request, res: Response, next: NextFunction) => {
   if (!error) {
     next(error)
@@ -13,6 +15,11 @@ export const standardErrors = (error: ExpressError, req: Request, res: Response,
     status: `${error.statusCode}`,
     title: error.name,
   }
-  res.status(error.statusCode).json({ errors: [body], meta: {} })
+  const meta = { perf: {} }
+  const duration = profileResponse(res)
+  if (duration) {
+    meta.perf = duration
+  }
+  res.status(error.statusCode).json({ errors: [body], meta })
   next(error)
 }
