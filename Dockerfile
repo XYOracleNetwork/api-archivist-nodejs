@@ -11,7 +11,7 @@ FROM node:16 AS dependencies
 WORKDIR /app
 COPY ./package.json ./package.json
 COPY ./yarn.lock ./yarn.lock
-RUN yarn install --production --frozen-lockfile
+RUN yarn install --production --immutable
 
 # Copy over the compiled output and production dependencies
 # into a slimmer container
