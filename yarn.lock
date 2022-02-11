@@ -2901,15 +2901,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-replace@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "@rollup/plugin-replace@npm:3.0.1"
+"@rollup/plugin-replace@npm:^3.0.1, @rollup/plugin-replace@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "@rollup/plugin-replace@npm:3.1.0"
   dependencies:
     "@rollup/pluginutils": ^3.1.0
     magic-string: ^0.25.7
   peerDependencies:
     rollup: ^1.20.0 || ^2.0.0
-  checksum: 0cd97439783d3d23ba4f0c74146f5cdf0965d57977cc8227a77dfdd9604930905619e405c961ae146a0e68c8239b9a3a817704fa90f7d62d5087ed84d8c33ead
+  checksum: 9f833d40f7ebd6bb32b1c7a118fedd27a6d63e591018543740c78d3bc6fe67efa7048c6457bcadf8f982385b78e33ff8e38a67ddd4d11c15d9c81898a0757c13
   languageName: node
   linkType: hard
 
@@ -3365,10 +3365,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^17.0.16":
-  version: 17.0.16
-  resolution: "@types/node@npm:17.0.16"
-  checksum: 2d452a9e0ee7ec83d447d66dd2baf4dd05ef2fbcda39b06f73d86b36d5150d86c43a733d534d77467e7782104756944d42a35ed4b64113bda341b8334ee4d01d
+"@types/node@npm:*, @types/node@npm:^17.0.17":
+  version: 17.0.17
+  resolution: "@types/node@npm:17.0.17"
+  checksum: 8ddba2829acdf1684fbd8fd248ec13f033efb70ecd1085677b547c40ef8e936a006b95eac3bdc28c47939c62526f3f027afeb4a930e30e4394923bbae4626476
   languageName: node
   linkType: hard
 
@@ -3798,21 +3798,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xylabs/sdk-js@npm:^2.3.24, @xylabs/sdk-js@npm:^2.4.1":
-  version: 2.4.1
-  resolution: "@xylabs/sdk-js@npm:2.4.1"
-  peerDependencies:
-    axios: ^0
-    bn.js: ^5
-    rollbar: ^2
-  peerDependenciesMeta:
-    axios:
-      optional: true
-    bn.js:
-      optional: true
-    rollbar:
-      optional: true
-  checksum: 613ffa272aef76301e40e1565f7afe5dfcbcdee4c4abd81a489735251c4323dca5f7d3fe145f2acbb233fecc741aea57a58a1a1fa8aa04bc216083e37d675ea8
+"@xylabs/sdk-js@npm:^2.4.2":
+  version: 2.4.2
+  resolution: "@xylabs/sdk-js@npm:2.4.2"
+  dependencies:
+    axios: ^0.25.0
+    bn.js: ^5.2.0
+    buffer: ^6.0.3
+    rollbar: ^2.24.0
+  checksum: ea74baada91286eb97d0cb90d7b4af3d61780ff06eb16c43f18e3397af5dbae4a319206d64df82217fc41141d12839288bf8d3488eedb87c830555da0b15eab6
   languageName: node
   linkType: hard
 
@@ -3876,12 +3870,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xyo-network/sdk-xyo-client-js@npm:^2.7.18":
-  version: 2.7.18
-  resolution: "@xyo-network/sdk-xyo-client-js@npm:2.7.18"
+"@xyo-network/sdk-xyo-client-js@npm:^2.8.2":
+  version: 2.8.2
+  resolution: "@xyo-network/sdk-xyo-client-js@npm:2.8.2"
   dependencies:
     "@ethersproject/providers": ^5.5.3
-    "@xylabs/sdk-js": ^2.4.1
+    "@xylabs/sdk-js": ^2.4.2
     "@xyo-network/sdk-xyo-mongo-js": ^2.2.3
     axios: ^0.25.0
     bowser: ^2.11.0
@@ -3895,18 +3889,18 @@ __metadata:
     neo4j-driver-core: ^4.4.2
     sha.js: ^2.4.11
     ua-parser-js: ^1.0.2
-  checksum: 2e5b007722c496bea7d123878919efb62618efb38ace66da081edc8d98eb8765ddd41797e86dc14bfe18cb52b760443b3ef4b481796acfbb796f1b80e0bd7a6c
+  checksum: 3c146087f795fd6e18d73808c7e9f681d7826ede0b26140cee34a5731d692e842e68f86c8f77fa162619cc7368751b6f81895153b2f1bc62be50d29b1b06cd9d
   languageName: node
   linkType: hard
 
-"@xyo-network/sdk-xyo-mongo-js@npm:^2.2.3":
-  version: 2.2.3
-  resolution: "@xyo-network/sdk-xyo-mongo-js@npm:2.2.3"
+"@xyo-network/sdk-xyo-mongo-js@npm:^2.2.3, @xyo-network/sdk-xyo-mongo-js@npm:^2.2.5":
+  version: 2.2.5
+  resolution: "@xyo-network/sdk-xyo-mongo-js@npm:2.2.5"
   dependencies:
-    "@xylabs/sdk-js": ^2.3.24
+    "@xylabs/sdk-js": ^2.4.2
     async-mutex: ^0.3.2
-    mongodb: ^4.3.0
-  checksum: 5490fc57a53530f5486e9f0e79930d1a6fb4f654d79896e7ae71f71d86e2903499fca795156720b3abce9cc4c5cde4c9249a49cb092628518ce122a3431ffedc
+    mongodb: ^4.3.1
+  checksum: 33336a4a7d3a798c17479721cf55b0caa69db21e355e68d01ce7a5cfd77fe93e5ac5714e0961066ab18b359c527443982a88b01c264b7000c23b220ea350fd6a
   languageName: node
   linkType: hard
 
@@ -4133,7 +4127,7 @@ __metadata:
     "@babel/preset-env": ^7.16.11
     "@rollup/plugin-commonjs": ^21.0.1
     "@rollup/plugin-json": ^4.1.0
-    "@rollup/plugin-replace": ^3.0.1
+    "@rollup/plugin-replace": ^3.1.0
     "@rollup/plugin-strip": ^2.1.0
     "@types/bcrypt": ^5.0.0
     "@types/bluebird": ^3.5.36
@@ -4144,7 +4138,7 @@ __metadata:
     "@types/jest": ^27.4.0
     "@types/jsonwebtoken": ^8.5.8
     "@types/lodash": ^4.14.178
-    "@types/node": ^17.0.16
+    "@types/node": ^17.0.17
     "@types/passport": ^1.0.7
     "@types/passport-jwt": ^3.0.6
     "@types/passport-local": ^1.0.34
@@ -4154,11 +4148,11 @@ __metadata:
     "@xylabs/eslint-config": ^2.3.14
     "@xylabs/rollup-config": ^1.1.7
     "@xylabs/sdk-api-express-ecs": ^1.0.12
-    "@xylabs/sdk-js": ^2.4.1
+    "@xylabs/sdk-js": ^2.4.2
     "@xylabs/ts-scripts": ^1.0.43
     "@xylabs/tsconfig": ^1.0.12
-    "@xyo-network/sdk-xyo-client-js": ^2.7.18
-    "@xyo-network/sdk-xyo-mongo-js": ^2.2.3
+    "@xyo-network/sdk-xyo-client-js": ^2.8.2
+    "@xyo-network/sdk-xyo-mongo-js": ^2.2.5
     axios: ^0.25.0
     babel-jest: ^27.5.1
     bcrypt: ^5.0.1
@@ -4187,7 +4181,7 @@ __metadata:
     prettier: ^2.5.1
     rimraf: ^3.0.2
     rollbar: ^2.24.0
-    rollup: ^2.67.1
+    rollup: ^2.67.2
     rollup-plugin-typescript2: ^0.31.2
     sha.js: ^2.4.11
     source-map-support: ^0.5.21
@@ -9625,7 +9619,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mongodb@npm:^4.3.0, mongodb@npm:^4.3.1":
+"mongodb@npm:^4.3.1":
   version: 4.3.1
   resolution: "mongodb@npm:4.3.1"
   dependencies:
@@ -12632,9 +12626,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:^2.67.1":
-  version: 2.67.1
-  resolution: "rollup@npm:2.67.1"
+"rollup@npm:^2.67.1, rollup@npm:^2.67.2":
+  version: 2.67.2
+  resolution: "rollup@npm:2.67.2"
   dependencies:
     fsevents: ~2.3.2
   dependenciesMeta:
@@ -12642,7 +12636,7 @@ __metadata:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: 4320927ae9d42abf0a72ccdfd14303f7b6d6908ec94be953900a41bd4c0bbba3131887c3925dec65361a3e394cb572a4fa8e1f1be4db587a775068ad71d42acd
+  checksum: 9aca5251ba4b441064183cde2394b91567259002d68086bdd3906db66d55dd148ab27e57c51eb53830d7b9b813c2d4e834b7735d65e2a869780bc639d4a20c38
   languageName: node
   linkType: hard
 
