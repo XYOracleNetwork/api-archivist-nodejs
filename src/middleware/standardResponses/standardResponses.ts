@@ -1,14 +1,10 @@
 import { Request, Response } from 'express'
 import mung from 'express-mung'
 
-import { profileResponse } from '../metrics'
+import { getResponseMetadata } from '../metrics'
 
 export const transformResponse = (body: unknown, _req: Request, res: Response) => {
-  const meta = { perf: {} }
-  const duration = profileResponse(res)
-  if (duration) {
-    meta.perf = duration
-  }
+  const meta = getResponseMetadata(res)
   return { data: body, meta }
 }
 
