@@ -14,8 +14,20 @@ export class ArchiveApiKeyStrategy extends Strategy {
     _options?: unknown
   ) {
     try {
-      // TODO: Don't just cast here
-      const apiKey = req.headers[this.apiKeyHeader] as string
+      // NOTE: There should never be multiple of this header but
+      // just to prevent ugliness if someone did send us multiple
+      // we'll grab the 1st one
+      const apiKey =
+        // If the header exists
+        req.headers[this.apiKeyHeader]
+          ? // If there's multiple of the same header
+            Array.isArray(req.headers[this.apiKeyHeader])
+            ? // Grab the first one
+              (req.headers[this.apiKeyHeader] as string[]).shift()
+            : // Otherwise grab the only one
+              (req.headers[this.apiKeyHeader] as string)
+          : // Otherwise undefined
+            undefined
       if (!apiKey) {
         this.fail('Missing API key in header')
         return
