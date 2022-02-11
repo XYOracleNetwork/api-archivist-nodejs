@@ -1,7 +1,7 @@
 import { ExpressError } from '@xylabs/sdk-api-express-ecs'
 import { NextFunction, Request, Response } from 'express'
 
-import { getResponseMetadata } from '../metrics'
+import { getResponseMetadata } from './getResponseMetadata'
 import { IErrorObject, IErrorResponse } from './jsonApi'
 
 export const standardErrors = (err: ExpressError, req: Request, res: Response, next: NextFunction) => {
