@@ -3,7 +3,12 @@ import { StatusCodes } from 'http-status-codes'
 import supertest, { SuperTest, Test } from 'supertest'
 import { v4 } from 'uuid'
 
-import { IGetArchiveSettingsKeysResponse, IPostArchiveSettingsKeysResponse, IPutArchiveResponse } from '../archive'
+import {
+  IGetArchiveSettingsKeysResponse,
+  IPostArchiveBlockResponse,
+  IPostArchiveSettingsKeysResponse,
+  IPutArchiveResponse,
+} from '../archive'
 
 test('Must have API_KEY ENV VAR defined', () => {
   expect(process.env.API_KEY).toBeTruthy()
@@ -168,16 +173,11 @@ export const getBlockWithBoundWitnessesWithPayloads = (numBoundWitnesses = 1, nu
   }
 }
 
-export interface IPostBlockResponse {
-  boundWitnesses: number
-  payloads: number
-}
-
 export const postBlock = async (
   data: Record<string, unknown>,
   archive: string,
   expectedStatus: StatusCodes = StatusCodes.OK
-): Promise<IPostBlockResponse> => {
+): Promise<IPostArchiveBlockResponse> => {
   const response = await getArchivist().post(`/archive/${archive}/block`).send(data).expect(expectedStatus)
   return response.body.data
 }
