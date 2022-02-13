@@ -134,23 +134,38 @@ export const getPayload = () => {
   }
 }
 
+export const getPayloads = (numPayloads: number) => {
+  return new Array(numPayloads).fill(0).map(getPayload)
+}
+
 export const getBlock = (...payloads: Record<string, unknown>[]) => {
-  const block = {
+  return {
     boundWitnesses: [
       {
-        _payloads: [] as Record<string, unknown>[],
+        _payloads: payloads ? payloads : ([] as Record<string, unknown>[]),
       },
     ],
   }
-  if (payloads) {
-    block.boundWitnesses[0]._payloads = payloads
-  }
-  return block
 }
 
 export const getBlockWithPayloads = (numPayloads = 1) => {
-  const payloads = new Array(numPayloads).fill(0).map(getPayload)
-  return getBlock(...payloads)
+  return getBlock(...getPayloads(numPayloads))
+}
+
+export const getBlockWithBoundWitnesses = (numBoundWitnesses = 1) => {
+  return {
+    boundWitnesses: new Array(numBoundWitnesses).fill(0).map(() => {
+      return { _payloads: [] as Record<string, unknown>[] }
+    }),
+  }
+}
+
+export const getBlockWithBoundWitnessesWithPayloads = (numBoundWitnesses = 1, numPayloads = 1) => {
+  return {
+    boundWitnesses: new Array(numBoundWitnesses).fill(0).map(() => {
+      return { _payloads: getPayloads(numPayloads) }
+    }),
+  }
 }
 
 export interface IPostBlockResponse {
