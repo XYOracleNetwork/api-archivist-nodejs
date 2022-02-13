@@ -126,3 +126,27 @@ export const getArchiveKeys = async (
     .expect(expectedStatus)
   return response.body.data
 }
+
+export const getBlock = () => {
+  return {
+    boundWitnesses: [
+      {
+        _payloads: [
+          {
+            id: v4(),
+            schema: 'test',
+          },
+        ],
+      },
+    ],
+  }
+}
+
+export const postBlock = async (
+  data: Record<string, unknown>,
+  archive: string,
+  expectedStatus: StatusCodes = StatusCodes.OK
+): Promise<IGetArchiveSettingsKeysResponse[]> => {
+  const response = await await getArchivist().post(`/archive/${archive}/block`).send(data).expect(expectedStatus)
+  return response.body.data
+}
