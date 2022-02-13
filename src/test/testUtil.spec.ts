@@ -127,19 +127,30 @@ export const getArchiveKeys = async (
   return response.body.data
 }
 
-export const getBlock = () => {
+export const getPayload = () => {
   return {
+    id: v4(),
+    schema: 'test',
+  }
+}
+
+export const getBlock = (...payloads: Record<string, unknown>[]) => {
+  const block = {
     boundWitnesses: [
       {
-        _payloads: [
-          {
-            id: v4(),
-            schema: 'test',
-          },
-        ],
+        _payloads: [] as Record<string, unknown>[],
       },
     ],
   }
+  if (payloads) {
+    block.boundWitnesses[0]._payloads = payloads
+  }
+  return block
+}
+
+export const getBlockWithPayloads = (numPayloads = 1) => {
+  const payloads = new Array(numPayloads).map(() => getPayload())
+  return getBlock(...payloads)
 }
 
 export const postBlock = async (
