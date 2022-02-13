@@ -1,10 +1,10 @@
 import {
   claimArchive,
   getArchiveName,
-  getBlock,
   getBlockWithBoundWitnesses,
   getBlockWithBoundWitnessesWithPayloads,
   getBlockWithPayloads,
+  getNewBlock,
   getTokenForNewUser,
   postBlock,
 } from '../../../test'
@@ -13,10 +13,10 @@ describe('/archive/:archive/block', () => {
   it('Allows posting blocks to existing archives', async () => {
     const token = await getTokenForNewUser()
     const archive = (await claimArchive(token)).archive
-    await postBlock(getBlock(), archive)
+    await postBlock(getNewBlock(), archive)
   })
   it('Allows posting blocks to non-existing archives', async () => {
-    await postBlock(getBlock(), getArchiveName())
+    await postBlock(getNewBlock(), getArchiveName())
   })
   it('Allows posting block with payload', async () => {
     const response = await postBlock(getBlockWithPayloads(1), getArchiveName())
@@ -29,7 +29,7 @@ describe('/archive/:archive/block', () => {
     expect(response.payloads).toEqual(2)
   })
   it('Allows posting block without payloads', async () => {
-    const response = await postBlock(getBlock(), getArchiveName())
+    const response = await postBlock(getNewBlock(), getArchiveName())
     expect(response.boundWitnesses).toEqual(1)
     expect(response.payloads).toEqual(0)
   })

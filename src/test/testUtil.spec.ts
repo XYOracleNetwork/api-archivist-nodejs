@@ -143,7 +143,7 @@ export const getPayloads = (numPayloads: number) => {
   return new Array(numPayloads).fill(0).map(getPayload)
 }
 
-export const getBlock = (...payloads: Record<string, unknown>[]) => {
+export const getNewBlock = (...payloads: Record<string, unknown>[]) => {
   return {
     boundWitnesses: [
       {
@@ -154,7 +154,7 @@ export const getBlock = (...payloads: Record<string, unknown>[]) => {
 }
 
 export const getBlockWithPayloads = (numPayloads = 1) => {
-  return getBlock(...getPayloads(numPayloads))
+  return getNewBlock(...getPayloads(numPayloads))
 }
 
 export const getBlockWithBoundWitnesses = (numBoundWitnesses = 1) => {
@@ -179,5 +179,25 @@ export const postBlock = async (
   expectedStatus: StatusCodes = StatusCodes.OK
 ): Promise<IPostArchiveBlockResponse> => {
   const response = await getArchivist().post(`/archive/${archive}/block`).send(data).expect(expectedStatus)
+  return response.body.data
+}
+
+export interface IHashResponse {
+  _archive: string
+  _hash: string
+  _timestamp: number
+  _user_agent: string | null
+}
+
+export const getBlockByHash = async (
+  token: string,
+  archive: string,
+  hash: string,
+  expectedStatus: StatusCodes = StatusCodes.OK
+): Promise<IHashResponse[]> => {
+  const response = await getArchivist()
+    .get(`/archive/${archive}/block/hash/${hash}`)
+    .auth(token, { type: 'bearer' })
+    .expect(expectedStatus)
   return response.body.data
 }
