@@ -149,15 +149,20 @@ export const getBlock = (...payloads: Record<string, unknown>[]) => {
 }
 
 export const getBlockWithPayloads = (numPayloads = 1) => {
-  const payloads = new Array(numPayloads).map(() => getPayload())
+  const payloads = new Array(numPayloads).fill(0).map(getPayload)
   return getBlock(...payloads)
+}
+
+export interface IPostBlockResponse {
+  boundWitnesses: number
+  payloads: number
 }
 
 export const postBlock = async (
   data: Record<string, unknown>,
   archive: string,
   expectedStatus: StatusCodes = StatusCodes.OK
-): Promise<IGetArchiveSettingsKeysResponse[]> => {
-  const response = await await getArchivist().post(`/archive/${archive}/block`).send(data).expect(expectedStatus)
+): Promise<IPostBlockResponse> => {
+  const response = await getArchivist().post(`/archive/${archive}/block`).send(data).expect(expectedStatus)
   return response.body.data
 }
