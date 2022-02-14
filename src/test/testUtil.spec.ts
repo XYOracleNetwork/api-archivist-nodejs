@@ -154,11 +154,11 @@ export const getNewBlock = (...payloads: Record<string, unknown>[]) => {
   }
 }
 
-export const getBlockWithPayloads = (numPayloads = 1) => {
+export const getNewBlockWithPayloads = (numPayloads = 1) => {
   return getNewBlock(...getPayloads(numPayloads))
 }
 
-export const getBlockWithBoundWitnesses = (numBoundWitnesses = 1) => {
+export const getNewBlockWithBoundWitnesses = (numBoundWitnesses = 1) => {
   return {
     boundWitnesses: new Array(numBoundWitnesses).fill(0).map(() => {
       return { _payloads: [] as Record<string, unknown>[] }
@@ -166,7 +166,7 @@ export const getBlockWithBoundWitnesses = (numBoundWitnesses = 1) => {
   }
 }
 
-export const getBlockWithBoundWitnessesWithPayloads = (numBoundWitnesses = 1, numPayloads = 1) => {
+export const getNewBlockWithBoundWitnessesWithPayloads = (numBoundWitnesses = 1, numPayloads = 1) => {
   return {
     boundWitnesses: new Array(numBoundWitnesses).fill(0).map(() => {
       return { _payloads: getPayloads(numPayloads) }
