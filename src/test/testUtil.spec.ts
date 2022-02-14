@@ -9,6 +9,7 @@ import {
   IPostArchiveBlockResponse,
   IPostArchiveSettingsKeysResponse,
   IPutArchiveResponse,
+  IRepairHashResponse,
 } from '../archive'
 
 test('Must have API_KEY ENV VAR defined', () => {
@@ -204,6 +205,19 @@ export const getPayloadByHash = async (
 ): Promise<IGetArchiveBlockHashResponse[]> => {
   const response = await getArchivist()
     .get(`/archive/${archive}/payload/hash/${hash}`)
+    .auth(token, { type: 'bearer' })
+    .expect(expectedStatus)
+  return response.body.data
+}
+
+export const repairPayloadByHash = async (
+  token: string,
+  archive: string,
+  hash: string,
+  expectedStatus: StatusCodes = StatusCodes.OK
+): Promise<IRepairHashResponse> => {
+  const response = await getArchivist()
+    .get(`/archive/${archive}/payload/hash/${hash}/repair`)
     .auth(token, { type: 'bearer' })
     .expect(expectedStatus)
   return response.body.data

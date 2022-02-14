@@ -17,6 +17,14 @@ const updatePayload = async (archive: string, hash: string, payload: XyoPayload)
   return await sdk.updateByHash(hash, { ...payload, _hash: wrapper.sortedHash() })
 }
 
+export interface IRepairHashResponse {
+  acknowledged: boolean
+  matchedCount: number
+  modifiedCount: number
+  upsertedCount: number
+  upsertedId: null | string
+}
+
 export const getArchivePayloadRepair = async (req: Request, res: Response, next: NextFunction) => {
   const { archive, hash } = req.params
   const payloads = await getPayload(archive, hash)
