@@ -4,6 +4,7 @@ import supertest, { SuperTest, Test } from 'supertest'
 import { v4 } from 'uuid'
 
 import {
+  IGetArchiveBlockHashResponse,
   IGetArchiveSettingsKeysResponse,
   IPostArchiveBlockResponse,
   IPostArchiveSettingsKeysResponse,
@@ -182,19 +183,12 @@ export const postBlock = async (
   return response.body.data
 }
 
-export interface IHashResponse {
-  _archive: string
-  _hash: string
-  _timestamp: number
-  _user_agent: string | null
-}
-
 export const getBlockByHash = async (
   token: string,
   archive: string,
   hash: string,
   expectedStatus: StatusCodes = StatusCodes.OK
-): Promise<IHashResponse[]> => {
+): Promise<IGetArchiveBlockHashResponse[]> => {
   const response = await getArchivist()
     .get(`/archive/${archive}/block/hash/${hash}`)
     .auth(token, { type: 'bearer' })
