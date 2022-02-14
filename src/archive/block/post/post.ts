@@ -14,7 +14,12 @@ interface XyoArchivistBoundWitnessBody {
   payloads: Record<string, unknown>[][]
 }
 
-export const postArchiveBlock = async (req: Request, res: Response, next: NextFunction) => {
+export interface IPostArchiveBlockResponse {
+  boundWitnesses: number
+  payloads: number
+}
+
+export const postArchiveBlock = async (req: Request, res: Response<IPostArchiveBlockResponse>, next: NextFunction) => {
   const { archive } = req.params
   const _source_ip = req.ip ?? undefined
   const _user_agent = req.headers['user-agent'] ?? undefined

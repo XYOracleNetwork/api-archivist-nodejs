@@ -17,7 +17,18 @@ const scrubBoundWitnesses = (boundWitnesses: XyoBoundWitness[]) => {
   })
 }
 
-export const getArchiveBlockHash = async (req: Request, res: Response, next: NextFunction) => {
+export interface IGetArchiveBlockHashResponse {
+  _archive?: string
+  _hash?: string
+  _timestamp?: number
+  _user_agent?: string | null
+}
+
+export const getArchiveBlockHash = async (
+  req: Request,
+  res: Response<IGetArchiveBlockHashResponse[]>,
+  next: NextFunction
+) => {
   const { archive, hash } = req.params
   res.json(scrubBoundWitnesses(await getBoundWitness(archive, hash)) ?? [])
   next()

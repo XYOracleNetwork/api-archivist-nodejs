@@ -3,7 +3,14 @@ import { StatusCodes } from 'http-status-codes'
 import supertest, { SuperTest, Test } from 'supertest'
 import { v4 } from 'uuid'
 
-import { IGetArchiveSettingsKeysResponse, IPostArchiveSettingsKeysResponse, IPutArchiveResponse } from '../archive'
+import {
+  IGetArchiveBlockHashResponse,
+  IGetArchiveSettingsKeysResponse,
+  IPostArchiveBlockResponse,
+  IPostArchiveSettingsKeysResponse,
+  IPutArchiveResponse,
+  IRepairHashResponse,
+} from '../archive'
 
 test('Must have API_KEY ENV VAR defined', () => {
   expect(process.env.API_KEY).toBeTruthy()
@@ -122,6 +129,108 @@ export const getArchiveKeys = async (
 ): Promise<IGetArchiveSettingsKeysResponse[]> => {
   const response = await getArchivist()
     .get(`/archive/${archive}/settings/keys`)
+    .auth(token, { type: 'bearer' })
+    .expect(expectedStatus)
+  return response.body.data
+}
+
+export const getPayload = () => {
+  return {
+    id: v4(),
+    schema: 'test',
+  }
+}
+
+export const getPayloads = (numPayloads: number) => {
+  return new Array(numPayloads).fill(0).map(getPayload)
+}
+
+export const getNewBlock = (...payloads: Record<string, unknown>[]) => {
+  return {
+    boundWitnesses: [
+      {
+        _payloads: payloads ? payloads : ([] as Record<string, unknown>[]),
+      },
+    ],
+  }
+}
+
+export const getNewBlockWithPayloads = (numPayloads = 1) => {
+  return getNewBlock(...getPayloads(numPayloads))
+}
+
+export const getNewBlockWithBoundWitnesses = (numBoundWitnesses = 1) => {
+  return {
+    boundWitnesses: new Array(numBoundWitnesses).fill(0).map(() => {
+      return { _payloads: [] as Record<string, unknown>[] }
+    }),
+  }
+}
+
+export const getNewBlockWithBoundWitnessesWithPayloads = (numBoundWitnesses = 1, numPayloads = 1) => {
+  return {
+    boundWitnesses: new Array(numBoundWitnesses).fill(0).map(() => {
+      return { _payloads: getPayloads(numPayloads) }
+    }),
+  }
+}
+
+export const postBlock = async (
+  data: Record<string, unknown>,
+  archive: string,
+  expectedStatus: StatusCodes = StatusCodes.OK
+): Promise<IPostArchiveBlockResponse> => {
+  const response = await getArchivist().post(`/archive/${archive}/block`).send(data).expect(expectedStatus)
+  return response.body.data
+}
+
+export const getBlockByHash = async (
+  token: string,
+  archive: string,
+  hash: string,
+  expectedStatus: StatusCodes = StatusCodes.OK
+): Promise<IGetArchiveBlockHashResponse[]> => {
+  const response = await getArchivist()
+    .get(`/archive/${archive}/block/hash/${hash}`)
+    .auth(token, { type: 'bearer' })
+    .expect(expectedStatus)
+  return response.body.data
+}
+
+export const getPayloadByHash = async (
+  token: string,
+  archive: string,
+  hash: string,
+  expectedStatus: StatusCodes = StatusCodes.OK
+): Promise<IGetArchiveBlockHashResponse[]> => {
+  const response = await getArchivist()
+    .get(`/archive/${archive}/payload/hash/${hash}`)
+    .auth(token, { type: 'bearer' })
+    .expect(expectedStatus)
+  return response.body.data
+}
+
+export const repairPayloadByHash = async (
+  token: string,
+  archive: string,
+  hash: string,
+  expectedStatus: StatusCodes = StatusCodes.OK
+): Promise<IRepairHashResponse> => {
+  const response = await getArchivist()
+    .get(`/archive/${archive}/payload/hash/${hash}/repair`)
+    .auth(token, { type: 'bearer' })
+    .expect(expectedStatus)
+  return response.body.data
+}
+
+export const getPayloadByBlockHash = async (
+  token: string,
+  archive: string,
+  hash: string,
+  expectedStatus: StatusCodes = StatusCodes.OK
+): Promise<IGetArchiveBlockHashResponse[]> => {
+  const response = await getArchivist()
+    .get(`/archive/${archive}/block/hash/${hash}/payloads`)
     .auth(token, { type: 'bearer' })
     .expect(expectedStatus)
   return response.body.data
