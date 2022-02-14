@@ -1,8 +1,9 @@
 import 'source-map-support/register'
 
-import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitness, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { NextFunction, Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
+import { InsertManyResult } from 'mongodb'
 
 import { prepareBoundWitnesses } from './prepareBoundWitnesses'
 import { storeBoundWitnesses } from './storeBoundWitnesses'
@@ -15,8 +16,8 @@ interface XyoArchivistBoundWitnessBody {
 }
 
 export interface IPostArchiveBlockResponse {
-  boundWitnesses: number
-  payloads: number
+  boundWitnesses: InsertManyResult<XyoBoundWitness>
+  payloads: InsertManyResult<XyoPayload>
 }
 
 export const postArchiveBlock = async (req: Request, res: Response<IPostArchiveBlockResponse>, next: NextFunction) => {
