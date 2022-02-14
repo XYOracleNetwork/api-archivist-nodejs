@@ -196,6 +196,19 @@ export const getBlockByHash = async (
   return response.body.data
 }
 
+export const getPayloadByHash = async (
+  token: string,
+  archive: string,
+  hash: string,
+  expectedStatus: StatusCodes = StatusCodes.OK
+): Promise<IGetArchiveBlockHashResponse[]> => {
+  const response = await getArchivist()
+    .get(`/archive/${archive}/payload/hash/${hash}`)
+    .auth(token, { type: 'bearer' })
+    .expect(expectedStatus)
+  return response.body.data
+}
+
 export const getPayloadByBlockHash = async (
   token: string,
   archive: string,
