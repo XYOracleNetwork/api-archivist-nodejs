@@ -145,6 +145,7 @@ const server = async (port = 80) => {
   }
 
   app.get('/', (_req, res, next) => {
+    /* #swagger.tags = ['health'] */
     res.json({ alive: true })
     next()
   })
@@ -168,7 +169,10 @@ const server = async (port = 80) => {
       url: '/docs/swagger.json',
     },
   }
-  app.get('/docs/swagger.json', (req, res) => res.sendFile('swagger.json', { root: './' }))
+  app.get(
+    '/docs/swagger.json',
+    (req, res) => res.sendFile('swagger.json', { root: './' }) /* #swagger.tags = ['docs'] */
+  )
   // eslint-disable-next-line import/no-deprecated
   app.use('/doc', serve, setup(undefined, options))
 
