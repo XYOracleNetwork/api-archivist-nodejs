@@ -56,16 +56,51 @@ let respondWithJwt: RequestHandler = () => {
   throw new Error('JWT Auth Incorrectly Configured')
 }
 
-router.post('/signup', adminApiKeyUserSignupStrategy, postSignup)
+router.post(
+  '/signup',
+  adminApiKeyUserSignupStrategy,
+  postSignup /*
+    #swagger.tags = ['user']
+    #swagger.basePath = '/user'
+  */
+)
 
 // web2 flow
-router.post('/login', localStrategy, (req, res, next) => respondWithJwt(req, res, next))
+router.post(
+  '/login',
+  localStrategy,
+  (req, res, next) => respondWithJwt(req, res, next)
+  /*
+    #swagger.tags = ['user']
+    #swagger.basePath = '/user'
+  */
+)
 
 // web3 flow
-router.post('/wallet/challenge', postWalletChallenge)
-router.post('/wallet/verify', web3Strategy, (req, res, next) => respondWithJwt(req, res, next))
+router.post(
+  '/wallet/challenge',
+  postWalletChallenge /*
+    #swagger.tags = ['user']
+    #swagger.basePath = '/user'
+  */
+)
+router.post(
+  '/wallet/verify',
+  web3Strategy,
+  (req, res, next) => respondWithJwt(req, res, next) /*
+    #swagger.tags = ['user']
+    #swagger.basePath = '/user'
+  */
+)
 
-router.get('/profile', requireLoggedIn, getProfile)
+router.get(
+  '/profile',
+  requireLoggedIn,
+  getProfile /*
+    #swagger.tags = ['user']
+    #swagger.basePath = '/user'
+  */
+)
 
 export interface IAuthConfig {
   secretOrKey?: string

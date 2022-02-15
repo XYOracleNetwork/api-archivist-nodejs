@@ -10,6 +10,7 @@ export const useRequestCounters = (app: Application): void => {
   })
 
   app.get('/stats', (req: Request, res: Response, next: NextFunction) => {
+    /* #swagger.tags = ['metrics'] */
     res.json({
       alive: true,
       avgTime: `${((Counters.counters['_totalTime'] ?? 0) / (Counters.counters['_calls'] ?? 1)).toFixed(2)}ms`,
