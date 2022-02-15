@@ -2,8 +2,6 @@ import { asyncHandler, getEnvFromAws } from '@xylabs/sdk-api-express-ecs'
 import cors from 'cors'
 import express, { Express, RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
-// eslint-disable-next-line import/no-deprecated
-import { serve, setup } from 'swagger-ui-express'
 
 import {
   getArchiveBlockHash,
@@ -23,6 +21,7 @@ import {
 import { getArchivesByOwner } from './lib'
 import {
   configureAuth,
+  configureDoc,
   jsonBodyParser,
   requireArchiveOwner,
   requireAuth,
@@ -163,19 +162,8 @@ const server = async (port = 80) => {
     secretOrKey: process.env.JWT_SECRET,
   })
   app.use('/user', userRoutes)
-
-  const options = {
-    swaggerOptions: {
-      url: '/docs/swagger.json',
-    },
-  }
-  app.get(
-    '/docs/swagger.json',
-    (req, res) => res.sendFile('swagger.json', { root: './' }) /* #swagger.tags = ['docs'] */
-  )
-  // eslint-disable-next-line import/no-deprecated
-  app.use('/doc', serve, setup(undefined, options))
-
+  const host = process.env.PUBLIC_ORIGIN || `http://localhost:${port}`
+  await configureDoc(app, { host })
   app.use(standardErrors)
 
   const server = app.listen(port, () => {

@@ -1,347 +1,79 @@
 {
-  "basePath": "",
-  "consumes": ["application/json"],
-  "host": "",
+  "swagger": "2.0",
   "info": {
     "description": "Routes for storing & retrieving blocks/payloads in the Archivist",
     "title": "Archivist API",
-    "version": "2.0"
+    "version": "1.0"
   },
+  "host": "http://localhost:8081",
+  "basePath": "",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "securityDefinitions": {},
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
   "paths": {
-    "/archive": {
-      "get": {
+    "/signup": {
+      "post": {
+        "tags": [
+          "user"
+        ],
         "description": "",
         "parameters": [],
-        "responses": {},
-        "tags": ["archive"]
-      }
-    },
-    "/archive/{archive}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "archive",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {},
-        "tags": ["archive"]
-      },
-      "put": {
-        "description": "",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "archive",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {},
-        "tags": ["archive"]
-      }
-    },
-    "/archive/{archive}/payload/hash/{hash}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "archive",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "path",
-            "name": "hash",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {},
-        "tags": ["payload"]
-      }
-    },
-    "/archive/{archive}/payload/hash/{hash}/repair": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "archive",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "path",
-            "name": "hash",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {},
-        "tags": ["payload"]
-      }
-    },
-    "/archive/{archive}/block": {
-      "post": {
-        "description": "",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "archive",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": ["block"],
         "responses": {}
-      }
-    },
-    "/archive/{archive}/payload/recent/{limit?}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "archive",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "path",
-            "name": "limit?",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {},
-        "tags": ["payload"]
-      }
-    },
-    "/archive/{archive}/block/stats": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "archive",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": ["block"],
-        "responses": {}
-      }
-    },
-    "/archive/{archive}/payload/sample/{size?}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "archive",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "path",
-            "name": "size?",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {},
-        "tags": ["payload"]
-      }
-    },
-    "/archive/{archive}/block/hash/{hash}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "archive",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "path",
-            "name": "hash",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {},
-        "tags": ["block"]
-      }
-    },
-    "/archive/{archive}/payload/stats": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "archive",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": ["payload"],
-        "responses": {}
-      }
-    },
-    "/archive/{archive}/block/hash/{hash}/payloads": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "archive",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "path",
-            "name": "hash",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {},
-        "tags": ["block"]
       }
     },
     "/login": {
       "post": {
+        "tags": [
+          "user"
+        ],
         "description": "",
-        "parameters": [],
-        "responses": {},
-        "tags": ["user"]
-      }
-    },
-    "/": {
-      "get": {
-        "description": "",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        },
-        "tags": ["health"]
-      }
-    },
-    "/profile": {
-      "get": {
-        "description": "",
-        "tags": ["user"],
         "parameters": [],
         "responses": {}
-      }
-    },
-    "/archive/{archive}/block/recent/{limit?}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "archive",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "path",
-            "name": "limit?",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {},
-        "tags": ["block"]
-      }
-    },
-    "/signup": {
-      "post": {
-        "description": "",
-        "tags": ["user"],
-        "parameters": [],
-        "responses": {}
-      }
-    },
-    "/archive/{archive}/block/sample/{size?}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "archive",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "path",
-            "name": "size?",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {},
-        "tags": ["block"]
       }
     },
     "/wallet/challenge": {
       "post": {
+        "tags": [
+          "user"
+        ],
         "description": "",
-        "tags": ["user"],
         "parameters": [],
         "responses": {}
-      }
-    },
-    "/archive/{archive}/bw": {
-      "post": {
-        "description": "",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "archive",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {},
-        "tags": ["block"]
       }
     },
     "/wallet/verify": {
       "post": {
-        "tags": ["user"],
+        "tags": [
+          "user"
+        ],
         "description": "",
         "parameters": [],
         "responses": {}
       }
     },
-    "/archive/{archive}/payload/schema": {
+    "/profile": {
       "get": {
-        "description": "",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "archive",
-            "required": true,
-            "type": "string"
-          }
+        "tags": [
+          "user"
         ],
-        "responses": {},
-        "tags": ["payload"]
+        "description": "",
+        "parameters": [],
+        "responses": {}
       }
     },
     "/stats": {
       "get": {
-        "tags": ["metrics"],
+        "tags": [
+          "metrics"
+        ],
         "description": "",
         "parameters": [],
         "responses": {
@@ -351,51 +83,53 @@
         }
       }
     },
-    "/archive/{archive}/payload/schema/{schema}": {
+    "/archive": {
       "get": {
-        "description": "",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "archive",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "path",
-            "name": "schema",
-            "required": true,
-            "type": "string"
-          }
+        "tags": [
+          "archive"
         ],
-        "responses": {},
-        "tags": ["payload"]
+        "description": "",
+        "parameters": [],
+        "responses": {}
       }
     },
-    "/archive/{archive}/payload/schema/{schema}/recent/limit": {
+    "/archive/{archive}": {
       "get": {
+        "tags": [
+          "archive"
+        ],
         "description": "",
         "parameters": [
           {
-            "in": "path",
             "name": "archive",
-            "required": true,
-            "type": "string"
-          },
-          {
             "in": "path",
-            "name": "schema",
             "required": true,
             "type": "string"
           }
         ],
-        "responses": {},
-        "tags": ["payload"]
+        "responses": {}
+      },
+      "put": {
+        "tags": [
+          "archive"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "archive",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
       }
     },
     "/archive/{archive}/settings/keys": {
       "get": {
-        "tags": ["archive"],
+        "tags": [
+          "archive"
+        ],
         "description": "",
         "parameters": [
           {
@@ -408,11 +142,162 @@
         "responses": {}
       },
       "post": {
-        "tags": ["archive"],
+        "tags": [
+          "archive"
+        ],
         "description": "",
         "parameters": [
           {
             "name": "archive",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/archive/{archive}/payload/stats": {
+      "get": {
+        "tags": [
+          "payload"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "archive",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/archive/{archive}/payload/hash/{hash}": {
+      "get": {
+        "tags": [
+          "payload"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "archive",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "hash",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/archive/{archive}/payload/hash/{hash}/repair": {
+      "get": {
+        "tags": [
+          "payload"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "archive",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "hash",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/archive/{archive}/payload/recent/{limit?}": {
+      "get": {
+        "tags": [
+          "payload"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "archive",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "limit?",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/archive/{archive}/payload/sample/{size?}": {
+      "get": {
+        "tags": [
+          "payload"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "archive",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "size?",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/archive/{archive}/payload/schema": {
+      "get": {
+        "tags": [
+          "payload"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "archive",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/archive/{archive}/payload/schema/{schema}": {
+      "get": {
+        "tags": [
+          "payload"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "archive",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "schema",
             "in": "path",
             "required": true,
             "type": "string"
@@ -423,40 +308,206 @@
     },
     "/archive/{archive}/payload/schema/{schema}/stats": {
       "get": {
+        "tags": [
+          "payload"
+        ],
         "description": "",
         "parameters": [
           {
-            "in": "path",
             "name": "archive",
+            "in": "path",
             "required": true,
             "type": "string"
           },
           {
-            "in": "path",
             "name": "schema",
+            "in": "path",
             "required": true,
             "type": "string"
           }
         ],
-        "responses": {},
-        "tags": ["payload"]
+        "responses": {}
       }
     },
-    "/docs/swagger.json": {
+    "/archive/{archive}/payload/schema/{schema}/recent/limit": {
       "get": {
+        "tags": [
+          "payload"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "archive",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "schema",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/archive/{archive}/block": {
+      "post": {
+        "tags": [
+          "block"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "archive",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/archive/{archive}/bw": {
+      "post": {
+        "tags": [
+          "block"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "archive",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/archive/{archive}/block/stats": {
+      "get": {
+        "tags": [
+          "block"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "archive",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/archive/{archive}/block/hash/{hash}": {
+      "get": {
+        "tags": [
+          "block"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "archive",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "hash",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/archive/{archive}/block/hash/{hash}/payloads": {
+      "get": {
+        "tags": [
+          "block"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "archive",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "hash",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/archive/{archive}/block/recent/{limit?}": {
+      "get": {
+        "tags": [
+          "block"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "archive",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "limit?",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/archive/{archive}/block/sample/{size?}": {
+      "get": {
+        "tags": [
+          "block"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "archive",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "size?",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/": {
+      "get": {
+        "tags": [
+          "health"
+        ],
         "description": "",
         "parameters": [],
         "responses": {
           "200": {
             "description": "OK"
           }
-        },
-        "tags": ["docs"]
+        }
       }
     }
-  },
-  "produces": ["application/json"],
-  "schemes": ["http", "https"],
-  "securityDefinitions": {},
-  "swagger": "2.0"
+  }
 }
