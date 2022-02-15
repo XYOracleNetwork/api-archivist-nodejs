@@ -2,8 +2,13 @@
   "compilerOptions": {
     "module": "esnext",
     "outDir": "dist",
-    "typeRoots": ["./node_modules/@types"]
+    "typeRoots": [
+      "./node_modules/@types",
+      "./types"
+    ]
   },
-  "exclude": ["dist/**/*"],
+  "exclude": [
+    "dist/**/*"
+  ],
   "extends": "@xylabs/tsconfig"
 }
