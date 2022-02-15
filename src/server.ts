@@ -2,6 +2,8 @@ import { asyncHandler, getEnvFromAws } from '@xylabs/sdk-api-express-ecs'
 import cors from 'cors'
 import express, { Express, RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
+// eslint-disable-next-line import/no-deprecated
+import { serve, setup } from 'swagger-ui-express'
 
 import {
   getArchiveBlockHash,
@@ -35,36 +37,84 @@ const notImplemented: RequestHandler = (_req, _res, next) => {
 }
 
 const addArchiveRoutes = (app: Express) => {
-  app.get('/archive', requireAuth, asyncHandler(getArchives))
-  app.get('/archive/:archive', requireArchiveOwner, notImplemented)
-  app.put('/archive/:archive', requireAuth, asyncHandler(putArchive))
-  app.get('/archive/:archive/settings/keys', requireArchiveOwner, asyncHandler(getArchiveSettingsKeys))
-  app.post('/archive/:archive/settings/keys', requireArchiveOwner, asyncHandler(postArchiveSettingsKeys))
+  app.get('/archive', requireAuth, asyncHandler(getArchives) /* #swagger.tags = ['archive'] */)
+  app.get('/archive/:archive', requireArchiveOwner, notImplemented /* #swagger.tags = ['archive'] */)
+  app.put('/archive/:archive', requireAuth, asyncHandler(putArchive) /* #swagger.tags = ['archive'] */)
+  app.get(
+    '/archive/:archive/settings/keys',
+    requireArchiveOwner,
+    asyncHandler(getArchiveSettingsKeys) /* #swagger.tags = ['archive'] */
+  )
+  app.post(
+    '/archive/:archive/settings/keys',
+    requireArchiveOwner,
+    asyncHandler(postArchiveSettingsKeys) /* #swagger.tags = ['archive'] */
+  )
 }
 
 const addPayloadRoutes = (app: Express) => {
-  app.get('/archive/:archive/payload/stats', asyncHandler(getArchivePayloadStats))
-  app.get('/archive/:archive/payload/hash/:hash', requireArchiveOwner, asyncHandler(getArchivePayloadHash))
-  app.get('/archive/:archive/payload/hash/:hash/repair', requireArchiveOwner, asyncHandler(getArchivePayloadRepair))
-  app.get('/archive/:archive/payload/recent/:limit?', requireArchiveOwner, asyncHandler(getArchivePayloadRecent))
-  app.get('/archive/:archive/payload/sample/:size?', requireArchiveOwner, notImplemented)
+  app.get('/archive/:archive/payload/stats', asyncHandler(getArchivePayloadStats) /* #swagger.tags = ['payload'] */)
+  app.get(
+    '/archive/:archive/payload/hash/:hash',
+    requireArchiveOwner,
+    asyncHandler(getArchivePayloadHash) /* #swagger.tags = ['payload'] */
+  )
+  app.get(
+    '/archive/:archive/payload/hash/:hash/repair',
+    requireArchiveOwner,
+    asyncHandler(getArchivePayloadRepair) /* #swagger.tags = ['payload'] */
+  )
+  app.get(
+    '/archive/:archive/payload/recent/:limit?',
+    requireArchiveOwner,
+    asyncHandler(getArchivePayloadRecent) /* #swagger.tags = ['payload'] */
+  )
+  app.get(
+    '/archive/:archive/payload/sample/:size?',
+    requireArchiveOwner,
+    notImplemented /* #swagger.tags = ['payload'] */
+  )
 }
 
 const addPayloadSchemaRoutes = (app: Express) => {
-  app.get('/archive/:archive/payload/schema', requireArchiveOwner, notImplemented)
-  app.get('/archive/:archive/payload/schema/:schema', requireArchiveOwner, notImplemented)
-  app.get('/archive/:archive/payload/schema/:schema/stats', requireArchiveOwner, notImplemented)
-  app.get('/archive/:archive/payload/schema/:schema/recent/limit', requireArchiveOwner, notImplemented)
+  app.get('/archive/:archive/payload/schema', requireArchiveOwner, notImplemented /* #swagger.tags = ['payload'] */)
+  app.get(
+    '/archive/:archive/payload/schema/:schema',
+    requireArchiveOwner,
+    notImplemented /* #swagger.tags = ['payload'] */
+  )
+  app.get(
+    '/archive/:archive/payload/schema/:schema/stats',
+    requireArchiveOwner,
+    notImplemented /* #swagger.tags = ['payload'] */
+  )
+  app.get(
+    '/archive/:archive/payload/schema/:schema/recent/limit',
+    requireArchiveOwner,
+    notImplemented /* #swagger.tags = ['payload'] */
+  )
 }
 
 const addBlockRoutes = (app: Express) => {
-  app.post('/archive/:archive/block', asyncHandler(postArchiveBlock))
-  app.post('/archive/:archive/bw', asyncHandler(postArchiveBlock))
-  app.get('/archive/:archive/block/stats', asyncHandler(getArchiveBlockStats))
-  app.get('/archive/:archive/block/hash/:hash', requireArchiveOwner, asyncHandler(getArchiveBlockHash))
-  app.get('/archive/:archive/block/hash/:hash/payloads', requireArchiveOwner, asyncHandler(getArchiveBlockHashPayloads))
-  app.get('/archive/:archive/block/recent/:limit?', requireArchiveOwner, asyncHandler(getArchiveBlockRecent))
-  app.get('/archive/:archive/block/sample/:size?', requireArchiveOwner, notImplemented)
+  app.post('/archive/:archive/block', asyncHandler(postArchiveBlock) /* #swagger.tags = ['block'] */)
+  app.post('/archive/:archive/bw', asyncHandler(postArchiveBlock) /* #swagger.tags = ['block'] */)
+  app.get('/archive/:archive/block/stats', asyncHandler(getArchiveBlockStats) /* #swagger.tags = ['block'] */)
+  app.get(
+    '/archive/:archive/block/hash/:hash',
+    requireArchiveOwner,
+    asyncHandler(getArchiveBlockHash) /* #swagger.tags = ['block'] */
+  )
+  app.get(
+    '/archive/:archive/block/hash/:hash/payloads',
+    requireArchiveOwner,
+    asyncHandler(getArchiveBlockHashPayloads) /* #swagger.tags = ['block'] */
+  )
+  app.get(
+    '/archive/:archive/block/recent/:limit?',
+    requireArchiveOwner,
+    asyncHandler(getArchiveBlockRecent) /* #swagger.tags = ['block'] */
+  )
+  app.get('/archive/:archive/block/sample/:size?', requireArchiveOwner, notImplemented /* #swagger.tags = ['block'] */)
 }
 
 const server = async (port = 80) => {
@@ -112,6 +162,15 @@ const server = async (port = 80) => {
     secretOrKey: process.env.JWT_SECRET,
   })
   app.use('/user', userRoutes)
+
+  const options = {
+    swaggerOptions: {
+      url: '/docs/swagger.json',
+    },
+  }
+  app.get('/docs/swagger.json', (req, res) => res.sendFile('swagger.json', { root: './' }))
+  // eslint-disable-next-line import/no-deprecated
+  app.use('/doc', serve, setup(undefined, options))
 
   app.use(standardErrors)
 
