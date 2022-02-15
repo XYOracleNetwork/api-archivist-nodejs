@@ -1,7 +1,7 @@
 import { Request } from 'express'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
-import { getArchiveKeys, getArchiveOwnerMongoSdk } from '../../../../lib'
+import { getArchiveKeys, getArchiveMongoSdk } from '../../../../lib'
 import { IUserStore } from '../../model'
 
 export class ArchiveApiKeyStrategy extends Strategy {
@@ -48,7 +48,7 @@ export class ArchiveApiKeyStrategy extends Strategy {
       }
 
       // Get the archive owner
-      const owners = await getArchiveOwnerMongoSdk()
+      const owners = await getArchiveMongoSdk()
       const archiveOwner = await owners.findByArchive(archive)
       if (!archiveOwner || !archiveOwner?.user) {
         this.fail('Invalid user')

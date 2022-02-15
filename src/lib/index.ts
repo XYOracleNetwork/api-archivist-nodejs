@@ -1,6 +1,6 @@
 export * from './getArchiveKeys'
 export * from './getArchiveKeysMongoSdk'
-export * from './getArchiveOwnerMongoSdk'
+export * from './getArchiveMongoSdk'
 export * from './getArchivesByOwner'
 export * from './getArchivistBoundWitnessesMongoSdk'
 export * from './getArchivistPayloadMongoSdk'

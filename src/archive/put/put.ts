@@ -2,11 +2,13 @@ import { NextFunction, Request, RequestHandler, Response } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import { isValidArchiveName } from '../../lib'
-import { storeArchiveOwner } from './storeArchiveOwner'
+import { storeArchive } from './storeArchive'
 
 export interface IPutArchiveResponse {
   archive: string
-  owner: string
+  user: string
+  boundWitnessPrivate: boolean
+  payloadPrivate: boolean
 }
 
 export const putArchive: RequestHandler = async (
@@ -26,8 +28,8 @@ export const putArchive: RequestHandler = async (
     return
   }
 
-  const response = await storeArchiveOwner(archive, user.id)
-  if (response && response?.owner === user.id) {
+  const response = await storeArchive({ archive, user: user.id, ...req.body })
+  if (response && response?.user === user.id) {
     res.json(response as IPutArchiveResponse)
     next()
   } else {

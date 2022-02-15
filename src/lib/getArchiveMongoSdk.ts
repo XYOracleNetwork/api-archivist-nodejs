@@ -4,10 +4,10 @@ import { Collection } from 'mongodb'
 
 import { getMongoDBConfig } from './getMongoDBValues'
 
-export const getArchiveOwnerMongoSdk = async () => {
+export const getArchiveMongoSdk = async () => {
   const env = await getMongoDBConfig()
 
-  return new XyoArchiveOwnerMongoSdk({
+  return new XyoArchiveMongoSdk({
     collection: 'archive_owners',
     dbConnectionString: env.MONGO_CONNECTION_STRING,
     dbDomain: assertEx(env.MONGO_DOMAIN, 'Missing Mongo Domain'),
@@ -20,9 +20,11 @@ export const getArchiveOwnerMongoSdk = async () => {
 interface IArchiveOwner {
   archive: string
   user: string
+  boundWitnessPrivate: boolean
+  payloadPrivate: boolean
 }
 
-class XyoArchiveOwnerMongoSdk extends BaseMongoSdk<IArchiveOwner> {
+class XyoArchiveMongoSdk extends BaseMongoSdk<IArchiveOwner> {
   constructor(readonly config: BaseMongoSdkConfig, private readonly _maxTime = 2000) {
     super(config)
   }
