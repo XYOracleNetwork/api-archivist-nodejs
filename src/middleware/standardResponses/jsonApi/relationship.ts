@@ -1,4 +1,4 @@
-import { IResourceIdentifierObject } from './response'
+import { IResourceIdentifierObject } from './resourceIdentifier'
 
 export interface IRelationshipSelfLink {
   /**

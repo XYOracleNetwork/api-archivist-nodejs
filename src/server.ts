@@ -41,7 +41,7 @@ const addArchiveRoutes = (app: Express) => {
   app.get(
     '/archive/:archive/settings/keys',
     requireArchiveOwner,
-    asyncHandler(getArchiveSettingsKeys) /* #swagger.tags = ['archive'] */
+    getArchiveSettingsKeys /* #swagger.tags = ['archive'] */
   )
   app.post(
     '/archive/:archive/settings/keys',

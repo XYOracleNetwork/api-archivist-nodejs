@@ -1,18 +1,15 @@
-import { NextFunction, Request, RequestHandler, Response } from 'express'
+import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
-import { getArchiveKeys, isValidArchiveName } from '../../../../lib'
+import { genericAsyncHandler, getArchiveKeys, isValidArchiveName } from '../../../../lib'
+import { ArchivePathParams } from '../../../archivePathParams'
 
-export interface IGetArchiveSettingsKeysResponse {
+export type GetArchiveSettingsKeysResponse = {
   created: string
   key: string
-}
+}[]
 
-export const getArchiveSettingsKeys: RequestHandler = async (
-  req: Request,
-  res: Response<IGetArchiveSettingsKeysResponse[]>,
-  next: NextFunction
-) => {
+export const handler: RequestHandler<ArchivePathParams, GetArchiveSettingsKeysResponse> = async (req, res, next) => {
   const { user } = req
   if (!user || !user?.id) {
     next({ message: 'Invalid User', statusCode: StatusCodes.UNAUTHORIZED })
@@ -29,3 +26,5 @@ export const getArchiveSettingsKeys: RequestHandler = async (
   res.json(keys)
   next()
 }
+
+export const getArchiveSettingsKeys = genericAsyncHandler(handler)
