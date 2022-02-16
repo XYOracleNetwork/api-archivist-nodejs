@@ -1,10 +1,12 @@
 import 'source-map-support/register'
 
 import { XyoBoundWitness, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
-import { NextFunction, Request, Response } from 'express'
+import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { InsertManyResult } from 'mongodb'
 
+import { genericAsyncHandler } from '../../../lib'
+import { ArchivePathParams } from '../..'
 import { prepareBoundWitnesses } from './prepareBoundWitnesses'
 import { storeBoundWitnesses } from './storeBoundWitnesses'
 import { storePayloads } from './storePayloads'
@@ -16,11 +18,15 @@ interface XyoArchivistBoundWitnessBody {
 }
 
 export interface IPostArchiveBlockResponse {
-  boundWitnesses: InsertManyResult<XyoBoundWitness>
-  payloads: InsertManyResult<XyoPayload>
+  boundWitnesses: number
+  payloads: number
 }
 
-export const postArchiveBlock = async (req: Request, res: Response<IPostArchiveBlockResponse>, next: NextFunction) => {
+const handler: RequestHandler<ArchivePathParams, IPostArchiveBlockResponse, XyoArchivistBoundWitnessBody> = async (
+  req,
+  res,
+  next
+) => {
   const { archive } = req.params
   const _source_ip = req.ip ?? undefined
   const _user_agent = req.headers['user-agent'] ?? undefined
@@ -43,7 +49,9 @@ export const postArchiveBlock = async (req: Request, res: Response<IPostArchiveB
 
   const bwResult = await storeBoundWitnesses(archive, sanitized)
   const payloadsResult = await storePayloads(archive, payloads)
-  res.json({ boundWitnesses: bwResult, payloads: payloadsResult })
+  res.json({ boundWitnesses: bwResult.insertedCount, payloads: payloadsResult.insertedCount })
 
   next()
 }
+
+export const postArchiveBlock = genericAsyncHandler(handler)

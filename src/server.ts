@@ -94,8 +94,8 @@ const addPayloadSchemaRoutes = (app: Express) => {
 }
 
 const addBlockRoutes = (app: Express) => {
-  app.post('/archive/:archive/block', asyncHandler(postArchiveBlock) /* #swagger.tags = ['block'] */)
-  app.post('/archive/:archive/bw', asyncHandler(postArchiveBlock) /* #swagger.tags = ['block'] */)
+  app.post('/archive/:archive/block', postArchiveBlock /* #swagger.tags = ['block'] */)
+  app.post('/archive/:archive/bw', postArchiveBlock /* #swagger.tags = ['block'] */)
   app.get('/archive/:archive/block/stats', asyncHandler(getArchiveBlockStats) /* #swagger.tags = ['block'] */)
   app.get(
     '/archive/:archive/block/hash/:hash',
