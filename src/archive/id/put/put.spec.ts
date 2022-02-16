@@ -1,6 +1,6 @@
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
-import { claimArchive, getArchiveName, getArchivist, getTokenForNewUser } from '../../test'
+import { claimArchive, getArchiveName, getArchivist, getTokenForNewUser } from '../../../test'
 
 describe('/archive', () => {
   let token = ''

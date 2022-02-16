@@ -4,6 +4,7 @@ import express, { Express, RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import {
+  getArchive,
   getArchiveBlockHash,
   getArchiveBlockHashPayloads,
   getArchiveBlockRecent,
@@ -36,8 +37,9 @@ const notImplemented: RequestHandler = (_req, _res, next) => {
 
 const addArchiveRoutes = (app: Express) => {
   app.get('/archive', requireAuth, getArchives /* #swagger.tags = ['archive'] */)
-  app.get('/archive/:archive', requireArchiveOwner, notImplemented /* #swagger.tags = ['archive'] */)
+  app.get('/archive/:archive', requireArchiveOwner, getArchive /* #swagger.tags = ['archive'] */)
   app.put('/archive/:archive', requireAuth, putArchive /* #swagger.tags = ['archive'] */)
+  app.delete('/archive/:archive', requireArchiveOwner, notImplemented /* #swagger.tags = ['archive'] */)
   app.get(
     '/archive/:archive/settings/keys',
     requireArchiveOwner,

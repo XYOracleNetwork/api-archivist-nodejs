@@ -1,8 +1,9 @@
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
-import { genericAsyncHandler, isValidArchiveName } from '../../lib'
-import { ArchivePathParams } from '../archivePathParams'
+import { genericAsyncHandler, isValidArchiveName } from '../../../lib'
+import { ArchivePathParams } from '../../archivePathParams'
+import { IArchiveResponse } from '../../archiveResponse'
 import { storeArchive } from './storeArchive'
 
 export interface IPutArchiveRequest {
@@ -10,12 +11,7 @@ export interface IPutArchiveRequest {
   payloadPrivate: boolean
 }
 
-export interface IPutArchiveResponse extends IPutArchiveRequest {
-  archive: string
-  user: string
-}
-
-const handler: RequestHandler<ArchivePathParams, IPutArchiveResponse, IPutArchiveRequest> = async (req, res, next) => {
+const handler: RequestHandler<ArchivePathParams, IArchiveResponse, IPutArchiveRequest> = async (req, res, next) => {
   const { user } = req
   if (!user || !user?.id) {
     next({ message: 'Invalid User', statusCode: StatusCodes.UNAUTHORIZED })

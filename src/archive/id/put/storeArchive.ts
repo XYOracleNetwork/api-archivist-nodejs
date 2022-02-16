@@ -1,4 +1,4 @@
-import { getArchiveMongoSdk } from '../../lib'
+import { getArchiveMongoSdk } from '../../../lib'
 
 export interface IStoreArchive {
   archive: string
@@ -16,6 +16,11 @@ export const storeArchive = async (request: IStoreArchive): Promise<IStoreArchiv
     // but at this point we don't know if the owner is already the desired owner
     // from the insert above
   }
-  const result = await sdk.findByArchive(request.archive)
-  return result ? { ...result } : null
+  const record = await sdk.findByArchive(request.archive)
+  if (!record) return record
+  const { archive, user } = record
+  let { boundWitnessPrivate, payloadPrivate } = record
+  boundWitnessPrivate = boundWitnessPrivate ? boundWitnessPrivate : false
+  payloadPrivate = payloadPrivate ? payloadPrivate : false
+  return { archive, boundWitnessPrivate, payloadPrivate, user }
 }

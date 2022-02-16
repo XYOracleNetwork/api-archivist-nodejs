@@ -6,10 +6,9 @@ import { v4 } from 'uuid'
 
 import {
   GetArchiveSettingsKeysResponse,
-  GetArchivesResponse,
+  IArchiveResponse,
   IPostArchiveBlockResponse,
   IPostArchiveSettingsKeysResponse,
-  IPutArchiveResponse,
   IRepairHashResponse,
 } from '../archive'
 
@@ -93,7 +92,7 @@ export const getTokenForNewUser = async (): Promise<string> => {
 export const getArchives = async (
   token: string,
   expectedStatus: StatusCodes = StatusCodes.OK
-): Promise<GetArchivesResponse> => {
+): Promise<IArchiveResponse[]> => {
   const response = await getArchivist().get('/archive').auth(token, { type: 'bearer' }).expect(expectedStatus)
   return response.body.data
 }
@@ -102,10 +101,22 @@ export const claimArchive = async (
   token: string,
   archive?: string,
   expectedStatus: StatusCodes = StatusCodes.OK
-): Promise<IPutArchiveResponse> => {
+): Promise<IArchiveResponse> => {
   if (!archive) archive = getArchiveName()
   const response = await getArchivist()
     .put(`/archive/${archive}`)
+    .auth(token, { type: 'bearer' })
+    .expect(expectedStatus)
+  return response.body.data
+}
+
+export const getArchive = async (
+  token: string,
+  archive: string,
+  expectedStatus: StatusCodes = StatusCodes.OK
+): Promise<IArchiveResponse> => {
+  const response = await getArchivist()
+    .get(`/archive/${archive}`)
     .auth(token, { type: 'bearer' })
     .expect(expectedStatus)
   return response.body.data
