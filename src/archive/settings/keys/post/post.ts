@@ -1,7 +1,8 @@
-import { NextFunction, Request, RequestHandler, Response } from 'express'
+import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
-import { isValidArchiveName } from '../../../../lib'
+import { genericAsyncHandler, isValidArchiveName } from '../../../../lib'
+import { ArchivePathParams } from '../../..'
 import { generateArchiveKey } from './generateArchiveKey'
 
 export interface IPostArchiveSettingsKeysResponse {
@@ -9,11 +10,7 @@ export interface IPostArchiveSettingsKeysResponse {
   key: string
 }
 
-export const postArchiveSettingsKeys: RequestHandler = async (
-  req: Request,
-  res: Response<IPostArchiveSettingsKeysResponse>,
-  next: NextFunction
-) => {
+const handler: RequestHandler<ArchivePathParams, IPostArchiveSettingsKeysResponse> = async (req, res, next) => {
   const { user } = req
   if (!user || !user?.id) {
     next({ message: 'Invalid User', statusCode: StatusCodes.UNAUTHORIZED })
@@ -27,6 +24,8 @@ export const postArchiveSettingsKeys: RequestHandler = async (
   }
 
   const response = await generateArchiveKey(archive)
-  res.json(response as IPostArchiveSettingsKeysResponse)
+  res.json(response)
   next()
 }
+
+export const postArchiveSettingsKeys = genericAsyncHandler(handler)

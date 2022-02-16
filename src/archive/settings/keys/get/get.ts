@@ -9,7 +9,7 @@ export type GetArchiveSettingsKeysResponse = {
   key: string
 }[]
 
-export const handler: RequestHandler<ArchivePathParams, GetArchiveSettingsKeysResponse> = async (req, res, next) => {
+const handler: RequestHandler<ArchivePathParams, GetArchiveSettingsKeysResponse> = async (req, res, next) => {
   const { user } = req
   if (!user || !user?.id) {
     next({ message: 'Invalid User', statusCode: StatusCodes.UNAUTHORIZED })
