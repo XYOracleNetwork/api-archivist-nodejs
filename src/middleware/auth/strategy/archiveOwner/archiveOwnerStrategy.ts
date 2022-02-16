@@ -1,4 +1,5 @@
 import { Request } from 'express'
+import { StatusCodes } from 'http-status-codes'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
 import { verifyArchiveOwner } from './verifyArchiveOwner'
@@ -20,7 +21,7 @@ export class ArchiveOwnerStrategy extends Strategy {
       }
       const isArchiveOwner = await verifyArchiveOwner(req)
       if (!isArchiveOwner) {
-        this.fail('User not authorized for archive')
+        this.fail('User not authorized for archive', StatusCodes.FORBIDDEN)
         return
       }
       this.success(user)
