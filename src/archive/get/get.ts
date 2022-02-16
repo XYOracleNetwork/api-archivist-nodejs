@@ -3,12 +3,12 @@ import { StatusCodes } from 'http-status-codes'
 
 import { genericAsyncHandler, getArchivesByOwner, NoReqParams } from '../../lib'
 
-export type GetArchivesResponse = Array<{
+export type GetArchivesResponse = {
   archive: string
   user: string
   boundWitnessPrivate?: boolean
   payloadPrivate?: boolean
-}>
+}[]
 
 const handler: RequestHandler<NoReqParams, GetArchivesResponse> = async (req, res, next) => {
   const { user } = req

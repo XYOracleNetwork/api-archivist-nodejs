@@ -31,7 +31,7 @@ describe('/archive/:archive/settings/keys', () => {
     await createArchiveKey(token, archive)
     await createArchiveKey(token, archive)
   })
-  it(`Returns ${ReasonPhrases.UNAUTHORIZED} when user attempts to create keys for archive they do not own`, async () => {
-    await createArchiveKey(token, 'user-does-not-own-this-archive', StatusCodes.UNAUTHORIZED)
+  it(`Returns ${ReasonPhrases.FORBIDDEN} when user attempts to create keys for archive they do not own`, async () => {
+    await createArchiveKey(token, 'user-does-not-own-this-archive', StatusCodes.FORBIDDEN)
   })
 })

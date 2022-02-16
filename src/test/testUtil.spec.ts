@@ -4,11 +4,12 @@ import supertest, { SuperTest, Test } from 'supertest'
 import { v4 } from 'uuid'
 
 import {
+  GetArchiveSettingsKeysResponse,
   GetArchivesResponse,
   IGetArchiveBlockHashResponse,
-  IGetArchiveSettingsKeysResponse,
   IPostArchiveBlockResponse,
   IPostArchiveSettingsKeysResponse,
+  IPutArchiveResponse,
   IRepairHashResponse,
 } from '../archive'
 
@@ -101,7 +102,7 @@ export const claimArchive = async (
   token: string,
   archive?: string,
   expectedStatus: StatusCodes = StatusCodes.OK
-): Promise<GetArchivesResponse> => {
+): Promise<IPutArchiveResponse> => {
   if (!archive) archive = getArchiveName()
   const response = await getArchivist()
     .put(`/archive/${archive}`)
@@ -126,7 +127,7 @@ export const getArchiveKeys = async (
   token: string,
   archive: string,
   expectedStatus: StatusCodes = StatusCodes.OK
-): Promise<IGetArchiveSettingsKeysResponse[]> => {
+): Promise<GetArchiveSettingsKeysResponse> => {
   const response = await getArchivist()
     .get(`/archive/${archive}/settings/keys`)
     .auth(token, { type: 'bearer' })
