@@ -1,2 +1,5 @@
+export * from './block'
 export * from './get'
+export * from './payload'
 export * from './put'
+export * from './settings'
