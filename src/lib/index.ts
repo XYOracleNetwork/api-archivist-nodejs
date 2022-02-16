@@ -1,6 +1,6 @@
+export * from './dbSdk'
 export * from './determineArchiveAccessControl'
 export * from './genericAsyncHandler'
 export * from './getArchiveKeys'
 export * from './getArchivesByOwner'
 export * from './isValidArchiveName'
-export * from './sdk'

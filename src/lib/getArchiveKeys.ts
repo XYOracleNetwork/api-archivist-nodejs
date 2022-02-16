@@ -1,4 +1,4 @@
-import { getArchivistArchiveKeysMongoSdk } from './sdk'
+import { getArchivistArchiveKeysMongoSdk } from './dbSdk'
 
 export interface IArchiveKeyResult {
   archive: string

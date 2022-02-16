@@ -1,4 +1,4 @@
-import { IArchiveRecord } from './sdk'
+import { IArchiveRecord } from './dbSdk'
 
 export const determineArchiveAcessControl = (record: IArchiveRecord) => {
   const { accessControl } = record
