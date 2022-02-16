@@ -1,4 +1,5 @@
 export * from './adminApiKey'
+export * from './archiveAccessControl'
 export * from './archiveApiKey'
 export * from './archiveOwner'
 export * from './jwt'

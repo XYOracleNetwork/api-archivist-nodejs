@@ -6,6 +6,8 @@ import { getUserMongoSdk, MongoDBUserStore, UserWithoutId } from './model'
 import { getProfile, postSignup, postWalletChallenge } from './routes'
 import {
   adminApiKeyUserSignupStrategy,
+  archiveAccessControlStrategy,
+  archiveAccessControlStrategyName,
   archiveApiKeyStrategy,
   archiveApiKeyStrategyName,
   archiveOwnerStrategy,
@@ -37,7 +39,7 @@ export const requireLoggedIn: RequestHandler = jwtStrategy
 /**
  * Require either an API key OR logged-in user
  */
-export const requireAuth: RequestHandler = passport.authenticate([archiveApiKeyStrategyName, jwtStrategyName], {
+export const requireAuth: RequestHandler = passport.authenticate([jwtStrategyName, archiveApiKeyStrategyName], {
   session: false,
 })
 
@@ -45,6 +47,17 @@ export const requireAuth: RequestHandler = passport.authenticate([archiveApiKeyS
  * Require an auth'd request AND that the account owns the archive being requested
  */
 export const requireArchiveOwner: RequestHandler[] = [requireAuth, archiveOwnerStrategy]
+
+/**
+ * Require that the user can, in some way, access the archive. Either by owning
+ * the archive OR by the archive being pulbic (having no access control)
+ */
+export const requireArchiveAccess: RequestHandler[] = passport.authenticate(
+  [archiveAccessControlStrategyName, jwtStrategyName, archiveApiKeyStrategyName],
+  {
+    session: false,
+  }
+)
 
 /**
  * Allow anonymous requests
