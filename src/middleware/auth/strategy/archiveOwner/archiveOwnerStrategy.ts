@@ -1,11 +1,10 @@
 import { Request } from 'express'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
-import { IArchiveOwnerStore } from '../../model'
 import { verifyArchiveOwner } from './verifyArchiveOwner'
 
 export class ArchiveOwnerStrategy extends Strategy {
-  constructor(public readonly store: IArchiveOwnerStore) {
+  constructor() {
     super()
   }
   override async authenticate(
@@ -19,7 +18,7 @@ export class ArchiveOwnerStrategy extends Strategy {
         this.fail('Invalid user')
         return
       }
-      const isArchiveOwner = await verifyArchiveOwner(req, this.store)
+      const isArchiveOwner = await verifyArchiveOwner(req)
       if (!isArchiveOwner) {
         this.fail('User not authorized for archive')
         return

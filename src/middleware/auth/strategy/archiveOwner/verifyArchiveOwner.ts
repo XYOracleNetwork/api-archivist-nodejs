@@ -1,8 +1,8 @@
 import { Request } from 'express'
 
-import { IArchiveOwnerStore } from '../../model'
+import { getArchivesByOwner } from '../../../../lib'
 
-export const verifyArchiveOwner = async (req: Request, store: IArchiveOwnerStore): Promise<boolean> => {
+export const verifyArchiveOwner = async (req: Request): Promise<boolean> => {
   // Validate user from request
   const { user } = req
   if (!user || !user?.id) {
@@ -14,7 +14,7 @@ export const verifyArchiveOwner = async (req: Request, store: IArchiveOwnerStore
     return false
   }
   // Get archives owned by the user
-  const userArchives = await store.getArchivesOwnedByUser(user.id)
+  const userArchives = await getArchivesByOwner(user.id)
   // Verify user owns archive from path
-  return userArchives.some((userArchive) => userArchive === archive)
+  return userArchives.some((userArchive) => userArchive.archive === archive)
 }

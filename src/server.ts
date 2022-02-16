@@ -18,7 +18,6 @@ import {
   postArchiveSettingsKeys,
   putArchive,
 } from './archive'
-import { getArchivesByOwner } from './lib'
 import {
   configureAuth,
   configureDoc,
@@ -158,9 +157,6 @@ const server = async (port = 80) => {
 
   const userRoutes = await configureAuth({
     apiKey: process.env.API_KEY,
-    getUserArchives: async (user: string) => {
-      return (await getArchivesByOwner(user)).map((a) => a.archive)
-    },
     secretOrKey: process.env.JWT_SECRET,
   })
   app.use('/user', userRoutes)
