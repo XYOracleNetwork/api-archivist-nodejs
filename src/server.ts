@@ -55,17 +55,17 @@ const addPayloadRoutes = (app: Express) => {
   app.get(
     '/archive/:archive/payload/hash/:hash',
     requireArchiveOwner,
-    asyncHandler(getArchivePayloadHash) /* #swagger.tags = ['payload'] */
+    getArchivePayloadHash /* #swagger.tags = ['payload'] */
   )
   app.get(
     '/archive/:archive/payload/hash/:hash/repair',
     requireArchiveOwner,
-    asyncHandler(getArchivePayloadRepair) /* #swagger.tags = ['payload'] */
+    getArchivePayloadRepair /* #swagger.tags = ['payload'] */
   )
   app.get(
     '/archive/:archive/payload/recent/:limit?',
     requireArchiveOwner,
-    asyncHandler(getArchivePayloadRecent) /* #swagger.tags = ['payload'] */
+    getArchivePayloadRecent /* #swagger.tags = ['payload'] */
   )
   app.get(
     '/archive/:archive/payload/sample/:size?',

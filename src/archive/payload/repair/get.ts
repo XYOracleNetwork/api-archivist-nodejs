@@ -1,10 +1,12 @@
 import 'source-map-support/register'
 
 import { XyoPayload, XyoPayloadWrapper } from '@xyo-network/sdk-xyo-client-js'
-import { NextFunction, Request, Response } from 'express'
+import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
+import { UpdateResult } from 'mongodb'
 
-import { getArchivistPayloadMongoSdk } from '../../../lib'
+import { genericAsyncHandler, getArchivistPayloadMongoSdk } from '../../../lib'
+import { PayloadHashPathParams } from '../payloadHashPathParams'
 
 const getPayload = async (archive: string, hash: string) => {
   const sdk = await getArchivistPayloadMongoSdk(archive)
@@ -22,17 +24,20 @@ export interface IRepairHashResponse {
   matchedCount: number
   modifiedCount: number
   upsertedCount: number
-  upsertedId: null | string
+  // upsertedId: null | string
 }
 
-export const getArchivePayloadRepair = async (req: Request, res: Response, next: NextFunction) => {
+const handler: RequestHandler<PayloadHashPathParams, IRepairHashResponse> = async (req, res, next) => {
   const { archive, hash } = req.params
   const payloads = await getPayload(archive, hash)
   const payload = payloads.length > 0 ? payloads[0] : undefined
   if (payload) {
-    res.json(await updatePayload(archive, hash, payload))
+    const result: UpdateResult = (await updatePayload(archive, hash, payload)) as UpdateResult
+    res.json(result)
     next()
   } else {
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
   }
 }
+
+export const getArchivePayloadRepair = genericAsyncHandler(handler)

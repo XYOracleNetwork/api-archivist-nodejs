@@ -1,17 +1,21 @@
 import 'source-map-support/register'
 
-import { NextFunction, Request, Response } from 'express'
+import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { RequestHandler } from 'express'
 
-import { getArchivistPayloadMongoSdk } from '../../../lib'
+import { genericAsyncHandler, getArchivistPayloadMongoSdk } from '../../../lib'
+import { PayloadHashPathParams } from '../payloadHashPathParams'
 
 const getPayload = async (archive: string, hash: string) => {
   const sdk = await getArchivistPayloadMongoSdk(archive)
   return await sdk.findByHash(hash)
 }
 
-export const getArchivePayloadHash = async (req: Request, res: Response, next: NextFunction) => {
+const handler: RequestHandler<PayloadHashPathParams, XyoPayload[]> = async (req, res, next) => {
   const { archive, hash } = req.params
 
   res.json((await getPayload(archive, hash)) ?? [])
   next()
 }
+
+export const getArchivePayloadHash = genericAsyncHandler(handler)
