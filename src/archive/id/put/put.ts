@@ -1,14 +1,12 @@
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
-import { genericAsyncHandler, isValidArchiveName } from '../../../lib'
+import { genericAsyncHandler, isValidArchiveName, storeArchive } from '../../../lib'
 import { ArchivePathParams } from '../../archivePathParams'
 import { IArchiveResponse } from '../../archiveResponse'
-import { storeArchive } from './storeArchive'
 
 export interface IPutArchiveRequest {
-  boundWitnessPrivate: boolean
-  payloadPrivate: boolean
+  accessControl: boolean
 }
 
 const handler: RequestHandler<ArchivePathParams, IArchiveResponse, IPutArchiveRequest> = async (req, res, next) => {

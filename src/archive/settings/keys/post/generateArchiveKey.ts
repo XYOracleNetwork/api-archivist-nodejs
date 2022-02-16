@@ -1,6 +1,6 @@
 import { v4 } from 'uuid'
 
-import { getArchiveKeysMongoSdk } from '../../../../lib'
+import { getArchivistArchiveKeysMongoSdk } from '../../../../lib'
 
 export interface IGenerateArchiveKeyResult {
   archive: string
@@ -9,7 +9,7 @@ export interface IGenerateArchiveKeyResult {
 }
 
 export const generateArchiveKey = async (archive: string): Promise<IGenerateArchiveKeyResult> => {
-  const sdk = await getArchiveKeysMongoSdk()
+  const sdk = await getArchivistArchiveKeysMongoSdk()
   const key = v4()
   const result = await sdk.insert({ archive, key })
   return { archive, created: result.getTimestamp().toISOString(), key }

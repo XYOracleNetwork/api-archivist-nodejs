@@ -1,12 +1,10 @@
-import { getArchiveMongoSdk } from '../../../lib'
+import { determineArchiveAcessControl, getArchivistArchiveMongoSdk } from '../../../lib'
 
 export const getArchiveByName = async (name: string) => {
-  const sdk = await getArchiveMongoSdk()
+  const sdk = await getArchivistArchiveMongoSdk()
   const record = await sdk.findByArchive(name)
   if (!record) return record
   const { archive, user } = record
-  let { boundWitnessPrivate, payloadPrivate } = record
-  boundWitnessPrivate = boundWitnessPrivate ? boundWitnessPrivate : false
-  payloadPrivate = payloadPrivate ? payloadPrivate : false
-  return { archive, boundWitnessPrivate, payloadPrivate, user }
+  const accessControl = determineArchiveAcessControl(record)
+  return { accessControl, archive, user }
 }

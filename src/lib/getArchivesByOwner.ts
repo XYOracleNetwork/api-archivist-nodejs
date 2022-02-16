@@ -1,20 +1,18 @@
-import { getArchiveMongoSdk } from './getArchiveMongoSdk'
+import { determineArchiveAcessControl } from './determineArchiveAccessControl'
+import { getArchivistArchiveMongoSdk } from './sdk'
 
-export interface IArchive {
+export interface IArchiveResult {
   archive: string
   user: string
-  boundWitnessPrivate: boolean
-  payloadPrivate: boolean
+  accessControl: boolean
 }
 
-export const getArchivesByOwner = async (user: string): Promise<IArchive[]> => {
-  const sdk = await getArchiveMongoSdk()
+export const getArchivesByOwner = async (user: string): Promise<IArchiveResult[]> => {
+  const sdk = await getArchivistArchiveMongoSdk()
   const response = await sdk.findByUser(user)
   return response.map((record) => {
     const { archive, user } = record
-    let { boundWitnessPrivate, payloadPrivate } = record
-    boundWitnessPrivate = boundWitnessPrivate ? boundWitnessPrivate : false
-    payloadPrivate = payloadPrivate ? payloadPrivate : false
-    return { archive, boundWitnessPrivate, payloadPrivate, user }
+    const accessControl = determineArchiveAcessControl(record)
+    return { accessControl, archive, user }
   })
 }
