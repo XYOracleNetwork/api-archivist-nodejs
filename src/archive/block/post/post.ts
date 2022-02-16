@@ -1,12 +1,11 @@
 import 'source-map-support/register'
 
-import { XyoBoundWitness, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
-import { InsertManyResult } from 'mongodb'
 
 import { genericAsyncHandler } from '../../../lib'
-import { ArchivePathParams } from '../..'
+import { ArchivePathParams } from '../../archivePathParams'
 import { prepareBoundWitnesses } from './prepareBoundWitnesses'
 import { storeBoundWitnesses } from './storeBoundWitnesses'
 import { storePayloads } from './storePayloads'

@@ -2,7 +2,7 @@ import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
 import { genericAsyncHandler, isValidArchiveName } from '../../../../lib'
-import { ArchivePathParams } from '../../..'
+import { ArchivePathParams } from '../../../archivePathParams'
 import { generateArchiveKey } from './generateArchiveKey'
 
 export interface IPostArchiveSettingsKeysResponse {

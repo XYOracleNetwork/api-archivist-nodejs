@@ -96,21 +96,21 @@ const addPayloadSchemaRoutes = (app: Express) => {
 const addBlockRoutes = (app: Express) => {
   app.post('/archive/:archive/block', postArchiveBlock /* #swagger.tags = ['block'] */)
   app.post('/archive/:archive/bw', postArchiveBlock /* #swagger.tags = ['block'] */)
-  app.get('/archive/:archive/block/stats', asyncHandler(getArchiveBlockStats) /* #swagger.tags = ['block'] */)
+  app.get('/archive/:archive/block/stats', getArchiveBlockStats /* #swagger.tags = ['block'] */)
   app.get(
     '/archive/:archive/block/hash/:hash',
     requireArchiveOwner,
-    asyncHandler(getArchiveBlockHash) /* #swagger.tags = ['block'] */
+    getArchiveBlockHash /* #swagger.tags = ['block'] */
   )
   app.get(
     '/archive/:archive/block/hash/:hash/payloads',
     requireArchiveOwner,
-    asyncHandler(getArchiveBlockHashPayloads) /* #swagger.tags = ['block'] */
+    getArchiveBlockHashPayloads /* #swagger.tags = ['block'] */
   )
   app.get(
     '/archive/:archive/block/recent/:limit?',
     requireArchiveOwner,
-    asyncHandler(getArchiveBlockRecent) /* #swagger.tags = ['block'] */
+    getArchiveBlockRecent /* #swagger.tags = ['block'] */
   )
   app.get('/archive/:archive/block/sample/:size?', requireArchiveOwner, notImplemented /* #swagger.tags = ['block'] */)
 }

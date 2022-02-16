@@ -1,9 +1,10 @@
 import 'source-map-support/register'
 
 import { XyoBoundWitness, XyoBoundWitnessWrapper } from '@xyo-network/sdk-xyo-client-js'
-import { NextFunction, Request, Response } from 'express'
+import { RequestHandler } from 'express'
 
-import { getArchivistBoundWitnessesMongoSdk } from '../../../lib'
+import { genericAsyncHandler, getArchivistBoundWitnessesMongoSdk } from '../../../lib'
+import { BlockHashPathParams } from './blockHashPathParams'
 
 const getBoundWitness = async (archive: string, hash: string) => {
   const sdk = await getArchivistBoundWitnessesMongoSdk(archive)
@@ -17,19 +18,17 @@ const scrubBoundWitnesses = (boundWitnesses: XyoBoundWitness[]) => {
   })
 }
 
-export interface IGetArchiveBlockHashResponse {
+export type GetArchiveBlockHashResponse = {
   _archive?: string
   _hash?: string
   _timestamp?: number
   _user_agent?: string | null
-}
+}[]
 
-export const getArchiveBlockHash = async (
-  req: Request,
-  res: Response<IGetArchiveBlockHashResponse[]>,
-  next: NextFunction
-) => {
+const handler: RequestHandler<BlockHashPathParams, GetArchiveBlockHashResponse> = async (req, res, next) => {
   const { archive, hash } = req.params
   res.json(scrubBoundWitnesses(await getBoundWitness(archive, hash)) ?? [])
   next()
 }
+
+export const getArchiveBlockHash = genericAsyncHandler(handler)

@@ -1,9 +1,10 @@
 import 'source-map-support/register'
 
-import { NextFunction, Request, Response } from 'express'
+import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
-import { getArchivistBoundWitnessesMongoSdk, getArchivistPayloadMongoSdk } from '../../../../lib'
+import { genericAsyncHandler, getArchivistBoundWitnessesMongoSdk, getArchivistPayloadMongoSdk } from '../../../../lib'
+import { BlockHashPathParams } from '../blockHashPathParams'
 
 const getBoundWitness = async (archive: string, hash: string) => {
   const sdk = await getArchivistBoundWitnessesMongoSdk(archive)
@@ -15,7 +16,7 @@ const getPayloads = async (archive: string, hashes: string[]) => {
   return await sdk.findByHashes(hashes)
 }
 
-export const getArchiveBlockHashPayloads = async (req: Request, res: Response, next: NextFunction) => {
+const handler: RequestHandler<BlockHashPathParams> = async (req, res, next) => {
   const { archive, hash } = req.params
   const bw = await getBoundWitness(archive, hash)
   if (bw && bw.length > 0) {
@@ -25,3 +26,5 @@ export const getArchiveBlockHashPayloads = async (req: Request, res: Response, n
     next({ message: 'Block not found', statusCode: StatusCodes.NOT_FOUND })
   }
 }
+
+export const getArchiveBlockHashPayloads = genericAsyncHandler(handler)
