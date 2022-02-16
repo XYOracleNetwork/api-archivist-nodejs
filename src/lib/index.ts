@@ -1,3 +1,4 @@
+export * from './archiveRecord'
 export * from './dbSdk'
 export * from './determineArchiveAccessControl'
 export * from './genericAsyncHandler'

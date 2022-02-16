@@ -2,6 +2,7 @@ import { assertEx } from '@xylabs/sdk-js'
 import { BaseMongoSdk, BaseMongoSdkConfig } from '@xyo-network/sdk-xyo-mongo-js'
 import { Collection } from 'mongodb'
 
+import { IArchiveRecord } from '../archiveRecord'
 import { getMongoDBConfig } from './getMongoDBValues'
 
 export const getArchivistArchiveMongoSdk = async () => {
@@ -15,12 +16,6 @@ export const getArchivistArchiveMongoSdk = async () => {
     dbPassword: assertEx(env.MONGO_PASSWORD, 'Missing Mongo Password'),
     dbUserName: assertEx(env.MONGO_USERNAME, 'Missing Mongo Username'),
   })
-}
-
-export interface IArchiveRecord {
-  archive: string
-  user: string
-  accessControl?: boolean
 }
 
 class XyoArchiveMongoSdk extends BaseMongoSdk<IArchiveRecord> {

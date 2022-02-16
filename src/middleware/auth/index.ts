@@ -6,7 +6,6 @@ import { getUserMongoSdk, MongoDBUserStore, UserWithoutId } from './model'
 import { getProfile, postSignup, postWalletChallenge } from './routes'
 import {
   adminApiKeyUserSignupStrategy,
-  archiveAccessControlStrategy,
   archiveAccessControlStrategyName,
   archiveApiKeyStrategy,
   archiveApiKeyStrategyName,
