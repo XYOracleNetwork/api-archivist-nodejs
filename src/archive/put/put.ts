@@ -1,11 +1,10 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express'
-import { ParamsDictionary } from 'express-serve-static-core'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import { genericAsyncHandler, isValidArchiveName } from '../../lib'
 import { storeArchive } from './storeArchive'
 
-export interface IPutArchivePathParams extends ParamsDictionary {
+export type PutArchivePathParams = {
   archive: string
 }
 
@@ -19,9 +18,9 @@ export interface IPutArchiveResponse extends IPutArchiveRequest {
   user: string
 }
 
-export const handler: RequestHandler<IPutArchivePathParams, IPutArchiveResponse, IPutArchiveRequest> = async (
-  req: Request<IPutArchivePathParams>,
-  res: Response<IPutArchiveResponse>,
+const handler: RequestHandler<PutArchivePathParams, IPutArchiveResponse, IPutArchiveRequest> = async (
+  req: Request,
+  res: Response,
   next: NextFunction
 ) => {
   const { user } = req
@@ -45,5 +44,4 @@ export const handler: RequestHandler<IPutArchivePathParams, IPutArchiveResponse,
   }
 }
 
-export const putArchive: RequestHandler<IPutArchivePathParams, IPutArchiveResponse, IPutArchiveRequest> =
-  genericAsyncHandler(handler)
+export const putArchive = genericAsyncHandler(handler)
