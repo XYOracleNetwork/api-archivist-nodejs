@@ -6,8 +6,8 @@ import { genericAsyncHandler, getArchivesByOwner, NoReqParams } from '../../lib'
 export type GetArchivesResponse = Array<{
   archive: string
   user: string
-  boundWitnessPrivate: boolean
-  payloadPrivate: boolean
+  boundWitnessPrivate?: boolean
+  payloadPrivate?: boolean
 }>
 
 const handler: RequestHandler<NoReqParams, GetArchivesResponse> = async (req, res, next) => {
@@ -17,7 +17,14 @@ const handler: RequestHandler<NoReqParams, GetArchivesResponse> = async (req, re
     return
   }
   const archives = await getArchivesByOwner(user.id)
-  res.json(archives)
+  const response = archives.map((a) => {
+    const { archive, user } = a
+    let { boundWitnessPrivate, payloadPrivate } = a
+    boundWitnessPrivate = boundWitnessPrivate ? boundWitnessPrivate : false
+    payloadPrivate = payloadPrivate ? payloadPrivate : false
+    return { archive, boundWitnessPrivate, payloadPrivate, user }
+  })
+  res.json(response)
   next()
 }
 
