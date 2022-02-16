@@ -38,7 +38,7 @@ const notImplemented: RequestHandler = (_req, _res, next) => {
 const addArchiveRoutes = (app: Express) => {
   app.get('/archive', requireAuth, asyncHandler(getArchives) /* #swagger.tags = ['archive'] */)
   app.get('/archive/:archive', requireArchiveOwner, notImplemented /* #swagger.tags = ['archive'] */)
-  app.put('/archive/:archive', requireAuth, asyncHandler(putArchive) /* #swagger.tags = ['archive'] */)
+  app.put('/archive/:archive', requireAuth, putArchive /* #swagger.tags = ['archive'] */)
   app.get(
     '/archive/:archive/settings/keys',
     requireArchiveOwner,

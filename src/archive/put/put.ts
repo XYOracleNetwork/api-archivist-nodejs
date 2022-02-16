@@ -1,18 +1,27 @@
+import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
 import { NextFunction, Request, RequestHandler, Response } from 'express'
+import { ParamsDictionary } from 'express-serve-static-core'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import { isValidArchiveName } from '../../lib'
 import { storeArchive } from './storeArchive'
 
-export interface IPutArchiveResponse {
+export interface IPutArchivePathParams extends ParamsDictionary {
   archive: string
-  user: string
+}
+
+export interface IPutArchiveRequest {
   boundWitnessPrivate: boolean
   payloadPrivate: boolean
 }
 
-export const putArchive: RequestHandler = async (
-  req: Request,
+export interface IPutArchiveResponse extends IPutArchiveRequest {
+  archive: string
+  user: string
+}
+
+export const handler: RequestHandler<IPutArchivePathParams, IPutArchiveResponse, IPutArchiveRequest> = async (
+  req: Request<IPutArchivePathParams>,
   res: Response<IPutArchiveResponse>,
   next: NextFunction
 ) => {
@@ -30,9 +39,13 @@ export const putArchive: RequestHandler = async (
 
   const response = await storeArchive({ archive, user: user.id, ...req.body })
   if (response && response?.user === user.id) {
-    res.json(response as IPutArchiveResponse)
+    res.json(response)
     next()
   } else {
-    next({ message: ReasonPhrases.CONFLICT, statusCode: StatusCodes.CONFLICT })
+    next({ message: ReasonPhrases.FORBIDDEN, statusCode: StatusCodes.FORBIDDEN })
   }
 }
+
+export const putArchive: RequestHandler<IPutArchivePathParams, IPutArchiveResponse, IPutArchiveRequest> = asyncHandler(
+  handler as RequestHandler
+)
