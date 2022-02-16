@@ -10,6 +10,7 @@ import {
   PayloadRepairHashResponse,
   PostArchiveBlockResponse,
   PostArchiveSettingsKeysResponse,
+  PutArchiveRequest,
 } from '../archive'
 
 test('Must have API_KEY ENV VAR defined', () => {
@@ -118,6 +119,21 @@ export const getArchive = async (
   const response = await getArchivist()
     .get(`/archive/${archive}`)
     .auth(token, { type: 'bearer' })
+    .expect(expectedStatus)
+  return response.body.data
+}
+
+export const setArchiveAccessControl = async (
+  token: string,
+  archive: string,
+  data: PutArchiveRequest = { accessControl: false },
+  expectedStatus: StatusCodes = StatusCodes.OK
+): Promise<ArchiveResponse> => {
+  if (!archive) archive = getArchiveName()
+  const response = await getArchivist()
+    .put(`/archive/${archive}`)
+    .auth(token, { type: 'bearer' })
+    .send(data)
     .expect(expectedStatus)
   return response.body.data
 }
