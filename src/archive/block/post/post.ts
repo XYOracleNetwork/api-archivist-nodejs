@@ -16,12 +16,12 @@ interface XyoArchivistBoundWitnessBody {
   payloads: Record<string, unknown>[][]
 }
 
-export interface IPostArchiveBlockResponse {
+export interface PostArchiveBlockResponse {
   boundWitnesses: number
   payloads: number
 }
 
-const handler: RequestHandler<ArchivePathParams, IPostArchiveBlockResponse, XyoArchivistBoundWitnessBody> = async (
+const handler: RequestHandler<ArchivePathParams, PostArchiveBlockResponse, XyoArchivistBoundWitnessBody> = async (
   req,
   res,
   next

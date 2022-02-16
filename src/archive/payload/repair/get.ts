@@ -19,7 +19,7 @@ const updatePayload = async (archive: string, hash: string, payload: XyoPayload)
   return await sdk.updateByHash(hash, { ...payload, _hash: wrapper.sortedHash() })
 }
 
-export interface IRepairHashResponse {
+export interface PayloadRepairHashResponse {
   acknowledged: boolean
   matchedCount: number
   modifiedCount: number
@@ -27,7 +27,7 @@ export interface IRepairHashResponse {
   // upsertedId: null | string
 }
 
-const handler: RequestHandler<PayloadHashPathParams, IRepairHashResponse> = async (req, res, next) => {
+const handler: RequestHandler<PayloadHashPathParams, PayloadRepairHashResponse> = async (req, res, next) => {
   const { archive, hash } = req.params
   const payloads = await getPayload(archive, hash)
   const payload = payloads.length > 0 ? payloads[0] : undefined

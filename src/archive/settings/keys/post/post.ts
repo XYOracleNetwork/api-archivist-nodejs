@@ -5,12 +5,12 @@ import { genericAsyncHandler, isValidArchiveName } from '../../../../lib'
 import { ArchivePathParams } from '../../../archivePathParams'
 import { generateArchiveKey } from './generateArchiveKey'
 
-export interface IPostArchiveSettingsKeysResponse {
+export interface PostArchiveSettingsKeysResponse {
   created: string
   key: string
 }
 
-const handler: RequestHandler<ArchivePathParams, IPostArchiveSettingsKeysResponse> = async (req, res, next) => {
+const handler: RequestHandler<ArchivePathParams, PostArchiveSettingsKeysResponse> = async (req, res, next) => {
   const { user } = req
   if (!user || !user?.id) {
     next({ message: 'Invalid User', statusCode: StatusCodes.UNAUTHORIZED })

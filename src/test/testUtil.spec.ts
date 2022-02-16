@@ -5,11 +5,11 @@ import supertest, { SuperTest, Test } from 'supertest'
 import { v4 } from 'uuid'
 
 import {
+  ArchiveResponse,
   GetArchiveSettingsKeysResponse,
-  IArchiveResponse,
-  IPostArchiveBlockResponse,
-  IPostArchiveSettingsKeysResponse,
-  IRepairHashResponse,
+  PayloadRepairHashResponse,
+  PostArchiveBlockResponse,
+  PostArchiveSettingsKeysResponse,
 } from '../archive'
 
 test('Must have API_KEY ENV VAR defined', () => {
@@ -92,7 +92,7 @@ export const getTokenForNewUser = async (): Promise<string> => {
 export const getArchives = async (
   token: string,
   expectedStatus: StatusCodes = StatusCodes.OK
-): Promise<IArchiveResponse[]> => {
+): Promise<ArchiveResponse[]> => {
   const response = await getArchivist().get('/archive').auth(token, { type: 'bearer' }).expect(expectedStatus)
   return response.body.data
 }
@@ -101,7 +101,7 @@ export const claimArchive = async (
   token: string,
   archive?: string,
   expectedStatus: StatusCodes = StatusCodes.OK
-): Promise<IArchiveResponse> => {
+): Promise<ArchiveResponse> => {
   if (!archive) archive = getArchiveName()
   const response = await getArchivist()
     .put(`/archive/${archive}`)
@@ -114,7 +114,7 @@ export const getArchive = async (
   token: string,
   archive: string,
   expectedStatus: StatusCodes = StatusCodes.OK
-): Promise<IArchiveResponse> => {
+): Promise<ArchiveResponse> => {
   const response = await getArchivist()
     .get(`/archive/${archive}`)
     .auth(token, { type: 'bearer' })
@@ -126,7 +126,7 @@ export const createArchiveKey = async (
   token: string,
   archive: string,
   expectedStatus: StatusCodes = StatusCodes.OK
-): Promise<IPostArchiveSettingsKeysResponse> => {
+): Promise<PostArchiveSettingsKeysResponse> => {
   const response = await getArchivist()
     .post(`/archive/${archive}/settings/keys`)
     .auth(token, { type: 'bearer' })
@@ -191,7 +191,7 @@ export const postBlock = async (
   data: Record<string, unknown>,
   archive: string,
   expectedStatus: StatusCodes = StatusCodes.OK
-): Promise<IPostArchiveBlockResponse> => {
+): Promise<PostArchiveBlockResponse> => {
   const response = await getArchivist().post(`/archive/${archive}/block`).send(data).expect(expectedStatus)
   return response.body.data
 }
@@ -227,7 +227,7 @@ export const repairPayloadByHash = async (
   archive: string,
   hash: string,
   expectedStatus: StatusCodes = StatusCodes.OK
-): Promise<IRepairHashResponse> => {
+): Promise<PayloadRepairHashResponse> => {
   const response = await getArchivist()
     .get(`/archive/${archive}/payload/hash/${hash}/repair`)
     .auth(token, { type: 'bearer' })

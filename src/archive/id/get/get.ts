@@ -3,10 +3,10 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import { genericAsyncHandler, isValidArchiveName } from '../../../lib'
 import { ArchivePathParams } from '../../archivePathParams'
-import { IArchiveResponse } from '../../archiveResponse'
+import { ArchiveResponse } from '../../archiveResponse'
 import { getArchiveByName } from './getArchiveByName'
 
-const handler: RequestHandler<ArchivePathParams, IArchiveResponse> = async (req, res, next) => {
+const handler: RequestHandler<ArchivePathParams, ArchiveResponse> = async (req, res, next) => {
   const { user } = req
   if (!user || !user?.id) {
     next({ message: 'Invalid User', statusCode: StatusCodes.UNAUTHORIZED })

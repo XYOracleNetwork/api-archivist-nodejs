@@ -1,4 +1,4 @@
-import { asyncHandler, getEnvFromAws } from '@xylabs/sdk-api-express-ecs'
+import { getEnvFromAws } from '@xylabs/sdk-api-express-ecs'
 import cors from 'cors'
 import express, { Express, RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
@@ -54,7 +54,7 @@ const addArchiveRoutes = (app: Express) => {
 }
 
 const addPayloadRoutes = (app: Express) => {
-  app.get('/archive/:archive/payload/stats', asyncHandler(getArchivePayloadStats) /* #swagger.tags = ['payload'] */)
+  app.get('/archive/:archive/payload/stats', getArchivePayloadStats /* #swagger.tags = ['payload'] */)
   app.get(
     '/archive/:archive/payload/hash/:hash',
     requireArchiveAccess,
