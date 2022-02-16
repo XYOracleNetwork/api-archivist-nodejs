@@ -42,6 +42,6 @@ describe('/archive/:archive/block/payload/:hash', () => {
     expect(response.matchedCount).toBe(1)
     expect(response.modifiedCount).toBe(0)
     expect(response.upsertedCount).toBe(0)
-    expect(response.upsertedId).toBe(null)
+    // expect(response.upsertedId).toBe(null)
   })
 })

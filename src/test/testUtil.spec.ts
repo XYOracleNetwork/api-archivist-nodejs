@@ -1,3 +1,4 @@
+import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { Wallet } from 'ethers'
 import { StatusCodes } from 'http-status-codes'
 import supertest, { SuperTest, Test } from 'supertest'
@@ -6,7 +7,6 @@ import { v4 } from 'uuid'
 import {
   GetArchiveSettingsKeysResponse,
   GetArchivesResponse,
-  IGetArchiveBlockHashResponse,
   IPostArchiveBlockResponse,
   IPostArchiveSettingsKeysResponse,
   IPutArchiveResponse,
@@ -190,7 +190,7 @@ export const getBlockByHash = async (
   archive: string,
   hash: string,
   expectedStatus: StatusCodes = StatusCodes.OK
-): Promise<IGetArchiveBlockHashResponse[]> => {
+): Promise<XyoPayload[]> => {
   const response = await getArchivist()
     .get(`/archive/${archive}/block/hash/${hash}`)
     .auth(token, { type: 'bearer' })
@@ -203,7 +203,7 @@ export const getPayloadByHash = async (
   archive: string,
   hash: string,
   expectedStatus: StatusCodes = StatusCodes.OK
-): Promise<IGetArchiveBlockHashResponse[]> => {
+): Promise<XyoPayload[]> => {
   const response = await getArchivist()
     .get(`/archive/${archive}/payload/hash/${hash}`)
     .auth(token, { type: 'bearer' })
@@ -229,7 +229,7 @@ export const getPayloadByBlockHash = async (
   archive: string,
   hash: string,
   expectedStatus: StatusCodes = StatusCodes.OK
-): Promise<IGetArchiveBlockHashResponse[]> => {
+): Promise<XyoPayload[]> => {
   const response = await getArchivist()
     .get(`/archive/${archive}/block/hash/${hash}/payloads`)
     .auth(token, { type: 'bearer' })
