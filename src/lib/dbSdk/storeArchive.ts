@@ -1,4 +1,4 @@
-import { determineArchiveAcessControl } from '../determineArchiveAccessControl'
+import { determineArchiveAccessControl } from '../determineArchiveAccessControl'
 import { getArchivistArchiveMongoSdk } from './getArchivistArchiveMongoSdk'
 
 export interface IStoreArchiveResult {
@@ -19,6 +19,6 @@ export const storeArchive = async (request: IStoreArchiveResult): Promise<IStore
   const record = await sdk.findByArchive(request.archive)
   if (!record) return record
   const { archive, user } = record
-  const accessControl = determineArchiveAcessControl(record)
+  const accessControl = determineArchiveAccessControl(record)
   return { accessControl, archive, user }
 }

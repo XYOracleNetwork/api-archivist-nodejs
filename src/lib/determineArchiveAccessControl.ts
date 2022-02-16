@@ -1,6 +1,6 @@
-import { IArchiveRecord } from './archiveRecord'
+import { ArchiveRecord } from './archiveRecord'
 
-export const determineArchiveAcessControl = (record: IArchiveRecord) => {
+export const determineArchiveAccessControl = (record: ArchiveRecord) => {
   const { accessControl } = record
   return accessControl || false
 }

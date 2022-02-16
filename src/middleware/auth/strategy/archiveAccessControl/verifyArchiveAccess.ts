@@ -1,7 +1,7 @@
 import { Request } from 'express'
 
 import { getArchiveByName } from '../../../../archive'
-import { determineArchiveAcessControl } from '../../../../lib'
+import { determineArchiveAccessControl } from '../../../../lib'
 
 export const verifyArchiveAccess = async (req: Request): Promise<boolean> => {
   // Validate user from request
@@ -21,7 +21,7 @@ export const verifyArchiveAccess = async (req: Request): Promise<boolean> => {
   if (!record) return false
 
   // If the archive exists, determine if it has any access controls
-  const accessControl = determineArchiveAcessControl(record)
+  const accessControl = determineArchiveAccessControl(record)
 
   // If there are any access controls we won't allow anonymous access
   return accessControl ? false : true

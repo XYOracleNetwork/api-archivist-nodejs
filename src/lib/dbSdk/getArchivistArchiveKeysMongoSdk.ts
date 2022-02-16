@@ -17,23 +17,23 @@ export const getArchivistArchiveKeysMongoSdk = async () => {
   })
 }
 
-export interface IArchiveKeyRecord {
+export interface ArchiveKeyRecord {
   archive: string
   key: string
 }
 
-class XyoArchiveKeyMongoSdk extends BaseMongoSdk<IArchiveKeyRecord> {
+class XyoArchiveKeyMongoSdk extends BaseMongoSdk<ArchiveKeyRecord> {
   constructor(readonly config: BaseMongoSdkConfig, private readonly _maxTime = 2000) {
     super(config)
   }
 
-  public async findByArchive(archive: string): Promise<WithId<IArchiveKeyRecord>[]> {
-    return await this.useCollection(async (collection: Collection<IArchiveKeyRecord>) => {
+  public async findByArchive(archive: string): Promise<WithId<ArchiveKeyRecord>[]> {
+    return await this.useCollection(async (collection: Collection<ArchiveKeyRecord>) => {
       return await collection.find({ archive }).toArray()
     })
   }
-  public async insert(item: IArchiveKeyRecord): Promise<ObjectId> {
-    return await this.useCollection(async (collection: Collection<IArchiveKeyRecord>) => {
+  public async insert(item: ArchiveKeyRecord): Promise<ObjectId> {
+    return await this.useCollection(async (collection: Collection<ArchiveKeyRecord>) => {
       const result = await collection.insertOne({ ...item })
       if (result.acknowledged) {
         return result.insertedId

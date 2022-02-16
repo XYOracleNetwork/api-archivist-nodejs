@@ -2,7 +2,7 @@ import { assertEx } from '@xylabs/sdk-js'
 import { BaseMongoSdk, BaseMongoSdkConfig } from '@xyo-network/sdk-xyo-mongo-js'
 import { Collection } from 'mongodb'
 
-import { IArchiveRecord } from '../archiveRecord'
+import { ArchiveRecord } from '../archiveRecord'
 import { getMongoDBConfig } from './getMongoDBValues'
 
 export const getArchivistArchiveMongoSdk = async () => {
@@ -18,24 +18,24 @@ export const getArchivistArchiveMongoSdk = async () => {
   })
 }
 
-class XyoArchiveMongoSdk extends BaseMongoSdk<IArchiveRecord> {
+class XyoArchiveMongoSdk extends BaseMongoSdk<ArchiveRecord> {
   constructor(readonly config: BaseMongoSdkConfig, private readonly _maxTime = 2000) {
     super(config)
   }
 
   public async findByArchive(archive: string) {
-    return await this.useCollection(async (collection: Collection<IArchiveRecord>) => {
+    return await this.useCollection(async (collection: Collection<ArchiveRecord>) => {
       return await collection.findOne({ archive })
     })
   }
   public async findByUser(user: string) {
-    return await this.useCollection(async (collection: Collection<IArchiveRecord>) => {
+    return await this.useCollection(async (collection: Collection<ArchiveRecord>) => {
       return await collection.find({ user }).maxTimeMS(this._maxTime).toArray()
     })
   }
 
-  public async insert(item: IArchiveRecord) {
-    return await this.useCollection(async (collection: Collection<IArchiveRecord>) => {
+  public async insert(item: ArchiveRecord) {
+    return await this.useCollection(async (collection: Collection<ArchiveRecord>) => {
       return await collection.insertOne({ ...item })
     })
   }
