@@ -1,9 +1,8 @@
-import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
 import { NextFunction, Request, RequestHandler, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
-import { isValidArchiveName } from '../../lib'
+import { genericAsyncHandler, isValidArchiveName } from '../../lib'
 import { storeArchive } from './storeArchive'
 
 export interface IPutArchivePathParams extends ParamsDictionary {
@@ -46,6 +45,5 @@ export const handler: RequestHandler<IPutArchivePathParams, IPutArchiveResponse,
   }
 }
 
-export const putArchive: RequestHandler<IPutArchivePathParams, IPutArchiveResponse, IPutArchiveRequest> = asyncHandler(
-  handler as RequestHandler
-)
+export const putArchive: RequestHandler<IPutArchivePathParams, IPutArchiveResponse, IPutArchiveRequest> =
+  genericAsyncHandler(handler)

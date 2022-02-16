@@ -1,3 +1,4 @@
+export * from './genericAsyncHandler'
 export * from './getArchiveKeys'
 export * from './getArchiveKeysMongoSdk'
 export * from './getArchiveMongoSdk'
