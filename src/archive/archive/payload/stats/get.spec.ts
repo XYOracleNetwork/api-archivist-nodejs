@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes'
 
-import { claimArchive, getArchivist, getNewBlockWithPayloads, getTokenForNewUser, postBlock } from '../../../test'
+import { claimArchive, getArchivist, getNewBlockWithPayloads, getTokenForNewUser, postBlock } from '../../../../test'
 
 const blocksPosted = 25
 

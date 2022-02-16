@@ -1,7 +1,7 @@
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 import { validate } from 'uuid'
 
-import { claimArchive, createArchiveKey, getTokenForNewUser } from '../../../../test'
+import { claimArchive, createArchiveKey, getTokenForNewUser } from '../../../../../test'
 
 const oneMinuteInMs = 1 * 60 * 1000
 

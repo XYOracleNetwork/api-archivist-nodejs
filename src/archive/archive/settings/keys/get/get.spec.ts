@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes'
 
-import { claimArchive, createArchiveKey, getArchiveKeys, getArchivist, getTokenForNewUser } from '../../../../test'
+import { claimArchive, createArchiveKey, getArchiveKeys, getArchivist, getTokenForNewUser } from '../../../../../test'
 
 describe('/archive/:archive/settings/keys', () => {
   let token = ''

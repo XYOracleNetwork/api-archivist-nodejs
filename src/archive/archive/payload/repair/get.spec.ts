@@ -1,4 +1,4 @@
-import { claimArchive, getTokenForNewUser, postBlock, repairPayloadByHash } from '../../../test'
+import { claimArchive, getTokenForNewUser, postBlock, repairPayloadByHash } from '../../../../test'
 
 const knownBlock = {
   boundWitnesses: [
