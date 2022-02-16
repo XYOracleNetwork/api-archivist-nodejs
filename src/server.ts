@@ -23,6 +23,7 @@ import {
   configureAuth,
   configureDoc,
   jsonBodyParser,
+  requireArchiveAccess,
   requireArchiveOwner,
   requireAuth,
   responseProfiler,
@@ -56,41 +57,41 @@ const addPayloadRoutes = (app: Express) => {
   app.get('/archive/:archive/payload/stats', asyncHandler(getArchivePayloadStats) /* #swagger.tags = ['payload'] */)
   app.get(
     '/archive/:archive/payload/hash/:hash',
-    requireArchiveOwner,
+    requireArchiveAccess,
     getArchivePayloadHash /* #swagger.tags = ['payload'] */
   )
   app.get(
     '/archive/:archive/payload/hash/:hash/repair',
-    requireArchiveOwner,
+    requireArchiveAccess,
     getArchivePayloadRepair /* #swagger.tags = ['payload'] */
   )
   app.get(
     '/archive/:archive/payload/recent/:limit?',
-    requireArchiveOwner,
+    requireArchiveAccess,
     getArchivePayloadRecent /* #swagger.tags = ['payload'] */
   )
   app.get(
     '/archive/:archive/payload/sample/:size?',
-    requireArchiveOwner,
+    requireArchiveAccess,
     notImplemented /* #swagger.tags = ['payload'] */
   )
 }
 
 const addPayloadSchemaRoutes = (app: Express) => {
-  app.get('/archive/:archive/payload/schema', requireArchiveOwner, notImplemented /* #swagger.tags = ['payload'] */)
+  app.get('/archive/:archive/payload/schema', requireArchiveAccess, notImplemented /* #swagger.tags = ['payload'] */)
   app.get(
     '/archive/:archive/payload/schema/:schema',
-    requireArchiveOwner,
+    requireArchiveAccess,
     notImplemented /* #swagger.tags = ['payload'] */
   )
   app.get(
     '/archive/:archive/payload/schema/:schema/stats',
-    requireArchiveOwner,
+    requireArchiveAccess,
     notImplemented /* #swagger.tags = ['payload'] */
   )
   app.get(
     '/archive/:archive/payload/schema/:schema/recent/limit',
-    requireArchiveOwner,
+    requireArchiveAccess,
     notImplemented /* #swagger.tags = ['payload'] */
   )
 }
@@ -101,20 +102,20 @@ const addBlockRoutes = (app: Express) => {
   app.get('/archive/:archive/block/stats', getArchiveBlockStats /* #swagger.tags = ['block'] */)
   app.get(
     '/archive/:archive/block/hash/:hash',
-    requireArchiveOwner,
+    requireArchiveAccess,
     getArchiveBlockHash /* #swagger.tags = ['block'] */
   )
   app.get(
     '/archive/:archive/block/hash/:hash/payloads',
-    requireArchiveOwner,
+    requireArchiveAccess,
     getArchiveBlockHashPayloads /* #swagger.tags = ['block'] */
   )
   app.get(
     '/archive/:archive/block/recent/:limit?',
-    requireArchiveOwner,
+    requireArchiveAccess,
     getArchiveBlockRecent /* #swagger.tags = ['block'] */
   )
-  app.get('/archive/:archive/block/sample/:size?', requireArchiveOwner, notImplemented /* #swagger.tags = ['block'] */)
+  app.get('/archive/:archive/block/sample/:size?', requireArchiveAccess, notImplemented /* #swagger.tags = ['block'] */)
 }
 
 const server = async (port = 80) => {
