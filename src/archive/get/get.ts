@@ -1,9 +1,16 @@
-import { NextFunction, Request, RequestHandler, Response } from 'express'
+import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
-import { getArchivesByOwner } from '../../lib'
+import { genericAsyncHandler, getArchivesByOwner, NoReqParams } from '../../lib'
 
-export const getArchives: RequestHandler = async (req: Request, res: Response<string[]>, next: NextFunction) => {
+export type GetArchivesResponse = Array<{
+  archive: string
+  user: string
+  boundWitnessPrivate: boolean
+  payloadPrivate: boolean
+}>
+
+const handler: RequestHandler<NoReqParams, GetArchivesResponse> = async (req, res, next) => {
   const { user } = req
   if (!user || !user?.id) {
     next({ message: 'Invalid User', statusCode: StatusCodes.UNAUTHORIZED })
@@ -13,3 +20,5 @@ export const getArchives: RequestHandler = async (req: Request, res: Response<st
   res.json(archives)
   next()
 }
+
+export const getArchives = genericAsyncHandler(handler)

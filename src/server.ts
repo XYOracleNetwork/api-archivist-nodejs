@@ -36,7 +36,7 @@ const notImplemented: RequestHandler = (_req, _res, next) => {
 }
 
 const addArchiveRoutes = (app: Express) => {
-  app.get('/archive', requireAuth, asyncHandler(getArchives) /* #swagger.tags = ['archive'] */)
+  app.get('/archive', requireAuth, getArchives /* #swagger.tags = ['archive'] */)
   app.get('/archive/:archive', requireArchiveOwner, notImplemented /* #swagger.tags = ['archive'] */)
   app.put('/archive/:archive', requireAuth, putArchive /* #swagger.tags = ['archive'] */)
   app.get(
@@ -158,7 +158,9 @@ const server = async (port = 80) => {
 
   const userRoutes = await configureAuth({
     apiKey: process.env.API_KEY,
-    getUserArchives: getArchivesByOwner,
+    getUserArchives: async (user: string) => {
+      return (await getArchivesByOwner(user)).map((a) => a.archive)
+    },
     secretOrKey: process.env.JWT_SECRET,
   })
   app.use('/user', userRoutes)

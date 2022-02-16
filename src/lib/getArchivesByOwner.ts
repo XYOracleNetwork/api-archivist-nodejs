@@ -1,7 +1,13 @@
 import { getArchiveMongoSdk } from './getArchiveMongoSdk'
 
-export const getArchivesByOwner = async (user: string): Promise<string[]> => {
+export interface IArchive {
+  archive: string
+  user: string
+  boundWitnessPrivate: boolean
+  payloadPrivate: boolean
+}
+
+export const getArchivesByOwner = async (user: string): Promise<IArchive[]> => {
   const sdk = await getArchiveMongoSdk()
-  const userArchives = await sdk.findByUser(user)
-  return userArchives.map((userArchive) => userArchive.archive)
+  return sdk.findByUser(user)
 }

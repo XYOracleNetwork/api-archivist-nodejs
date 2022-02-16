@@ -1,4 +1,4 @@
-import { NextFunction, Request, RequestHandler, Response } from 'express'
+import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import { genericAsyncHandler, isValidArchiveName } from '../../lib'
@@ -19,9 +19,9 @@ export interface IPutArchiveResponse extends IPutArchiveRequest {
 }
 
 const handler: RequestHandler<PutArchivePathParams, IPutArchiveResponse, IPutArchiveRequest> = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
+  req,
+  res,
+  next
 ) => {
   const { user } = req
   if (!user || !user?.id) {

@@ -4,11 +4,11 @@ import supertest, { SuperTest, Test } from 'supertest'
 import { v4 } from 'uuid'
 
 import {
+  GetArchivesResponse,
   IGetArchiveBlockHashResponse,
   IGetArchiveSettingsKeysResponse,
   IPostArchiveBlockResponse,
   IPostArchiveSettingsKeysResponse,
-  IPutArchiveResponse,
   IRepairHashResponse,
 } from '../archive'
 
@@ -92,7 +92,7 @@ export const getTokenForNewUser = async (): Promise<string> => {
 export const getArchives = async (
   token: string,
   expectedStatus: StatusCodes = StatusCodes.OK
-): Promise<IPutArchiveResponse> => {
+): Promise<GetArchivesResponse> => {
   const response = await getArchivist().get('/archive').auth(token, { type: 'bearer' }).expect(expectedStatus)
   return response.body.data
 }
@@ -101,7 +101,7 @@ export const claimArchive = async (
   token: string,
   archive?: string,
   expectedStatus: StatusCodes = StatusCodes.OK
-): Promise<IPutArchiveResponse> => {
+): Promise<GetArchivesResponse> => {
   if (!archive) archive = getArchiveName()
   const response = await getArchivist()
     .put(`/archive/${archive}`)
