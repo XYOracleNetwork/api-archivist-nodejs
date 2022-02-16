@@ -1,13 +1,13 @@
 import { determineArchiveAccessControl } from '../determineArchiveAccessControl'
 import { getArchivistArchiveMongoSdk } from './getArchivistArchiveMongoSdk'
 
-export interface IStoreArchiveResult {
+export interface StoreArchiveResult {
   archive: string
   user: string
   accessControl: boolean
 }
 
-export const storeArchive = async (request: IStoreArchiveResult): Promise<IStoreArchiveResult | null> => {
+export const storeArchive = async (request: StoreArchiveResult): Promise<StoreArchiveResult | null> => {
   const sdk = await getArchivistArchiveMongoSdk()
   try {
     await sdk.insert(request)

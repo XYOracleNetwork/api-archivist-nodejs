@@ -19,14 +19,6 @@ const knownBlock = {
 }
 const knownPayloadHash = '9ba8f23d484191a50d7008e8bc93ef82e8253b66acf3e819cec7e39f17e4f1a8'
 
-export interface IRepairHashResponse {
-  acknowledged: boolean
-  matchedCount: number
-  modifiedCount: number
-  upsertedCount: number
-  upsertedId: null | string
-}
-
 describe('/archive/:archive/block/payload/:hash', () => {
   let token = ''
   let archive = ''

@@ -114,12 +114,12 @@ router.get(
   */
 )
 
-export interface IAuthConfig {
+export interface AuthConfig {
   secretOrKey?: string
   apiKey?: string
 }
 
-export const configureAuth: (config: IAuthConfig) => Promise<Router> = async (config) => {
+export const configureAuth: (config: AuthConfig) => Promise<Router> = async (config) => {
   assertEx(config?.secretOrKey, 'Missing JWT secretOrKey')
   const secretOrKey = config?.secretOrKey as string
   assertEx(config?.apiKey, 'Missing API Key')

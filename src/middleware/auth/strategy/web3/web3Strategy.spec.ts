@@ -1,6 +1,6 @@
-import { getExistingWeb3User, getNewWeb3User, ITestWeb3User, signInWeb3User } from '../../../../test'
+import { getExistingWeb3User, getNewWeb3User, signInWeb3User, TestWeb3User } from '../../../../test'
 
-const verifySignIn = async (user: ITestWeb3User) => {
+const verifySignIn = async (user: TestWeb3User) => {
   const token = await signInWeb3User(user)
   expect(token).not.toBeNull()
   expect(token).not.toEqual('')

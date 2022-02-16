@@ -21,11 +21,11 @@ test('Must have APP_PORT ENV VAR defined', () => {
 
 const request = supertest(`http://localhost:${process.env.APP_PORT}`)
 
-export interface ITestWeb2User {
+export interface TestWeb2User {
   email: string
   password: string
 }
-export interface ITestWeb3User {
+export interface TestWeb3User {
   address: string
   privateKey: string
 }
@@ -38,7 +38,7 @@ export const getArchiveName = (): string => {
   return v4()
 }
 
-export const getNewWeb2User = (): ITestWeb2User => {
+export const getNewWeb2User = (): TestWeb2User => {
   const user = {
     email: `test-user-${v4()}@test.com`,
     password: 'password',
@@ -46,32 +46,32 @@ export const getNewWeb2User = (): ITestWeb2User => {
   return user
 }
 
-export const getNewWeb3User = (): ITestWeb3User => {
+export const getNewWeb3User = (): TestWeb3User => {
   const wallet = Wallet.createRandom()
   const user = { address: wallet.address, privateKey: wallet.privateKey }
   return user
 }
 
-export const getExistingWeb2User = async (): Promise<ITestWeb2User> => {
+export const getExistingWeb2User = async (): Promise<TestWeb2User> => {
   const apiKey = process.env.API_KEY as string
   const user = getNewWeb2User()
   await request.post('/user/signup').set('x-api-key', apiKey).send(user).expect(StatusCodes.OK)
   return user
 }
 
-export const signInWeb2User = async (user: ITestWeb2User): Promise<string> => {
+export const signInWeb2User = async (user: TestWeb2User): Promise<string> => {
   const tokenResponse = await request.post('/user/login').send(user).expect(StatusCodes.OK)
   return tokenResponse.body.data.token
 }
 
-export const getExistingWeb3User = async (): Promise<ITestWeb3User> => {
+export const getExistingWeb3User = async (): Promise<TestWeb3User> => {
   const apiKey = process.env.API_KEY as string
   const user = getNewWeb3User()
   await request.post('/user/signup').set('x-api-key', apiKey).send({ address: user.address }).expect(StatusCodes.OK)
   return user
 }
 
-export const signInWeb3User = async (user: ITestWeb3User): Promise<string> => {
+export const signInWeb3User = async (user: TestWeb3User): Promise<string> => {
   const challengeResponse = await request.post('/user/wallet/challenge').send(user).expect(StatusCodes.OK)
   const { state } = challengeResponse.body.data
   const wallet = new Wallet(user.privateKey)
