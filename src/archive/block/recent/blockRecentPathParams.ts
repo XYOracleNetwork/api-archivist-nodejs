@@ -1,5 +1,5 @@
-export type BlockRecentPathParams = {
-  archive: string
-  hash: string
+import { ArchivePathParams } from '../../archivePathParams'
+
+export type BlockRecentPathParams = ArchivePathParams & {
   limit?: string
 }
