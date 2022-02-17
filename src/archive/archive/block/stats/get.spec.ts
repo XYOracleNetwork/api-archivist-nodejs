@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes'
 
-import { claimArchive, getArchivist, getNewBlock, getTokenForNewUser, postBlock } from '../../../../test'
+import { claimArchive, getArchivist, getNewBlockWithPayloads, getTokenForNewUser, postBlock } from '../../../../test'
 
 const blocksPosted = 25
 
@@ -14,7 +14,7 @@ describe('/archive/:archive/block/stats', () => {
   it('Returns stats on all archives', async () => {
     // Post blocks to one archive
     for (let blockCount = 0; blockCount < blocksPosted; blockCount++) {
-      const block = getNewBlock()
+      const block = getNewBlockWithPayloads()
       const blockResponse = await postBlock(block, archive)
       expect(blockResponse.boundWitnesses).toBe(1)
     }
@@ -23,7 +23,7 @@ describe('/archive/:archive/block/stats', () => {
     token = await getTokenForNewUser()
     archive = (await claimArchive(token)).archive
     for (let blockCount = 0; blockCount < blocksPosted; blockCount++) {
-      const block = getNewBlock()
+      const block = getNewBlockWithPayloads()
       const blockResponse = await postBlock(block, archive)
       expect(blockResponse.boundWitnesses).toBe(1)
     }

@@ -1,23 +1,11 @@
-import { claimArchive, getBlockByHash, getTokenForNewUser, postBlock } from '../../../../test'
-
-const knownBlock = {
-  boundWitnesses: [
-    {
-      _payloads: [
-        {
-          balance: 10000.0,
-          daysOld: 1,
-          deviceId: '00000000-0000-0000-0000-000000000000',
-          geomines: 41453,
-          planType: 'pro',
-          schema: 'co.coinapp.current.user.witness',
-          uid: '0000000000000000000000000000',
-        },
-      ],
-    },
-  ],
-}
-const knownBlockHash = '44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a'
+import {
+  claimArchive,
+  getBlockByHash,
+  getTokenForNewUser,
+  knownBlock,
+  knownBlockHash,
+  postBlock,
+} from '../../../../test'
 
 describe('/archive/:archive/block/hash/:hash', () => {
   let token = ''

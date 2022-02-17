@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes'
 
-import { claimArchive, getArchivist, getNewBlock, getTokenForNewUser, postBlock } from '../../../../test'
+import { claimArchive, getArchivist, getNewBlockWithPayloads, getTokenForNewUser, postBlock } from '../../../../test'
 
 describe('/archive/:archive/block/recent/:limit', () => {
   let token = ''
@@ -12,7 +12,7 @@ describe('/archive/:archive/block/recent/:limit', () => {
   it('With no argument, retrieves the 20 most recently posted blocks', async () => {
     const blocksPosted = 25
     for (let blockCount = 0; blockCount < blocksPosted; blockCount++) {
-      const block = getNewBlock()
+      const block = getNewBlockWithPayloads()
       const blockResponse = await postBlock(block, archive)
       expect(blockResponse.boundWitnesses).toBe(1)
     }
@@ -31,7 +31,7 @@ describe('/archive/:archive/block/recent/:limit', () => {
   it('Only retrieves recently posted blocks from the archive specified in the path', async () => {
     const blocksPosted = 25
     for (let blockCount = 0; blockCount < blocksPosted; blockCount++) {
-      const block = getNewBlock()
+      const block = getNewBlockWithPayloads()
       const blockResponse = await postBlock(block, archive)
       expect(blockResponse.boundWitnesses).toBe(1)
     }
