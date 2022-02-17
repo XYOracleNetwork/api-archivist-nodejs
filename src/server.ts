@@ -78,21 +78,21 @@ const addPayloadRoutes = (app: Express) => {
 }
 
 const addPayloadSchemaRoutes = (app: Express) => {
-  app.get('/archive/:archive/payload/schema', requireArchiveAccess, notImplemented /* #swagger.tags = ['payload'] */)
+  app.get('/archive/:archive/payload/schema', requireArchiveAccess, notImplemented /* #swagger.tags = ['schema'] */)
   app.get(
     '/archive/:archive/payload/schema/:schema',
     requireArchiveAccess,
-    notImplemented /* #swagger.tags = ['payload'] */
+    notImplemented /* #swagger.tags = ['schema'] */
   )
   app.get(
     '/archive/:archive/payload/schema/:schema/stats',
     requireArchiveAccess,
-    notImplemented /* #swagger.tags = ['payload'] */
+    notImplemented /* #swagger.tags = ['schema'] */
   )
   app.get(
     '/archive/:archive/payload/schema/:schema/recent/limit',
     requireArchiveAccess,
-    notImplemented /* #swagger.tags = ['payload'] */
+    notImplemented /* #swagger.tags = ['schema'] */
   )
 }
 
