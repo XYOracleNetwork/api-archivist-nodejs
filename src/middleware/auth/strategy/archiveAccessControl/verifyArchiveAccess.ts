@@ -9,7 +9,7 @@ export const verifyArchiveAccess = async (req: Request): Promise<boolean> => {
   if (!archive) {
     return false
   }
-  // Get archives owned by the user
+  // Get the archive from the path
   const record = await getArchiveByName(archive)
 
   // If the archive doesn't exist they can't access it
