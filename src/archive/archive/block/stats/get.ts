@@ -1,8 +1,9 @@
 import 'source-map-support/register'
 
+import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
 import { RequestHandler } from 'express'
 
-import { genericAsyncHandler, getArchivistBoundWitnessesMongoSdk } from '../../../../lib'
+import { getArchivistBoundWitnessesMongoSdk } from '../../../../lib'
 import { ArchivePathParams } from '../../../archivePathParams'
 
 export interface GetArchiveBlockStatsResponse {
@@ -22,4 +23,4 @@ const handler: RequestHandler<ArchivePathParams, GetArchiveBlockStatsResponse> =
   next()
 }
 
-export const getArchiveBlockStats = genericAsyncHandler(handler)
+export const getArchiveBlockStats = asyncHandler(handler)

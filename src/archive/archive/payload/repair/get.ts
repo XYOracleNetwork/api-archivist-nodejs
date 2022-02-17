@@ -1,11 +1,12 @@
 import 'source-map-support/register'
 
+import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
 import { XyoPayload, XyoPayloadWrapper } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 import { UpdateResult } from 'mongodb'
 
-import { genericAsyncHandler, getArchivistPayloadMongoSdk } from '../../../../lib'
+import { getArchivistPayloadMongoSdk } from '../../../../lib'
 import { PayloadHashPathParams } from '../payloadHashPathParams'
 
 const getPayload = async (archive: string, hash: string) => {
@@ -40,4 +41,4 @@ const handler: RequestHandler<PayloadHashPathParams, PayloadRepairHashResponse> 
   }
 }
 
-export const getArchivePayloadRepair = genericAsyncHandler(handler)
+export const getArchivePayloadRepair = asyncHandler(handler)

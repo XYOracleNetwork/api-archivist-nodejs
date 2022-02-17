@@ -1,8 +1,9 @@
 import 'source-map-support/register'
 
+import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
 import { RequestHandler } from 'express'
 
-import { genericAsyncHandler, getArchivistPayloadMongoSdk } from '../../../../lib'
+import { getArchivistPayloadMongoSdk } from '../../../../lib'
 import { ArchivePathParams } from '../../../archivePathParams'
 
 const getCount = async (archive: string) => {
@@ -20,4 +21,4 @@ const handler: RequestHandler<ArchivePathParams, ArchivePayloadStatsResponse> = 
   next()
 }
 
-export const getArchivePayloadStats = genericAsyncHandler(handler)
+export const getArchivePayloadStats = asyncHandler(handler)

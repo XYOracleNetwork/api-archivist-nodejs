@@ -1,11 +1,11 @@
 import 'source-map-support/register'
 
-import { tryParseInt } from '@xylabs/sdk-api-express-ecs'
+import { asyncHandler, tryParseInt } from '@xylabs/sdk-api-express-ecs'
 import { assertEx } from '@xylabs/sdk-js'
 import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 
-import { genericAsyncHandler, getArchivistPayloadMongoSdk } from '../../../../lib'
+import { getArchivistPayloadMongoSdk } from '../../../../lib'
 import { PayloadRecentPathParams } from './payloadRecentPathParams'
 
 const getPayloads = async (archive: string, limit: number) => {
@@ -22,4 +22,4 @@ const handler: RequestHandler<PayloadRecentPathParams, XyoPayload[]> = async (re
   next()
 }
 
-export const getArchivePayloadRecent = genericAsyncHandler(handler)
+export const getArchivePayloadRecent = asyncHandler(handler)

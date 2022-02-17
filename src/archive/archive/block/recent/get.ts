@@ -1,10 +1,10 @@
 import 'source-map-support/register'
 
-import { tryParseInt } from '@xylabs/sdk-api-express-ecs'
+import { asyncHandler, tryParseInt } from '@xylabs/sdk-api-express-ecs'
 import { assertEx } from '@xylabs/sdk-js'
 import { RequestHandler } from 'express'
 
-import { genericAsyncHandler, getArchivistBoundWitnessesMongoSdk } from '../../../../lib'
+import { getArchivistBoundWitnessesMongoSdk } from '../../../../lib'
 import { BlockRecentPathParams } from './blockRecentPathParams'
 
 const getBoundWitness = async (archive: string, limit: number) => {
@@ -21,4 +21,4 @@ const handler: RequestHandler<BlockRecentPathParams> = async (req, res, next) =>
   next()
 }
 
-export const getArchiveBlockRecent = genericAsyncHandler(handler)
+export const getArchiveBlockRecent = asyncHandler(handler)

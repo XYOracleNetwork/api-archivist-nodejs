@@ -1,10 +1,10 @@
 import 'source-map-support/register'
 
+import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
 import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
-import { genericAsyncHandler } from '../../../../lib'
 import { ArchivePathParams } from '../../../archivePathParams'
 import { prepareBoundWitnesses } from './prepareBoundWitnesses'
 import { storeBoundWitnesses } from './storeBoundWitnesses'
@@ -53,4 +53,4 @@ const handler: RequestHandler<ArchivePathParams, PostArchiveBlockResponse, XyoAr
   next()
 }
 
-export const postArchiveBlock = genericAsyncHandler(handler)
+export const postArchiveBlock = asyncHandler(handler)

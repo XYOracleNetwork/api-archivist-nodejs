@@ -1,9 +1,10 @@
 import 'source-map-support/register'
 
+import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
 import { XyoBoundWitness, XyoBoundWitnessWrapper } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 
-import { genericAsyncHandler, getArchivistBoundWitnessesMongoSdk } from '../../../../lib'
+import { getArchivistBoundWitnessesMongoSdk } from '../../../../lib'
 import { BlockHashPathParams } from './blockHashPathParams'
 
 const getBoundWitness = async (archive: string, hash: string) => {
@@ -31,4 +32,4 @@ const handler: RequestHandler<BlockHashPathParams, GetArchiveBlockHashResponse> 
   next()
 }
 
-export const getArchiveBlockHash = genericAsyncHandler(handler)
+export const getArchiveBlockHash = asyncHandler(handler)

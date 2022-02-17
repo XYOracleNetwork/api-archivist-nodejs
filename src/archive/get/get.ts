@@ -1,7 +1,8 @@
+import { asyncHandler, NoReqParams } from '@xylabs/sdk-api-express-ecs'
 import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
-import { genericAsyncHandler, getArchivesByOwner, NoReqParams } from '../../lib'
+import { getArchivesByOwner } from '../../lib'
 import { ArchiveResponse } from '../archiveResponse'
 
 const handler: RequestHandler<NoReqParams, ArchiveResponse[]> = async (req, res, next) => {
@@ -14,4 +15,4 @@ const handler: RequestHandler<NoReqParams, ArchiveResponse[]> = async (req, res,
   next()
 }
 
-export const getArchives = genericAsyncHandler(handler)
+export const getArchives = asyncHandler(handler)

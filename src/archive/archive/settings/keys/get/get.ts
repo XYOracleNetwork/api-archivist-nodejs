@@ -1,7 +1,8 @@
+import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
 import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
-import { genericAsyncHandler, getArchiveKeys, isValidArchiveName } from '../../../../../lib'
+import { getArchiveKeys, isValidArchiveName } from '../../../../../lib'
 import { ArchivePathParams } from '../../../../archivePathParams'
 import { ArchiveKeyResponse } from '../archiveKeyResponse'
 
@@ -23,4 +24,4 @@ const handler: RequestHandler<ArchivePathParams, ArchiveKeyResponse[]> = async (
   next()
 }
 
-export const getArchiveSettingsKeys = genericAsyncHandler(handler)
+export const getArchiveSettingsKeys = asyncHandler(handler)

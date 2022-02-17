@@ -1,9 +1,10 @@
 import 'source-map-support/register'
 
+import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
 import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 
-import { genericAsyncHandler, getArchivistPayloadMongoSdk } from '../../../../lib'
+import { getArchivistPayloadMongoSdk } from '../../../../lib'
 import { PayloadHashPathParams } from '../payloadHashPathParams'
 
 const getPayload = async (archive: string, hash: string) => {
@@ -18,4 +19,4 @@ const handler: RequestHandler<PayloadHashPathParams, XyoPayload[]> = async (req,
   next()
 }
 
-export const getArchivePayloadHash = genericAsyncHandler(handler)
+export const getArchivePayloadHash = asyncHandler(handler)
