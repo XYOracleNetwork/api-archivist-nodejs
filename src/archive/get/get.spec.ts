@@ -7,7 +7,8 @@ describe('/archive', () => {
   })
   it('Returns the users archives', async () => {
     const claimArchiveResponse = await claimArchive(token)
-    expect(await getArchives(token)).toEqual([claimArchiveResponse.archive])
+    const response = await getArchives(token)
+    expect(response.map((x) => x.archive)).toEqual([claimArchiveResponse.archive])
   })
   it('Returns any empty array if the user owns no archives', async () => {
     expect(await getArchives(token)).toEqual([])

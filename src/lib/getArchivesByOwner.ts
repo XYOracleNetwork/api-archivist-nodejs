@@ -1,7 +1,18 @@
-import { getArchiveOwnerMongoSdk } from './getArchiveOwnerMongoSdk'
+import { getArchivistArchiveMongoSdk } from './dbSdk'
+import { determineArchiveAccessControl } from './determineArchiveAccessControl'
 
-export const getArchivesByOwner = async (user: string): Promise<string[]> => {
-  const sdk = await getArchiveOwnerMongoSdk()
-  const userArchives = await sdk.findByUser(user)
-  return userArchives.map((userArchive) => userArchive.archive)
+export interface ArchiveResult {
+  archive: string
+  user: string
+  accessControl: boolean
+}
+
+export const getArchivesByOwner = async (user: string): Promise<ArchiveResult[]> => {
+  const sdk = await getArchivistArchiveMongoSdk()
+  const response = await sdk.findByUser(user)
+  return response.map((record) => {
+    const { archive, user } = record
+    const accessControl = determineArchiveAccessControl(record)
+    return { accessControl, archive, user }
+  })
 }

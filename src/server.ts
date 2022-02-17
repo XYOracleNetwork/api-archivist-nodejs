@@ -1,9 +1,10 @@
-import { asyncHandler, getEnvFromAws } from '@xylabs/sdk-api-express-ecs'
+import { getEnvFromAws } from '@xylabs/sdk-api-express-ecs'
 import cors from 'cors'
 import express, { Express, RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import {
+  getArchive,
   getArchiveBlockHash,
   getArchiveBlockHashPayloads,
   getArchiveBlockRecent,
@@ -18,11 +19,11 @@ import {
   postArchiveSettingsKeys,
   putArchive,
 } from './archive'
-import { getArchivesByOwner } from './lib'
 import {
   configureAuth,
   configureDoc,
   jsonBodyParser,
+  requireArchiveAccess,
   requireArchiveOwner,
   requireAuth,
   responseProfiler,
@@ -36,84 +37,85 @@ const notImplemented: RequestHandler = (_req, _res, next) => {
 }
 
 const addArchiveRoutes = (app: Express) => {
-  app.get('/archive', requireAuth, asyncHandler(getArchives) /* #swagger.tags = ['archive'] */)
-  app.get('/archive/:archive', requireArchiveOwner, notImplemented /* #swagger.tags = ['archive'] */)
-  app.put('/archive/:archive', requireAuth, asyncHandler(putArchive) /* #swagger.tags = ['archive'] */)
+  app.get('/archive', requireAuth, getArchives /* #swagger.tags = ['archive'] */)
+  app.get('/archive/:archive', requireArchiveOwner, getArchive /* #swagger.tags = ['archive'] */)
+  app.put('/archive/:archive', requireAuth, putArchive /* #swagger.tags = ['archive'] */)
+  app.delete('/archive/:archive', requireArchiveOwner, notImplemented /* #swagger.tags = ['archive'] */)
   app.get(
     '/archive/:archive/settings/keys',
     requireArchiveOwner,
-    asyncHandler(getArchiveSettingsKeys) /* #swagger.tags = ['archive'] */
+    getArchiveSettingsKeys /* #swagger.tags = ['archive'] */
   )
   app.post(
     '/archive/:archive/settings/keys',
     requireArchiveOwner,
-    asyncHandler(postArchiveSettingsKeys) /* #swagger.tags = ['archive'] */
+    postArchiveSettingsKeys /* #swagger.tags = ['archive'] */
   )
 }
 
 const addPayloadRoutes = (app: Express) => {
-  app.get('/archive/:archive/payload/stats', asyncHandler(getArchivePayloadStats) /* #swagger.tags = ['payload'] */)
+  app.get('/archive/:archive/payload/stats', getArchivePayloadStats /* #swagger.tags = ['payload'] */)
   app.get(
     '/archive/:archive/payload/hash/:hash',
-    requireArchiveOwner,
-    asyncHandler(getArchivePayloadHash) /* #swagger.tags = ['payload'] */
+    requireArchiveAccess,
+    getArchivePayloadHash /* #swagger.tags = ['payload'] */
   )
   app.get(
     '/archive/:archive/payload/hash/:hash/repair',
-    requireArchiveOwner,
-    asyncHandler(getArchivePayloadRepair) /* #swagger.tags = ['payload'] */
+    requireArchiveAccess,
+    getArchivePayloadRepair /* #swagger.tags = ['payload'] */
   )
   app.get(
     '/archive/:archive/payload/recent/:limit?',
-    requireArchiveOwner,
-    asyncHandler(getArchivePayloadRecent) /* #swagger.tags = ['payload'] */
+    requireArchiveAccess,
+    getArchivePayloadRecent /* #swagger.tags = ['payload'] */
   )
   app.get(
     '/archive/:archive/payload/sample/:size?',
-    requireArchiveOwner,
+    requireArchiveAccess,
     notImplemented /* #swagger.tags = ['payload'] */
   )
 }
 
 const addPayloadSchemaRoutes = (app: Express) => {
-  app.get('/archive/:archive/payload/schema', requireArchiveOwner, notImplemented /* #swagger.tags = ['payload'] */)
+  app.get('/archive/:archive/payload/schema', requireArchiveAccess, notImplemented /* #swagger.tags = ['schema'] */)
   app.get(
     '/archive/:archive/payload/schema/:schema',
-    requireArchiveOwner,
-    notImplemented /* #swagger.tags = ['payload'] */
+    requireArchiveAccess,
+    notImplemented /* #swagger.tags = ['schema'] */
   )
   app.get(
     '/archive/:archive/payload/schema/:schema/stats',
-    requireArchiveOwner,
-    notImplemented /* #swagger.tags = ['payload'] */
+    requireArchiveAccess,
+    notImplemented /* #swagger.tags = ['schema'] */
   )
   app.get(
     '/archive/:archive/payload/schema/:schema/recent/limit',
-    requireArchiveOwner,
-    notImplemented /* #swagger.tags = ['payload'] */
+    requireArchiveAccess,
+    notImplemented /* #swagger.tags = ['schema'] */
   )
 }
 
 const addBlockRoutes = (app: Express) => {
-  app.post('/archive/:archive/block', asyncHandler(postArchiveBlock) /* #swagger.tags = ['block'] */)
-  app.post('/archive/:archive/bw', asyncHandler(postArchiveBlock) /* #swagger.tags = ['block'] */)
-  app.get('/archive/:archive/block/stats', asyncHandler(getArchiveBlockStats) /* #swagger.tags = ['block'] */)
+  app.post('/archive/:archive/block', postArchiveBlock /* #swagger.tags = ['block'] */)
+  app.post('/archive/:archive/bw', postArchiveBlock /* #swagger.tags = ['block'] */)
+  app.get('/archive/:archive/block/stats', getArchiveBlockStats /* #swagger.tags = ['block'] */)
   app.get(
     '/archive/:archive/block/hash/:hash',
-    requireArchiveOwner,
-    asyncHandler(getArchiveBlockHash) /* #swagger.tags = ['block'] */
+    requireArchiveAccess,
+    getArchiveBlockHash /* #swagger.tags = ['block'] */
   )
   app.get(
     '/archive/:archive/block/hash/:hash/payloads',
-    requireArchiveOwner,
-    asyncHandler(getArchiveBlockHashPayloads) /* #swagger.tags = ['block'] */
+    requireArchiveAccess,
+    getArchiveBlockHashPayloads /* #swagger.tags = ['block'] */
   )
   app.get(
     '/archive/:archive/block/recent/:limit?',
-    requireArchiveOwner,
-    asyncHandler(getArchiveBlockRecent) /* #swagger.tags = ['block'] */
+    requireArchiveAccess,
+    getArchiveBlockRecent /* #swagger.tags = ['block'] */
   )
-  app.get('/archive/:archive/block/sample/:size?', requireArchiveOwner, notImplemented /* #swagger.tags = ['block'] */)
+  app.get('/archive/:archive/block/sample/:size?', requireArchiveAccess, notImplemented /* #swagger.tags = ['block'] */)
 }
 
 const server = async (port = 80) => {
@@ -158,7 +160,6 @@ const server = async (port = 80) => {
 
   const userRoutes = await configureAuth({
     apiKey: process.env.API_KEY,
-    getUserArchives: getArchivesByOwner,
     secretOrKey: process.env.JWT_SECRET,
   })
   app.use('/user', userRoutes)

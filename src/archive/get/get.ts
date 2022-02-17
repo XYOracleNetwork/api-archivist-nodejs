@@ -1,15 +1,18 @@
-import { NextFunction, Request, RequestHandler, Response } from 'express'
+import { asyncHandler, NoReqParams } from '@xylabs/sdk-api-express-ecs'
+import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
 import { getArchivesByOwner } from '../../lib'
+import { ArchiveResponse } from '../archiveResponse'
 
-export const getArchives: RequestHandler = async (req: Request, res: Response<string[]>, next: NextFunction) => {
+const handler: RequestHandler<NoReqParams, ArchiveResponse[]> = async (req, res, next) => {
   const { user } = req
   if (!user || !user?.id) {
     next({ message: 'Invalid User', statusCode: StatusCodes.UNAUTHORIZED })
     return
   }
-  const archives = await getArchivesByOwner(user.id)
-  res.json(archives)
+  res.json(await getArchivesByOwner(user.id))
   next()
 }
+
+export const getArchives = asyncHandler(handler)

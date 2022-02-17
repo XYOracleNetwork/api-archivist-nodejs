@@ -2,14 +2,16 @@ import { assertEx } from '@xylabs/sdk-js'
 import express, { RequestHandler, Router } from 'express'
 import passport from 'passport'
 
-import { ArchiveOwnerStore, GetArchivesByUserFn, getUserMongoSdk, MongoDBUserStore, UserWithoutId } from './model'
+import { getUserMongoSdk, MongoDBUserStore, UserWithoutId } from './model'
 import { getProfile, postSignup, postWalletChallenge } from './routes'
 import {
   adminApiKeyUserSignupStrategy,
+  archiveAccessControlStrategyName,
   archiveApiKeyStrategy,
   archiveApiKeyStrategyName,
   archiveOwnerStrategy,
   configureAdminApiKeyStrategy,
+  configureArchiveAccessControlStrategy,
   configureArchiveApiKeyStrategy,
   configureArchiveOwnerStrategy,
   configureJwtStrategy,
@@ -37,7 +39,7 @@ export const requireLoggedIn: RequestHandler = jwtStrategy
 /**
  * Require either an API key OR logged-in user
  */
-export const requireAuth: RequestHandler = passport.authenticate([archiveApiKeyStrategyName, jwtStrategyName], {
+export const requireAuth: RequestHandler = passport.authenticate([jwtStrategyName, archiveApiKeyStrategyName], {
   session: false,
 })
 
@@ -45,6 +47,17 @@ export const requireAuth: RequestHandler = passport.authenticate([archiveApiKeyS
  * Require an auth'd request AND that the account owns the archive being requested
  */
 export const requireArchiveOwner: RequestHandler[] = [requireAuth, archiveOwnerStrategy]
+
+/**
+ * Require that the user can, in some way, access the archive. Either by owning
+ * the archive OR by the archive being pulbic (having no access control)
+ */
+export const requireArchiveAccess: RequestHandler[] = passport.authenticate(
+  [archiveAccessControlStrategyName, jwtStrategyName, archiveApiKeyStrategyName],
+  {
+    session: false,
+  }
+)
 
 /**
  * Allow anonymous requests
@@ -102,25 +115,24 @@ router.get(
   */
 )
 
-export interface IAuthConfig {
+export interface AuthConfig {
   secretOrKey?: string
   apiKey?: string
-  getUserArchives: GetArchivesByUserFn
 }
 
-export const configureAuth: (config: IAuthConfig) => Promise<Router> = async (config) => {
+export const configureAuth: (config: AuthConfig) => Promise<Router> = async (config) => {
   assertEx(config?.secretOrKey, 'Missing JWT secretOrKey')
   const secretOrKey = config?.secretOrKey as string
   assertEx(config?.apiKey, 'Missing API Key')
   const apiKey = config?.apiKey as string
 
-  const archiveOwnerStore = new ArchiveOwnerStore(config.getUserArchives)
   const userMongoSdk = await getUserMongoSdk()
   const userStore = new MongoDBUserStore(userMongoSdk)
 
   configureAdminApiKeyStrategy(userStore, apiKey)
   configureArchiveApiKeyStrategy(userStore)
-  configureArchiveOwnerStrategy(archiveOwnerStore)
+  configureArchiveOwnerStrategy()
+  configureArchiveAccessControlStrategy()
   respondWithJwt = configureJwtStrategy(secretOrKey)
   configureLocalStrategy(userStore)
   configureWeb3Strategy(userStore)
