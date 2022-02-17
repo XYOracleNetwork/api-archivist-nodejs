@@ -4,11 +4,6 @@ import { getArchiveByName } from '../../../../archive'
 import { determineArchiveAccessControl } from '../../../../lib'
 
 export const verifyArchiveAccess = async (req: Request): Promise<boolean> => {
-  // Validate user from request
-  const { user } = req
-  if (!user || !user?.id) {
-    return false
-  }
   // Validate archive from request
   const { archive } = req.params
   if (!archive) {
@@ -23,6 +18,6 @@ export const verifyArchiveAccess = async (req: Request): Promise<boolean> => {
   // If the archive exists, determine if it has any access controls
   const accessControl = determineArchiveAccessControl(record)
 
-  // If there are any access controls we won't allow anonymous access
-  return accessControl ? false : true
+  // If there are any access controls don't allow anonymous access
+  return !accessControl
 }

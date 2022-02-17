@@ -14,17 +14,12 @@ export class ArchiveOwnerStrategy extends Strategy {
     _options?: unknown
   ) {
     try {
-      const { user } = req
-      if (!user) {
-        this.fail('Invalid user')
-        return
-      }
-      const isArchiveOwner = await verifyArchiveAccess(req)
-      if (!isArchiveOwner) {
+      const canAccessArchive = await verifyArchiveAccess(req)
+      if (!canAccessArchive) {
         this.fail('User not authorized for archive', StatusCodes.FORBIDDEN)
         return
       }
-      this.success(user)
+      this.success({})
       return
     } catch (error) {
       this.error({ message: 'ArchiveOwner Auth Error' })

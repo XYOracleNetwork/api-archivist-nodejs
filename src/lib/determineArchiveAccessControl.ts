@@ -1,6 +1,8 @@
-import { ArchiveRecord } from './archiveRecord'
+interface AccessControl {
+  accessControl?: boolean
+}
 
-export const determineArchiveAccessControl = (record: ArchiveRecord) => {
+export const determineArchiveAccessControl = (record: AccessControl) => {
   const { accessControl } = record
   return accessControl || false
 }

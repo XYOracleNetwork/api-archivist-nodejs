@@ -11,6 +11,7 @@ import {
   archiveApiKeyStrategyName,
   archiveOwnerStrategy,
   configureAdminApiKeyStrategy,
+  configureArchiveAccessControlStrategy,
   configureArchiveApiKeyStrategy,
   configureArchiveOwnerStrategy,
   configureJwtStrategy,
@@ -131,6 +132,7 @@ export const configureAuth: (config: AuthConfig) => Promise<Router> = async (con
   configureAdminApiKeyStrategy(userStore, apiKey)
   configureArchiveApiKeyStrategy(userStore)
   configureArchiveOwnerStrategy()
+  configureArchiveAccessControlStrategy()
   respondWithJwt = configureJwtStrategy(secretOrKey)
   configureLocalStrategy(userStore)
   configureWeb3Strategy(userStore)

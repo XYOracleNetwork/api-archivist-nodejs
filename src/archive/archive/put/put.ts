@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
-import { genericAsyncHandler, isValidArchiveName, storeArchive } from '../../../lib'
+import { determineArchiveAccessControl, genericAsyncHandler, isValidArchiveName, storeArchive } from '../../../lib'
 import { ArchivePathParams } from '../../archivePathParams'
 import { ArchiveResponse } from '../../archiveResponse'
 
@@ -22,9 +22,10 @@ const handler: RequestHandler<ArchivePathParams, ArchiveResponse, PutArchiveRequ
     return
   }
 
-  const response = await storeArchive({ archive, user: user.id, ...req.body })
-  if (response && response?.user === user.id) {
-    res.json(response)
+  const accessControl = determineArchiveAccessControl(req.body)
+  const result = await storeArchive({ accessControl, archive, user: user.id })
+  if (result) {
+    res.json(result)
     next()
   } else {
     next({ message: ReasonPhrases.FORBIDDEN, statusCode: StatusCodes.FORBIDDEN })
