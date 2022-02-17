@@ -47,7 +47,7 @@ const handler: RequestHandler<ArchivePathParams, PostArchiveBlockResponse, XyoAr
   const { payloads, sanitized } = prepareBoundWitnesses(body.boundWitnesses, boundWitnessMetaData, payloadMetaData)
 
   const bwResult = await storeBoundWitnesses(archive, sanitized)
-  const payloadsResult = await storePayloads(archive, payloads)
+  const payloadsResult = payloads.length ? await storePayloads(archive, payloads) : { insertedCount: 0 }
   res.json({ boundWitnesses: bwResult.insertedCount, payloads: payloadsResult.insertedCount })
 
   next()
