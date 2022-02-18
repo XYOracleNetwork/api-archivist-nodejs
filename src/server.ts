@@ -8,10 +8,12 @@ import {
   getArchiveBlockHash,
   getArchiveBlockHashPayloads,
   getArchiveBlockRecent,
+  getArchiveBlocks,
   getArchiveBlockStats,
   getArchivePayloadHash,
   getArchivePayloadRecent,
   getArchivePayloadRepair,
+  getArchivePayloads,
   getArchivePayloadStats,
   getArchives,
   getArchiveSettingsKeys,
@@ -55,6 +57,7 @@ const addArchiveRoutes = (app: Express) => {
 }
 
 const addPayloadRoutes = (app: Express) => {
+  app.get('/archive/:archive/payload', getArchivePayloads /* #swagger.tags = ['block'] */)
   app.get('/archive/:archive/payload/stats', getArchivePayloadStats /* #swagger.tags = ['payload'] */)
   app.get(
     '/archive/:archive/payload/hash/:hash',
@@ -98,6 +101,7 @@ const addPayloadSchemaRoutes = (app: Express) => {
 }
 
 const addBlockRoutes = (app: Express) => {
+  app.get('/archive/:archive/block', getArchiveBlocks /* #swagger.tags = ['block'] */)
   app.post('/archive/:archive/block', postArchiveBlock /* #swagger.tags = ['block'] */)
   app.post('/archive/:archive/bw', postArchiveBlock /* #swagger.tags = ['block'] */)
   app.get('/archive/:archive/block/stats', getArchiveBlockStats /* #swagger.tags = ['block'] */)
