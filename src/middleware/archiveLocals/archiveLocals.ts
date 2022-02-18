@@ -5,7 +5,7 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 import { ArchiveResult, getArchiveByName, isValidArchiveName } from '../../lib'
 
 type ArchivePathParams = {
-  archive?: string
+  archive: string
 }
 
 interface ArchiveLocals {
@@ -17,23 +17,29 @@ const handler: RequestHandler<ArchivePathParams, NoResBody, NoReqBody, NoReqQuer
   res,
   next
 ) => {
-  // If there's an archive path param
-  if (req.params.archive) {
-    // Verify it's a valid archive name
-    const archive = req.params.archive?.toLowerCase()
-    if (!isValidArchiveName(archive)) {
-      next({ message: 'Invalid Archive Name', statusCode: StatusCodes.BAD_REQUEST })
-      return
+  try {
+    // If there's an archive path param
+    if (req.params.archive) {
+      // Verify it's a valid archive name
+      const archive = req.params.archive?.toLowerCase()
+      if (!isValidArchiveName(archive)) {
+        next({ message: 'Invalid Archive Name', statusCode: StatusCodes.BAD_REQUEST })
+        return
+      }
+      // Lookup the archive
+      const response = await getArchiveByName(archive)
+      if (!response) {
+        // TODO: Uncomment if/when we require a priori archive creation to
+        // automatically reject all calls for archives that don't exist
+        // next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
+      } else {
+        res.locals.archive = response
+      }
     }
-    // Lookup the archive
-    const response = await getArchiveByName(archive)
-    if (!response) {
-      next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
-    } else {
-      res.locals.archive = response
-    }
+    next()
+  } catch (error) {
+    next({ message: ReasonPhrases.INTERNAL_SERVER_ERROR, statusCode: StatusCodes.INTERNAL_SERVER_ERROR })
   }
-  next()
 }
 
 /**
