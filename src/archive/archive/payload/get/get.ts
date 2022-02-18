@@ -37,4 +37,4 @@ const handler: RequestHandler<
   }
 }
 
-export const getPayloads = handler
+export const getArchivePayloads = handler
