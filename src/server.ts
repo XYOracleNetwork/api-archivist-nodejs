@@ -20,6 +20,7 @@ import {
   putArchive,
 } from './archive'
 import {
+  archiveLocals,
   configureAuth,
   configureDoc,
   jsonBodyParser,
@@ -137,6 +138,7 @@ const server = async (port = 80) => {
 
   app.use(jsonBodyParser)
   app.use(standardResponses)
+  app.use(archiveLocals)
 
   if (process.env.CORS_ALLOWED_ORIGINS) {
     // CORS_ALLOWED_ORIGINS can be an array of allowed origins so we support
