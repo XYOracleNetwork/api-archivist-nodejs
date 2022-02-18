@@ -1,7 +1,6 @@
 import { Request } from 'express'
 
-import { getArchiveByName } from '../../../../archive'
-import { determineArchiveAccessControl } from '../../../../lib'
+import { determineArchiveAccessControl, getArchiveByName } from '../../../../lib'
 
 export const verifyArchiveAccess = async (req: Request): Promise<boolean> => {
   // Validate archive from request

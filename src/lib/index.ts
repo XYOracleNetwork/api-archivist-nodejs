@@ -1,4 +1,4 @@
-export * from './archiveRecord'
+export * from './archiveResult'
 export * from './dbSdk'
 export * from './determineArchiveAccessControl'
 export * from './getArchiveByName'

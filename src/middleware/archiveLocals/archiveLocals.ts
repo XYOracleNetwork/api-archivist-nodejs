@@ -2,14 +2,14 @@ import { asyncHandler, NoReqBody, NoReqQuery, NoResBody } from '@xylabs/sdk-api-
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
-import { getArchiveByName, isValidArchiveName } from '../../lib'
+import { ArchiveResult, getArchiveByName, isValidArchiveName } from '../../lib'
 
 type ArchivePathParams = {
-  archive: string
+  archive?: string
 }
 
 interface ArchiveLocals {
-  archive: string
+  archive: ArchiveResult
 }
 
 const handler: RequestHandler<ArchivePathParams, NoResBody, NoReqBody, NoReqQuery, ArchiveLocals> = async (
@@ -17,19 +17,26 @@ const handler: RequestHandler<ArchivePathParams, NoResBody, NoReqBody, NoReqQuer
   res,
   next
 ) => {
-  const archive = req.params.archive?.toLowerCase()
-  if (!isValidArchiveName(archive)) {
-    next({ message: 'Invalid Archive Name', statusCode: StatusCodes.BAD_REQUEST })
-    return
+  // If there's an archive path param
+  if (req.params.archive) {
+    // Verify it's a valid archive name
+    const archive = req.params.archive?.toLowerCase()
+    if (!isValidArchiveName(archive)) {
+      next({ message: 'Invalid Archive Name', statusCode: StatusCodes.BAD_REQUEST })
+      return
+    }
+    // Lookup the archive
+    const response = await getArchiveByName(archive)
+    if (!response) {
+      next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
+    } else {
+      res.locals.archive = response
+    }
   }
-
-  const response = await getArchiveByName(archive)
-  if (!response) {
-    next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
-  }
-
-  // TODO: Augment Locals with archive
   next()
 }
 
+/**
+ * Augments each request with the archive from the path (if supplied)
+ */
 export const archiveLocals = asyncHandler(handler)
