@@ -1,20 +1,22 @@
+import { NoReqBody, NoReqQuery, NoResBody } from '@xylabs/sdk-api-express-ecs'
 import { Request } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
+import { ArchiveLocals, ArchivePathParams } from '../../../../archive'
 import { verifyArchiveAccess } from './verifyArchiveAccess'
 
 export class ArchiveOwnerStrategy extends Strategy {
   constructor() {
     super()
   }
-  override async authenticate(
+  override authenticate(
     this: StrategyCreated<this, this & StrategyCreatedStatic>,
-    req: Request,
+    req: Request<ArchivePathParams, NoResBody, NoReqBody, NoReqQuery, ArchiveLocals>,
     _options?: unknown
   ) {
     try {
-      const canAccessArchive = await verifyArchiveAccess(req)
+      const canAccessArchive = verifyArchiveAccess(req)
       if (!canAccessArchive) {
         this.fail('User not authorized for archive', StatusCodes.FORBIDDEN)
         return

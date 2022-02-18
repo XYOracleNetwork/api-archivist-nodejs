@@ -91,7 +91,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-secrets-manager@npm:^3.50.0, @aws-sdk/client-secrets-manager@npm:^3.51.0":
+"@aws-sdk/client-secrets-manager@npm:^3.51.0":
   version: 3.51.0
   resolution: "@aws-sdk/client-secrets-manager@npm:3.51.0"
   dependencies:
@@ -3815,15 +3815,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xylabs/sdk-api-express-ecs@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "@xylabs/sdk-api-express-ecs@npm:1.1.1"
+"@xylabs/sdk-api-express-ecs@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "@xylabs/sdk-api-express-ecs@npm:1.1.2"
   dependencies:
-    "@aws-sdk/client-secrets-manager": ^3.50.0
+    "@aws-sdk/client-secrets-manager": ^3.51.0
     node-cache: ^5.1.2
   peerDependencies:
     express: ^4
-  checksum: 2a145f384ed3022e27b601a9410ae320896b209a3017ee33c6c27528245b9bbd0dbb3bb6355610818318ae458151aac974d006743b3d87d6bb019ffa242eab64
+  checksum: 0fc37927ed6f15f5d3b3c0d5c93882cc95bb998b35ace27d58557485a19440602aef0608d81cbfe919ced591101a35c29441a89dcc88673389ff34a799179b43
   languageName: node
   linkType: hard
 
@@ -4178,7 +4178,7 @@ __metadata:
     "@types/uuid": ^8.3.4
     "@xylabs/eslint-config": ^2.3.16
     "@xylabs/rollup-config": ^1.1.7
-    "@xylabs/sdk-api-express-ecs": ^1.1.1
+    "@xylabs/sdk-api-express-ecs": ^1.1.2
     "@xylabs/sdk-js": ^2.4.2
     "@xylabs/ts-scripts": ^1.0.43
     "@xylabs/tsconfig": ^1.0.12

@@ -2,7 +2,6 @@ import { assertEx } from '@xylabs/sdk-js'
 import { BaseMongoSdk, BaseMongoSdkConfig } from '@xyo-network/sdk-xyo-mongo-js'
 import { Collection, WithId } from 'mongodb'
 
-import { ArchiveRecord } from '../archiveRecord'
 import { getMongoDBConfig } from './getMongoDBValues'
 
 interface IUpsertFilter {
@@ -14,6 +13,12 @@ interface IUpsertFilter {
       user: string
     }
   ]
+}
+
+export interface ArchiveRecord {
+  accessControl: boolean
+  archive: string
+  user: string
 }
 
 export const getArchivistArchiveMongoSdk = async () => {

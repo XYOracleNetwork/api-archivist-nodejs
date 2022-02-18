@@ -1,16 +1,14 @@
+import { NoReqBody, NoReqQuery, NoResBody } from '@xylabs/sdk-api-express-ecs'
 import { Request } from 'express'
 
-import { getArchiveByName } from '../../../../archive'
+import { ArchiveLocals, ArchivePathParams } from '../../../../archive'
 import { determineArchiveAccessControl } from '../../../../lib'
 
-export const verifyArchiveAccess = async (req: Request): Promise<boolean> => {
-  // Validate archive from request
-  const { archive } = req.params
-  if (!archive) {
-    return false
-  }
-  // Get the archive from the path
-  const record = await getArchiveByName(archive)
+export const verifyArchiveAccess = (
+  req: Request<ArchivePathParams, NoResBody, NoReqBody, NoReqQuery, ArchiveLocals>
+): boolean => {
+  // Get the archive from locals
+  const record = req?.res?.locals?.archive
 
   // If the archive doesn't exist they can't access it
   if (!record) return false
