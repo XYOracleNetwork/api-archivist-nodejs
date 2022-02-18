@@ -769,7 +769,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:^7.1.0, @babel/core@npm:^7.12.3, @babel/core@npm:^7.17.4, @babel/core@npm:^7.17.5, @babel/core@npm:^7.7.2, @babel/core@npm:^7.8.0":
+"@babel/core@npm:^7.1.0, @babel/core@npm:^7.12.3, @babel/core@npm:^7.17.5, @babel/core@npm:^7.7.2, @babel/core@npm:^7.8.0":
   version: 7.17.5
   resolution: "@babel/core@npm:7.17.5"
   dependencies:
@@ -3771,11 +3771,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xylabs/eslint-config@npm:^2.3.14, @xylabs/eslint-config@npm:^2.3.16":
-  version: 2.3.16
-  resolution: "@xylabs/eslint-config@npm:2.3.16"
+"@xylabs/eslint-config@npm:^2.3.17":
+  version: 2.3.17
+  resolution: "@xylabs/eslint-config@npm:2.3.17"
   dependencies:
-    "@babel/core": ^7.17.4
+    "@babel/core": ^7.17.5
     "@babel/eslint-parser": ^7.17.0
     "@rushstack/eslint-patch": ^1.1.0
     "@typescript-eslint/eslint-plugin": ^5.12.0
@@ -3795,7 +3795,8 @@ __metadata:
     prettier: ^2.5.1
     remark-lint-maximum-line-length: ^3.1.2
     remark-preset-lint-markdown-style-guide: ^5.1.2
-  checksum: 47274e9d60f5a1319b93751ce6d0b97da4573e879bea098e8b04c2dc1d2448773080989e8496f2c2fa323fae62222e0c2b3af83ebc7404f271b77aa48b193412
+    typescript: ^4.5.5
+  checksum: b5323408f09e2a825a497315550224c504806b685189b1ee65c8c2ca9aa736a35adceab7573099df9500279bae30f3c0903a03aa00c2256552b10571ce2d5169
   languageName: node
   linkType: hard
 
@@ -3839,21 +3840,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xylabs/ts-scripts@npm:^1.0.43":
-  version: 1.0.43
-  resolution: "@xylabs/ts-scripts@npm:1.0.43"
+"@xylabs/ts-scripts@npm:^1.0.44":
+  version: 1.0.44
+  resolution: "@xylabs/ts-scripts@npm:1.0.44"
   dependencies:
-    "@xylabs/eslint-config": ^2.3.14
+    "@xylabs/eslint-config": ^2.3.17
     copyfiles: ^2.4.1
     depcheck: ^1.4.3
-    eslint: ^8.8.0
-    eslint-plugin-sonarjs: ^0.11.0
+    eslint: ^8.9.0
+    eslint-plugin-sonarjs: ^0.12.0
     node-cmd: ^5.0.0
-    npm-check-updates: ^12.3.0
+    npm-check-updates: ^12.3.1
     npm-package-json-lint: ^5.4.2
     npm-package-json-lint-config-default: ^3.0.0
     rimraf: ^3.0.2
     ts-prune: ^0.10.3
+    typescript: ^4.5.5
   peerDependencies:
     typescript: ^4
   bin:
@@ -3863,15 +3865,19 @@ __metadata:
     cycle: bin/cycle.js
     dead: bin/dead.js
     deploy: bin/deploy.js
+    deploy3: bin/deploy3.js
     deps: bin/deps.js
     fix: bin/fix.js
     lint: bin/lint.js
+    migrate: bin/migrate.js
     rebuild: bin/rebuild.js
     reinstall: bin/reinstall.js
     sonar: bin/sonar.js
     test: bin/test.js
     up: bin/up.js
+    up3: bin/up3.js
     updo: bin/updo.js
+    updo3: bin/updo3.js
     xylabs-build: bin/build.js
     xylabs-clean: bin/clean.js
     xylabs-compile: bin/compile.js
@@ -3880,13 +3886,16 @@ __metadata:
     xylabs-deps: bin/deps.js
     xylabs-fix: bin/fix.js
     xylabs-lint: bin/lint.js
+    xylabs-migrate: bin/migrate.js
     xylabs-rebuild: bin/rebuild.js
     xylabs-reinstall: bin/reinstall.js
     xylabs-sonar: bin/sonar.js
     xylabs-test: bin/test.js
     xylabs-up: bin/up.js
+    xylabs-up3: bin/up3.js
     xylabs-updo: bin/updo.js
-  checksum: f16dab97df00d18031952f8a3abdb38f5a8931c8ce41982257be057cbd04a00ebea2a9c7c6aed472d8b70244eaccb0fc244b6476844c77675de2c27d9dfbbaeb
+    xylabs-updo3: bin/updo3.js
+  checksum: 6b1cc4ec7c2f2643fc35ce1eefa883cce8941a0947e10cf00642def6ac498c3293daca38350097c8f14ccc508f967ae20bec011a3fd66639b7a9562f72cbc211
   languageName: node
   linkType: hard
 
@@ -3899,38 +3908,40 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xyo-network/sdk-xyo-client-js@npm:^2.10.2":
-  version: 2.10.2
-  resolution: "@xyo-network/sdk-xyo-client-js@npm:2.10.2"
+"@xyo-network/sdk-xyo-client-js@npm:^2.10.10":
+  version: 2.10.10
+  resolution: "@xyo-network/sdk-xyo-client-js@npm:2.10.10"
   dependencies:
     "@ethersproject/providers": ^5.5.3
     "@xylabs/sdk-js": ^2.4.2
-    "@xyo-network/sdk-xyo-mongo-js": ^2.2.6
+    "@xyo-network/sdk-xyo-mongo-js": ^2.2.7
     axios: ^0.26.0
+    bn.js: ^5.2.0
     bowser: ^2.11.0
     buffer: ^6.0.3
     elliptic: ^6.5.4
     is-ip: ^4.0.0
     keccak256: ^1.0.6
     lodash: ^4.17.21
-    mongodb: ^4.3.1
+    mongodb: ^4.4.0
     neo4j-driver: ^4.4.2
     neo4j-driver-core: ^4.4.2
     sha.js: ^2.4.11
     systeminformation: ^5.11.3
     ua-parser-js: ^1.0.2
-  checksum: e2bda220fddcf89fe7b8bb6d699cda734246f5784afc2da9c2b46500e494d0250c6f12f4d013ba2b90ac41e6bd11b734cd58cf7973ca2a254784ad7c7cf184a0
+    uuid: ^8.3.2
+  checksum: 9d51abf9d54e90d09ec7d0ee48dcd7aa33231426a8fee45a28f6d022b04543d435daa28b6c01757e3f48d17e79e134a54c1f7fc6f8add4bcff772d0cf998f997
   languageName: node
   linkType: hard
 
-"@xyo-network/sdk-xyo-mongo-js@npm:^2.2.6":
-  version: 2.2.6
-  resolution: "@xyo-network/sdk-xyo-mongo-js@npm:2.2.6"
+"@xyo-network/sdk-xyo-mongo-js@npm:^2.2.7":
+  version: 2.2.7
+  resolution: "@xyo-network/sdk-xyo-mongo-js@npm:2.2.7"
   dependencies:
     "@xylabs/sdk-js": ^2.4.2
     async-mutex: ^0.3.2
-    mongodb: ^4.3.1
-  checksum: ea2a63a15b86fc8959fbd822b4c72317885d2614fed5dd03ebfc646c954657438c1f7901fcd2cb1ee22b187b94318b63e6f89defe39288f45d347c6cbf3ffb8d
+    mongodb: ^4.4.0
+  checksum: fc445735799efdf0a06f2a69af5eeb295e347070150565cb950f3734117eccc39e1167657e6fd370f67d1bc258eb96b7804386750aad63ad54bffe0c0b60d12f
   languageName: node
   linkType: hard
 
@@ -4176,14 +4187,14 @@ __metadata:
     "@types/supertest": ^2.0.11
     "@types/swagger-ui-express": ^4.1.3
     "@types/uuid": ^8.3.4
-    "@xylabs/eslint-config": ^2.3.16
+    "@xylabs/eslint-config": ^2.3.17
     "@xylabs/rollup-config": ^1.1.7
     "@xylabs/sdk-api-express-ecs": ^1.1.2
     "@xylabs/sdk-js": ^2.4.2
-    "@xylabs/ts-scripts": ^1.0.43
+    "@xylabs/ts-scripts": ^1.0.44
     "@xylabs/tsconfig": ^1.0.12
-    "@xyo-network/sdk-xyo-client-js": ^2.10.2
-    "@xyo-network/sdk-xyo-mongo-js": ^2.2.6
+    "@xyo-network/sdk-xyo-client-js": ^2.10.10
+    "@xyo-network/sdk-xyo-mongo-js": ^2.2.7
     axios: ^0.26.0
     babel-jest: ^27.5.1
     bcrypt: ^5.0.1
@@ -4202,7 +4213,7 @@ __metadata:
     jsonwebtoken: ^8.5.1
     license-checker: ^25.0.1
     lodash: ^4.17.21
-    mongodb: ^4.3.1
+    mongodb: ^4.4.0
     node-cache: ^5.1.2
     nodemon: ^2.0.15
     npm-check-updates: ^12.3.1
@@ -4212,7 +4223,7 @@ __metadata:
     prettier: ^2.5.1
     rimraf: ^3.0.2
     rollbar: ^2.24.0
-    rollup: ^2.67.2
+    rollup: ^2.67.3
     rollup-plugin-typescript2: ^0.31.2
     sha.js: ^2.4.11
     source-map-support: ^0.5.21
@@ -6057,12 +6068,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-sonarjs@npm:^0.11.0":
-  version: 0.11.0
-  resolution: "eslint-plugin-sonarjs@npm:0.11.0"
+"eslint-plugin-sonarjs@npm:^0.12.0":
+  version: 0.12.0
+  resolution: "eslint-plugin-sonarjs@npm:0.12.0"
   peerDependencies:
     eslint: ^5.0.0 || ^6.0.0 || ^7.0.0|| ^8.0.0
-  checksum: ef9633e518f6d8365b7370bf48f70fb837124c68318e14146c13ffa8f4c5a747b5f776956124549f81252131ebb8c139d071b9c66e2af77889d0eada725d6d25
+  checksum: 96be3002ce2344a07081c33649d9bb927189153c2e68ecb13069b0adfa4ff2e2cecec6f25ee3d5e29600d8d8aac6e14e54f1990b0847234975f311d48521c828
   languageName: node
   linkType: hard
 
@@ -6186,7 +6197,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^8.8.0, eslint@npm:^8.9.0":
+"eslint@npm:^8.9.0":
   version: 8.9.0
   resolution: "eslint@npm:8.9.0"
   dependencies:
@@ -9700,9 +9711,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mongodb@npm:^4.3.1":
-  version: 4.3.1
-  resolution: "mongodb@npm:4.3.1"
+"mongodb@npm:^4.4.0":
+  version: 4.4.0
+  resolution: "mongodb@npm:4.4.0"
   dependencies:
     bson: ^4.6.1
     denque: ^2.0.1
@@ -9712,7 +9723,7 @@ __metadata:
   dependenciesMeta:
     saslprep:
       optional: true
-  checksum: 5684b5481bfbf73e4628b8bad7018cd4436fdb23b9548fb38dece3e079b1716fe870d41070a505d13ae4d86c107315afaf34891ba2b64925eb4fa4cd5bb70300
+  checksum: e485927d1def94f28564bdcb98d82144914bf23854e8bd15437fcef0d9a36f36997f7e97e0aad730ebf299c6a919430669198e02b5e2f4410f74a4002409b182
   languageName: node
   linkType: hard
 
@@ -10028,7 +10039,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"npm-check-updates@npm:^12.3.0, npm-check-updates@npm:^12.3.1":
+"npm-check-updates@npm:^12.3.1":
   version: 12.3.1
   resolution: "npm-check-updates@npm:12.3.1"
   dependencies:
@@ -12741,7 +12752,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:^2.67.1, rollup@npm:^2.67.2":
+"rollup@npm:^2.67.1":
   version: 2.67.2
   resolution: "rollup@npm:2.67.2"
   dependencies:
@@ -12752,6 +12763,20 @@ __metadata:
   bin:
     rollup: dist/bin/rollup
   checksum: 9aca5251ba4b441064183cde2394b91567259002d68086bdd3906db66d55dd148ab27e57c51eb53830d7b9b813c2d4e834b7735d65e2a869780bc639d4a20c38
+  languageName: node
+  linkType: hard
+
+"rollup@npm:^2.67.3":
+  version: 2.67.3
+  resolution: "rollup@npm:2.67.3"
+  dependencies:
+    fsevents: ~2.3.2
+  dependenciesMeta:
+    fsevents:
+      optional: true
+  bin:
+    rollup: dist/bin/rollup
+  checksum: c4013a2ceef6918375fd07a6548e05d0f3df1db9f0a0281aebe6e993a45c0e667c5a06f53b55c0ffaf72f72266c1879bc181b13199aace97d93f0fc47691d4a9
   languageName: node
   linkType: hard
 
