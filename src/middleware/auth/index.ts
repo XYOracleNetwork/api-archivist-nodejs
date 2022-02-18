@@ -75,6 +75,7 @@ router.post(
   postSignup /*
     #swagger.tags = ['user']
     #swagger.basePath = '/user'
+    #swagger.summary = 'Create an account (web2)'
   */
 )
 
@@ -86,6 +87,7 @@ router.post(
   /*
     #swagger.tags = ['user']
     #swagger.basePath = '/user'
+    #swagger.summary = 'Log in (web2)'
   */
 )
 
@@ -95,6 +97,7 @@ router.post(
   postWalletChallenge /*
     #swagger.tags = ['user']
     #swagger.basePath = '/user'
+    #swagger.summary = 'Challenge (web3)'
   */
 )
 router.post(
@@ -103,6 +106,7 @@ router.post(
   (req, res, next) => respondWithJwt(req, res, next) /*
     #swagger.tags = ['user']
     #swagger.basePath = '/user'
+    #swagger.summary = 'Verify (web3)'
   */
 )
 
@@ -112,6 +116,7 @@ router.get(
   getProfile /*
     #swagger.tags = ['user']
     #swagger.basePath = '/user'
+    #swagger.summary = 'Get user profile data'
   */
 )
 

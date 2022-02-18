@@ -11,6 +11,7 @@ export const useRequestCounters = (app: Application): void => {
 
   app.get('/stats', (req: Request, res: Response, next: NextFunction) => {
     /* #swagger.tags = ['metrics'] */
+    /* #swagger.summary = 'Get the counters for single instance of archivist' */
     res.json({
       alive: true,
       avgTime: `${((Counters.counters['_totalTime'] ?? 0) / (Counters.counters['_calls'] ?? 1)).toFixed(2)}ms`,

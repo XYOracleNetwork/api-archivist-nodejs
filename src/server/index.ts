@@ -30,8 +30,6 @@ const server = async (port = 80) => {
     app.use(cors({ origin }))
   }
 
-  addMiddleware(app)
-
   app.get('/', (_req, res, next) => {
     /* #swagger.tags = ['health'] */
     /* #swagger.summary = 'Get the health check for the server' */
@@ -39,6 +37,7 @@ const server = async (port = 80) => {
     next()
   })
 
+  addMiddleware(app)
   addArchiveRoutes(app)
   addPayloadRoutes(app)
   addPayloadSchemaRoutes(app)
