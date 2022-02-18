@@ -2,7 +2,7 @@ import { asyncHandler, NoReqBody, NoReqQuery, NoResBody } from '@xylabs/sdk-api-
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
-import { isValidArchiveName } from '../../lib'
+import { getArchiveByName, isValidArchiveName } from '../../lib'
 
 type ArchivePathParams = {
   archive: string

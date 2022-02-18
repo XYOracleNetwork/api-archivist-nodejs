@@ -2,10 +2,9 @@ import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
-import { isValidArchiveName } from '../../../lib'
+import { getArchiveByName, isValidArchiveName } from '../../../lib'
 import { ArchivePathParams } from '../../archivePathParams'
 import { ArchiveResponse } from '../../archiveResponse'
-import { getArchiveByName } from './getArchiveByName'
 
 const handler: RequestHandler<ArchivePathParams, ArchiveResponse> = async (req, res, next) => {
   const { user } = req

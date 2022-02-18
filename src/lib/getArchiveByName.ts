@@ -1,4 +1,5 @@
-import { determineArchiveAccessControl, getArchivistArchiveMongoSdk } from '../../../lib'
+import { getArchivistArchiveMongoSdk } from './dbSdk'
+import { determineArchiveAccessControl } from './determineArchiveAccessControl'
 
 export const getArchiveByName = async (name: string) => {
   const sdk = await getArchivistArchiveMongoSdk()
