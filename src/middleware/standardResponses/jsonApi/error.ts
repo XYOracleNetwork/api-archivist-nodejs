@@ -1,9 +1,9 @@
-import { Links } from './links'
+import { ApiLinks } from './links'
 
 /**
  * An object containing references to the source of the error
  */
-export interface ISource {
+export interface Source {
   /**
    * A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute].
    */
@@ -14,7 +14,7 @@ export interface ISource {
   parameter?: string
 }
 
-export interface IErrorObject {
+export interface ApiError {
   /**
    *  A unique identifier for this particular occurrence of the problem.
    */
@@ -23,7 +23,7 @@ export interface IErrorObject {
    *  A links object containing the following members:
    *    about: a link that leads to further details about this particular occurrence of the problem
    */
-  links?: Links
+  links?: ApiLinks
   /**
    *  The HTTP status code applicable to this problem, expressed as a string value.
    */
@@ -43,7 +43,7 @@ export interface IErrorObject {
   /**
    *  An object containing references to the source of the error, optionally including any of the following members:
    */
-  source?: ISource
+  source?: Source
   /**
    *  A meta object containing non-standard meta-information about the error.
    */

@@ -3,12 +3,12 @@
  * https://jsonapi.org/format/
  */
 
-import { IErrorObject } from './error'
-import { Links } from './links'
+import { ApiError } from './error'
+import { ApiLinks } from './links'
 import { Relationship } from './relationship'
-import { IResourceIdentifierObject } from './resourceIdentifier'
+import { ApiResourceIdentifierObject } from './resourceIdentifier'
 
-export interface IResourceObject extends IResourceIdentifierObject {
+export interface ApiResourceObject extends ApiResourceIdentifierObject {
   /**
    * An attributes object representing some of the resource's data.
    */
@@ -20,30 +20,30 @@ export interface IResourceObject extends IResourceIdentifierObject {
   /**
    * A links object containing links related to the resource.
    */
-  links?: Links
+  links?: ApiLinks
   /**
    * A meta object containing non-standard meta-information about a resource that can not be represented as an attribute or relationship.
    */
   meta?: Record<string, unknown>
 }
 
-export interface IJsonApi {
+export interface JsonApi {
   version?: '1.0' | '1.1'
   meta?: Record<string, unknown>
 }
 
-export interface IResponseBase {
+export interface ApiResponseBase {
   meta?: Record<string, unknown>
-  jsonapi?: IJsonApi
-  links?: Links
+  jsonapi?: JsonApi
+  links?: ApiLinks
 }
 
-export interface IDataResponse<T extends IResourceIdentifierObject> extends IResponseBase {
+export interface ApiDataResponse<T extends ApiResourceIdentifierObject> extends ApiResponseBase {
   data: T
-  included?: IResourceObject[]
+  included?: ApiResourceObject[]
 }
-export interface IErrorResponse extends IResponseBase {
-  errors: IErrorObject[]
+export interface ApiErrorResponse extends ApiResponseBase {
+  errors: ApiError[]
 }
 
-export type IResponse<T extends IResourceIdentifierObject> = IDataResponse<T> | IErrorResponse
+export type ApiResponse<T extends ApiResourceIdentifierObject> = ApiDataResponse<T> | ApiErrorResponse

@@ -17,12 +17,14 @@ export const addPayloadRoutes = (app: Express) => {
     /* #swagger.tags = ['payload'] */
     /* #swagger.summary = 'Get payloads' */
   )
+
   app.get(
     '/archive/:archive/payload/stats',
     getArchivePayloadStats
     /* #swagger.tags = ['payload'] */
     /* #swagger.summary = 'Get payload stats' */
   )
+
   app.get(
     '/archive/:archive/payload/hash/:hash',
     requireArchiveAccess,
@@ -47,6 +49,7 @@ export const addPayloadRoutes = (app: Express) => {
     /* #swagger.tags = ['payload'] */
     /* #swagger.summary = 'Get the most recent payloads' */
   )
+
   app.get(
     '/archive/:archive/payload/sample/:size?',
     requireArchiveAccess,
@@ -54,6 +57,7 @@ export const addPayloadRoutes = (app: Express) => {
     /* #swagger.tags = ['payload'] */
     /* #swagger.summary = 'Get a random sampling of payloads' */
   )
+
   app.get(
     '/archive/:archive/payload/chain/:hash?',
     requireArchiveAccess,
