@@ -4,17 +4,31 @@ import {
   getArchivePayloadHash,
   getArchivePayloadRecent,
   getArchivePayloadRepair,
+  getArchivePayloads,
   getArchivePayloadStats,
 } from '../archive'
 import { requireArchiveAccess } from '../middleware'
 import { notImplemented } from './notImplemented'
 
 export const addPayloadRoutes = (app: Express) => {
-  app.get('/archive/:archive/payload/stats', getArchivePayloadStats /* #swagger.tags = ['payload'] */)
+  app.get(
+    '/archive/:archive/payload',
+    getArchivePayloads
+    /* #swagger.tags = ['payload'] */
+    /* #swagger.summary = 'Get payloads' */
+  )
+  app.get(
+    '/archive/:archive/payload/stats',
+    getArchivePayloadStats
+    /* #swagger.tags = ['payload'] */
+    /* #swagger.summary = 'Get payload stats' */
+  )
   app.get(
     '/archive/:archive/payload/hash/:hash',
     requireArchiveAccess,
-    getArchivePayloadHash /* #swagger.tags = ['payload'] */
+    getArchivePayloadHash
+    /* #swagger.tags = ['payload'] */
+    /* #swagger.summary = 'Get payloads by hash' */
   )
 
   /* Todo: Should this be a POST or PUT instead? */

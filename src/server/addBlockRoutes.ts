@@ -4,6 +4,7 @@ import {
   getArchiveBlockHash,
   getArchiveBlockHashPayloads,
   getArchiveBlockRecent,
+  getArchiveBlocks,
   getArchiveBlockStats,
   postArchiveBlock,
 } from '../archive'
@@ -11,9 +12,27 @@ import { requireArchiveAccess } from '../middleware'
 import { notImplemented } from './notImplemented'
 
 export const addBlockRoutes = (app: Express) => {
-  app.post('/archive/:archive/block', postArchiveBlock /* #swagger.tags = ['block'] */)
-  app.post('/archive/:archive/bw', postArchiveBlock /* #swagger.tags = ['block'] */)
-  app.get('/archive/:archive/block/stats', getArchiveBlockStats /* #swagger.tags = ['block'] */)
+  app.post(
+    '/archive/:archive/block',
+    getArchiveBlocks
+    /* #swagger.tags = ['block'] */
+    /* #swagger.summary = 'Get blocks' */
+  )
+
+  app.post(
+    '/archive/:archive/bw',
+    postArchiveBlock
+    /* #swagger.tags = ['block'] */
+    /* #swagger.summary = 'Temporary support for legacy calls' */
+  )
+
+  app.get(
+    '/archive/:archive/block/stats',
+    getArchiveBlockStats
+    /* #swagger.tags = ['block'] */
+    /* #swagger.summary = 'Get block stats' */
+  )
+
   app.get(
     '/archive/:archive/block/hash/:hash',
     requireArchiveAccess,
@@ -21,6 +40,7 @@ export const addBlockRoutes = (app: Express) => {
     /* #swagger.tags = ['block'] */
     /* #swagger.summary = 'Get blocks by block hash' */
   )
+
   app.get(
     '/archive/:archive/block/hash/:hash/payloads',
     requireArchiveAccess,
@@ -28,6 +48,7 @@ export const addBlockRoutes = (app: Express) => {
     /* #swagger.tags = ['block'] */
     /* #swagger.summary = 'Get block payloads by block hash' */
   )
+
   app.get(
     '/archive/:archive/block/recent/:limit?',
     requireArchiveAccess,
@@ -35,6 +56,7 @@ export const addBlockRoutes = (app: Express) => {
     /* #swagger.tags = ['block'] */
     /* #swagger.summary = 'Get the most recent blocks' */
   )
+
   app.get(
     '/archive/:archive/block/sample/:size?',
     requireArchiveAccess,
@@ -42,6 +64,7 @@ export const addBlockRoutes = (app: Express) => {
     /* #swagger.tags = ['block'] */
     /* #swagger.summary = 'Get a random sampling of blocks' */
   )
+
   app.get(
     '/archive/:archive/block/chain/:hash?',
     requireArchiveAccess,
