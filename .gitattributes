@@ -1,1 +1,4 @@
-* eol=lf 
+# This setting forces Git to normalize line endings to LF on checkin and
+# prevents conversion to CRLF when the file is checked out.
+# https://git-scm.com/docs/gitattributes#_eol
+* eol=lf
