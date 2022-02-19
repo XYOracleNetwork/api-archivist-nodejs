@@ -12,11 +12,18 @@ import { requireArchiveAccess } from '../middleware'
 import { notImplemented } from './notImplemented'
 
 export const addBlockRoutes = (app: Express) => {
-  app.post(
+  app.get(
     '/archive/:archive/block',
     getArchiveBlocks
     /* #swagger.tags = ['Block'] */
     /* #swagger.summary = 'Get blocks' */
+  )
+
+  app.post(
+    '/archive/:archive/block',
+    postArchiveBlock
+    /* #swagger.tags = ['Block'] */
+    /* #swagger.summary = 'Post blocks' */
   )
 
   app.post(
