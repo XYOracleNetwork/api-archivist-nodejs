@@ -1,4 +1,4 @@
-import { NoReqBody, NoReqQuery } from '@xylabs/sdk-api-express-ecs'
+import { asyncHandler, NoReqBody, NoReqQuery } from '@xylabs/sdk-api-express-ecs'
 import { XyoBoundWitness, XyoBoundWitnessWrapper } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
@@ -66,4 +66,4 @@ const handler: RequestHandler<
   next()
 }
 
-export const getArchiveBlocks = handler
+export const getArchiveBlocks = asyncHandler(handler)
