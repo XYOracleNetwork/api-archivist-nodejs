@@ -16,3 +16,18 @@ It doesn't look like they support:
 -   `console`
 
 so be sure to code your scripts accordingly.
+
+## Debugging
+
+For debugging with `mongosh` you can connect with something similar to the
+following:
+
+```shell
+mongosh --authenticationDatabase admin mongodb://root:example@localhost:27017/archivist
+```
+
+From the mongo shell, to seed the DB with test data you can run:
+
+```shell
+load('./scripts/mongo/test/seed.js')
+```
