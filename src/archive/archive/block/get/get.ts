@@ -11,6 +11,7 @@ import { ArchivePathParams } from '../../../archivePathParams'
 const getBoundWitnesses = async (archive: string, hash: string, limit = 100, orderBy: 'asc' | 'desc' = 'asc') => {
   const sdk = await getArchivistBoundWitnessesMongoSdk(archive)
   const sortOrder = orderBy === 'asc' ? 1 : -1
+  // TODO: Find by hash
   return await (
     await sdk.useCollection((collection) => collection.find().sort({ _id: sortOrder }).limit(limit))
   ).toArray()
@@ -43,6 +44,9 @@ const handler: RequestHandler<
   }
   // Validate path params
   const { hash, limit, orderBy } = req.query
+  if (!hash) {
+    next({ message: ReasonPhrases.BAD_REQUEST, statusCode: StatusCodes.BAD_REQUEST })
+  }
   const parsed = parseInt(limit || '100', 10)
   const parsedLimit = isNaN(parsed) || parsed > 100 ? 100 : parsed
   const parsedOrderBy = orderBy === 'asc' ? 'asc' : 'desc'
