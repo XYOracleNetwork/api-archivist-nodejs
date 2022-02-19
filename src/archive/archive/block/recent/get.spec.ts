@@ -1,6 +1,13 @@
 import { StatusCodes } from 'http-status-codes'
 
-import { claimArchive, getArchivist, getNewBlockWithPayloads, getTokenForNewUser, postBlock } from '../../../../test'
+import {
+  claimArchive,
+  getArchivist,
+  getNewBlockWithPayloads,
+  getRecentBlocks,
+  getTokenForNewUser,
+  postBlock,
+} from '../../../../test'
 
 describe('/archive/:archive/block/recent/:limit', () => {
   let token = ''
@@ -37,21 +44,13 @@ describe('/archive/:archive/block/recent/:limit', () => {
     }
     token = await getTokenForNewUser()
     archive = (await claimArchive(token)).archive
-    const response = await getArchivist()
-      .get(`/archive/${archive}/block/recent`)
-      .auth(token, { type: 'bearer' })
-      .expect(StatusCodes.OK)
-    const recent = response.body.data
+    const recent = await getRecentBlocks(token, archive)
     expect(recent).toBeTruthy()
     expect(Array.isArray(recent)).toBe(true)
     expect(recent.length).toBe(0)
   })
   it('When no blocks have been posted to the archive, returns an empty array', async () => {
-    const response = await getArchivist()
-      .get(`/archive/${archive}/block/recent`)
-      .auth(token, { type: 'bearer' })
-      .expect(StatusCodes.OK)
-    const recent = response.body.data
+    const recent = await getRecentBlocks(token, archive)
     expect(recent).toBeTruthy()
     expect(Array.isArray(recent)).toBe(true)
     expect(recent.length).toBe(0)

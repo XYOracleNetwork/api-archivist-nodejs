@@ -1,15 +1,14 @@
 import { asyncHandler, NoReqBody, NoReqQuery } from '@xylabs/sdk-api-express-ecs'
-import { XyoBoundWitness, XyoBoundWitnessWrapper } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
-import { getArchivistBoundWitnessesMongoSdk } from '../../../../lib'
+import { SortOrder } from '../../../../../model'
+import { getArchivistBoundWitnessesMongoSdk, scrubBoundWitnesses } from '../../../../lib'
 import { ArchiveLocals } from '../../../archiveLocals'
 import { ArchivePathParams } from '../../../archivePathParams'
 
 const maxLimit = 100
-
-export type SortOrder = 'asc' | 'desc'
 
 export interface GetArchiveBlocksQueryParams extends NoReqQuery {
   hash: string
@@ -24,19 +23,11 @@ const getBoundWitnesses = async (archive: string, hash: string, limit = maxLimit
   return await (
     await sdk.useCollection((col) =>
       col
-        .find({ _archive: 'testA', _hash: { $gte: hash } })
+        .find({ _archive: archive, _hash: { $gt: hash } })
         .sort({ _hash: sortOrder })
         .limit(limit)
     )
   ).toArray()
-}
-
-// TODO: Move to shared lib since we use for single hash endpoint too
-const scrubBoundWitnesses = (boundWitnesses: XyoBoundWitness[]) => {
-  return boundWitnesses?.map((boundWitness) => {
-    const bwWrapper = new XyoBoundWitnessWrapper(boundWitness)
-    return bwWrapper.scrubbedFields
-  })
 }
 
 const handler: RequestHandler<

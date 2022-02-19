@@ -1,9 +1,10 @@
-import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoAddress, XyoPayload, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
 import { Wallet } from 'ethers'
 import { StatusCodes } from 'http-status-codes'
 import supertest, { SuperTest, Test } from 'supertest'
 import { v4 } from 'uuid'
 
+import { SortOrder } from '../../model'
 import {
   ArchiveKeyResponse,
   ArchiveResponse,
@@ -20,6 +21,18 @@ test('Must have APP_PORT ENV VAR defined', () => {
 })
 
 const request = supertest(`http://localhost:${process.env.APP_PORT}`)
+
+const schema = 'co.coinapp.current.user.witness'
+const address = XyoAddress.fromPhrase('test')
+const payloadTemplate = {
+  balance: 10000.0,
+  daysOld: 1,
+  deviceId: '77040732-4c6d-47e1-af15-06159b51d879',
+  geomines: 1,
+  planType: 'pro',
+  schema,
+  uid: '',
+}
 
 export const knownBlock = {
   boundWitnesses: [
@@ -181,11 +194,13 @@ export const getArchiveKeys = async (
   return response.body.data
 }
 
-export const getPayload = () => {
-  return {
-    id: v4(),
-    schema: 'test',
-  }
+export const getPayload = (): XyoPayload => {
+  return new XyoPayloadBuilder({ schema })
+    .fields({
+      ...payloadTemplate,
+      uid: v4(),
+    })
+    .build()
 }
 
 export const getPayloads = (numPayloads: number) => {
@@ -239,6 +254,34 @@ export const getBlockByHash = async (
 ): Promise<XyoPayload[]> => {
   const response = await getArchivist()
     .get(`/archive/${archive}/block/hash/${hash}`)
+    .auth(token, { type: 'bearer' })
+    .expect(expectedStatus)
+  return response.body.data
+}
+
+export const getBlocksByHash = async (
+  token: string,
+  archive: string,
+  hash: string,
+  limit = 10,
+  order: SortOrder = 'asc',
+  expectedStatus: StatusCodes = StatusCodes.OK
+): Promise<XyoPayload[]> => {
+  const response = await getArchivist()
+    .get(`/archive/${archive}/block/hash/${hash}`)
+    .query({ hash, limit, order })
+    .auth(token, { type: 'bearer' })
+    .expect(expectedStatus)
+  return response.body.data
+}
+
+export const getRecentBlocks = async (
+  token: string,
+  archive: string,
+  expectedStatus: StatusCodes = StatusCodes.OK
+): Promise<XyoPayload[]> => {
+  const response = await getArchivist()
+    .get(`/archive/${archive}/block/recent`)
     .auth(token, { type: 'bearer' })
     .expect(expectedStatus)
   return response.body.data
