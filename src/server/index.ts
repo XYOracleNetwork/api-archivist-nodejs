@@ -2,7 +2,7 @@ import { getEnvFromAws } from '@xylabs/sdk-api-express-ecs'
 import cors from 'cors'
 import express from 'express'
 
-import { configureAuth, configureDoc, standardErrors } from '../middleware'
+import { configureAuth, configureDoc } from '../middleware'
 import { addArchiveRoutes } from './addArchiveRoutes'
 import { addBlockRoutes } from './addBlockRoutes'
 import { addMiddleware } from './addMiddleware'

@@ -59,7 +59,7 @@ export const addPayloadRoutes = (app: Express) => {
   )
 
   app.get(
-    '/archive/:archive/payload/chain/:hash?',
+    '/archive/:archive/payload/chain/:hash/:limit?',
     requireArchiveAccess,
     notImplemented
     /* #swagger.tags = ['payload'] */

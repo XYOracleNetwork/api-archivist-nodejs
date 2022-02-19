@@ -66,7 +66,7 @@ export const addBlockRoutes = (app: Express) => {
   )
 
   app.get(
-    '/archive/:archive/block/chain/:hash?',
+    '/archive/:archive/block/chain/:hash/:address/:limit?',
     requireArchiveAccess,
     notImplemented
     /* #swagger.tags = ['block'] */
