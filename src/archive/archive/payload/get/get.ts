@@ -1,4 +1,4 @@
-import { NoReqBody, NoReqQuery } from '@xylabs/sdk-api-express-ecs'
+import { asyncHandler, NoReqBody, NoReqQuery } from '@xylabs/sdk-api-express-ecs'
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
@@ -18,7 +18,7 @@ const handler: RequestHandler<
   NoReqBody,
   GetArchivePayloadsQueryParams,
   ArchiveLocals
-> = (req, res, next) => {
+> = async (req, res, next) => {
   const { user } = req
   if (!user || !user?.id) {
     next({ message: 'Invalid User', statusCode: StatusCodes.UNAUTHORIZED })
@@ -29,6 +29,8 @@ const handler: RequestHandler<
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
   }
   if (archive.user === user.id) {
+    // NOTE: Placeholder so we don't forget to wrap in asyncHandler
+    await Promise.resolve()
     // res.json(archive)
     // next()
     next({ message: ReasonPhrases.NOT_IMPLEMENTED, statusCode: StatusCodes.NOT_IMPLEMENTED })
@@ -37,4 +39,4 @@ const handler: RequestHandler<
   }
 }
 
-export const getArchivePayloads = handler
+export const getArchivePayloads = asyncHandler(handler)

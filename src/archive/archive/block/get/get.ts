@@ -14,7 +14,7 @@ export type SortOrder = 'asc' | 'desc'
 export interface GetArchiveBlocksQueryParams extends NoReqQuery {
   hash: string
   limit?: string
-  orderBy?: SortOrder
+  order?: SortOrder
 }
 
 // TODO: Move to SDK lib
@@ -51,7 +51,7 @@ const handler: RequestHandler<
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
   }
   // Validate path params
-  const { hash, limit, orderBy } = req.query
+  const { hash, limit, order: orderBy } = req.query
   if (!hash) {
     next({ message: ReasonPhrases.BAD_REQUEST, statusCode: StatusCodes.BAD_REQUEST })
   }
