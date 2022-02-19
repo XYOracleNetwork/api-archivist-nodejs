@@ -7,13 +7,27 @@ import { getArchivistBoundWitnessesMongoSdk } from '../../../../lib'
 import { ArchiveLocals } from '../../../archiveLocals'
 import { ArchivePathParams } from '../../../archivePathParams'
 
+const maxLimit = 100
+
+export type SortOrder = 'asc' | 'desc'
+
+export interface GetArchiveBlocksQueryParams extends NoReqQuery {
+  hash: string
+  limit?: string
+  orderBy?: SortOrder
+}
+
 // TODO: Move to SDK lib
-const getBoundWitnesses = async (archive: string, hash: string, limit = 100, orderBy: 'asc' | 'desc' = 'asc') => {
+const getBoundWitnesses = async (archive: string, hash: string, limit = maxLimit, orderBy: SortOrder = 'asc') => {
   const sdk = await getArchivistBoundWitnessesMongoSdk(archive)
   const sortOrder = orderBy === 'asc' ? 1 : -1
-  // TODO: Find by hash
   return await (
-    await sdk.useCollection((collection) => collection.find().sort({ _id: sortOrder }).limit(limit))
+    await sdk.useCollection((col) =>
+      col
+        .find({ _archive: 'testA', _hash: { $gte: hash } })
+        .sort({ _hash: sortOrder })
+        .limit(limit)
+    )
   ).toArray()
 }
 
@@ -23,12 +37,6 @@ const scrubBoundWitnesses = (boundWitnesses: XyoBoundWitness[]) => {
     const bwWrapper = new XyoBoundWitnessWrapper(boundWitness)
     return bwWrapper.scrubbedFields
   })
-}
-
-interface GetArchiveBlocksQueryParams extends NoReqQuery {
-  hash: string
-  limit?: string
-  orderBy?: 'asc' | 'desc'
 }
 
 const handler: RequestHandler<
@@ -47,9 +55,9 @@ const handler: RequestHandler<
   if (!hash) {
     next({ message: ReasonPhrases.BAD_REQUEST, statusCode: StatusCodes.BAD_REQUEST })
   }
-  const parsed = parseInt(limit || '100', 10)
-  const parsedLimit = isNaN(parsed) || parsed > 100 ? 100 : parsed
-  const parsedOrderBy = orderBy === 'asc' ? 'asc' : 'desc'
+  const parsed = parseInt(limit || `${maxLimit}`, 10)
+  const parsedLimit = isNaN(parsed) || parsed > maxLimit ? maxLimit : parsed
+  const parsedOrderBy = orderBy?.toLowerCase?.() === 'asc' ? 'asc' : 'desc'
 
   // Get boundWitnesses
   const boundWitnesses = (await getBoundWitnesses(archive.archive, hash, parsedLimit, parsedOrderBy)) ?? []
