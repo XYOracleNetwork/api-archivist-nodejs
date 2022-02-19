@@ -14,14 +14,14 @@ export const addPayloadRoutes = (app: Express) => {
   app.get(
     '/archive/:archive/payload',
     getArchivePayloads
-    /* #swagger.tags = ['payload'] */
+    /* #swagger.tags = ['Payload'] */
     /* #swagger.summary = 'Get payloads' */
   )
 
   app.get(
     '/archive/:archive/payload/stats',
     getArchivePayloadStats
-    /* #swagger.tags = ['payload'] */
+    /* #swagger.tags = ['Payload'] */
     /* #swagger.summary = 'Get payload stats' */
   )
 
@@ -29,7 +29,7 @@ export const addPayloadRoutes = (app: Express) => {
     '/archive/:archive/payload/hash/:hash',
     requireArchiveAccess,
     getArchivePayloadHash
-    /* #swagger.tags = ['payload'] */
+    /* #swagger.tags = ['Payload'] */
     /* #swagger.summary = 'Get payloads by hash' */
   )
 
@@ -38,7 +38,7 @@ export const addPayloadRoutes = (app: Express) => {
     '/archive/:archive/payload/hash/:hash/repair',
     requireArchiveAccess,
     getArchivePayloadRepair
-    /* #swagger.tags = ['payload'] */
+    /* #swagger.tags = ['Payload'] */
     /* #swagger.summary = 'Repair a payload' */
   )
 
@@ -46,7 +46,7 @@ export const addPayloadRoutes = (app: Express) => {
     '/archive/:archive/payload/recent/:limit?',
     requireArchiveAccess,
     getArchivePayloadRecent
-    /* #swagger.tags = ['payload'] */
+    /* #swagger.tags = ['Payload'] */
     /* #swagger.summary = 'Get the most recent payloads' */
   )
 
@@ -54,7 +54,7 @@ export const addPayloadRoutes = (app: Express) => {
     '/archive/:archive/payload/sample/:size?',
     requireArchiveAccess,
     notImplemented
-    /* #swagger.tags = ['payload'] */
+    /* #swagger.tags = ['Payload'] */
     /* #swagger.summary = 'Get a random sampling of payloads' */
   )
 
@@ -62,7 +62,7 @@ export const addPayloadRoutes = (app: Express) => {
     '/archive/:archive/payload/chain/:hash/:limit?',
     requireArchiveAccess,
     notImplemented
-    /* #swagger.tags = ['payload'] */
+    /* #swagger.tags = ['Payload'] */
     /* #swagger.summary = 'Get a proof of origin chain starting from a payload hash' */
   )
 }

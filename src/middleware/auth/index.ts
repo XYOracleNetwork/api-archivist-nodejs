@@ -73,7 +73,7 @@ router.post(
   '/signup',
   adminApiKeyUserSignupStrategy,
   postSignup /*
-    #swagger.tags = ['user']
+    #swagger.tags = ['User']
     #swagger.basePath = '/user'
     #swagger.summary = 'Create an account (web2)'
   */
@@ -85,7 +85,7 @@ router.post(
   localStrategy,
   (req, res, next) => respondWithJwt(req, res, next)
   /*
-    #swagger.tags = ['user']
+    #swagger.tags = ['User']
     #swagger.basePath = '/user'
     #swagger.summary = 'Log in (web2)'
   */
@@ -95,7 +95,7 @@ router.post(
 router.post(
   '/wallet/challenge',
   postWalletChallenge /*
-    #swagger.tags = ['user']
+    #swagger.tags = ['User']
     #swagger.basePath = '/user'
     #swagger.summary = 'Challenge (web3)'
   */
@@ -104,7 +104,7 @@ router.post(
   '/wallet/verify',
   web3Strategy,
   (req, res, next) => respondWithJwt(req, res, next) /*
-    #swagger.tags = ['user']
+    #swagger.tags = ['User']
     #swagger.basePath = '/user'
     #swagger.summary = 'Verify (web3)'
   */
@@ -114,7 +114,7 @@ router.get(
   '/profile',
   requireLoggedIn,
   getProfile /*
-    #swagger.tags = ['user']
+    #swagger.tags = ['User']
     #swagger.basePath = '/user'
     #swagger.summary = 'Get user profile data'
   */

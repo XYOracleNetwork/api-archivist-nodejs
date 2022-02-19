@@ -15,21 +15,21 @@ export const addBlockRoutes = (app: Express) => {
   app.post(
     '/archive/:archive/block',
     getArchiveBlocks
-    /* #swagger.tags = ['block'] */
+    /* #swagger.tags = ['Block'] */
     /* #swagger.summary = 'Get blocks' */
   )
 
   app.post(
     '/archive/:archive/bw',
     postArchiveBlock
-    /* #swagger.tags = ['block'] */
+    /* #swagger.tags = ['Block'] */
     /* #swagger.summary = 'Temporary support for legacy calls' */
   )
 
   app.get(
     '/archive/:archive/block/stats',
     getArchiveBlockStats
-    /* #swagger.tags = ['block'] */
+    /* #swagger.tags = ['Block'] */
     /* #swagger.summary = 'Get block stats' */
   )
 
@@ -37,7 +37,7 @@ export const addBlockRoutes = (app: Express) => {
     '/archive/:archive/block/hash/:hash',
     requireArchiveAccess,
     getArchiveBlockHash
-    /* #swagger.tags = ['block'] */
+    /* #swagger.tags = ['Block'] */
     /* #swagger.summary = 'Get blocks by block hash' */
   )
 
@@ -45,7 +45,7 @@ export const addBlockRoutes = (app: Express) => {
     '/archive/:archive/block/hash/:hash/payloads',
     requireArchiveAccess,
     getArchiveBlockHashPayloads
-    /* #swagger.tags = ['block'] */
+    /* #swagger.tags = ['Block'] */
     /* #swagger.summary = 'Get block payloads by block hash' */
   )
 
@@ -53,7 +53,7 @@ export const addBlockRoutes = (app: Express) => {
     '/archive/:archive/block/recent/:limit?',
     requireArchiveAccess,
     getArchiveBlockRecent
-    /* #swagger.tags = ['block'] */
+    /* #swagger.tags = ['Block'] */
     /* #swagger.summary = 'Get the most recent blocks' */
   )
 
@@ -61,7 +61,7 @@ export const addBlockRoutes = (app: Express) => {
     '/archive/:archive/block/sample/:size?',
     requireArchiveAccess,
     notImplemented
-    /* #swagger.tags = ['block'] */
+    /* #swagger.tags = ['Block'] */
     /* #swagger.summary = 'Get a random sampling of blocks' */
   )
 
@@ -69,7 +69,7 @@ export const addBlockRoutes = (app: Express) => {
     '/archive/:archive/block/chain/:hash/:address/:limit?',
     requireArchiveAccess,
     notImplemented
-    /* #swagger.tags = ['block'] */
+    /* #swagger.tags = ['Block'] */
     /* #swagger.summary = 'Get a proof of origin chain starting from a block hash' */
   )
 }

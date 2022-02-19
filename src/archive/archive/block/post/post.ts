@@ -28,7 +28,7 @@ const handler: RequestHandler<ArchivePathParams, PostArchiveBlockResponse, XyoAr
 ) => {
   const { archive } = req.params
   const _source_ip = req.ip ?? undefined
-  const _user_agent = req.headers['user-agent'] ?? undefined
+  const _user_agent = req.headers['User-agent'] ?? undefined
   const _timestamp = Date.now()
 
   const body = req.body as XyoArchivistBoundWitnessBody

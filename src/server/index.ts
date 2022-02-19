@@ -31,7 +31,7 @@ const server = async (port = 80) => {
   }
 
   app.get('/', (_req, res, next) => {
-    /* #swagger.tags = ['health'] */
+    /* #swagger.tags = ['Health'] */
     /* #swagger.summary = 'Get the health check for the server' */
     res.json({ alive: true })
     next()

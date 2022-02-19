@@ -10,7 +10,7 @@ export const useRequestCounters = (app: Application): void => {
   })
 
   app.get('/stats', (req: Request, res: Response, next: NextFunction) => {
-    /* #swagger.tags = ['metrics'] */
+    /* #swagger.tags = ['Metrics'] */
     /* #swagger.summary = 'Get the counters for single instance of archivist' */
     res.json({
       alive: true,

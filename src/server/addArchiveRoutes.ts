@@ -9,7 +9,7 @@ export const addArchiveRoutes = (app: Express) => {
     '/archive',
     requireAuth,
     getArchives
-    /* #swagger.tags = ['archive'] */
+    /* #swagger.tags = ['Archive'] */
     /* #swagger.summary = 'Get list of archives on archivist' */
   )
 
@@ -17,7 +17,7 @@ export const addArchiveRoutes = (app: Express) => {
     '/archive/:archive',
     requireArchiveOwner,
     getArchive
-    /* #swagger.tags = ['archive'] */
+    /* #swagger.tags = ['Archive'] */
     /* #swagger.summary = 'Get archive configuration' */
   )
 
@@ -25,7 +25,7 @@ export const addArchiveRoutes = (app: Express) => {
     '/archive/:archive',
     requireAuth,
     putArchive
-    /* #swagger.tags = ['archive'] */
+    /* #swagger.tags = ['Archive'] */
     /* #swagger.summary = 'Put archive configuration' */
   )
 
@@ -33,7 +33,7 @@ export const addArchiveRoutes = (app: Express) => {
     '/archive/:archive',
     requireArchiveOwner,
     notImplemented
-    /* #swagger.tags = ['archive'] */
+    /* #swagger.tags = ['Archive'] */
     /* #swagger.summary = 'Delete an archive' */
   )
 
@@ -41,7 +41,7 @@ export const addArchiveRoutes = (app: Express) => {
     '/archive/:archive/settings/keys',
     requireArchiveOwner,
     getArchiveSettingsKeys
-    /* #swagger.tags = ['archive'] */
+    /* #swagger.tags = ['Archive'] */
     /* #swagger.summary = 'Gets the list of keys for a specific archive' */
   )
 
@@ -49,7 +49,7 @@ export const addArchiveRoutes = (app: Express) => {
     '/archive/:archive/settings/keys',
     requireArchiveOwner,
     postArchiveSettingsKeys
-    /* #swagger.tags = ['archive'] */
+    /* #swagger.tags = ['Archive'] */
     /* #swagger.summary = 'Sets the list of keys for a specific archive' */
   )
 }
