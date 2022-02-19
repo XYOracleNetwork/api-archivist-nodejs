@@ -1,4 +1,4 @@
-import { IResourceIdentifierObject } from './resourceIdentifier'
+import { ApiResourceIdentifierObject } from './resourceIdentifier'
 
 export interface IRelationshipSelfLink {
   /**
@@ -26,7 +26,7 @@ export interface IRelationshipLinks {
  *    • a single resource identifier object for non-empty to-one relationships.
  *    • an array of resource identifier objects for non-empty to-many relationships.
  */
-export type ResourceLinkage = null | [] | IResourceIdentifierObject | IResourceIdentifierObject[]
+export type ResourceLinkage = null | [] | ApiResourceIdentifierObject | ApiResourceIdentifierObject[]
 export interface IRelationshipData {
   data: ResourceLinkage
 }

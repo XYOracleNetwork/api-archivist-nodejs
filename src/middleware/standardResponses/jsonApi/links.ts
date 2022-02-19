@@ -1,6 +1,6 @@
-export interface ILink {
+export interface HrefWithMeta {
   href: string
   meta: Record<string, unknown>
 }
-export type Link = string | ILink
-export type Links = Record<string, Link>
+export type ApiLink = string | HrefWithMeta
+export type ApiLinks = Record<string, ApiLink>
