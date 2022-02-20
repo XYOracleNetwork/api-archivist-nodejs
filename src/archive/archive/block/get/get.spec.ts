@@ -37,9 +37,10 @@ describe('/archive/:archive/block', () => {
     })
     const recentHash = recent[0]._hash || ''
     expect(recentHash).toBeTruthy()
-    const response = await getBlocksByHash(token, archive, recentHash)
+    const response = await getBlocksByHash(token, archive, recentHash, 10)
     expect(response).toBeTruthy()
     expect(Array.isArray(response)).toBe(true)
-    expect(response.length).toBeGreaterThan(0)
+    expect(response.length).toBe(10)
+    expect(response.map((x) => x._hash)).not.toContain(recentHash)
   })
 })

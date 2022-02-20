@@ -283,7 +283,7 @@ export const getBlocksByHash = async (
   expectedStatus: StatusCodes = StatusCodes.OK
 ): Promise<XyoPayload[]> => {
   const response = await getArchivist()
-    .get(`/archive/${archive}/block/hash/${hash}`)
+    .get(`/archive/${archive}/block`)
     .query({ hash, limit, order })
     .auth(token, { type: 'bearer' })
     .expect(expectedStatus)
