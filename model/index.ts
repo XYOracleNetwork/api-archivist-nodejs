@@ -1,1 +1,1 @@
-export * from './SortOrder'
+export * from './sortOrder'
