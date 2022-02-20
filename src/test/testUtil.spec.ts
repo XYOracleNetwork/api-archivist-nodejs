@@ -72,7 +72,7 @@ const knownPayload = new XyoPayloadBuilder({ schema })
   })
   .build()
 export const knownPayloadHash = knownPayload._hash || ''
-export const knownBlock = new XyoBoundWitnessBuilder().payload(knownPayload).build()
+export const knownBlock = new XyoBoundWitnessBuilder({ inlinePayloads: true }).payload(knownPayload).build()
 export const knownBlockHash = knownBlock._hash || ''
 
 export interface TestWeb2User {
@@ -229,7 +229,7 @@ export const getPayloads = (numPayloads: number) => {
 }
 
 export const getNewBlock = (...payloads: XyoPayload[]) => {
-  return new XyoBoundWitnessBuilder().witness(address).payloads(payloads).build()
+  return new XyoBoundWitnessBuilder({ inlinePayloads: true }).witness(address).payloads(payloads).build()
 }
 
 export const getNewBlockWithPayloads = (numPayloads = 1) => {
@@ -238,13 +238,13 @@ export const getNewBlockWithPayloads = (numPayloads = 1) => {
 
 export const getNewBlockWithBoundWitnesses = (numBoundWitnesses = 1) => {
   return new Array(numBoundWitnesses).fill(0).map(() => {
-    return new XyoBoundWitnessBuilder().build()
+    return new XyoBoundWitnessBuilder({ inlinePayloads: true }).build()
   })
 }
 
 export const getNewBlockWithBoundWitnessesWithPayloads = (numBoundWitnesses = 1, numPayloads = 1) => {
   return new Array(numBoundWitnesses).fill(0).map(() => {
-    return new XyoBoundWitnessBuilder().payloads(getPayloads(numPayloads)).build()
+    return new XyoBoundWitnessBuilder({ inlinePayloads: true }).payloads(getPayloads(numPayloads)).build()
   })
 }
 
