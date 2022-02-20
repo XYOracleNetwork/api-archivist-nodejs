@@ -315,6 +315,22 @@ export const getPayloadByHash = async (
   return response.body.data
 }
 
+export const getPayloadsByHash = async (
+  token: string,
+  archive: string,
+  hash: string,
+  limit = 10,
+  order: SortOrder = 'asc',
+  expectedStatus: StatusCodes = StatusCodes.OK
+): Promise<XyoPayload[]> => {
+  const response = await getArchivist()
+    .get(`/archive/${archive}/payload`)
+    .query({ hash, limit, order })
+    .auth(token, { type: 'bearer' })
+    .expect(expectedStatus)
+  return response.body.data
+}
+
 export const repairPayloadByHash = async (
   token: string,
   archive: string,
