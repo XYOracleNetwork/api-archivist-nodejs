@@ -4,8 +4,8 @@ import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
-import { SortOrder } from '../../../../../model'
 import { getArchivistPayloadMongoSdk } from '../../../../lib'
+import { SortOrder } from '../../../../model'
 import { ArchiveLocals } from '../../../archiveLocals'
 import { ArchivePathParams } from '../../../archivePathParams'
 

@@ -10,7 +10,6 @@ import { StatusCodes } from 'http-status-codes'
 import supertest, { SuperTest, Test } from 'supertest'
 import { v4 } from 'uuid'
 
-import { SortOrder } from '../../model'
 import {
   ArchiveKeyResponse,
   ArchiveResponse,
@@ -18,6 +17,7 @@ import {
   PostArchiveBlockResponse,
   PutArchiveRequest,
 } from '../archive'
+import { SortOrder } from '../model'
 
 test('Must have API_KEY ENV VAR defined', () => {
   expect(process.env.API_KEY).toBeTruthy()
