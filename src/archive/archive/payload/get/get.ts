@@ -56,4 +56,4 @@ const handler: RequestHandler<
   next()
 }
 
-export const getArchiveBlocks = asyncHandler(handler)
+export const getArchivePayloads = asyncHandler(handler)

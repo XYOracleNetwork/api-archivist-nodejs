@@ -35,9 +35,9 @@ const server = async (port = 80) => {
   addMiddleware(app)
   addHealthChecks(app)
   addArchiveRoutes(app)
+  addBlockRoutes(app)
   addPayloadRoutes(app)
   addPayloadSchemaRoutes(app)
-  addBlockRoutes(app)
 
   const userRoutes = await configureAuth({
     apiKey: process.env.API_KEY,
