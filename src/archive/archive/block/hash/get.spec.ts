@@ -26,7 +26,7 @@ describe('/archive/:archive/block/hash/:hash', () => {
     expect(typeof block._timestamp).toBe('number')
     expect(block._user_agent).toBe(null)
   })
-  it('Allows retreiving the same block if posted to multiple archives', async () => {
+  it('Allows retrieving the same block if posted to multiple archives', async () => {
     const response = await getBlockByHash(token, archive, knownBlockHash)
     expect(response.length).toBe(1)
     const token2 = await getTokenForNewUser()

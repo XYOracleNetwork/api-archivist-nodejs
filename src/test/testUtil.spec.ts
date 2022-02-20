@@ -1,4 +1,10 @@
-import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import {
+  XyoAddress,
+  XyoBoundWitness,
+  XyoBoundWitnessBuilder,
+  XyoPayload,
+  XyoPayloadBuilder,
+} from '@xyo-network/sdk-xyo-client-js'
 import { Wallet } from 'ethers'
 import { StatusCodes } from 'http-status-codes'
 import supertest, { SuperTest, Test } from 'supertest'
@@ -11,6 +17,7 @@ import {
   PostArchiveBlockResponse,
   PutArchiveRequest,
 } from '../archive'
+import { SortOrder } from '../model'
 
 test('Must have API_KEY ENV VAR defined', () => {
   expect(process.env.API_KEY).toBeTruthy()
@@ -21,25 +28,32 @@ test('Must have APP_PORT ENV VAR defined', () => {
 
 const request = supertest(`http://localhost:${process.env.APP_PORT}`)
 
-export const knownBlock = {
-  boundWitnesses: [
-    {
-      _payloads: [
-        {
-          balance: 10000.0,
-          daysOld: 1,
-          deviceId: '00000000-0000-0000-0000-000000000000',
-          geomines: 41453,
-          planType: 'pro',
-          schema: 'co.coinapp.current.user.witness',
-          uid: '0000000000000000000000000000',
-        },
-      ],
-    },
-  ],
+const schema = 'co.coinapp.current.user.witness'
+const address = XyoAddress.fromPhrase('test')
+const payloadTemplate = {
+  balance: 10000.0,
+  daysOld: 1,
+  deviceId: '77040732-4c6d-47e1-af15-06159b51d879',
+  geomines: 1,
+  planType: 'pro',
+  schema,
+  uid: '',
 }
-export const knownBlockHash = '44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a'
-export const knownPayloadHash = '9ba8f23d484191a50d7008e8bc93ef82e8253b66acf3e819cec7e39f17e4f1a8'
+
+const knownPayload = new XyoPayloadBuilder({ schema })
+  .fields({
+    balance: 10000.0,
+    daysOld: 1,
+    deviceId: '00000000-0000-0000-0000-000000000000',
+    geomines: 41453,
+    planType: 'pro',
+    schema: 'co.coinapp.current.user.witness',
+    uid: '0000000000000000000000000000',
+  })
+  .build()
+export const knownPayloadHash = knownPayload._hash || ''
+export const knownBlock = new XyoBoundWitnessBuilder({ inlinePayloads: true }).payload(knownPayload).build()
+export const knownBlockHash = knownBlock._hash || ''
 
 export interface TestWeb2User {
   email: string
@@ -181,25 +195,21 @@ export const getArchiveKeys = async (
   return response.body.data
 }
 
-export const getPayload = () => {
-  return {
-    id: v4(),
-    schema: 'test',
-  }
+export const getPayload = (): XyoPayload => {
+  return new XyoPayloadBuilder({ schema })
+    .fields({
+      ...payloadTemplate,
+      uid: v4(),
+    })
+    .build()
 }
 
 export const getPayloads = (numPayloads: number) => {
   return new Array(numPayloads).fill(0).map(getPayload)
 }
 
-export const getNewBlock = (...payloads: Record<string, unknown>[]) => {
-  return {
-    boundWitnesses: [
-      {
-        _payloads: payloads ? payloads : ([] as Record<string, unknown>[]),
-      },
-    ],
-  }
+export const getNewBlock = (...payloads: XyoPayload[]) => {
+  return new XyoBoundWitnessBuilder({ inlinePayloads: true }).witness(address).payloads(payloads).build()
 }
 
 export const getNewBlockWithPayloads = (numPayloads = 1) => {
@@ -207,27 +217,27 @@ export const getNewBlockWithPayloads = (numPayloads = 1) => {
 }
 
 export const getNewBlockWithBoundWitnesses = (numBoundWitnesses = 1) => {
-  return {
-    boundWitnesses: new Array(numBoundWitnesses).fill(0).map(() => {
-      return { _payloads: [] as Record<string, unknown>[] }
-    }),
-  }
+  return new Array(numBoundWitnesses).fill(0).map(() => {
+    return new XyoBoundWitnessBuilder({ inlinePayloads: true }).build()
+  })
 }
 
 export const getNewBlockWithBoundWitnessesWithPayloads = (numBoundWitnesses = 1, numPayloads = 1) => {
-  return {
-    boundWitnesses: new Array(numBoundWitnesses).fill(0).map(() => {
-      return { _payloads: getPayloads(numPayloads) }
-    }),
-  }
+  return new Array(numBoundWitnesses).fill(0).map(() => {
+    return new XyoBoundWitnessBuilder({ inlinePayloads: true }).payloads(getPayloads(numPayloads)).build()
+  })
 }
 
 export const postBlock = async (
-  data: Record<string, unknown>,
+  boundWitnesses: XyoBoundWitness | XyoBoundWitness[],
   archive: string,
   expectedStatus: StatusCodes = StatusCodes.OK
 ): Promise<PostArchiveBlockResponse> => {
-  const response = await getArchivist().post(`/archive/${archive}/block`).send(data).expect(expectedStatus)
+  const data = ([] as XyoBoundWitness[]).concat(boundWitnesses)
+  const response = await getArchivist()
+    .post(`/archive/${archive}/block`)
+    .send({ boundWitnesses: data })
+    .expect(expectedStatus)
   return response.body.data
 }
 
@@ -244,6 +254,34 @@ export const getBlockByHash = async (
   return response.body.data
 }
 
+export const getBlocksByHash = async (
+  token: string,
+  archive: string,
+  hash: string,
+  limit = 10,
+  order: SortOrder = 'asc',
+  expectedStatus: StatusCodes = StatusCodes.OK
+): Promise<XyoPayload[]> => {
+  const response = await getArchivist()
+    .get(`/archive/${archive}/block`)
+    .query({ hash, limit, order })
+    .auth(token, { type: 'bearer' })
+    .expect(expectedStatus)
+  return response.body.data
+}
+
+export const getRecentBlocks = async (
+  token: string,
+  archive: string,
+  expectedStatus: StatusCodes = StatusCodes.OK
+): Promise<XyoPayload[]> => {
+  const response = await getArchivist()
+    .get(`/archive/${archive}/block/recent`)
+    .auth(token, { type: 'bearer' })
+    .expect(expectedStatus)
+  return response.body.data
+}
+
 export const getPayloadByHash = async (
   token: string,
   archive: string,
@@ -252,6 +290,22 @@ export const getPayloadByHash = async (
 ): Promise<XyoPayload[]> => {
   const response = await getArchivist()
     .get(`/archive/${archive}/payload/hash/${hash}`)
+    .auth(token, { type: 'bearer' })
+    .expect(expectedStatus)
+  return response.body.data
+}
+
+export const getPayloadsByHash = async (
+  token: string,
+  archive: string,
+  hash: string,
+  limit = 10,
+  order: SortOrder = 'asc',
+  expectedStatus: StatusCodes = StatusCodes.OK
+): Promise<XyoPayload[]> => {
+  const response = await getArchivist()
+    .get(`/archive/${archive}/payload`)
+    .query({ hash, limit, order })
     .auth(token, { type: 'bearer' })
     .expect(expectedStatus)
   return response.body.data

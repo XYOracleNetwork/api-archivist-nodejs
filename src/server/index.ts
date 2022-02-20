@@ -5,6 +5,8 @@ import express from 'express'
 import { configureAuth, configureDoc } from '../middleware'
 import { addArchiveRoutes } from './addArchiveRoutes'
 import { addBlockRoutes } from './addBlockRoutes'
+import { addErrorHandlers } from './addErrorHandlers'
+import { addHealthChecks } from './addHealthChecks'
 import { addMiddleware } from './addMiddleware'
 import { addPayloadRoutes } from './addPayloadRoutes'
 import { addPayloadSchemaRoutes } from './addPayloadSchemaRoutes'
@@ -30,18 +32,12 @@ const server = async (port = 80) => {
     app.use(cors({ origin }))
   }
 
-  app.get('/', (_req, res, next) => {
-    /* #swagger.tags = ['Health'] */
-    /* #swagger.summary = 'Get the health check for the server' */
-    res.json({ alive: true })
-    next()
-  })
-
   addMiddleware(app)
+  addHealthChecks(app)
   addArchiveRoutes(app)
+  addBlockRoutes(app)
   addPayloadRoutes(app)
   addPayloadSchemaRoutes(app)
-  addBlockRoutes(app)
 
   const userRoutes = await configureAuth({
     apiKey: process.env.API_KEY,
@@ -50,6 +46,8 @@ const server = async (port = 80) => {
   app.use('/user', userRoutes)
   const host = process.env.PUBLIC_ORIGIN || `http://localhost:${port}`
   await configureDoc(app, { host })
+
+  addErrorHandlers(app)
 
   const server = app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`)

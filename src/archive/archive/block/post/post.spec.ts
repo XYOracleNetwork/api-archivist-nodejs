@@ -5,6 +5,7 @@ import {
   getNewBlockWithBoundWitnesses,
   getNewBlockWithBoundWitnessesWithPayloads,
   getNewBlockWithPayloads,
+  getPayloads,
   getTokenForNewUser,
   postBlock,
 } from '../../../../test'
@@ -49,8 +50,9 @@ describe('/archive/:archive/block', () => {
     expect(response.payloads).toEqual(4)
   })
   it('Allows posting multiple bound witnesses some with payloads and some without', async () => {
-    const block = getNewBlockWithBoundWitnessesWithPayloads(2, 2)
-    block.boundWitnesses[0]._payloads = []
+    const boundWitness1 = getNewBlock(...getPayloads(2))
+    const boundWitness2 = getNewBlock()
+    const block = [boundWitness1, boundWitness2]
     const response = await postBlock(block, getArchiveName())
     expect(response.boundWitnesses).toEqual(2)
     expect(response.payloads).toEqual(2)

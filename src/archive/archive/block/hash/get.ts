@@ -1,22 +1,14 @@
 import 'source-map-support/register'
 
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
-import { XyoBoundWitness, XyoBoundWitnessWrapper } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 
-import { getArchivistBoundWitnessesMongoSdk } from '../../../../lib'
+import { getArchivistBoundWitnessesMongoSdk, scrubBoundWitnesses } from '../../../../lib'
 import { BlockHashPathParams } from './blockHashPathParams'
 
 const getBoundWitness = async (archive: string, hash: string) => {
   const sdk = await getArchivistBoundWitnessesMongoSdk(archive)
   return await sdk.findByHash(hash)
-}
-
-const scrubBoundWitnesses = (boundWitnesses: XyoBoundWitness[]) => {
-  return boundWitnesses?.map((boundWitness) => {
-    const bwWrapper = new XyoBoundWitnessWrapper(boundWitness)
-    return bwWrapper.scrubbedFields
-  })
 }
 
 export type GetArchiveBlockHashResponse = {
