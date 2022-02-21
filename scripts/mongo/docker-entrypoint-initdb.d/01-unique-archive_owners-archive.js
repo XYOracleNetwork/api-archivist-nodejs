@@ -1,2 +1,2 @@
 /* eslint-disable */
-db.archive_owners.createIndex({ archive: 1 }, { name: 'archive_owners.UX_archive', unique: true })
+db.archives.createIndex({ archive: 1 }, { name: 'archives.UX_archive', unique: true })
