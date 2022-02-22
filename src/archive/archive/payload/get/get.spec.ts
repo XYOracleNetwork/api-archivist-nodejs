@@ -1,4 +1,5 @@
 import { XyoBoundWitness, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import { SortDirection } from '../../../../model'
 import {
@@ -33,39 +34,49 @@ const descendingSort = (a: XyoPayload, b: XyoPayload) => {
 describe('/archive/:archive/payload', () => {
   let token = ''
   let archive = ''
-  let recentBlocks: XyoBoundWitness[] = []
   beforeEach(async () => {
     token = await getTokenForNewUser()
     archive = getArchiveName()
     await claimArchive(token, archive)
-    const blocksPosted = 25
-    for (let blockCount = 0; blockCount < blocksPosted; blockCount++) {
-      const block = getNewBlockWithPayloads()
-      const blockResponse = await postBlock(block, archive)
-      expect(blockResponse.boundWitnesses).toBe(1)
-    }
-    recentBlocks = await getRecentBlocks(token, archive)
-    expect(recentBlocks).toBeTruthy()
-    expect(Array.isArray(recentBlocks)).toBe(true)
-    expect(recentBlocks.length).toBeGreaterThan(10)
   })
-  describe.each(sortDirections)('In %s order', (order: SortDirection) => {
-    const sortPredicate = order === 'asc' ? ascendingSort : descendingSort
-    let recentHash = ''
-    let response: XyoPayload[] = []
+  it(`With non-existent hash returns ${ReasonPhrases.NOT_FOUND}`, async () => {
+    await getPayloadsByHash(token, archive, '1234567890', 10, 'asc', StatusCodes.NOT_FOUND)
+  })
+  it(`With missing hash returns ${ReasonPhrases.BAD_REQUEST}`, async () => {
+    await getPayloadsByHash(token, archive, '', 10, 'asc', StatusCodes.BAD_REQUEST)
+  })
+  describe('With valid data', () => {
+    let recentBlocks: XyoBoundWitness[] = []
     beforeEach(async () => {
-      recentHash = (order === 'asc' ? recentBlocks.pop() : recentBlocks.shift())?.payload_hashes?.pop?.() || ''
-      expect(recentHash).toBeTruthy()
-      response = await getPayloadsByHash(token, archive, recentHash, 10, order)
-      expect(response).toBeTruthy()
-      expect(Array.isArray(response)).toBe(true)
-      expect(response.length).toBe(10)
+      const blocksPosted = 25
+      for (let blockCount = 0; blockCount < blocksPosted; blockCount++) {
+        const block = getNewBlockWithPayloads()
+        const blockResponse = await postBlock(block, archive)
+        expect(blockResponse.boundWitnesses).toBe(1)
+      }
+      recentBlocks = await getRecentBlocks(token, archive)
+      expect(recentBlocks).toBeTruthy()
+      expect(Array.isArray(recentBlocks)).toBe(true)
+      expect(recentBlocks.length).toBeGreaterThan(10)
     })
-    it('Returns payloads starting at the specified hash', () => {
-      expect(response.map((x) => x._hash)).toContain(recentHash)
-    })
-    it('Returns payloads in the correct sort order', () => {
-      expect([...response].sort(sortPredicate)).toEqual(response)
+    describe.each(sortDirections)('In %s order', (order: SortDirection) => {
+      const sortPredicate = order === 'asc' ? ascendingSort : descendingSort
+      let recentHash = ''
+      let response: XyoPayload[] = []
+      beforeEach(async () => {
+        recentHash = (order === 'asc' ? recentBlocks.pop() : recentBlocks.shift())?.payload_hashes?.pop?.() || ''
+        expect(recentHash).toBeTruthy()
+        response = await getPayloadsByHash(token, archive, recentHash, 10, order)
+        expect(response).toBeTruthy()
+        expect(Array.isArray(response)).toBe(true)
+        expect(response.length).toBe(10)
+      })
+      it('Returns payloads starting at the specified hash', () => {
+        expect(response.map((x) => x._hash)).toContain(recentHash)
+      })
+      it('Returns payloads in the correct sort order', () => {
+        expect([...response].sort(sortPredicate)).toEqual(response)
+      })
     })
   })
 })
