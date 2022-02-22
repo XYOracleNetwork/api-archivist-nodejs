@@ -5,7 +5,7 @@ import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import { getArchivistBoundWitnessesMongoSdk, scrubBoundWitnesses } from '../../../../lib'
-import { SortOrder } from '../../../../model'
+import { SortDirection } from '../../../../model'
 import { ArchiveLocals } from '../../../archiveLocals'
 import { ArchivePathParams } from '../../../archivePathParams'
 
@@ -15,19 +15,26 @@ const maxLimit = 100
 export interface GetArchiveBlocksQueryParams extends NoReqQuery {
   hash: string
   limit?: string
-  order?: SortOrder
+  order?: SortDirection
 }
 
 // TODO: Move to SDK lib
-const getBoundWitnesses = async (archive: string, hash: string, limit = defaultLimit, orderBy: SortOrder = 'asc') => {
+const getBoundWitnesses = async (
+  archive: string,
+  hash: string,
+  limit = defaultLimit,
+  sortOrder: SortDirection = 'asc'
+) => {
   const sdk = await getArchivistBoundWitnessesMongoSdk(archive)
-  const sortOrder = orderBy === 'asc' ? 1 : -1
+  const boundWitnesses = await sdk.findOne({ _hash: hash })
+  if (!boundWitnesses || !boundWitnesses._timestamp) {
+    return null
+  }
+  const _timestampPredicate =
+    sortOrder === 'asc' ? { $gte: boundWitnesses._timestamp } : { $lte: boundWitnesses._timestamp }
   return await (
     await sdk.useCollection((col) =>
-      col
-        .find({ _archive: archive, _hash: { $gt: hash } })
-        .sort({ _hash: sortOrder })
-        .limit(limit)
+      col.find({ _archive: archive, _timestamp: _timestampPredicate }).sort({ _timestamp: sortOrder }).limit(limit)
     )
   ).toArray()
 }
@@ -43,7 +50,6 @@ const handler: RequestHandler<
   if (!archive) {
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
   }
-  // Validate path params
   const { hash, limit, order: orderBy } = req.query
   if (!hash) {
     next({ message: ReasonPhrases.BAD_REQUEST, statusCode: StatusCodes.BAD_REQUEST })
@@ -51,12 +57,13 @@ const handler: RequestHandler<
   const limitNumber = tryParseInt(limit) ?? 10
   assertEx(limitNumber > 0 && limitNumber <= maxLimit, `limit must be between 1 and ${maxLimit}`)
   const parsedOrderBy = orderBy?.toLowerCase?.() === 'asc' ? 'asc' : 'desc'
-
-  // Get boundWitnesses
-  const boundWitnesses = (await getBoundWitnesses(archive.archive, hash, limitNumber, parsedOrderBy)) ?? []
-  const response = scrubBoundWitnesses(boundWitnesses)
-  res.json(response)
-  next()
+  const boundWitnesses = await getBoundWitnesses(archive.archive, hash, limitNumber, parsedOrderBy)
+  if (boundWitnesses) {
+    res.json(scrubBoundWitnesses(boundWitnesses))
+    next()
+  } else {
+    next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
+  }
 }
 
 export const getArchiveBlocks = asyncHandler(handler)

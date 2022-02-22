@@ -17,7 +17,7 @@ import {
   PostArchiveBlockResponse,
   PutArchiveRequest,
 } from '../archive'
-import { SortOrder } from '../model'
+import { SortDirection } from '../model'
 
 test('Must have API_KEY ENV VAR defined', () => {
   expect(process.env.API_KEY).toBeTruthy()
@@ -259,9 +259,9 @@ export const getBlocksByHash = async (
   archive: string,
   hash: string,
   limit = 10,
-  order: SortOrder = 'asc',
+  order: SortDirection = 'asc',
   expectedStatus: StatusCodes = StatusCodes.OK
-): Promise<XyoPayload[]> => {
+): Promise<XyoBoundWitness[]> => {
   const response = await getArchivist()
     .get(`/archive/${archive}/block`)
     .query({ hash, limit, order })
@@ -274,7 +274,7 @@ export const getRecentBlocks = async (
   token: string,
   archive: string,
   expectedStatus: StatusCodes = StatusCodes.OK
-): Promise<XyoPayload[]> => {
+): Promise<XyoBoundWitness[]> => {
   const response = await getArchivist()
     .get(`/archive/${archive}/block/recent`)
     .auth(token, { type: 'bearer' })
@@ -300,7 +300,7 @@ export const getPayloadsByHash = async (
   archive: string,
   hash: string,
   limit = 10,
-  order: SortOrder = 'asc',
+  order: SortDirection = 'asc',
   expectedStatus: StatusCodes = StatusCodes.OK
 ): Promise<XyoPayload[]> => {
   const response = await getArchivist()
