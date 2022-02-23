@@ -2868,9 +2868,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-commonjs@npm:^21.0.1":
-  version: 21.0.1
-  resolution: "@rollup/plugin-commonjs@npm:21.0.1"
+"@rollup/plugin-commonjs@npm:^21.0.2":
+  version: 21.0.2
+  resolution: "@rollup/plugin-commonjs@npm:21.0.2"
   dependencies:
     "@rollup/pluginutils": ^3.1.0
     commondir: ^1.0.1
@@ -2881,7 +2881,7 @@ __metadata:
     resolve: ^1.17.0
   peerDependencies:
     rollup: ^2.38.3
-  checksum: 3e56be58c72d655face6f361f85923ddcc3cc07760b5a3a91cfc728115dfed358fc595781148c512d53a03be8c703133379f228e78fd2aed8655fae9d83800b6
+  checksum: 5fd4c7b75d7881070f4395d7ba5f9035934f53b25e92d136583cc794461a456efc1e2a2204f946ec567dfea58073c38cb48f24d27155b89af0df0447c2cd0758
   languageName: node
   linkType: hard
 
@@ -3286,13 +3286,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:^27.4.0":
-  version: 27.4.0
-  resolution: "@types/jest@npm:27.4.0"
+"@types/jest@npm:^27.4.1":
+  version: 27.4.1
+  resolution: "@types/jest@npm:27.4.1"
   dependencies:
-    jest-diff: ^27.0.0
+    jest-matcher-utils: ^27.0.0
     pretty-format: ^27.0.0
-  checksum: d2350267f954f9a2e4a15e5f02fbf19a77abfb9fd9e57a954de1fb0e9a0d3d5f8d3646ac7d9c42aeb4b4d828d2e70624ec149c85bb50a48634a54eed8429e1f8
+  checksum: 5184f3eef4832d01ee8f59bed15eec45ccc8e29c724a5e6ce37bf74396b37bdf04f557000f45ba4fc38ae6075cf9cfcce3d7a75abc981023c61ceb27230a93e4
   languageName: node
   linkType: hard
 
@@ -3372,10 +3372,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^17.0.18":
+"@types/node@npm:*":
   version: 17.0.18
   resolution: "@types/node@npm:17.0.18"
   checksum: 6c4edfc2b3ba2342a9c3d56e934c5245948ab752f4dc04bd6790b9603e6ebc53bc4f5befc3662e207f7dba2ddd17ccf657f915e319ea7cdd4f77b851079d1611
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^17.0.21":
+  version: 17.0.21
+  resolution: "@types/node@npm:17.0.21"
+  checksum: 89dcd2fe82f21d3634266f8384e9c865cf8af49685639fbdbd799bdd1040480fb1e8eeda2d3b9fce41edbe704d2a4be9f427118c4ae872e8d9bb7cbeb3c41a94
   languageName: node
   linkType: hard
 
@@ -3908,9 +3915,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xyo-network/sdk-xyo-client-js@npm:^2.10.14":
-  version: 2.10.14
-  resolution: "@xyo-network/sdk-xyo-client-js@npm:2.10.14"
+"@xyo-network/sdk-xyo-client-js@npm:^2.11.1":
+  version: 2.11.1
+  resolution: "@xyo-network/sdk-xyo-client-js@npm:2.11.1"
   dependencies:
     "@ethersproject/providers": ^5.5.3
     "@xylabs/sdk-js": ^2.4.2
@@ -3920,17 +3927,16 @@ __metadata:
     bowser: ^2.11.0
     buffer: ^6.0.3
     elliptic: ^6.5.4
-    is-ip: ^4.0.0
     keccak256: ^1.0.6
     lodash: ^4.17.21
     mongodb: ^4.4.0
     neo4j-driver: ^4.4.2
     neo4j-driver-core: ^4.4.2
     sha.js: ^2.4.11
-    systeminformation: ^5.11.3
+    systeminformation: ^5.11.4
     ua-parser-js: ^1.0.2
     uuid: ^8.3.2
-  checksum: 746525960d0d92b4499600e6359d286212a83495283c935476af46d500fa4f1edc9dd458a129965309d916bec19c91bae0861fdf9cc9eebb573254e1ab57ce38
+  checksum: 83f1e4c651884b8e0fd9e15ab02c08e0e7f129f0ece5ee006d68a06305b70273eba115750a4aa03acec75ebf158eadb53a875ccf3c8b3a005d336f43a5100134
   languageName: node
   linkType: hard
 
@@ -4166,7 +4172,7 @@ __metadata:
     "@aws-sdk/client-secrets-manager": ^3.52.0
     "@babel/core": ^7.17.5
     "@babel/preset-env": ^7.16.11
-    "@rollup/plugin-commonjs": ^21.0.1
+    "@rollup/plugin-commonjs": ^21.0.2
     "@rollup/plugin-json": ^4.1.0
     "@rollup/plugin-replace": ^3.1.0
     "@rollup/plugin-strip": ^2.1.0
@@ -4176,10 +4182,10 @@ __metadata:
     "@types/cors": ^2.8.12
     "@types/express": 4.17.13
     "@types/express-mung": ^0.5.2
-    "@types/jest": ^27.4.0
+    "@types/jest": ^27.4.1
     "@types/jsonwebtoken": ^8.5.8
     "@types/lodash": ^4.14.178
-    "@types/node": ^17.0.18
+    "@types/node": ^17.0.21
     "@types/passport": ^1.0.7
     "@types/passport-jwt": ^3.0.6
     "@types/passport-local": ^1.0.34
@@ -4193,7 +4199,7 @@ __metadata:
     "@xylabs/sdk-js": ^2.4.2
     "@xylabs/ts-scripts": ^1.0.44
     "@xylabs/tsconfig": ^1.0.12
-    "@xyo-network/sdk-xyo-client-js": ^2.10.14
+    "@xyo-network/sdk-xyo-client-js": ^2.11.1
     "@xyo-network/sdk-xyo-mongo-js": ^2.2.7
     axios: ^0.26.0
     babel-jest: ^27.5.1
@@ -4228,7 +4234,7 @@ __metadata:
     sha.js: ^2.4.11
     source-map-support: ^0.5.21
     supertest: ^6.2.2
-    swagger-autogen: ^2.18.8
+    swagger-autogen: ^2.19.0
     swagger-ui-express: ^4.3.0
     ts-jest: ^27.1.3
     ts-node: ^10.5.0
@@ -7445,13 +7451,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ip-regex@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "ip-regex@npm:5.0.0"
-  checksum: 4098b2df89c015f1484a5946e733ec126af8c1828719d90e09f04af23ce487e1a852670e4d3f51b0dc6dfbaf7d8bfab23fd7893ca60e69833da99b7b1ee3623b
-  languageName: node
-  linkType: hard
-
 "ip@npm:^1.1.5":
   version: 1.1.5
   resolution: "ip@npm:1.1.5"
@@ -7640,15 +7639,6 @@ __metadata:
     global-dirs: ^3.0.0
     is-path-inside: ^3.0.2
   checksum: 3359840d5982d22e9b350034237b2cda2a12bac1b48a721912e1ab8e0631dd07d45a2797a120b7b87552759a65ba03e819f1bd63f2d7ab8657ec0b44ee0bf399
-  languageName: node
-  linkType: hard
-
-"is-ip@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "is-ip@npm:4.0.0"
-  dependencies:
-    ip-regex: ^5.0.0
-  checksum: 6bbf3b83b18b02e6cf6b26d16c0d2de38bf5b2f5597de2b902894a83764ae6879f9acd1baec653b47b18a67a975c0cade779f3485e96a6b2cd09a26407d82991
   languageName: node
   linkType: hard
 
@@ -8015,7 +8005,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-diff@npm:^27.0.0, jest-diff@npm:^27.5.1":
+"jest-diff@npm:^27.5.1":
   version: 27.5.1
   resolution: "jest-diff@npm:27.5.1"
   dependencies:
@@ -8144,7 +8134,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-matcher-utils@npm:^27.5.1":
+"jest-matcher-utils@npm:^27.0.0, jest-matcher-utils@npm:^27.5.1":
   version: 27.5.1
   resolution: "jest-matcher-utils@npm:27.5.1"
   dependencies:
@@ -13500,15 +13490,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"swagger-autogen@npm:^2.18.8":
-  version: 2.18.8
-  resolution: "swagger-autogen@npm:2.18.8"
+"swagger-autogen@npm:^2.19.0":
+  version: 2.19.0
+  resolution: "swagger-autogen@npm:2.19.0"
   dependencies:
     acorn: ^7.4.1
     deepmerge: ^4.2.2
     glob: ^7.1.7
     json5: ^2.2.0
-  checksum: a69de51c8518bf19d16a4fa003a066899a34e8832cd1c6bc991d15aab5a42df5d8116fd17013519fed641cf1fab9b354390642283d65d540f1d73bf708b6567d
+  checksum: e263e2f0ebe8f4209dfb218a13f602c8b8d5fe0a63a94e494d4a4e6e71a13d25076a2563039d728ce83880e2cd17c3b6a7778ac16b2c1a75bd645cd3bdd38368
   languageName: node
   linkType: hard
 
@@ -13537,12 +13527,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"systeminformation@npm:^5.11.3":
-  version: 5.11.3
-  resolution: "systeminformation@npm:5.11.3"
+"systeminformation@npm:^5.11.4":
+  version: 5.11.4
+  resolution: "systeminformation@npm:5.11.4"
   bin:
     systeminformation: lib/cli.js
-  checksum: 9d27028dd43b233173519ee03a228df6d2cdbf2c8723ad54b60553092c528e1b9756cd88973d69968afa48b664e7c68a35d3cc8b5cc22af51a823f0712b54dbf
+  checksum: fcb71b933c6d77072f2ad86b7688f0fa6feb975829eeddd1fc877e0e99dff0ff50cc11c978b97b1662c9d935a3b19c6e01a110d7e6481d7232fd6e2c23fcf10c
   conditions: (os=darwin | os=linux | os=win32 | os=freebsd | os=openbsd | os=netbsd | os=sunos | os=android)
   languageName: node
   linkType: hard
