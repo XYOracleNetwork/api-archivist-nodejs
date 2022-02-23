@@ -19,7 +19,6 @@ export interface GetArchiveBlocksQueryParams extends NoReqQuery {
   timestamp?: string
 }
 
-// TODO: Move to SDK lib
 const getBoundWitnesses = async (
   archive: string,
   hash?: string,
@@ -28,34 +27,14 @@ const getBoundWitnesses = async (
   sortOrder: SortDirection = 'asc'
 ): Promise<XyoBoundWitness[] | null> => {
   const sdk = await getArchivistBoundWitnessesMongoSdk(archive)
+  if (hash) {
+    return sortOrder === 'asc' ? sdk.findAfterHash(hash, limit, timestamp) : sdk.findBeforeHash(hash, limit, timestamp)
+  }
+  if (timestamp) {
+    return sortOrder === 'asc' ? sdk.findAfter(timestamp) : sdk.findBefore(timestamp)
+  }
   // If no hash/timestamp was supplied, just return from the start/end of the archive
-  if (!hash && !timestamp) {
-    return sortOrder === 'asc' ? sdk.findAfter(0, limit) : sdk.findBefore(Date.now(), limit)
-  }
-  // If a filter was supplied, find that block
-  const findOneFilter: { _hash?: string; _timestamp?: number } = {}
-  if (hash) findOneFilter._hash = hash
-  if (timestamp) findOneFilter._timestamp = timestamp
-  const boundWitnesses = await sdk.findOne(findOneFilter)
-  if (!boundWitnesses) {
-    return null
-  }
-
-  // Find all blocks starting from that block
-  const _idPredicate = sortOrder === 'asc' ? { $gte: boundWitnesses._id } : { $lte: boundWitnesses._id }
-  const _timestampPredicate =
-    sortOrder === 'asc' ? { $gte: boundWitnesses._timestamp } : { $lte: boundWitnesses._timestamp }
-  return await (
-    await sdk.useCollection((col) =>
-      col
-        // Order of keys really matters here since we're relying on the archive/timestamp
-        // index so we disable eslint from sorting them alphabetically
-        // eslint-disable-next-line sort-keys-fix/sort-keys-fix
-        .find({ _archive: archive, _timestamp: _timestampPredicate, _id: _idPredicate })
-        .sort({ _timestamp: sortOrder })
-        .limit(limit)
-    )
-  ).toArray()
+  return sortOrder === 'asc' ? sdk.findAfter(0, limit) : sdk.findBefore(Date.now(), limit)
 }
 
 const handler: RequestHandler<
