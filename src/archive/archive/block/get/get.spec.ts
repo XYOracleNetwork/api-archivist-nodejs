@@ -14,23 +14,6 @@ import {
 
 const sortDirections: SortDirection[] = ['asc', 'desc']
 
-const ascendingSort = (a: XyoBoundWitness, b: XyoBoundWitness) => {
-  if (!a?._timestamp && !b?._timestamp) {
-    return 1
-  }
-  if (!a?._timestamp) return -1
-  if (!b?._timestamp) return 1
-  return a._timestamp > b._timestamp ? 1 : -1
-}
-const descendingSort = (a: XyoBoundWitness, b: XyoBoundWitness) => {
-  if (!a?._timestamp && !b?._timestamp) {
-    return -1
-  }
-  if (!a?._timestamp) return 1
-  if (!b?._timestamp) return -1
-  return a._timestamp > b._timestamp ? -1 : 1
-}
-
 describe('/archive/:archive/block', () => {
   let token = ''
   let archive = ''
@@ -60,22 +43,21 @@ describe('/archive/:archive/block', () => {
       expect(recentBlocks.length).toBeGreaterThan(10)
     })
     describe.each(sortDirections)('In %s order', (order: SortDirection) => {
-      const sortPredicate = order === 'asc' ? ascendingSort : descendingSort
       let recentHash = ''
       let response: XyoBoundWitness[] = []
       beforeEach(async () => {
-        recentHash = (order === 'asc' ? recentBlocks.pop() : recentBlocks.shift())?._hash || ''
+        recentHash = (order === 'asc' ? recentBlocks.shift() : recentBlocks.pop())?._hash || ''
         expect(recentHash).toBeTruthy()
         response = await getBlocksByHash(token, archive, recentHash, 10, order)
         expect(response).toBeTruthy()
         expect(Array.isArray(response)).toBe(true)
         expect(response.length).toBe(10)
       })
-      it('Returns blocks starting at the specified hash', () => {
-        expect(response.map((x) => x._hash)).toContain(recentHash)
+      it('Returns blocks beyond the specified hash', () => {
+        expect(response.map((x) => x._hash)).not.toContain(recentHash)
       })
       it('Returns blocks in the correct sort order', () => {
-        expect([...response].sort(sortPredicate)).toEqual(response)
+        expect(response).toBeSortedBy('_timestamp', { descending: order === 'desc' })
       })
     })
   })
