@@ -13,7 +13,6 @@ const defaultLimit = 10
 const maxLimit = 100
 
 export interface GetArchiveBlocksQueryParams extends NoReqQuery {
-  hash?: string
   limit?: string
   order?: SortDirection
   timestamp?: string
@@ -21,17 +20,13 @@ export interface GetArchiveBlocksQueryParams extends NoReqQuery {
 
 const getBoundWitnesses = async (
   archive: string,
-  hash?: string,
   timestamp?: number,
   limit = defaultLimit,
   sortOrder: SortDirection = 'asc'
 ): Promise<XyoBoundWitness[] | null> => {
   const sdk = await getArchivistBoundWitnessesMongoSdk(archive)
-  if (hash) {
-    return sortOrder === 'asc' ? sdk.findAfterHash(hash, limit, timestamp) : sdk.findBeforeHash(hash, limit, timestamp)
-  }
   if (timestamp) {
-    return sortOrder === 'asc' ? sdk.findAfter(timestamp) : sdk.findBefore(timestamp)
+    return sortOrder === 'asc' ? sdk.findAfter(timestamp, limit) : sdk.findBefore(timestamp, limit)
   }
   // If no hash/timestamp was supplied, just return from the start/end of the archive
   return sortOrder === 'asc' ? sdk.findAfter(0, limit) : sdk.findBefore(Date.now(), limit)
@@ -48,15 +43,12 @@ const handler: RequestHandler<
   if (!archive) {
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
   }
-  const { hash, limit, order, timestamp } = req.query
-  if (!hash) {
-    next({ message: ReasonPhrases.BAD_REQUEST, statusCode: StatusCodes.BAD_REQUEST })
-  }
+  const { limit, order, timestamp } = req.query
   const limitNumber = tryParseInt(limit) ?? 10
-  const timestampNumber = tryParseInt(timestamp)
   assertEx(limitNumber > 0 && limitNumber <= maxLimit, `limit must be between 1 and ${maxLimit}`)
+  const timestampNumber = tryParseInt(timestamp)
   const parsedOrder = order?.toLowerCase?.() === 'asc' ? 'asc' : 'desc'
-  const boundWitnesses = await getBoundWitnesses(archive.archive, hash, timestampNumber, limitNumber, parsedOrder)
+  const boundWitnesses = await getBoundWitnesses(archive.archive, timestampNumber, limitNumber, parsedOrder)
   if (boundWitnesses) {
     res.json(scrubBoundWitnesses(boundWitnesses))
     next()

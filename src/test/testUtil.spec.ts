@@ -254,17 +254,17 @@ export const getBlockByHash = async (
   return response.body.data
 }
 
-export const getBlocksByHash = async (
+export const getBlocksByTimestamp = async (
   token: string,
   archive: string,
-  hash: string,
+  timestamp: number,
   limit = 10,
   order: SortDirection = 'asc',
   expectedStatus: StatusCodes = StatusCodes.OK
 ): Promise<XyoBoundWitness[]> => {
   const response = await getArchivist()
     .get(`/archive/${archive}/block`)
-    .query({ hash, limit, order })
+    .query({ limit, order, timestamp })
     .auth(token, { type: 'bearer' })
     .expect(expectedStatus)
   return response.body.data
