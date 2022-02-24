@@ -1,7 +1,6 @@
 import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
-import { StatusCodes } from 'http-status-codes'
 
-import { claimArchive, getArchiveName, getArchivist, getTokenForNewUser, postBlock } from '../../test'
+import { claimArchive, getArchiveName, getArchivist, getTokenForNewUser } from '../../test'
 
 describe('standardErrors', () => {
   let token = ''

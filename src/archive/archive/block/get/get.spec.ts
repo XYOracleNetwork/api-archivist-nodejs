@@ -1,17 +1,25 @@
+import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
+import { ReasonPhrases, StatusCodes } from 'http-status-codes'
+
+import { SortDirection } from '../../../../model'
 import {
   claimArchive,
   getArchiveName,
-  getBlocksByHash,
+  getArchivist,
+  getBlocksByTimestamp,
   getNewBlockWithPayloads,
   getRecentBlocks,
   getTokenForNewUser,
   postBlock,
 } from '../../../../test'
 
+const sortDirections: SortDirection[] = ['asc', 'desc']
+
 describe('/archive/:archive/block', () => {
   let token = ''
   let archive = ''
-  beforeEach(async () => {
+  let recentBlocks: XyoBoundWitness[] = []
+  beforeAll(async () => {
     token = await getTokenForNewUser()
     archive = getArchiveName()
     await claimArchive(token, archive)
@@ -21,26 +29,42 @@ describe('/archive/:archive/block', () => {
       const blockResponse = await postBlock(block, archive)
       expect(blockResponse.boundWitnesses).toBe(1)
     }
+    recentBlocks = await getRecentBlocks(token, archive)
+    expect(recentBlocks).toBeTruthy()
+    expect(Array.isArray(recentBlocks)).toBe(true)
+    expect(recentBlocks.length).toBeGreaterThan(10)
   })
-  it('Returns blocks after the specified hash', async () => {
-    const recent = await getRecentBlocks(token, archive)
-    expect(recent).toBeTruthy()
-    expect(Array.isArray(recent)).toBe(true)
-    expect(recent.length).toBeGreaterThan(0)
-    recent.sort((a, b) => {
-      if (!a?._hash && !b?._hash) {
-        return 1
-      }
-      if (!a?._hash) return -1
-      if (!b?._hash) return 1
-      return a._hash > b._hash ? 1 : -1
+  it(`With missing timestamp returns ${ReasonPhrases.OK}`, async () => {
+    await getArchivist()
+      .get(`/archive/${archive}/block`)
+      .query({ limit: 10, order: 'asc' })
+      .auth(token, { type: 'bearer' })
+      .expect(StatusCodes.OK)
+  })
+  describe('With valid data', () => {
+    describe.each(sortDirections)('In %s order', (order: SortDirection) => {
+      let hash = ''
+      let timestamp = 0
+      let response: XyoBoundWitness[] = []
+      let recentBlock: XyoBoundWitness | undefined
+      beforeEach(async () => {
+        recentBlock = order === 'asc' ? recentBlocks.pop() : recentBlocks.shift()
+        expect(recentBlock).toBeTruthy()
+        hash = recentBlock?._hash || ''
+        expect(hash).toBeTruthy()
+        timestamp = recentBlock?._timestamp || 0
+        expect(timestamp).toBeTruthy()
+        response = await getBlocksByTimestamp(token, archive, timestamp, 10, order)
+        expect(response).toBeTruthy()
+        expect(Array.isArray(response)).toBe(true)
+        expect(response.length).toBe(10)
+      })
+      it('Returns blocks not including the specified timestamp', () => {
+        expect(response.map((x) => x._timestamp)).not.toContain(timestamp)
+      })
+      it('Returns blocks in the correct sort order', () => {
+        expect(response).toBeSortedBy('_timestamp', { descending: order === 'desc' })
+      })
     })
-    const recentHash = recent[0]._hash || ''
-    expect(recentHash).toBeTruthy()
-    const response = await getBlocksByHash(token, archive, recentHash, 10)
-    expect(response).toBeTruthy()
-    expect(Array.isArray(response)).toBe(true)
-    expect(response.length).toBe(10)
-    expect(response.map((x) => x._hash)).not.toContain(recentHash)
   })
 })

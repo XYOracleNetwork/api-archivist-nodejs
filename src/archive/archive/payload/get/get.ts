@@ -5,7 +5,7 @@ import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import { getArchivistPayloadMongoSdk } from '../../../../lib'
-import { SortOrder } from '../../../../model'
+import { SortDirection } from '../../../../model'
 import { ArchiveLocals } from '../../../archiveLocals'
 import { ArchivePathParams } from '../../../archivePathParams'
 
@@ -13,23 +13,23 @@ const defaultLimit = 10
 const maxLimit = 100
 
 export interface GetArchivePayloadsQueryParams extends NoReqQuery {
-  hash: string
   limit?: string
-  order?: SortOrder
+  order?: SortDirection
+  timestamp?: string
 }
 
-// TODO: Move to SDK lib
-const getPayloads = async (archive: string, hash: string, limit = defaultLimit, orderBy: SortOrder = 'asc') => {
+const getPayloads = async (
+  archive: string,
+  timestamp?: number,
+  limit = defaultLimit,
+  sortOrder: SortDirection = 'asc'
+): Promise<XyoPayload[] | null> => {
   const sdk = await getArchivistPayloadMongoSdk(archive)
-  const sortOrder = orderBy === 'asc' ? 1 : -1
-  return await (
-    await sdk.useCollection((col) =>
-      col
-        .find({ _archive: archive, _hash: { $gt: hash } })
-        .sort({ _hash: sortOrder })
-        .limit(limit)
-    )
-  ).toArray()
+  if (timestamp) {
+    return sortOrder === 'asc' ? sdk.findAfter(timestamp, limit) : sdk.findBefore(timestamp, limit)
+  }
+  // If no hash/timestamp was supplied, just return from the start/end of the archive
+  return sortOrder === 'asc' ? sdk.findAfter(0, limit) : sdk.findBefore(Date.now(), limit)
 }
 
 const handler: RequestHandler<
@@ -43,17 +43,18 @@ const handler: RequestHandler<
   if (!archive) {
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
   }
-  // Validate path params
-  const { hash, limit, order: orderBy } = req.query
-  if (!hash) {
-    next({ message: ReasonPhrases.BAD_REQUEST, statusCode: StatusCodes.BAD_REQUEST })
-  }
+  const { limit, order, timestamp } = req.query
   const limitNumber = tryParseInt(limit) ?? 10
+  const timestampNumber = tryParseInt(timestamp)
   assertEx(limitNumber > 0 && limitNumber <= maxLimit, `limit must be between 1 and ${maxLimit}`)
-  const parsedOrderBy = orderBy?.toLowerCase?.() === 'asc' ? 'asc' : 'desc'
-  const payloads = (await getPayloads(archive.archive, hash, limitNumber, parsedOrderBy)) ?? []
-  res.json(payloads)
-  next()
+  const parsedOrder = order?.toLowerCase?.() === 'asc' ? 'asc' : 'desc'
+  const payloads = await getPayloads(archive.archive, timestampNumber, limitNumber, parsedOrder)
+  if (payloads) {
+    res.json(payloads)
+    next()
+  } else {
+    next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
+  }
 }
 
 export const getArchivePayloads = asyncHandler(handler)
