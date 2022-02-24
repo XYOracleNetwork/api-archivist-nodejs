@@ -1,4 +1,4 @@
-import { XyoBoundWitness, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import { SortDirection } from '../../../../model'
@@ -8,7 +8,6 @@ import {
   getArchivist,
   getNewBlockWithPayloads,
   getPayloadsByTimestamp,
-  getRecentBlocks,
   getRecentPayloads,
   getTokenForNewUser,
   postBlock,
