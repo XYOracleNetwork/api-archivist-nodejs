@@ -4,8 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - main
-      - beta
+      - prod
 
 env:
   AWS_REGION: us-east-1
