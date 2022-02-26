@@ -4,8 +4,6 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - main
-      - beta
       - prod
 
 env:
@@ -16,7 +14,7 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    environment: beta
+    environment: production
 
     steps:
       - name: Checkout
