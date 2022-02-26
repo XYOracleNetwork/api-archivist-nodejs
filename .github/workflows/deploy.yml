@@ -1,4 +1,4 @@
-name: Deploy to Amazon ECS Beta
+name: Deploy to Amazon ECS
 
 on:
   workflow_dispatch:
@@ -6,6 +6,7 @@ on:
     branches:
       - main
       - beta
+      - prod
 
 env:
   AWS_REGION: us-east-1
