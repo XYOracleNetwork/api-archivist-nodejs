@@ -1,10 +1,9 @@
-name: Deploy to Amazon ECS
+name: Deploy Beta
 
 on:
   workflow_dispatch:
   push:
     branches:
-      - main
       - beta
 
 env:
@@ -24,9 +23,9 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@13d241b293754004c80624b5567555c4a39ffbe3
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+          aws-access-key-id: ${{ secrets.AWS_ECS_DEPLOY_ACCESS_KEY_SELECT }}
+          aws-secret-access-key: ${{ secrets.AWS_ECS_DEPLOY_SECRET_KEY_SELECT }}
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to Amazon ECR
         id: login-ecr
@@ -49,7 +48,7 @@ jobs:
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@374ee96751fffe528c09b5f427848da60469bb55
         with:
-          task-definition: ${{ secrets.ECS_TASK_DEFINITION }}
+          task-definition: .aws/task-definition-beta.json
           container-name: ${{ env.CONTAINER_NAME }}
           image: ${{ steps.build-image.outputs.image }}
           environment-variables: |
