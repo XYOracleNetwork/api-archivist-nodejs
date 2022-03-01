@@ -25,12 +25,14 @@ const server = async (port = 80) => {
   const app = express()
   app.set('etag', false)
 
-  if (process.env.CORS_ALLOWED_ORIGINS) {
+  /*if (process.env.CORS_ALLOWED_ORIGINS) {
     // CORS_ALLOWED_ORIGINS can be an array of allowed origins so we support
     // a list of comma delimited CORS origins
     const origin = process.env.CORS_ALLOWED_ORIGINS.split(',')
     app.use(cors({ origin }))
-  }
+  }*/
+
+  app.use(cors())
 
   addMiddleware(app)
   addHealthChecks(app)
