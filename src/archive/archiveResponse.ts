@@ -1,5 +1,5 @@
 export interface ArchiveResponse {
   archive: string
-  user: string
+  user?: string
   accessControl: boolean
 }
