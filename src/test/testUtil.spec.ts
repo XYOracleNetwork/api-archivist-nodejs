@@ -124,10 +124,12 @@ export const getTokenForNewUser = async (): Promise<string> => {
 }
 
 export const getArchives = async (
-  token: string,
+  token?: string,
   expectedStatus: StatusCodes = StatusCodes.OK
 ): Promise<ArchiveResponse[]> => {
-  const response = await getArchivist().get('/archive').auth(token, { type: 'bearer' }).expect(expectedStatus)
+  const response = token
+    ? await getArchivist().get('/archive').auth(token, { type: 'bearer' }).expect(expectedStatus)
+    : await getArchivist().get('/archive').expect(expectedStatus)
   return response.body.data
 }
 

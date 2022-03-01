@@ -7,7 +7,6 @@ import { notImplemented } from './notImplemented'
 export const addArchiveRoutes = (app: Express) => {
   app.get(
     '/archive',
-    requireAuth,
     getArchives
     /* #swagger.tags = ['Archive'] */
     /* #swagger.summary = 'Get list of archives on archivist' */
