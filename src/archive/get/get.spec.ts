@@ -14,3 +14,10 @@ describe('/archive', () => {
     expect(await getArchives(token)).toEqual([])
   })
 })
+
+describe('/archive (noauth)', () => {
+  it('Returns the users archives', async () => {
+    const response = await getArchives()
+    expect(response.map((x) => x.archive)).toEqual(['temp'])
+  })
+})
