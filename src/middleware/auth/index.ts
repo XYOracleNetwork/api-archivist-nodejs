@@ -50,7 +50,7 @@ export const requireArchiveOwner: RequestHandler[] = [requireAuth, archiveOwnerS
 
 /**
  * Require that the user can, in some way, access the archive. Either by owning
- * the archive OR by the archive being pulbic (having no access control)
+ * the archive OR by the archive being public (having no access control)
  */
 export const requireArchiveAccess: RequestHandler[] = passport.authenticate(
   [archiveAccessControlStrategyName, jwtStrategyName, archiveApiKeyStrategyName],
