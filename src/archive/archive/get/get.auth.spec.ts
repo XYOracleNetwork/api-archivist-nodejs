@@ -1,7 +1,6 @@
-import { ArchiveResponse } from '@xyo-network/sdk-xyo-client-js'
 import { StatusCodes } from 'http-status-codes'
 
-import { claimArchive, getArchive, getArchivist, getTokenForNewUser, setArchiveAccessControl } from '../../../test'
+import { claimArchive, getArchive, getTokenForNewUser, setArchiveAccessControl } from '../../../test'
 
 function getInvalidVersionOfToken(token: string) {
   const half = Math.floor(token.length / 2)

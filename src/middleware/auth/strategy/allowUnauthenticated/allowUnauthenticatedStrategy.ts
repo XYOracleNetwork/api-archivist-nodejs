@@ -4,10 +4,10 @@ import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 /**
  * Authentication scheme which allows for unauthenticated requests for use in
  * routes which provide a satisfactory experience without being logged in but
- * can provide a richer experience for users who are logged in. If auth is
- * supplied via API Key or Authorization header, this strategy will fail in
- * favor in deference to those strategies, allowing those strategies to take
- * precedence if supplied.
+ * could also provide a richer experience for users who are logged in. If auth
+ * is supplied via API Key or Authorization header, this strategy will fail in
+ * deference to those strategies, allowing those strategies to take precedence
+ * if supplied.
  */
 export class AllowUnauthenticatedStrategy extends Strategy {
   constructor(public readonly apiKeyHeader = 'x-api-key') {
