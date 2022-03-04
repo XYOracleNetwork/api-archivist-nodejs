@@ -3,15 +3,14 @@ import { RequestHandler } from 'express'
 
 import { getArchivesByOwner } from '../../lib'
 import { ArchiveResponse } from '../archiveResponse'
-
-export const defaultPublicArchives: ArchiveResponse[] = [{ accessControl: false, archive: 'temp' }]
+import { defaultPublicArchives } from './DefaultPublicArchives'
 
 const handler: RequestHandler<NoReqParams, ArchiveResponse[]> = async (req, res, next) => {
-  const { user } = req
-  if (!user || !user?.id) {
+  const id = req?.user?.id
+  if (!id) {
     res.json(defaultPublicArchives)
   } else {
-    res.json([...defaultPublicArchives, ...(await getArchivesByOwner(user.id))])
+    res.json([...defaultPublicArchives, ...(await getArchivesByOwner(id))])
   }
   next()
 }
