@@ -1,7 +1,7 @@
 import { ArchiveResponse } from '@xyo-network/sdk-xyo-client-js'
 import { StatusCodes } from 'http-status-codes'
 
-import { claimArchive, getArchivist, getTokenForNewUser, setArchiveAccessControl } from '../../../../test'
+import { claimArchive, getArchivist, getTokenForNewUser, setArchiveAccessControl } from '../../test'
 
 function getInvalidVersionOfToken(token: string) {
   const half = Math.floor(token.length / 2)
@@ -21,7 +21,7 @@ const callApi = async (
   return response.body.data
 }
 
-describe('archiveOwner', () => {
+describe('/archive', () => {
   describe('with public archive', () => {
     let archive = ''
     let token = ''
