@@ -136,7 +136,7 @@ export const getArchives = async (
 export const claimArchive = async (
   token: string,
   archive?: string,
-  expectedStatus: StatusCodes = StatusCodes.OK
+  expectedStatus: StatusCodes = StatusCodes.CREATED
 ): Promise<ArchiveResponse> => {
   if (!archive) archive = getArchiveName()
   const response = await getArchivist()

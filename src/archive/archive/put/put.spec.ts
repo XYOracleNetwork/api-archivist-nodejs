@@ -9,11 +9,17 @@ describe('/archive', () => {
     token = await getTokenForNewUser()
     archive = getArchiveName()
   })
-  it('Allows the user to claim an unclaimed archive', async () => {
+  it('Allows user to claim an unclaimed archive', async () => {
     const response = await claimArchive(token, archive)
     expect(response.archive).toEqual(archive)
   })
-  it(`Returns ${ReasonPhrases.FORBIDDEN} if user claims an already claimed archive`, async () => {
+  it('Allows user to reclaim an archive they already own', async () => {
+    let response = await claimArchive(token, archive)
+    expect(response.archive).toEqual(archive)
+    response = await claimArchive(token, archive, StatusCodes.OK)
+    expect(response.archive).toEqual(archive)
+  })
+  it(`Returns ${ReasonPhrases.FORBIDDEN} if user attempts to claim an archive already claimed by someone else`, async () => {
     // User 1 claims archive
     await claimArchive(token, archive)
 
