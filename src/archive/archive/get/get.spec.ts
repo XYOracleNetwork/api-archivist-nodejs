@@ -9,7 +9,7 @@ describe('/archive', () => {
     await claimArchive(token, archive)
   })
   it('Gets information about the archive', async () => {
-    const response = await getArchive(token, archive)
+    const response = await getArchive(archive, token)
     expect(response.archive).toEqual(archive)
   })
 })

@@ -6,11 +6,13 @@ import { getUserMongoSdk, MongoDBUserStore, UserWithoutId } from './model'
 import { getProfile, postSignup, postWalletChallenge } from './routes'
 import {
   adminApiKeyUserSignupStrategy,
+  allowUnauthenticatedStrategyName,
   archiveAccessControlStrategyName,
   archiveApiKeyStrategy,
   archiveApiKeyStrategyName,
   archiveOwnerStrategy,
   configureAdminApiKeyStrategy,
+  configureAllowUnauthenticatedStrategy,
   configureArchiveAccessControlStrategy,
   configureArchiveApiKeyStrategy,
   configureArchiveOwnerStrategy,
@@ -50,7 +52,7 @@ export const requireArchiveOwner: RequestHandler[] = [requireAuth, archiveOwnerS
 
 /**
  * Require that the user can, in some way, access the archive. Either by owning
- * the archive OR by the archive being pulbic (having no access control)
+ * the archive OR by the archive being public (having no access control)
  */
 export const requireArchiveAccess: RequestHandler[] = passport.authenticate(
   [archiveAccessControlStrategyName, jwtStrategyName, archiveApiKeyStrategyName],
@@ -60,9 +62,14 @@ export const requireArchiveAccess: RequestHandler[] = passport.authenticate(
 )
 
 /**
- * Allow anonymous requests
+ * If present, require API key OR JWT to be valid, but if absent, allow anonymous access
  */
-export const allowAnonymous: RequestHandler = (_req, _res, next) => next()
+export const allowAnonymous: RequestHandler = passport.authenticate(
+  [allowUnauthenticatedStrategyName, jwtStrategyName, archiveApiKeyStrategyName],
+  {
+    session: false,
+  }
+)
 
 // Properly initialized after auth is configured
 let respondWithJwt: RequestHandler = () => {
@@ -135,9 +142,10 @@ export const configureAuth: (config: AuthConfig) => Promise<Router> = async (con
   const userStore = new MongoDBUserStore(userMongoSdk)
 
   configureAdminApiKeyStrategy(userStore, apiKey)
+  configureAllowUnauthenticatedStrategy()
+  configureArchiveAccessControlStrategy()
   configureArchiveApiKeyStrategy(userStore)
   configureArchiveOwnerStrategy()
-  configureArchiveAccessControlStrategy()
   respondWithJwt = configureJwtStrategy(secretOrKey)
   configureLocalStrategy(userStore)
   configureWeb3Strategy(userStore)

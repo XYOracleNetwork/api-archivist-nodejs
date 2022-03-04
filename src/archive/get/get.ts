@@ -3,14 +3,14 @@ import { RequestHandler } from 'express'
 
 import { getArchivesByOwner } from '../../lib'
 import { ArchiveResponse } from '../archiveResponse'
+import { defaultPublicArchives } from './DefaultPublicArchives'
 
 const handler: RequestHandler<NoReqParams, ArchiveResponse[]> = async (req, res, next) => {
-  const { user } = req
-  if (!user || !user?.id) {
-    //return the public discoverable archives without auth
-    res.json([{ accessControl: false, archive: 'temp' }])
+  const id = req?.user?.id
+  if (!id) {
+    res.json(defaultPublicArchives)
   } else {
-    res.json(await getArchivesByOwner(user.id))
+    res.json([...defaultPublicArchives, ...(await getArchivesByOwner(id))])
   }
   next()
 }

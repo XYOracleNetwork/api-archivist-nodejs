@@ -1,12 +1,13 @@
 import { Express } from 'express'
 
 import { getArchive, getArchives, getArchiveSettingsKeys, postArchiveSettingsKeys, putArchive } from '../archive'
-import { requireArchiveOwner, requireAuth } from '../middleware'
+import { allowAnonymous, requireArchiveOwner, requireAuth } from '../middleware'
 import { notImplemented } from './notImplemented'
 
 export const addArchiveRoutes = (app: Express) => {
   app.get(
     '/archive',
+    allowAnonymous,
     getArchives
     /* #swagger.tags = ['Archive'] */
     /* #swagger.summary = 'Get list of archives on archivist' */
