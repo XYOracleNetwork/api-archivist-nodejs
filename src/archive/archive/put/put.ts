@@ -26,8 +26,7 @@ const handler: RequestHandler<ArchivePathParams, ArchiveResponse, PutArchiveRequ
   const accessControl = determineArchiveAccessControl(req.body)
   const result = await storeArchive({ accessControl, archive, user: user.id })
   if (result) {
-    res.status(result.updated ? StatusCodes.OK : StatusCodes.CREATED)
-    res.json(result)
+    res.status(result.updated ? StatusCodes.OK : StatusCodes.CREATED).json(result)
     next()
   } else {
     next({ message: ReasonPhrases.FORBIDDEN, statusCode: StatusCodes.FORBIDDEN })

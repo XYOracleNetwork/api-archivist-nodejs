@@ -9,8 +9,7 @@ const message = 'Signup successful'
 export const postSignup: RequestHandler = (req, res, next) => {
   const updated = req?.authInfo?.updated
   const user = toUserDto(req.user)
-  res.statusCode = updated ? StatusCodes.OK : StatusCodes.CREATED
-  res.json({
+  res.status(updated ? StatusCodes.OK : StatusCodes.CREATED).json({
     message,
     user,
   })
