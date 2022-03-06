@@ -1,6 +1,7 @@
 import { BaseMongoSdk, BaseMongoSdkConfig } from '@xyo-network/sdk-xyo-mongo-js'
 import { Collection, ObjectId, WithId } from 'mongodb'
 
+import { UpsertResult } from '../../../../../lib'
 import { User, UserWithoutId } from '../../user'
 
 interface IUpsertFilter {
@@ -15,7 +16,7 @@ class UserMongoSdk extends BaseMongoSdk<User> {
     super(config)
   }
 
-  public async upsert(user: UserWithoutId): Promise<WithId<User>> {
+  public async upsert(user: UserWithoutId): Promise<WithId<User & UpsertResult>> {
     return await this.useCollection(async (collection) => {
       const filter: IUpsertFilter = { $or: [] }
       const { address, email } = user
@@ -34,10 +35,8 @@ class UserMongoSdk extends BaseMongoSdk<User> {
         { returnDocument: 'after', upsert: true }
       )
       if (result.ok && result.value) {
-        const created = result.value as WithId<User>
-        if (created?._id) {
-          return created
-        }
+        const updated = !!result?.lastErrorObject?.updatedExisting || false
+        return { ...result.value, updated }
       }
       throw new Error('Insert Failed')
     })

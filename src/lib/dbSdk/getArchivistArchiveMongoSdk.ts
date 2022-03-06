@@ -3,6 +3,7 @@ import { BaseMongoSdk, BaseMongoSdkConfig } from '@xyo-network/sdk-xyo-mongo-js'
 import { Collection, WithId } from 'mongodb'
 
 import { getMongoDBConfig } from './getMongoDBValues'
+import { UpsertResult } from './UpsertResult'
 
 interface IUpsertFilter {
   $and: [
@@ -50,7 +51,7 @@ class XyoArchiveMongoSdk extends BaseMongoSdk<ArchiveRecord> {
     })
   }
 
-  public async upsert(item: ArchiveRecord): Promise<WithId<ArchiveRecord>> {
+  public async upsert(item: ArchiveRecord): Promise<WithId<ArchiveRecord & UpsertResult>> {
     return await this.useCollection(async (collection) => {
       const { archive, user } = item
       if (!archive && !user) {
@@ -63,7 +64,8 @@ class XyoArchiveMongoSdk extends BaseMongoSdk<ArchiveRecord> {
         { returnDocument: 'after', upsert: true }
       )
       if (result.ok && result.value) {
-        return result.value
+        const updated = !!result?.lastErrorObject?.updatedExisting || false
+        return { ...result.value, updated }
       }
       throw new Error('Insert Failed')
     })

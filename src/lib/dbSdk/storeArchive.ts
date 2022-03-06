@@ -1,9 +1,13 @@
 import { getArchivistArchiveMongoSdk } from './getArchivistArchiveMongoSdk'
 
-export interface StoreArchiveResult {
+export interface StoreArchiveRequest {
   archive: string
   user: string
   accessControl: boolean
+}
+
+export interface StoreArchiveResult extends StoreArchiveRequest {
+  updated: boolean
 }
 
 /**
@@ -14,7 +18,7 @@ export interface StoreArchiveResult {
  * @param request The archive to store
  * @returns The stored archive if the operation was successful, null if not
  */
-export const storeArchive = async (request: StoreArchiveResult): Promise<StoreArchiveResult | null> => {
+export const storeArchive = async (request: StoreArchiveRequest): Promise<StoreArchiveResult | null> => {
   const sdk = await getArchivistArchiveMongoSdk()
   try {
     return await sdk.upsert(request)

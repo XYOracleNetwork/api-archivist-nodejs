@@ -86,10 +86,12 @@ export const getNewWeb3User = (): TestWeb3User => {
   return user
 }
 
-export const getExistingWeb2User = async (): Promise<TestWeb2User> => {
+export const getExistingWeb2User = async (
+  user: TestWeb2User = getNewWeb2User(),
+  expectedStatus: StatusCodes = StatusCodes.CREATED
+): Promise<TestWeb2User> => {
   const apiKey = process.env.API_KEY as string
-  const user = getNewWeb2User()
-  await request.post('/user/signup').set('x-api-key', apiKey).send(user).expect(StatusCodes.OK)
+  await request.post('/user/signup').set('x-api-key', apiKey).send(user).expect(expectedStatus)
   return user
 }
 
@@ -98,10 +100,10 @@ export const signInWeb2User = async (user: TestWeb2User): Promise<string> => {
   return tokenResponse.body.data.token
 }
 
-export const getExistingWeb3User = async (): Promise<TestWeb3User> => {
+export const getExistingWeb3User = async (expectedStatus: StatusCodes = StatusCodes.CREATED): Promise<TestWeb3User> => {
   const apiKey = process.env.API_KEY as string
   const user = getNewWeb3User()
-  await request.post('/user/signup').set('x-api-key', apiKey).send({ address: user.address }).expect(StatusCodes.OK)
+  await request.post('/user/signup').set('x-api-key', apiKey).send({ address: user.address }).expect(expectedStatus)
   return user
 }
 
@@ -136,7 +138,7 @@ export const getArchives = async (
 export const claimArchive = async (
   token: string,
   archive?: string,
-  expectedStatus: StatusCodes = StatusCodes.OK
+  expectedStatus: StatusCodes = StatusCodes.CREATED
 ): Promise<ArchiveResponse> => {
   if (!archive) archive = getArchiveName()
   const response = await getArchivist()

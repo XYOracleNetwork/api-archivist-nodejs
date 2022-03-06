@@ -2,7 +2,7 @@ import { Request } from 'express'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
 import { IUserStore } from '../../model'
-import { createUserFromRequest } from './createUserFromRequest'
+import { createUserFromRequest } from '../lib/createUserFromRequest'
 
 export class AdminApiKeyStrategy extends Strategy {
   constructor(
@@ -29,7 +29,8 @@ export class AdminApiKeyStrategy extends Strategy {
           this.error({ message: 'Error creating user' })
           return
         }
-        this.success(user)
+        const { updated } = user
+        this.success(user, { updated })
         return
       }
       this.success({})

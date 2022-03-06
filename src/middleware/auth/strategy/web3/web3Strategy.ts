@@ -1,7 +1,9 @@
 import { Request } from 'express'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
-import { IUserStore } from '../../model'
+import { UpsertResult } from '../../../../lib'
+import { IUserStore, User } from '../../model'
+import { createUserFromRequest } from '../lib/createUserFromRequest'
 import { verifyUuid } from './verifyUuid'
 import { verifyWallet } from './verifyWallet'
 
@@ -28,12 +30,23 @@ export class Web3AuthStrategy extends Strategy {
         this.fail('Invalid message')
         return
       }
-      let user = await this.userStore.getByWallet(address)
-      if (!user) {
-        user = await this.userStore.create({ address })
+
+      // Lookup existing user
+      const user = await this.userStore.getByWallet(address)
+      if (user) {
+        // if found, return them
+        this.success(user, { updated: false })
+        return
+      } else {
+        // if not found, create them (since they've verified they own the wallet)
+        const createdUser = await createUserFromRequest(req, this.userStore)
+        if (!createdUser) {
+          this.error({ message: 'Error creating user' })
+          return
+        }
+        this.success(createdUser, { updated: createdUser.updated })
+        return
       }
-      this.success(user)
-      return
     } catch (error) {
       this.error({ message: 'Web3 Auth Error' })
     }
