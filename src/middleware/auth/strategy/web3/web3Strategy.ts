@@ -28,10 +28,14 @@ export class Web3AuthStrategy extends Strategy {
         this.fail('Invalid message')
         return
       }
+
+      // TODO: Use createUserFromRequest in AdminApiKeyStrategy
+      // for single point of user creation
       let user = await this.userStore.getByWallet(address)
       if (!user) {
         user = await this.userStore.create({ address })
       }
+
       this.success(user)
       return
     } catch (error) {
