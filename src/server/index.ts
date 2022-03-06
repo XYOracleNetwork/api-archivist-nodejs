@@ -6,6 +6,7 @@ import { configureAuth, configureDoc } from '../middleware'
 import { addArchiveRoutes } from './addArchiveRoutes'
 import { addBlockRoutes } from './addBlockRoutes'
 import { addErrorHandlers } from './addErrorHandlers'
+import { addHashRoutes } from './addHashRoutes'
 import { addHealthChecks } from './addHealthChecks'
 import { addMiddleware } from './addMiddleware'
 import { addPayloadRoutes } from './addPayloadRoutes'
@@ -36,6 +37,7 @@ const server = async (port = 80) => {
 
   addMiddleware(app)
   addHealthChecks(app)
+  addHashRoutes(app)
   addArchiveRoutes(app)
   addBlockRoutes(app)
   addPayloadRoutes(app)
