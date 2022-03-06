@@ -2,7 +2,7 @@ import { Request } from 'express'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
 import { IUserStore } from '../../model'
-import { createUserFromRequest } from './createUserFromRequest'
+import { createUserFromRequest } from '../lib/createUserFromRequest'
 
 export class AdminApiKeyStrategy extends Strategy {
   constructor(
