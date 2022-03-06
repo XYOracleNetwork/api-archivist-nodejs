@@ -2,7 +2,7 @@ import { assertEx } from '@xylabs/sdk-js'
 import express, { RequestHandler, Router } from 'express'
 import passport from 'passport'
 
-import { getUserMongoSdk, MongoDBUserStore, UserWithoutId } from './model'
+import { getUserMongoSdk, MongoDBUserStore, UserCreationAuthInfo, UserWithoutId } from './model'
 import { getProfile, postSignup, postWalletChallenge } from './routes'
 import {
   adminApiKeyUserSignupStrategy,
@@ -151,10 +151,6 @@ export const configureAuth: (config: AuthConfig) => Promise<Router> = async (con
   configureWeb3Strategy(userStore)
 
   return router
-}
-
-export interface UserCreationAuthInfo {
-  updated?: boolean
 }
 
 // Since Passport augments each successfully auth'd request
