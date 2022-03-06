@@ -29,7 +29,8 @@ export class AdminApiKeyStrategy extends Strategy {
           this.error({ message: 'Error creating user' })
           return
         }
-        this.success(user)
+        const { updated } = user
+        this.success(user, { updated })
         return
       }
       this.success({})

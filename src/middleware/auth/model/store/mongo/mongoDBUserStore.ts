@@ -1,5 +1,6 @@
 import { WithId } from 'mongodb'
 
+import { UpsertResult } from '../../../../../lib'
 import { User, UserWithoutId } from '../../user'
 import { IUserStore } from '../userStore'
 import { UserMongoSdk } from './userSdk'
@@ -25,9 +26,9 @@ const toDbEntity = (user: UserWithoutId) => {
 
 export class MongoDBUserStore implements IUserStore {
   constructor(private readonly mongo: UserMongoSdk) {}
-  async create(user: UserWithoutId): Promise<User> {
+  async create(user: UserWithoutId): Promise<User & UpsertResult> {
     const created = await this.mongo.upsert(toDbEntity(user))
-    return fromDbEntity(created)
+    return { ...fromDbEntity(created), updated: created.updated }
   }
   async getById(id: string): Promise<User | null> {
     const user = await this.mongo.findById(id.toLowerCase())

@@ -153,6 +153,10 @@ export const configureAuth: (config: AuthConfig) => Promise<Router> = async (con
   return router
 }
 
+export interface UserCreationAuthInfo {
+  updated?: boolean
+}
+
 // Since Passport augments each successfully auth'd request
 // with our User, we need to redefine the default Express
 // User (just an empty Object) to be our User so we don't
@@ -161,9 +165,10 @@ export const configureAuth: (config: AuthConfig) => Promise<Router> = async (con
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
-    // eslint-disable-next-line @typescript-eslint/no-empty-interface
     interface User extends UserWithoutId {
       id?: string
     }
+    // eslint-disable-next-line @typescript-eslint/no-empty-interface
+    interface AuthInfo extends UserCreationAuthInfo {}
   }
 }
