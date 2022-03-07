@@ -22,7 +22,7 @@
   "main": "dist/index.js",
   "module": "dist/index.js",
   "scripts": {
-    "start": "nodemon --ext .ts --watch ./src --exec \"node --max-old-space-size=8192 --experimental-specifier-resolution=node --loader ts-node/esm ./src/index.ts\"",
+    "start": "nodemon",
     "launch": "node --max-old-space-size=8192 --experimental-specifier-resolution=node ./dist/node-esm/index.js",
     "build": "yarn lint && yarn compile",
     "clean": "rimraf tsconfig.tsbuildinfo && rimraf ./build && rimraf ./.serverless && rimraf ./.webpack",
