@@ -7,7 +7,7 @@ import {
   postBlock,
 } from '../../../../../test'
 
-describe.skip('/archive/:archive/block/hash/:hash/payloads', () => {
+describe('/archive/:archive/block/hash/:hash/payloads', () => {
   let token = ''
   let archive = ''
   beforeEach(async () => {
