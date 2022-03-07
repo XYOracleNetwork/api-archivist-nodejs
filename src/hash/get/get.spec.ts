@@ -4,6 +4,7 @@ import {
   claimArchive,
   getArchiveName,
   getHash,
+  getNewBlockWithBoundWitnessesWithPayloads,
   getNewBlockWithPayloads,
   getTokenForNewUser,
   postBlock,
@@ -11,6 +12,35 @@ import {
 } from '../../test'
 
 describe('/:hash', () => {
+  describe('return format is', () => {
+    let token = ''
+    let archive = ''
+    const boundWitness = getNewBlockWithBoundWitnessesWithPayloads(2, 2)
+    expect(boundWitness).toBeTruthy()
+    const boundWitnessHash = boundWitness[0]?._hash as string
+    expect(boundWitnessHash).toBeTruthy()
+    const payload = boundWitness[0]._payloads?.[0]
+    expect(payload).toBeTruthy()
+    const payloadHash = boundWitness[0].payload_hashes?.[0]
+    expect(payloadHash).toBeTruthy()
+    beforeAll(async () => {
+      token = await getTokenForNewUser()
+      archive = getArchiveName()
+      await claimArchive(token, archive)
+      const blockResponse = await postBlock(boundWitness, archive)
+      expect(blockResponse.boundWitnesses).toBe(2)
+    })
+    it('a single bound witness', async () => {
+      const response = await getHash(boundWitnessHash)
+      expect(response).toBeTruthy()
+      expect(Array.isArray(response)).toBe(false)
+    })
+    it('a single payload', async () => {
+      const response = await getHash(payloadHash)
+      expect(response).toBeTruthy()
+      expect(Array.isArray(response)).toBe(false)
+    })
+  })
   describe('with public archive', () => {
     let token = ''
     let archive = ''

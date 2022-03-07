@@ -1,5 +1,4 @@
 import { asyncHandler, NoReqBody, NoReqQuery } from '@xylabs/sdk-api-express-ecs'
-import { assertEx } from '@xylabs/sdk-js'
 import { XyoBoundWitness, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
@@ -11,9 +10,10 @@ import { findByHash } from './findByHash'
 export type HashPathParams = {
   hash: string
 }
-export interface HashResponse {
-  block: XyoBoundWitness | XyoPayload | null
-}
+
+export type HashResponse = XyoBoundWitness | XyoPayload
+// TODO: Return slimmer version of BW?
+// export type HashResponse = Pick<XyoBoundWitness, string> | XyoPayload
 
 export const isPublicArchive = (archive?: ArchiveResult | null): boolean => {
   if (!archive) return false
@@ -49,7 +49,7 @@ const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuer
   // If archive is public
   if (isPublicArchive(archive)) {
     // Return the block
-    res.json({ block })
+    res.json({ ...block })
     return
   } else {
     // If the archive is private check if the user owns archive
@@ -65,7 +65,7 @@ const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuer
     // If the user owns the archive
     if (user.id === archive.user) {
       // Return the block
-      res.json({ block })
+      res.json({ ...block })
       return
     }
   }
