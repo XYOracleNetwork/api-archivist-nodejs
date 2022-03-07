@@ -37,8 +37,8 @@ const server = async (port = 80) => {
 
   addMiddleware(app)
   addHealthChecks(app)
-  addHashRoutes(app)
   addArchiveRoutes(app)
+  addHashRoutes(app)
   addBlockRoutes(app)
   addPayloadRoutes(app)
   addPayloadSchemaRoutes(app)
