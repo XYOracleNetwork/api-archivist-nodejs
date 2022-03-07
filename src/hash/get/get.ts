@@ -26,11 +26,14 @@ const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuer
   next
 ) => {
   const { hash } = req.params
-  assertEx(hash, 'Error hash not defined')
+  if (!hash) {
+    next({ message: 'Hash not supplied', statusCode: StatusCodes.BAD_REQUEST })
+    return
+  }
 
   const block = await findByHash(hash)
   if (!block) {
-    next({ message: 'Block not found', statusCode: StatusCodes.NOT_FOUND })
+    next({ message: 'Hash not found', statusCode: StatusCodes.NOT_FOUND })
     return
   }
   if (!block?._archive) {
@@ -66,7 +69,7 @@ const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuer
       return
     }
   }
-  next({ message: 'Block not found', statusCode: StatusCodes.NOT_FOUND })
+  next({ message: 'Hash not found', statusCode: StatusCodes.NOT_FOUND })
   return
 }
 
