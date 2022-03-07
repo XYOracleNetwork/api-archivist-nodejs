@@ -49,7 +49,7 @@ describe.skip('/archive/{:archive}', () => {
     })
     it('with token for user who does not own the archive does not allow access', async () => {
       const newToken = await getTokenForNewUser()
-      await getArchive(archive, newToken, StatusCodes.OK)
+      await getArchive(archive, newToken, StatusCodes.FORBIDDEN)
     })
     it('with invalid token does not allow access', async () => {
       const newToken = getInvalidVersionOfToken(token)
