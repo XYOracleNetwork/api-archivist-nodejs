@@ -8,7 +8,6 @@ import {
   adminApiKeyUserSignupStrategy,
   allowUnauthenticatedStrategyName,
   archiveAccessControlStrategy,
-  archiveAccessControlStrategyName,
   archiveApiKeyStrategy,
   archiveApiKeyStrategyName,
   archiveOwnerStrategy,

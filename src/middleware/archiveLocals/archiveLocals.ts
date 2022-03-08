@@ -25,6 +25,7 @@ const handler: RequestHandler<ArchivePathParams, NoResBody, NoReqBody, NoReqQuer
         // TODO: Uncomment if/when we require a priori archive creation to
         // automatically reject all calls for archives that don't exist
         // next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
+        // return
       } else {
         res.locals.archive = response
       }
