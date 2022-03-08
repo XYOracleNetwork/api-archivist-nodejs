@@ -65,12 +65,6 @@ export const allowAnonymous: RequestHandler = passport.authenticate(
  * Require that the user can, in some way, access the archive. Either by owning
  * the archive OR by the archive being public (having no access control)
  */
-// export const requireArchiveAccess: RequestHandler[] = passport.authenticate(
-//   [archiveAccessControlStrategyName, jwtStrategyName, archiveApiKeyStrategyName],
-//   {
-//     session: false,
-//   }
-// )
 export const requireArchiveAccess: RequestHandler[] = [allowAnonymous, archiveAccessControlStrategy]
 
 // Properly initialized after auth is configured
