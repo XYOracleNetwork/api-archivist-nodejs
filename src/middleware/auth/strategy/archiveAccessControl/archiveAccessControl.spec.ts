@@ -36,6 +36,12 @@ describe('ArchiveAccessControlAuthStrategy', () => {
     const response = await setArchiveAccessControl(token, archive, { accessControl: true })
     expect(response.accessControl).toBe(true)
     await verifyAuthorizedRouteAccess(token, archive)
-    await verifyAnonymousRouteAccess(archive, StatusCodes.FORBIDDEN)
+    await verifyAnonymousRouteAccess(archive, StatusCodes.UNAUTHORIZED)
+  })
+  it('Denys access to route if access control specified as true and user not archive owner', async () => {
+    const response = await setArchiveAccessControl(token, archive, { accessControl: true })
+    expect(response.accessControl).toBe(true)
+    await verifyAuthorizedRouteAccess(await getTokenForNewUser(), archive, StatusCodes.FORBIDDEN)
+    await verifyAnonymousRouteAccess(archive, StatusCodes.UNAUTHORIZED)
   })
 })

@@ -2,7 +2,7 @@ import { StatusCodes } from 'http-status-codes'
 
 import { claimArchive, getArchive, getTokenForNewUser, invalidateToken, setArchiveAccessControl } from '../../../test'
 
-describe.skip('/archive/{:archive}', () => {
+describe('/archive/{:archive}', () => {
   describe('with public archive', () => {
     let archive = ''
     let token = ''
