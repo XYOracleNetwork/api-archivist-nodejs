@@ -1,6 +1,6 @@
 import { claimArchive, getArchive, getArchiveName, getTokenForNewUser } from '../../../test'
 
-describe.skip('/archive', () => {
+describe('/archive', () => {
   let token = ''
   let archive = ''
   beforeEach(async () => {
