@@ -7,6 +7,8 @@ import { StatusCodes } from 'http-status-codes'
 import { ArchiveLocals } from '../../archive'
 import { ArchiveResult, findByHash, getArchiveByName } from '../../lib'
 
+const reservedHashes = ['archive', 'schema', 'doc']
+
 export type HashPathParams = {
   hash: string
 }
@@ -32,7 +34,15 @@ const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuer
   // Since this is the default/catch-all route we need to ensure that the
   // request hasn't already handled by another route
   // NOTE: Remove this if route regex can filter our /archive from matching this route
-  if (hash === 'archive' || res.headersSent) {
+  if (res.headersSent) {
+    next()
+    return
+  }
+
+  if (reservedHashes.find((reservedHash) => reservedHash === hash)) {
+    console.warn(
+      `This should not happen: ':hash' path did not run: [res.headersSent !== true, reservedHashes did find, ${hash}]`
+    )
     next()
     return
   }
@@ -43,11 +53,13 @@ const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuer
     return
   }
   if (!block?._archive) {
+    console.log(`No Archive: ${JSON.stringify(block, null, 2)}`)
     next({ message: 'Archive not found for block', statusCode: StatusCodes.NOT_FOUND })
     return
   }
   const archive = await getArchiveByName(block._archive)
   if (!archive) {
+    console.log(`No Archive By Name: ${JSON.stringify(block, null, 2)}`)
     next({ message: 'Archive not found for block', statusCode: StatusCodes.NOT_FOUND })
     return
   }

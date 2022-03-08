@@ -72,10 +72,6 @@ export const getArchiveName = (): string => {
   return v4()
 }
 
-export const getSchemaName = (): string => {
-  return 'network.xyo.schema'
-}
-
 export const getNewWeb2User = (): TestWeb2User => {
   const user = {
     email: `test-user-${v4()}@test.com`,
@@ -165,11 +161,6 @@ export const getArchive = async (
   const response = token
     ? await getArchivist().get(`/archive/${archive}`).auth(token, { type: 'bearer' }).expect(expectedStatus)
     : await getArchivist().get(`/archive/${archive}`).expect(expectedStatus)
-  return response.body.data
-}
-
-export const getSchema = async (schema: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoPayload> => {
-  const response = await getArchivist().get(`/schema/${schema}`).expect(expectedStatus)
   return response.body.data
 }
 

@@ -8,11 +8,11 @@ import { SchemaCache } from '../SchemaCache'
 
 const handler: RequestHandler<SchemaPathParams, XyoPayload, NoReqBody, NoReqQuery> = async (req, res, next) => {
   const { schema } = req.params
-  console.log(`Yo: ${schema}`)
   if (!schema) {
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
   } else {
-    res.json((await SchemaCache.get().get(schema)) ?? undefined)
+    const sr = await SchemaCache.get().get(schema)
+    res.json(sr ?? undefined)
     next()
   }
 }

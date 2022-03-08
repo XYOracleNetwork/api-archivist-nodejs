@@ -1,4 +1,4 @@
-import { XyoDomainConfigWrapper, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { Huri, XyoDomainConfigWrapper, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import LRU from 'lru-cache'
 
 import { findByHash } from '../../lib'
@@ -14,9 +14,10 @@ export class SchemaCache {
     if (this.cache.get(schema) === undefined) {
       const config = new XyoDomainConfigWrapper()
 
-      const schemaHash = (await config.discover(schema))?.schema?.[schema]
-      if (schemaHash) {
-        const payload = (await findByHash(schemaHash, 'schemas')) as XyoPayload
+      const schemaHuri = (await config.discover(schema))?.schema?.[schema]
+      if (schemaHuri) {
+        const huri = new Huri(schemaHuri)
+        const payload = (await findByHash(huri.hash)) as XyoPayload
         this.cache.set(schema, payload ?? null)
       }
     }
