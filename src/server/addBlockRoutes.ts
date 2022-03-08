@@ -14,6 +14,7 @@ import { notImplemented } from './notImplemented'
 export const addBlockRoutes = (app: Express) => {
   app.get(
     '/archive/:archive/block',
+    requireArchiveAccess,
     getArchiveBlocks
     /* #swagger.tags = ['Block'] */
     /* #swagger.summary = 'Get blocks' */
@@ -35,6 +36,7 @@ export const addBlockRoutes = (app: Express) => {
 
   app.get(
     '/archive/:archive/block/stats',
+    requireArchiveAccess,
     getArchiveBlockStats
     /* #swagger.tags = ['Block'] */
     /* #swagger.summary = 'Get block stats' */
