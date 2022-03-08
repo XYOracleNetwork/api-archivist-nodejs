@@ -10,7 +10,8 @@ const handler: RequestHandler<NoReqParams, ArchiveResponse[]> = async (req, res,
   if (!id) {
     res.json(defaultPublicArchives)
   } else {
-    res.json([...defaultPublicArchives, ...(await getArchivesByOwner(id))])
+    const userArchives = await getArchivesByOwner(id)
+    res.json([...defaultPublicArchives, ...userArchives])
   }
   next()
 }
