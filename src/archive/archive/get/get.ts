@@ -15,12 +15,8 @@ const handler: RequestHandler<ArchivePathParams, ArchiveResponse, NoReqBody, NoR
   if (!archive) {
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
   }
-  // if (archive.user === user.id) {
   res.json(archive)
   next()
-  // } else {
-  //   next({ message: ReasonPhrases.FORBIDDEN, statusCode: StatusCodes.FORBIDDEN })
-  // }
 }
 
 export const getArchive = handler

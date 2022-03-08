@@ -33,7 +33,7 @@ export class AdminApiKeyStrategy extends Strategy {
         this.success(user, { updated })
         return
       }
-      this.success({})
+      this.success(req.user || {})
       return
     } catch (error) {
       this.error({ message: 'Admin API Key Auth Error' })
