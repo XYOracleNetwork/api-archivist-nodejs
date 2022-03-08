@@ -4,7 +4,8 @@ import { StatusCodes } from 'http-status-codes'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
 import { ArchiveLocals, ArchivePathParams } from '../../../../archive'
-import { verifyArchiveAccess } from './verifyArchiveAccess'
+import { isArchiveOwner } from './isArchiveOwner'
+import { isPublicArchive } from './isPublicArchive'
 
 export class ArchiveOwnerStrategy extends Strategy {
   constructor() {
@@ -16,12 +17,21 @@ export class ArchiveOwnerStrategy extends Strategy {
     _options?: unknown
   ) {
     try {
-      const canAccessArchive = verifyArchiveAccess(req)
-      if (!canAccessArchive) {
-        this.fail('User not authorized for archive', StatusCodes.FORBIDDEN)
-        return
+      // If it's not a public archive
+      if (!isPublicArchive(req)) {
+        // We require auth
+        if (!req?.user?.id) {
+          this.fail('Archive requires authorization', StatusCodes.UNAUTHORIZED)
+          return
+        } else {
+          // Check if user has access to this archive
+          if (!isArchiveOwner(req)) {
+            this.fail('User not authorized for archive', StatusCodes.FORBIDDEN)
+            return
+          }
+        }
       }
-      this.success({})
+      this.success(req.user || {})
       return
     } catch (error) {
       this.error({ message: 'ArchiveOwner Auth Error' })

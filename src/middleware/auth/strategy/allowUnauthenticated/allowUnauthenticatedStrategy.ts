@@ -41,7 +41,7 @@ export class AllowUnauthenticatedStrategy extends Strategy {
         return
       }
 
-      this.success({})
+      this.success(req.user || {})
       return
     } catch (error) {
       this.error({ message: 'AllowUnauthenticated Auth Error' })

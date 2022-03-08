@@ -1,13 +1,8 @@
 import { StatusCodes } from 'http-status-codes'
 
-import { claimArchive, getArchive, getTokenForNewUser, setArchiveAccessControl } from '../../../test'
+import { claimArchive, getArchive, getTokenForNewUser, invalidateToken, setArchiveAccessControl } from '../../../test'
 
-function getInvalidVersionOfToken(token: string) {
-  const half = Math.floor(token.length / 2)
-  return token.substring(0, half) + 'foo' + token.substring(half)
-}
-
-describe.skip('/archive/{:archive}', () => {
+describe('/archive/{:archive}', () => {
   describe('with public archive', () => {
     let archive = ''
     let token = ''
@@ -28,7 +23,7 @@ describe.skip('/archive/{:archive}', () => {
       await getArchive(archive, newToken, StatusCodes.OK)
     })
     it('with invalid token does not allow access', async () => {
-      const newToken = getInvalidVersionOfToken(token)
+      const newToken = invalidateToken(token)
       await getArchive(archive, newToken, StatusCodes.UNAUTHORIZED)
     })
   })
@@ -52,7 +47,7 @@ describe.skip('/archive/{:archive}', () => {
       await getArchive(archive, newToken, StatusCodes.FORBIDDEN)
     })
     it('with invalid token does not allow access', async () => {
-      const newToken = getInvalidVersionOfToken(token)
+      const newToken = invalidateToken(token)
       await getArchive(archive, newToken, StatusCodes.UNAUTHORIZED)
     })
   })

@@ -7,7 +7,7 @@ import { getProfile, postSignup, postWalletChallenge } from './routes'
 import {
   adminApiKeyUserSignupStrategy,
   allowUnauthenticatedStrategyName,
-  archiveAccessControlStrategyName,
+  archiveAccessControlStrategy,
   archiveApiKeyStrategy,
   archiveApiKeyStrategyName,
   archiveOwnerStrategy,
@@ -51,25 +51,20 @@ export const requireAuth: RequestHandler = passport.authenticate([jwtStrategyNam
 export const requireArchiveOwner: RequestHandler[] = [requireAuth, archiveOwnerStrategy]
 
 /**
- * Require that the user can, in some way, access the archive. Either by owning
- * the archive OR by the archive being public (having no access control)
+ * If present, require API key OR JWT to be valid, but if absent, allow anonymous access
  */
-export const requireArchiveAccess: RequestHandler[] = passport.authenticate(
-  [archiveAccessControlStrategyName, jwtStrategyName, archiveApiKeyStrategyName],
+export const allowAnonymous: RequestHandler = passport.authenticate(
+  [jwtStrategyName, archiveApiKeyStrategyName, allowUnauthenticatedStrategyName],
   {
     session: false,
   }
 )
 
 /**
- * If present, require API key OR JWT to be valid, but if absent, allow anonymous access
+ * Require that the user can, in some way, access the archive. Either by owning
+ * the archive OR by the archive being public (having no access control)
  */
-export const allowAnonymous: RequestHandler = passport.authenticate(
-  [allowUnauthenticatedStrategyName, jwtStrategyName, archiveApiKeyStrategyName],
-  {
-    session: false,
-  }
-)
+export const requireArchiveAccess: RequestHandler[] = [allowAnonymous, archiveAccessControlStrategy]
 
 // Properly initialized after auth is configured
 let respondWithJwt: RequestHandler = () => {

@@ -13,6 +13,7 @@ import { notImplemented } from './notImplemented'
 export const addPayloadRoutes = (app: Express) => {
   app.get(
     '/archive/:archive/payload',
+    requireArchiveAccess,
     getArchivePayloads
     /* #swagger.tags = ['Payload'] */
     /* #swagger.summary = 'Get payloads' */
@@ -20,6 +21,7 @@ export const addPayloadRoutes = (app: Express) => {
 
   app.get(
     '/archive/:archive/payload/stats',
+    requireArchiveAccess,
     getArchivePayloadStats
     /* #swagger.tags = ['Payload'] */
     /* #swagger.summary = 'Get payload stats' */

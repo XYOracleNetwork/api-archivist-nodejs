@@ -129,6 +129,11 @@ export const getTokenForNewUser = async (): Promise<string> => {
   return signInWeb2User(await getExistingWeb2User())
 }
 
+export const invalidateToken = (token: string) => {
+  const half = Math.floor(token.length / 2)
+  return token.substring(0, half) + 'foo' + token.substring(half)
+}
+
 export const getArchives = async (
   token?: string,
   expectedStatus: StatusCodes = StatusCodes.OK
@@ -254,13 +259,17 @@ export const getHash = async (
 export const postBlock = async (
   boundWitnesses: XyoBoundWitness | XyoBoundWitness[],
   archive: string,
+  token?: string,
   expectedStatus: StatusCodes = StatusCodes.OK
 ): Promise<PostArchiveBlockResponse> => {
   const data = ([] as XyoBoundWitness[]).concat(boundWitnesses)
-  const response = await getArchivist()
-    .post(`/archive/${archive}/block`)
-    .send({ boundWitnesses: data })
-    .expect(expectedStatus)
+  const response = token
+    ? await getArchivist()
+        .post(`/archive/${archive}/block`)
+        .auth(token, { type: 'bearer' })
+        .send({ boundWitnesses: data })
+        .expect(expectedStatus)
+    : await getArchivist().post(`/archive/${archive}/block`).send({ boundWitnesses: data }).expect(expectedStatus)
   return response.body.data
 }
 

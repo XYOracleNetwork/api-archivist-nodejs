@@ -1,3 +1,4 @@
+/* eslint-disable max-statements */
 import { asyncHandler, NoReqBody, NoReqQuery } from '@xylabs/sdk-api-express-ecs'
 import { removeUnderscoreFields } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
@@ -25,6 +26,14 @@ const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuer
   const { hash } = req.params
   if (!hash) {
     next({ message: 'Hash not supplied', statusCode: StatusCodes.BAD_REQUEST })
+    return
+  }
+
+  // Since this is the default/catch-all route we need to ensure that the
+  // request hasn't already handled by another route
+  // NOTE: Remove this if route regex can filter our /archive from matching this route
+  if (hash === 'archive' || res.headersSent) {
+    next()
     return
   }
 
