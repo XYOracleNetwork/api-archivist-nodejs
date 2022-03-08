@@ -11,6 +11,7 @@ import { addHealthChecks } from './addHealthChecks'
 import { addMiddleware } from './addMiddleware'
 import { addPayloadRoutes } from './addPayloadRoutes'
 import { addPayloadSchemaRoutes } from './addPayloadSchemaRoutes'
+import { addSchemaRoutes } from './addSchemaRoutes'
 
 const server = async (port = 80) => {
   // If an AWS ARN was supplied for Secrets Manager
@@ -41,7 +42,7 @@ const server = async (port = 80) => {
   addBlockRoutes(app)
   addPayloadRoutes(app)
   addPayloadSchemaRoutes(app)
-  addHashRoutes(app)
+  addSchemaRoutes(app)
 
   const userRoutes = await configureAuth({
     apiKey: process.env.API_KEY,
@@ -50,6 +51,9 @@ const server = async (port = 80) => {
   app.use('/user', userRoutes)
   const host = process.env.PUBLIC_ORIGIN || `http://localhost:${port}`
   await configureDoc(app, { host })
+
+  /* This needs to be the last true handler since it is a ctach all for the root */
+  addHashRoutes(app)
 
   addErrorHandlers(app)
 
