@@ -14,6 +14,7 @@ import { notImplemented } from './notImplemented'
 export const addBlockRoutes = (app: Express) => {
   app.get(
     '/archive/:archive/block',
+    requireArchiveAccess,
     getArchiveBlocks
     /* #swagger.tags = ['Block'] */
     /* #swagger.summary = 'Get blocks' */
@@ -21,6 +22,7 @@ export const addBlockRoutes = (app: Express) => {
 
   app.post(
     '/archive/:archive/block',
+    // requireArchiveAccess,
     postArchiveBlock
     /* #swagger.tags = ['Block'] */
     /* #swagger.summary = 'Post blocks' */
@@ -28,6 +30,7 @@ export const addBlockRoutes = (app: Express) => {
 
   app.post(
     '/archive/:archive/bw',
+    // requireArchiveAccess,
     postArchiveBlock
     /* #swagger.tags = ['Block'] */
     /* #swagger.summary = 'Temporary support for legacy calls' */
@@ -35,6 +38,7 @@ export const addBlockRoutes = (app: Express) => {
 
   app.get(
     '/archive/:archive/block/stats',
+    requireArchiveAccess,
     getArchiveBlockStats
     /* #swagger.tags = ['Block'] */
     /* #swagger.summary = 'Get block stats' */

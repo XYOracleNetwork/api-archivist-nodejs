@@ -92,7 +92,7 @@ describe('/:hash', () => {
       archive = getArchiveName()
       await claimArchive(token, archive)
       await setArchiveAccessControl(token, archive, { accessControl: true })
-      const blockResponse = await postBlock(boundWitness, archive)
+      const blockResponse = await postBlock(boundWitness, archive, token)
       expect(blockResponse.boundWitnesses).toBe(1)
     })
     describe.each([
