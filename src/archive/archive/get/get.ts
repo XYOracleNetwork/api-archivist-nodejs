@@ -14,9 +14,10 @@ const handler: RequestHandler<ArchivePathParams, ArchiveResponse, NoReqBody, NoR
   const { archive } = res.locals
   if (!archive) {
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
+  } else {
+    res.json(archive)
+    next()
   }
-  res.json(archive)
-  next()
 }
 
 export const getArchive = handler
