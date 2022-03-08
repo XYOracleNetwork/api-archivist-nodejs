@@ -11,6 +11,7 @@ import { addHealthChecks } from './addHealthChecks'
 import { addMiddleware } from './addMiddleware'
 import { addPayloadRoutes } from './addPayloadRoutes'
 import { addPayloadSchemaRoutes } from './addPayloadSchemaRoutes'
+import { addSchemaRoutes } from './addSchemaRoutes'
 
 const server = async (port = 80) => {
   // If an AWS ARN was supplied for Secrets Manager
@@ -42,6 +43,7 @@ const server = async (port = 80) => {
   addBlockRoutes(app)
   addPayloadRoutes(app)
   addPayloadSchemaRoutes(app)
+  addSchemaRoutes(app)
 
   const userRoutes = await configureAuth({
     apiKey: process.env.API_KEY,

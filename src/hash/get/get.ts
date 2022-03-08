@@ -4,8 +4,7 @@ import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
 import { ArchiveLocals } from '../../archive'
-import { ArchiveResult, getArchiveByName } from '../../lib'
-import { findByHash } from './findByHash'
+import { ArchiveResult, findByHash, getArchiveByName } from '../../lib'
 
 export type HashPathParams = {
   hash: string
