@@ -32,6 +32,8 @@
     "reinstall": "rimraf ./yarn-error.log && rimraf ./node_modules && yarn install && yarn outdated",
     "license": "yarn license-checker --exclude \"MIT, ISC, Apache-2.0, BSD, BSD-2-Clause, CC-BY-4.0, Unlicense, CC-BY-3.0, CC0-1.0\"",
     "test": "jest ./src",
+    "test:hash": "jest ./src/hash",
+    "test:domain": "jest ./src/domain",
     "test:schema": "jest ./src/schema"
   },
   "author": "Arie Trouw",
@@ -44,7 +46,7 @@
     "@rollup/plugin-strip": "^2.1.0",
     "@xylabs/sdk-api-express-ecs": "^1.1.2",
     "@xylabs/sdk-js": "^2.4.2",
-    "@xyo-network/sdk-xyo-client-js": "^2.11.17",
+    "@xyo-network/sdk-xyo-client-js": "^2.11.19",
     "@xyo-network/sdk-xyo-mongo-js": "^2.2.7",
     "axios": "^0.26.0",
     "bcrypt": "^5.0.1",

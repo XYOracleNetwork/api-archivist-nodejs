@@ -7,7 +7,7 @@ import { StatusCodes } from 'http-status-codes'
 import { ArchiveLocals } from '../../archive'
 import { ArchiveResult, findByHash, getArchiveByName } from '../../lib'
 
-const reservedHashes = ['archive', 'schema', 'doc']
+const reservedHashes = ['archive', 'schema', 'doc', 'domain']
 
 export type HashPathParams = {
   hash: string

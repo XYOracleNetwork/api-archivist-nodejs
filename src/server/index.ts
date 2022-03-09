@@ -5,6 +5,7 @@ import express from 'express'
 import { configureAuth, configureDoc } from '../middleware'
 import { addArchiveRoutes } from './addArchiveRoutes'
 import { addBlockRoutes } from './addBlockRoutes'
+import { addDomainRoutes } from './addDomainRoutes'
 import { addErrorHandlers } from './addErrorHandlers'
 import { addHashRoutes } from './addHashRoutes'
 import { addHealthChecks } from './addHealthChecks'
@@ -43,6 +44,7 @@ const server = async (port = 80) => {
   addPayloadRoutes(app)
   addPayloadSchemaRoutes(app)
   addSchemaRoutes(app)
+  addDomainRoutes(app)
 
   const userRoutes = await configureAuth({
     apiKey: process.env.API_KEY,

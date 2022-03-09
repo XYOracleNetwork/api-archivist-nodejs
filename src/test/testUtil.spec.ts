@@ -2,6 +2,7 @@ import {
   XyoAddress,
   XyoBoundWitness,
   XyoBoundWitnessBuilder,
+  XyoDomainConfig,
   XyoPayload,
   XyoPayloadBuilder,
 } from '@xyo-network/sdk-xyo-client-js'
@@ -161,6 +162,17 @@ export const getArchive = async (
   const response = token
     ? await getArchivist().get(`/archive/${archive}`).auth(token, { type: 'bearer' }).expect(expectedStatus)
     : await getArchivist().get(`/archive/${archive}`).expect(expectedStatus)
+  return response.body.data
+}
+
+export const getDomain = async (
+  domain: string,
+  token?: string,
+  expectedStatus: StatusCodes = StatusCodes.OK
+): Promise<XyoDomainConfig> => {
+  const response = token
+    ? await getArchivist().get(`/domain/${domain}`).auth(token, { type: 'bearer' }).expect(expectedStatus)
+    : await getArchivist().get(`/domain/${domain}`).expect(expectedStatus)
   return response.body.data
 }
 
