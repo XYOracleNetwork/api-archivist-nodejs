@@ -1,3 +1,4 @@
+import { XyoBoundWitness, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import {
@@ -15,30 +16,39 @@ describe('/:hash', () => {
   describe('return format is', () => {
     let token = ''
     let archive = ''
-    const boundWitness = getNewBlockWithBoundWitnessesWithPayloads(2, 2)
+    const block = getNewBlockWithBoundWitnessesWithPayloads(2, 2)
+    expect(block).toBeTruthy()
+    const boundWitness = block[0]
     expect(boundWitness).toBeTruthy()
-    const boundWitnessHash = boundWitness[0]?._hash as string
+    const boundWitnessHash = boundWitness?._hash as string
     expect(boundWitnessHash).toBeTruthy()
-    const payload = boundWitness[0]._payloads?.[0]
+    const payload = boundWitness?._payloads?.[0]
     expect(payload).toBeTruthy()
-    const payloadHash = boundWitness[0].payload_hashes?.[0]
+    const payloadHash = boundWitness?.payload_hashes?.[0]
     expect(payloadHash).toBeTruthy()
     beforeAll(async () => {
       token = await getTokenForNewUser()
       archive = getArchiveName()
       await claimArchive(token, archive)
-      const blockResponse = await postBlock(boundWitness, archive)
+      const blockResponse = await postBlock(block, archive)
       expect(blockResponse.boundWitnesses).toBe(2)
     })
     it('a single bound witness', async () => {
       const response = await getHash(boundWitnessHash)
       expect(response).toBeTruthy()
       expect(Array.isArray(response)).toBe(false)
+      const actual = response as XyoBoundWitness
+      expect(actual.addresses).toEqual(boundWitness.addresses)
+      expect(actual.payload_hashes).toEqual(boundWitness.payload_hashes)
+      expect(actual.payload_schemas).toEqual(boundWitness.payload_schemas)
+      expect(actual.previous_hashes).toEqual(boundWitness.previous_hashes)
     })
     it('a single payload', async () => {
       const response = await getHash(payloadHash)
       expect(response).toBeTruthy()
       expect(Array.isArray(response)).toBe(false)
+      const actual = response as XyoPayload
+      expect(actual.schema).toEqual(payload?.schema)
     })
   })
   describe('with public archive', () => {
