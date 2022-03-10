@@ -4,7 +4,7 @@ import { StatusCodes } from 'http-status-codes'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
 import { ArchiveLocals, ArchivePathParams } from '../../../../archive'
-import { isArchiveOwner } from './isArchiveOwner'
+import { isRequestUserOwnerOfRequestedArchive } from '../../../../lib'
 import { isPublicArchive } from './isPublicArchive'
 
 export class ArchiveOwnerStrategy extends Strategy {
@@ -25,7 +25,7 @@ export class ArchiveOwnerStrategy extends Strategy {
           return
         } else {
           // Check if user has access to this archive
-          if (!isArchiveOwner(req)) {
+          if (!isRequestUserOwnerOfRequestedArchive(req)) {
             this.fail('User not authorized for archive', StatusCodes.FORBIDDEN)
             return
           }

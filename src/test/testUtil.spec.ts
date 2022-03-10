@@ -252,7 +252,7 @@ export const getHash = async (
   hash: string,
   token?: string,
   expectedStatus: StatusCodes = StatusCodes.OK
-): Promise<XyoPayload[]> => {
+): Promise<XyoBoundWitness | XyoPayload> => {
   const response = token
     ? await getArchivist().get(`/${hash}`).auth(token, { type: 'bearer' }).expect(expectedStatus)
     : await getArchivist().get(`/${hash}`).expect(expectedStatus)
