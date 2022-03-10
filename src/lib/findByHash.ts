@@ -7,21 +7,19 @@ import {
   getArchivistPayloadMongoSdk,
 } from './dbSdk'
 
+export const findOnePayloadByHash = async (hash: string, archive?: string): Promise<XyoPayload | null> => {
+  const sdk = archive ? await getArchivistPayloadMongoSdk(archive) : await getArchivistAllPayloadMongoSdk()
+  return sdk.findOne({ _hash: hash })
+}
+
+export const findOneBoundWitnessByHash = async (hash: string, archive?: string): Promise<XyoBoundWitness | null> => {
+  const sdk = archive
+    ? await getArchivistBoundWitnessesMongoSdk(archive)
+    : await getArchivistAllBoundWitnessesMongoSdk()
+  return sdk.findOne({ _hash: hash })
+}
+
 export const findOneByHash = async (hash: string, archive?: string): Promise<XyoBoundWitness | XyoPayload | null> => {
-  if (archive) {
-    const payloads = await getArchivistPayloadMongoSdk(archive)
-    const payload = await payloads.findOne({ _hash: hash })
-    if (payload) return payload
-    const boundWitnesses = await getArchivistBoundWitnessesMongoSdk(archive)
-    const boundWitness = await boundWitnesses.findOne({ _hash: hash })
-    if (boundWitness) return boundWitness
-    return null
-  }
-  const payloads = await getArchivistAllPayloadMongoSdk()
-  const payload = await payloads.findOne({ _hash: hash })
-  if (payload) return payload
-  const boundWitnesses = await getArchivistAllBoundWitnessesMongoSdk()
-  const boundWitness = await boundWitnesses.findOne({ _hash: hash })
-  if (boundWitness) return boundWitness
-  return null
+  const payload = await findOnePayloadByHash(hash, archive)
+  return payload ? payload : findOneBoundWitnessByHash(hash, archive)
 }
