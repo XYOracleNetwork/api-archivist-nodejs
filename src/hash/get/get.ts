@@ -1,11 +1,10 @@
-/* eslint-disable max-statements */
 import { asyncHandler, NoReqBody, NoReqQuery } from '@xylabs/sdk-api-express-ecs'
 import { removeUnderscoreFields } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
 import { ArchiveLocals } from '../../archive'
-import { ArchiveResult, findByHash, getArchiveByName } from '../../lib'
+import { findByHash, getArchiveByName, isPublicArchive, isRequestUserOwnerOfArchive } from '../../lib'
 
 const reservedHashes = ['archive', 'schema', 'doc', 'domain']
 
@@ -14,11 +13,6 @@ export type HashPathParams = {
 }
 
 export type HashResponse = Record<string, unknown>
-
-export const isPublicArchive = (archive?: ArchiveResult | null): boolean => {
-  if (!archive) return false
-  return archive ? !archive.accessControl : false
-}
 
 const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuery, ArchiveLocals> = async (
   req,
@@ -32,7 +26,7 @@ const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuer
   }
 
   // Since this is the default/catch-all route we need to ensure that the
-  // request hasn't already handled by another route
+  // request hasn't already been handled by another route
   // NOTE: Remove this if route regex can filter our /archive from matching this route
   if (res.headersSent) {
     next()
@@ -47,43 +41,34 @@ const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuer
     return
   }
 
-  const block = await findByHash(hash)
-  if (!block) {
+  const blocks = await findByHash(hash)
+  if (blocks.length === 0) {
     next({ message: 'Hash not found', statusCode: StatusCodes.NOT_FOUND })
     return
   }
-  if (!block?._archive) {
-    console.log(`No Archive: ${JSON.stringify(block, null, 2)}`)
-    next({ message: 'Archive not found for block', statusCode: StatusCodes.NOT_FOUND })
-    return
-  }
-  const archive = await getArchiveByName(block._archive)
-  if (!archive) {
-    console.log(`No Archive By Name: ${JSON.stringify(block, null, 2)}`)
-    next({ message: 'Archive not found for block', statusCode: StatusCodes.NOT_FOUND })
-    return
-  }
 
-  // If archive is public
-  if (isPublicArchive(archive)) {
-    // Return the block
-    res.json({ ...removeUnderscoreFields(block) })
-    return
-  } else {
-    // If the archive is private check if the user owns archive
-    const { user } = req
-    if (!user || !user?.id) {
-      next({ message: 'Invalid User', statusCode: StatusCodes.NOT_FOUND })
-      return null
+  for (const block of blocks) {
+    if (!block?._archive) {
+      console.log(`No Archive For Block: ${JSON.stringify(block, null, 2)}`)
+      continue
     }
-    if (!archive?.user) {
-      next({ message: 'Archive owner not found', statusCode: StatusCodes.NOT_FOUND })
-      return
+    const archive = await getArchiveByName(block._archive)
+    if (!archive) {
+      console.log(`No Archive By Name: ${JSON.stringify(block, null, 2)}`)
+      continue
     }
-    // If the user owns the archive
-    if (user.id === archive.user) {
-      // Return the block
+    // If the archive is public
+    if (isPublicArchive(archive)) {
+      // return this block from the public archive
       res.json({ ...removeUnderscoreFields(block) })
+      next()
+      return
+    } else if (isRequestUserOwnerOfArchive(req, archive)) {
+      // If the archive is private but this is an auth'd
+      // request from the archive owner
+      // return this block from the private archive
+      res.json({ ...removeUnderscoreFields(block) })
+      next()
       return
     }
   }
