@@ -5,7 +5,7 @@ import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
 import { ArchiveLocals } from '../../archive'
-import { ArchiveResult, findOneByHash, getArchiveByName } from '../../lib'
+import { ArchiveResult, findByHash, getArchiveByName } from '../../lib'
 
 const reservedHashes = ['archive', 'schema', 'doc', 'domain']
 
@@ -32,7 +32,7 @@ const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuer
   }
 
   // Since this is the default/catch-all route we need to ensure that the
-  // request hasn't already handled by another route
+  // request hasn't already been handled by another route
   // NOTE: Remove this if route regex can filter our /archive from matching this route
   if (res.headersSent) {
     next()
@@ -47,44 +47,41 @@ const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuer
     return
   }
 
-  const block = await findOneByHash(hash)
-  if (!block) {
+  const blocks = await findByHash(hash)
+  if (blocks.length === 0) {
     next({ message: 'Hash not found', statusCode: StatusCodes.NOT_FOUND })
     return
   }
-  if (!block?._archive) {
-    console.log(`No Archive: ${JSON.stringify(block, null, 2)}`)
-    next({ message: 'Archive not found for block', statusCode: StatusCodes.NOT_FOUND })
-    return
-  }
-  const archive = await getArchiveByName(block._archive)
-  if (!archive) {
-    console.log(`No Archive By Name: ${JSON.stringify(block, null, 2)}`)
-    next({ message: 'Archive not found for block', statusCode: StatusCodes.NOT_FOUND })
-    return
-  }
 
-  // If archive is public
-  if (isPublicArchive(archive)) {
-    // Return the block
-    res.json({ ...removeUnderscoreFields(block) })
-    return
-  } else {
-    // If the archive is private check if the user owns archive
-    const { user } = req
-    if (!user || !user?.id) {
-      next({ message: 'Invalid User', statusCode: StatusCodes.NOT_FOUND })
-      return null
+  const userId = req?.user?.id
+
+  for (const block of blocks) {
+    if (!block?._archive) {
+      console.log(`No Archive For Block: ${JSON.stringify(block, null, 2)}`)
+      continue
     }
-    if (!archive?.user) {
-      next({ message: 'Archive owner not found', statusCode: StatusCodes.NOT_FOUND })
-      return
+    const archive = await getArchiveByName(block._archive)
+    if (!archive) {
+      console.log(`No Archive By Name: ${JSON.stringify(block, null, 2)}`)
+      continue
     }
-    // If the user owns the archive
-    if (user.id === archive.user) {
+    // If archive is public
+    if (isPublicArchive(archive)) {
       // Return the block
-      res.json({ ...removeUnderscoreFields(block) })
+      res.json({ ...removeUnderscoreFields(blocks) })
       return
+    } else {
+      // If the archive is private check if the user owns archive
+      if (!archive?.user) {
+        console.log(`No Archive Owner: ${JSON.stringify(archive, null, 2)}`)
+        continue
+      }
+      // If the user owns the archive
+      if (userId && userId === archive.user) {
+        // Return the block
+        res.json({ ...removeUnderscoreFields(blocks) })
+        return
+      }
     }
   }
   next({ message: 'Hash not found', statusCode: StatusCodes.NOT_FOUND })

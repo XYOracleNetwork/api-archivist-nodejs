@@ -37,6 +37,6 @@ export const findBoundWitnessesByHash = async (hash: string, archive?: string): 
 }
 
 export const findByHash = async (hash: string, archive?: string): Promise<XyoBoundWitness[] | XyoPayload[]> => {
-  const payload = await findPayloadsByHash(hash, archive)
-  return payload ? payload : findBoundWitnessesByHash(hash, archive)
+  const payloads = await findPayloadsByHash(hash, archive)
+  return payloads.length ? payloads : findBoundWitnessesByHash(hash, archive)
 }
