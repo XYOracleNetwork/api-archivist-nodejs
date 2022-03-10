@@ -383,3 +383,14 @@ export const getPayloadByBlockHash = async (
     .expect(expectedStatus)
   return response.body.data
 }
+
+export const getSchema = async (
+  schema: string,
+  token?: string,
+  expectedStatus: StatusCodes = StatusCodes.OK
+): Promise<XyoPayload> => {
+  const response = token
+    ? await getArchivist().get(`/schema/${schema}`).auth(token, { type: 'bearer' }).expect(expectedStatus)
+    : await getArchivist().get(`/schema/${schema}`).expect(expectedStatus)
+  return response.body.data
+}

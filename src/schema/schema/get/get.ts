@@ -1,4 +1,4 @@
-import { NoReqBody, NoReqQuery } from '@xylabs/sdk-api-express-ecs'
+import { asyncHandler, NoReqBody, NoReqQuery } from '@xylabs/sdk-api-express-ecs'
 import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
@@ -17,4 +17,4 @@ const handler: RequestHandler<SchemaPathParams, XyoPayload, NoReqBody, NoReqQuer
   }
 }
 
-export const getSchema = handler
+export const getSchema = asyncHandler(handler)
