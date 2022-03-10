@@ -68,7 +68,7 @@ const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuer
     // If archive is public
     if (isPublicArchive(archive)) {
       // Return the block
-      res.json({ ...removeUnderscoreFields(blocks) })
+      res.json({ ...removeUnderscoreFields(block) })
       return
     } else {
       // If the archive is private check if the user owns archive
@@ -79,7 +79,7 @@ const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuer
       // If the user owns the archive
       if (userId && userId === archive.user) {
         // Return the block
-        res.json({ ...removeUnderscoreFields(blocks) })
+        res.json({ ...removeUnderscoreFields(block) })
         return
       }
     }
