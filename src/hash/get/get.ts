@@ -1,7 +1,6 @@
-/* eslint-disable max-statements */
 import { asyncHandler, NoReqBody, NoReqQuery } from '@xylabs/sdk-api-express-ecs'
 import { removeUnderscoreFields } from '@xyo-network/sdk-xyo-client-js'
-import { RequestHandler } from 'express'
+import { Request, RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
 import { ArchiveLocals } from '../../archive'
@@ -15,9 +14,21 @@ export type HashPathParams = {
 
 export type HashResponse = Record<string, unknown>
 
-export const isPublicArchive = (archive?: ArchiveResult | null): boolean => {
-  if (!archive) return false
-  return archive ? !archive.accessControl : false
+const isPublicArchive = (archive?: ArchiveResult | null): boolean => {
+  return !archive ? false : !archive.accessControl
+}
+
+const isReqUserArchiveOwner = (req: Request, archive: ArchiveResult): boolean => {
+  const archiveOwnerId = archive?.user
+  if (!archiveOwnerId) {
+    console.log(`No Archive Owner: ${JSON.stringify(archive, null, 2)}`)
+    return false
+  }
+  // Grab the user from the request (if this was an auth'd request)
+  const reqUserId = req?.user?.id
+  if (!reqUserId) return false
+
+  return reqUserId === archiveOwnerId
 }
 
 const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuery, ArchiveLocals> = async (
@@ -53,9 +64,6 @@ const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuer
     return
   }
 
-  // Grab the user from the request if this was an auth'd request
-  const userId = req?.user?.id
-
   for (const block of blocks) {
     if (!block?._archive) {
       console.log(`No Archive For Block: ${JSON.stringify(block, null, 2)}`)
@@ -66,24 +74,19 @@ const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuer
       console.log(`No Archive By Name: ${JSON.stringify(block, null, 2)}`)
       continue
     }
-    // If archive is public
+    // If the archive is public
     if (isPublicArchive(archive)) {
-      // Return this block to the user
+      // return this block from the public archive
       res.json({ ...removeUnderscoreFields(block) })
+      next()
       return
-    } else if (userId) {
-      // Since the archive is private, check if the user owns archive
-      const ownerId = archive?.user
-      if (ownerId) {
-        console.log(`No Archive Owner: ${JSON.stringify(archive, null, 2)}`)
-        continue
-      }
-      // If the user owns the archive
-      if (ownerId === userId) {
-        // Return this block to the user
-        res.json({ ...removeUnderscoreFields(block) })
-        return
-      }
+    } else if (isReqUserArchiveOwner(req, archive)) {
+      // If the archive is private but this is an auth'd
+      // request from the archive owner
+      // return this block from the private archive
+      res.json({ ...removeUnderscoreFields(block) })
+      next()
+      return
     }
   }
   next({ message: 'Hash not found', statusCode: StatusCodes.NOT_FOUND })
