@@ -6,9 +6,10 @@ import { ArchiveResponse } from '../archiveResponse'
 import { defaultPublicArchives } from './DefaultPublicArchives'
 
 const getArchivesDistinctByName = (archives: ArchiveResponse[]): ArchiveResponse[] => {
-  return archives.reduce((uniques, item) => {
-    return uniques.find((existing) => existing.archive === item.archive) ? uniques : [...uniques, item]
-  }, [] as ArchiveResponse[])
+  // Use a Map with the archive name as the key to produce an array
+  // of distinct archives. The last occurrence in the archive will
+  // be the one that is used.
+  return [...new Map(archives.map((x) => [x.archive, x])).values()]
 }
 
 const handler: RequestHandler<NoReqParams, ArchiveResponse[]> = async (req, res, next) => {
