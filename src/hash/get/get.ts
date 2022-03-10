@@ -53,6 +53,7 @@ const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuer
     return
   }
 
+  // Grab the user from the request if this was an auth'd request
   const userId = req?.user?.id
 
   for (const block of blocks) {
@@ -67,18 +68,19 @@ const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuer
     }
     // If archive is public
     if (isPublicArchive(archive)) {
-      // Return the block
+      // Return this block to the user
       res.json({ ...removeUnderscoreFields(block) })
       return
-    } else {
-      // If the archive is private check if the user owns archive
-      if (!archive?.user) {
+    } else if (userId) {
+      // Since the archive is private, check if the user owns archive
+      const ownerId = archive?.user
+      if (ownerId) {
         console.log(`No Archive Owner: ${JSON.stringify(archive, null, 2)}`)
         continue
       }
       // If the user owns the archive
-      if (userId && userId === archive.user) {
-        // Return the block
+      if (ownerId === userId) {
+        // Return this block to the user
         res.json({ ...removeUnderscoreFields(block) })
         return
       }
