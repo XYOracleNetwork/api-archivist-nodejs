@@ -25,7 +25,7 @@ describe('/archive/:archive/block/stats', () => {
       const blockResponse = await postBlock(block, archive)
       expect(blockResponse.boundWitnesses).toBe(1)
     }
-  })
+  }, 25000)
   it('Returns stats on all archives', async () => {
     // Verify the counts are for more than just 1 archive
     const response = await getArchivist()
