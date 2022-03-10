@@ -7,8 +7,8 @@ import { defaultPublicArchives } from './DefaultPublicArchives'
 
 const getArchivesDistinctByName = (archives: ArchiveResponse[]): ArchiveResponse[] => {
   // Use a Map with the archive name as the key to produce an array
-  // of distinct archives. The last occurrence in the archive will
-  // be the one that is used.
+  // of distinct archives. If there are duplicates, the last occurrence
+  // of the archive in the supplied array will be the one that is used.
   return [...new Map(archives.map((x) => [x.archive, x])).values()]
 }
 
