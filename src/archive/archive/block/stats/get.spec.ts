@@ -7,11 +7,9 @@ const blocksPosted = 25
 describe('/archive/:archive/block/stats', () => {
   let token = ''
   let archive = ''
-  beforeEach(async () => {
+  beforeAll(async () => {
     token = await getTokenForNewUser()
     archive = (await claimArchive(token)).archive
-  })
-  it('Returns stats on all archives', async () => {
     // Post blocks to one archive
     for (let blockCount = 0; blockCount < blocksPosted; blockCount++) {
       const block = getNewBlockWithPayloads()
@@ -27,7 +25,8 @@ describe('/archive/:archive/block/stats', () => {
       const blockResponse = await postBlock(block, archive)
       expect(blockResponse.boundWitnesses).toBe(1)
     }
-
+  })
+  it('Returns stats on all archives', async () => {
     // Verify the counts are for more than just 1 archive
     const response = await getArchivist()
       .get(`/archive/${archive}/block/stats`)
