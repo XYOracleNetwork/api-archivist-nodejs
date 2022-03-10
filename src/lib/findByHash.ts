@@ -7,7 +7,7 @@ import {
   getArchivistPayloadMongoSdk,
 } from './dbSdk'
 
-export const findByHash = async (hash: string, archive?: string): Promise<XyoBoundWitness | XyoPayload | null> => {
+export const findOneByHash = async (hash: string, archive?: string): Promise<XyoBoundWitness | XyoPayload | null> => {
   if (archive) {
     const payloads = await getArchivistPayloadMongoSdk(archive)
     const payload = await payloads.findOne({ _hash: hash })

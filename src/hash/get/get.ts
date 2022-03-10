@@ -5,7 +5,7 @@ import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
 import { ArchiveLocals } from '../../archive'
-import { ArchiveResult, findByHash, getArchiveByName } from '../../lib'
+import { ArchiveResult, findOneByHash, getArchiveByName } from '../../lib'
 
 const reservedHashes = ['archive', 'schema', 'doc', 'domain']
 
@@ -47,7 +47,7 @@ const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuer
     return
   }
 
-  const block = await findByHash(hash)
+  const block = await findOneByHash(hash)
   if (!block) {
     next({ message: 'Hash not found', statusCode: StatusCodes.NOT_FOUND })
     return
