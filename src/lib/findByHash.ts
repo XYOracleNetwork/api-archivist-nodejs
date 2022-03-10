@@ -23,3 +23,20 @@ export const findOneByHash = async (hash: string, archive?: string): Promise<Xyo
   const payload = await findOnePayloadByHash(hash, archive)
   return payload ? payload : findOneBoundWitnessByHash(hash, archive)
 }
+
+export const findPayloadsByHash = async (hash: string, archive?: string): Promise<XyoPayload[]> => {
+  const sdk = archive ? await getArchivistPayloadMongoSdk(archive) : await getArchivistAllPayloadMongoSdk()
+  return (await sdk.find({ _hash: hash })).toArray()
+}
+
+export const findBoundWitnessesByHash = async (hash: string, archive?: string): Promise<XyoBoundWitness[]> => {
+  const sdk = archive
+    ? await getArchivistBoundWitnessesMongoSdk(archive)
+    : await getArchivistAllBoundWitnessesMongoSdk()
+  return (await sdk.find({ _hash: hash })).toArray()
+}
+
+export const findByHash = async (hash: string, archive?: string): Promise<XyoBoundWitness[] | XyoPayload[]> => {
+  const payload = await findPayloadsByHash(hash, archive)
+  return payload ? payload : findBoundWitnessesByHash(hash, archive)
+}
