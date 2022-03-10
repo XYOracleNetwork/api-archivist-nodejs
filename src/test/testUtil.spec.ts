@@ -306,14 +306,16 @@ export const getBlocksByTimestamp = async (
 }
 
 export const getRecentBlocks = async (
-  token: string,
   archive: string,
+  token?: string,
   expectedStatus: StatusCodes = StatusCodes.OK
 ): Promise<XyoBoundWitness[]> => {
-  const response = await getArchivist()
-    .get(`/archive/${archive}/block/recent`)
-    .auth(token, { type: 'bearer' })
-    .expect(expectedStatus)
+  const response = token
+    ? await getArchivist()
+        .get(`/archive/${archive}/block/recent`)
+        .auth(token, { type: 'bearer' })
+        .expect(expectedStatus)
+    : await getArchivist().get(`/archive/${archive}/block/recent`).expect(expectedStatus)
   return response.body.data
 }
 
@@ -360,14 +362,16 @@ export const repairPayloadByHash = async (
 }
 
 export const getRecentPayloads = async (
-  token: string,
   archive: string,
+  token?: string,
   expectedStatus: StatusCodes = StatusCodes.OK
 ): Promise<XyoPayload[]> => {
-  const response = await getArchivist()
-    .get(`/archive/${archive}/payload/recent`)
-    .auth(token, { type: 'bearer' })
-    .expect(expectedStatus)
+  const response = token
+    ? await getArchivist()
+        .get(`/archive/${archive}/payload/recent`)
+        .auth(token, { type: 'bearer' })
+        .expect(expectedStatus)
+    : await getArchivist().get(`/archive/${archive}/payload/recent`).expect(expectedStatus)
   return response.body.data
 }
 
