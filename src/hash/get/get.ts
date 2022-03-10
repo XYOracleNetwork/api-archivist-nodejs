@@ -1,10 +1,10 @@
 import { asyncHandler, NoReqBody, NoReqQuery } from '@xylabs/sdk-api-express-ecs'
 import { removeUnderscoreFields } from '@xyo-network/sdk-xyo-client-js'
-import { Request, RequestHandler } from 'express'
+import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
 import { ArchiveLocals } from '../../archive'
-import { ArchiveResult, findByHash, getArchiveByName } from '../../lib'
+import { findByHash, getArchiveByName, isPublicArchive, isRequestUserOwnerOfArchive } from '../../lib'
 
 const reservedHashes = ['archive', 'schema', 'doc', 'domain']
 
@@ -13,23 +13,6 @@ export type HashPathParams = {
 }
 
 export type HashResponse = Record<string, unknown>
-
-const isPublicArchive = (archive?: ArchiveResult | null): boolean => {
-  return !archive ? false : !archive.accessControl
-}
-
-const isReqUserArchiveOwner = (req: Request, archive: ArchiveResult): boolean => {
-  const archiveOwnerId = archive?.user
-  if (!archiveOwnerId) {
-    console.log(`No Archive Owner: ${JSON.stringify(archive, null, 2)}`)
-    return false
-  }
-  // Grab the user from the request (if this was an auth'd request)
-  const reqUserId = req?.user?.id
-  if (!reqUserId) return false
-
-  return reqUserId === archiveOwnerId
-}
 
 const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuery, ArchiveLocals> = async (
   req,
@@ -80,7 +63,7 @@ const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuer
       res.json({ ...removeUnderscoreFields(block) })
       next()
       return
-    } else if (isReqUserArchiveOwner(req, archive)) {
+    } else if (isRequestUserOwnerOfArchive(req, archive)) {
       // If the archive is private but this is an auth'd
       // request from the archive owner
       // return this block from the private archive

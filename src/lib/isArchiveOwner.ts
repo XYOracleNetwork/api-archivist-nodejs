@@ -1,9 +1,23 @@
 import { NoReqBody, NoReqQuery, NoResBody } from '@xylabs/sdk-api-express-ecs'
 import { Request } from 'express'
 
-import { ArchiveLocals, ArchivePathParams } from '../../../../archive'
+import { ArchiveLocals, ArchivePathParams } from '../archive'
+import { ArchiveResult } from './archiveResult'
 
-export const isArchiveOwner = (
+export const isRequestUserOwnerOfArchive = (req: Request, archive: ArchiveResult): boolean => {
+  const archiveOwnerId = archive?.user
+  if (!archiveOwnerId) {
+    console.log(`No Archive Owner: ${JSON.stringify(archive, null, 2)}`)
+    return false
+  }
+  // Grab the user from the request (if this was an auth'd request)
+  const reqUserId = req?.user?.id
+  if (!reqUserId) return false
+
+  return reqUserId === archiveOwnerId
+}
+
+export const isRequestUserOwnerOfRequestedArchive = (
   req: Request<ArchivePathParams, NoResBody, NoReqBody, NoReqQuery, ArchiveLocals>
 ): boolean => {
   // Get the archive from locals
