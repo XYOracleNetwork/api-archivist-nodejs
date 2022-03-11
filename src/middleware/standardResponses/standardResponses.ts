@@ -1,7 +1,24 @@
+import { NoResBody } from '@xylabs/sdk-api-express-ecs'
 import { Request, Response } from 'express'
 import mung from 'express-mung'
 
 import { getResponseMetadata } from './getResponseMetadata'
+
+interface TransformResponseLocals {
+  rawResponse?: boolean
+}
+
+export const setRawResponseFormat = (res: Response): void => {
+  res.locals.rawResponse = true
+}
+
+export const clearRawResponseFormat = (res: Response): void => {
+  res.locals.rawResponse = false
+}
+
+export const isRawResponseFormatSet = (res: Response): boolean => {
+  return res.locals.rawResponse ? true : false
+}
 
 /**
  * Transforms each response to conform to the standard response format (compatible with JSON API)
@@ -10,9 +27,8 @@ import { getResponseMetadata } from './getResponseMetadata'
  * @param res The response
  * @returns The transformed response body
  */
-export const transformResponse = (body: unknown, _req: Request, res: Response) => {
-  const meta = getResponseMetadata(res)
-  return { data: body, meta }
+const transformResponse = (body: unknown, _req: Request, res: Response<NoResBody, TransformResponseLocals>) => {
+  return isRawResponseFormatSet(res) ? body : { data: body, meta: getResponseMetadata(res) }
 }
 
 /**
