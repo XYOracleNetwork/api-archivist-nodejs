@@ -1,10 +1,11 @@
 import { asyncHandler, NoReqBody, NoReqQuery } from '@xylabs/sdk-api-express-ecs'
-import { removeUnderscoreFields } from '@xyo-network/sdk-xyo-client-js'
-import { RequestHandler } from 'express'
+import { removeUnderscoreFields, XyoBoundWitness, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { RequestHandler, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
 import { ArchiveLocals } from '../../archive'
 import { findByHash, getArchiveByName, isPublicArchive, isRequestUserOwnerOfArchive } from '../../lib'
+import { setRawResponseFormat } from '../../middleware'
 
 const reservedHashes = ['archive', 'schema', 'doc', 'domain']
 
@@ -13,6 +14,11 @@ export type HashPathParams = {
 }
 
 export type HashResponse = Record<string, unknown>
+
+const respondWithBlock = (res: Response, block: XyoBoundWitness | XyoPayload) => {
+  setRawResponseFormat(res)
+  res.json({ ...removeUnderscoreFields(block) })
+}
 
 const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuery, ArchiveLocals> = async (
   req,
@@ -57,17 +63,10 @@ const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuer
       console.log(`No Archive By Name: ${JSON.stringify(block, null, 2)}`)
       continue
     }
-    // If the archive is public
-    if (isPublicArchive(archive)) {
-      // return this block from the public archive
-      res.json({ ...removeUnderscoreFields(block) })
-      next()
-      return
-    } else if (isRequestUserOwnerOfArchive(req, archive)) {
-      // If the archive is private but this is an auth'd
-      // request from the archive owner
-      // return this block from the private archive
-      res.json({ ...removeUnderscoreFields(block) })
+    // If the archive is public or if the archive is private but this is
+    // an auth'd request from the archive owner
+    if (isPublicArchive(archive) || isRequestUserOwnerOfArchive(req, archive)) {
+      respondWithBlock(res, block)
       next()
       return
     }

@@ -256,7 +256,7 @@ export const getHash = async (
   const response = token
     ? await getArchivist().get(`/${hash}`).auth(token, { type: 'bearer' }).expect(expectedStatus)
     : await getArchivist().get(`/${hash}`).expect(expectedStatus)
-  return response.body.data
+  return response.body
 }
 
 export const postBlock = async (
