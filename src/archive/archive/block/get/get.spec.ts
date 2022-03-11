@@ -29,7 +29,7 @@ describe('/archive/:archive/block', () => {
       const blockResponse = await postBlock(block, archive)
       expect(blockResponse.boundWitnesses).toBe(1)
     }
-    recentBlocks = await getRecentBlocks(token, archive)
+    recentBlocks = await getRecentBlocks(archive, token)
     expect(recentBlocks).toBeTruthy()
     expect(Array.isArray(recentBlocks)).toBe(true)
     expect(recentBlocks.length).toBeGreaterThan(10)

@@ -29,7 +29,7 @@ describe('/archive/:archive/payload', () => {
       const blockResponse = await postBlock(block, archive)
       expect(blockResponse.boundWitnesses).toBe(1)
     }
-    recentPayloads = await getRecentPayloads(token, archive)
+    recentPayloads = await getRecentPayloads(archive, token)
     expect(recentPayloads).toBeTruthy()
     expect(Array.isArray(recentPayloads)).toBe(true)
     expect(recentPayloads.length).toBeGreaterThan(10)
