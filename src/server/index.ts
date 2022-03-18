@@ -1,4 +1,5 @@
 import { getEnvFromAws } from '@xylabs/sdk-api-express-ecs'
+import compression from 'compression'
 import cors from 'cors'
 import express from 'express'
 
@@ -36,6 +37,7 @@ const server = async (port = 80) => {
   }*/
 
   app.use(cors())
+  app.use(compression())
 
   addMiddleware(app)
   addHealthChecks(app)
