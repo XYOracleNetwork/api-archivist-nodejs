@@ -1,5 +1,5 @@
 import { asyncHandler, NoReqBody, NoReqQuery } from '@xylabs/sdk-api-express-ecs'
-import { removeUnderscoreFields, XyoBoundWitness, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { deepOmitUnderscoreFields, XyoBoundWitness, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
@@ -17,7 +17,7 @@ export type HashResponse = Record<string, unknown>
 
 const respondWithBlock = (res: Response, block: XyoBoundWitness | XyoPayload) => {
   setRawResponseFormat(res)
-  res.json({ ...removeUnderscoreFields(block) })
+  res.json({ ...deepOmitUnderscoreFields(block) })
 }
 
 const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuery, ArchiveLocals> = async (
