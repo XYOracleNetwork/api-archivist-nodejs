@@ -3971,9 +3971,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xyo-network/sdk-xyo-client-js@npm:^2.14.11":
-  version: 2.14.11
-  resolution: "@xyo-network/sdk-xyo-client-js@npm:2.14.11"
+"@xyo-network/sdk-xyo-client-js@npm:^2.14.14":
+  version: 2.14.14
+  resolution: "@xyo-network/sdk-xyo-client-js@npm:2.14.14"
   dependencies:
     "@ethersproject/providers": ^5.6.1
     "@xylabs/sdk-js": ^2.4.2
@@ -3989,11 +3989,12 @@ __metadata:
     mongodb: ^4.4.1
     neo4j-driver: ^4.4.4
     neo4j-driver-core: ^4.4.4
+    pako: ^2.0.4
     sha.js: ^2.4.11
     systeminformation: ^5.11.9
     ua-parser-js: ^1.0.2
     uuid: ^8.3.2
-  checksum: a29788576be82b0b7066b9aecde8bf6138cf186efbb12bd1094a8ad6344af3a393b84e8e538679afb8ec5d108bf7062ea12b1e3d46132cfb3f4bb35974dc8b43
+  checksum: 1e81cb2f006c2064368713fff8e40f50dbfbbe641084a85c3f8afc72edb531d48f3d5780c0d4f5fbb86493aff4467cb46d87f1c854ab615eaa7e5d7df58831c9
   languageName: node
   linkType: hard
 
@@ -4258,7 +4259,7 @@ __metadata:
     "@xylabs/sdk-js": ^2.4.2
     "@xylabs/ts-scripts": ^1.0.48
     "@xylabs/tsconfig": ^1.0.12
-    "@xyo-network/sdk-xyo-client-js": ^2.14.11
+    "@xyo-network/sdk-xyo-client-js": ^2.14.14
     "@xyo-network/sdk-xyo-mongo-js": ^2.2.7
     axios: ^0.26.1
     babel-jest: ^27.5.1
@@ -4296,7 +4297,7 @@ __metadata:
     sha.js: ^2.4.11
     source-map-support: ^0.5.21
     supertest: ^6.2.2
-    swagger-autogen: ^2.20.4
+    swagger-autogen: ^2.20.5
     swagger-ui-express: ^4.3.0
     ts-jest: ^27.1.3
     ts-node: ^10.7.0
@@ -8638,14 +8639,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json5@npm:2.x, json5@npm:^2.1.2, json5@npm:^2.1.3, json5@npm:^2.2.0":
-  version: 2.2.0
-  resolution: "json5@npm:2.2.0"
-  dependencies:
-    minimist: ^1.2.5
+"json5@npm:2.x, json5@npm:^2.1.2, json5@npm:^2.1.3, json5@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "json5@npm:2.2.1"
   bin:
     json5: lib/cli.js
-  checksum: e88fc5274bb58fc99547baa777886b069d2dd96d9cfc4490b305fd16d711dabd5979e35a4f90873cefbeb552e216b041a304fe56702bedba76e19bc7845f208d
+  checksum: 74b8a23b102a6f2bf2d224797ae553a75488b5adbaee9c9b6e5ab8b510a2fc6e38f876d4c77dea672d4014a44b2399e15f2051ac2b37b87f74c0c7602003543b
   languageName: node
   linkType: hard
 
@@ -10619,6 +10618,13 @@ __metadata:
   bin:
     pacote: lib/bin.js
   checksum: d77427d3d3f6ff822fbd06247400cffcb084c07e2da907a8e8f7982d9239fe9c179aef192156a715ba9b397481e41f8a39bbb1123d0d9bfbb68e4eeb2f07e743
+  languageName: node
+  linkType: hard
+
+"pako@npm:^2.0.4":
+  version: 2.0.4
+  resolution: "pako@npm:2.0.4"
+  checksum: 82b9b0b99dd830c9103856a6dbd10f0cb2c8c32b9768184727ea381a99666de9a47a069d2e6efe6acf09336f363956b50835c196ef9311b34b7274d420eb0d88
   languageName: node
   linkType: hard
 
@@ -13642,15 +13648,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"swagger-autogen@npm:^2.20.4":
-  version: 2.20.4
-  resolution: "swagger-autogen@npm:2.20.4"
+"swagger-autogen@npm:^2.20.5":
+  version: 2.20.5
+  resolution: "swagger-autogen@npm:2.20.5"
   dependencies:
     acorn: ^7.4.1
     deepmerge: ^4.2.2
     glob: ^7.1.7
-    json5: ^2.2.0
-  checksum: 350035c7e38bf523fa6384a6024bc80b9078f5f057d6318a262a7b26f4d9185597091d972a97f5d57e6b81a69ad11caa76184b6aab35d46272aabd484f91ba23
+    json5: ^2.2.1
+  checksum: 5152f11612e0d3b759b4fa4f04761c8392255e6c8c1e23653e08e59ca2dfa4181d65491ddc94eed330a0ca5cecd97e855c82a68af6f43a4c88a891fd9ccd3a79
   languageName: node
   linkType: hard
 
