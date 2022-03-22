@@ -56,7 +56,7 @@ const server = async (port = 80) => {
   const host = process.env.PUBLIC_ORIGIN || `http://localhost:${port}`
   await configureDoc(app, { host })
 
-  /* This needs to be the last true handler since it is a ctach all for the root */
+  /* This needs to be the last true handler since it is a catch all for the root */
   addHashRoutes(app)
 
   addErrorHandlers(app)

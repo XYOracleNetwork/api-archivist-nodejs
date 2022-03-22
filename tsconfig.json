@@ -1,11 +1,4 @@
 {
-  "ts-node": {
-    "transpileOnly": true,
-    "files": true,
-    "compilerOptions": {
-      "module": "CommonJS"
-    }
-  },
   "compilerOptions": {
     "module": "esnext",
     "outDir": "dist",
@@ -24,5 +17,12 @@
   "exclude": [
     "dist/**/*"
   ],
-  "extends": "@xylabs/tsconfig"
+  "extends": "@xylabs/tsconfig",
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    },
+    "files": true,
+    "transpileOnly": true
+  }
 }
