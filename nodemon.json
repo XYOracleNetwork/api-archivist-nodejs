@@ -1,5 +1,5 @@
 {
-  "exec": "node --max-old-space-size=8192 --experimental-specifier-resolution=node --loader ts-node/esm ./src/index.ts",
+  "exec": "ts-node ./src/index.ts",
   "ext": ".ts",
   "ignore": [
     "**/*.spec.ts"
