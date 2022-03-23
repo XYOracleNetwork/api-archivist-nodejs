@@ -1,4 +1,4 @@
-import { ArchiveResult } from './archiveResult'
+import { ArchiveResult } from '../model'
 import { getArchivistArchiveMongoSdk } from './dbSdk'
 import { determineArchiveAccessControl } from './determineArchiveAccessControl'
 

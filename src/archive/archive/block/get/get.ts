@@ -5,9 +5,7 @@ import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import { getArchivistBoundWitnessesMongoSdk, scrubBoundWitnesses } from '../../../../lib'
-import { SortDirection } from '../../../../model'
-import { ArchiveLocals } from '../../../archiveLocals'
-import { ArchivePathParams } from '../../../archivePathParams'
+import { ArchiveLocals, ArchivePathParams, SortDirection } from '../../../../model'
 
 const defaultLimit = 10
 const maxLimit = 100

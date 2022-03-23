@@ -2,7 +2,7 @@ import { asyncHandler, NoReqParams } from '@xylabs/sdk-api-express-ecs'
 import { RequestHandler } from 'express'
 
 import { getArchivesByOwner } from '../../lib'
-import { ArchiveResponse } from '../archiveResponse'
+import { ArchiveResponse } from '../../model'
 import { defaultPublicArchives } from './DefaultPublicArchives'
 
 const getArchivesDistinctByName = (archives: ArchiveResponse[]): ArchiveResponse[] => {

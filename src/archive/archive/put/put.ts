@@ -3,8 +3,7 @@ import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import { determineArchiveAccessControl, isValidArchiveName, storeArchive } from '../../../lib'
-import { ArchivePathParams } from '../../archivePathParams'
-import { ArchiveResponse } from '../../archiveResponse'
+import { ArchivePathParams, ArchiveResponse } from '../../../model'
 
 export interface PutArchiveRequest {
   accessControl: boolean

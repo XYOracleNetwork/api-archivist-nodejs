@@ -1,4 +1,4 @@
-import { ArchiveResponse } from '../archiveResponse'
+import { ArchiveResponse } from '../../model'
 
 export const defaultPublicArchives: ArchiveResponse[] = [
   {

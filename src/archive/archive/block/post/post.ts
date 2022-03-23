@@ -5,7 +5,7 @@ import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
-import { ArchivePathParams } from '../../../archivePathParams'
+import { ArchivePathParams } from '../../../../model'
 import { prepareBoundWitnesses } from './prepareBoundWitnesses'
 import { storeBoundWitnesses } from './storeBoundWitnesses'
 import { storePayloads } from './storePayloads'

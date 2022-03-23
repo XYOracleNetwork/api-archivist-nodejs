@@ -1,4 +1,3 @@
-export * from './archiveResult'
 export * from './dbSdk'
 export * from './determineArchiveAccessControl'
 export * from './findByHash'

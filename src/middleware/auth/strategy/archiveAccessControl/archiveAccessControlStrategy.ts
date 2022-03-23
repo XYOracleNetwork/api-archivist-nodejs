@@ -3,8 +3,8 @@ import { Request } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
-import { ArchiveLocals, ArchivePathParams } from '../../../../archive'
 import { isRequestUserOwnerOfRequestedArchive } from '../../../../lib'
+import { ArchiveLocals, ArchivePathParams } from '../../../../model'
 import { isPublicArchive } from './isPublicArchive'
 
 export class ArchiveOwnerStrategy extends Strategy {

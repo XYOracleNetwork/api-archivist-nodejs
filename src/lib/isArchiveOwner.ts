@@ -1,8 +1,7 @@
 import { NoReqBody, NoReqQuery, NoResBody } from '@xylabs/sdk-api-express-ecs'
 import { Request } from 'express'
 
-import { ArchiveLocals, ArchivePathParams } from '../archive'
-import { ArchiveResult } from './archiveResult'
+import { ArchiveLocals, ArchivePathParams, ArchiveResult } from '../model'
 
 export const isRequestUserOwnerOfArchive = (req: Request, archive: ArchiveResult): boolean => {
   const archiveOwnerId = archive?.user
