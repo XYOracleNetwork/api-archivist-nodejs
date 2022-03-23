@@ -3,9 +3,9 @@ import { deepOmitUnderscoreFields, XyoBoundWitness, XyoPayload } from '@xyo-netw
 import { RequestHandler, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
-import { ArchiveLocals } from '../../archive'
 import { findByHash, getArchiveByName, isPublicArchive, isRequestUserOwnerOfArchive } from '../../lib'
 import { setRawResponseFormat } from '../../middleware'
+import { ArchiveLocals } from '../../model'
 
 const reservedHashes = ['archive', 'schema', 'doc', 'domain']
 

@@ -2,9 +2,7 @@ import { NoReqBody, NoReqQuery } from '@xylabs/sdk-api-express-ecs'
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
-import { ArchiveLocals } from '../../archiveLocals'
-import { ArchivePathParams } from '../../archivePathParams'
-import { ArchiveResponse } from '../../archiveResponse'
+import { ArchiveLocals, ArchivePathParams, ArchiveResponse } from '../../../model'
 
 const handler: RequestHandler<ArchivePathParams, ArchiveResponse, NoReqBody, NoReqQuery, ArchiveLocals> = (
   req,

@@ -2,8 +2,8 @@ import { asyncHandler, NoReqBody, NoReqQuery, NoResBody } from '@xylabs/sdk-api-
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
-import { ArchiveLocals, ArchivePathParams } from '../../archive'
 import { getArchiveByName, isValidArchiveName } from '../../lib'
+import { ArchiveLocals, ArchivePathParams } from '../../model'
 
 const handler: RequestHandler<ArchivePathParams, NoResBody, NoReqBody, NoReqQuery, ArchiveLocals> = async (
   req,

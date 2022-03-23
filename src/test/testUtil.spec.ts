@@ -1,4 +1,5 @@
 import {
+  ArchiveResponse,
   XyoAddress,
   XyoBoundWitness,
   XyoBoundWitnessBuilder,
@@ -11,13 +12,7 @@ import { StatusCodes } from 'http-status-codes'
 import supertest, { SuperTest, Test } from 'supertest'
 import { v4 } from 'uuid'
 
-import {
-  ArchiveKeyResponse,
-  ArchiveResponse,
-  PayloadRepairHashResponse,
-  PostArchiveBlockResponse,
-  PutArchiveRequest,
-} from '../archive'
+import { ArchiveKeyResponse, PayloadRepairHashResponse, PostArchiveBlockResponse, PutArchiveRequest } from '../archive'
 import { SortDirection } from '../model'
 
 test('Must have API_KEY ENV VAR defined', () => {

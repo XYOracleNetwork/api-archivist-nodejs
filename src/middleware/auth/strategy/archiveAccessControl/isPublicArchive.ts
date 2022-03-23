@@ -1,8 +1,8 @@
 import { NoReqBody, NoReqQuery, NoResBody } from '@xylabs/sdk-api-express-ecs'
 import { Request } from 'express'
 
-import { ArchiveLocals, ArchivePathParams } from '../../../../archive'
 import { determineArchiveAccessControl } from '../../../../lib'
+import { ArchiveLocals, ArchivePathParams } from '../../../../model'
 
 export const isPublicArchive = (
   req: Request<ArchivePathParams, NoResBody, NoReqBody, NoReqQuery, ArchiveLocals>

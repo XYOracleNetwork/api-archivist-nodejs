@@ -3,7 +3,7 @@ import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
 import { isValidArchiveName } from '../../../../../lib'
-import { ArchivePathParams } from '../../../../archivePathParams'
+import { ArchivePathParams } from '../../../../../model'
 import { ArchiveKeyResponse } from '../archiveKeyResponse'
 import { generateArchiveKey } from './generateArchiveKey'
 

@@ -4,7 +4,7 @@ import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
 import { RequestHandler } from 'express'
 
 import { getArchivistBoundWitnessesMongoSdk } from '../../../../lib'
-import { ArchivePathParams } from '../../../archivePathParams'
+import { ArchivePathParams } from '../../../../model'
 
 export interface GetArchiveBlockStatsResponse {
   count: number

@@ -3,7 +3,7 @@ import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
 import { getArchiveKeys, isValidArchiveName } from '../../../../../lib'
-import { ArchivePathParams } from '../../../../archivePathParams'
+import { ArchivePathParams } from '../../../../../model'
 import { ArchiveKeyResponse } from '../archiveKeyResponse'
 
 const handler: RequestHandler<ArchivePathParams, ArchiveKeyResponse[]> = async (req, res, next) => {

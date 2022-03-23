@@ -4,7 +4,7 @@ import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
 import { RequestHandler } from 'express'
 
 import { getArchivistPayloadMongoSdk } from '../../../../lib'
-import { ArchivePathParams } from '../../../archivePathParams'
+import { ArchivePathParams } from '../../../../model'
 
 const getCount = async (archive: string) => {
   const sdk = await getArchivistPayloadMongoSdk(archive)
