@@ -1,6 +1,6 @@
 import {
-  ArchiveResponse,
   XyoAddress,
+  XyoArchive,
   XyoBoundWitness,
   XyoBoundWitnessBuilder,
   XyoDomainConfig,
@@ -129,7 +129,7 @@ export const invalidateToken = (token: string) => {
 export const getArchives = async (
   token?: string,
   expectedStatus: StatusCodes = StatusCodes.OK
-): Promise<ArchiveResponse[]> => {
+): Promise<XyoArchive[]> => {
   const response = token
     ? await getArchivist().get('/archive').auth(token, { type: 'bearer' }).expect(expectedStatus)
     : await getArchivist().get('/archive').expect(expectedStatus)
@@ -140,7 +140,7 @@ export const claimArchive = async (
   token: string,
   archive?: string,
   expectedStatus: StatusCodes = StatusCodes.CREATED
-): Promise<ArchiveResponse> => {
+): Promise<XyoArchive> => {
   if (!archive) archive = getArchiveName()
   const response = await getArchivist()
     .put(`/archive/${archive}`)
@@ -153,7 +153,7 @@ export const getArchive = async (
   archive: string,
   token?: string,
   expectedStatus: StatusCodes = StatusCodes.OK
-): Promise<ArchiveResponse> => {
+): Promise<XyoArchive> => {
   const response = token
     ? await getArchivist().get(`/archive/${archive}`).auth(token, { type: 'bearer' }).expect(expectedStatus)
     : await getArchivist().get(`/archive/${archive}`).expect(expectedStatus)
@@ -176,7 +176,7 @@ export const setArchiveAccessControl = async (
   archive: string,
   data: PutArchiveRequest = { accessControl: false },
   expectedStatus: StatusCodes = StatusCodes.OK
-): Promise<ArchiveResponse> => {
+): Promise<XyoArchive> => {
   if (!archive) archive = getArchiveName()
   const response = await getArchivist()
     .put(`/archive/${archive}`)
