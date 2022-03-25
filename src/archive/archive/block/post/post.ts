@@ -31,7 +31,14 @@ const handler: RequestHandler<ArchivePathParams, PostArchiveBlockResponse, XyoAr
   const _user_agent = req.headers['User-agent'] ?? undefined
   const _timestamp = Date.now()
 
-  const body = req.body as XyoArchivistBoundWitnessBody
+  //fairly complex logic to handle old object, or new single/array boundwitness
+  const body: XyoArchivistBoundWitnessBody = (
+    Array.isArray(req.body)
+      ? { boundWitnesses: req.body as XyoBoundWitness[] }
+      : Array.isArray(req.body.boundWitnesses)
+      ? req.body
+      : [req.body]
+  ) as XyoArchivistBoundWitnessBody
 
   const boundWitnessMetaData = { _source_ip, _timestamp, _user_agent }
   const payloadMetaData = { _archive: archive }
