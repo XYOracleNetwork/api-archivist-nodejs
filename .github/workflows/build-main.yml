@@ -26,7 +26,7 @@ jobs:
       - name: copy env file
         run: yarn copyfiles .example.env .env
       - name: setup test environment
-        run: docker compose up
+        run: docker compose up -d
       - name: test
         run: yarn test
       - name: bring down test environment
