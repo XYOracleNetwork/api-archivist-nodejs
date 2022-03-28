@@ -2161,12 +2161,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/bytes@npm:5.6.0, @ethersproject/bytes@npm:^5.6.0":
-  version: 5.6.0
-  resolution: "@ethersproject/bytes@npm:5.6.0"
+"@ethersproject/bytes@npm:5.6.1, @ethersproject/bytes@npm:^5.6.0":
+  version: 5.6.1
+  resolution: "@ethersproject/bytes@npm:5.6.1"
   dependencies:
     "@ethersproject/logger": ^5.6.0
-  checksum: 226af93e7ee2ed71b6032970c168e23f588247a1f848a192854a0774ce9527aff5d4beb8ddf1687aa18a244bc9e22b20ff1c00c79ff8018863ecc9e1082c377f
+  checksum: d06ffe3bf12aa8a6588d99b82e40b46a2cbb8b057fc650aad836e3e8c95d4559773254eeeb8fed652066dcf8082e527e37cd2b9fff7ac8cabc4de7c49459a7eb
   languageName: node
   linkType: hard
 
@@ -2271,12 +2271,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/networks@npm:5.6.0, @ethersproject/networks@npm:^5.6.0":
-  version: 5.6.0
-  resolution: "@ethersproject/networks@npm:5.6.0"
+"@ethersproject/networks@npm:5.6.1, @ethersproject/networks@npm:^5.6.0":
+  version: 5.6.1
+  resolution: "@ethersproject/networks@npm:5.6.1"
   dependencies:
     "@ethersproject/logger": ^5.6.0
-  checksum: fb7aa3c1a0bde2cb2831328d6a028d7d25df075bcb631d91e4c2086703af5da29a113c986f6eee4033d14b2563005410d4d6859781df3f94b9d61281d6ef4179
+  checksum: e894369e58b45563653155df6f6db9a919448fc077a74a8fcc3fa10423335250372243868bcc2cc08857f081af6320a3a62d322340d2e5364fb25c258c978b9e
   languageName: node
   linkType: hard
 
@@ -2299,9 +2299,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/providers@npm:5.6.1, @ethersproject/providers@npm:^5.6.1":
-  version: 5.6.1
-  resolution: "@ethersproject/providers@npm:5.6.1"
+"@ethersproject/providers@npm:5.6.2, @ethersproject/providers@npm:^5.6.1":
+  version: 5.6.2
+  resolution: "@ethersproject/providers@npm:5.6.2"
   dependencies:
     "@ethersproject/abstract-provider": ^5.6.0
     "@ethersproject/abstract-signer": ^5.6.0
@@ -2322,7 +2322,7 @@ __metadata:
     "@ethersproject/web": ^5.6.0
     bech32: 1.1.4
     ws: 7.4.6
-  checksum: c6d6ab73064ee4a7793d4cb599e2b0ff7d61b510c2ffece249a95c60043e07ef40c7c55f097569141a7f50fd82f7bb3956d44e1715997ec91da25216a5ce51b6
+  checksum: 30409755c227eab65a94ec3d7834560af5d0c7a2359855e597c0ecdfd312e851324ab8d47d0afcf60efa7a008b75c23be1a1a9d219872f99aa165283139f543a
   languageName: node
   linkType: hard
 
@@ -2866,9 +2866,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-commonjs@npm:^21.0.2":
-  version: 21.0.2
-  resolution: "@rollup/plugin-commonjs@npm:21.0.2"
+"@rollup/plugin-commonjs@npm:^21.0.3":
+  version: 21.0.3
+  resolution: "@rollup/plugin-commonjs@npm:21.0.3"
   dependencies:
     "@rollup/pluginutils": ^3.1.0
     commondir: ^1.0.1
@@ -2879,7 +2879,7 @@ __metadata:
     resolve: ^1.17.0
   peerDependencies:
     rollup: ^2.38.3
-  checksum: 5fd4c7b75d7881070f4395d7ba5f9035934f53b25e92d136583cc794461a456efc1e2a2204f946ec567dfea58073c38cb48f24d27155b89af0df0447c2cd0758
+  checksum: 23307d3b7eb8d64dd966fbe380b85bf3b5f4908c7344427d45918d570cf6b48710ef6f155bea74545127c10de9d64f87dd2219078e83dbccf927505d38774de8
   languageName: node
   linkType: hard
 
@@ -3342,10 +3342,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lru-cache@npm:^7.5.0":
-  version: 7.5.0
-  resolution: "@types/lru-cache@npm:7.5.0"
-  checksum: d6f9337ee898ac070bdd6f36615bc2d9e328907f7f486420d1a43e159b947a03670af6418702ae87ff2dceab73e3de0f64016daca02386932daeb9396ad20b3c
+"@types/lru-cache@npm:^7.6.1":
+  version: 7.6.1
+  resolution: "@types/lru-cache@npm:7.6.1"
+  checksum: 8915c0762f4f31e660d4145707f2418c96f8a80e8543fd312c9a7af4c11cdab314f9df9f6168dbe203e81fb6881757f72b5eeacddefe87d028e6c3d55c8bc987
   languageName: node
   linkType: hard
 
@@ -3915,22 +3915,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xylabs/ts-scripts@npm:^1.0.48":
-  version: 1.0.48
-  resolution: "@xylabs/ts-scripts@npm:1.0.48"
+"@xylabs/ts-scripts@npm:^1.0.49":
+  version: 1.0.49
+  resolution: "@xylabs/ts-scripts@npm:1.0.49"
   dependencies:
     "@xylabs/eslint-config": ^2.3.19
     copyfiles: ^2.4.1
     depcheck: ^1.4.3
-    eslint: ^8.11.0
+    eslint: ^8.12.0
     eslint-plugin-sonarjs: ^0.12.0
     node-cmd: ^5.0.0
-    npm-check-updates: ^12.5.3
-    npm-package-json-lint: ^6.0.1
+    npm-check-updates: ^12.5.4
+    npm-package-json-lint: ^6.3.0
     npm-package-json-lint-config-default: ^5.0.0
+    parse-git-config: ^3.0.0
     rimraf: ^3.0.2
     ts-prune: ^0.10.3
-    typescript: ^4.6.2
+    typescript: ^4.6.3
   peerDependencies:
     typescript: ^4
   bin:
@@ -3943,6 +3944,8 @@ __metadata:
     deploy3: bin/deploy3.js
     deps: bin/deps.js
     fix: bin/fix.js
+    gitlint: bin/gitlint.js
+    gitlint-fix: bin/gitlint-fix.js
     lint: bin/lint.js
     migrate: bin/migrate.js
     rebuild: bin/rebuild.js
@@ -3960,6 +3963,8 @@ __metadata:
     xylabs-dead: bin/dead.js
     xylabs-deps: bin/deps.js
     xylabs-fix: bin/fix.js
+    xylabs-gitlint: bin/gitlint.js
+    xylabs-gitlint-fix: bin/gitlint-fix.js
     xylabs-lint: bin/lint.js
     xylabs-migrate: bin/migrate.js
     xylabs-rebuild: bin/rebuild.js
@@ -3970,7 +3975,7 @@ __metadata:
     xylabs-up3: bin/up3.js
     xylabs-updo: bin/updo.js
     xylabs-updo3: bin/updo3.js
-  checksum: 018aba6374d913598d4b1b457c54ddf2b9e3503767d98117dad11fe38404c05c0b35e3c499cec3d2ef785997599f10d8b3f0271e306ce9037d6cbc2d82895dcb
+  checksum: 40c2e20be39bf3e86113cf53998630694f8c2c8eef0c29d94077d79af3748b3e4998f6f8a56006b1abafa08c35452e4ace0428b8f8c66d11e9e1c07dfeb93d20
   languageName: node
   linkType: hard
 
@@ -3983,9 +3988,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xyo-network/sdk-xyo-client-js@npm:^2.14.26":
-  version: 2.14.26
-  resolution: "@xyo-network/sdk-xyo-client-js@npm:2.14.26"
+"@xyo-network/sdk-xyo-client-js@npm:^2.14.29":
+  version: 2.14.29
+  resolution: "@xyo-network/sdk-xyo-client-js@npm:2.14.29"
   dependencies:
     "@ethersproject/providers": ^5.6.1
     "@xylabs/sdk-js": ^2.4.3
@@ -4006,7 +4011,7 @@ __metadata:
     systeminformation: ^5.11.9
     ua-parser-js: ^1.0.2
     uuid: ^8.3.2
-  checksum: 3faaf27d5e6c23d1abe12bf11523d9659127b42e7b1df44d21c656fa18e40f7d391e3b0819f29481cd95d5fee74f795a7dbd263452acf7d10d2be915ef5d0781
+  checksum: f5ede2fa869852cbf5d62f437f3522c1bceb80f45d65d08b5e802e6491f42a1a9a9e78475d84c6b77f007cee3df6c916efb0e52e5127167e29d62c6cb3f88c2b
   languageName: node
   linkType: hard
 
@@ -4242,7 +4247,7 @@ __metadata:
     "@aws-sdk/client-secrets-manager": ^3.56.0
     "@babel/core": ^7.17.8
     "@babel/preset-env": ^7.16.11
-    "@rollup/plugin-commonjs": ^21.0.2
+    "@rollup/plugin-commonjs": ^21.0.3
     "@rollup/plugin-json": ^4.1.0
     "@rollup/plugin-replace": ^4.0.0
     "@rollup/plugin-strip": ^2.1.0
@@ -4256,7 +4261,7 @@ __metadata:
     "@types/jest": ^27.4.1
     "@types/jsonwebtoken": ^8.5.8
     "@types/lodash": ^4.14.180
-    "@types/lru-cache": ^7.5.0
+    "@types/lru-cache": ^7.6.1
     "@types/node": ^17.0.23
     "@types/passport": ^1.0.7
     "@types/passport-jwt": ^3.0.6
@@ -4269,9 +4274,9 @@ __metadata:
     "@xylabs/rollup-config": ^1.1.10
     "@xylabs/sdk-api-express-ecs": ^1.1.3
     "@xylabs/sdk-js": ^2.4.3
-    "@xylabs/ts-scripts": ^1.0.48
+    "@xylabs/ts-scripts": ^1.0.49
     "@xylabs/tsconfig": ^1.0.12
-    "@xyo-network/sdk-xyo-client-js": ^2.14.26
+    "@xyo-network/sdk-xyo-client-js": ^2.14.29
     "@xyo-network/sdk-xyo-mongo-js": ^2.2.7
     axios: ^0.26.1
     babel-jest: ^27.5.1
@@ -4283,8 +4288,8 @@ __metadata:
     depcheck: ^1.4.3
     dotenv: ^16.0.0
     elliptic: ^6.5.4
-    eslint: ^8.11.0
-    ethers: ^5.6.1
+    eslint: ^8.12.0
+    ethers: ^5.6.2
     express: ^4.17.3
     express-mung: ^0.5.1
     http-status-codes: ^2.2.0
@@ -5493,15 +5498,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debug@npm:4, debug@npm:^4.0.0, debug@npm:^4.0.1, debug@npm:^4.1.0, debug@npm:^4.1.1, debug@npm:^4.2.0, debug@npm:^4.3.1, debug@npm:^4.3.2, debug@npm:^4.3.3":
-  version: 4.3.3
-  resolution: "debug@npm:4.3.3"
+"debug@npm:4, debug@npm:^4.0.0, debug@npm:^4.0.1, debug@npm:^4.1.0, debug@npm:^4.1.1, debug@npm:^4.2.0, debug@npm:^4.3.1, debug@npm:^4.3.2, debug@npm:^4.3.3, debug@npm:^4.3.4":
+  version: 4.3.4
+  resolution: "debug@npm:4.3.4"
   dependencies:
     ms: 2.1.2
   peerDependenciesMeta:
     supports-color:
       optional: true
-  checksum: 14472d56fe4a94dbcfaa6dbed2dd3849f1d72ba78104a1a328047bb564643ca49df0224c3a17fa63533fd11dd3d4c8636cd861191232a2c6735af00cc2d4de16
+  checksum: 3dbad3f94ea64f34431a9cbf0bafb61853eda57bff2880036153438f50fb5a84f27683ba0d8e5426bf41a8c6ff03879488120cf5b3a761e77953169c0600a708
   languageName: node
   linkType: hard
 
@@ -6300,9 +6305,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^8.10.0, eslint@npm:^8.11.0":
-  version: 8.11.0
-  resolution: "eslint@npm:8.11.0"
+"eslint@npm:^8.10.0, eslint@npm:^8.12.0":
+  version: 8.12.0
+  resolution: "eslint@npm:8.12.0"
   dependencies:
     "@eslint/eslintrc": ^1.2.1
     "@humanwhocodes/config-array": ^0.9.2
@@ -6341,7 +6346,7 @@ __metadata:
     v8-compile-cache: ^2.0.3
   bin:
     eslint: bin/eslint.js
-  checksum: a06a2ea37002d6c0a4f462fe31b4411185dc3da7857fafb896eb392ba95a1289cc3538056474b2f44f08012f265bede01a39d46df4ac39ebc6d7be90e2c8f9fa
+  checksum: 111bf9046b7a463049788dd00d7f4cd91e024029982352dff4811ce5dfa8cb1136aa127cd8a7a91508234d3e1b4fb6f638a1f5ef9ea08b1af93a18703a4a8dc1
   languageName: node
   linkType: hard
 
@@ -6437,9 +6442,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ethers@npm:^5.6.1":
-  version: 5.6.1
-  resolution: "ethers@npm:5.6.1"
+"ethers@npm:^5.6.2":
+  version: 5.6.2
+  resolution: "ethers@npm:5.6.2"
   dependencies:
     "@ethersproject/abi": 5.6.0
     "@ethersproject/abstract-provider": 5.6.0
@@ -6448,7 +6453,7 @@ __metadata:
     "@ethersproject/base64": 5.6.0
     "@ethersproject/basex": 5.6.0
     "@ethersproject/bignumber": 5.6.0
-    "@ethersproject/bytes": 5.6.0
+    "@ethersproject/bytes": 5.6.1
     "@ethersproject/constants": 5.6.0
     "@ethersproject/contracts": 5.6.0
     "@ethersproject/hash": 5.6.0
@@ -6456,10 +6461,10 @@ __metadata:
     "@ethersproject/json-wallets": 5.6.0
     "@ethersproject/keccak256": 5.6.0
     "@ethersproject/logger": 5.6.0
-    "@ethersproject/networks": 5.6.0
+    "@ethersproject/networks": 5.6.1
     "@ethersproject/pbkdf2": 5.6.0
     "@ethersproject/properties": 5.6.0
-    "@ethersproject/providers": 5.6.1
+    "@ethersproject/providers": 5.6.2
     "@ethersproject/random": 5.6.0
     "@ethersproject/rlp": 5.6.0
     "@ethersproject/sha2": 5.6.0
@@ -6471,7 +6476,7 @@ __metadata:
     "@ethersproject/wallet": 5.6.0
     "@ethersproject/web": 5.6.0
     "@ethersproject/wordlists": 5.6.0
-  checksum: f04079034d4c7f51e5c69a3ee55c38ca70bd5bd9b2680a5e6b594c92a09c8a88882e7d57991eb0ff9d0a95f900511cdccbccedbfc829f3995d01ad5d6f85156d
+  checksum: 47458ba83140bff55e884ae4e7f1558b0bb3a4d90b98c002d60387cfc1fe7c5cac7a6903930880e6d7e791ebdc5409a16c634e77bcb0cc56d85ccd6b5441c7ad
   languageName: node
   linkType: hard
 
@@ -7053,6 +7058,13 @@ __metadata:
     call-bind: ^1.0.2
     get-intrinsic: ^1.1.1
   checksum: 9ceff8fe968f9270a37a1f73bf3f1f7bda69ca80f4f80850670e0e7b9444ff99323f7ac52f96567f8b5f5fbe7ac717a0d81d3407c7313e82810c6199446a5247
+  languageName: node
+  linkType: hard
+
+"git-config-path@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "git-config-path@npm:2.0.0"
+  checksum: f67bee619b76a339d39dee6094c4db914512e3ca7e5ec0a05421b81a6ad0221d6fccfcc0b1c5127cf5af4ed3a49184279bde91b61c003f1cff58ac61e7139cfc
   languageName: node
   linkType: hard
 
@@ -10174,7 +10186,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"npm-check-updates@npm:^12.5.3, npm-check-updates@npm:^12.5.4":
+"npm-check-updates@npm:^12.5.4":
   version: 12.5.4
   resolution: "npm-check-updates@npm:12.5.4"
   dependencies:
@@ -10250,15 +10262,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"npm-package-json-lint@npm:^6.0.1":
-  version: 6.0.3
-  resolution: "npm-package-json-lint@npm:6.0.3"
+"npm-package-json-lint@npm:^6.3.0":
+  version: 6.3.0
+  resolution: "npm-package-json-lint@npm:6.3.0"
   dependencies:
     ajv: ^6.12.6
     ajv-errors: ^1.0.1
     chalk: ^4.1.2
     cosmiconfig: ^7.0.1
-    debug: ^4.3.3
+    debug: ^4.3.4
     globby: ^11.1.0
     ignore: ^5.2.0
     is-plain-obj: ^3.0.0
@@ -10273,7 +10285,7 @@ __metadata:
     validate-npm-package-name: ^3.0.0
   bin:
     npmPkgJsonLint: dist/cli.js
-  checksum: cb97e251a4ff0154eb31782e6f36bc59811ce677173535dcbc0306da493b11ee3a663cdcc696be1086e8775eeaff905f0ddbdea4ab2f4a4a5106cc3294275d24
+  checksum: 20e204dadee92402922422d0afae2a0414ede6cebc5c105eaeb3c308f259c39c53bd8c3b2d4d0acc48ffb94f1a292a3854464d8e4edfd08e555022a8ba33b2ed
   languageName: node
   linkType: hard
 
@@ -10651,6 +10663,16 @@ __metadata:
     is-decimal: ^1.0.0
     is-hexadecimal: ^1.0.0
   checksum: abf070c67912647a016efd5547607ecddc7e1963e59fc20c76797419b6699a3a9a522c067efa509feefedd37afd6c2a44200b3e5546a023a973c90e6e650b68a
+  languageName: node
+  linkType: hard
+
+"parse-git-config@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "parse-git-config@npm:3.0.0"
+  dependencies:
+    git-config-path: ^2.0.0
+    ini: ^1.3.5
+  checksum: 243aa781d08f3208e94708a59e3410af90a7e831054c08775e7aeccaa23fc03240092ffd829412ee3dbe57f33ae876883b7e63171499041d4522e92d7d624c13
   languageName: node
   linkType: hard
 
