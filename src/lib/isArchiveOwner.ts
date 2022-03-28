@@ -1,9 +1,10 @@
 import { NoReqBody, NoReqQuery, NoResBody } from '@xylabs/sdk-api-express-ecs'
+import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 import { Request } from 'express'
 
-import { ArchiveLocals, ArchivePathParams, ArchiveResult } from '../model'
+import { ArchiveLocals, ArchivePathParams } from '../model'
 
-export const isRequestUserOwnerOfArchive = (req: Request, archive: ArchiveResult): boolean => {
+export const isRequestUserOwnerOfArchive = (req: Request, archive: XyoArchive): boolean => {
   const archiveOwnerId = archive?.user
   if (!archiveOwnerId) {
     console.log(`No Archive Owner: ${JSON.stringify(archive, null, 2)}`)

@@ -1,10 +1,11 @@
 import { NoReqBody, NoReqQuery } from '@xylabs/sdk-api-express-ecs'
+import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
-import { ArchiveLocals, ArchivePathParams, ArchiveResponse } from '../../../model'
+import { ArchiveLocals, ArchivePathParams } from '../../../model'
 
-const handler: RequestHandler<ArchivePathParams, ArchiveResponse, NoReqBody, NoReqQuery, ArchiveLocals> = (
+const handler: RequestHandler<ArchivePathParams, XyoArchive, NoReqBody, NoReqQuery, ArchiveLocals> = (
   req,
   res,
   next

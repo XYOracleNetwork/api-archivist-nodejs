@@ -18,8 +18,16 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: "16"
-          cache: 'yarn'
+          cache: "yarn"
       - name: install
         run: yarn install
       - name: build
         run: yarn build
+      - name: copy env file
+        run: yarn copyfile .example.env .env
+      - name: setup test environment
+        run: docker compose up
+      - name: test
+        run: yarn test
+      - name: bring down test environment
+        run: docker compose down

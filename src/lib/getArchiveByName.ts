@@ -1,8 +1,9 @@
-import { ArchiveResult } from '../model'
+import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
+
 import { getArchivistArchiveMongoSdk } from './dbSdk'
 import { determineArchiveAccessControl } from './determineArchiveAccessControl'
 
-export const getArchiveByName = async (name: string): Promise<ArchiveResult | null> => {
+export const getArchiveByName = async (name: string): Promise<XyoArchive | null> => {
   if (!name) {
     return null
   }

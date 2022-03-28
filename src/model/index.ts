@@ -1,5 +1,3 @@
 export * from './archiveLocals'
 export * from './archivePathParams'
-export * from './archiveResponse'
-export * from './archiveResult'
 export * from './sortDirection'

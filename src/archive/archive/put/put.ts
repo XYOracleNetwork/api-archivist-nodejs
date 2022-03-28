@@ -1,15 +1,16 @@
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
+import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import { determineArchiveAccessControl, isValidArchiveName, storeArchive } from '../../../lib'
-import { ArchivePathParams, ArchiveResponse } from '../../../model'
+import { ArchivePathParams } from '../../../model'
 
 export interface PutArchiveRequest {
   accessControl: boolean
 }
 
-const handler: RequestHandler<ArchivePathParams, ArchiveResponse, PutArchiveRequest> = async (req, res, next) => {
+const handler: RequestHandler<ArchivePathParams, XyoArchive, PutArchiveRequest> = async (req, res, next) => {
   const { user } = req
   if (!user || !user?.id) {
     next({ message: 'Invalid User', statusCode: StatusCodes.UNAUTHORIZED })
