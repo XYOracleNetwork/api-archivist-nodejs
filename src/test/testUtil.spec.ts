@@ -12,7 +12,7 @@ import { StatusCodes } from 'http-status-codes'
 import supertest, { SuperTest, Test } from 'supertest'
 import { v4 } from 'uuid'
 
-import { ArchiveKeyResponse, PayloadRepairHashResponse, PostArchiveBlockResponse, PutArchiveRequest } from '../archive'
+import { ArchiveKeyResponse, PayloadRepairHashResponse, PutArchiveRequest } from '../archive'
 import { SortDirection } from '../model'
 
 test('Must have API_KEY ENV VAR defined', () => {
@@ -259,7 +259,7 @@ export const postBlock = async (
   archive: string,
   token?: string,
   expectedStatus: StatusCodes = StatusCodes.OK
-): Promise<PostArchiveBlockResponse> => {
+): Promise<XyoBoundWitness[]> => {
   const data = ([] as XyoBoundWitness[]).concat(boundWitnesses)
   const response = token
     ? await getArchivist()

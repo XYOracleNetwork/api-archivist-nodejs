@@ -16,12 +16,7 @@ interface XyoArchivistBoundWitnessBody {
   payloads: Record<string, unknown>[][]
 }
 
-export interface PostArchiveBlockResponse {
-  boundWitnesses: number
-  payloads: number
-}
-
-const handler: RequestHandler<ArchivePathParams, PostArchiveBlockResponse, XyoArchivistBoundWitnessBody> = async (
+const handler: RequestHandler<ArchivePathParams, XyoBoundWitness[], XyoArchivistBoundWitnessBody> = async (
   req,
   res,
   next
@@ -53,9 +48,9 @@ const handler: RequestHandler<ArchivePathParams, PostArchiveBlockResponse, XyoAr
 
   const { payloads, sanitized } = prepareBoundWitnesses(body.boundWitnesses, boundWitnessMetaData, payloadMetaData)
 
-  const bwResult = await storeBoundWitnesses(archive, sanitized)
-  const payloadsResult = payloads.length ? await storePayloads(archive, payloads) : { insertedCount: 0 }
-  res.json({ boundWitnesses: bwResult.insertedCount, payloads: payloadsResult.insertedCount })
+  await storeBoundWitnesses(archive, sanitized)
+  payloads.length ? await storePayloads(archive, payloads) : { insertedCount: 0 }
+  res.json(sanitized)
 
   next()
 }
