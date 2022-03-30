@@ -14,7 +14,7 @@ describe('/archive/:archive/block/stats', () => {
     for (let blockCount = 0; blockCount < blocksPosted; blockCount++) {
       const block = getNewBlockWithPayloads()
       const blockResponse = await postBlock(block, archive)
-      expect(blockResponse.boundWitnesses).toBe(1)
+      expect(blockResponse.length).toBe(1)
     }
 
     // Post blocks to another archive
@@ -23,7 +23,7 @@ describe('/archive/:archive/block/stats', () => {
     for (let blockCount = 0; blockCount < blocksPosted; blockCount++) {
       const block = getNewBlockWithPayloads()
       const blockResponse = await postBlock(block, archive)
-      expect(blockResponse.boundWitnesses).toBe(1)
+      expect(blockResponse.length).toBe(1)
     }
   }, 25000)
   it('Returns stats on all archives', async () => {

@@ -1,11 +1,12 @@
 import { assertEx } from '@xylabs/sdk-js'
+import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk, BaseMongoSdkConfig } from '@xyo-network/sdk-xyo-mongo-js'
 import { Collection, WithId } from 'mongodb'
 
 import { getMongoDBConfig } from './getMongoDBValues'
 import { UpsertResult } from './UpsertResult'
 
-interface IUpsertFilter {
+interface UpsertFilter {
   $and: [
     {
       archive: string
@@ -14,12 +15,6 @@ interface IUpsertFilter {
       user: string
     }
   ]
-}
-
-export interface ArchiveRecord {
-  accessControl: boolean
-  archive: string
-  user: string
 }
 
 export const getArchivistArchiveMongoSdk = async () => {
@@ -35,29 +30,29 @@ export const getArchivistArchiveMongoSdk = async () => {
   })
 }
 
-class XyoArchiveMongoSdk extends BaseMongoSdk<ArchiveRecord> {
+class XyoArchiveMongoSdk extends BaseMongoSdk<XyoArchive> {
   constructor(readonly config: BaseMongoSdkConfig, private readonly _maxTime = 2000) {
     super(config)
   }
 
-  public async findByArchive(archive: string): Promise<WithId<ArchiveRecord> | null> {
-    return await this.useCollection(async (collection: Collection<ArchiveRecord>) => {
+  public async findByArchive(archive: string): Promise<WithId<XyoArchive> | null> {
+    return await this.useCollection(async (collection: Collection<XyoArchive>) => {
       return await collection.findOne({ archive })
     })
   }
-  public async findByUser(user: string): Promise<WithId<ArchiveRecord>[]> {
-    return await this.useCollection(async (collection: Collection<ArchiveRecord>) => {
+  public async findByUser(user: string): Promise<WithId<XyoArchive>[]> {
+    return await this.useCollection(async (collection: Collection<XyoArchive>) => {
       return await collection.find({ user }).maxTimeMS(this._maxTime).toArray()
     })
   }
 
-  public async upsert(item: ArchiveRecord): Promise<WithId<ArchiveRecord & UpsertResult>> {
+  public async upsert(item: XyoArchive): Promise<WithId<XyoArchive & UpsertResult>> {
     return await this.useCollection(async (collection) => {
       const { archive, user } = item
-      if (!archive && !user) {
+      if (!archive || !user) {
         throw new Error('Invalid archive creation attempted. Archive and user are required.')
       }
-      const filter: IUpsertFilter = { $and: [{ archive }, { user }] }
+      const filter: UpsertFilter = { $and: [{ archive }, { user }] }
       const result = await collection.findOneAndUpdate(
         filter,
         { $set: item },

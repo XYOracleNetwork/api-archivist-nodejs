@@ -27,7 +27,7 @@ describe('/archive/:archive/payload', () => {
     for (let blockCount = 0; blockCount < blocksPosted; blockCount++) {
       const block = getNewBlockWithPayloads()
       const blockResponse = await postBlock(block, archive)
-      expect(blockResponse.boundWitnesses).toBe(1)
+      expect(blockResponse.length).toBe(1)
     }
     recentPayloads = await getRecentPayloads(archive, token)
     expect(recentPayloads).toBeTruthy()

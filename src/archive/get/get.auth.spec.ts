@@ -10,7 +10,7 @@ describe('/archive', () => {
       // Create public archive
       token = await getTokenForNewUser()
       archive = (await claimArchive(token)).archive
-      await setArchiveAccessControl(token, archive, { accessControl: false })
+      await setArchiveAccessControl(token, archive, { accessControl: false, archive })
     })
     it('supplied allows access', async () => {
       await getArchives(token, StatusCodes.OK)

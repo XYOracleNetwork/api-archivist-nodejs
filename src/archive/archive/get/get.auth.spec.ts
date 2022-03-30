@@ -10,7 +10,7 @@ describe('/archive/{:archive}', () => {
       // Create public archive
       token = await getTokenForNewUser()
       archive = (await claimArchive(token)).archive
-      await setArchiveAccessControl(token, archive, { accessControl: false })
+      await setArchiveAccessControl(token, archive, { accessControl: false, archive })
     })
     it('with token absent allows access', async () => {
       await getArchive(archive, undefined, StatusCodes.OK)
@@ -34,7 +34,7 @@ describe('/archive/{:archive}', () => {
       // Create private archive
       token = await getTokenForNewUser()
       archive = (await claimArchive(token)).archive
-      await setArchiveAccessControl(token, archive, { accessControl: true })
+      await setArchiveAccessControl(token, archive, { accessControl: true, archive })
     })
     it('with token absent does not allow access', async () => {
       await getArchive(archive, undefined, StatusCodes.UNAUTHORIZED)

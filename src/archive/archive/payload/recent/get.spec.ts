@@ -31,8 +31,7 @@ describe('/archive/:archive/payload/recent/:limit', () => {
     archive = (await claimArchive(token)).archive
     for (let i = 0; i < payloadsToPost; i++) {
       const response = await postBlock(getNewBlockWithPayloads(1), archive)
-      expect(response.boundWitnesses).toBe(1)
-      expect(response.payloads).toBe(1)
+      expect(response.length).toBe(1)
     }
   })
   it(`With no argument, retrieves the ${defaultReturnLength} most recently posted payloads`, async () => {
@@ -45,8 +44,8 @@ describe('/archive/:archive/payload/recent/:limit', () => {
     for (let i = 0; i < otherPayloadsToPost; i++) {
       const newArchive = (await claimArchive(token)).archive
       const response = await postBlock(getNewBlockWithPayloads(1), newArchive)
-      expect(response.boundWitnesses).toBe(1)
-      expect(response.payloads).toBe(1)
+      expect(response.length).toBe(1)
+
       // Ensure this payload only shows up when getting recent from this archive
       const recent = await getRecent(newArchive, token, 1)
       recent.map((block) => expect(block._archive).toBe(newArchive))

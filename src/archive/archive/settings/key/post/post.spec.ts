@@ -5,7 +5,7 @@ import { claimArchive, createArchiveKey, getTokenForNewUser } from '../../../../
 
 const oneMinuteInMs = 1 * 60 * 1000
 
-describe('/archive/:archive/settings/keys', () => {
+describe('/archive/:archive/settings/key', () => {
   let token = ''
   let archive = ''
   beforeEach(async () => {
@@ -23,7 +23,7 @@ describe('/archive/:archive/settings/keys', () => {
     expect(validate(key)).toBeTruthy()
 
     expect(created).toBeTruthy()
-    const createdDate = new Date(created)
+    const createdDate = new Date(created ?? 0)
     const now = new Date()
     expect(now.getTime() - createdDate.getTime()).toBeLessThan(oneMinuteInMs)
   })

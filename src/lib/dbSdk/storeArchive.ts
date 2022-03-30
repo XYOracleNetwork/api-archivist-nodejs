@@ -1,12 +1,8 @@
+import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
+
 import { getArchivistArchiveMongoSdk } from './getArchivistArchiveMongoSdk'
 
-export interface StoreArchiveRequest {
-  archive: string
-  user: string
-  accessControl: boolean
-}
-
-export interface StoreArchiveResult extends StoreArchiveRequest {
+export interface StoreArchiveResult extends XyoArchive {
   updated: boolean
 }
 
@@ -18,7 +14,7 @@ export interface StoreArchiveResult extends StoreArchiveRequest {
  * @param request The archive to store
  * @returns The stored archive if the operation was successful, null if not
  */
-export const storeArchive = async (request: StoreArchiveRequest): Promise<StoreArchiveResult | null> => {
+export const storeArchive = async (request: XyoArchive): Promise<StoreArchiveResult | null> => {
   const sdk = await getArchivistArchiveMongoSdk()
   try {
     return await sdk.upsert(request)

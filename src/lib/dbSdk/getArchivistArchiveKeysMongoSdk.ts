@@ -1,4 +1,5 @@
 import { assertEx } from '@xylabs/sdk-js'
+import { XyoArchiveKey } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk, BaseMongoSdkConfig } from '@xyo-network/sdk-xyo-mongo-js'
 import { Collection, ObjectId, WithId } from 'mongodb'
 
@@ -17,23 +18,18 @@ export const getArchivistArchiveKeysMongoSdk = async () => {
   })
 }
 
-export interface ArchiveKeyRecord {
-  archive: string
-  key: string
-}
-
-class XyoArchiveKeyMongoSdk extends BaseMongoSdk<ArchiveKeyRecord> {
+class XyoArchiveKeyMongoSdk extends BaseMongoSdk<XyoArchiveKey> {
   constructor(readonly config: BaseMongoSdkConfig, private readonly _maxTime = 2000) {
     super(config)
   }
 
-  public async findByArchive(archive: string): Promise<WithId<ArchiveKeyRecord>[]> {
-    return await this.useCollection(async (collection: Collection<ArchiveKeyRecord>) => {
+  public async findByArchive(archive: string): Promise<WithId<XyoArchiveKey>[]> {
+    return await this.useCollection(async (collection: Collection<XyoArchiveKey>) => {
       return await collection.find({ archive }).toArray()
     })
   }
-  public async insert(item: ArchiveKeyRecord): Promise<ObjectId> {
-    return await this.useCollection(async (collection: Collection<ArchiveKeyRecord>) => {
+  public async insert(item: XyoArchiveKey): Promise<ObjectId> {
+    return await this.useCollection(async (collection: Collection<XyoArchiveKey>) => {
       const result = await collection.insertOne({ ...item })
       if (result.acknowledged) {
         return result.insertedId

@@ -1,7 +1,8 @@
 import { Express } from 'express'
 
-import { getArchive, getArchives, getArchiveSettingsKeys, postArchiveSettingsKeys, putArchive } from '../archive'
+import { getArchive, getArchives, putArchive } from '../archive'
 import { allowAnonymous, requireArchiveAccess, requireArchiveOwner, requireAuth } from '../middleware'
+import { addArchiveSettingsRoutes } from './addArchiveSettingsRoutes'
 import { notImplemented } from './notImplemented'
 
 export const addArchiveRoutes = (app: Express) => {
@@ -37,19 +38,5 @@ export const addArchiveRoutes = (app: Express) => {
     /* #swagger.summary = 'Delete an archive' */
   )
 
-  app.get(
-    '/archive/:archive/settings/keys',
-    requireArchiveOwner,
-    getArchiveSettingsKeys
-    /* #swagger.tags = ['Archive'] */
-    /* #swagger.summary = 'Gets the list of keys for a specific archive' */
-  )
-
-  app.post(
-    '/archive/:archive/settings/keys',
-    requireArchiveOwner,
-    postArchiveSettingsKeys
-    /* #swagger.tags = ['Archive'] */
-    /* #swagger.summary = 'Sets the list of keys for a specific archive' */
-  )
+  addArchiveSettingsRoutes(app)
 }

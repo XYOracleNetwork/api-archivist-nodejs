@@ -6,11 +6,7 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 import { determineArchiveAccessControl, isValidArchiveName, storeArchive } from '../../../lib'
 import { ArchivePathParams } from '../../../model'
 
-export interface PutArchiveRequest {
-  accessControl: boolean
-}
-
-const handler: RequestHandler<ArchivePathParams, XyoArchive, PutArchiveRequest> = async (req, res, next) => {
+const handler: RequestHandler<ArchivePathParams, XyoArchive, XyoArchive> = async (req, res, next) => {
   const { user } = req
   if (!user || !user?.id) {
     next({ message: 'Invalid User', statusCode: StatusCodes.UNAUTHORIZED })

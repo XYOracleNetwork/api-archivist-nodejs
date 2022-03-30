@@ -31,7 +31,7 @@ describe('/:hash', () => {
       archive = getArchiveName()
       await claimArchive(token, archive)
       const blockResponse = await postBlock(block, archive)
-      expect(blockResponse.boundWitnesses).toBe(2)
+      expect(blockResponse.length).toBe(2)
     })
     it('a single bound witness', async () => {
       const response = await getHash(boundWitnessHash)
@@ -67,7 +67,7 @@ describe('/:hash', () => {
       archive = getArchiveName()
       await claimArchive(token, archive)
       const blockResponse = await postBlock(boundWitness, archive)
-      expect(blockResponse.boundWitnesses).toBe(1)
+      expect(blockResponse.length).toBe(1)
     })
     describe.each([
       ['bound witness', boundWitnessHash],
@@ -101,9 +101,9 @@ describe('/:hash', () => {
       token = await getTokenForNewUser()
       archive = getArchiveName()
       await claimArchive(token, archive)
-      await setArchiveAccessControl(token, archive, { accessControl: true })
+      await setArchiveAccessControl(token, archive, { accessControl: true, archive })
       const blockResponse = await postBlock(boundWitness, archive, token)
-      expect(blockResponse.boundWitnesses).toBe(1)
+      expect(blockResponse.length).toBe(1)
     })
     describe.each([
       ['bound witness', boundWitnessHash],

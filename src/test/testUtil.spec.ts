@@ -1,6 +1,7 @@
 import {
   XyoAddress,
   XyoArchive,
+  XyoArchiveKey,
   XyoBoundWitness,
   XyoBoundWitnessBuilder,
   XyoDomainConfig,
@@ -12,7 +13,7 @@ import { StatusCodes } from 'http-status-codes'
 import supertest, { SuperTest, Test } from 'supertest'
 import { v4 } from 'uuid'
 
-import { ArchiveKeyResponse, PayloadRepairHashResponse, PutArchiveRequest } from '../archive'
+import { PayloadRepairHashResponse } from '../archive'
 import { SortDirection } from '../model'
 
 test('Must have API_KEY ENV VAR defined', () => {
@@ -174,14 +175,14 @@ export const getDomain = async (
 export const setArchiveAccessControl = async (
   token: string,
   archive: string,
-  data: PutArchiveRequest = { accessControl: false },
+  data: XyoArchive,
   expectedStatus: StatusCodes = StatusCodes.OK
 ): Promise<XyoArchive> => {
   if (!archive) archive = getArchiveName()
   const response = await getArchivist()
     .put(`/archive/${archive}`)
     .auth(token, { type: 'bearer' })
-    .send(data)
+    .send(data ?? { accessControl: false, archive })
     .expect(expectedStatus)
   return response.body.data
 }
@@ -190,9 +191,9 @@ export const createArchiveKey = async (
   token: string,
   archive: string,
   expectedStatus: StatusCodes = StatusCodes.OK
-): Promise<ArchiveKeyResponse> => {
+): Promise<XyoArchiveKey> => {
   const response = await getArchivist()
-    .post(`/archive/${archive}/settings/keys`)
+    .post(`/archive/${archive}/settings/key`)
     .auth(token, { type: 'bearer' })
     .expect(expectedStatus)
   return response.body.data
@@ -202,9 +203,9 @@ export const getArchiveKeys = async (
   token: string,
   archive: string,
   expectedStatus: StatusCodes = StatusCodes.OK
-): Promise<ArchiveKeyResponse[]> => {
+): Promise<XyoArchiveKey[]> => {
   const response = await getArchivist()
-    .get(`/archive/${archive}/settings/keys`)
+    .get(`/archive/${archive}/settings/key`)
     .auth(token, { type: 'bearer' })
     .expect(expectedStatus)
   return response.body.data

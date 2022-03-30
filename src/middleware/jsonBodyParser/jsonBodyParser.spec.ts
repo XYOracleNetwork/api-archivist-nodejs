@@ -12,7 +12,6 @@ describe('jsonBodyParser', () => {
     const payload = new XyoPayloadBuilder({ schema }).fields({ result }).build()
     const block = getNewBlock(payload)
     const response = await postBlock(block, 'temp')
-    expect(response.boundWitnesses).toBe(1)
-    expect(response.payloads).toBe(1)
+    expect(response.length).toBe(1)
   })
 })
