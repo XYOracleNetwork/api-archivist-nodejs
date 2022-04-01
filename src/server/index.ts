@@ -52,7 +52,7 @@ const server = async (port = 80) => {
     apiKey: process.env.API_KEY,
     secretOrKey: process.env.JWT_SECRET,
   })
-  app.use('/user', userRoutes)
+  app.use('', userRoutes)
   const host = process.env.PUBLIC_ORIGIN || `http://localhost:${port}`
   await configureDoc(app, { host })
 

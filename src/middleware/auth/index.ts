@@ -72,52 +72,52 @@ let respondWithJwt: RequestHandler = () => {
 }
 
 router.post(
-  '/signup',
+  '/user/signup',
   adminApiKeyUserSignupStrategy,
   postSignup /*
     #swagger.tags = ['User']
-    #swagger.basePath = '/user'
+    #swagger.basePath = '/'
     #swagger.summary = 'Create an account (web2)'
   */
 )
 
 // web2 flow
 router.post(
-  '/login',
+  '/user/login',
   localStrategy,
   (req, res, next) => respondWithJwt(req, res, next)
   /*
     #swagger.tags = ['User']
-    #swagger.basePath = '/user'
+    #swagger.basePath = '/'
     #swagger.summary = 'Log in (web2)'
   */
 )
 
 // web3 flow
 router.post(
-  '/wallet/challenge',
+  '/wallet/:address/challenge',
   postWalletChallenge /*
-    #swagger.tags = ['User']
-    #swagger.basePath = '/user'
+    #swagger.tags = ['Wallet']
+    #swagger.basePath = '/'
     #swagger.summary = 'Challenge (web3)'
   */
 )
 router.post(
-  '/wallet/verify',
+  '/wallet/:address/verify',
   web3Strategy,
   (req, res, next) => respondWithJwt(req, res, next) /*
-    #swagger.tags = ['User']
-    #swagger.basePath = '/user'
+    #swagger.tags = ['Wallet']
+    #swagger.basePath = '/'
     #swagger.summary = 'Verify (web3)'
   */
 )
 
 router.get(
-  '/profile',
+  '/user/profile',
   requireLoggedIn,
   getProfile /*
     #swagger.tags = ['User']
-    #swagger.basePath = '/user'
+    #swagger.basePath = '/'
     #swagger.summary = 'Get user profile data'
   */
 )

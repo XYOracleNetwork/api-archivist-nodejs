@@ -6,7 +6,7 @@ import { RequestHandler } from 'express'
 import { getArchivistBoundWitnessesMongoSdk } from '../../../../lib'
 import { ArchivePathParams } from '../../../../model'
 
-export interface GetArchiveBlockStatsResponse {
+export interface GetArchiveBlockStats {
   count: number
 }
 
@@ -15,11 +15,13 @@ const getCount = async (archive: string) => {
   return await sdk.fetchCount()
 }
 
-const handler: RequestHandler<ArchivePathParams, GetArchiveBlockStatsResponse> = async (req, res, next) => {
+const handler: RequestHandler<ArchivePathParams, GetArchiveBlockStats[]> = async (req, res, next) => {
   const { archive } = req.params
-  res.json({
-    count: await getCount(archive),
-  })
+  res.json([
+    {
+      count: await getCount(archive),
+    },
+  ])
   next()
 }
 
