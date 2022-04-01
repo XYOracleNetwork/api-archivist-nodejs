@@ -4,6 +4,17 @@ import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 import { IUserStore } from '../../model'
 import { createUser } from '../lib'
 
+export const createUserFromRequest = (req: Request, userStore: IUserStore) => {
+  const userToCreate = req.body
+  const password = userToCreate.password
+  if (password) {
+    delete userToCreate.password
+    return createUser(userToCreate, userStore, password)
+  } else {
+    return createUser(userToCreate, userStore)
+  }
+}
+
 export class AdminApiKeyStrategy extends Strategy {
   constructor(
     public readonly userStore: IUserStore,
