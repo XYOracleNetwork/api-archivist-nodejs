@@ -4,6 +4,17 @@ import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 import { IUserStore } from '../../model'
 import { createUser } from '../lib'
 
+export const createUserFromRequest = (req: Request, userStore: IUserStore) => {
+  const userToCreate = req.body
+  const password = userToCreate.password
+  if (password) {
+    delete userToCreate.password
+    return createUser(userToCreate, userStore, password)
+  } else {
+    return createUser(userToCreate, userStore)
+  }
+}
+
 export class AdminApiKeyStrategy extends Strategy {
   constructor(
     public readonly userStore: IUserStore,
@@ -24,7 +35,7 @@ export class AdminApiKeyStrategy extends Strategy {
         return
       }
       if (this.createUser) {
-        const user = await createUser({}, this.userStore)
+        const user = await createUserFromRequest(req, this.userStore)
         if (!user) {
           this.error({ message: 'Error creating user' })
           return
@@ -36,6 +47,7 @@ export class AdminApiKeyStrategy extends Strategy {
       this.success(req.user || {})
       return
     } catch (error) {
+      console.log(JSON.stringify(error, null, 2))
       this.error({ message: 'Admin API Key Auth Error' })
     }
   }

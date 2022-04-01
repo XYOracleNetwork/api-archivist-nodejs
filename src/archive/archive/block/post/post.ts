@@ -11,29 +11,14 @@ import { storeBoundWitnesses } from './storeBoundWitnesses'
 import { storePayloads } from './storePayloads'
 import { validateBody } from './validateBody'
 
-interface XyoArchivistBoundWitnessBody {
-  boundWitnesses: XyoBoundWitness[]
-  payloads: Record<string, unknown>[][]
-}
-
-const handler: RequestHandler<ArchivePathParams, XyoBoundWitness[], XyoArchivistBoundWitnessBody> = async (
-  req,
-  res,
-  next
-) => {
+const handler: RequestHandler<ArchivePathParams, XyoBoundWitness[], XyoBoundWitness[]> = async (req, res, next) => {
   const { archive } = req.params
   const _source_ip = req.ip ?? undefined
   const _user_agent = req.headers['User-agent'] ?? undefined
   const _timestamp = Date.now()
 
   //fairly complex logic to handle old object, or new single/array boundwitness
-  const body: XyoArchivistBoundWitnessBody = (
-    Array.isArray(req.body)
-      ? { boundWitnesses: req.body as XyoBoundWitness[] }
-      : Array.isArray(req.body.boundWitnesses)
-      ? req.body
-      : [req.body]
-  ) as XyoArchivistBoundWitnessBody
+  const body: XyoBoundWitness[] = (Array.isArray(req.body) ? req.body : [req.body]) as XyoBoundWitness[]
 
   const boundWitnessMetaData = { _source_ip, _timestamp, _user_agent }
   const payloadMetaData = { _archive: archive }
@@ -46,7 +31,7 @@ const handler: RequestHandler<ArchivePathParams, XyoBoundWitness[], XyoArchivist
     return
   }
 
-  const { payloads, sanitized } = prepareBoundWitnesses(body.boundWitnesses, boundWitnessMetaData, payloadMetaData)
+  const { payloads, sanitized } = prepareBoundWitnesses(body, boundWitnessMetaData, payloadMetaData)
 
   await storeBoundWitnesses(archive, sanitized)
   payloads.length ? await storePayloads(archive, payloads) : { insertedCount: 0 }
