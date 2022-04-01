@@ -2,7 +2,7 @@ import { Request } from 'express'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
 import { IUserStore } from '../../model'
-import { createUserFromRequest } from '../lib'
+import { createUser } from '../lib'
 import { verifyUuid } from './verifyUuid'
 import { verifyWallet } from './verifyWallet'
 
@@ -16,7 +16,8 @@ export class Web3AuthStrategy extends Strategy {
     _options?: unknown
   ) {
     try {
-      const { address, message, signature } = req.body
+      const { message, signature } = req.body
+      const { address } = req.params
       if (!address || !message || !signature) {
         this.fail('Missing request values')
         return
@@ -30,6 +31,8 @@ export class Web3AuthStrategy extends Strategy {
         return
       }
 
+      console.log('Verified')
+
       // Lookup existing user
       const user = await this.userStore.getByWallet(address)
       if (user) {
@@ -38,7 +41,7 @@ export class Web3AuthStrategy extends Strategy {
         return
       } else {
         // if not found, create them (since they've verified they own the wallet)
-        const createdUser = await createUserFromRequest(req, this.userStore)
+        const createdUser = await createUser({ address }, this.userStore)
         if (!createdUser) {
           this.error({ message: 'Error creating user' })
           return
@@ -47,6 +50,7 @@ export class Web3AuthStrategy extends Strategy {
         return
       }
     } catch (error) {
+      console.log(JSON.stringify(error, null, 2))
       this.error({ message: 'Web3 Auth Error' })
     }
   }

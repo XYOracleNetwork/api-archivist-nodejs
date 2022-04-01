@@ -1,13 +1,13 @@
-export interface IIdentifiable {
+export interface Identifiable {
   id: string
 }
-export interface IWeb2User {
+export interface Web2User {
   email: string
   passwordHash: string
 }
-export interface IWeb3User {
+export interface Web3User {
   address: string
 }
 
-export type UserWithoutId = Partial<IWeb2User> & Partial<IWeb3User>
-export type User = IIdentifiable & UserWithoutId
+export type UserWithoutId = Partial<Web2User> & Partial<Web3User>
+export type User = Identifiable & UserWithoutId
