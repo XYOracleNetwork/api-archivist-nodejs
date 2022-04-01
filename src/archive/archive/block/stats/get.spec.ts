@@ -32,9 +32,9 @@ describe('/archive/:archive/block/stats', () => {
       .get(`/archive/${archive}/block/stats`)
       .auth(token, { type: 'bearer' })
       .expect(StatusCodes.OK)
-    const recent = response.body.data
-    expect(recent).toBeTruthy()
-    expect(typeof recent?.count).toBe('number')
-    expect(recent.count).toBeGreaterThanOrEqual(2 * blocksPosted)
+    const stats = response.body.data
+    expect(stats).toBeTruthy()
+    expect(typeof stats?.count).toBe('number')
+    expect(stats.count).toBeGreaterThanOrEqual(2 * blocksPosted)
   })
 })

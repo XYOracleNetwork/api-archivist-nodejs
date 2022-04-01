@@ -35,7 +35,7 @@ export class AdminApiKeyStrategy extends Strategy {
         return
       }
       if (this.createUser) {
-        const user = await createUser({}, this.userStore)
+        const user = await createUserFromRequest(req, this.userStore)
         if (!user) {
           this.error({ message: 'Error creating user' })
           return
@@ -47,6 +47,7 @@ export class AdminApiKeyStrategy extends Strategy {
       this.success(req.user || {})
       return
     } catch (error) {
+      console.log(JSON.stringify(error, null, 2))
       this.error({ message: 'Admin API Key Auth Error' })
     }
   }

@@ -15,9 +15,9 @@ export interface ArchivePayloadStats {
   count: number
 }
 
-const handler: RequestHandler<ArchivePathParams, ArchivePayloadStats[]> = async (req, res, next) => {
+const handler: RequestHandler<ArchivePathParams, ArchivePayloadStats> = async (req, res, next) => {
   const { archive } = req.params
-  res.json([{ count: await getCount(archive) }])
+  res.json({ count: await getCount(archive) })
   next()
 }
 
