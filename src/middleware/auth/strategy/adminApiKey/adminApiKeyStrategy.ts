@@ -2,7 +2,7 @@ import { NoReqParams } from '@xylabs/sdk-api-express-ecs'
 import { Request } from 'express'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
-import { IUserStore, UserWithoutId } from '../../model'
+import { IUserStore, User, UserWithoutId } from '../../model'
 import { createUser } from '../lib'
 
 interface UserToCreate extends UserWithoutId {
@@ -21,7 +21,7 @@ export class AdminApiKeyStrategy extends Strategy {
 
   override async authenticate(
     this: StrategyCreated<this, this & StrategyCreatedStatic>,
-    req: Request<NoReqParams, UserToCreate>,
+    req: Request<NoReqParams, User, UserToCreate>,
     _options?: unknown
   ) {
     try {
@@ -30,7 +30,7 @@ export class AdminApiKeyStrategy extends Strategy {
         return
       }
       if (this.createUser) {
-        const userToCreate: UserToCreate = req.body
+        const userToCreate = req.body
         const password = userToCreate.password
         if (password) {
           delete userToCreate.password
