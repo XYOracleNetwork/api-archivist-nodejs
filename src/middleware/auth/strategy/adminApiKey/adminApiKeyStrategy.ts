@@ -48,6 +48,7 @@ export class AdminApiKeyStrategy extends Strategy {
       this.success(req.user || {})
       return
     } catch (error) {
+      console.log(JSON.stringify(error, null, 2))
       this.error({ message: 'Admin API Key Auth Error' })
     }
   }

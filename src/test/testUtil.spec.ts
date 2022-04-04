@@ -49,7 +49,10 @@ const knownPayload = new XyoPayloadBuilder({ schema })
   })
   .build()
 export const knownPayloadHash = knownPayload._hash || ''
-export const knownBlock = new XyoBoundWitnessBuilder({ inlinePayloads: true }).payload(knownPayload).build()
+export const knownBlock = new XyoBoundWitnessBuilder({ inlinePayloads: true })
+  .witness(XyoAddress.random())
+  .payload(knownPayload)
+  .build()
 export const knownBlockHash = knownBlock._hash || ''
 
 export interface TestWeb2User {
@@ -105,7 +108,7 @@ export const getExistingWeb3User = async (expectedStatus: StatusCodes = StatusCo
 }
 
 export const signInWeb3User = async (user: TestWeb3User): Promise<string> => {
-  const challengeResponse = await request.post('/user/wallet/challenge').send(user).expect(StatusCodes.OK)
+  const challengeResponse = await request.post(`/wallet/${user.address}/challenge`).send(user).expect(StatusCodes.OK)
   const { state } = challengeResponse.body.data
   const wallet = new Wallet(user.privateKey)
   const signature = await wallet.signMessage(state)
@@ -114,7 +117,7 @@ export const signInWeb3User = async (user: TestWeb3User): Promise<string> => {
     message: state,
     signature,
   }
-  const tokenResponse = await request.post('/user/wallet/verify').send(verifyBody).expect(StatusCodes.OK)
+  const tokenResponse = await request.post(`/wallet/${wallet.address}/verify`).send(verifyBody).expect(StatusCodes.OK)
   return tokenResponse.body.data.token
 }
 
@@ -234,13 +237,16 @@ export const getNewBlockWithPayloads = (numPayloads = 1) => {
 
 export const getNewBlockWithBoundWitnesses = (numBoundWitnesses = 1) => {
   return new Array(numBoundWitnesses).fill(0).map(() => {
-    return new XyoBoundWitnessBuilder({ inlinePayloads: true }).build()
+    return new XyoBoundWitnessBuilder({ inlinePayloads: true }).witness(XyoAddress.random()).build()
   })
 }
 
 export const getNewBlockWithBoundWitnessesWithPayloads = (numBoundWitnesses = 1, numPayloads = 1) => {
   return new Array(numBoundWitnesses).fill(0).map(() => {
-    return new XyoBoundWitnessBuilder({ inlinePayloads: true }).payloads(getPayloads(numPayloads)).build()
+    return new XyoBoundWitnessBuilder({ inlinePayloads: true })
+      .witness(XyoAddress.random())
+      .payloads(getPayloads(numPayloads))
+      .build()
   })
 }
 
@@ -261,14 +267,14 @@ export const postBlock = async (
   token?: string,
   expectedStatus: StatusCodes = StatusCodes.OK
 ): Promise<XyoBoundWitness[]> => {
-  const data = ([] as XyoBoundWitness[]).concat(boundWitnesses)
+  const data = ([] as XyoBoundWitness[]).concat(Array.isArray(boundWitnesses) ? boundWitnesses : [boundWitnesses])
   const response = token
     ? await getArchivist()
         .post(`/archive/${archive}/block`)
         .auth(token, { type: 'bearer' })
-        .send({ boundWitnesses: data })
+        .send(data)
         .expect(expectedStatus)
-    : await getArchivist().post(`/archive/${archive}/block`).send({ boundWitnesses: data }).expect(expectedStatus)
+    : await getArchivist().post(`/archive/${archive}/block`).send(data).expect(expectedStatus)
   return response.body.data
 }
 
