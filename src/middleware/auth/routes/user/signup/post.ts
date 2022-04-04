@@ -3,7 +3,7 @@ import 'source-map-support/register'
 import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
-import { toUserDto } from '../../dto'
+import { toUserDto } from '../../../dto'
 
 const message = 'Signup successful'
 export const postSignup: RequestHandler = (req, res, next) => {
