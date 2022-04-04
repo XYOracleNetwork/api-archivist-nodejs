@@ -4,7 +4,7 @@ import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 import { IUserStore } from '../../model'
 import { createUser } from '../lib'
 
-export const createUserFromRequest = (req: Request, userStore: IUserStore) => {
+const createUserFromRequest = (req: Request, userStore: IUserStore) => {
   const userToCreate = req.body
   const password = userToCreate.password
   if (password) {
@@ -24,6 +24,7 @@ export class AdminApiKeyStrategy extends Strategy {
   ) {
     super()
   }
+
   override async authenticate(
     this: StrategyCreated<this, this & StrategyCreatedStatic>,
     req: Request,
@@ -35,7 +36,7 @@ export class AdminApiKeyStrategy extends Strategy {
         return
       }
       if (this.createUser) {
-        const user = await createUser({}, this.userStore)
+        const user = await createUserFromRequest(req, this.userStore)
         if (!user) {
           this.error({ message: 'Error creating user' })
           return
