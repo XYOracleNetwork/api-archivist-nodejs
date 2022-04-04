@@ -1,18 +1,12 @@
+import { NoReqParams } from '@xylabs/sdk-api-express-ecs'
 import { Request } from 'express'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
-import { IUserStore } from '../../model'
+import { IUserStore, UserWithoutId } from '../../model'
 import { createUser } from '../lib'
 
-const createUserFromRequest = (req: Request, userStore: IUserStore) => {
-  const userToCreate = req.body
-  const password = userToCreate.password
-  if (password) {
-    delete userToCreate.password
-    return createUser(userToCreate, userStore, password)
-  } else {
-    return createUser(userToCreate, userStore)
-  }
+interface UserToCreate extends UserWithoutId {
+  password?: string
 }
 
 export class AdminApiKeyStrategy extends Strategy {
@@ -27,7 +21,7 @@ export class AdminApiKeyStrategy extends Strategy {
 
   override async authenticate(
     this: StrategyCreated<this, this & StrategyCreatedStatic>,
-    req: Request,
+    req: Request<NoReqParams, UserToCreate>,
     _options?: unknown
   ) {
     try {
@@ -36,7 +30,12 @@ export class AdminApiKeyStrategy extends Strategy {
         return
       }
       if (this.createUser) {
-        const user = await createUserFromRequest(req, this.userStore)
+        const userToCreate: UserToCreate = req.body
+        const password = userToCreate.password
+        if (password) {
+          delete userToCreate.password
+        }
+        const user = await createUser(userToCreate, this.userStore, password)
         if (!user) {
           this.error({ message: 'Error creating user' })
           return
