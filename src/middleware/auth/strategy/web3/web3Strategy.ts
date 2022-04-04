@@ -30,9 +30,6 @@ export class Web3AuthStrategy extends Strategy {
         this.fail('Invalid message')
         return
       }
-
-      console.log('Verified')
-
       // Lookup existing user
       const user = await this.userStore.getByWallet(address)
       if (user) {
