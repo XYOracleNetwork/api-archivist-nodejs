@@ -25,7 +25,7 @@ const getPayloads = async (archive: string, hashes: string[]) => {
   return hashes.map((value) => map[value])
 }
 
-const handler: RequestHandler<BlockHashPathParams> = async (req, res, next) => {
+const handler: RequestHandler<BlockHashPathParams, XyoPayload[][]> = async (req, res, next) => {
   const { archive, hash } = req.params
   const bw = await getBoundWitness(archive, hash)
   if (bw && bw.length > 0) {
