@@ -1,7 +1,7 @@
 import passport from 'passport'
 import { IStrategyOptions, Strategy } from 'passport-local'
 
-import { IUserStore, passwordHasher } from '../../model'
+import { passwordHasher, UserStore } from '../../model'
 
 const strategyOptions: IStrategyOptions = {
   passwordField: 'password',
@@ -11,7 +11,7 @@ const strategyOptions: IStrategyOptions = {
 export const localStrategyName = 'local'
 export const localStrategy = passport.authenticate(localStrategyName, { session: false })
 
-export const configureLocalStrategy = (userStore: IUserStore) => {
+export const configureLocalStrategy = (userStore: UserStore) => {
   passport.use(
     localStrategyName,
     new Strategy(strategyOptions, async (email, providedPassword, done) => {
