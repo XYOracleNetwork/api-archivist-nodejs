@@ -3,9 +3,9 @@ import express, { RequestHandler, Router } from 'express'
 import passport from 'passport'
 
 import { getUserMongoSdk, MongoDBUserStore, UserCreationAuthInfo, UserWithoutId } from './model'
-import { getProfile, postSignup, postWalletChallenge } from './routes'
+import { getUserProfile, postUserSignup, postWalletChallenge } from './routes'
 import {
-  adminApiKeyUserSignupStrategy,
+  adminApiKeyStrategy,
   allowUnauthenticatedStrategyName,
   archiveAccessControlStrategy,
   archiveApiKeyStrategy,
@@ -71,16 +71,6 @@ let respondWithJwt: RequestHandler = () => {
   throw new Error('JWT Auth Incorrectly Configured')
 }
 
-router.post(
-  '/user/signup',
-  adminApiKeyUserSignupStrategy,
-  postSignup /*
-    #swagger.tags = ['User']
-    #swagger.basePath = '/'
-    #swagger.summary = 'Create an account (web2)'
-  */
-)
-
 // web2 flow
 router.post(
   '/user/login',
@@ -115,7 +105,7 @@ router.post(
 router.get(
   '/user/profile',
   requireLoggedIn,
-  getProfile /*
+  getUserProfile /*
     #swagger.tags = ['User']
     #swagger.basePath = '/'
     #swagger.summary = 'Get user profile data'
@@ -136,7 +126,7 @@ export const configureAuth: (config: AuthConfig) => Promise<Router> = async (con
   const userMongoSdk = await getUserMongoSdk()
   const userStore = new MongoDBUserStore(userMongoSdk)
 
-  configureAdminApiKeyStrategy(userStore, apiKey)
+  configureAdminApiKeyStrategy(apiKey)
   configureAllowUnauthenticatedStrategy()
   configureArchiveAccessControlStrategy()
   configureArchiveApiKeyStrategy(userStore)
@@ -144,6 +134,16 @@ export const configureAuth: (config: AuthConfig) => Promise<Router> = async (con
   respondWithJwt = configureJwtStrategy(secretOrKey)
   configureLocalStrategy(userStore)
   configureWeb3Strategy(userStore)
+
+  router.post(
+    '/user/signup',
+    adminApiKeyStrategy,
+    postUserSignup(userStore) /*
+      #swagger.tags = ['User']
+      #swagger.basePath = '/'
+      #swagger.summary = 'Create an account (web2)'
+    */
+  )
 
   return router
 }

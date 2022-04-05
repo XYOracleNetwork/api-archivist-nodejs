@@ -1,8 +1,8 @@
 import { Request } from 'express'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
+import { createUser } from '../../lib'
 import { IUserStore } from '../../model'
-import { createUser } from '../lib'
 import { verifyUuid } from './verifyUuid'
 import { verifyWallet } from './verifyWallet'
 

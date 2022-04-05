@@ -1,5 +1,5 @@
-import { UpsertResult } from '../../../../lib'
-import { IUserStore, passwordHasher, User, UserWithoutId } from '../../model'
+import { UpsertResult } from '../../../lib'
+import { IUserStore, passwordHasher, User, UserWithoutId } from '../model'
 
 export const createUser = async (
   userToCreate: UserWithoutId,
