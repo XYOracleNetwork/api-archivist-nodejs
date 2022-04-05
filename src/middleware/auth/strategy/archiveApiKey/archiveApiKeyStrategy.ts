@@ -2,10 +2,10 @@ import { Request } from 'express'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
 import { getArchiveKeys, getArchivistArchiveMongoSdk } from '../../../../lib'
-import { IUserStore } from '../../model'
+import { UserStore } from '../../model'
 
 export class ArchiveApiKeyStrategy extends Strategy {
-  constructor(public readonly userStore: IUserStore, public readonly apiKeyHeader = 'x-api-key') {
+  constructor(public readonly userStore: UserStore, public readonly apiKeyHeader = 'x-api-key') {
     super()
   }
   override async authenticate(

@@ -1,13 +1,13 @@
 import { Request } from 'express'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
-import { IUserStore } from '../../model'
-import { createUser } from '../lib'
+import { createUser } from '../../lib'
+import { UserStore } from '../../model'
 import { verifyUuid } from './verifyUuid'
 import { verifyWallet } from './verifyWallet'
 
 export class Web3AuthStrategy extends Strategy {
-  constructor(public readonly userStore: IUserStore) {
+  constructor(public readonly userStore: UserStore) {
     super()
   }
   override async authenticate(
@@ -30,9 +30,6 @@ export class Web3AuthStrategy extends Strategy {
         this.fail('Invalid message')
         return
       }
-
-      console.log('Verified')
-
       // Lookup existing user
       const user = await this.userStore.getByWallet(address)
       if (user) {

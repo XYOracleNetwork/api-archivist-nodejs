@@ -2,7 +2,7 @@ import { WithId } from 'mongodb'
 
 import { UpsertResult } from '../../../../../lib'
 import { User, UserWithoutId } from '../../user'
-import { IUserStore } from '../userStore'
+import { UserStore } from '../userStore'
 import { UserMongoSdk } from './userSdk'
 
 const fromDbEntity = (user: WithId<User>): User => {
@@ -24,7 +24,7 @@ const toDbEntity = (user: UserWithoutId) => {
   return user
 }
 
-export class MongoDBUserStore implements IUserStore {
+export class MongoDBUserStore implements UserStore {
   constructor(private readonly mongo: UserMongoSdk) {}
   async create(user: UserWithoutId): Promise<User & UpsertResult> {
     const created = await this.mongo.upsert(toDbEntity(user))
