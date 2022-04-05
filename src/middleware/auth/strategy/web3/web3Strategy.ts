@@ -2,12 +2,12 @@ import { Request } from 'express'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
 import { createUser } from '../../lib'
-import { IUserStore } from '../../model'
+import { UserStore } from '../../model'
 import { verifyUuid } from './verifyUuid'
 import { verifyWallet } from './verifyWallet'
 
 export class Web3AuthStrategy extends Strategy {
-  constructor(public readonly userStore: IUserStore) {
+  constructor(public readonly userStore: UserStore) {
     super()
   }
   override async authenticate(

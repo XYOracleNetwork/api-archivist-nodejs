@@ -6,7 +6,7 @@ import { StatusCodes } from 'http-status-codes'
 
 import { toUserDto } from '../../../dto'
 import { createUser } from '../../../lib'
-import { IUserStore, User, UserWithoutId } from '../../../model'
+import { User, UserStore, UserWithoutId } from '../../../model'
 
 const message = 'Signup successful'
 
@@ -19,8 +19,7 @@ export interface UserCreationResponse {
   user: User
 }
 
-export const postUserSignup = (userStore: IUserStore) => {
-  // TODO: Create user here instead of auth handler
+export const postUserSignup = (userStore: UserStore) => {
   return asyncHandler(
     async (
       req: Request<NoReqParams, UserCreationResponse, UserToCreate>,
