@@ -23,13 +23,13 @@ const handler: RequestHandler<ArchivePathParams, XyoBoundWitness[], XyoBoundWitn
   const boundWitnessMetaData = { _source_ip, _timestamp, _user_agent }
   const payloadMetaData = { _archive: archive }
 
-  const validationErrors = validateBody(body)
+  /*const validationErrors = validateBody(body)
 
   if (validationErrors.length > 0) {
     console.log(`Error: ${validationErrors[0].message}`)
     next({ message: validationErrors[0].message, statusCode: StatusCodes.BAD_REQUEST })
     return
-  }
+  }*/
 
   const { payloads, sanitized } = prepareBoundWitnesses(body, boundWitnessMetaData, payloadMetaData)
 
