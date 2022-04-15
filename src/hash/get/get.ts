@@ -21,7 +21,11 @@ const respondWithBlock = (res: Response, block: XyoPayload) => {
   res.json({ ...deepOmitUnderscoreFields(block) })
 }
 
-const validate: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuery, WithValid<ArchiveLocals>> = (req, res, next) => {
+const validate: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuery, WithValid<ArchiveLocals>> = (
+  req,
+  res,
+  next
+) => {
   const { hash } = req.params
   if (!hash) {
     next({ message: 'Hash not supplied', statusCode: StatusCodes.BAD_REQUEST })
@@ -39,14 +43,20 @@ const validate: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQue
   }
 
   if (reservedHashes.find((reservedHash) => reservedHash === hash)) {
-    console.warn(`This should not happen: ':hash' path did not run: [res.headersSent !== true, reservedHashes did find, ${hash}]`)
+    console.warn(
+      `This should not happen: ':hash' path did not run: [res.headersSent !== true, reservedHashes did find, ${hash}]`
+    )
     next()
     res.locals.valid = false
     return
   }
 }
 
-const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuery, WithValid<ArchiveLocals>> = async (req, res, next) => {
+const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuery, WithValid<ArchiveLocals>> = async (
+  req,
+  res,
+  next
+) => {
   const { hash } = req.params
   validate(req, res, next)
   if (!res.locals.valid) {
