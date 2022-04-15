@@ -8,11 +8,7 @@ export class ArchiveOwnerStrategy extends Strategy {
   constructor() {
     super()
   }
-  override async authenticate(
-    this: StrategyCreated<this, this & StrategyCreatedStatic>,
-    req: Request,
-    _options?: unknown
-  ) {
+  override async authenticate(this: StrategyCreated<this, this & StrategyCreatedStatic>, req: Request, _options?: unknown) {
     try {
       const { user } = req
       if (!user) {

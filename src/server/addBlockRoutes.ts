@@ -1,13 +1,6 @@
 import { Express } from 'express'
 
-import {
-  getArchiveBlockHash,
-  getArchiveBlockHashPayloads,
-  getArchiveBlockRecent,
-  getArchiveBlocks,
-  getArchiveBlockStats,
-  postArchiveBlock,
-} from '../archive'
+import { getArchiveBlockHash, getArchiveBlockHashPayloads, getArchiveBlockRecent, getArchiveBlocks, getArchiveBlockStats, postArchiveBlock } from '../archive'
 import { requireArchiveAccess } from '../middleware'
 import { notImplemented } from './notImplemented'
 

@@ -9,13 +9,7 @@ import { WithId } from 'mongodb'
 import { getArchivistBoundWitnessesMongoSdk } from '../../../../lib'
 import { BlockChainPathParams } from './blockChainPathParams'
 
-const getBlocks = async (
-  archive: string,
-  hash: string,
-  address: string,
-  blocks: WithId<XyoBoundWitness>[],
-  limit: number
-) => {
+const getBlocks = async (archive: string, hash: string, address: string, blocks: WithId<XyoBoundWitness>[], limit: number) => {
   const sdk = await getArchivistBoundWitnessesMongoSdk(archive)
   const block = (await sdk.findByHash(hash)).pop()
   if (block) {

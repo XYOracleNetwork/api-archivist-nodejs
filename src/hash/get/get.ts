@@ -20,11 +20,7 @@ const respondWithBlock = (res: Response, block: XyoBoundWitness | XyoPayload) =>
   res.json({ ...deepOmitUnderscoreFields(block) })
 }
 
-const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuery, ArchiveLocals> = async (
-  req,
-  res,
-  next
-) => {
+const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuery, ArchiveLocals> = async (req, res, next) => {
   const { hash } = req.params
   if (!hash) {
     next({ message: 'Hash not supplied', statusCode: StatusCodes.BAD_REQUEST })
@@ -40,9 +36,7 @@ const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuer
   }
 
   if (reservedHashes.find((reservedHash) => reservedHash === hash)) {
-    console.warn(
-      `This should not happen: ':hash' path did not run: [res.headersSent !== true, reservedHashes did find, ${hash}]`
-    )
+    console.warn(`This should not happen: ':hash' path did not run: [res.headersSent !== true, reservedHashes did find, ${hash}]`)
     next()
     return
   }

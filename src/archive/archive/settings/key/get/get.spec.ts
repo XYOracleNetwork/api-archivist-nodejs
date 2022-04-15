@@ -14,17 +14,11 @@ describe('/archive/:archive/settings/key', () => {
       await getArchivist().get(`/archive/${archive}/settings/key`).expect(StatusCodes.UNAUTHORIZED)
     })
     it('supports JWT', async () => {
-      await getArchivist()
-        .get(`/archive/${archive}/settings/key`)
-        .auth(token, { type: 'bearer' })
-        .expect(StatusCodes.OK)
+      await getArchivist().get(`/archive/${archive}/settings/key`).auth(token, { type: 'bearer' }).expect(StatusCodes.OK)
     })
     it('supports API Key', async () => {
       const createKeyResponse = await createArchiveKey(token, archive)
-      await getArchivist()
-        .get(`/archive/${archive}/settings/key`)
-        .set('x-api-key', createKeyResponse.key)
-        .expect(StatusCodes.OK)
+      await getArchivist().get(`/archive/${archive}/settings/key`).set('x-api-key', createKeyResponse.key).expect(StatusCodes.OK)
     })
   })
   it('Returns the keys for the archive', async () => {

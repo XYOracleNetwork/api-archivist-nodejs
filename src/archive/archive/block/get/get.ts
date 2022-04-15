@@ -16,12 +16,7 @@ export interface GetArchiveBlocksQueryParams extends NoReqQuery {
   timestamp?: string
 }
 
-const getBoundWitnesses = async (
-  archive: string,
-  timestamp?: number,
-  limit = defaultLimit,
-  sortOrder: SortDirection = 'asc'
-): Promise<XyoBoundWitness[] | null> => {
+const getBoundWitnesses = async (archive: string, timestamp?: number, limit = defaultLimit, sortOrder: SortDirection = 'asc'): Promise<XyoBoundWitness[] | null> => {
   const sdk = await getArchivistBoundWitnessesMongoSdk(archive)
   if (timestamp) {
     return sortOrder === 'asc' ? sdk.findAfter(timestamp, limit) : sdk.findBefore(timestamp, limit)
@@ -30,13 +25,7 @@ const getBoundWitnesses = async (
   return sortOrder === 'asc' ? sdk.findAfter(0, limit) : sdk.findBefore(Date.now(), limit)
 }
 
-const handler: RequestHandler<
-  ArchivePathParams,
-  Pick<XyoBoundWitness, string>[],
-  NoReqBody,
-  GetArchiveBlocksQueryParams,
-  ArchiveLocals
-> = async (req, res, next) => {
+const handler: RequestHandler<ArchivePathParams, Pick<XyoBoundWitness, string>[], NoReqBody, GetArchiveBlocksQueryParams, ArchiveLocals> = async (req, res, next) => {
   const { archive } = res.locals
   if (!archive) {
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })

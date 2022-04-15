@@ -17,9 +17,7 @@ export const isRequestUserOwnerOfArchive = (req: Request, archive: XyoArchive): 
   return reqUserId === archiveOwnerId
 }
 
-export const isRequestUserOwnerOfRequestedArchive = (
-  req: Request<ArchivePathParams, NoResBody, NoReqBody, NoReqQuery, ArchiveLocals>
-): boolean => {
+export const isRequestUserOwnerOfRequestedArchive = (req: Request<ArchivePathParams, NoResBody, NoReqBody, NoReqQuery, ArchiveLocals>): boolean => {
   // Get the archive from locals
   const record = req?.res?.locals?.archive
 

@@ -8,8 +8,7 @@ export type DomainPathParams = {
 
 const handler: RequestHandler<DomainPathParams, XyoDomainConfig> = async (req, res, next) => {
   const { domain } = req.params
-  const wrapper = new XyoDomainConfigWrapper()
-  const config = await wrapper.discover(domain)
+  const config = await XyoDomainConfigWrapper.discover(domain)
   res.json(config)
   next()
 }

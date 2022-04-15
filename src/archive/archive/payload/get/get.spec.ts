@@ -2,16 +2,7 @@ import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import { SortDirection } from '../../../../model'
-import {
-  claimArchive,
-  getArchiveName,
-  getArchivist,
-  getNewBlockWithPayloads,
-  getPayloadsByTimestamp,
-  getRecentPayloads,
-  getTokenForNewUser,
-  postBlock,
-} from '../../../../test'
+import { claimArchive, getArchiveName, getArchivist, getNewBlockWithPayloads, getPayloadsByTimestamp, getRecentPayloads, getTokenForNewUser, postBlock } from '../../../../test'
 
 const sortDirections: SortDirection[] = ['asc', 'desc']
 
@@ -35,11 +26,7 @@ describe('/archive/:archive/payload', () => {
     expect(recentPayloads.length).toBeGreaterThan(10)
   })
   it(`With missing timestamp returns ${ReasonPhrases.OK}`, async () => {
-    await getArchivist()
-      .get(`/archive/${archive}/block`)
-      .query({ limit: 10, order: 'asc' })
-      .auth(token, { type: 'bearer' })
-      .expect(StatusCodes.OK)
+    await getArchivist().get(`/archive/${archive}/block`).query({ limit: 10, order: 'asc' }).auth(token, { type: 'bearer' }).expect(StatusCodes.OK)
   })
   describe('With valid data', () => {
     describe.each(sortDirections)('In %s order', (order: SortDirection) => {

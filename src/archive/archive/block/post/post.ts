@@ -3,13 +3,13 @@ import 'source-map-support/register'
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
 import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
-import { StatusCodes } from 'http-status-codes'
 
+//import { StatusCodes } from 'http-status-codes'
 import { ArchivePathParams } from '../../../../model'
 import { prepareBoundWitnesses } from './prepareBoundWitnesses'
 import { storeBoundWitnesses } from './storeBoundWitnesses'
 import { storePayloads } from './storePayloads'
-import { validateBody } from './validateBody'
+//import { validateBody } from './validateBody'
 
 const handler: RequestHandler<ArchivePathParams, XyoBoundWitness[], XyoBoundWitness[]> = async (req, res, next) => {
   const { archive } = req.params
