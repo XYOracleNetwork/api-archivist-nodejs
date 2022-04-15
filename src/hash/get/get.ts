@@ -1,11 +1,12 @@
 import { asyncHandler, NoReqBody, NoReqQuery } from '@xylabs/sdk-api-express-ecs'
-import { deepOmitUnderscoreFields, XyoBoundWitness, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { deepOmitUnderscoreFields, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
 import { findByHash, getArchiveByName, isPublicArchive, isRequestUserOwnerOfArchive } from '../../lib'
 import { setRawResponseFormat } from '../../middleware'
 import { ArchiveLocals } from '../../model'
+import { WithValid } from './WithValid'
 
 const reservedHashes = ['archive', 'schema', 'doc', 'domain']
 
@@ -15,15 +16,16 @@ export type HashPathParams = {
 
 export type HashResponse = Record<string, unknown>
 
-const respondWithBlock = (res: Response, block: XyoBoundWitness | XyoPayload) => {
+const respondWithBlock = (res: Response, block: XyoPayload) => {
   setRawResponseFormat(res)
   res.json({ ...deepOmitUnderscoreFields(block) })
 }
 
-const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuery, ArchiveLocals> = async (req, res, next) => {
+const validate: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuery, WithValid<ArchiveLocals>> = (req, res, next) => {
   const { hash } = req.params
   if (!hash) {
     next({ message: 'Hash not supplied', statusCode: StatusCodes.BAD_REQUEST })
+    res.locals.valid = false
     return
   }
 
@@ -32,12 +34,22 @@ const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuer
   // NOTE: Remove this if route regex can filter our /archive from matching this route
   if (res.headersSent) {
     next()
+    res.locals.valid = false
     return
   }
 
   if (reservedHashes.find((reservedHash) => reservedHash === hash)) {
     console.warn(`This should not happen: ':hash' path did not run: [res.headersSent !== true, reservedHashes did find, ${hash}]`)
     next()
+    res.locals.valid = false
+    return
+  }
+}
+
+const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuery, WithValid<ArchiveLocals>> = async (req, res, next) => {
+  const { hash } = req.params
+  validate(req, res, next)
+  if (!res.locals.valid) {
     return
   }
 
