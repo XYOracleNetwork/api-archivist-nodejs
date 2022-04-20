@@ -44,6 +44,7 @@ const validate: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQue
     res.locals.valid = false
     return
   }
+  res.locals.valid = true
 }
 
 const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuery, WithValid<ArchiveLocals>> = async (req, res, next) => {
