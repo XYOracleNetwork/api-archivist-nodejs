@@ -30,7 +30,7 @@ const validateParams: RequestHandler<HashPathParams> = (req, res, next) => {
   next()
 }
 
-const validateNotHandled: RequestHandler<HashPathParams> = (req, res, next) => {
+const validateNotReserved: RequestHandler<HashPathParams> = (req, res, next) => {
   const { hash } = req.params
   // Since this is the default/catch-all route we need to ensure that the
   // request hasn't already been handled by another route
@@ -87,4 +87,4 @@ const respondWithBlock: RequestHandler<HashPathParams, HashResponse, NoReqBody, 
   return
 }
 
-export const getByHash = [validateParams, validateNotHandled, asyncHandler(validateHashExists), asyncHandler(validateUserCanAccessBlock), respondWithBlock]
+export const getByHash = [validateParams, validateNotReserved, asyncHandler(validateHashExists), asyncHandler(validateUserCanAccessBlock), respondWithBlock]
