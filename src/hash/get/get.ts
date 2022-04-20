@@ -18,6 +18,10 @@ type BlocksLocals = {
   blocks: XyoPayload[]
 }
 
+type FoundBlockLocals = BlocksLocals & {
+  block?: XyoPayload
+}
+
 const validateParams: RequestHandler<HashPathParams> = (req, res, next) => {
   const { hash } = req.params
   if (!hash) {
@@ -51,7 +55,7 @@ const validateHashExists: RequestHandler<HashPathParams, HashResponse, NoReqBody
   next()
 }
 
-const respondWithBlock: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuery, BlocksLocals> = async (req, res, next) => {
+const validateUserCanAccessBlock: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuery, FoundBlockLocals> = async (req, res, next) => {
   for (const block of res.locals.blocks) {
     if (!block?._archive) {
       console.log(`No Archive For Block: ${JSON.stringify(block, null, 2)}`)
@@ -65,14 +69,22 @@ const respondWithBlock: RequestHandler<HashPathParams, HashResponse, NoReqBody, 
     // If the archive is public or if the archive is private but this is
     // an auth'd request from the archive owner
     if (isPublicArchive(archive) || isRequestUserOwnerOfArchive(req, archive)) {
-      setRawResponseFormat(res)
-      res.json({ ...deepOmitUnderscoreFields(block) })
-      next()
-      return
+      res.locals.block = block
+      break
     }
   }
-  next({ message: 'Hash not found', statusCode: StatusCodes.NOT_FOUND })
+  next()
+}
+
+const respondWithBlock: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuery, FoundBlockLocals> = (req, res, next) => {
+  const { block } = res.locals
+  if (block) {
+    setRawResponseFormat(res)
+    res.json({ ...deepOmitUnderscoreFields(block) })
+  } else {
+    next({ message: 'Hash not found', statusCode: StatusCodes.NOT_FOUND })
+  }
   return
 }
 
-export const getByHash = [validateParams, validateNotHandled, asyncHandler(validateHashExists), asyncHandler(respondWithBlock)]
+export const getByHash = [validateParams, validateNotHandled, asyncHandler(validateHashExists), asyncHandler(validateUserCanAccessBlock), respondWithBlock]
