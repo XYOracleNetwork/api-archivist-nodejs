@@ -1,4 +1,4 @@
-import { XyoArchive, XyoArchiveKey, XyoBoundWitness, XyoBoundWitnessBuilder, XyoDomainConfig, XyoPayload, XyoPayloadBuilder, XyoWallet } from '@xyo-network/sdk-xyo-client-js'
+import { XyoAccount, XyoArchive, XyoArchiveKey, XyoBoundWitness, XyoBoundWitnessBuilder, XyoDomainConfig, XyoPayload, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
 import { Wallet } from 'ethers'
 import { StatusCodes } from 'http-status-codes'
 import supertest, { SuperTest, Test } from 'supertest'
@@ -17,7 +17,7 @@ test('Must have APP_PORT ENV VAR defined', () => {
 const request = supertest(`http://localhost:${process.env.APP_PORT}`)
 
 const schema = 'co.coinapp.current.user.witness'
-const address = XyoWallet.fromPhrase('test')
+const address = XyoAccount.fromPhrase('test')
 const payloadTemplate = {
   balance: 10000.0,
   daysOld: 1,
@@ -40,7 +40,7 @@ const knownPayload = new XyoPayloadBuilder({ schema })
   })
   .build()
 export const knownPayloadHash = knownPayload._hash || ''
-export const knownBlock = new XyoBoundWitnessBuilder({ inlinePayloads: true }).witness(XyoWallet.random()).payload(knownPayload).build()
+export const knownBlock = new XyoBoundWitnessBuilder({ inlinePayloads: true }).witness(XyoAccount.random()).payload(knownPayload).build()
 export const knownBlockHash = knownBlock._hash || ''
 
 export interface TestWeb2User {
@@ -183,13 +183,13 @@ export const getNewBlockWithPayloads = (numPayloads = 1) => {
 
 export const getNewBlockWithBoundWitnesses = (numBoundWitnesses = 1) => {
   return new Array(numBoundWitnesses).fill(0).map(() => {
-    return new XyoBoundWitnessBuilder({ inlinePayloads: true }).witness(XyoWallet.random()).build()
+    return new XyoBoundWitnessBuilder({ inlinePayloads: true }).witness(XyoAccount.random()).build()
   })
 }
 
 export const getNewBlockWithBoundWitnessesWithPayloads = (numBoundWitnesses = 1, numPayloads = 1) => {
   return new Array(numBoundWitnesses).fill(0).map(() => {
-    return new XyoBoundWitnessBuilder({ inlinePayloads: true }).witness(XyoWallet.random()).payloads(getPayloads(numPayloads)).build()
+    return new XyoBoundWitnessBuilder({ inlinePayloads: true }).witness(XyoAccount.random()).payloads(getPayloads(numPayloads)).build()
   })
 }
 
