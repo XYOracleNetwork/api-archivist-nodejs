@@ -1,6 +1,7 @@
+import { jsonBodyParser } from '@xylabs/sdk-api-express-ecs'
 import { Express } from 'express'
 
-import { archiveLocals, jsonBodyParser, responseProfiler, standardResponses, useRequestCounters } from '../middleware'
+import { archiveLocals, responseProfiler, standardResponses, useRequestCounters } from '../middleware'
 
 export const addMiddleware = (app: Express) => {
   app.use(responseProfiler)
