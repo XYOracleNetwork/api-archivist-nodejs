@@ -87,4 +87,4 @@ const respondWithBlock: RequestHandler<HashPathParams, HashResponse, NoReqBody, 
   return
 }
 
-export const getByHash = [validateParams, validateNotReserved, asyncHandler(validateHashExists), asyncHandler(validateUserCanAccessBlock), respondWithBlock]
+export const getByHash = [validateParams, validateNotReserved, asyncHandler(validateHashExists), asyncHandler(validateUserCanAccessBlock), respondWithBlock] as RequestHandler[]
