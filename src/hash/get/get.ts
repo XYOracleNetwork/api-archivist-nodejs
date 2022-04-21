@@ -1,12 +1,10 @@
 import { asyncHandler, NoReqBody, NoReqQuery } from '@xylabs/sdk-api-express-ecs'
 import { deepOmitUnderscoreFields, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
-import { RequestHandler, Response } from 'express'
+import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
 import { findByHash, getArchiveByName, isPublicArchive, isRequestUserOwnerOfArchive } from '../../lib'
 import { setRawResponseFormat } from '../../middleware'
-import { ArchiveLocals } from '../../model'
-import { WithValid } from './WithValid'
 
 const reservedHashes = ['archive', 'schema', 'doc', 'domain']
 
@@ -16,50 +14,49 @@ export type HashPathParams = {
 
 export type HashResponse = Record<string, unknown>
 
-const respondWithBlock = (res: Response, block: XyoPayload) => {
-  setRawResponseFormat(res)
-  res.json({ ...deepOmitUnderscoreFields(block) })
+type BlocksLocals = {
+  blocks: XyoPayload[]
 }
 
-const validate: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuery, WithValid<ArchiveLocals>> = (req, res, next) => {
+type FoundBlockLocals = BlocksLocals & {
+  block?: XyoPayload
+}
+
+const validateParams: RequestHandler<HashPathParams> = (req, res, next) => {
   const { hash } = req.params
   if (!hash) {
     next({ message: 'Hash not supplied', statusCode: StatusCodes.BAD_REQUEST })
-    res.locals.valid = false
-    return
   }
+  next()
+}
 
+const validateNotReserved: RequestHandler<HashPathParams> = (req, res, next) => {
+  const { hash } = req.params
   // Since this is the default/catch-all route we need to ensure that the
   // request hasn't already been handled by another route
   // NOTE: Remove this if route regex can filter our /archive from matching this route
   if (res.headersSent) {
-    next()
-    res.locals.valid = false
     return
-  }
-
-  if (reservedHashes.find((reservedHash) => reservedHash === hash)) {
+  } else if (reservedHashes.find((reservedHash) => reservedHash === hash)) {
     console.warn(`This should not happen: ':hash' path did not run: [res.headersSent !== true, reservedHashes did find, ${hash}]`)
-    next()
-    res.locals.valid = false
-    return
+    next({ message: 'Error processing request', statusCode: StatusCodes.INTERNAL_SERVER_ERROR })
   }
+  next()
 }
 
-const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuery, WithValid<ArchiveLocals>> = async (req, res, next) => {
+const validateHashExists: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuery, BlocksLocals> = async (req, res, next) => {
   const { hash } = req.params
-  validate(req, res, next)
-  if (!res.locals.valid) {
-    return
-  }
-
   const blocks = await findByHash(hash)
   if (blocks.length === 0) {
     next({ message: 'Hash not found', statusCode: StatusCodes.NOT_FOUND })
     return
   }
+  res.locals.blocks = blocks
+  next()
+}
 
-  for (const block of blocks) {
+const validateUserCanAccessBlock: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuery, FoundBlockLocals> = async (req, res, next) => {
+  for (const block of res.locals.blocks) {
     if (!block?._archive) {
       console.log(`No Archive For Block: ${JSON.stringify(block, null, 2)}`)
       continue
@@ -72,13 +69,22 @@ const handler: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuer
     // If the archive is public or if the archive is private but this is
     // an auth'd request from the archive owner
     if (isPublicArchive(archive) || isRequestUserOwnerOfArchive(req, archive)) {
-      respondWithBlock(res, block)
-      next()
-      return
+      res.locals.block = block
+      break
     }
   }
-  next({ message: 'Hash not found', statusCode: StatusCodes.NOT_FOUND })
+  next()
+}
+
+const respondWithBlock: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuery, FoundBlockLocals> = (req, res, next) => {
+  const { block } = res.locals
+  if (block) {
+    setRawResponseFormat(res)
+    res.json({ ...deepOmitUnderscoreFields(block) })
+  } else {
+    next({ message: 'Hash not found', statusCode: StatusCodes.NOT_FOUND })
+  }
   return
 }
 
-export const getByHash = asyncHandler(handler)
+export const getByHash = [validateParams, validateNotReserved, asyncHandler(validateHashExists), asyncHandler(validateUserCanAccessBlock), respondWithBlock] as RequestHandler[]
