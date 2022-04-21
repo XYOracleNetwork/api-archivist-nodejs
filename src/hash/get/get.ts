@@ -57,16 +57,12 @@ const validateHashExists: RequestHandler<HashPathParams, HashResponse, NoReqBody
 
 const validateUserCanAccessBlock: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuery, FoundBlockLocals> = async (req, res, next) => {
   for (const block of res.locals.blocks) {
-    if (block?._archive) {
-      const archive = await getArchiveByName(block?._archive)
-      if (archive) {
-        // If the archive is public or if the archive is private but this is
-        // an auth'd request from the archive owner
-        if (isPublicArchive(archive) || isRequestUserOwnerOfArchive(req, archive)) {
-          res.locals.block = block
-          break
-        }
-      }
+    const archive = await getArchiveByName(block?._archive)
+    // If the archive is public or if the archive is private but this is
+    // an auth'd request from the archive owner
+    if (isPublicArchive(archive) || isRequestUserOwnerOfArchive(req, archive)) {
+      res.locals.block = block
+      break
     }
   }
   next()
