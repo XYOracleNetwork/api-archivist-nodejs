@@ -57,13 +57,8 @@ const validateHashExists: RequestHandler<HashPathParams, HashResponse, NoReqBody
 
 const validateUserCanAccessBlock: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuery, FoundBlockLocals> = async (req, res, next) => {
   for (const block of res.locals.blocks) {
-    if (!block?._archive) {
-      console.log(`No Archive For Block: ${JSON.stringify(block, null, 2)}`)
-      continue
-    }
-    const archive = await getArchiveByName(block._archive)
+    const archive = block?._archive ? await getArchiveByName(block._archive) : null
     if (!archive) {
-      console.log(`No Archive By Name: ${JSON.stringify(block, null, 2)}`)
       continue
     }
     // If the archive is public or if the archive is private but this is
