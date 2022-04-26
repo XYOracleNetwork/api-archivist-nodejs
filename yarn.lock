@@ -3952,7 +3952,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xylabs/sdk-js@npm:^2.4.2, @xylabs/sdk-js@npm:^2.4.5":
+"@xylabs/sdk-js@npm:^2.4.2":
   version: 2.4.5
   resolution: "@xylabs/sdk-js@npm:2.4.5"
   dependencies:
@@ -3961,6 +3961,18 @@ __metadata:
     buffer: ^6.0.3
     rollbar: ^2.24.1
   checksum: a6ac5ecfc5285e4c059072e902538ed27fe607cf8c87715624859faf9bd964e7eff7cd6d74ce219dc3be8def8a7619d892bc4f0333162b674944687abf3d54b4
+  languageName: node
+  linkType: hard
+
+"@xylabs/sdk-js@npm:^2.5.2":
+  version: 2.5.2
+  resolution: "@xylabs/sdk-js@npm:2.5.2"
+  dependencies:
+    axios: ^0.26.1
+    bn.js: ^5.2.0
+    buffer: ^6.0.3
+    rollbar: ^2.25.0
+  checksum: 1362b0eab9df75e88b8a6bab5ed0d97da21bf4441478b084cc6dc3fa7b4f7c066d1d1adfcf34ca059e736a54ee45ab16a1738fe8e09357c4b75324e345228077
   languageName: node
   linkType: hard
 
@@ -4037,18 +4049,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xyo-network/sdk-xyo-client-js@npm:^2.18.4":
-  version: 2.18.4
-  resolution: "@xyo-network/sdk-xyo-client-js@npm:2.18.4"
+"@xyo-network/sdk-xyo-client-js@npm:^2.19.10":
+  version: 2.19.10
+  resolution: "@xyo-network/sdk-xyo-client-js@npm:2.19.10"
   dependencies:
     "@ethersproject/providers": ^5.6.4
-    "@xylabs/sdk-js": ^2.4.5
+    "@xylabs/sdk-js": ^2.5.2
     "@xyo-network/sdk-xyo-mongo-js": ^2.2.7
     ajv: ^8.11.0
     axios: ^0.26.1
     bn.js: ^5.2.0
     bowser: ^2.11.0
-    buffer: ^6.0.3
     elliptic: ^6.5.4
     keccak256: ^1.0.6
     lodash: ^4.17.21
@@ -4059,10 +4070,10 @@ __metadata:
     pako: ^2.0.4
     randombytes: ^2.1.0
     sha.js: ^2.4.11
-    systeminformation: ^5.11.12
+    systeminformation: ^5.11.14
     ua-parser-js: ^1.0.2
     uuid: ^8.3.2
-  checksum: 790ffe5306f4c0f55c18cf9fca5b6051cda18eea6e9ac685f2009d0001aca7876f57d59796c38d04e1f5f4772e75d3d1822d69b3344fc7e2f29c1829a3bd84b5
+  checksum: 19601c94671f5835454358460ef92a4dff7312d94c2379ea1b4cf169903ccb192accf71dec3f41e674b78f863901f8cc7e595ca08729fda78866cfbc572ff868
   languageName: node
   linkType: hard
 
@@ -4336,10 +4347,10 @@ __metadata:
     "@xylabs/eslint-config": ^2.3.22
     "@xylabs/rollup-config": ^1.1.15
     "@xylabs/sdk-api-express-ecs": ^1.1.4
-    "@xylabs/sdk-js": ^2.4.5
+    "@xylabs/sdk-js": ^2.5.2
     "@xylabs/ts-scripts": ^1.0.53
     "@xylabs/tsconfig": ^1.0.13
-    "@xyo-network/sdk-xyo-client-js": ^2.18.4
+    "@xyo-network/sdk-xyo-client-js": ^2.19.10
     "@xyo-network/sdk-xyo-mongo-js": ^2.2.7
     axios: ^0.26.1
     babel-jest: ^27.5.1
@@ -13942,12 +13953,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"systeminformation@npm:^5.11.12":
-  version: 5.11.12
-  resolution: "systeminformation@npm:5.11.12"
+"systeminformation@npm:^5.11.14":
+  version: 5.11.14
+  resolution: "systeminformation@npm:5.11.14"
   bin:
     systeminformation: lib/cli.js
-  checksum: 7e88b1350f1d82a3fd905ec5a101753a7cc601d799a35b7a7d5c20c9c28969165995db6a4644c51c3febe19587c1d7a1a454253db4897902b6d35f001b5b2b3c
+  checksum: 4e40f71da55899df2722288bd4b44562c22d9427e08591bb39e285303a4cce98b32ef0ccd1570a0264dca7863786fdf8cb71f75da85f77594361b8b7108898c9
   conditions: (os=darwin | os=linux | os=win32 | os=freebsd | os=openbsd | os=netbsd | os=sunos | os=android)
   languageName: node
   linkType: hard
