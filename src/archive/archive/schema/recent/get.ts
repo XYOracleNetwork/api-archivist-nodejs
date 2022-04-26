@@ -15,15 +15,15 @@ import { ArchiveSchemaRecentPathParams } from './ArchiveSchemaRecentPathParams'
 
 const getSchemas = async (archive: string, limit: number) => {
   const sdk = await getArchivistPayloadMongoSdk(archive)
-  return (await sdk.find({ schema: 'network.xyo.schema' })).sort({ timestamp: -1 }).limit(limit)
+  return (await sdk.find({ _archive: archive, schema: 'network.xyo.schema' })).sort({ timestamp: -1 }).limit(limit).toArray()
 }
 
 const handler: RequestHandler<ArchiveSchemaRecentPathParams> = async (req, res, next) => {
   const { archive, limit } = req.params
   const limitNumber = tryParseInt(limit) ?? 20
   assertEx(limitNumber > 0 && limitNumber <= 100, 'limit must be between 1 and 100')
-  const schemas = await getSchemas(archive, limitNumber)
-  res.json(schemas?.map(({ _payloads, ...clean }) => clean))
+  const schemas = (await getSchemas(archive, limitNumber)) || []
+  res.json(schemas)
   next()
 }
 
