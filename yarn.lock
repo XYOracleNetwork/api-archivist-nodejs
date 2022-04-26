@@ -3428,6 +3428,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:^17.0.27":
+  version: 17.0.27
+  resolution: "@types/node@npm:17.0.27"
+  checksum: 6645ca813c24dcb9893729ed6f87a9e415d6df03cb3e1ececa3a03ca845d3324c3808b4dc79c08a4b3c7d1ccd515e6d7e004db9c9123c9333e963675238e39fc
+  languageName: node
+  linkType: hard
+
 "@types/normalize-package-data@npm:^2.4.0":
   version: 2.4.1
   resolution: "@types/normalize-package-data@npm:2.4.1"
@@ -3964,6 +3971,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@xylabs/sdk-js@npm:^2.5.4":
+  version: 2.5.4
+  resolution: "@xylabs/sdk-js@npm:2.5.4"
+  dependencies:
+    "@types/node": ^17.0.27
+    axios: ^0.26.1
+    bn.js: ^5.2.0
+    buffer: ^6.0.3
+    rollbar: ^2.25.0
+  checksum: 8c9f9602510dacc057db2b2cb6e0eaeb1c3c9c29415e374b2d923f95851c7b543a9677bd76de948e4f22da5001d8f63395ab854385386fe51f1507e688c7c884
+  languageName: node
+  linkType: hard
+
 "@xylabs/ts-scripts@npm:^1.0.53":
   version: 1.0.53
   resolution: "@xylabs/ts-scripts@npm:1.0.53"
@@ -4037,9 +4057,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xyo-network/sdk-xyo-client-js@npm:^2.18.4":
-  version: 2.18.4
-  resolution: "@xyo-network/sdk-xyo-client-js@npm:2.18.4"
+"@xyo-network/sdk-xyo-client-js@npm:^2.19.13":
+  version: 2.19.13
+  resolution: "@xyo-network/sdk-xyo-client-js@npm:2.19.13"
   dependencies:
     "@ethersproject/providers": ^5.6.4
     "@xylabs/sdk-js": ^2.4.5
@@ -4062,7 +4082,7 @@ __metadata:
     systeminformation: ^5.11.12
     ua-parser-js: ^1.0.2
     uuid: ^8.3.2
-  checksum: 790ffe5306f4c0f55c18cf9fca5b6051cda18eea6e9ac685f2009d0001aca7876f57d59796c38d04e1f5f4772e75d3d1822d69b3344fc7e2f29c1829a3bd84b5
+  checksum: 9fb6099adfa77e7ef2a1859c0f2413d81e5010cf8ba48b3a8a505fad907e203a25abc872bd3ad7335679690ea21f8f84ca76782ba9cbb228c8e0b3390a768742
   languageName: node
   linkType: hard
 
@@ -4336,10 +4356,10 @@ __metadata:
     "@xylabs/eslint-config": ^2.3.22
     "@xylabs/rollup-config": ^1.1.15
     "@xylabs/sdk-api-express-ecs": ^1.1.4
-    "@xylabs/sdk-js": ^2.4.5
+    "@xylabs/sdk-js": ^2.5.4
     "@xylabs/ts-scripts": ^1.0.53
     "@xylabs/tsconfig": ^1.0.13
-    "@xyo-network/sdk-xyo-client-js": ^2.18.4
+    "@xyo-network/sdk-xyo-client-js": ^2.19.13
     "@xyo-network/sdk-xyo-mongo-js": ^2.2.7
     axios: ^0.26.1
     babel-jest: ^27.5.1
