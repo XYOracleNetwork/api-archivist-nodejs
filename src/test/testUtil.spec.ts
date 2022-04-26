@@ -1,4 +1,14 @@
-import { XyoAccount, XyoArchive, XyoArchiveKey, XyoBoundWitness, XyoBoundWitnessBuilder, XyoDomainConfig, XyoPayload, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
+import {
+  XyoAccount,
+  XyoArchive,
+  XyoArchiveKey,
+  XyoBoundWitness,
+  XyoBoundWitnessBuilder,
+  XyoDomainConfig,
+  XyoPayload,
+  XyoPayloadBuilder,
+  XyoSchemaPayload,
+} from '@xyo-network/sdk-xyo-client-js'
 import { Wallet } from 'ethers'
 import { StatusCodes } from 'http-status-codes'
 import supertest, { SuperTest, Test } from 'supertest'
@@ -269,7 +279,7 @@ export const getPayloadByBlockHash = async (token: string, archive: string, hash
   return response.body.data
 }
 
-export const getSchema = async (schema: string, token?: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoPayload> => {
+export const getSchema = async (schema: string, token?: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoSchemaPayload> => {
   const response = token
     ? await getArchivist().get(`/schema/${schema}`).auth(token, { type: 'bearer' }).expect(expectedStatus)
     : await getArchivist().get(`/schema/${schema}`).expect(expectedStatus)

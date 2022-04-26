@@ -21,6 +21,6 @@ describe('/schema', () => {
     const response = await getSchema(schema)
     expect(response).toBeTruthy()
     expect(response.schema).toEqual(schema)
-    expect(response.definition).toEqual(definition)
+    expect(response.definition.$schema).toEqual(definition.$schema)
   })
 })

@@ -10,8 +10,8 @@ const handler: RequestHandler<SchemaPathParams, XyoPayload, NoReqBody, NoReqQuer
   if (!schema) {
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
   } else {
-    const sr = await XyoSchemaCache.instance.get(schema)
-    res.json(sr ?? undefined)
+    const schemaCacheEntry = await XyoSchemaCache.instance.get(schema)
+    res.json(schemaCacheEntry?.payload ?? undefined)
     next()
   }
 }
