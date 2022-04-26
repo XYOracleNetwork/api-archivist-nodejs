@@ -275,3 +275,10 @@ export const getSchema = async (schema: string, token?: string, expectedStatus: 
     : await getArchivist().get(`/schema/${schema}`).expect(expectedStatus)
   return response.body.data
 }
+
+export const getArchiveSchemaRecent = async (archive: string, token?: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoPayload[]> => {
+  const response = token
+    ? await getArchivist().get(`/archive/${archive}/schema/recent`).auth(token, { type: 'bearer' }).expect(expectedStatus)
+    : await getArchivist().get(`/archive/${archive}/schema/recent`).expect(expectedStatus)
+  return response.body.data
+}
