@@ -2,7 +2,7 @@ import { XyoAccount, XyoBoundWitnessBuilder } from '@xyo-network/sdk-xyo-client-
 
 import { claimArchive, getArchiveSchemaRecent, getTokenForNewUser, postBlock } from '../../../../test'
 
-describe('/archive/:archive/schema/recent', () => {
+describe.skip('/archive/:archive/schema/recent', () => {
   const schema = 'network.xyo.schema'
   let token: string
   let archive: string
