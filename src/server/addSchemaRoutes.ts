@@ -1,6 +1,7 @@
 import { Express } from 'express'
 
-import { allowAnonymous } from '../middleware'
+import { getArchiveSchemaRecent } from '../archive'
+import { allowAnonymous, requireArchiveAccess } from '../middleware'
 import { getSchema, getSchemas } from '../schema'
 
 export const addSchemaRoutes = (app: Express) => {
@@ -18,5 +19,13 @@ export const addSchemaRoutes = (app: Express) => {
     getSchema
     /* #swagger.tags = ['Schema'] */
     /* #swagger.summary = 'Get specific schema if known by archivist' */
+  )
+
+  app.get(
+    '/archive/:archive/schema/recent/:limit?',
+    requireArchiveAccess,
+    getArchiveSchemaRecent
+    /* #swagger.tags = ['Schema'] */
+    /* #swagger.summary = 'Get recent schema for the archive' */
   )
 }
