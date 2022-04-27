@@ -1,4 +1,5 @@
 export * from './archiveLocals'
 export * from './auth'
 export * from './doc'
+export * from './rollbar'
 export * from './standardResponses'
