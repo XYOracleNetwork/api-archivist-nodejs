@@ -1,8 +1,10 @@
 export type MongoDbConnectionStringEnvVar = 'MONGO_CONNECTION_STRING'
 export type MongoDbEnvVars = 'MONGO_DATABASE' | 'MONGO_DOMAIN' | 'MONGO_PASSWORD' | 'MONGO_USERNAME'
 
-export const getMongoDBConfig = (): Record<string, string | undefined> => {
-  const env: Record<string, string | undefined> = {}
+export type MongoEnv = Record<MongoDbEnvVars | MongoDbConnectionStringEnvVar, string | undefined>
+
+export const getMongoDBConfig = (): MongoEnv => {
+  const env: MongoEnv = {} as MongoEnv
   if (process.env.MONGO_CONNECTION_STRING) {
     env.MONGO_CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING
   }
