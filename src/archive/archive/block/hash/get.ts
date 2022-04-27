@@ -7,7 +7,7 @@ import { getArchivistBoundWitnessesMongoSdk, scrubBoundWitnesses } from '../../.
 import { BlockHashPathParams } from './blockHashPathParams'
 
 const getBoundWitness = async (archive: string, hash: string) => {
-  const sdk = await getArchivistBoundWitnessesMongoSdk(archive)
+  const sdk = getArchivistBoundWitnessesMongoSdk(archive)
   return await sdk.findByHash(hash)
 }
 

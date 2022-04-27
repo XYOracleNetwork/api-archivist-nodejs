@@ -10,7 +10,7 @@ import { getArchivistPayloadMongoSdk } from '../../../../lib'
 import { PayloadChainPathParams } from './payloadChainPathParams'
 
 const getPayloads = async (archive: string, hash: string, payloads: WithId<XyoPayload>[], limit: number) => {
-  const sdk = await getArchivistPayloadMongoSdk(archive)
+  const sdk = getArchivistPayloadMongoSdk(archive)
   const payload = (await sdk.findByHash(hash)).pop()
   if (payload) {
     payloads.push(payload)

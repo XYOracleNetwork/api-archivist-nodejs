@@ -15,7 +15,7 @@ export interface StoreArchiveResult extends XyoArchive {
  * @returns The stored archive if the operation was successful, null if not
  */
 export const storeArchive = async (request: XyoArchive): Promise<StoreArchiveResult | null> => {
-  const sdk = await getArchivistArchiveMongoSdk()
+  const sdk = getArchivistArchiveMongoSdk()
   try {
     return await sdk.upsert(request)
   } catch (_error) {

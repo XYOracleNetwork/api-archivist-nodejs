@@ -17,7 +17,7 @@ export interface GetArchivePayloadsQueryParams extends NoReqQuery {
 }
 
 const getPayloads = async (archive: string, timestamp?: number, limit = defaultLimit, sortOrder: SortDirection = 'asc'): Promise<XyoPayload[] | null> => {
-  const sdk = await getArchivistPayloadMongoSdk(archive)
+  const sdk = getArchivistPayloadMongoSdk(archive)
   if (timestamp) {
     return sortOrder === 'asc' ? sdk.findAfter(timestamp, limit) : sdk.findBefore(timestamp, limit)
   }

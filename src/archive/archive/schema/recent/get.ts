@@ -14,7 +14,7 @@ import { ArchiveSchemaRecentPathParams } from './ArchiveSchemaRecentPathParams'
 // }
 
 const getSchemas = async (archive: string, limit: number) => {
-  const sdk = await getArchivistPayloadMongoSdk(archive)
+  const sdk = getArchivistPayloadMongoSdk(archive)
   return (await sdk.find({ _archive: archive, schema: 'network.xyo.schema' })).sort({ timestamp: -1 }).limit(limit).toArray()
 }
 

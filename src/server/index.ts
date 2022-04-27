@@ -38,6 +38,12 @@ export const getApp = (): Express => {
   addSchemaRoutes(app)
   addDomainRoutes(app)
 
+  const userRoutes = configureAuth({
+    apiKey: process.env.API_KEY,
+    secretOrKey: process.env.JWT_SECRET,
+  })
+  app.use('', userRoutes)
+
   /* This needs to be the last true handler since it is a catch all for the root */
   addHashRoutes(app)
   addErrorHandlers(app)
@@ -55,12 +61,8 @@ const server = async (port = 80) => {
     const awsEnv = await getEnvFromAws(awsEnvSecret)
     Object.assign(process.env, awsEnv)
   }
-  const userRoutes = await configureAuth({
-    apiKey: process.env.API_KEY,
-    secretOrKey: process.env.JWT_SECRET,
-  })
+
   const app = getApp()
-  app.use('', userRoutes)
   const host = process.env.PUBLIC_ORIGIN || `http://localhost:${port}`
   await configureDoc(app, { host })
 

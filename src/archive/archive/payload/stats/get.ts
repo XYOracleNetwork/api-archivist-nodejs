@@ -7,7 +7,7 @@ import { getArchivistPayloadMongoSdk } from '../../../../lib'
 import { ArchivePathParams } from '../../../../model'
 
 const getCount = async (archive: string) => {
-  const sdk = await getArchivistPayloadMongoSdk(archive)
+  const sdk = getArchivistPayloadMongoSdk(archive)
   return await sdk.fetchCount()
 }
 
