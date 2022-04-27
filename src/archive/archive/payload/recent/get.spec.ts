@@ -1,20 +1,10 @@
 import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 
-import {
-  claimArchive,
-  getNewBlockWithPayloads,
-  getRecentPayloads,
-  getTokenForNewUser,
-  postBlock,
-} from '../../../../test'
+import { claimArchive, getNewBlockWithPayloads, getRecentPayloads, getTokenForNewUser, postBlock } from '../../../../test'
 
 const defaultReturnLength = 20
 
-const getRecent = async (
-  archive: string,
-  token: string,
-  expectedReturnLength = defaultReturnLength
-): Promise<XyoPayload[]> => {
+const getRecent = async (archive: string, token: string, expectedReturnLength = defaultReturnLength): Promise<XyoPayload[]> => {
   const recent = await getRecentPayloads(archive, token)
   expect(recent).toBeTruthy()
   expect(Array.isArray(recent)).toBe(true)

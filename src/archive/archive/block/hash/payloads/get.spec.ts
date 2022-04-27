@@ -1,11 +1,4 @@
-import {
-  claimArchive,
-  getNewBlock,
-  getNewBlockWithBoundWitnessesWithPayloads,
-  getPayloadByBlockHash,
-  getTokenForNewUser,
-  postBlock,
-} from '../../../../../test'
+import { claimArchive, getNewBlock, getNewBlockWithBoundWitnessesWithPayloads, getPayloadByBlockHash, getTokenForNewUser, postBlock } from '../../../../../test'
 
 describe('/archive/:archive/block/hash/:hash/payloads', () => {
   let token = ''

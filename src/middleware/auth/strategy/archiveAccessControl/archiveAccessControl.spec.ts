@@ -6,11 +6,7 @@ const verifyAnonymousRouteAccess = async (archive: string, expectedStatus: Statu
   await getArchivist().get(`/archive/${archive}/payload/recent`).expect(expectedStatus)
 }
 
-const verifyAuthorizedRouteAccess = async (
-  token: string,
-  archive: string,
-  expectedStatus: StatusCodes = StatusCodes.OK
-) => {
+const verifyAuthorizedRouteAccess = async (token: string, archive: string, expectedStatus: StatusCodes = StatusCodes.OK) => {
   await getArchivist().get(`/archive/${archive}/payload/recent`).auth(token, { type: 'bearer' }).expect(expectedStatus)
 }
 describe('ArchiveAccessControlAuthStrategy', () => {

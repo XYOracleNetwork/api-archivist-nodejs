@@ -29,11 +29,7 @@ class UserMongoSdk extends BaseMongoSdk<User> {
       if (email) {
         filter.$or.push({ email })
       }
-      const result = await collection.findOneAndUpdate(
-        filter,
-        { $set: user },
-        { returnDocument: 'after', upsert: true }
-      )
+      const result = await collection.findOneAndUpdate(filter, { $set: user }, { returnDocument: 'after', upsert: true })
       if (result.ok && result.value) {
         const updated = !!result?.lastErrorObject?.updatedExisting || false
         return { ...result.value, updated }

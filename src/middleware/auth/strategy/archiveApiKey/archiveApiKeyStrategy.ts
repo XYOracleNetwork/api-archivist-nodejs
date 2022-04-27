@@ -8,11 +8,7 @@ export class ArchiveApiKeyStrategy extends Strategy {
   constructor(public readonly userStore: UserStore, public readonly apiKeyHeader = 'x-api-key') {
     super()
   }
-  override async authenticate(
-    this: StrategyCreated<this, this & StrategyCreatedStatic>,
-    req: Request,
-    _options?: unknown
-  ) {
+  override async authenticate(this: StrategyCreated<this, this & StrategyCreatedStatic>, req: Request, _options?: unknown) {
     try {
       // NOTE: There should never be multiple of this header but
       // just to prevent ugliness if someone did send us multiple

@@ -5,11 +5,7 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import { ArchiveLocals, ArchivePathParams } from '../../../model'
 
-const handler: RequestHandler<ArchivePathParams, XyoArchive, NoReqBody, NoReqQuery, ArchiveLocals> = (
-  req,
-  res,
-  next
-) => {
+const handler: RequestHandler<ArchivePathParams, XyoArchive, NoReqBody, NoReqQuery, ArchiveLocals> = (req, res, next) => {
   const { archive } = res.locals
   if (!archive) {
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })

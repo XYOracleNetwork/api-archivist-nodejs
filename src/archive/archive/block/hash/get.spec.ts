@@ -1,11 +1,4 @@
-import {
-  claimArchive,
-  getBlockByHash,
-  getTokenForNewUser,
-  knownBlock,
-  knownBlockHash,
-  postBlock,
-} from '../../../../test'
+import { claimArchive, getBlockByHash, getTokenForNewUser, knownBlock, knownBlockHash, postBlock } from '../../../../test'
 
 describe('/archive/:archive/block/hash/:hash', () => {
   let token = ''

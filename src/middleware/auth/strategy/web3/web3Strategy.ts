@@ -10,11 +10,7 @@ export class Web3AuthStrategy extends Strategy {
   constructor(public readonly userStore: UserStore) {
     super()
   }
-  override async authenticate(
-    this: StrategyCreated<this, this & StrategyCreatedStatic>,
-    req: Request,
-    _options?: unknown
-  ) {
+  override async authenticate(this: StrategyCreated<this, this & StrategyCreatedStatic>, req: Request, _options?: unknown) {
     try {
       const { message, signature } = req.body
       const { address } = req.params

@@ -53,12 +53,9 @@ export const requireArchiveOwner: RequestHandler[] = [requireAuth, archiveOwnerS
 /**
  * If present, require API key OR JWT to be valid, but if absent, allow anonymous access
  */
-export const allowAnonymous: RequestHandler = passport.authenticate(
-  [jwtStrategyName, archiveApiKeyStrategyName, allowUnauthenticatedStrategyName],
-  {
-    session: false,
-  }
-)
+export const allowAnonymous: RequestHandler = passport.authenticate([jwtStrategyName, archiveApiKeyStrategyName, allowUnauthenticatedStrategyName], {
+  session: false,
+})
 
 /**
  * Require that the user can, in some way, access the archive. Either by owning

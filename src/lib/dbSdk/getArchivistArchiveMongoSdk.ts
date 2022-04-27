@@ -53,11 +53,7 @@ class XyoArchiveMongoSdk extends BaseMongoSdk<XyoArchive> {
         throw new Error('Invalid archive creation attempted. Archive and user are required.')
       }
       const filter: UpsertFilter = { $and: [{ archive }, { user }] }
-      const result = await collection.findOneAndUpdate(
-        filter,
-        { $set: item },
-        { returnDocument: 'after', upsert: true }
-      )
+      const result = await collection.findOneAndUpdate(filter, { $set: item }, { returnDocument: 'after', upsert: true })
       if (result.ok && result.value) {
         const updated = !!result?.lastErrorObject?.updatedExisting || false
         return { ...result.value, updated }

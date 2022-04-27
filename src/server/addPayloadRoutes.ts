@@ -1,12 +1,6 @@
 import { Express } from 'express'
 
-import {
-  getArchivePayloadHash,
-  getArchivePayloadRecent,
-  getArchivePayloadRepair,
-  getArchivePayloads,
-  getArchivePayloadStats,
-} from '../archive'
+import { getArchivePayloadHash, getArchivePayloadRecent, getArchivePayloadRepair, getArchivePayloads, getArchivePayloadStats } from '../archive'
 import { requireArchiveAccess } from '../middleware'
 import { notImplemented } from './notImplemented'
 
