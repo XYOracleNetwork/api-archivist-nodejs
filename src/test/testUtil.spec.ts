@@ -25,7 +25,6 @@ test('Must have APP_PORT ENV VAR defined', () => {
   expect(process.env.APP_PORT).toBeTruthy()
 })
 
-// const request = supertest(`http://localhost:${process.env.APP_PORT}`)
 const request = supertest(getApp())
 
 const schema = 'co.coinapp.current.user.witness'
@@ -66,7 +65,6 @@ export interface TestWeb3User {
 
 export const getArchivist = (): SuperTest<Test> => {
   return supertest(getApp())
-  // return supertest(`http://localhost:${process.env.APP_PORT}`)
 }
 
 export const getArchiveName = (): string => {
