@@ -16,6 +16,7 @@ import { v4 } from 'uuid'
 
 import { PayloadRepairHashResponse } from '../archive'
 import { SortDirection } from '../model'
+import { getApp } from '../server'
 
 test('Must have API_KEY ENV VAR defined', () => {
   expect(process.env.API_KEY).toBeTruthy()
@@ -24,7 +25,8 @@ test('Must have APP_PORT ENV VAR defined', () => {
   expect(process.env.APP_PORT).toBeTruthy()
 })
 
-const request = supertest(`http://localhost:${process.env.APP_PORT}`)
+// const request = supertest(`http://localhost:${process.env.APP_PORT}`)
+const request = supertest(getApp())
 
 const schema = 'co.coinapp.current.user.witness'
 const address = XyoAccount.fromPhrase('test')
@@ -63,7 +65,8 @@ export interface TestWeb3User {
 }
 
 export const getArchivist = (): SuperTest<Test> => {
-  return supertest(`http://localhost:${process.env.APP_PORT}`)
+  return supertest(getApp())
+  // return supertest(`http://localhost:${process.env.APP_PORT}`)
 }
 
 export const getArchiveName = (): string => {
@@ -126,33 +129,33 @@ export const invalidateToken = (token: string) => {
 }
 
 export const getArchives = async (token?: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoArchive[]> => {
-  const response = token ? await getArchivist().get('/archive').auth(token, { type: 'bearer' }).expect(expectedStatus) : await getArchivist().get('/archive').expect(expectedStatus)
+  const response = token ? await request.get('/archive').auth(token, { type: 'bearer' }).expect(expectedStatus) : await request.get('/archive').expect(expectedStatus)
   return response.body.data
 }
 
 export const claimArchive = async (token: string, archive?: string, expectedStatus: StatusCodes = StatusCodes.CREATED): Promise<XyoArchive> => {
   if (!archive) archive = getArchiveName()
-  const response = await getArchivist().put(`/archive/${archive}`).auth(token, { type: 'bearer' }).expect(expectedStatus)
+  const response = await request.put(`/archive/${archive}`).auth(token, { type: 'bearer' }).expect(expectedStatus)
   return response.body.data
 }
 
 export const getArchive = async (archive: string, token?: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoArchive> => {
   const response = token
-    ? await getArchivist().get(`/archive/${archive}`).auth(token, { type: 'bearer' }).expect(expectedStatus)
-    : await getArchivist().get(`/archive/${archive}`).expect(expectedStatus)
+    ? await request.get(`/archive/${archive}`).auth(token, { type: 'bearer' }).expect(expectedStatus)
+    : await request.get(`/archive/${archive}`).expect(expectedStatus)
   return response.body.data
 }
 
 export const getDomain = async (domain: string, token?: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoDomainConfig> => {
   const response = token
-    ? await getArchivist().get(`/domain/${domain}`).auth(token, { type: 'bearer' }).expect(expectedStatus)
-    : await getArchivist().get(`/domain/${domain}`).expect(expectedStatus)
+    ? await request.get(`/domain/${domain}`).auth(token, { type: 'bearer' }).expect(expectedStatus)
+    : await request.get(`/domain/${domain}`).expect(expectedStatus)
   return response.body.data
 }
 
 export const setArchiveAccessControl = async (token: string, archive: string, data: XyoArchive, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoArchive> => {
   if (!archive) archive = getArchiveName()
-  const response = await getArchivist()
+  const response = await request
     .put(`/archive/${archive}`)
     .auth(token, { type: 'bearer' })
     .send(data ?? { accessControl: false, archive })
@@ -161,12 +164,12 @@ export const setArchiveAccessControl = async (token: string, archive: string, da
 }
 
 export const createArchiveKey = async (token: string, archive: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoArchiveKey> => {
-  const response = await getArchivist().post(`/archive/${archive}/settings/key`).auth(token, { type: 'bearer' }).expect(expectedStatus)
+  const response = await request.post(`/archive/${archive}/settings/key`).auth(token, { type: 'bearer' }).expect(expectedStatus)
   return response.body.data
 }
 
 export const getArchiveKeys = async (token: string, archive: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoArchiveKey[]> => {
-  const response = await getArchivist().get(`/archive/${archive}/settings/key`).auth(token, { type: 'bearer' }).expect(expectedStatus)
+  const response = await request.get(`/archive/${archive}/settings/key`).auth(token, { type: 'bearer' }).expect(expectedStatus)
   return response.body.data
 }
 
@@ -204,7 +207,7 @@ export const getNewBlockWithBoundWitnessesWithPayloads = (numBoundWitnesses = 1,
 }
 
 export const getHash = async (hash: string, token?: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoBoundWitness | XyoPayload> => {
-  const response = token ? await getArchivist().get(`/${hash}`).auth(token, { type: 'bearer' }).expect(expectedStatus) : await getArchivist().get(`/${hash}`).expect(expectedStatus)
+  const response = token ? await request.get(`/${hash}`).auth(token, { type: 'bearer' }).expect(expectedStatus) : await request.get(`/${hash}`).expect(expectedStatus)
   return response.body
 }
 
@@ -216,13 +219,13 @@ export const postBlock = async (
 ): Promise<XyoBoundWitness[]> => {
   const data = ([] as XyoBoundWitness[]).concat(Array.isArray(boundWitnesses) ? boundWitnesses : [boundWitnesses])
   const response = token
-    ? await getArchivist().post(`/archive/${archive}/block`).auth(token, { type: 'bearer' }).send(data).expect(expectedStatus)
-    : await getArchivist().post(`/archive/${archive}/block`).send(data).expect(expectedStatus)
+    ? await request.post(`/archive/${archive}/block`).auth(token, { type: 'bearer' }).send(data).expect(expectedStatus)
+    : await request.post(`/archive/${archive}/block`).send(data).expect(expectedStatus)
   return response.body.data
 }
 
 export const getBlockByHash = async (token: string, archive: string, hash: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoPayload[]> => {
-  const response = await getArchivist().get(`/archive/${archive}/block/hash/${hash}`).auth(token, { type: 'bearer' }).expect(expectedStatus)
+  const response = await request.get(`/archive/${archive}/block/hash/${hash}`).auth(token, { type: 'bearer' }).expect(expectedStatus)
   return response.body.data
 }
 
@@ -234,19 +237,19 @@ export const getBlocksByTimestamp = async (
   order: SortDirection = 'asc',
   expectedStatus: StatusCodes = StatusCodes.OK
 ): Promise<XyoBoundWitness[]> => {
-  const response = await getArchivist().get(`/archive/${archive}/block`).query({ limit, order, timestamp }).auth(token, { type: 'bearer' }).expect(expectedStatus)
+  const response = await request.get(`/archive/${archive}/block`).query({ limit, order, timestamp }).auth(token, { type: 'bearer' }).expect(expectedStatus)
   return response.body.data
 }
 
 export const getRecentBlocks = async (archive: string, token?: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoBoundWitness[]> => {
   const response = token
-    ? await getArchivist().get(`/archive/${archive}/block/recent`).auth(token, { type: 'bearer' }).expect(expectedStatus)
-    : await getArchivist().get(`/archive/${archive}/block/recent`).expect(expectedStatus)
+    ? await request.get(`/archive/${archive}/block/recent`).auth(token, { type: 'bearer' }).expect(expectedStatus)
+    : await request.get(`/archive/${archive}/block/recent`).expect(expectedStatus)
   return response.body.data
 }
 
 export const getPayloadByHash = async (token: string, archive: string, hash: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoPayload[]> => {
-  const response = await getArchivist().get(`/archive/${archive}/payload/hash/${hash}`).auth(token, { type: 'bearer' }).expect(expectedStatus)
+  const response = await request.get(`/archive/${archive}/payload/hash/${hash}`).auth(token, { type: 'bearer' }).expect(expectedStatus)
   return response.body.data
 }
 
@@ -258,37 +261,37 @@ export const getPayloadsByTimestamp = async (
   order: SortDirection = 'asc',
   expectedStatus: StatusCodes = StatusCodes.OK
 ): Promise<XyoPayload[]> => {
-  const response = await getArchivist().get(`/archive/${archive}/payload`).query({ limit, order, timestamp }).auth(token, { type: 'bearer' }).expect(expectedStatus)
+  const response = await request.get(`/archive/${archive}/payload`).query({ limit, order, timestamp }).auth(token, { type: 'bearer' }).expect(expectedStatus)
   return response.body.data
 }
 
 export const repairPayloadByHash = async (token: string, archive: string, hash: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<PayloadRepairHashResponse> => {
-  const response = await getArchivist().get(`/archive/${archive}/payload/hash/${hash}/repair`).auth(token, { type: 'bearer' }).expect(expectedStatus)
+  const response = await request.get(`/archive/${archive}/payload/hash/${hash}/repair`).auth(token, { type: 'bearer' }).expect(expectedStatus)
   return response.body.data
 }
 
 export const getRecentPayloads = async (archive: string, token?: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoPayload[]> => {
   const response = token
-    ? await getArchivist().get(`/archive/${archive}/payload/recent`).auth(token, { type: 'bearer' }).expect(expectedStatus)
-    : await getArchivist().get(`/archive/${archive}/payload/recent`).expect(expectedStatus)
+    ? await request.get(`/archive/${archive}/payload/recent`).auth(token, { type: 'bearer' }).expect(expectedStatus)
+    : await request.get(`/archive/${archive}/payload/recent`).expect(expectedStatus)
   return response.body.data
 }
 
 export const getPayloadByBlockHash = async (token: string, archive: string, hash: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoPayload[]> => {
-  const response = await getArchivist().get(`/archive/${archive}/block/hash/${hash}/payloads`).auth(token, { type: 'bearer' }).expect(expectedStatus)
+  const response = await request.get(`/archive/${archive}/block/hash/${hash}/payloads`).auth(token, { type: 'bearer' }).expect(expectedStatus)
   return response.body.data
 }
 
 export const getSchema = async (schema: string, token?: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoSchemaPayload> => {
   const response = token
-    ? await getArchivist().get(`/schema/${schema}`).auth(token, { type: 'bearer' }).expect(expectedStatus)
-    : await getArchivist().get(`/schema/${schema}`).expect(expectedStatus)
+    ? await request.get(`/schema/${schema}`).auth(token, { type: 'bearer' }).expect(expectedStatus)
+    : await request.get(`/schema/${schema}`).expect(expectedStatus)
   return response.body.data
 }
 
 export const getArchiveSchemaRecent = async (archive: string, token?: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoPayload[]> => {
   const response = token
-    ? await getArchivist().get(`/archive/${archive}/schema/recent`).auth(token, { type: 'bearer' }).expect(expectedStatus)
-    : await getArchivist().get(`/archive/${archive}/schema/recent`).expect(expectedStatus)
+    ? await request.get(`/archive/${archive}/schema/recent`).auth(token, { type: 'bearer' }).expect(expectedStatus)
+    : await request.get(`/archive/${archive}/schema/recent`).expect(expectedStatus)
   return response.body.data
 }
