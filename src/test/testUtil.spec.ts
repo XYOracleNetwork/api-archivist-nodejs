@@ -103,7 +103,7 @@ export const getExistingWeb3User = async (expectedStatus: StatusCodes = StatusCo
 }
 
 export const signInWeb3User = async (user: TestWeb3User): Promise<string> => {
-  const challengeResponse = await request.post(`/wallet/${user.address}/challenge`).send(user).expect(StatusCodes.OK)
+  const challengeResponse = await request.post(`/account/${user.address}/challenge`).send(user).expect(StatusCodes.OK)
   const { state } = challengeResponse.body.data
   const wallet = new Wallet(user.privateKey)
   const signature = await wallet.signMessage(state)
@@ -112,7 +112,7 @@ export const signInWeb3User = async (user: TestWeb3User): Promise<string> => {
     message: state,
     signature,
   }
-  const tokenResponse = await request.post(`/wallet/${wallet.address}/verify`).send(verifyBody).expect(StatusCodes.OK)
+  const tokenResponse = await request.post(`/account/${wallet.address}/verify`).send(verifyBody).expect(StatusCodes.OK)
   return tokenResponse.body.data.token
 }
 
