@@ -94,7 +94,9 @@ router.post(
   postAccountChallenge /*
     #swagger.tags = ['Wallet']
     #swagger.basePath = '/'
-    #swagger.summary = 'Challenge (web3)'
+    #swagger.deprecated = true
+    #swagger.ignore = true
+    #swagger.summary = 'Temporary support for legacy calls'
   */
 )
 router.post(
@@ -112,7 +114,9 @@ router.post(
   (req, res, next) => respondWithJwt(req, res, next) /*
     #swagger.tags = ['Wallet']
     #swagger.basePath = '/'
-    #swagger.summary = 'Verify (web3)'
+    #swagger.deprecated = true
+    #swagger.ignore = true
+    #swagger.summary = 'Temporary support for legacy calls'
   */
 )
 
