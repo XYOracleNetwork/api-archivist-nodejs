@@ -1,7 +1,7 @@
 import { getEnvFromAws } from '@xylabs/sdk-api-express-ecs'
 import compression from 'compression'
 import cors from 'cors'
-import express from 'express'
+import express, { Express } from 'express'
 
 import { configureAuth, configureDoc } from '../middleware'
 import { addArchiveRoutes } from './addArchiveRoutes'
@@ -15,17 +15,7 @@ import { addPayloadRoutes } from './addPayloadRoutes'
 import { addPayloadSchemaRoutes } from './addPayloadSchemaRoutes'
 import { addSchemaRoutes } from './addSchemaRoutes'
 
-const server = async (port = 80) => {
-  // If an AWS ARN was supplied for Secrets Manager
-  const awsEnvSecret = process.env.AWS_ENV_SECRET_ARN
-  if (awsEnvSecret) {
-    console.log('Bootstrapping ENV from AWS')
-    // Merge the values from AWS into the current ENV
-    // with AWS taking precedence
-    const awsEnv = await getEnvFromAws(awsEnvSecret)
-    Object.assign(process.env, awsEnv)
-  }
-
+export const getApp = (): Express => {
   const app = express()
   app.set('etag', false)
 
@@ -48,18 +38,31 @@ const server = async (port = 80) => {
   addSchemaRoutes(app)
   addDomainRoutes(app)
 
+  /* This needs to be the last true handler since it is a catch all for the root */
+  addHashRoutes(app)
+  addErrorHandlers(app)
+
+  return app
+}
+
+const server = async (port = 80) => {
+  // If an AWS ARN was supplied for Secrets Manager
+  const awsEnvSecret = process.env.AWS_ENV_SECRET_ARN
+  if (awsEnvSecret) {
+    console.log('Bootstrapping ENV from AWS')
+    // Merge the values from AWS into the current ENV
+    // with AWS taking precedence
+    const awsEnv = await getEnvFromAws(awsEnvSecret)
+    Object.assign(process.env, awsEnv)
+  }
   const userRoutes = await configureAuth({
     apiKey: process.env.API_KEY,
     secretOrKey: process.env.JWT_SECRET,
   })
+  const app = getApp()
   app.use('', userRoutes)
   const host = process.env.PUBLIC_ORIGIN || `http://localhost:${port}`
   await configureDoc(app, { host })
-
-  /* This needs to be the last true handler since it is a catch all for the root */
-  addHashRoutes(app)
-
-  addErrorHandlers(app)
 
   const server = app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`)
