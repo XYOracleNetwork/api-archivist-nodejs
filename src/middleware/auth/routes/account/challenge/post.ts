@@ -4,7 +4,7 @@ import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { v1 } from 'uuid'
 
-export const postWalletChallenge: RequestHandler = (req, res, next) => {
+export const postAccountChallenge: RequestHandler = (req, res, next) => {
   const { address } = req.params
   if (!address) {
     res.sendStatus(StatusCodes.BAD_REQUEST)

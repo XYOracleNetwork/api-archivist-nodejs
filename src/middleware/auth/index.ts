@@ -3,7 +3,7 @@ import express, { RequestHandler, Router } from 'express'
 import passport from 'passport'
 
 import { getUserMongoSdk, MongoDBUserStore, UserCreationAuthInfo, UserWithoutId } from './model'
-import { getUserProfile, postUserSignup, postWalletChallenge } from './routes'
+import { getUserProfile, postAccountChallenge, postUserSignup } from './routes'
 import {
   adminApiKeyStrategy,
   allowUnauthenticatedStrategyName,
@@ -82,11 +82,29 @@ router.post(
 
 // web3 flow
 router.post(
-  '/wallet/:address/challenge',
-  postWalletChallenge /*
-    #swagger.tags = ['Wallet']
+  '/account/:address/challenge',
+  postAccountChallenge /*
+    #swagger.tags = ['Account']
     #swagger.basePath = '/'
     #swagger.summary = 'Challenge (web3)'
+  */
+)
+router.post(
+  '/wallet/:address/challenge',
+  postAccountChallenge /*
+    #swagger.tags = ['Wallet']
+    #swagger.basePath = '/'
+    #swagger.deprecated = true
+    #swagger.summary = 'Temporary support for legacy calls'
+  */
+)
+router.post(
+  '/account/:address/verify',
+  web3Strategy,
+  (req, res, next) => respondWithJwt(req, res, next) /*
+    #swagger.tags = ['Account']
+    #swagger.basePath = '/'
+    #swagger.summary = 'Verify (web3)'
   */
 )
 router.post(
@@ -95,7 +113,8 @@ router.post(
   (req, res, next) => respondWithJwt(req, res, next) /*
     #swagger.tags = ['Wallet']
     #swagger.basePath = '/'
-    #swagger.summary = 'Verify (web3)'
+    #swagger.deprecated = true
+    #swagger.summary = 'Temporary support for legacy calls'
   */
 )
 
