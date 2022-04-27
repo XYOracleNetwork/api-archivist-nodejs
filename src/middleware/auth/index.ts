@@ -95,7 +95,6 @@ router.post(
     #swagger.tags = ['Wallet']
     #swagger.basePath = '/'
     #swagger.deprecated = true
-    #swagger.ignore = true
     #swagger.summary = 'Temporary support for legacy calls'
   */
 )
@@ -115,7 +114,6 @@ router.post(
     #swagger.tags = ['Wallet']
     #swagger.basePath = '/'
     #swagger.deprecated = true
-    #swagger.ignore = true
     #swagger.summary = 'Temporary support for legacy calls'
   */
 )

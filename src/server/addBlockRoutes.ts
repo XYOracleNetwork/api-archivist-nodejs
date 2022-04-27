@@ -27,7 +27,6 @@ export const addBlockRoutes = (app: Express) => {
     postArchiveBlock
     /* #swagger.tags = ['Block'] */
     /* #swagger.deprecated = true */
-    /* #swagger.ignore = true */
     /* #swagger.summary = 'Temporary support for legacy calls' */
   )
 
