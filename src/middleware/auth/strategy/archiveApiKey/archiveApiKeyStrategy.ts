@@ -44,7 +44,7 @@ export class ArchiveApiKeyStrategy extends Strategy {
       }
 
       // Get the archive owner
-      const owners = await getArchivistArchiveMongoSdk()
+      const owners = getArchivistArchiveMongoSdk()
       const archiveOwner = await owners.findByArchive(archive)
       if (!archiveOwner || !archiveOwner?.user) {
         this.fail('Invalid user')

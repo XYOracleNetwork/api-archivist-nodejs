@@ -6,6 +6,6 @@ import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { getArchivistPayloadMongoSdk } from '../../../../lib'
 
 export const storePayloads = async (archive: string, payloads: XyoPayload[]) => {
-  const sdk = await getArchivistPayloadMongoSdk(archive)
+  const sdk = getArchivistPayloadMongoSdk(archive)
   return await sdk.insertMany(assertEx(payloads))
 }

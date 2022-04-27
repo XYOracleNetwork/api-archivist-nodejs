@@ -1,7 +1,10 @@
-import { getEnvFromAws } from '@xylabs/sdk-api-express-ecs'
+export type MongoDbConnectionStringEnvVar = 'MONGO_CONNECTION_STRING'
+export type MongoDbEnvVars = 'MONGO_DATABASE' | 'MONGO_DOMAIN' | 'MONGO_PASSWORD' | 'MONGO_USERNAME'
 
-export const getMongoDBConfig = async (): Promise<Record<string, string | undefined>> => {
-  let env: Record<string, string | undefined> = {}
+export type MongoEnv = Record<MongoDbEnvVars | MongoDbConnectionStringEnvVar, string | undefined>
+
+export const getMongoDBConfig = (): MongoEnv => {
+  const env: MongoEnv = {} as MongoEnv
   if (process.env.MONGO_CONNECTION_STRING) {
     env.MONGO_CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING
   }
@@ -10,8 +13,6 @@ export const getMongoDBConfig = async (): Promise<Record<string, string | undefi
     env.MONGO_DOMAIN = process.env.MONGO_DOMAIN
     env.MONGO_PASSWORD = process.env.MONGO_PASSWORD
     env.MONGO_USERNAME = process.env.MONGO_USERNAME
-  } else {
-    env = await getEnvFromAws('arn:aws:secretsmanager:us-east-1:434114103920:secret:api-xyo-archivist-aWFucj')
   }
   return env
 }

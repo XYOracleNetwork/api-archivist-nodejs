@@ -5,8 +5,8 @@ import { Collection, ObjectId, WithId } from 'mongodb'
 
 import { getMongoDBConfig } from './getMongoDBValues'
 
-export const getArchivistArchiveKeysMongoSdk = async () => {
-  const env = await getMongoDBConfig()
+export const getArchivistArchiveKeysMongoSdk = () => {
+  const env = getMongoDBConfig()
 
   return new XyoArchiveKeyMongoSdk({
     collection: 'archive_keys',

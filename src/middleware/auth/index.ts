@@ -133,13 +133,13 @@ export interface AuthConfig {
   apiKey?: string
 }
 
-export const configureAuth: (config: AuthConfig) => Promise<Router> = async (config) => {
+export const configureAuth: (config: AuthConfig) => Router = (config) => {
   assertEx(config?.secretOrKey, 'Missing JWT secretOrKey')
   const secretOrKey = config?.secretOrKey as string
   assertEx(config?.apiKey, 'Missing API Key')
   const apiKey = config?.apiKey as string
 
-  const userMongoSdk = await getUserMongoSdk()
+  const userMongoSdk = getUserMongoSdk()
   const userStore = new MongoDBUserStore(userMongoSdk)
 
   configureAdminApiKeyStrategy(apiKey)

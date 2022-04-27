@@ -4,8 +4,8 @@ import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 
 import { getMongoDBConfig } from './getMongoDBValues'
 
-export const getArchivistPayloadMongoSdk = async (archive: string) => {
-  const env = await getMongoDBConfig()
+export const getArchivistPayloadMongoSdk = (archive: string) => {
+  const env = getMongoDBConfig()
 
   return new XyoArchivistPayloadMongoSdk(
     {
@@ -20,8 +20,8 @@ export const getArchivistPayloadMongoSdk = async (archive: string) => {
   )
 }
 
-export const getArchivistAllPayloadMongoSdk = async () => {
-  const env = await getMongoDBConfig()
+export const getArchivistAllPayloadMongoSdk = () => {
+  const env = getMongoDBConfig()
 
   return new BaseMongoSdk<XyoPayload>({
     collection: 'payloads',
