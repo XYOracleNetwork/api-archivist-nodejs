@@ -1,21 +1,21 @@
 import { RequestHandler } from 'express'
 import { AllowedSchema, Validator } from 'express-json-validator-middleware'
 
-const requestSchema: AllowedSchema = {
+const requestBodySchema: AllowedSchema = {
   properties: {
-    street: {
+    test: {
       type: 'string',
     },
   },
-  required: ['street'],
+  required: ['test'],
   type: 'object',
 }
 
 const { validate } = new Validator({})
 
-const requestValidator: RequestHandler = validate({ body: requestSchema })
+const requestValidator: RequestHandler = validate({ body: requestBodySchema })
 
-const handler: RequestHandler = (req, res, _next) => {
+const handler: RequestHandler = (_req, res, _next) => {
   res.json({ valid: true })
 }
 
