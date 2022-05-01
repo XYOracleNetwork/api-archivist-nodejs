@@ -21,16 +21,7 @@ export const validationErrorToApiError = (err: ErrorObject): ApiError => {
     },
   }
   // const source = '' // TODO: Put query param errors here
-  const meta = {
-    params: err.params,
-  }
-  const error: ApiError = {
-    code,
-    detail,
-    links,
-    meta,
-    status,
-    title,
-  }
+  const meta = { params: err.params }
+  const error: ApiError = { code, detail, links, meta, status, title }
   return error
 }
