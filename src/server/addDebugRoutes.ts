@@ -1,18 +1,7 @@
 import { Express } from 'express'
 
 import { getDebug, postDebug } from '../debug'
-import { allowAnonymous } from '../middleware'
-
-export type NodeEnv = 'production' | 'development' | undefined
-
-// TODO: Move to Express SDK
-export const isDevelopment = () => {
-  return (process.env.NODE_ENV as NodeEnv) === 'development'
-}
-
-export const isProduction = () => {
-  return (process.env.NODE_ENV as NodeEnv) === 'production'
-}
+import { allowAnonymous, isDevelopment } from '../middleware'
 
 export const addDebugRoutes = (app: Express) => {
   if (isDevelopment()) {
