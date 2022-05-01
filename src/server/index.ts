@@ -6,6 +6,7 @@ import express, { Express } from 'express'
 import { configureAuth, configureDoc } from '../middleware'
 import { addArchiveRoutes } from './addArchiveRoutes'
 import { addBlockRoutes } from './addBlockRoutes'
+import { addDebugRoutes } from './addDebugRoutes'
 import { addDomainRoutes } from './addDomainRoutes'
 import { addErrorHandlers } from './addErrorHandlers'
 import { addHashRoutes } from './addHashRoutes'
@@ -37,6 +38,7 @@ export const getApp = (): Express => {
   addPayloadSchemaRoutes(app)
   addSchemaRoutes(app)
   addDomainRoutes(app)
+  addDebugRoutes(app)
 
   const userRoutes = configureAuth({
     apiKey: process.env.API_KEY,
