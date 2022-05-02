@@ -9,7 +9,7 @@ import { getArchivistPayloadMongoSdk } from '../../../../lib'
 import { PayloadRecentPathParams } from './payloadRecentPathParams'
 
 const getPayloads = async (archive: string, limit: number) => {
-  const sdk = await getArchivistPayloadMongoSdk(archive)
+  const sdk = getArchivistPayloadMongoSdk(archive)
   return await sdk.findRecent(limit)
 }
 

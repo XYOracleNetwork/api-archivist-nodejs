@@ -9,12 +9,12 @@ import { getArchivistBoundWitnessesMongoSdk, getArchivistPayloadMongoSdk } from 
 import { BlockHashPathParams } from '../blockHashPathParams'
 
 const getBoundWitness = async (archive: string, hash: string) => {
-  const sdk = await getArchivistBoundWitnessesMongoSdk(archive)
+  const sdk = getArchivistBoundWitnessesMongoSdk(archive)
   return await sdk.findByHash(hash)
 }
 
 const getPayloads = async (archive: string, hashes: string[]) => {
-  const sdk = await getArchivistPayloadMongoSdk(archive)
+  const sdk = getArchivistPayloadMongoSdk(archive)
   const map: Record<string, XyoPayload[]> = {}
   const payloads = await sdk.findByHashes(hashes)
   payloads.forEach((value) => {

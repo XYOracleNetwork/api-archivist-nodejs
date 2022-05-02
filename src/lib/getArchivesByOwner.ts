@@ -4,7 +4,7 @@ import { getArchivistArchiveMongoSdk } from './dbSdk'
 import { determineArchiveAccessControl } from './determineArchiveAccessControl'
 
 export const getArchivesByOwner = async (user: string): Promise<XyoArchive[]> => {
-  const sdk = await getArchivistArchiveMongoSdk()
+  const sdk = getArchivistArchiveMongoSdk()
   const response = await sdk.findByUser(user)
   return response.map((record) => {
     const { archive, user } = record

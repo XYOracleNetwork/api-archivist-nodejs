@@ -17,8 +17,8 @@ interface UpsertFilter {
   ]
 }
 
-export const getArchivistArchiveMongoSdk = async () => {
-  const env = await getMongoDBConfig()
+export const getArchivistArchiveMongoSdk = () => {
+  const env = getMongoDBConfig()
 
   return new XyoArchiveMongoSdk({
     collection: 'archives',

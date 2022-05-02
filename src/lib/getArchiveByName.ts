@@ -7,7 +7,7 @@ export const getArchiveByName = async (name: string | undefined): Promise<XyoArc
   if (!name) {
     return null
   }
-  const sdk = await getArchivistArchiveMongoSdk()
+  const sdk = getArchivistArchiveMongoSdk()
   const record = await sdk.findByArchive(name?.toLowerCase?.())
   if (!record) return null
   const { archive, user } = record

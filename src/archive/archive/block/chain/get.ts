@@ -10,7 +10,7 @@ import { getArchivistBoundWitnessesMongoSdk } from '../../../../lib'
 import { BlockChainPathParams } from './blockChainPathParams'
 
 const getBlocks = async (archive: string, hash: string, address: string, blocks: WithId<XyoBoundWitness>[], limit: number) => {
-  const sdk = await getArchivistBoundWitnessesMongoSdk(archive)
+  const sdk = getArchivistBoundWitnessesMongoSdk(archive)
   const block = (await sdk.findByHash(hash)).pop()
   if (block) {
     const addressIndex = block.addresses.findIndex((value) => value === address)

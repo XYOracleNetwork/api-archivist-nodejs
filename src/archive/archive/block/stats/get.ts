@@ -11,7 +11,7 @@ export interface GetArchiveBlockStats {
 }
 
 const getCount = async (archive: string) => {
-  const sdk = await getArchivistBoundWitnessesMongoSdk(archive)
+  const sdk = getArchivistBoundWitnessesMongoSdk(archive)
   return await sdk.fetchCount()
 }
 

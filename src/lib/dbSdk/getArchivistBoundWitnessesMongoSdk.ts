@@ -4,9 +4,8 @@ import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 
 import { getMongoDBConfig } from './getMongoDBValues'
 
-export const getArchivistBoundWitnessesMongoSdk = async (archive: string) => {
-  const env = await getMongoDBConfig()
-
+export const getArchivistBoundWitnessesMongoSdk = (archive: string) => {
+  const env = getMongoDBConfig()
   return new XyoArchivistBoundWitnessMongoSdk(
     {
       collection: 'bound_witnesses',
@@ -20,9 +19,8 @@ export const getArchivistBoundWitnessesMongoSdk = async (archive: string) => {
   )
 }
 
-export const getArchivistAllBoundWitnessesMongoSdk = async () => {
-  const env = await getMongoDBConfig()
-
+export const getArchivistAllBoundWitnessesMongoSdk = () => {
+  const env = getMongoDBConfig()
   return new BaseMongoSdk<XyoBoundWitness>({
     collection: 'bound_witnesses',
     dbConnectionString: env.MONGO_CONNECTION_STRING,
