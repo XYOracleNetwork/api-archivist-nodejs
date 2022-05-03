@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - feature/ci-code-coverage
 
 jobs:
   build:
@@ -30,5 +31,9 @@ jobs:
         run: docker compose up -d mongo
       - name: test
         run: yarn test --coverage
+      - name: publish code coverage
+        uses: ./.github/actions/publish-codeclimate-coverage
+        with:
+          who-to-greet: "coverage"
       - name: bring down test environment
         run: docker compose down
