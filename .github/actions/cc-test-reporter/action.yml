@@ -1,0 +1,24 @@
+name: "CodeClimate Code Coverage Test Reporter"
+description: "GitHub action for publishing code coverage results to CodeClimate"
+inputs:
+  subcommand:
+    description: "The cc-test-report subcommand (with flags/arguments) to execute"
+    required: true
+    default: "help"
+    # TODO: Limit choices to known subcommands and pass args separately
+    # https://docs.codeclimate.com/docs/configuring-test-coverage#list-of-subcommands
+    # type: choice
+    # options:
+    #   - after-build
+    #   - before-build
+    #   - env
+    #   - format-coverage
+    #   - help
+    #   - show-coverage
+    #   - sum-coverage
+    #   - upload-coverage
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  args:
+    - ${{ inputs.subcommand }}

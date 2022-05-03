@@ -16,21 +16,28 @@ jobs:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
       - uses: actions/setup-node@v2
-
         with:
           node-version: "16"
           cache: "yarn"
       - name: install
         run: yarn install
       - name: build
-        run: yarn build
+        run: yarn
       - name: copy env file
         run: cp .example.env .env
-      - name: build test environment
-        run: docker compose build
-      - name: setup test environment
-        run: docker compose up -d
+      - name: setup test db
+        run: docker compose up -d mongo
       - name: test
-        run: yarn test
+        run: yarn test --coverage
       - name: bring down test environment
         run: docker compose down
+      - name: format code coverage
+        uses: ./.github/actions/cc-test-reporter
+        with:
+          subcommand: "format-coverage -t lcov ./coverage/lcov.info"
+      - name: upload code coverage
+        uses: ./.github/actions/cc-test-reporter
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        with:
+          subcommand: "upload-coverage"
