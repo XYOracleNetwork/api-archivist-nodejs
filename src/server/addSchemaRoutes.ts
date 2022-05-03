@@ -1,6 +1,6 @@
 import { Express } from 'express'
 
-import { getArchiveSchemaRecent } from '../archive'
+import { getArchiveSchemaPayloadsRecent, getArchiveSchemaRecent } from '../archive'
 import { allowAnonymous, requireArchiveAccess } from '../middleware'
 import { getSchema, getSchemas } from '../schema'
 
@@ -27,5 +27,13 @@ export const addSchemaRoutes = (app: Express) => {
     getArchiveSchemaRecent
     /* #swagger.tags = ['Schema'] */
     /* #swagger.summary = 'Get recent schema for the archive' */
+  )
+
+  app.get(
+    '/archive/:archive/schema/:schema/recent/:limit?',
+    requireArchiveAccess,
+    getArchiveSchemaPayloadsRecent
+    /* #swagger.tags = ['Schema'] */
+    /* #swagger.summary = 'Get recent payloads of the supplied schema type for the archive' */
   )
 }
