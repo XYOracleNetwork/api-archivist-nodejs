@@ -1,4 +1,4 @@
-# Only, using Node here because:
+# Using Node here because:
 #   - We use it elsewhere in our build/deploy so it's audited
 #   - It already has curl/gpg installed
 #   - We might want to pivot to a Node GitHub action
@@ -7,6 +7,7 @@ FROM node:16
 
 WORKDIR /reporter
 
+# The Version of the pre-compiled CodeClimate test-reporter to use
 ENV VERSION=0.10.3
 ENV REPORTER=test-reporter-${VERSION}-linux-amd64
 
