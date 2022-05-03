@@ -24,10 +24,6 @@ jobs:
         run: yarn install
       - name: build
         run: yarn
-  test:
-    needs: [build]
-    runs-on: ubuntu-latest
-    steps:
       - name: copy env file
         run: cp .example.env .env
       - name: setup test db
@@ -36,10 +32,6 @@ jobs:
         run: yarn test --coverage
       - name: bring down test environment
         run: docker compose down
-  coverage:
-    needs: [test]
-    runs-on: ubuntu-latest
-    steps:
       - name: format code coverage
         uses: ./.github/actions/cc-test-reporter
         with:
