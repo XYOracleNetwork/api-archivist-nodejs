@@ -23,16 +23,22 @@ jobs:
       - name: install
         run: yarn install
       - name: build
-        run: yarn build
+        run: yarn
+  test:
+    runs-on: ubuntu-latest
+    steps:
       - name: copy env file
         run: cp .example.env .env
       - name: setup test db
         run: docker compose up -d mongo
       - name: test
         run: yarn test --coverage
-      - name: publish code coverage
+      - name: bring down test environment
+        run: docker compose down
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: format code coverage
         uses: ./.github/actions/cc-test-reporter
         with:
           subcommand: "format-coverage -t lcov ./coverage/lcov.info"
-      - name: bring down test environment
-        run: docker compose down
