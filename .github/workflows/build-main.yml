@@ -25,6 +25,7 @@ jobs:
       - name: build
         run: yarn
   test:
+    needs: [build]
     runs-on: ubuntu-latest
     steps:
       - name: copy env file
@@ -36,6 +37,7 @@ jobs:
       - name: bring down test environment
         run: docker compose down
   coverage:
+    needs: [test]
     runs-on: ubuntu-latest
     steps:
       - name: format code coverage
