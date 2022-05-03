@@ -11,14 +11,14 @@ ENV VERSION=0.10.3
 ENV REPORTER=test-reporter-${VERSION}-linux-amd64
 
 # Download the binary
-RUN curl -L -O https://codeclimate.com/downloads/test-reporter/${REPORTER}
+RUN curl -sSL -O https://codeclimate.com/downloads/test-reporter/${REPORTER}
 # Download the hash
-RUN curl -L -O https://codeclimate.com/downloads/test-reporter/${REPORTER}.sha256
+RUN curl -sSL -O https://codeclimate.com/downloads/test-reporter/${REPORTER}.sha256
 # Verify the hash
 RUN grep ${REPORTER}  ${REPORTER}.sha256 | shasum -a 256 -c -
 
 # Download the signature
-RUN curl -L -O https://codeclimate.com/downloads/test-reporter/${REPORTER}.sha256.sig
+RUN curl -sSL -O https://codeclimate.com/downloads/test-reporter/${REPORTER}.sha256.sig
 # Import public key
 RUN gpg --keyserver  keys.openpgp.org --recv-keys 9BD9E2DD46DA965A537E5B0A5CBF320243B6FD85
 # Verify the signature
