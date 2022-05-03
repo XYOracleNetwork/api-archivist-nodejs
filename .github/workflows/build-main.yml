@@ -36,3 +36,9 @@ jobs:
         uses: ./.github/actions/cc-test-reporter
         with:
           subcommand: "format-coverage -t lcov ./coverage/lcov.info"
+      - name: upload code coverage
+        uses: ./.github/actions/cc-test-reporter
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        with:
+          subcommand: "upload-coverage"
