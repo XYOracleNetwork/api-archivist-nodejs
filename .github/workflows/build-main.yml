@@ -26,10 +26,8 @@ jobs:
         run: yarn build
       - name: copy env file
         run: cp .example.env .env
-      - name: build test environment
-        run: docker compose build
-      - name: setup test environment
-        run: docker compose up -d
+      - name: setup test db
+        run: docker compose up -d mongo
       - name: test
         run: yarn test
       - name: bring down test environment
