@@ -1,4 +1,4 @@
-#!/bin/sh -l
+#!/bin/bash -e
 
 echo "Hello $1"
 time=$(date)

@@ -24,9 +24,11 @@ RUN gpg --keyserver  keys.openpgp.org --recv-keys 9BD9E2DD46DA965A537E5B0A5CBF32
 # Verify the signature
 RUN gpg --verify ${REPORTER}.sha256.sig ${REPORTER}.sha256
 
+# Make the binary executable
+RUN chmod +x ${REPORTER}
+
 # Move the verified binary to a directory in the PATH
-RUN cp ./${REPORTER} /usr/local/bin
-RUN chmod +x /usr/local/bin/${REPORTER}
+RUN cp ${REPORTER} /usr/local/bin/cc-test-reporter
 
 COPY entrypoint.sh /entrypoint.sh
 

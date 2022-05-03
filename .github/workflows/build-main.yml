@@ -22,17 +22,17 @@ jobs:
           cache: "yarn"
       - name: install
         run: yarn install
-      # - name: build
-      #   run: yarn build
-      # - name: copy env file
-      #   run: cp .example.env .env
-      # - name: setup test db
-      #   run: docker compose up -d mongo
-      # - name: test
-      #   run: yarn test --coverage
+      - name: build
+        run: yarn build
+      - name: copy env file
+        run: cp .example.env .env
+      - name: setup test db
+        run: docker compose up -d mongo
+      - name: test
+        run: yarn test --coverage
       - name: publish code coverage
-        uses: ./.github/actions/publish-codeclimate-coverage
+        uses: ./.github/actions/cc-test-reporter
         with:
-          who-to-greet: "coverage"
-      # - name: bring down test environment
-      #   run: docker compose down
+          subcommand: "format-coverage -t lcov ./coverage/lcov.info"
+      - name: bring down test environment
+        run: docker compose down
