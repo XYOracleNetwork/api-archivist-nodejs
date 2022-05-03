@@ -6,7 +6,6 @@
 [![prod-deploy][]][prod-deploy-link]
 [![beta-deploy][]][beta-deploy-link]
 
-
 [![codacy-badge][]][codacy-link]
 [![codeclimate-badge][]][codeclimate-link]
 [![codeclimate-coverage-badge][]][codeclimate-coverage-link]
