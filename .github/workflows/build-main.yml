@@ -17,23 +17,22 @@ jobs:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
       - uses: actions/setup-node@v2
-
         with:
           node-version: "16"
           cache: "yarn"
       - name: install
         run: yarn install
-      - name: build
-        run: yarn build
-      - name: copy env file
-        run: cp .example.env .env
-      - name: setup test db
-        run: docker compose up -d mongo
-      - name: test
-        run: yarn test --coverage
+      # - name: build
+      #   run: yarn build
+      # - name: copy env file
+      #   run: cp .example.env .env
+      # - name: setup test db
+      #   run: docker compose up -d mongo
+      # - name: test
+      #   run: yarn test --coverage
       - name: publish code coverage
         uses: ./.github/actions/publish-codeclimate-coverage
         with:
           who-to-greet: "coverage"
-      - name: bring down test environment
-        run: docker compose down
+      # - name: bring down test environment
+      #   run: docker compose down
