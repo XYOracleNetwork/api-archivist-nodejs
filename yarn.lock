@@ -2289,9 +2289,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/providers@npm:5.6.4, @ethersproject/providers@npm:^5.6.4":
-  version: 5.6.4
-  resolution: "@ethersproject/providers@npm:5.6.4"
+"@ethersproject/providers@npm:5.6.5, @ethersproject/providers@npm:^5.6.5":
+  version: 5.6.5
+  resolution: "@ethersproject/providers@npm:5.6.5"
   dependencies:
     "@ethersproject/abstract-provider": ^5.6.0
     "@ethersproject/abstract-signer": ^5.6.0
@@ -2312,7 +2312,7 @@ __metadata:
     "@ethersproject/web": ^5.6.0
     bech32: 1.1.4
     ws: 7.4.6
-  checksum: 75ec09bbff5c7b8b9372fd7e35b11da1262ae5b16601beb27a028e3ac9332502765540fd9a07971b843aafb54a145e0a7c6a2f28ed97a5707be83d144a97e0f7
+  checksum: f8b37d72068e845f447f922cceddda73508ad539bb035e3f094b6feb7de2a8c6dde87ecd7ee2ec00712e7135145f7e9a902f0b845a0cb604313caf7cb6b440a7
   languageName: node
   linkType: hard
 
@@ -2347,7 +2347,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/signing-key@npm:5.6.0, @ethersproject/signing-key@npm:^5.6.0":
+"@ethersproject/signing-key@npm:5.6.1":
+  version: 5.6.1
+  resolution: "@ethersproject/signing-key@npm:5.6.1"
+  dependencies:
+    "@ethersproject/bytes": ^5.6.0
+    "@ethersproject/logger": ^5.6.0
+    "@ethersproject/properties": ^5.6.0
+    bn.js: ^4.11.9
+    elliptic: 6.5.4
+    hash.js: 1.1.7
+  checksum: 9292611a2206b9b160a6e7b8ecaf95090efa66e0fb09c4069f6adcceac678b8be59340c623f61a2ffcc57af814745b0fefc1381b0208eda0a62e84234fa85455
+  languageName: node
+  linkType: hard
+
+"@ethersproject/signing-key@npm:^5.6.0":
   version: 5.6.0
   resolution: "@ethersproject/signing-key@npm:5.6.0"
   dependencies:
@@ -3390,6 +3404,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/jest@npm:^27.5.0":
+  version: 27.5.0
+  resolution: "@types/jest@npm:27.5.0"
+  dependencies:
+    jest-matcher-utils: ^27.0.0
+    pretty-format: ^27.0.0
+  checksum: ca09ac3a17972e18683c57b681a6866c7a56c67f429810ece00425d948da62f207d271becb5cc759da3630f120596ec3c8e0ceb0eecefbe26daffba168b82879
+  languageName: node
+  linkType: hard
+
 "@types/json-schema@npm:^7.0.4, @types/json-schema@npm:^7.0.9":
   version: 7.0.11
   resolution: "@types/json-schema@npm:7.0.11"
@@ -3971,7 +3995,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xylabs/rollup-config@npm:^1.1.17":
+"@xylabs/rollup-config@npm:1.1.17, @xylabs/rollup-config@npm:^1.1.17":
   version: 1.1.17
   resolution: "@xylabs/rollup-config@npm:1.1.17"
   dependencies:
@@ -4004,7 +4028,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xylabs/sdk-js@npm:^2.4.2, @xylabs/sdk-js@npm:^2.5.4, @xylabs/sdk-js@npm:^2.5.5":
+"@xylabs/sdk-js@npm:^2.4.2, @xylabs/sdk-js@npm:^2.5.5":
   version: 2.5.5
   resolution: "@xylabs/sdk-js@npm:2.5.5"
   dependencies:
@@ -4017,15 +4041,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xylabs/ts-scripts@npm:^1.0.59":
-  version: 1.0.59
-  resolution: "@xylabs/ts-scripts@npm:1.0.59"
+"@xylabs/ts-scripts@npm:^1.0.64":
+  version: 1.0.64
+  resolution: "@xylabs/ts-scripts@npm:1.0.64"
   dependencies:
+    "@types/jest": ^27.4.1
     "@xylabs/eslint-config": ^2.3.22
+    "@xylabs/rollup-config": 1.1.17
+    chalk: ^4
     copyfiles: ^2.4.1
     depcheck: ^1.4.3
     eslint: ^8.14.0
     eslint-plugin-sonarjs: ^0.13.0
+    jest: ^28.0.3
+    jest-sorted: ^1.0.14
     node-cmd: ^5.0.0
     npm-check-updates: ^12.5.11
     npm-package-json-lint: ^6.3.0
@@ -4033,6 +4062,7 @@ __metadata:
     parse-git-config: ^3.0.0
     rimraf: ^3.0.2
     rollup: ^2.71.1
+    ts-jest: ^28.0.0-next.1
     ts-prune: ^0.10.3
     typescript: ^4.6.4
   peerDependencies:
@@ -4080,7 +4110,7 @@ __metadata:
     xylabs-up3: bin/up3.js
     xylabs-updo: bin/updo.js
     xylabs-updo3: bin/updo3.js
-  checksum: dd09ec0b4079797605c41022184746f97603ac941edf063151e616d303ce20177114d9a17ca0a784237e08270c0b8f224a7abbe8780fa3bb45fd156ded5f30af
+  checksum: 8de1facaed2a57a427c30b3c4920b160a17dde5774f30a18e31ca6a82b78c692a00425d87f8537340d1fcecf07d023014d0787e31d79faa000cc0d6cdb5e4c22
   languageName: node
   linkType: hard
 
@@ -4093,12 +4123,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xyo-network/sdk-xyo-client-js@npm:^2.19.18":
-  version: 2.19.18
-  resolution: "@xyo-network/sdk-xyo-client-js@npm:2.19.18"
+"@xyo-network/sdk-xyo-client-js@npm:^2.19.22":
+  version: 2.19.22
+  resolution: "@xyo-network/sdk-xyo-client-js@npm:2.19.22"
   dependencies:
-    "@ethersproject/providers": ^5.6.4
-    "@xylabs/sdk-js": ^2.5.4
+    "@ethersproject/providers": ^5.6.5
+    "@xylabs/sdk-js": ^2.5.5
     "@xyo-network/sdk-xyo-mongo-js": ^2.2.7
     ajv: ^8.11.0
     axios: ^0.27.2
@@ -4107,7 +4137,7 @@ __metadata:
     elliptic: ^6.5.4
     keccak256: ^1.0.6
     lodash: ^4.17.21
-    lru-cache: ^7.8.1
+    lru-cache: ^7.9.0
     mongodb: ^4.5.0
     neo4j-driver: ^4.4.5
     neo4j-driver-core: ^4.4.5
@@ -4117,7 +4147,7 @@ __metadata:
     systeminformation: ^5.11.14
     ua-parser-js: ^1.0.2
     uuid: ^8.3.2
-  checksum: 464c831c9859f6f8a6d30eed0564cc1679d51839f54e713c35def39c55d4d69b230bfe1eff955b4f44dcbc6452825ff664f5fdebaf958b4c35ebbd94844266e9
+  checksum: 7b11bf1de86eb64ad3b692106daed20467e548a16d6b72aebe89885c7069aec81cfbdebf7ce5e376eff689e88352bc09e5645c2f3bb6a28b89e8e696481b5a32
   languageName: node
   linkType: hard
 
@@ -4352,7 +4382,7 @@ __metadata:
     "@types/cors": ^2.8.12
     "@types/express": 4.17.13
     "@types/express-mung": ^0.5.2
-    "@types/jest": ^27.4.1
+    "@types/jest": ^27.5.0
     "@types/jsonwebtoken": ^8.5.8
     "@types/lodash": ^4.14.182
     "@types/lru-cache": ^7.6.1
@@ -4368,9 +4398,9 @@ __metadata:
     "@xylabs/rollup-config": ^1.1.17
     "@xylabs/sdk-api-express-ecs": ^1.1.4
     "@xylabs/sdk-js": ^2.5.5
-    "@xylabs/ts-scripts": ^1.0.59
+    "@xylabs/ts-scripts": ^1.0.64
     "@xylabs/tsconfig": ^1.0.13
-    "@xyo-network/sdk-xyo-client-js": ^2.19.18
+    "@xyo-network/sdk-xyo-client-js": ^2.19.22
     "@xyo-network/sdk-xyo-mongo-js": ^2.2.7
     axios: ^0.27.2
     babel-jest: ^28.0.3
@@ -4383,7 +4413,7 @@ __metadata:
     dotenv: ^16.0.0
     elliptic: ^6.5.4
     eslint: ^8.14.0
-    ethers: ^5.6.4
+    ethers: ^5.6.5
     express: ^4.18.1
     express-json-validator-middleware: ^2.2.1
     express-mung: ^0.5.1
@@ -4411,7 +4441,7 @@ __metadata:
     supertest: ^6.2.3
     swagger-autogen: ^2.21.1
     swagger-ui-express: ^4.3.0
-    ts-jest: ^28.0.0-next.1
+    ts-jest: ^28.0.1
     ts-node: ^10.7.0
     ts-toolbelt: ^9.6.0
     tslib: ^2.4.0
@@ -5094,7 +5124,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:^4.0.0, chalk@npm:^4.1.0, chalk@npm:^4.1.2":
+"chalk@npm:^4, chalk@npm:^4.0.0, chalk@npm:^4.1.0, chalk@npm:^4.1.2":
   version: 4.1.2
   resolution: "chalk@npm:4.1.2"
   dependencies:
@@ -6528,9 +6558,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ethers@npm:^5.6.4":
-  version: 5.6.4
-  resolution: "ethers@npm:5.6.4"
+"ethers@npm:^5.6.5":
+  version: 5.6.5
+  resolution: "ethers@npm:5.6.5"
   dependencies:
     "@ethersproject/abi": 5.6.1
     "@ethersproject/abstract-provider": 5.6.0
@@ -6550,11 +6580,11 @@ __metadata:
     "@ethersproject/networks": 5.6.2
     "@ethersproject/pbkdf2": 5.6.0
     "@ethersproject/properties": 5.6.0
-    "@ethersproject/providers": 5.6.4
+    "@ethersproject/providers": 5.6.5
     "@ethersproject/random": 5.6.0
     "@ethersproject/rlp": 5.6.0
     "@ethersproject/sha2": 5.6.0
-    "@ethersproject/signing-key": 5.6.0
+    "@ethersproject/signing-key": 5.6.1
     "@ethersproject/solidity": 5.6.0
     "@ethersproject/strings": 5.6.0
     "@ethersproject/transactions": 5.6.0
@@ -6562,7 +6592,7 @@ __metadata:
     "@ethersproject/wallet": 5.6.0
     "@ethersproject/web": 5.6.0
     "@ethersproject/wordlists": 5.6.0
-  checksum: 2d3a10823a0e83c692f59ad513572fb17f0924941c18d512929dae3bfe1e3aa1d4c77d7547eb993fb4363a73c0d06195580d109a38382e802b96264e7b21f583
+  checksum: f2c2528452eea1fa3c6e735ea9acf8162555b681d712e770a2e11560a71f9c9ef4abbe686e68c4e2cfa4c51eda35fe06f1bac7dc030daf00747c229b8cab5812
   languageName: node
   linkType: hard
 
@@ -9083,7 +9113,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lru-cache@npm:^7.3.1, lru-cache@npm:^7.5.1, lru-cache@npm:^7.7.1, lru-cache@npm:^7.8.1, lru-cache@npm:^7.9.0":
+"lru-cache@npm:^7.3.1, lru-cache@npm:^7.5.1, lru-cache@npm:^7.7.1, lru-cache@npm:^7.9.0":
   version: 7.9.0
   resolution: "lru-cache@npm:7.9.0"
   checksum: c91a293a103d11ea4f07de4122ba4f73d8203d0de51852fb612b1764296aebf623a3e11dddef1b3aefdc8d71af97d52b222dad5459dcb967713bbab9a19fed7d
@@ -14000,6 +14030,39 @@ __metadata:
   bin:
     ts-jest: cli.js
   checksum: 81e9fe6872ec092ec23c4a40b40f9d2c1df67185a1fd7f26282ab3c3fa4c741a27edb9ddaafb2cebd34ad9a69c76d11ed9c3d430d7072871dfedb4739f3a5dcc
+  languageName: node
+  linkType: hard
+
+"ts-jest@npm:^28.0.1":
+  version: 28.0.1
+  resolution: "ts-jest@npm:28.0.1"
+  dependencies:
+    bs-logger: 0.x
+    fast-json-stable-stringify: 2.x
+    jest-util: ^28.0.0
+    json5: 2.x
+    lodash.memoize: 4.x
+    make-error: 1.x
+    semver: 7.x
+    yargs-parser: ^20.x
+  peerDependencies:
+    "@babel/core": ">=7.0.0-beta.0 <8"
+    "@types/jest": ^27.0.0
+    babel-jest: ^28.0.0
+    jest: ^28.0.0
+    typescript: ">=4.3"
+  peerDependenciesMeta:
+    "@babel/core":
+      optional: true
+    "@types/jest":
+      optional: true
+    babel-jest:
+      optional: true
+    esbuild:
+      optional: true
+  bin:
+    ts-jest: cli.js
+  checksum: d6827b5eb9838b63c694a49a6d85020f62e6eed1e8aae935fdb3fabdccc0ed7207b41c812c0de793a8e5ba1b7818cddfc4d51dc29ed6054f3a08cafbedbef26e
   languageName: node
   linkType: hard
 

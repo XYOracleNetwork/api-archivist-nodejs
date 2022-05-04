@@ -1,8 +1,8 @@
 import { v4 } from 'uuid'
 
-import { claimArchive, getArchiveSchemaPayloadsRecent, getNewBlock, getPayloads, getTokenForNewUser, postBlock } from '../../../../test'
+import { claimArchive, getArchiveSchemaPayloadsRecent, getNewBlock, getPayloads, getTokenForNewUser, postBlock } from '../../../../../test'
 
-describe('/archive/:archive/schema/:schema/recent', () => {
+describe.skip('/archive/:archive/schema/current/witness', () => {
   const schema = `network.xyo.test.${v4()}`
   const schemaToAdd = 5
   let token: string
@@ -26,7 +26,7 @@ describe('/archive/:archive/schema/:schema/recent', () => {
       expect(response).toBeTruthy()
     }
   })
-  it('Gets recently uploaded payloads with the supplied schema from the archive', async () => {
+  it('Witnesses currently cached schema for the archive', async () => {
     const response = await getArchiveSchemaPayloadsRecent(archive, schema)
     expect(response).toBeTruthy()
     expect(Array.isArray(response)).toBeTruthy()

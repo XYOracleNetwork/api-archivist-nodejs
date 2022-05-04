@@ -1,10 +1,13 @@
-import { NextFunction } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import Rollbar, { ExpressErrorHandler } from 'rollbar'
 
 const defaultEnvironment = 'development'
 
-const noOpErrorHandler: ExpressErrorHandler = (err, _req, _res, next: NextFunction) => {
-  next(err)
+const noOpErrorHandler: ExpressErrorHandler = (err, _req: Request, _res: Response, next: NextFunction) => {
+  if (_res.headersSent) {
+    return next()
+  }
+  return next(err)
 }
 
 export const rollbarErrorHandler = (): ExpressErrorHandler => {
