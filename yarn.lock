@@ -2289,7 +2289,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/providers@npm:5.6.5":
+"@ethersproject/providers@npm:5.6.5, @ethersproject/providers@npm:^5.6.5":
   version: 5.6.5
   resolution: "@ethersproject/providers@npm:5.6.5"
   dependencies:
@@ -2313,33 +2313,6 @@ __metadata:
     bech32: 1.1.4
     ws: 7.4.6
   checksum: f8b37d72068e845f447f922cceddda73508ad539bb035e3f094b6feb7de2a8c6dde87ecd7ee2ec00712e7135145f7e9a902f0b845a0cb604313caf7cb6b440a7
-  languageName: node
-  linkType: hard
-
-"@ethersproject/providers@npm:^5.6.4":
-  version: 5.6.4
-  resolution: "@ethersproject/providers@npm:5.6.4"
-  dependencies:
-    "@ethersproject/abstract-provider": ^5.6.0
-    "@ethersproject/abstract-signer": ^5.6.0
-    "@ethersproject/address": ^5.6.0
-    "@ethersproject/basex": ^5.6.0
-    "@ethersproject/bignumber": ^5.6.0
-    "@ethersproject/bytes": ^5.6.0
-    "@ethersproject/constants": ^5.6.0
-    "@ethersproject/hash": ^5.6.0
-    "@ethersproject/logger": ^5.6.0
-    "@ethersproject/networks": ^5.6.0
-    "@ethersproject/properties": ^5.6.0
-    "@ethersproject/random": ^5.6.0
-    "@ethersproject/rlp": ^5.6.0
-    "@ethersproject/sha2": ^5.6.0
-    "@ethersproject/strings": ^5.6.0
-    "@ethersproject/transactions": ^5.6.0
-    "@ethersproject/web": ^5.6.0
-    bech32: 1.1.4
-    ws: 7.4.6
-  checksum: 75ec09bbff5c7b8b9372fd7e35b11da1262ae5b16601beb27a028e3ac9332502765540fd9a07971b843aafb54a145e0a7c6a2f28ed97a5707be83d144a97e0f7
   languageName: node
   linkType: hard
 
@@ -4055,7 +4028,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xylabs/sdk-js@npm:^2.4.2, @xylabs/sdk-js@npm:^2.5.4, @xylabs/sdk-js@npm:^2.5.5":
+"@xylabs/sdk-js@npm:^2.4.2, @xylabs/sdk-js@npm:^2.5.5":
   version: 2.5.5
   resolution: "@xylabs/sdk-js@npm:2.5.5"
   dependencies:
@@ -4150,12 +4123,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xyo-network/sdk-xyo-client-js@npm:^2.19.18":
-  version: 2.19.18
-  resolution: "@xyo-network/sdk-xyo-client-js@npm:2.19.18"
+"@xyo-network/sdk-xyo-client-js@npm:^2.19.20":
+  version: 2.19.21
+  resolution: "@xyo-network/sdk-xyo-client-js@npm:2.19.21"
   dependencies:
-    "@ethersproject/providers": ^5.6.4
-    "@xylabs/sdk-js": ^2.5.4
+    "@ethersproject/providers": ^5.6.5
+    "@xylabs/sdk-js": ^2.5.5
     "@xyo-network/sdk-xyo-mongo-js": ^2.2.7
     ajv: ^8.11.0
     axios: ^0.27.2
@@ -4164,7 +4137,7 @@ __metadata:
     elliptic: ^6.5.4
     keccak256: ^1.0.6
     lodash: ^4.17.21
-    lru-cache: ^7.8.1
+    lru-cache: ^7.9.0
     mongodb: ^4.5.0
     neo4j-driver: ^4.4.5
     neo4j-driver-core: ^4.4.5
@@ -4174,7 +4147,7 @@ __metadata:
     systeminformation: ^5.11.14
     ua-parser-js: ^1.0.2
     uuid: ^8.3.2
-  checksum: 464c831c9859f6f8a6d30eed0564cc1679d51839f54e713c35def39c55d4d69b230bfe1eff955b4f44dcbc6452825ff664f5fdebaf958b4c35ebbd94844266e9
+  checksum: 2ed85bee649fa6113b1e021d0c3c39f15fd978f1635fdc415cf1816a3302f1955f2aa52df9b9be8430561a1b926fe764ea1ebf84176daec41e093129ec006ed9
   languageName: node
   linkType: hard
 
@@ -4427,7 +4400,7 @@ __metadata:
     "@xylabs/sdk-js": ^2.5.5
     "@xylabs/ts-scripts": ^1.0.64
     "@xylabs/tsconfig": ^1.0.13
-    "@xyo-network/sdk-xyo-client-js": ^2.19.18
+    "@xyo-network/sdk-xyo-client-js": ^2.19.20
     "@xyo-network/sdk-xyo-mongo-js": ^2.2.7
     axios: ^0.27.2
     babel-jest: ^28.0.3
@@ -9140,7 +9113,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lru-cache@npm:^7.3.1, lru-cache@npm:^7.5.1, lru-cache@npm:^7.7.1, lru-cache@npm:^7.8.1, lru-cache@npm:^7.9.0":
+"lru-cache@npm:^7.3.1, lru-cache@npm:^7.5.1, lru-cache@npm:^7.7.1, lru-cache@npm:^7.9.0":
   version: 7.9.0
   resolution: "lru-cache@npm:7.9.0"
   checksum: c91a293a103d11ea4f07de4122ba4f73d8203d0de51852fb612b1764296aebf623a3e11dddef1b3aefdc8d71af97d52b222dad5459dcb967713bbab9a19fed7d
