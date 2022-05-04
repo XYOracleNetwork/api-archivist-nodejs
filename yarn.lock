@@ -4123,9 +4123,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xyo-network/sdk-xyo-client-js@npm:^2.19.20":
-  version: 2.19.21
-  resolution: "@xyo-network/sdk-xyo-client-js@npm:2.19.21"
+"@xyo-network/sdk-xyo-client-js@npm:^2.19.22":
+  version: 2.19.22
+  resolution: "@xyo-network/sdk-xyo-client-js@npm:2.19.22"
   dependencies:
     "@ethersproject/providers": ^5.6.5
     "@xylabs/sdk-js": ^2.5.5
@@ -4147,7 +4147,7 @@ __metadata:
     systeminformation: ^5.11.14
     ua-parser-js: ^1.0.2
     uuid: ^8.3.2
-  checksum: 2ed85bee649fa6113b1e021d0c3c39f15fd978f1635fdc415cf1816a3302f1955f2aa52df9b9be8430561a1b926fe764ea1ebf84176daec41e093129ec006ed9
+  checksum: 7b11bf1de86eb64ad3b692106daed20467e548a16d6b72aebe89885c7069aec81cfbdebf7ce5e376eff689e88352bc09e5645c2f3bb6a28b89e8e696481b5a32
   languageName: node
   linkType: hard
 
@@ -4400,7 +4400,7 @@ __metadata:
     "@xylabs/sdk-js": ^2.5.5
     "@xylabs/ts-scripts": ^1.0.64
     "@xylabs/tsconfig": ^1.0.13
-    "@xyo-network/sdk-xyo-client-js": ^2.19.20
+    "@xyo-network/sdk-xyo-client-js": ^2.19.22
     "@xyo-network/sdk-xyo-mongo-js": ^2.2.7
     axios: ^0.27.2
     babel-jest: ^28.0.3
@@ -4441,7 +4441,7 @@ __metadata:
     supertest: ^6.2.3
     swagger-autogen: ^2.21.1
     swagger-ui-express: ^4.3.0
-    ts-jest: ^28.0.0-next.1
+    ts-jest: ^28.0.1
     ts-node: ^10.7.0
     ts-toolbelt: ^9.6.0
     tslib: ^2.4.0
@@ -14030,6 +14030,39 @@ __metadata:
   bin:
     ts-jest: cli.js
   checksum: 81e9fe6872ec092ec23c4a40b40f9d2c1df67185a1fd7f26282ab3c3fa4c741a27edb9ddaafb2cebd34ad9a69c76d11ed9c3d430d7072871dfedb4739f3a5dcc
+  languageName: node
+  linkType: hard
+
+"ts-jest@npm:^28.0.1":
+  version: 28.0.1
+  resolution: "ts-jest@npm:28.0.1"
+  dependencies:
+    bs-logger: 0.x
+    fast-json-stable-stringify: 2.x
+    jest-util: ^28.0.0
+    json5: 2.x
+    lodash.memoize: 4.x
+    make-error: 1.x
+    semver: 7.x
+    yargs-parser: ^20.x
+  peerDependencies:
+    "@babel/core": ">=7.0.0-beta.0 <8"
+    "@types/jest": ^27.0.0
+    babel-jest: ^28.0.0
+    jest: ^28.0.0
+    typescript: ">=4.3"
+  peerDependenciesMeta:
+    "@babel/core":
+      optional: true
+    "@types/jest":
+      optional: true
+    babel-jest:
+      optional: true
+    esbuild:
+      optional: true
+  bin:
+    ts-jest: cli.js
+  checksum: d6827b5eb9838b63c694a49a6d85020f62e6eed1e8aae935fdb3fabdccc0ed7207b41c812c0de793a8e5ba1b7818cddfc4d51dc29ed6054f3a08cafbedbef26e
   languageName: node
   linkType: hard
 
