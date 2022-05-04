@@ -19,12 +19,19 @@ describe('/archive', () => {
     response = await claimArchive(token, archive, StatusCodes.OK)
     expect(response.archive).toEqual(archive)
   })
-  it('Prevents users from claiming an archive already claimed by someone else', async () => {
-    // User 1 claims archive
-    await claimArchive(token, archive)
+  describe('when already claimed by another user', () => {
+    beforeAll(() => {
+      jest.spyOn(console, 'error').mockImplementation(() => {
+        // Stop expected errors from being logged
+      })
+    })
+    it('prevents user from claiming archive ', async () => {
+      // User 1 claims archive
+      await claimArchive(token, archive)
 
-    // User 2 attempts to claim archive
-    const user2Token = await getTokenForNewUser()
-    await getArchivist().put(`/archive/${archive}`).auth(user2Token, { type: 'bearer' }).expect(StatusCodes.FORBIDDEN)
+      // User 2 attempts to claim archive
+      const user2Token = await getTokenForNewUser()
+      await getArchivist().put(`/archive/${archive}`).auth(user2Token, { type: 'bearer' }).expect(StatusCodes.FORBIDDEN)
+    })
   })
 })
