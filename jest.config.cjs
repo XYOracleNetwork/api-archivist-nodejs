@@ -11,12 +11,11 @@ const generateJestConfig = ({ esModules }) => {
     },
     preset: 'ts-jest/presets/default-esm',
     setupFiles: ['dotenv/config'],
-    setupFilesAfterEnv: ['jest-sorted'],
     testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$',
     testTimeout: 15000,
     transform: {
       [`(${esModuleslist}).+\\.js$`]: 'babel-jest',
-      '^.+\\.tsx?$': 'ts-jest/legacy',
+      '^.+\\.tsx?$': 'ts-jest',
     },
     transformIgnorePatterns: [`./node_modules/(?!${esModuleslist})`],
   }
