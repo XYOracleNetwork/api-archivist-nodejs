@@ -4041,9 +4041,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xylabs/ts-scripts@npm:^1.0.64":
-  version: 1.0.64
-  resolution: "@xylabs/ts-scripts@npm:1.0.64"
+"@xylabs/ts-scripts@npm:^1.0.65":
+  version: 1.0.65
+  resolution: "@xylabs/ts-scripts@npm:1.0.65"
   dependencies:
     "@types/jest": ^27.4.1
     "@xylabs/eslint-config": ^2.3.22
@@ -4110,7 +4110,7 @@ __metadata:
     xylabs-up3: bin/up3.js
     xylabs-updo: bin/updo.js
     xylabs-updo3: bin/updo3.js
-  checksum: 8de1facaed2a57a427c30b3c4920b160a17dde5774f30a18e31ca6a82b78c692a00425d87f8537340d1fcecf07d023014d0787e31d79faa000cc0d6cdb5e4c22
+  checksum: 334bcbdbb8366a1b4cb006165369897256faed8dd9f12c2be3eac17970a5900c56e023d2c5a892c13b0d6215419104d18840db9e4575cf67a994eaea250019eb
   languageName: node
   linkType: hard
 
@@ -4123,9 +4123,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xyo-network/sdk-xyo-client-js@npm:^2.19.22":
-  version: 2.19.22
-  resolution: "@xyo-network/sdk-xyo-client-js@npm:2.19.22"
+"@xyo-network/sdk-xyo-client-js@npm:^2.19.27":
+  version: 2.19.27
+  resolution: "@xyo-network/sdk-xyo-client-js@npm:2.19.27"
   dependencies:
     "@ethersproject/providers": ^5.6.5
     "@xylabs/sdk-js": ^2.5.5
@@ -4135,6 +4135,7 @@ __metadata:
     bn.js: ^5.2.0
     bowser: ^2.11.0
     elliptic: ^6.5.4
+    is-ip: ^4.0.0
     keccak256: ^1.0.6
     lodash: ^4.17.21
     lru-cache: ^7.9.0
@@ -4147,7 +4148,7 @@ __metadata:
     systeminformation: ^5.11.14
     ua-parser-js: ^1.0.2
     uuid: ^8.3.2
-  checksum: 7b11bf1de86eb64ad3b692106daed20467e548a16d6b72aebe89885c7069aec81cfbdebf7ce5e376eff689e88352bc09e5645c2f3bb6a28b89e8e696481b5a32
+  checksum: 273d1c89f1577982dafdab41d6e8743d820d764799419b909cef85847c07dbf503b0f3f057a6d62079556ed340e48574edc2f1a0e55d68688760fc12a588b2fc
   languageName: node
   linkType: hard
 
@@ -4398,9 +4399,9 @@ __metadata:
     "@xylabs/rollup-config": ^1.1.17
     "@xylabs/sdk-api-express-ecs": ^1.1.4
     "@xylabs/sdk-js": ^2.5.5
-    "@xylabs/ts-scripts": ^1.0.64
+    "@xylabs/ts-scripts": ^1.0.65
     "@xylabs/tsconfig": ^1.0.13
-    "@xyo-network/sdk-xyo-client-js": ^2.19.22
+    "@xyo-network/sdk-xyo-client-js": ^2.19.27
     "@xyo-network/sdk-xyo-mongo-js": ^2.2.7
     axios: ^0.27.2
     babel-jest: ^28.0.3
@@ -4434,7 +4435,7 @@ __metadata:
     prettier: ^2.6.2
     rimraf: ^3.0.2
     rollbar: ^2.25.0
-    rollup: ^2.71.1
+    rollup: ^2.72.0
     rollup-plugin-typescript2: ^0.31.2
     sha.js: ^2.4.11
     source-map-support: ^0.5.21
@@ -7679,6 +7680,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ip-regex@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "ip-regex@npm:5.0.0"
+  checksum: 4098b2df89c015f1484a5946e733ec126af8c1828719d90e09f04af23ce487e1a852670e4d3f51b0dc6dfbaf7d8bfab23fd7893ca60e69833da99b7b1ee3623b
+  languageName: node
+  linkType: hard
+
 "ip@npm:^1.1.5":
   version: 1.1.5
   resolution: "ip@npm:1.1.5"
@@ -7867,6 +7875,15 @@ __metadata:
     global-dirs: ^3.0.0
     is-path-inside: ^3.0.2
   checksum: 3359840d5982d22e9b350034237b2cda2a12bac1b48a721912e1ab8e0631dd07d45a2797a120b7b87552759a65ba03e819f1bd63f2d7ab8657ec0b44ee0bf399
+  languageName: node
+  linkType: hard
+
+"is-ip@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "is-ip@npm:4.0.0"
+  dependencies:
+    ip-regex: ^5.0.0
+  checksum: 6bbf3b83b18b02e6cf6b26d16c0d2de38bf5b2f5597de2b902894a83764ae6879f9acd1baec653b47b18a67a975c0cade779f3485e96a6b2cd09a26407d82991
   languageName: node
   linkType: hard
 
@@ -13013,6 +13030,20 @@ __metadata:
   bin:
     rollup: dist/bin/rollup
   checksum: fe2b2fda7bf53c86e970f3b026b784c00e2237089b802755b3e43725db88f5d1869c1f81f8c5257e9b68b0fd1840dcbd3897d2f19768cce97a37c70e1a563dce
+  languageName: node
+  linkType: hard
+
+"rollup@npm:^2.72.0":
+  version: 2.72.0
+  resolution: "rollup@npm:2.72.0"
+  dependencies:
+    fsevents: ~2.3.2
+  dependenciesMeta:
+    fsevents:
+      optional: true
+  bin:
+    rollup: dist/bin/rollup
+  checksum: d4c213d4250a0455e0ee40664db3339a9e3ca5affa09c348019b4895e7100cdbedeba881a239a7a80c407b4055dca4e97d10a740d99c09b17651efbfedd61a4b
   languageName: node
   linkType: hard
 

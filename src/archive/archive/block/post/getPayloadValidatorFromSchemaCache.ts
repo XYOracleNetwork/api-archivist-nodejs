@@ -7,6 +7,7 @@ import { GetValidator } from './GetValidator'
 const ajv = new Ajv()
 
 export const getPayloadValidatorFromSchemaCache: GetValidator<XyoPayload> = async (payload) => {
+  // TODO: Ensure the ajv cached version reflects the schema cached version?
   const validate = ajv.getSchema(payload.schema)
   if (!validate) {
     const schema = await XyoSchemaCache.instance.get(payload.schema)
