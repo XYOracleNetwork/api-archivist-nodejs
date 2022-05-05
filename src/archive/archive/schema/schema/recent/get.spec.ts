@@ -1,6 +1,6 @@
 import { v4 } from 'uuid'
 
-import { claimArchive, getArchiveSchemaPayloadsRecent, getNewBlock, getPayloads, getTokenForNewUser, postBlock } from '../../../../test'
+import { claimArchive, getArchiveSchemaPayloadsRecent, getNewBlock, getPayloads, getTokenForNewUser, postBlock } from '../../../../../test'
 
 describe('/archive/:archive/schema/:schema/recent', () => {
   const schema = `network.xyo.test.${v4()}`
