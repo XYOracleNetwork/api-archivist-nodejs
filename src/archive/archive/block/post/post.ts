@@ -9,6 +9,7 @@ import { ArchivePathParams } from '../../../../model'
 import { prepareBoundWitnesses } from './prepareBoundWitnesses'
 import { storeBoundWitnesses } from './storeBoundWitnesses'
 import { storePayloads } from './storePayloads'
+import { validatePayload } from './validatePayload'
 //import { validateBody } from './validateBody'
 
 const handler: RequestHandler<ArchivePathParams, XyoBoundWitness[], XyoBoundWitness[]> = async (req, res, next) => {
@@ -32,6 +33,13 @@ const handler: RequestHandler<ArchivePathParams, XyoBoundWitness[], XyoBoundWitn
   }*/
 
   const { payloads, sanitized } = prepareBoundWitnesses(body, boundWitnessMetaData, payloadMetaData)
+
+  payloads.forEach(async (payload) => {
+    const valid = await validatePayload(payload)
+    if (!valid) {
+      payload._schemaValid = false
+    }
+  })
 
   await storeBoundWitnesses(archive, sanitized)
   payloads.length ? await storePayloads(archive, payloads) : { insertedCount: 0 }
