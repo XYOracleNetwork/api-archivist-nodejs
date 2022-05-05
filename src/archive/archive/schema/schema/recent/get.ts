@@ -4,7 +4,7 @@ import { asyncHandler, tryParseInt } from '@xylabs/sdk-api-express-ecs'
 import { assertEx } from '@xylabs/sdk-js'
 import { RequestHandler } from 'express'
 
-import { getArchivistPayloadMongoSdk } from '../../../../lib'
+import { getArchivistPayloadMongoSdk } from '../../../../../lib'
 import { ArchiveSchemaPayloadsRecentPathParams } from './ArchiveSchemaPayloadsRecentPathParams'
 
 const getRecentPayloadsOfSchemaForArchive = async (archive: string, schema: string, limit: number) => {
