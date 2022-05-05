@@ -1,10 +1,10 @@
 import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 
-import { getValidatorForPayload } from './getValidatorForPayload'
-// eslint-disable-next-line import/no-named-as-default
+import { getPayloadValidatorFromSchemaCache } from './getPayloadValidatorFromSchemaCache'
+import { GetValidator } from './GetValidator'
 
-export const validatePayload = async (payload: XyoPayload): Promise<boolean> => {
-  const validate = await getValidatorForPayload(payload)
+export const validatePayload = async (payload: XyoPayload, getValidator: GetValidator<XyoPayload> = getPayloadValidatorFromSchemaCache): Promise<boolean> => {
+  const validate = await getValidator(payload)
   if (!validate) return true
   const valid = await validate(payload)
   return !valid ? false : true
