@@ -34,14 +34,12 @@ const handler: RequestHandler<ArchivePathParams, XyoBoundWitness[], XyoBoundWitn
 
   const { payloads, sanitized } = prepareBoundWitnesses(body, boundWitnessMetaData, payloadMetaData)
 
-  /*
   payloads.forEach(async (payload) => {
     const valid = await validatePayload(payload)
     if (!valid) {
       payload._schemaValid = false
     }
   })
-  */
 
   await storeBoundWitnesses(archive, sanitized)
   payloads.length ? await storePayloads(archive, payloads) : { insertedCount: 0 }
