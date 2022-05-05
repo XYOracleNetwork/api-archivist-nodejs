@@ -2,7 +2,7 @@ import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 // eslint-disable-next-line import/no-named-as-default
 import Ajv from 'ajv'
 
-import { validatePayload } from './validatePayload'
+import { validatePayloadSchema } from './validatePayloadSchema'
 
 const ajv = new Ajv()
 
@@ -22,24 +22,24 @@ const getPayload = (): XyoPayload => {
   }
 }
 
-describe('validatePayload', () => {
+describe('validatePayloadSchema', () => {
   describe('when validator exists', () => {
     it('and payload is valid against schema returns true', async () => {
       const payload = getPayload()
-      const answer = await validatePayload(payload, () => Promise.resolve(validate))
+      const answer = await validatePayloadSchema(payload, () => Promise.resolve(validate))
       expect(answer).toBeTruthy()
     })
     it('and payload is not valid against schema returns false', async () => {
       const payload = getPayload()
       delete (payload as Partial<XyoPayload>).schema
-      const answer = await validatePayload(payload, () => Promise.resolve(validate))
+      const answer = await validatePayloadSchema(payload, () => Promise.resolve(validate))
       expect(answer).toBeFalsy()
     })
   })
   describe('when validator does not exist', () => {
     it('returns true', async () => {
       const payload = getPayload()
-      const answer = await validatePayload(payload, () => Promise.resolve(undefined))
+      const answer = await validatePayloadSchema(payload, () => Promise.resolve(undefined))
       expect(answer).toBeTruthy()
     })
   })
