@@ -29,6 +29,10 @@ jobs:
         run: docker compose up -d mongo
       - name: test
         run: yarn test --coverage
+        env:
+          # Current max memory size of Linux hosted runner is 7 GB
+          # https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources
+          NODE_OPTIONS: "--max-old-space-size=5120"
       - name: bring down test environment
         run: docker compose down
       - name: format code coverage

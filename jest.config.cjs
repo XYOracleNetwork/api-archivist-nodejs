@@ -1,6 +1,14 @@
 const generateJestConfig = ({ esModules }) => {
   const esModuleslist = Array.isArray(esModules) ? esModules.join('|') : esModules
   return {
+    coverageThreshold: {
+      global: {
+        branches: 50,
+        functions: 80,
+        lines: 70,
+        statements: 70,
+      },
+    },
     globals: {
       'ts-jest': {
         tsconfig: 'tsconfig.test.json',
