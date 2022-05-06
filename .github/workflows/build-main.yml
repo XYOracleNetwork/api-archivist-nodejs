@@ -29,6 +29,8 @@ jobs:
         run: docker compose up -d mongo
       - name: test
         run: yarn test --coverage
+        env:
+          NODE_OPTIONS: "--max-old-space-size=4096"
       - name: bring down test environment
         run: docker compose down
       - name: format code coverage
