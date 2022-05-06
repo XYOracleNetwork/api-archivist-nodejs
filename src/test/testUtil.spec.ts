@@ -260,6 +260,7 @@ export const getPayloadsByTimestamp = async (
   expectedStatus: StatusCodes = StatusCodes.OK
 ): Promise<XyoPayload[]> => {
   const response = await request.get(`/archive/${archive}/payload`).query({ limit, order, timestamp }).auth(token, { type: 'bearer' }).expect(expectedStatus)
+  console.log(`getPayloadsByTimestamp: ${JSON.stringify(response.body.data, null, 2)}`)
   return response.body.data
 }
 
