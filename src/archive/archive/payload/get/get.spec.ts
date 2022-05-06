@@ -46,8 +46,8 @@ describe('/archive/:archive/payload', () => {
         expect(Array.isArray(response)).toBe(true)
         expect(response.length).toBe(10)
       })
-      it('Returns blocks not including the specified timestamp', () => {
-        expect(response.map((x) => x._timestamp)).not.toContain(timestamp)
+      it('Returns blocks including the specified timestamp', () => {
+        expect(response.map((x) => x._timestamp)).toContain(timestamp)
       })
       it('Returns blocks in the correct sort order', () => {
         expect(response).toBeSortedBy('_timestamp', { descending: order === 'desc' })
