@@ -41,7 +41,6 @@ describe('/archive/:archive/payload', () => {
         expect(hash).toBeTruthy()
         timestamp = recentPayload?._timestamp || 0
         expect(timestamp).toBeTruthy()
-        console.log(`In: ${token}, ${archive}, ${timestamp}, ${10}, ${order}`)
         response = await getPayloadsByTimestamp(token, archive, timestamp, 10, order)
         expect(response).toBeTruthy()
         expect(Array.isArray(response)).toBe(true)
