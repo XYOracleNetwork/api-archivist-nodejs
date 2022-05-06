@@ -3,8 +3,8 @@ import { assertEx } from '@xylabs/sdk-js'
 import { getMongoDBConfig } from '../../../../../lib'
 import { UserMongoSdk } from './userSdk'
 
-export const getUserMongoSdk = async () => {
-  const env = await getMongoDBConfig()
+export const getUserMongoSdk = () => {
+  const env = getMongoDBConfig()
   return new UserMongoSdk({
     collection: 'users',
     dbConnectionString: env.MONGO_CONNECTION_STRING,

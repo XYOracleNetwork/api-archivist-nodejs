@@ -1,13 +1,6 @@
 import { Express } from 'express'
 
-import {
-  getArchiveBlockHash,
-  getArchiveBlockHashPayloads,
-  getArchiveBlockRecent,
-  getArchiveBlocks,
-  getArchiveBlockStats,
-  postArchiveBlock,
-} from '../archive'
+import { getArchiveBlockHash, getArchiveBlockHashPayloads, getArchiveBlockRecent, getArchiveBlocks, getArchiveBlockStats, postArchiveBlock } from '../archive'
 import { requireArchiveAccess } from '../middleware'
 import { notImplemented } from './notImplemented'
 
@@ -33,6 +26,7 @@ export const addBlockRoutes = (app: Express) => {
     // requireArchiveAccess,
     postArchiveBlock
     /* #swagger.tags = ['Block'] */
+    /* #swagger.deprecated = true */
     /* #swagger.summary = 'Temporary support for legacy calls' */
   )
 

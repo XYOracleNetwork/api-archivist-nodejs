@@ -10,12 +10,12 @@ import { getArchivistPayloadMongoSdk } from '../../../../lib'
 import { PayloadHashPathParams } from '../payloadHashPathParams'
 
 const getPayload = async (archive: string, hash: string) => {
-  const sdk = await getArchivistPayloadMongoSdk(archive)
+  const sdk = getArchivistPayloadMongoSdk(archive)
   return await sdk.findByHash(hash)
 }
 
 const updatePayload = async (archive: string, hash: string, payload: XyoPayload) => {
-  const sdk = await getArchivistPayloadMongoSdk(archive)
+  const sdk = getArchivistPayloadMongoSdk(archive)
   const wrapper = new XyoPayloadWrapper(payload)
   return await sdk.updateByHash(hash, { ...payload, _hash: wrapper.sortedHash() })
 }

@@ -5,10 +5,10 @@ import { assertEx } from '@xylabs/sdk-js'
 import { RequestHandler } from 'express'
 
 import { getArchivistBoundWitnessesMongoSdk } from '../../../../lib'
-import { BlockRecentPathParams } from './blockRecentPathParams'
+import { BlockRecentPathParams } from './BlockRecentPathParams'
 
 const getBoundWitness = async (archive: string, limit: number) => {
-  const sdk = await getArchivistBoundWitnessesMongoSdk(archive)
+  const sdk = getArchivistBoundWitnessesMongoSdk(archive)
   return await sdk.findRecent(limit)
 }
 

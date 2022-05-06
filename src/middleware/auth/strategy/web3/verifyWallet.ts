@@ -8,7 +8,6 @@ export const verifyWallet = (message: string, signature: string, address: string
     const walletAddress = trimAddressPrefix(address.toLowerCase())
     return signingAddress === walletAddress
   } catch (error) {
-    console.error(error)
     return false
   }
 }

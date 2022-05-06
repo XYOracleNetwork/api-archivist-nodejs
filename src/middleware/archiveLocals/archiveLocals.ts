@@ -5,11 +5,7 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 import { getArchiveByName, isValidArchiveName } from '../../lib'
 import { ArchiveLocals, ArchivePathParams } from '../../model'
 
-const handler: RequestHandler<ArchivePathParams, NoResBody, NoReqBody, NoReqQuery, ArchiveLocals> = async (
-  req,
-  res,
-  next
-) => {
+const handler: RequestHandler<ArchivePathParams, NoResBody, NoReqBody, NoReqQuery, ArchiveLocals> = async (req, res, next) => {
   try {
     // If there's an archive path param
     if (req.params.archive) {

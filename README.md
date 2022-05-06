@@ -5,8 +5,10 @@
 [![main-build][]][main-build-link]
 [![prod-deploy][]][prod-deploy-link]
 [![beta-deploy][]][beta-deploy-link]
+
 [![codacy-badge][]][codacy-link]
 [![codeclimate-badge][]][codeclimate-link]
+[![codeclimate-coverage-badge][]][codeclimate-coverage-link]
 
 ## Table of Contents
 
@@ -49,3 +51,5 @@ See the [LICENSE](LICENSE) file for license details
 [codacy-link]: https://www.codacy.com/gh/XYOracleNetwork/api-archivist-nodejs/dashboard?utm_source=github.com&utm_medium=referral&utm_content=xylabs/api-xylabs-import-nodejs&utm_campaign=Badge_Grade
 [codeclimate-badge]: https://api.codeclimate.com/v1/badges/dc0bb5770f231f22f826/maintainability
 [codeclimate-link]: https://codeclimate.com/github/XYOracleNetwork/api-archivist-nodejs/maintainability
+[codeclimate-coverage-badge]: https://api.codeclimate.com/v1/badges/dc0bb5770f231f22f826/test_coverage
+[codeclimate-coverage-link]: https://codeclimate.com/github/XYOracleNetwork/api-archivist-nodejs/test_coverage

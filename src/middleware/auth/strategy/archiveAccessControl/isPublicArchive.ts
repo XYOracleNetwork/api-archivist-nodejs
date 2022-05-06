@@ -4,9 +4,7 @@ import { Request } from 'express'
 import { determineArchiveAccessControl } from '../../../../lib'
 import { ArchiveLocals, ArchivePathParams } from '../../../../model'
 
-export const isPublicArchive = (
-  req: Request<ArchivePathParams, NoResBody, NoReqBody, NoReqQuery, ArchiveLocals>
-): boolean => {
+export const isPublicArchive = (req: Request<ArchivePathParams, NoResBody, NoReqBody, NoReqQuery, ArchiveLocals>): boolean => {
   // Get the archive from locals
   const record = req?.res?.locals?.archive
 
