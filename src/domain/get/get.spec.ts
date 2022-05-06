@@ -6,13 +6,13 @@ describe('/domain', () => {
   describe('when authorized returns', () => {
     it('retrieve network.xyo', async () => {
       const response = await getDomain(domain, await getTokenForNewUser())
-      expect(response.aliases?.find((alias) => alias.name === 'network.xyo.schema')).toBeDefined()
+      expect(response.aliases?.['network.xyo.schema']).toBeDefined()
     })
   })
   describe('when unauthorized returns', () => {
     it('retrieve network.xyo', async () => {
       const response = await getDomain(domain)
-      expect(response.aliases?.find((alias) => alias.name === 'network.xyo.schema')).toBeDefined()
+      expect(response.aliases?.['network.xyo.schema']).toBeDefined()
     })
   })
 })
