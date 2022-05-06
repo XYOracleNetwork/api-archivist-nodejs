@@ -14,28 +14,32 @@ export interface GetArchivePayloadsQueryParams extends NoReqQuery {
   limit?: string
   order?: SortDirection
   timestamp?: string
+  schema?: string
 }
 
-const getPayloads = (archive: string, timestamp?: number, limit = defaultLimit, sortOrder: SortDirection = 'asc'): Promise<XyoPayload[] | null> => {
+const getPayloads = (archive: string, timestamp?: number, limit = defaultLimit, sortOrder: SortDirection = 'asc', schema?: string): Promise<XyoPayload[] | null> => {
+  console.log('Up!')
   const sdk = getArchivistPayloadMongoSdk(archive)
   if (timestamp) {
-    return sortOrder === 'asc' ? sdk.findAfter(timestamp, limit) : sdk.findBefore(timestamp, limit)
+    console.log('Yo!')
+    return sdk.findSorted(timestamp, limit, sortOrder, schema)
   }
   // If no hash/timestamp was supplied, just return from the start/end of the archive
   return sortOrder === 'asc' ? sdk.findAfter(0, limit) : sdk.findBefore(Date.now(), limit)
 }
 
 const handler: RequestHandler<ArchivePathParams, XyoPayload[], NoReqBody, GetArchivePayloadsQueryParams, ArchiveLocals> = async (req, res, next) => {
+  console.log('Up! Handler')
   const { archive } = res.locals
   if (!archive) {
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
   }
-  const { limit, order, timestamp } = req.query
+  const { limit, order, timestamp, schema } = req.query
   const limitNumber = tryParseInt(limit) ?? 10
   const timestampNumber = tryParseInt(timestamp)
   assertEx(limitNumber > 0 && limitNumber <= maxLimit, `limit must be between 1 and ${maxLimit}`)
   const parsedOrder = order?.toLowerCase?.() === 'asc' ? 'asc' : 'desc'
-  const payloads = await getPayloads(archive.archive, timestampNumber, limitNumber, parsedOrder)
+  const payloads = await getPayloads(archive.archive, timestampNumber, limitNumber, parsedOrder, schema)
   if (payloads) {
     res.json(payloads)
     next()
