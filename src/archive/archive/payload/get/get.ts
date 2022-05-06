@@ -19,10 +19,9 @@ export interface GetArchivePayloadsQueryParams extends NoReqQuery {
 
 const getPayloads = (archive: string, timestamp?: number, limit = defaultLimit, sortOrder: SortDirection = 'desc', schema?: string): Promise<XyoPayload[] | null> => {
   const sdk = getArchivistPayloadMongoSdk(archive)
-  if (timestamp) return sdk.findSorted(timestamp, limit, sortOrder, schema)
   // If no hash/timestamp was supplied, just return from the start/end of the archive
-  const time = sortOrder === 'asc' ? 0 : Date.now()
-  return sdk.findSorted(time, limit, 'desc', schema)
+  if (!timestamp) timestamp = sortOrder === 'desc' ? Date.now() : 0
+  return sdk.findSorted(timestamp, limit, sortOrder, schema)
 }
 
 const handler: RequestHandler<ArchivePathParams, XyoPayload[], NoReqBody, GetArchivePayloadsQueryParams, ArchiveLocals> = async (req, res, next) => {
