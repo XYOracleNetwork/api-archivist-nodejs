@@ -1,2 +1,1 @@
-export * from './ArchiveSchemaPayloadsRecentPathParams'
-export * from './get'
+export * from './recent'

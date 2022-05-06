@@ -1,4 +1,4 @@
-import { ArchivePathParams } from '../../../../model'
+import { ArchivePathParams } from '../../../../../model'
 
 export type ArchiveSchemaPayloadsRecentPathParams = ArchivePathParams & {
   schema: string

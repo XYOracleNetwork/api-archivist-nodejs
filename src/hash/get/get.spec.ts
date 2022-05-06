@@ -109,12 +109,19 @@ describe('/:hash', () => {
       ['bound witness', boundWitnessHash],
       ['payload', payloadHash],
     ])('with %s hash', (hashKind, hash) => {
-      it(`with anonymous user returns ${ReasonPhrases.NOT_FOUND}`, async () => {
-        await getHash(hash, undefined, StatusCodes.NOT_FOUND)
+      beforeAll(() => {
+        jest.spyOn(console, 'error').mockImplementation(() => {
+          // Stop expected errors from being logged
+        })
       })
-      it(`with non-archive owner returns ${ReasonPhrases.NOT_FOUND}`, async () => {
-        const token = await getTokenForNewUser()
-        await getHash(hash, token, StatusCodes.NOT_FOUND)
+      describe(`returns ${ReasonPhrases.NOT_FOUND}`, () => {
+        it('with anonymous user', async () => {
+          await getHash(hash, undefined, StatusCodes.NOT_FOUND)
+        })
+        it('with non-archive owner', async () => {
+          const token = await getTokenForNewUser()
+          await getHash(hash, token, StatusCodes.NOT_FOUND)
+        })
       })
       it(`with archive owner returns the ${hashKind}`, async () => {
         const result = await getHash(hash, token)
@@ -123,6 +130,11 @@ describe('/:hash', () => {
     })
   })
   describe('with nonexistent hash', () => {
+    beforeAll(() => {
+      jest.spyOn(console, 'error').mockImplementation(() => {
+        // Stop expected errors from being logged
+      })
+    })
     it(`returns ${ReasonPhrases.NOT_FOUND}`, async () => {
       await getHash('non_existent_hash', undefined, StatusCodes.NOT_FOUND)
     })

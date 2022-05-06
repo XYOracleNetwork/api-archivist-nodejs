@@ -2,7 +2,7 @@ import { XyoAccount, XyoBoundWitnessBuilder } from '@xyo-network/sdk-xyo-client-
 
 import { claimArchive, getHash, getSchema, getTokenForNewUser, postBlock } from '../../../test'
 
-describe('/schema', () => {
+describe('/schema/:schema', () => {
   const schema = 'network.xyo.schema'
   const definition = { $schema: 'http://json-schema.org/draft-07/schema#' }
   const bw = new XyoBoundWitnessBuilder({ inlinePayloads: true }).payload({ definition, schema }).witness(XyoAccount.random()).build()
