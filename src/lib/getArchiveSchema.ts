@@ -14,7 +14,7 @@ export const getPayloadSchemasInArchive = (archive: string): Promise<string[]> =
   })
 }
 
-export interface PayloadSchemaCounts {
+interface PayloadSchemaCountsAggregateResult {
   _id: string
   count: number
 }
@@ -23,11 +23,11 @@ export interface PayloadSchemaCounts {
  * @param archive The name of the archive to search
  * @returns A list of all the distinct schemas in use by the payloads in the archive
  */
-export const getPayloadSchemaCountsInArchive = (archive: string): Promise<PayloadSchemaCounts[]> => {
+export const getPayloadSchemaCountsInArchive = async (archive: string): Promise<Record<string, number>> => {
   const sdk = getArchivistPayloadMongoSdk(archive)
-  return sdk.useCollection((collection) => {
+  const result: PayloadSchemaCountsAggregateResult[] = await sdk.useCollection((collection) => {
     return collection
-      .aggregate<PayloadSchemaCounts>([
+      .aggregate<PayloadSchemaCountsAggregateResult>([
         {
           $group: {
             _id: '$schema',
@@ -44,4 +44,5 @@ export const getPayloadSchemaCountsInArchive = (archive: string): Promise<Payloa
       ])
       .toArray()
   })
+  return result.reduce((o, schemaCount) => ({ ...o, [schemaCount._id]: schemaCount.count }), {})
 }
