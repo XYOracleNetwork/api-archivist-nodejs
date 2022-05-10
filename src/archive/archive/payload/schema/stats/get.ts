@@ -1,8 +1,8 @@
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
 import { RequestHandler } from 'express'
 
-import { getPayloadSchemaCountsInArchive } from '../../../../lib'
-import { ArchivePathParams } from '../../../../model'
+import { getPayloadSchemaCountsInArchive } from '../../../../../lib'
+import { ArchivePathParams } from '../../../../../model'
 
 export interface ArchiveSchemaStatsResponse {
   counts: Record<string, number>
@@ -15,4 +15,4 @@ const handler: RequestHandler<ArchivePathParams, ArchiveSchemaStatsResponse> = a
   next()
 }
 
-export const getArchiveSchemaStats = asyncHandler(handler)
+export const getArchivePayloadSchemaStats = asyncHandler(handler)
