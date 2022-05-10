@@ -14,21 +14,15 @@ export const getPayloadSchemaCountsInArchive = async (archive: string): Promise<
   const sdk = getArchivistPayloadMongoSdk(archive)
   const result: PayloadSchemaCountsAggregateResult[] = await sdk.useCollection((collection) => {
     return collection
-      .aggregate<PayloadSchemaCountsAggregateResult>([
-        {
-          $group: {
-            _id: '$schema',
-            count: {
-              $sum: 1,
-            },
-          },
+      .aggregate()
+      .match({ _archive: archive })
+      .group<PayloadSchemaCountsAggregateResult>({
+        _id: '$schema',
+        count: {
+          $sum: 1,
         },
-        {
-          $sort: {
-            count: -1,
-          },
-        },
-      ])
+      })
+      .sort({ count: -1 })
       .toArray()
   })
   return result.reduce((o, schemaCount) => ({ ...o, [schemaCount._id]: schemaCount.count }), {})

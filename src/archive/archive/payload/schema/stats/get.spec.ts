@@ -44,9 +44,8 @@ describe('/archive/:archive/payload/schema/stats', () => {
     expect(schemas).toBeTruthy()
     expect(schemas.length).toBe(blocksPosted)
     schemas.forEach((schema) => {
-      expect(counts).toHaveProperty(schema)
-      const count = counts[schema]
-      expect(count).toBe(1)
+      // expect(counts).toHaveProperty(schema, 1)
+      expect(counts[schema]).toBe(1)
     })
   })
 })
