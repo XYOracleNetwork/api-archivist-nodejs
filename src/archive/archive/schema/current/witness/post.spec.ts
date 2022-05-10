@@ -1,9 +1,7 @@
-import { v4 } from 'uuid'
-
-import { claimArchive, getArchiveSchemaPayloadsRecent, getNewBlock, getPayloads, getTokenForNewUser, postBlock } from '../../../../../test'
+import { claimArchive, getArchiveSchemaPayloadsRecent, getNewBlock, getPayloads, getSchemaName, getTokenForNewUser, postBlock } from '../../../../../test'
 
 describe.skip('/archive/:archive/schema/current/witness', () => {
-  const schema = `network.xyo.test.${v4()}`
+  const schema = getSchemaName()
   const schemaToAdd = 5
   let token: string
   let archive: string

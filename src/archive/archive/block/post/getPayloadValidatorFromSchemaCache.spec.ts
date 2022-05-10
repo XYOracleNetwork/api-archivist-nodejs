@@ -1,11 +1,11 @@
 import { XyoPayload, XyoSchemaCache, XyoSchemaCacheEntry } from '@xyo-network/sdk-xyo-client-js'
-import { v4 } from 'uuid'
 
+import { getSchemaName } from '../../../../test'
 import { getPayloadValidatorFromSchemaCache } from './getPayloadValidatorFromSchemaCache'
 
 const getPayload = (): XyoPayload => {
   return {
-    schema: v4(),
+    schema: getSchemaName(),
   }
 }
 
