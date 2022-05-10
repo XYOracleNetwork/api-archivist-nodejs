@@ -34,7 +34,7 @@ describe('/archive/:archive/payload/schema/stats', () => {
     }
   }, 25000)
   it('Returns stats on all payload schemas in archive', async () => {
-    const response = await getArchivist().get(`/archive/${archive}/payload/schema/stats`).auth(token, { type: 'bearer' }).expect(StatusCodes.OK)
+    const response = await getArchivist().get(`/archive/${archive}/payload/schema/stats`).expect(StatusCodes.OK)
     const stats = response.body.data
     expect(stats).toBeTruthy()
     expect(stats.counts).toBeTruthy()
