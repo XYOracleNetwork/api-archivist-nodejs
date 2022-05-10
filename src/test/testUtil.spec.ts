@@ -67,8 +67,14 @@ export const getArchivist = (): SuperTest<Test> => {
   return supertest(getApp())
 }
 
+const testArchivePrefix = 'test-'
 export const getArchiveName = (): string => {
-  return v4()
+  return `${testArchivePrefix}${v4()}`
+}
+
+export const testSchemaPrefix = 'network.xyo.schema.test.'
+export const getSchemaName = (): string => {
+  return `${testSchemaPrefix}${v4()}`
 }
 
 export const getNewWeb2User = (): TestWeb2User => {

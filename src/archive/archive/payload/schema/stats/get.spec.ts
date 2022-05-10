@@ -1,13 +1,12 @@
 import { XyoAccount, XyoBoundWitnessBuilder } from '@xyo-network/sdk-xyo-client-js'
 import { StatusCodes } from 'http-status-codes'
-import { v4 } from 'uuid'
 
-import { claimArchive, getArchivist, getTokenForNewUser, postBlock } from '../../../../../test'
+import { claimArchive, getArchivist, getSchemaName, getTokenForNewUser, postBlock } from '../../../../../test'
 
 const blocksPosted = 2
 const definition = { $schema: 'http://json-schema.org/draft-07/schema#' }
 
-const getNewBlockWithPayloadsOfSchemaType = (schema = `network.xyo.schema.test.${v4()}`) => {
+const getNewBlockWithPayloadsOfSchemaType = (schema = getSchemaName()) => {
   return new XyoBoundWitnessBuilder({ inlinePayloads: true }).payload({ definition, schema }).witness(XyoAccount.random()).build()
 }
 
