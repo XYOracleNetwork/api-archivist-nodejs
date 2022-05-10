@@ -1,5 +1,6 @@
 import { Express } from 'express'
 
+import { getArchivePayloadSchemaStats } from '../archive'
 import { requireArchiveAccess } from '../middleware'
 import { notImplemented } from './notImplemented'
 
@@ -10,6 +11,14 @@ export const addPayloadSchemaRoutes = (app: Express) => {
     notImplemented
     /* #swagger.tags = ['Schema'] */
     /* #swagger.summary = 'Get list of payload schemas used in this archive' */
+  )
+
+  app.get(
+    '/archive/:archive/payload/schema/stats',
+    requireArchiveAccess,
+    getArchivePayloadSchemaStats
+    /* #swagger.tags = ['Schema'] */
+    /* #swagger.summary = 'Get payload schema stats' */
   )
 
   app.get(
