@@ -8,6 +8,6 @@ import { getArchivistPayloadMongoSdk } from '../dbSdk'
 export const getPayloadSchemasInArchive = (archive: string): Promise<string[]> => {
   const sdk = getArchivistPayloadMongoSdk(archive)
   return sdk.useCollection((collection) => {
-    return collection.distinct('schema')
+    return collection.distinct('schema', { _archive: archive })
   })
 }
