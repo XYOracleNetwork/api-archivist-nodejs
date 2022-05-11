@@ -1,12 +1,10 @@
-// TODO: make functional instead for non-id properties
-export interface Entity<T = string> {
-  id: T
+export interface ReadOnlyRepository<T, TQuery, TId = string> {
+  find(query: TQuery): Promise<T[]>
+  get(id: TId): Promise<T[]>
 }
 
-// TODO: Read, Write, Add, Delete
-export interface Repository<TEntity extends Entity<TId>, TId> {
-  delete: (x: TEntity) => Promise<TEntity>
-  deleteById: (id: TId) => Promise<TEntity>
-  get: (predicate: unknown) => Promise<TEntity[]>
-  getById: (id: TId) => Promise<TEntity | null>
+export interface WriteOnlyRepository<T> {
+  insert(item: T): Promise<T>
 }
+
+export type ReadWriteRepository<T, TQuery, TId> = ReadOnlyRepository<T, TQuery, TId> & WriteOnlyRepository<T>
