@@ -1,6 +1,6 @@
 export interface ReadOnlyRepository<T, TQuery, TId = string> {
-  find(query: TQuery): Promise<T[]>
-  get(id: TId): Promise<T[]>
+  find(query: TQuery): Promise<T>
+  get(id: TId): Promise<T>
 }
 
 export interface WriteOnlyRepository<T> {

@@ -6,14 +6,23 @@ import { getArchivistAllPayloadMongoSdk } from '../../lib'
 import { PayloadRepository } from './payloadRepository'
 
 export class MongoDBPayloadRepository implements PayloadRepository<XyoPayload, Filter<XyoPayload>> {
-  constructor(private sdk: BaseMongoSdk<XyoPayload> = getArchivistAllPayloadMongoSdk()) {}
-  find(query: Filter<XyoPayload>): Promise<WithXyoPayloadMeta<XyoPayload>[]> {
-    throw new Error('Method not implemented.')
+  constructor(
+    private readonly sdk: BaseMongoSdk<XyoPayload> = getArchivistAllPayloadMongoSdk() /*
+    private readonly account: XyoAccount = XyoAccount.random(),
+    private readonly config: XyoBoundWitnessBuilderConfig = { inlinePayloads: false }
+    */
+  ) {}
+  async find(filter: Filter<XyoPayload>): Promise<WithXyoPayloadMeta<XyoPayload>[]> {
+    return (await this.sdk.find(filter)).toArray()
   }
-  get(id: string): Promise<WithXyoPayloadMeta<XyoPayload>[]> {
-    throw new Error('Method not implemented.')
+  async get(huri: string): Promise<WithXyoPayloadMeta<XyoPayload>[]> {
+    return (await this.sdk.find({ _hash: huri })).toArray()
   }
-  insert(item: any): Promise<WithXyoPayloadMeta<XyoPayload>> {
-    throw new Error('Method not implemented.')
+  async insert(payloads: XyoPayload[]): Promise<WithXyoPayloadMeta<XyoPayload>[]> {
+    // TODO: Witness before insert?
+    // TODO: Validate payload before insert?
+    const result = await this.sdk.insertMany(payloads)
+    if (result.insertedCount != payloads.length) throw new Error('Error inserting payloads')
+    return payloads
   }
 }
