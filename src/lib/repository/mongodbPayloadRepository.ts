@@ -2,8 +2,8 @@ import { WithXyoPayloadMeta, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { Filter } from 'mongodb'
 
-import { getArchivistAllPayloadMongoSdk } from '../../lib'
-import { PayloadRepository } from './payloadRepository'
+import { PayloadRepository } from '../../model'
+import { getArchivistAllPayloadMongoSdk } from '../dbSdk'
 
 export class MongoDBPayloadRepository implements PayloadRepository<XyoPayload, Filter<XyoPayload>> {
   constructor(
@@ -20,7 +20,7 @@ export class MongoDBPayloadRepository implements PayloadRepository<XyoPayload, F
   }
   async insert(payloads: XyoPayload[]): Promise<WithXyoPayloadMeta<XyoPayload>[]> {
     // TODO: Witness before insert?
-    // TODO: Validate payload before insert?
+    // TODO: Validate payloads before insert?
     const result = await this.sdk.insertMany(payloads)
     if (result.insertedCount != payloads.length) throw new Error('Error inserting payloads')
     return payloads
