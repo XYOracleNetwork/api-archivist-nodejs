@@ -28,7 +28,7 @@ describe('/archive/:archive/block/stats', () => {
   }, 25000)
   it('Returns stats on all archives', async () => {
     // Verify the counts are for more than just 1 archive
-    const response = await getArchivist().get(`/archive/${archive}/block/stats`).auth(token, { type: 'bearer' }).expect(StatusCodes.OK)
+    const response = await getArchivist().get(`/archive/${archive}/block/stats`).expect(StatusCodes.OK)
     const stats = response.body.data
     expect(stats).toBeTruthy()
     expect(typeof stats?.count).toBe('number')
