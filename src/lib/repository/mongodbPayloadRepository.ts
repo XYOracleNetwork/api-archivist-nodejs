@@ -5,7 +5,7 @@ import { Filter } from 'mongodb'
 import { PayloadRepository } from '../../model'
 import { getArchivistAllBoundWitnessesMongoSdk, getArchivistAllPayloadMongoSdk } from '../dbSdk'
 
-export class MongoDBPayloadRepository implements PayloadRepository<XyoPayload, Filter<XyoPayload>> {
+export class MongoDBPayloadRepository implements PayloadRepository<XyoPayloadBody, XyoPayload, Filter<XyoPayload>> {
   constructor(
     private readonly payloadsSdk: BaseMongoSdk<XyoPayload> = getArchivistAllPayloadMongoSdk(),
     private readonly boundWitnessSdk: BaseMongoSdk<XyoBoundWitness> = getArchivistAllBoundWitnessesMongoSdk(),
