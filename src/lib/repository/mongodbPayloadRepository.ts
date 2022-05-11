@@ -21,10 +21,10 @@ export class MongoDBPayloadRepository implements PayloadRepository<XyoPayloadBod
   async insert(payloads: XyoPayloadBody[]): Promise<XyoPayload[]> {
     const bw = new XyoBoundWitnessBuilder(this.config).witness(this.account).payloads(payloads).build()
     const bwResult = await this.boundWitnessSdk.insertOne(bw)
-    if (bwResult.acknowledged && bwResult.insertedId) throw new Error('Error inserting payloads')
+    if (bwResult.acknowledged && bwResult.insertedId) throw new Error('MongoDBPayloadRepository: Error inserting BoundWitness')
     // TODO: Validate payloads before insert?
     const result = await this.payloadsSdk.insertMany(payloads)
-    if (result.insertedCount != payloads.length) throw new Error('Error inserting payloads')
+    if (result.insertedCount != payloads.length) throw new Error('MongoDBPayloadRepository: Error inserting Payloads')
     return payloads
   }
 }
