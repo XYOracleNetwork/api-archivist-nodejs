@@ -3,8 +3,8 @@ export interface ReadOnlyRepository<T, TQuery, TId = string> {
   get(id: TId): Promise<T>
 }
 
-export interface WriteOnlyRepository<T> {
-  insert(item: T): Promise<T>
+export interface WriteOnlyRepository<TInsert, TResponse> {
+  insert(item: TInsert): Promise<TResponse>
 }
 
-export type ReadWriteRepository<T, TQuery, TId> = ReadOnlyRepository<T, TQuery, TId> & WriteOnlyRepository<T>
+export type ReadWriteRepository<TInsert, TResponse, TQuery, TId> = ReadOnlyRepository<TResponse, TQuery, TId> & WriteOnlyRepository<TInsert, TResponse>

@@ -1,4 +1,4 @@
-import { WithXyoPayloadMeta, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload, XyoPayloadBody } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { Filter } from 'mongodb'
 
@@ -12,13 +12,13 @@ export class MongoDBPayloadRepository implements PayloadRepository<XyoPayload, F
     private readonly config: XyoBoundWitnessBuilderConfig = { inlinePayloads: false }
     */
   ) {}
-  async find(filter: Filter<XyoPayload>): Promise<WithXyoPayloadMeta<XyoPayload>[]> {
+  async find(filter: Filter<XyoPayload>): Promise<XyoPayload[]> {
     return (await this.sdk.find(filter)).toArray()
   }
-  async get(huri: string): Promise<WithXyoPayloadMeta<XyoPayload>[]> {
+  async get(huri: string): Promise<XyoPayload[]> {
     return (await this.sdk.find({ _hash: huri })).toArray()
   }
-  async insert(payloads: XyoPayload[]): Promise<WithXyoPayloadMeta<XyoPayload>[]> {
+  async insert(payloads: XyoPayloadBody[]): Promise<XyoPayload[]> {
     // TODO: Witness before insert?
     // TODO: Validate payloads before insert?
     const result = await this.sdk.insertMany(payloads)
