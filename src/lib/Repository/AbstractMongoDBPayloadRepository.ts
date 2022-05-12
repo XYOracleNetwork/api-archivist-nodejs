@@ -4,13 +4,12 @@ import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { AbstractPayloadRepository, XyoStoredPayload } from '../../model'
 import { getArchivistAllBoundWitnessesMongoSdk, getArchivistAllPayloadMongoSdk } from '../dbSdk'
 
-export abstract class AbstractMongoDBPayloadRepository<
+export abstract class AbstractMongoDBPayloadRepository<TInsert, TResponse extends XyoStoredPayload<TInsert>, TId, TQuery> extends AbstractPayloadRepository<
   TInsert,
-  TResponse extends XyoStoredPayload<TInsert>,
-  TQuery,
+  TResponse,
   TId,
-  TSchema extends string = string
-> extends AbstractPayloadRepository<TInsert, TResponse, TQuery, TId, TSchema> {
+  TQuery
+> {
   protected constructor(
     protected readonly payloadsSdk: BaseMongoSdk<XyoPayload> = getArchivistAllPayloadMongoSdk(),
     protected readonly boundWitnessSdk: BaseMongoSdk<XyoBoundWitness> = getArchivistAllBoundWitnessesMongoSdk(),

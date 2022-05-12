@@ -2,18 +2,12 @@ import { XyoAccount, XyoArchive, XyoBoundWitness, XyoBoundWitnessBuilder, XyoBou
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { Filter } from 'mongodb'
 
-import { XyoStoredPayload } from '../../model'
-import { getArchivistAllBoundWitnessesMongoSdk, getArchivistAllPayloadMongoSdk } from '../dbSdk'
-import { AbstractMongoDBPayloadRepository } from './AbstractMongoDBPayloadRepository'
+import { XyoStoredPayload } from '../../../model'
+import { getArchivistAllBoundWitnessesMongoSdk, getArchivistAllPayloadMongoSdk } from '../../dbSdk'
+import { AbstractMongoDBPayloadRepository } from '../AbstractMongoDBPayloadRepository'
 
 const schema = 'network.xyo.archive'
-export class MongoDBArchivePayloadRepository extends AbstractMongoDBPayloadRepository<
-  XyoArchive,
-  XyoStoredPayload<XyoArchive>,
-  Filter<XyoStoredPayload<XyoArchive>>,
-  string,
-  'network.xyo.archive'
-> {
+export class MongoDBArchivePayloadRepository extends AbstractMongoDBPayloadRepository<XyoArchive, XyoStoredPayload<XyoArchive>, string, Filter<XyoStoredPayload<XyoArchive>>> {
   constructor(
     protected readonly itemsSdk: BaseMongoSdk<XyoStoredPayload<XyoArchive>>,
     payloadsSdk: BaseMongoSdk<XyoPayload> = getArchivistAllPayloadMongoSdk(),
