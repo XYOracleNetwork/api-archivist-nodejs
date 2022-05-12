@@ -1,4 +1,4 @@
-import { Repository } from './sepository'
+import { Repository } from './Repository'
 import { XyoStoredPayload } from './XyoStoredPayload'
 
 export abstract class AbstractPayloadRepository<TInsert, TResponse extends XyoStoredPayload<TInsert>, TQuery, TId, TSchema extends string = string>
