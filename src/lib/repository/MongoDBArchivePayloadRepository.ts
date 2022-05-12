@@ -5,13 +5,15 @@ import { Filter } from 'mongodb'
 import { XyoStoredPayload } from '../../model'
 import { getArchivistAllBoundWitnessesMongoSdk, getArchivistAllPayloadMongoSdk } from '../dbSdk'
 import { AbstractMongoDBPayloadRepository } from './AbstractMongoDBPayloadRepository'
-import { ArchivePayloadRepository } from './ArchivePayloadRepository'
 
 const schema = 'network.xyo.archive'
-export class MongoDBArchivePayloadRepository
-  extends AbstractMongoDBPayloadRepository<XyoArchive, XyoStoredPayload<XyoArchive>, Filter<XyoStoredPayload<XyoArchive>>, string, 'network.xyo.archive'>
-  implements ArchivePayloadRepository<Filter<XyoStoredPayload<XyoArchive>>>
-{
+export class MongoDBArchivePayloadRepository extends AbstractMongoDBPayloadRepository<
+  XyoArchive,
+  XyoStoredPayload<XyoArchive>,
+  Filter<XyoStoredPayload<XyoArchive>>,
+  string,
+  'network.xyo.archive'
+> {
   constructor(
     protected readonly itemsSdk: BaseMongoSdk<XyoStoredPayload<XyoArchive>>,
     payloadsSdk: BaseMongoSdk<XyoPayload> = getArchivistAllPayloadMongoSdk(),
