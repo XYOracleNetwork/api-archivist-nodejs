@@ -1,1 +1,2 @@
-export * from './mongodbPayloadRepository'
+export * from './ArchivePayloadRepository'
+export * from './MongoDBArchivePayloadRepository'
