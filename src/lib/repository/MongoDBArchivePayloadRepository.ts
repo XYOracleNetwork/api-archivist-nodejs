@@ -2,8 +2,8 @@ import { XyoAccount, XyoArchive, XyoBoundWitness, XyoBoundWitnessBuilder, XyoBou
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { Filter } from 'mongodb'
 
-import { AbstractMongoDBPayloadRepository } from '../../model'
 import { getArchivistAllBoundWitnessesMongoSdk, getArchivistAllPayloadMongoSdk } from '../dbSdk'
+import { AbstractMongoDBPayloadRepository } from './AbstractMongoDBPayloadRepository'
 import { ArchivePayloadRepository } from './ArchivePayloadRepository'
 
 // TODO: Let base expose raw payload SDK
