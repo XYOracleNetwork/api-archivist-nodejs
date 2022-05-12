@@ -1,4 +1,4 @@
 export * from './AbstractPayloadRepository'
-export * from './PayloadRepository'
 export * from './Repository'
+export * from './sayloadRepository'
 export * from './XyoStoredPayload'
