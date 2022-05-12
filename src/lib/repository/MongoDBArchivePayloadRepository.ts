@@ -2,19 +2,18 @@ import { XyoAccount, XyoArchive, XyoBoundWitness, XyoBoundWitnessBuilder, XyoBou
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { Filter } from 'mongodb'
 
+import { XyoStoredPayload } from '../../model'
 import { getArchivistAllBoundWitnessesMongoSdk, getArchivistAllPayloadMongoSdk } from '../dbSdk'
 import { AbstractMongoDBPayloadRepository } from './AbstractMongoDBPayloadRepository'
 import { ArchivePayloadRepository } from './ArchivePayloadRepository'
 
-// TODO: Let base expose raw payload SDK
-// TODO: Consumers can get a wrapped version of it that is strongly typed to their native object based on schema
-
+const schema = 'network.xyo.archive'
 export class MongoDBArchivePayloadRepository
-  extends AbstractMongoDBPayloadRepository<XyoArchive, XyoArchive, Filter<XyoArchive>, string, 'network.xyo.archive'>
-  implements ArchivePayloadRepository<Filter<XyoArchive>>
+  extends AbstractMongoDBPayloadRepository<XyoArchive, XyoStoredPayload<XyoArchive>, Filter<XyoStoredPayload<XyoArchive>>, string, 'network.xyo.archive'>
+  implements ArchivePayloadRepository<Filter<XyoStoredPayload<XyoArchive>>>
 {
   constructor(
-    protected readonly itemsSdk: BaseMongoSdk<XyoArchive>,
+    protected readonly itemsSdk: BaseMongoSdk<XyoStoredPayload<XyoArchive>>,
     payloadsSdk: BaseMongoSdk<XyoPayload> = getArchivistAllPayloadMongoSdk(),
     boundWitnessSdk: BaseMongoSdk<XyoBoundWitness> = getArchivistAllBoundWitnessesMongoSdk(),
     account: XyoAccount = XyoAccount.random(),
@@ -22,20 +21,19 @@ export class MongoDBArchivePayloadRepository
   ) {
     super(payloadsSdk, boundWitnessSdk, account, config)
   }
-  async find(filter: Filter<XyoArchive>): Promise<XyoArchive[]> {
+  async find(filter: Filter<XyoStoredPayload<XyoArchive>>): Promise<XyoStoredPayload<XyoArchive>[]> {
     return (await this.itemsSdk.find(filter)).toArray()
   }
-  async get(name: string): Promise<XyoArchive[]> {
+  async get(name: string): Promise<XyoStoredPayload<XyoArchive>[]> {
     return (await this.itemsSdk.find({ name })).toArray()
   }
-  async insert(items: XyoArchive[]): Promise<XyoArchive[]> {
-    const schema = 'TODO: T'
+  async insert(items: XyoArchive[]): Promise<XyoStoredPayload<XyoArchive>[]> {
     const payloads = items.map((i) => new XyoPayloadBuilder({ schema }).fields({ i }).build())
     const bw = new XyoBoundWitnessBuilder(this.config).witness(this.account).payloads(payloads).build()
     const bwResult = await this.boundWitnessSdk.insertOne(bw)
     if (bwResult.acknowledged && bwResult.insertedId) throw new Error('MongoDBPayloadRepository: Error inserting BoundWitness')
     const result = await this.payloadsSdk.insertMany(payloads)
     if (result.insertedCount != payloads.length) throw new Error('MongoDBPayloadRepository: Error inserting Payloads')
-    return items
+    return payloads as XyoStoredPayload<XyoArchive>[]
   }
 }
