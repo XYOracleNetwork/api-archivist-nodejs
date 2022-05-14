@@ -22,15 +22,17 @@ export const getBaseSdk = <T>() => {
 const getSdk = (): BaseMongoSdk<XyoStoredPayload<XyoArchive>> => getBaseSdk<XyoStoredPayload<XyoArchive>>()
 
 export class MongoDBArchiveRepository implements ArchiveRepository {
-  protected repo: MongoDBArchivePayloadRepository
-
   constructor(repo: BaseMongoSdk<XyoStoredPayload<XyoArchive>> = getSdk()) {
     this.repo = new MongoDBArchivePayloadRepository(repo)
   }
+
   async get(id: string): Promise<XyoArchive> {
     return (await this.repo.get(id))?.[0]
   }
+
   async insert(item: XyoArchive): Promise<XyoArchive> {
     return (await this.repo.insert([item]))?.[0]
   }
+
+  protected repo: MongoDBArchivePayloadRepository
 }
