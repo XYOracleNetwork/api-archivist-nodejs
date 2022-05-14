@@ -7,16 +7,16 @@ describe('ArchivistDiviner', () => {
     await ArchivistDiviner.instance.addTrustedAddress(address)
   })
   describe('addressValue', () => {
-    it('Exposes the address associated with the signing account', () => {
+    it('exposes the address associated with the signing account', () => {
       const { addressValue } = ArchivistDiviner.instance
       expect(addressValue).toBeTruthy()
     })
   })
   describe('addTrustedAddress', () => {
-    it('Adds the address as a trusted address', async () => {
+    it('adds the address as a trusted address', async () => {
       expect(await ArchivistDiviner.instance.addTrustedAddress(address)).toBe(address)
     })
-    it('Can add the same address multiple times', async () => {
+    it('can add the same address multiple times', async () => {
       expect(await ArchivistDiviner.instance.addTrustedAddress(address)).toBe(address)
       expect(await ArchivistDiviner.instance.addTrustedAddress(address)).toBe(address)
     })
