@@ -1,4 +1,6 @@
+export * from './AbstractBoundWitnessRepository'
 export * from './AbstractPayloadRepository'
+export * from './BoundWitnessRepository'
 export * from './PayloadRepository'
 export * from './Repository'
 export * from './XyoStoredPayload'

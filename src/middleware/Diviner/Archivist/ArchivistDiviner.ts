@@ -28,7 +28,6 @@ export class ArchivistDiviner {
   }
 
   public isTrustedAddress(address: string): Promise<boolean> {
-    const contains = ArchivistDiviner.trustedAddresses.has(address)
-    return Promise.resolve(!!contains)
+    return Promise.resolve(ArchivistDiviner.trustedAddresses.has(address))
   }
 }
