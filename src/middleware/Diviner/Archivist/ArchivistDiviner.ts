@@ -1,5 +1,8 @@
 import { XyoAccount } from '@xyo-network/sdk-xyo-client-js'
 
+// TODO: Move to on chain storage (archive = public key?)
+// TODO: Figure out how to inject store
+
 export class ArchivistDiviner {
   private _account: XyoAccount
   public get account(): XyoAccount {
@@ -14,5 +17,13 @@ export class ArchivistDiviner {
       this._instance = new ArchivistDiviner()
     }
     return this._instance
+  }
+
+  public addTrustedAddress(address: string): Promise<void> {
+    return Promise.reject()
+  }
+
+  public isTrustedAddress(address: string): Promise<boolean> {
+    return Promise.resolve(false)
   }
 }
