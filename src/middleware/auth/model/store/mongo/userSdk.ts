@@ -6,14 +6,32 @@ import { User, UserWithoutId } from '../../user'
 
 interface IUpsertFilter {
   $or: {
-    email?: string
     address?: string
+    email?: string
   }[]
 }
 
 class UserMongoSdk extends BaseMongoSdk<User> {
   constructor(config: BaseMongoSdkConfig, private readonly _maxTime = 2000) {
     super(config)
+  }
+
+  public async findByAddress(address: string) {
+    return await this.useCollection(async (collection: Collection<User>) => {
+      return await collection.findOne({ address }, { maxTimeMS: this._maxTime })
+    })
+  }
+
+  public async findByEmail(email: string) {
+    return await this.useCollection(async (collection: Collection<User>) => {
+      return await collection.findOne({ email }, { maxTimeMS: this._maxTime })
+    })
+  }
+
+  public async findById(id: string) {
+    return await this.useCollection(async (collection: Collection<User>) => {
+      return await collection.findOne({ _id: new ObjectId(id) }, { maxTimeMS: this._maxTime })
+    })
   }
 
   public async upsert(user: UserWithoutId): Promise<WithId<User & UpsertResult>> {
@@ -35,24 +53,6 @@ class UserMongoSdk extends BaseMongoSdk<User> {
         return { ...result.value, updated }
       }
       throw new Error('Insert Failed')
-    })
-  }
-
-  public async findByAddress(address: string) {
-    return await this.useCollection(async (collection: Collection<User>) => {
-      return await collection.findOne({ address }, { maxTimeMS: this._maxTime })
-    })
-  }
-
-  public async findByEmail(email: string) {
-    return await this.useCollection(async (collection: Collection<User>) => {
-      return await collection.findOne({ email }, { maxTimeMS: this._maxTime })
-    })
-  }
-
-  public async findById(id: string) {
-    return await this.useCollection(async (collection: Collection<User>) => {
-      return await collection.findOne({ _id: new ObjectId(id) }, { maxTimeMS: this._maxTime })
     })
   }
 }

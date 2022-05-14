@@ -27,9 +27,11 @@ export class MongoDBArchiveRepository implements ArchiveRepository {
   constructor(repo: BaseMongoSdk<XyoStoredPayload<XyoArchive>> = getSdk()) {
     this.repo = new MongoDBArchivePayloadRepository(repo)
   }
+
   async get(id: string): Promise<XyoArchive> {
     return (await this.repo.get(id))?.[0]
   }
+
   async insert(item: XyoArchive): Promise<XyoArchive> {
     return (await this.repo.insert([item]))?.[0]
   }

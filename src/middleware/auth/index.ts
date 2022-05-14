@@ -129,8 +129,8 @@ router.get(
 )
 
 export interface AuthConfig {
-  secretOrKey?: string
   apiKey?: string
+  secretOrKey?: string
 }
 
 export const configureAuth: (config: AuthConfig) => Router = (config) => {

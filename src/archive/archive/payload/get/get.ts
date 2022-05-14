@@ -13,8 +13,8 @@ const maxLimit = 100
 export interface GetArchivePayloadsQueryParams extends NoReqQuery {
   limit?: string
   order?: SortDirection
-  timestamp?: string
   schema?: string
+  timestamp?: string
 }
 
 const getPayloads = (archive: string, timestamp?: number, limit = defaultLimit, sortOrder: SortDirection = 'desc', schema?: string): Promise<XyoPayload[] | null> => {
