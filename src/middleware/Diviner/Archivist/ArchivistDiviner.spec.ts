@@ -3,15 +3,14 @@ import { ArchivistDiviner } from './ArchivistDiviner'
 const address = 'foo'
 
 describe('ArchivistDiviner', () => {
-  describe('instance', () => {
-    it('Creates an account', () => {
-      const { account } = ArchivistDiviner.instance
-      expect(account).toBeTruthy()
-      expect(account.addressValue).toBeTruthy()
+  describe('addressValue', () => {
+    it('Exposes the address associated with the signing account', () => {
+      const { addressValue } = ArchivistDiviner.instance
+      expect(addressValue).toBeTruthy()
     })
   })
   describe('addTrustedAddress', () => {
-    it('Adds teh address as a trusted address', () => {
+    it('Adds the address as a trusted address', () => {
       expect(ArchivistDiviner.instance.addTrustedAddress(address)).toBeTruthy()
     })
   })
