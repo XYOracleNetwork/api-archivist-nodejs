@@ -1,6 +1,8 @@
 {
   "root": true,
-  "extends": ["@xylabs"],
+  "extends": [
+    "@xylabs"
+  ],
   "ignorePatterns": [
     "node_modules",
     "build",
@@ -13,10 +15,24 @@
     "swagger.json"
   ],
   "rules": {
+    "@typescript-eslint/member-ordering": [
+      "error",
+      {
+        "default": {
+          "memberTypes": [],
+          "order": "alphabetically"
+        }
+      }
+    ],
     "import/no-internal-modules": [
       "warn",
       {
-        "allow": ["source-map-support/*", "lodash/*", "aws-sdk/**/*", "types/*"]
+        "allow": [
+          "source-map-support/*",
+          "lodash/*",
+          "aws-sdk/**/*",
+          "types/*"
+        ]
       }
     ]
   }
