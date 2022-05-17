@@ -4,7 +4,7 @@ import { Application } from 'express'
 import { XyoPayloadProcessor } from './XyoPayloadProcessor'
 import { XyoPayloadProcessorRegistry } from './XyoPayloadProcessorRegistry'
 
-export class DefaultXyoPayloadProcessorRegistry implements XyoPayloadProcessorRegistry {
+export class XyoSchemaToPayloadProcessorRegistry implements XyoPayloadProcessorRegistry {
   private _processors: Record<string, XyoPayloadProcessor> = {}
 
   constructor(protected readonly app: Application) {}
