@@ -3,7 +3,7 @@ import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 
 const handler: RequestHandler<NoReqParams, XyoPayload[], XyoPayload[]> = async (req, res, next) => {
-  const { processors } = res.app.schemaHandlerRegistry
+  const { processors } = res.app.payloadProcessorRegistry
   const payloads = req.body
   const result: XyoPayload[] = (await Promise.all(payloads.map((p) => processors[p.schema](p)))) || []
   res.json(result)
