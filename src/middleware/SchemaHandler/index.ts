@@ -1,40 +1,16 @@
-/* eslint-disable @typescript-eslint/no-empty-interface */
-
-import EventEmitter from 'events'
-import { IRouter } from 'express'
-import { Application } from 'express-serve-static-core'
-
-export interface SchemaHandlers {
-  [key: string]: any
-  registerHandler: any
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-// export interface AppLocals extends Record<string, any> {
-//   schemaRegistry: string
-// }
-export interface AppLocals {
-  schemaRegistry: string
-}
-
-// export interface MyApplication extends Application<AppLocals> {
-export interface MyApplication {
-  locals: AppLocals
-}
+import { SchemaHandlerRegistry } from './SchemaHandlerRegistry'
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
-    interface Application extends EventEmitter, IRouter, Express.Application {
-      locals: AppLocals
-      otherLocals: AppLocals
-    }
-
-    interface Request {
-      app: Application
-    }
-    interface Response {
-      app: Application
+    // NOTE: Ideally we'd just override Application.locals with a strongly typed
+    // version of our known locals but:
+    // • Neither Express nor Express Serve Static Core expose Application as generic in a way that we can specify the type globally
+    // • TypeScript doesn't support property overrides when merging declarations (which makes sense)
+    // So the only thing we can do is add new properties to the interface, not override/narrow the type
+    // of existing ones
+    interface Application {
+      schemaHandlerRegistry: SchemaHandlerRegistry
     }
   }
 }
