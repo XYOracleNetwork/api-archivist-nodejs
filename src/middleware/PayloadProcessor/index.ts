@@ -1,4 +1,4 @@
-import { SchemaHandlerRegistry } from './SchemaHandlerRegistry'
+import { PayloadProcessorRegistry } from './PayloadProcessorRegistry'
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -10,7 +10,10 @@ declare global {
     // So the only thing we can do is add new properties to the interface, not override/narrow the type
     // of existing ones
     interface Application {
-      schemaHandlerRegistry: SchemaHandlerRegistry
+      schemaHandlerRegistry: PayloadProcessorRegistry
     }
   }
 }
+
+export * from './PayloadProcessor'
+export * from './PayloadProcessorRegistry'
