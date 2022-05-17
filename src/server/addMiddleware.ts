@@ -8,7 +8,7 @@ import {
 } from '@xylabs/sdk-api-express-ecs'
 import { Express } from 'express'
 
-import { archiveLocals, standardResponses } from '../middleware'
+import { archiveLocals, standardResponses, usePayloadProcessors } from '../middleware'
 
 export const addMiddleware = (app: Express) => {
   app.use(responseProfiler)
@@ -17,6 +17,7 @@ export const addMiddleware = (app: Express) => {
   disableExpressDefaultPoweredByHeader(app)
   app.use(customPoweredByHeader)
   disableCaseSensitiveRouting(app)
+  usePayloadProcessors(app)
   app.use('/archive/:archive', archiveLocals)
   useRequestCounters(app)
 }

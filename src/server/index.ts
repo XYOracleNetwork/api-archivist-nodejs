@@ -9,9 +9,9 @@ import { addBlockRoutes } from './addBlockRoutes'
 import { addDebugRoutes } from './addDebugRoutes'
 import { addDomainRoutes } from './addDomainRoutes'
 import { addErrorHandlers } from './addErrorHandlers'
-import { addHashRoutes } from './addHashRoutes'
 import { addHealthChecks } from './addHealthChecks'
 import { addMiddleware } from './addMiddleware'
+import { addNodeRoutes } from './addNodeRoutes'
 import { addPayloadRoutes } from './addPayloadRoutes'
 import { addPayloadSchemaRoutes } from './addPayloadSchemaRoutes'
 import { addSchemaRoutes } from './addSchemaRoutes'
@@ -47,7 +47,7 @@ export const getApp = (): Express => {
   app.use('', userRoutes)
 
   /* This needs to be the last true handler since it is a catch all for the root */
-  addHashRoutes(app)
+  addNodeRoutes(app)
   addErrorHandlers(app)
 
   return app
