@@ -10,4 +10,4 @@ const handler: RequestHandler<NoReqParams, XyoPayload[], XyoPayload[]> = async (
   next()
 }
 
-export const postPayload = asyncHandler(handler)
+export const postPayloads = asyncHandler(handler)
