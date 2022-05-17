@@ -4,7 +4,8 @@ import { RequestHandler } from 'express'
 
 // const handler: RequestHandler<NoReqParams, XyoArchive[]> = async (req, res, next) => {
 const handler: RequestHandler<NoReqParams, XyoArchive[]> = (req, res, next) => {
-  const { schemaRegistry } = res.app.locals
+  const { a } = res.app.locals
+  const { schemaRegistry } = req.app.otherLocals
   if (!schemaRegistry) {
     next()
     return
