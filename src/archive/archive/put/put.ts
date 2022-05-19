@@ -3,7 +3,7 @@ import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
-import { determineArchiveAccessControl, isValidArchiveName, storeArchive } from '../../../lib'
+import { determineArchiveAccessControl, isValidArchiveName } from '../../../lib'
 import { ArchivePathParams } from '../../../model'
 
 const handler: RequestHandler<ArchivePathParams, XyoArchive, XyoArchive> = async (req, res, next) => {
@@ -20,11 +20,11 @@ const handler: RequestHandler<ArchivePathParams, XyoArchive, XyoArchive> = async
   }
 
   const accessControl = determineArchiveAccessControl(req.body)
-  const result = await storeArchive({ accessControl, archive, user: user.id })
-  if (result) {
+  try {
+    const result = await req.app.archiveRepository.insert({ accessControl, archive, user: user.id })
     res.status(result.updated ? StatusCodes.OK : StatusCodes.CREATED).json(result)
     next()
-  } else {
+  } catch (error) {
     next({ message: ReasonPhrases.FORBIDDEN, statusCode: StatusCodes.FORBIDDEN })
   }
 }

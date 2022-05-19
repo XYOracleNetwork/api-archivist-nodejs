@@ -4,18 +4,6 @@ import { BaseMongoSdk, BaseMongoSdkConfig } from '@xyo-network/sdk-xyo-mongo-js'
 import { Collection, WithId } from 'mongodb'
 
 import { getMongoDBConfig } from './getMongoDBValues'
-import { UpsertResult } from './UpsertResult'
-
-interface UpsertFilter {
-  $and: [
-    {
-      archive: string
-    },
-    {
-      user: string
-    }
-  ]
-}
 
 export const getArchivistArchiveMongoSdk = () => {
   const env = getMongoDBConfig()
@@ -37,21 +25,6 @@ class XyoArchiveMongoSdk extends BaseMongoSdk<XyoArchive> {
   public async findByUser(user: string): Promise<WithId<XyoArchive>[]> {
     return await this.useCollection(async (collection: Collection<XyoArchive>) => {
       return await collection.find({ user }).maxTimeMS(this._maxTime).toArray()
-    })
-  }
-  public async upsert(item: XyoArchive): Promise<WithId<XyoArchive & UpsertResult>> {
-    return await this.useCollection(async (collection) => {
-      const { archive, user } = item
-      if (!archive || !user) {
-        throw new Error('Invalid archive creation attempted. Archive and user are required.')
-      }
-      const filter: UpsertFilter = { $and: [{ archive }, { user }] }
-      const result = await collection.findOneAndUpdate(filter, { $set: item }, { returnDocument: 'after', upsert: true })
-      if (result.ok && result.value) {
-        const updated = !!result?.lastErrorObject?.updatedExisting || false
-        return { ...result.value, updated }
-      }
-      throw new Error('Insert Failed')
     })
   }
 }
