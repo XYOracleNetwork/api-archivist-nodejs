@@ -5,6 +5,7 @@ import { Collection, WithId } from 'mongodb'
 
 import { getMongoDBConfig } from './getMongoDBValues'
 
+/** @deprecated use req.app.archiveRepository instead */
 export const getArchivistArchiveMongoSdk = () => {
   const env = getMongoDBConfig()
 
@@ -18,6 +19,7 @@ export const getArchivistArchiveMongoSdk = () => {
   })
 }
 
+/** @deprecated use req.app.archiveRepository instead */
 class XyoArchiveMongoSdk extends BaseMongoSdk<XyoArchive> {
   constructor(readonly config: BaseMongoSdkConfig, private readonly _maxTime = 2000) {
     super(config)
