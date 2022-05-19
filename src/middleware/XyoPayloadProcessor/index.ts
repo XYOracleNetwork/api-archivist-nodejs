@@ -15,7 +15,6 @@ declare global {
   }
 }
 
-export * from './usePayloadProcessors'
 export * from './XyoPayloadProcessor'
 export * from './XyoPayloadProcessorRegistry'
 export * from './XyoSchemaToPayloadProcessorRegistry'
