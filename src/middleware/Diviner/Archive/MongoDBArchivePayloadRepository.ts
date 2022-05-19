@@ -7,7 +7,7 @@ import { XyoStoredPayload } from '../../../model'
 
 const schema = 'network.xyo.archive'
 
-export class MongoDBArchivePayloadRepository extends AbstractMongoDBPayloadRepository<XyoArchive, XyoStoredPayload<XyoArchive>, string, Filter<XyoStoredPayload<XyoArchive>>> {
+export class MongoDBArchivePayloadRepository extends AbstractMongoDBPayloadRepository<XyoArchive> {
   constructor(
     protected readonly itemsSdk: BaseMongoSdk<XyoStoredPayload<XyoArchive>>,
     payloadsSdk: BaseMongoSdk<XyoPayload> = getArchivistAllPayloadMongoSdk(),
