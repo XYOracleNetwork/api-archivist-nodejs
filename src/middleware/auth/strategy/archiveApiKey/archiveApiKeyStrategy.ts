@@ -1,7 +1,7 @@
 import { Request } from 'express'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
-import { getArchiveKeys, getArchivistArchiveMongoSdk } from '../../../../lib'
+import { getArchiveKeys } from '../../../../lib'
 import { UserStore } from '../../model'
 
 export class ArchiveApiKeyStrategy extends Strategy {
@@ -29,7 +29,7 @@ export class ArchiveApiKeyStrategy extends Strategy {
         return
       }
 
-      const archive = req.params.archive
+      const { archive } = req.params
       if (!archive) {
         this.fail('Invalid archive')
         return
@@ -44,14 +44,13 @@ export class ArchiveApiKeyStrategy extends Strategy {
       }
 
       // Get the archive owner
-      const owners = getArchivistArchiveMongoSdk()
-      const archiveOwner = await owners.findByArchive(archive)
-      if (!archiveOwner || !archiveOwner?.user) {
+      const existingArchive = await req.app.archiveRepository.get(archive)
+      if (!existingArchive || !existingArchive?.user) {
         this.fail('Invalid user')
         return
       }
 
-      const user = await this.userStore.getById(archiveOwner.user)
+      const user = await this.userStore.getById(existingArchive.user)
       if (!user) {
         this.fail('Invalid user')
         return
