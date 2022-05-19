@@ -2,7 +2,7 @@ import { asyncHandler, NoReqParams } from '@xylabs/sdk-api-express-ecs'
 import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 
-import { getArchivesByOwner } from '../../lib'
+import { _getArchivesByOwner } from '../../lib'
 import { defaultPublicArchives } from './DefaultPublicArchives'
 
 const getArchivesDistinctByName = (archives: XyoArchive[]): XyoArchive[] => {
@@ -17,7 +17,7 @@ const handler: RequestHandler<NoReqParams, XyoArchive[]> = async (req, res, next
   if (!id) {
     res.json(defaultPublicArchives)
   } else {
-    const userArchives = await getArchivesByOwner(id)
+    const userArchives = await _getArchivesByOwner(id)
     res.json(getArchivesDistinctByName([...defaultPublicArchives, ...userArchives]))
   }
   next()
