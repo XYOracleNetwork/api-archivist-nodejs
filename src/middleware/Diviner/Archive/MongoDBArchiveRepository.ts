@@ -17,13 +17,13 @@ interface UpsertFilter {
 }
 
 export class MongoDBArchiveRepository implements ArchiveRepository {
-  constructor(protected archives: BaseMongoSdk<XyoArchive> = getBaseMongoSdk<XyoArchive>('archives')) {}
+  constructor(protected archives: BaseMongoSdk<Required<XyoArchive>> = getBaseMongoSdk<Required<XyoArchive>>('archives')) {}
 
-  get(name: string): Promise<XyoArchive | null> {
+  get(name: string): Promise<Required<XyoArchive> | null> {
     return this.archives.findOne({ archive: name })
   }
 
-  async insert(item: XyoArchive): Promise<WithId<XyoArchive & UpsertResult>> {
+  async insert(item: Required<XyoArchive>): Promise<WithId<Required<XyoArchive> & UpsertResult>> {
     return await this.archives.useCollection(async (collection) => {
       const { archive, user } = item
       if (!archive || !user) {
