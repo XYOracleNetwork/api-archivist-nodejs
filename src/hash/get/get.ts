@@ -3,7 +3,7 @@ import { deepOmitUnderscoreFields, XyoPayload } from '@xyo-network/sdk-xyo-clien
 import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
-import { findByHash, getArchiveByName, isPublicArchive, isRequestUserOwnerOfArchive } from '../../lib'
+import { findByHash, isPublicArchive, isRequestUserOwnerOfArchive } from '../../lib'
 import { setRawResponseFormat } from '../../middleware'
 
 const reservedHashes = ['archive', 'schema', 'doc', 'domain']
@@ -57,7 +57,11 @@ const validateHashExists: RequestHandler<HashPathParams, HashResponse, NoReqBody
 
 const validateUserCanAccessBlock: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuery, FoundBlockLocals> = async (req, res, next) => {
   for (const block of res.locals.blocks) {
-    const archive = await getArchiveByName(block?._archive)
+    const name = block?._archive
+    if (!name) {
+      continue
+    }
+    const archive = await req.app.archiveRepository.get(name)
     // If the archive is public or if the archive is private but this is
     // an auth'd request from the archive owner
     if (isPublicArchive(archive) || isRequestUserOwnerOfArchive(req, archive)) {
