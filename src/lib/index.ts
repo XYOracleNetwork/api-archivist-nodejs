@@ -1,7 +1,6 @@
 export * from './dbSdk'
 export * from './determineArchiveAccessControl'
 export * from './findByHash'
-export * from './getArchiveByName'
 export * from './getArchiveKeys'
 export * from './getArchivesByOwner'
 export * from './isArchiveOwner'

@@ -34,18 +34,11 @@ class XyoArchiveMongoSdk extends BaseMongoSdk<XyoArchive> {
   constructor(readonly config: BaseMongoSdkConfig, private readonly _maxTime = 2000) {
     super(config)
   }
-
-  public async findByArchive(archive: string): Promise<WithId<XyoArchive> | null> {
-    return await this.useCollection(async (collection: Collection<XyoArchive>) => {
-      return await collection.findOne({ archive })
-    })
-  }
   public async findByUser(user: string): Promise<WithId<XyoArchive>[]> {
     return await this.useCollection(async (collection: Collection<XyoArchive>) => {
       return await collection.find({ user }).maxTimeMS(this._maxTime).toArray()
     })
   }
-
   public async upsert(item: XyoArchive): Promise<WithId<XyoArchive & UpsertResult>> {
     return await this.useCollection(async (collection) => {
       const { archive, user } = item
