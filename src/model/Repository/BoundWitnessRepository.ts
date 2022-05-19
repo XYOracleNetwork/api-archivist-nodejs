@@ -1,10 +1,12 @@
 import { XyoBoundWitness, XyoBoundWitnessBody } from '@xyo-network/sdk-xyo-client-js'
 
-import { Repository } from './Repository'
+import { PayloadRepository } from './PayloadRepository'
 
-export type BoundWitnessRepository<TInsert extends XyoBoundWitnessBody, TResponse extends XyoBoundWitness, TId = string, TQuery = unknown> = Repository<
-  TInsert[],
-  TResponse[],
-  TId,
-  TQuery
->
+export type BoundWitnessRepository<
+  TWriteResponse extends XyoBoundWitness,
+  TWrite extends XyoBoundWitnessBody,
+  TReadResponse = TWriteResponse,
+  TId = string,
+  TQueryResponse = unknown,
+  TQuery = unknown
+> = PayloadRepository<TWriteResponse, TWrite, TReadResponse, TId, TQueryResponse, TQuery>

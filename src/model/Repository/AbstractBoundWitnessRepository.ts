@@ -1,8 +1,17 @@
-import { Repository } from './Repository'
-import { XyoStoredPayload } from './XyoStoredPayload'
+import { XyoBoundWitness, XyoBoundWitnessBody } from '@xyo-network/sdk-xyo-client-js'
 
-export abstract class AbstractBoundWitnessRepository<TInsert, TResponse extends XyoStoredPayload<TInsert>, TId, TQuery> implements Repository<TInsert[], TResponse[], TId, TQuery> {
-  abstract find(filter: TQuery): Promise<TResponse[]>
-  abstract get(id: TId): Promise<TResponse[]>
-  abstract insert(items: TInsert[]): Promise<TResponse[]>
+import { BoundWitnessRepository } from './BoundWitnessRepository'
+
+export abstract class AbstractBoundWitnessRepository<
+  TWriteResponse extends XyoBoundWitness,
+  TWrite extends XyoBoundWitnessBody,
+  TReadResponse = TWriteResponse,
+  TId = string,
+  TQueryResponse = unknown,
+  TQuery = unknown
+> implements BoundWitnessRepository<TWriteResponse, TWrite, TReadResponse, TId, TQueryResponse, TQuery>
+{
+  abstract find(filter: TQuery): Promise<TQueryResponse>
+  abstract get(id: TId): Promise<TReadResponse[]>
+  abstract insert(items: TWrite[]): Promise<TWriteResponse[]>
 }
