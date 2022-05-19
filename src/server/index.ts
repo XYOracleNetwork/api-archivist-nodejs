@@ -7,6 +7,7 @@ import { configureAuth, configureDoc } from '../middleware'
 import { addArchiveRoutes } from './addArchiveRoutes'
 import { addBlockRoutes } from './addBlockRoutes'
 import { addDebugRoutes } from './addDebugRoutes'
+import { addDependencies } from './addDependencies'
 import { addDomainRoutes } from './addDomainRoutes'
 import { addErrorHandlers } from './addErrorHandlers'
 import { addHealthChecks } from './addHealthChecks'
@@ -30,6 +31,7 @@ export const getApp = (): Express => {
   app.use(cors())
   app.use(compression())
 
+  addDependencies(app)
   addMiddleware(app)
   addHealthChecks(app)
   addArchiveRoutes(app)
