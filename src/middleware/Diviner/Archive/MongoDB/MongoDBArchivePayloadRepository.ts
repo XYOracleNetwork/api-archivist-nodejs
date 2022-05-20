@@ -1,23 +1,16 @@
-import { XyoAccount, XyoArchive, XyoBoundWitness, XyoBoundWitnessBuilder, XyoBoundWitnessBuilderConfig, XyoPayload, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
+import { XyoArchive, XyoBoundWitnessBuilder, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { Filter } from 'mongodb'
 
-import { AbstractMongoDBPayloadRepository, getDefaultAbstractMongoDBPayloadRepositoryOpts } from '../../../../lib'
+import { AbstractMongoDBPayloadRepository, AbstractMongoDBPayloadRepositoryOpts, getDefaultAbstractMongoDBPayloadRepositoryOpts } from '../../../../lib'
 import { XyoStoredPayload } from '../../../../model'
 
 const schema = 'network.xyo.archive'
 
-export interface MongoDBArchivePayloadRepositoryOpts {
-  account: XyoAccount
-  boundWitnessSdk: BaseMongoSdk<XyoBoundWitness>
-  config: XyoBoundWitnessBuilderConfig
-  payloadsSdk: BaseMongoSdk<XyoPayload>
-}
-
 export class MongoDBArchivePayloadRepository extends AbstractMongoDBPayloadRepository<XyoArchive> {
   constructor(
     protected readonly itemsSdk: BaseMongoSdk<XyoStoredPayload<XyoArchive>>,
-    opts: MongoDBArchivePayloadRepositoryOpts = getDefaultAbstractMongoDBPayloadRepositoryOpts()
+    opts: AbstractMongoDBPayloadRepositoryOpts = getDefaultAbstractMongoDBPayloadRepositoryOpts()
   ) {
     super(opts)
   }

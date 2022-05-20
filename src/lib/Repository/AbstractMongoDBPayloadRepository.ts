@@ -3,23 +3,8 @@ import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { Filter } from 'mongodb'
 
 import { AbstractPayloadRepository } from '../../model'
-import { getArchivistAllBoundWitnessesMongoSdk, getArchivistAllPayloadMongoSdk } from '../dbSdk'
-
-export interface AbstractMongoDBPayloadRepositoryOpts {
-  account: XyoAccount
-  boundWitnessSdk: BaseMongoSdk<XyoBoundWitness>
-  config: XyoBoundWitnessBuilderConfig
-  payloadsSdk: BaseMongoSdk<XyoPayload>
-}
-
-export const getDefaultAbstractMongoDBPayloadRepositoryOpts = (): AbstractMongoDBPayloadRepositoryOpts => {
-  return {
-    account: XyoAccount.random(),
-    boundWitnessSdk: getArchivistAllBoundWitnessesMongoSdk(),
-    config: { inlinePayloads: false },
-    payloadsSdk: getArchivistAllPayloadMongoSdk(),
-  }
-}
+import { AbstractMongoDBPayloadRepositoryOpts } from './AbstractMongoDBPayloadRepositoryOpts'
+import { getDefaultAbstractMongoDBPayloadRepositoryOpts } from './getDefaultAbstractMongoDBPayloadRepositoryOpts'
 
 export abstract class AbstractMongoDBPayloadRepository<T, TId = string, TQuery = Filter<T>> extends AbstractPayloadRepository<T, TId, TQuery> {
   protected readonly account: XyoAccount
