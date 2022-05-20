@@ -2,7 +2,8 @@ import { Request } from 'express'
 import passport from 'passport'
 import { IStrategyOptionsWithRequest, Strategy } from 'passport-local'
 
-import { passwordHasher } from '../../model'
+import { User } from '../../../../model'
+import { BcryptPasswordHasher, PasswordHasher } from '../../../PasswordHasher'
 
 const strategyOptions: IStrategyOptionsWithRequest = {
   passReqToCallback: true,
@@ -13,7 +14,7 @@ const strategyOptions: IStrategyOptionsWithRequest = {
 export const localStrategyName = 'local'
 export const localStrategy = passport.authenticate(localStrategyName, { session: false })
 
-export const configureLocalStrategy = () => {
+export const configureLocalStrategy = (passwordHasher: PasswordHasher<User> = BcryptPasswordHasher) => {
   passport.use(
     localStrategyName,
     new Strategy(strategyOptions, async (req: Request, email, providedPassword, done) => {
