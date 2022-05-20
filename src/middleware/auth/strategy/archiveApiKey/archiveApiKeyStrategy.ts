@@ -2,6 +2,7 @@ import { Request } from 'express'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
 import { getArchiveKeys } from '../../../../lib'
+import { getHttpHeader } from './getHttpHeader'
 
 export class ArchiveApiKeyStrategy extends Strategy {
   constructor(public readonly apiKeyHeader = 'x-api-key') {
@@ -9,20 +10,7 @@ export class ArchiveApiKeyStrategy extends Strategy {
   }
   override async authenticate(this: StrategyCreated<this, this & StrategyCreatedStatic>, req: Request, _options?: unknown) {
     try {
-      // NOTE: There should never be multiple of this header but
-      // just to prevent ugliness if someone did send us multiple
-      // we'll grab the 1st one
-      const apiKey =
-        // If the header exists
-        req.headers[this.apiKeyHeader]
-          ? // If there's multiple of the same header
-            Array.isArray(req.headers[this.apiKeyHeader])
-            ? // Grab the first one
-              (req.headers[this.apiKeyHeader] as string[]).shift()
-            : // Otherwise grab the only one
-              (req.headers[this.apiKeyHeader] as string)
-          : // Otherwise undefined
-            undefined
+      const apiKey = getHttpHeader(this.apiKeyHeader, req)
       if (!apiKey) {
         this.fail('Missing API key in header')
         return
