@@ -19,7 +19,7 @@ export const configureLocalStrategy = () => {
     new Strategy(strategyOptions, async (req: Request, email, providedPassword, done) => {
       try {
         // Find user
-        const user = await req.app.userManager.getByEmail(email)
+        const user = await req.app.userManager.findByEmail(email)
         // If we didn't find the user or they have no passwordHash
         if (!user || !user?.passwordHash) {
           return done(null, false, { message: 'User not found' })

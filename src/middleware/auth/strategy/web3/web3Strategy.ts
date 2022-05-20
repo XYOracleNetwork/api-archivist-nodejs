@@ -27,7 +27,7 @@ export class Web3AuthStrategy extends Strategy {
         return
       }
       // Lookup existing user
-      const user = await req.app.userManager.getByWallet(address)
+      const user = await req.app.userManager.findByWallet(address)
       if (user) {
         // if found, return them
         this.success(user, { updated: false })
