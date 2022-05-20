@@ -6,8 +6,6 @@ import { StatusCodes } from 'http-status-codes'
 
 import { User, UserWithoutId } from '../../../../../model'
 import { toUserDto } from '../../../dto'
-import { createUser } from '../../../lib'
-import { UserStore } from '../../../model'
 
 const message = 'Signup successful'
 
@@ -20,24 +18,24 @@ export interface UserCreationResponse {
   user: User
 }
 
-export const postUserSignup = (userStore: UserStore) => {
-  return asyncHandler(async (req: Request<NoReqParams, UserCreationResponse, UserToCreate>, res: Response<UserCreationResponse>, next: NextFunction) => {
-    const userToCreate = req.body
-    const password = userToCreate.password
-    if (password) {
-      delete userToCreate.password
-    }
-    const createdUser = await createUser(userToCreate, userStore, password)
-    if (!createdUser) {
-      next({ message: 'Error creating user' })
-      return
-    }
-    const updated = createdUser.updated
-    const user = toUserDto(createdUser)
-    res.status(updated ? StatusCodes.OK : StatusCodes.CREATED).json({
-      message,
-      user,
-    })
-    next()
+const handler = async (req: Request<NoReqParams, UserCreationResponse, UserToCreate>, res: Response<UserCreationResponse>, next: NextFunction) => {
+  const userToCreate = req.body
+  const password = userToCreate.password
+  if (password) {
+    delete userToCreate.password
+  }
+  const createdUser = await req.app.userManager.create(userToCreate, password)
+  if (!createdUser) {
+    next({ message: 'Error creating user' })
+    return
+  }
+  const updated = createdUser.updated
+  const user = toUserDto(createdUser)
+  res.status(updated ? StatusCodes.OK : StatusCodes.CREATED).json({
+    message,
+    user,
   })
+  next()
 }
+
+export const postUserSignup = asyncHandler(handler)
