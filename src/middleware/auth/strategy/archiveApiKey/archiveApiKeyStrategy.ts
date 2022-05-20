@@ -50,7 +50,7 @@ export class ArchiveApiKeyStrategy extends Strategy {
         return
       }
 
-      const user = await this.userStore.getById(existingArchive.user)
+      const user = await req.app.userRepository.get(existingArchive.user)
       if (!user) {
         this.fail('Invalid user')
         return

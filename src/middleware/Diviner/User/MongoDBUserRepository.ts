@@ -1,5 +1,5 @@
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
-import { Filter, WithId } from 'mongodb'
+import { Filter, ObjectId, WithId } from 'mongodb'
 
 import { getBaseMongoSdk, UpsertResult } from '../../../lib'
 import { User, UserWithoutId } from '../../../model'
@@ -12,18 +12,39 @@ interface IUpsertFilter {
   }[]
 }
 
+const fromDbEntity = (user: WithId<User>): User => {
+  const id = user?._id?.toHexString?.()
+  if (id) {
+    user.id = id
+  }
+  delete (user as Partial<WithId<User>>)?._id
+  return user
+}
+
+const toDbEntity = (user: UserWithoutId) => {
+  if (user?.email) {
+    user.email = user.email.toLowerCase()
+  }
+  if (user?.address) {
+    user.address = user.address.toLowerCase()
+  }
+  return user
+}
+
 export class MongoDBUserRepository implements UserRepository {
   constructor(protected db: BaseMongoSdk<User> = getBaseMongoSdk<User>('users')) {}
 
   async find(query: Filter<User>): Promise<User[]> {
-    return (await this.db.find(query)).toArray()
+    return (await (await this.db.find(query)).toArray()).map(fromDbEntity)
   }
 
-  get(name: string): Promise<User | null> {
-    return this.db.findOne({ archive: name })
+  async get(id: string): Promise<User | null> {
+    const user = await this.db.findOne({ _id: new ObjectId(id.toLowerCase()) })
+    return user ? fromDbEntity(user) : null
   }
 
   async insert(user: UserWithoutId): Promise<WithId<User & UpsertResult>> {
+    user = toDbEntity(user)
     return await this.db.useCollection(async (collection) => {
       const filter: IUpsertFilter = { $or: [] }
       const { address, email } = user
