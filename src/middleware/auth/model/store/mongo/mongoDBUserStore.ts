@@ -34,10 +34,6 @@ export class MongoDBUserStore implements UserStore {
     const user = await this.mongo.findByEmail(email.toLowerCase())
     return user ? fromDbEntity(user) : null
   }
-  async getById(id: string): Promise<User | null> {
-    const user = await this.mongo.findById(id.toLowerCase())
-    return user ? fromDbEntity(user) : null
-  }
   async getByWallet(address: string): Promise<User | null> {
     const user = await this.mongo.findByAddress(address.toLowerCase())
     return user ? fromDbEntity(user) : null
