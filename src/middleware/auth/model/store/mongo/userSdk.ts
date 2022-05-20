@@ -2,7 +2,7 @@ import { BaseMongoSdk, BaseMongoSdkConfig } from '@xyo-network/sdk-xyo-mongo-js'
 import { Collection, ObjectId, WithId } from 'mongodb'
 
 import { UpsertResult } from '../../../../../lib'
-import { User, UserWithoutId } from '../../user'
+import { User, UserWithoutId } from '../../../../../model'
 
 interface IUpsertFilter {
   $or: {

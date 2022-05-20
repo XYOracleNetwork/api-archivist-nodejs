@@ -1,5 +1,6 @@
 import { UpsertResult } from '../../../lib'
-import { passwordHasher, User, UserStore, UserWithoutId } from '../model'
+import { User, UserWithoutId } from '../../../model'
+import { passwordHasher, UserStore } from '../model'
 
 export const createUser = async (user: UserWithoutId, userStore: UserStore, password?: string): Promise<User & UpsertResult> => {
   if (password) {

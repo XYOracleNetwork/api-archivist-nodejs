@@ -2,7 +2,8 @@ import { assertEx } from '@xylabs/sdk-js'
 import express, { RequestHandler, Router } from 'express'
 import passport from 'passport'
 
-import { getUserMongoSdk, MongoDBUserStore, UserCreationAuthInfo, UserWithoutId } from './model'
+import { UserWithoutId } from '../../model'
+import { getUserMongoSdk, MongoDBUserStore, UserCreationAuthInfo } from './model'
 import { getUserProfile, postAccountChallenge, postUserSignup } from './routes'
 import {
   adminApiKeyStrategy,
