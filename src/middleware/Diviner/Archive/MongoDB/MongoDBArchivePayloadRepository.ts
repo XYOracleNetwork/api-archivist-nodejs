@@ -2,20 +2,24 @@ import { XyoAccount, XyoArchive, XyoBoundWitness, XyoBoundWitnessBuilder, XyoBou
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { Filter } from 'mongodb'
 
-import { AbstractMongoDBPayloadRepository, getArchivistAllBoundWitnessesMongoSdk, getArchivistAllPayloadMongoSdk } from '../../../../lib'
+import { AbstractMongoDBPayloadRepository, getDefaultAbstractMongoDBPayloadRepositoryOpts } from '../../../../lib'
 import { XyoStoredPayload } from '../../../../model'
 
 const schema = 'network.xyo.archive'
 
+export interface MongoDBArchivePayloadRepositoryOpts {
+  account: XyoAccount
+  boundWitnessSdk: BaseMongoSdk<XyoBoundWitness>
+  config: XyoBoundWitnessBuilderConfig
+  payloadsSdk: BaseMongoSdk<XyoPayload>
+}
+
 export class MongoDBArchivePayloadRepository extends AbstractMongoDBPayloadRepository<XyoArchive> {
   constructor(
     protected readonly itemsSdk: BaseMongoSdk<XyoStoredPayload<XyoArchive>>,
-    payloadsSdk: BaseMongoSdk<XyoPayload> = getArchivistAllPayloadMongoSdk(),
-    boundWitnessSdk: BaseMongoSdk<XyoBoundWitness> = getArchivistAllBoundWitnessesMongoSdk(),
-    account: XyoAccount = XyoAccount.random(),
-    config: XyoBoundWitnessBuilderConfig = { inlinePayloads: false }
+    opts: MongoDBArchivePayloadRepositoryOpts = getDefaultAbstractMongoDBPayloadRepositoryOpts()
   ) {
-    super(payloadsSdk, boundWitnessSdk, account, config)
+    super(opts)
   }
   async find(filter: Filter<XyoStoredPayload<XyoArchive>>): Promise<XyoStoredPayload<XyoArchive>[]> {
     return (await this.itemsSdk.find(filter)).toArray()
