@@ -1,5 +1,5 @@
 import { BaseMongoSdk, BaseMongoSdkConfig } from '@xyo-network/sdk-xyo-mongo-js'
-import { Collection, ObjectId, WithId } from 'mongodb'
+import { WithId } from 'mongodb'
 
 import { UpsertResult } from '../../../../../lib'
 import { User, UserWithoutId } from '../../../../../model'
@@ -12,26 +12,8 @@ interface IUpsertFilter {
 }
 
 class UserMongoSdk extends BaseMongoSdk<User> {
-  constructor(config: BaseMongoSdkConfig, private readonly _maxTime = 2000) {
+  constructor(config: BaseMongoSdkConfig) {
     super(config)
-  }
-
-  public async findByAddress(address: string) {
-    return await this.useCollection(async (collection: Collection<User>) => {
-      return await collection.findOne({ address }, { maxTimeMS: this._maxTime })
-    })
-  }
-
-  public async findByEmail(email: string) {
-    return await this.useCollection(async (collection: Collection<User>) => {
-      return await collection.findOne({ email }, { maxTimeMS: this._maxTime })
-    })
-  }
-
-  public async findById(id: string) {
-    return await this.useCollection(async (collection: Collection<User>) => {
-      return await collection.findOne({ _id: new ObjectId(id) }, { maxTimeMS: this._maxTime })
-    })
   }
 
   public async upsert(user: UserWithoutId): Promise<WithId<User & UpsertResult>> {

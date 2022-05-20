@@ -140,8 +140,7 @@ export const configureAuth: (config: AuthConfig) => Router = (config) => {
   assertEx(config?.apiKey, 'Missing API Key')
   const apiKey = config?.apiKey as string
 
-  const userMongoSdk = getUserMongoSdk()
-  const userStore = new MongoDBUserStore(userMongoSdk)
+  const userStore = new MongoDBUserStore(getUserMongoSdk())
 
   configureAdminApiKeyStrategy(apiKey)
   configureAllowUnauthenticatedStrategy()

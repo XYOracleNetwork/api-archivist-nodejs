@@ -12,25 +12,6 @@ interface IUpsertFilter {
   }[]
 }
 
-const fromDbEntity = (user: WithId<User>): User => {
-  const id = user?._id?.toHexString?.()
-  if (id) {
-    user.id = id
-  }
-  delete (user as Partial<WithId<User>>)?._id
-  return user
-}
-
-const toDbEntity = (user: UserWithoutId) => {
-  if (user?.email) {
-    user.email = user.email.toLowerCase()
-  }
-  if (user?.address) {
-    user.address = user.address.toLowerCase()
-  }
-  return user
-}
-
 export class MongoDBUserRepository implements UserRepository {
   constructor(protected readonly db: BaseMongoSdk<User> = getBaseMongoSdk<User>('users')) {}
 
@@ -44,7 +25,6 @@ export class MongoDBUserRepository implements UserRepository {
   }
 
   async insert(user: UserWithoutId): Promise<WithId<User & UpsertResult>> {
-    user = toDbEntity(user)
     return await this.db.useCollection(async (collection) => {
       const filter: IUpsertFilter = { $or: [] }
       const { address, email } = user
