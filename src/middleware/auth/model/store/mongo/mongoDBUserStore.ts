@@ -1,7 +1,7 @@
 import { WithId } from 'mongodb'
 
 import { UpsertResult } from '../../../../../lib'
-import { User, UserWithoutId } from '../../user'
+import { User, UserWithoutId } from '../../../../../model'
 import { UserStore } from '../userStore'
 import { UserMongoSdk } from './userSdk'
 

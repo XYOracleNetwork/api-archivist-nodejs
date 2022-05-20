@@ -4,9 +4,10 @@ import { asyncHandler, NoReqParams } from '@xylabs/sdk-api-express-ecs'
 import { NextFunction, Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
+import { User, UserWithoutId } from '../../../../../model'
 import { toUserDto } from '../../../dto'
 import { createUser } from '../../../lib'
-import { User, UserStore, UserWithoutId } from '../../../model'
+import { UserStore } from '../../../model'
 
 const message = 'Signup successful'
 
