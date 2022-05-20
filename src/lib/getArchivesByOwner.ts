@@ -1,6 +1,6 @@
 import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 
-import { ArchiveRepository } from '../middleware'
+// import { ArchiveRepository } from '../middleware'
 import { getArchivistArchiveMongoSdk } from './dbSdk'
 import { determineArchiveAccessControl } from './determineArchiveAccessControl'
 
@@ -15,6 +15,6 @@ export const _getArchivesByOwner = async (user: string): Promise<XyoArchive[]> =
   })
 }
 
-export const getArchivesByOwner = (archives: ArchiveRepository, user: string): Promise<XyoArchive[]> => {
-  throw new Error('TODO')
-}
+// export const getArchivesByOwner = (archives: ArchiveRepository, user: string): Promise<XyoArchive[]> => {
+//   throw new Error('TODO')
+// }
