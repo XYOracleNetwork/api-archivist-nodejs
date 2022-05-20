@@ -151,10 +151,11 @@ export const configureAuth: (config: AuthConfig) => Router = (config) => {
   configureLocalStrategy()
   configureWeb3Strategy(userStore)
 
+  // TODO: Now that it's configured via DI instead of at startup, move to a standard route file
   router.post(
     '/user/signup',
     adminApiKeyStrategy,
-    postUserSignup(userStore) /*
+    postUserSignup /*
       #swagger.tags = ['User']
       #swagger.basePath = '/'
       #swagger.summary = 'Create an account (web2)'
