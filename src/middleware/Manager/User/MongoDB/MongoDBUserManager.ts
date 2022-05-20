@@ -1,4 +1,4 @@
-import { ObjectId, WithId } from 'mongodb'
+import { WithId } from 'mongodb'
 
 import { UpsertResult } from '../../../../lib'
 import { Identifiable, User, UserWithoutId, Web2User, Web3User } from '../../../../model'
@@ -27,7 +27,7 @@ const toDbEntity = (user: UserWithoutId) => {
 export class MongoDBUserManager implements UserManager {
   constructor(protected mongo: MongoDBUserRepository) {}
   create(user: UserWithoutId): Promise<Identifiable & Partial<Web2User> & Partial<Web3User> & UpsertResult> {
-    throw new Error('Not Implemented')
+    return this.mongo.insert(toDbEntity(user))
   }
   async findByEmail(email: string): Promise<User | null> {
     email = email.toLowerCase()
@@ -35,8 +35,8 @@ export class MongoDBUserManager implements UserManager {
     return user.length ? fromDbEntity(user[0]) : null
   }
   async findById(id: string): Promise<User | null> {
-    const user = await this.mongo.find({ _id: new ObjectId(id.toLowerCase()) })
-    return user.length ? fromDbEntity(user[0]) : null
+    const user = await this.mongo.get(id)
+    return user ? fromDbEntity(user) : null
   }
   async findByWallet(address: string): Promise<User | null> {
     address = address.toLowerCase()

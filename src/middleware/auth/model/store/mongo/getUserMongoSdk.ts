@@ -3,6 +3,9 @@ import { assertEx } from '@xylabs/sdk-js'
 import { getMongoDBConfig } from '../../../../../lib'
 import { UserMongoSdk } from './userSdk'
 
+/**
+ * @deprecated Use app.userManager or app.userRepository instead
+ */
 export const getUserMongoSdk = () => {
   const env = getMongoDBConfig()
   return new UserMongoSdk({
