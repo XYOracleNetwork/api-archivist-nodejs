@@ -8,5 +8,5 @@ declare global {
   }
 }
 
-export * from './MongoDBUserRepository'
+export * from './MongoDB'
 export * from './UserRepository'

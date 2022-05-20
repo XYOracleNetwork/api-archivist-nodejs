@@ -10,5 +10,4 @@ declare global {
 }
 
 export * from './ArchiveRepository'
-export * from './MongoDBArchivePayloadRepository'
-export * from './MongoDBArchiveRepository'
+export * from './MongoDB'

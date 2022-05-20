@@ -2,8 +2,8 @@ import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { Filter } from 'mongodb'
 
-import { getBaseMongoSdk } from '../../../lib'
-import { AbstractPayloadRepository } from '../../../model'
+import { getBaseMongoSdk } from '../../../../lib'
+import { AbstractPayloadRepository } from '../../../../model'
 
 export class MongoDBPayloadRepository extends AbstractPayloadRepository<XyoPayload, string, XyoPayload[], Filter<XyoPayload>> {
   constructor(protected sdk: BaseMongoSdk<XyoPayload> = getBaseMongoSdk<XyoPayload>('payloads')) {
