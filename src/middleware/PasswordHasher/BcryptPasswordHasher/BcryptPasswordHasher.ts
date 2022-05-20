@@ -1,13 +1,9 @@
 import { compare, hash } from 'bcrypt'
 
 import { User } from '../../../model'
+import { PasswordHasher } from '../PasswordHasher'
 
-export interface IPasswordHasher<TUser> {
-  hash(password: string): Promise<string>
-  verify(user: TUser, providedPassword: string): Promise<boolean>
-}
-
-const bcryptPasswordHasher: IPasswordHasher<User> = {
+export const BcryptPasswordHasher: PasswordHasher<User> = {
   hash: (password: string) => {
     return hash(password, 10)
   },
@@ -18,7 +14,3 @@ const bcryptPasswordHasher: IPasswordHasher<User> = {
     return compare(providedPassword, user.passwordHash)
   },
 }
-
-// TODO: Move to PBKDF
-
-export const passwordHasher: IPasswordHasher<User> = bcryptPasswordHasher
