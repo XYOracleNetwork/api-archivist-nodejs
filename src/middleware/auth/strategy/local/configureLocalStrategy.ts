@@ -1,9 +1,11 @@
+import { Request } from 'express'
 import passport from 'passport'
-import { IStrategyOptions, Strategy } from 'passport-local'
+import { IStrategyOptionsWithRequest, Strategy } from 'passport-local'
 
 import { passwordHasher, UserStore } from '../../model'
 
-const strategyOptions: IStrategyOptions = {
+const strategyOptions: IStrategyOptionsWithRequest = {
+  passReqToCallback: true,
   passwordField: 'password',
   usernameField: 'email',
 }
@@ -14,7 +16,7 @@ export const localStrategy = passport.authenticate(localStrategyName, { session:
 export const configureLocalStrategy = (userStore: UserStore) => {
   passport.use(
     localStrategyName,
-    new Strategy(strategyOptions, async (email, providedPassword, done) => {
+    new Strategy(strategyOptions, async (_req: Request, email, providedPassword, done) => {
       try {
         // Find user
         const user = await userStore.getByEmail(email)
