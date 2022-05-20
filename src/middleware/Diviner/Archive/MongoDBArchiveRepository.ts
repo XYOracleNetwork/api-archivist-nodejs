@@ -1,9 +1,9 @@
 import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
-import { WithId } from 'mongodb'
+import { Filter, WithId } from 'mongodb'
 
 import { getBaseMongoSdk, UpsertResult } from '../../../lib'
-import { ArchiveRepository } from './ArchiveRepository'
+import { ArchiveRepository, EntityArchive } from './ArchiveRepository'
 
 interface UpsertFilter {
   $and: [
@@ -17,7 +17,11 @@ interface UpsertFilter {
 }
 
 export class MongoDBArchiveRepository implements ArchiveRepository {
-  constructor(protected archives: BaseMongoSdk<Required<XyoArchive>> = getBaseMongoSdk<Required<XyoArchive>>('archives')) {}
+  constructor(protected archives: BaseMongoSdk<Required<XyoArchive>> = getBaseMongoSdk<EntityArchive>('archives')) {}
+
+  async find(query: Filter<EntityArchive>): Promise<XyoArchive[]> {
+    return (await this.archives.find(query)).toArray()
+  }
 
   get(name: string): Promise<Required<XyoArchive> | null> {
     return this.archives.findOne({ archive: name })
