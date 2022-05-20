@@ -2,6 +2,9 @@ import { UpsertResult } from '../../../lib'
 import { User, UserWithoutId } from '../../../model'
 import { passwordHasher, UserStore } from '../model'
 
+/**
+ * @deprecated Use app.userManager instead
+ */
 export const createUser = async (user: UserWithoutId, userStore: UserStore, password?: string): Promise<User & UpsertResult> => {
   if (password) {
     user.passwordHash = await passwordHasher.hash(password)

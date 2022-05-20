@@ -32,15 +32,15 @@ const toDbEntity = (user: UserWithoutId) => {
 }
 
 export class MongoDBUserRepository implements UserRepository {
-  constructor(protected db: BaseMongoSdk<User> = getBaseMongoSdk<User>('users')) {}
+  constructor(protected readonly db: BaseMongoSdk<User> = getBaseMongoSdk<User>('users')) {}
 
-  async find(query: Filter<User>): Promise<User[]> {
-    return (await (await this.db.find(query)).toArray()).map(fromDbEntity)
+  async find(query: Filter<User>): Promise<WithId<User>[]> {
+    return (await this.db.find(query)).toArray()
   }
 
-  async get(id: string): Promise<User | null> {
+  async get(id: string): Promise<WithId<User> | null> {
     const user = await this.db.findOne({ _id: new ObjectId(id.toLowerCase()) })
-    return user ? fromDbEntity(user) : null
+    return user ? user : null
   }
 
   async insert(user: UserWithoutId): Promise<WithId<User & UpsertResult>> {
