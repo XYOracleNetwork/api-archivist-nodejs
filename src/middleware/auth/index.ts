@@ -19,4 +19,5 @@ declare global {
 }
 
 export * from './AuthConfig'
+export * from './AuthStrategies'
 export * from './configureAuth'
