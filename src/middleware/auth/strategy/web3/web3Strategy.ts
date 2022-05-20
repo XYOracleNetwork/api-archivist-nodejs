@@ -1,15 +1,10 @@
 import { Request } from 'express'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
-import { createUser } from '../../lib'
-import { UserStore } from '../../model'
 import { verifyUuid } from './verifyUuid'
 import { verifyWallet } from './verifyWallet'
 
 export class Web3AuthStrategy extends Strategy {
-  constructor(public readonly userStore: UserStore) {
-    super()
-  }
   override async authenticate(this: StrategyCreated<this, this & StrategyCreatedStatic>, req: Request, _options?: unknown) {
     try {
       const { message, signature } = req.body
@@ -34,7 +29,7 @@ export class Web3AuthStrategy extends Strategy {
         return
       } else {
         // if not found, create them (since they've verified they own the wallet)
-        const createdUser = await createUser({ address }, this.userStore)
+        const createdUser = await req.app.userManager.create({ address })
         if (!createdUser) {
           this.error({ message: 'Error creating user' })
           return

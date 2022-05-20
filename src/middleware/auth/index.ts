@@ -140,8 +140,6 @@ export const configureAuth: (config: AuthConfig) => Router = (config) => {
   assertEx(config?.apiKey, 'Missing API Key')
   const apiKey = config?.apiKey as string
 
-  const userStore = new MongoDBUserStore(getUserMongoSdk())
-
   configureAdminApiKeyStrategy(apiKey)
   configureAllowUnauthenticatedStrategy()
   configureArchiveAccessControlStrategy()
@@ -149,7 +147,7 @@ export const configureAuth: (config: AuthConfig) => Router = (config) => {
   configureArchiveOwnerStrategy()
   respondWithJwt = configureJwtStrategy(secretOrKey)
   configureLocalStrategy()
-  configureWeb3Strategy(userStore)
+  configureWeb3Strategy()
 
   // TODO: Now that it's configured via DI instead of at startup, move to a standard route file
   router.post(
