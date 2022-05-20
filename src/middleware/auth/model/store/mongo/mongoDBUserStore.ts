@@ -24,18 +24,13 @@ const toDbEntity = (user: UserWithoutId) => {
   return user
 }
 
+/**
+ * @deprecated Use app.userManager instead
+ */
 export class MongoDBUserStore implements UserStore {
   constructor(private readonly mongo: UserMongoSdk) {}
   async create(user: UserWithoutId): Promise<User & UpsertResult> {
     const created = await this.mongo.upsert(toDbEntity(user))
     return { ...fromDbEntity(created), updated: created.updated }
-  }
-  async getByEmail(email: string): Promise<User | null> {
-    const user = await this.mongo.findByEmail(email.toLowerCase())
-    return user ? fromDbEntity(user) : null
-  }
-  async getByWallet(address: string): Promise<User | null> {
-    const user = await this.mongo.findByAddress(address.toLowerCase())
-    return user ? fromDbEntity(user) : null
   }
 }

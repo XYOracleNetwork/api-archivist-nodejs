@@ -2,10 +2,9 @@ import { Request } from 'express'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
 import { getArchiveKeys } from '../../../../lib'
-import { UserStore } from '../../model'
 
 export class ArchiveApiKeyStrategy extends Strategy {
-  constructor(public readonly userStore: UserStore, public readonly apiKeyHeader = 'x-api-key') {
+  constructor(public readonly apiKeyHeader = 'x-api-key') {
     super()
   }
   override async authenticate(this: StrategyCreated<this, this & StrategyCreatedStatic>, req: Request, _options?: unknown) {
@@ -50,7 +49,7 @@ export class ArchiveApiKeyStrategy extends Strategy {
         return
       }
 
-      const user = await req.app.userRepository.get(existingArchive.user)
+      const user = await req.app.userManager.getById(existingArchive.user)
       if (!user) {
         this.fail('Invalid user')
         return

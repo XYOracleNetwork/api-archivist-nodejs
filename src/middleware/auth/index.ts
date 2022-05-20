@@ -146,10 +146,10 @@ export const configureAuth: (config: AuthConfig) => Router = (config) => {
   configureAdminApiKeyStrategy(apiKey)
   configureAllowUnauthenticatedStrategy()
   configureArchiveAccessControlStrategy()
-  configureArchiveApiKeyStrategy(userStore)
+  configureArchiveApiKeyStrategy()
   configureArchiveOwnerStrategy()
   respondWithJwt = configureJwtStrategy(secretOrKey)
-  configureLocalStrategy(userStore)
+  configureLocalStrategy()
   configureWeb3Strategy(userStore)
 
   router.post(
