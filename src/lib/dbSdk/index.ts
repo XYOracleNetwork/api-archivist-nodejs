@@ -1,5 +1,4 @@
 export * from './getArchivistArchiveKeysMongoSdk'
-export * from './getArchivistArchiveMongoSdk'
 export * from './getArchivistBoundWitnessesMongoSdk'
 export * from './getArchivistPayloadMongoSdk'
 export * from './getBaseMongoSdk'
