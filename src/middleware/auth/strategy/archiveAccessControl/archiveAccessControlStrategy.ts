@@ -34,7 +34,7 @@ export class ArchiveAccessControlStrategy extends Strategy {
       this.success(req.user || {})
       return
     } catch (error) {
-      this.error({ message: 'ArchiveOwner Auth Error' })
+      this.error({ message: 'ArchiveAccessControlStrategy Auth Error' })
     }
   }
 }

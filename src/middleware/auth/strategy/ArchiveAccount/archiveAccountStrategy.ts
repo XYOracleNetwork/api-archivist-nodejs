@@ -2,7 +2,7 @@ import { Request } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
-import { verifyArchiveOwner } from './verifyArchiveOwner'
+import { verifyOperationAllowedByAddress } from './verifyOperationAllowedByAddress'
 
 export class ArchiveAccountStrategy extends Strategy {
   constructor() {
@@ -15,15 +15,15 @@ export class ArchiveAccountStrategy extends Strategy {
         this.fail('Invalid user')
         return
       }
-      const isArchiveOwner = await verifyArchiveOwner(req)
-      if (!isArchiveOwner) {
-        this.fail('User not authorized for archive', StatusCodes.FORBIDDEN)
+      const allowed = await verifyOperationAllowedByAddress(req)
+      if (!allowed) {
+        this.fail('User not authorized for operation on this archive', StatusCodes.FORBIDDEN)
         return
       }
       this.success(user)
       return
     } catch (error) {
-      this.error({ message: 'ArchiveOwner Auth Error' })
+      this.error({ message: 'ArchiveAccountStrategy Auth Error' })
     }
   }
 }

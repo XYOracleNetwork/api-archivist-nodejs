@@ -1,9 +1,16 @@
 import { Request } from 'express'
 
-export const verifyArchiveOwner = async (req: Request): Promise<boolean> => {
-  // Validate user from request
+const verifyAccountAllowed = () => {
+  return false
+}
+const verifySchemaAllowed = () => {
+  return false
+}
+
+export const verifyOperationAllowedByAddress = async (req: Request): Promise<boolean> => {
+  // Validate user & address from request
   const { user } = req
-  if (!user || !user.id) {
+  if (!user || !user.address) {
     return false
   }
   // Validate archive from request
