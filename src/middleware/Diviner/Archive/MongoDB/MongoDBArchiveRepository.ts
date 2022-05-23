@@ -2,7 +2,8 @@ import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { Filter, WithId } from 'mongodb'
 
-import { getBaseMongoSdk, UpsertResult } from '../../../../lib'
+import { getBaseMongoSdk } from '../../../../lib'
+import { UpsertResult } from '../../../../model'
 import { ArchiveRepository, EntityArchive } from '../ArchiveRepository'
 
 interface UpsertFilter {

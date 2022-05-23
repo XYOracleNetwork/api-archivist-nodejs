@@ -1,8 +1,8 @@
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { Filter, ObjectId, WithId } from 'mongodb'
 
-import { getBaseMongoSdk, UpsertResult } from '../../../../lib'
-import { User, UserWithoutId } from '../../../../model'
+import { getBaseMongoSdk } from '../../../../lib'
+import { UpsertResult, User, UserWithoutId } from '../../../../model'
 import { UserRepository } from '../UserRepository'
 
 interface IUpsertFilter {

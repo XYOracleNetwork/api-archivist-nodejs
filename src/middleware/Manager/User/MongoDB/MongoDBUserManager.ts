@@ -1,7 +1,6 @@
 import { WithId } from 'mongodb'
 
-import { UpsertResult } from '../../../../lib'
-import { Identifiable, User, UserWithoutId, Web2User, Web3User } from '../../../../model'
+import { Identifiable, UpsertResult, User, UserWithoutId, Web2User, Web3User } from '../../../../model'
 import { MongoDBUserRepository } from '../../../Diviner'
 import { BcryptPasswordHasher, PasswordHasher } from '../../../PasswordHasher'
 import { UserManager } from '../UserManager'
