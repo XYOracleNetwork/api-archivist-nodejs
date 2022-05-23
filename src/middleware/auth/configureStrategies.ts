@@ -5,6 +5,7 @@ import {
   configureAdminApiKeyStrategy,
   configureAllowUnauthenticatedStrategy,
   configureArchiveAccessControlStrategy,
+  configureArchiveAccountStrategy,
   configureArchiveApiKeyStrategy,
   configureArchiveOwnerStrategy,
   configureJwtStrategy,
@@ -22,6 +23,7 @@ export const configureStrategies = (config: AuthConfig) => {
   configureAllowUnauthenticatedStrategy()
   configureArchiveAccessControlStrategy()
   configureArchiveApiKeyStrategy()
+  configureArchiveAccountStrategy()
   configureArchiveOwnerStrategy()
   const jwtRequestHandler = configureJwtStrategy(secretOrKey)
   configureLocalStrategy()
