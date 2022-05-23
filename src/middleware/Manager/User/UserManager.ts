@@ -1,5 +1,4 @@
-import { UpsertResult } from '../../../lib'
-import { User, UserWithoutId } from '../../../model'
+import { UpsertResult, User, UserWithoutId } from '../../../model'
 
 export interface UserManager {
   create(user: UserWithoutId, password?: string): Promise<User & UpsertResult>
