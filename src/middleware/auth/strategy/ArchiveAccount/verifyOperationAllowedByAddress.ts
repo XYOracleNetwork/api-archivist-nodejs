@@ -1,9 +1,13 @@
 import { Request } from 'express'
 
-const verifyAccountAllowed = () => {
+const getArchivePermissions = (req: Request, archive: string): Promise<Record<string, unknown>> => {
+  return Promise.resolve({})
+}
+
+const verifyAccountAllowed = (address: string, permissions: Record<string, unknown>) => {
   return false
 }
-const verifySchemaAllowed = () => {
+const verifySchemaAllowed = (schema: string, permissions: Record<string, unknown>) => {
   return false
 }
 
@@ -13,12 +17,12 @@ export const verifyOperationAllowedByAddress = async (req: Request): Promise<boo
   if (!user || !user.address) {
     return false
   }
-  // Validate archive from request
-  const { archive } = req.params
-  if (!archive) {
+  // Validate archive from request body
+  const { _archive: archive, schema } = req.body
+  if (!archive || !schema) {
     return false
   }
-  const existingArchive = await req.app.archiveRepository.get(archive)
-  // Validate user is archive owner
-  return !!existingArchive && existingArchive.user === user.id
+  // Get archive permissions from blockchain
+  const permissions = await getArchivePermissions(req, archive)
+  return verifyAccountAllowed(user.address, permissions) && verifySchemaAllowed(schema, permissions)
 }
