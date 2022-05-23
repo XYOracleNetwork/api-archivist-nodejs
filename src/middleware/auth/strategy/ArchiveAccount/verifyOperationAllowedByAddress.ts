@@ -1,13 +1,18 @@
 import { Request } from 'express'
 
-const getArchivePermissions = (req: Request, archive: string): Promise<Record<string, unknown>> => {
+export type ArchivePermissions = {
+  // TODO: Add to/grab from SDK
+  // TODO: Add to src/model temporarily
+}
+
+const getArchivePermissions = (req: Request, archive: string): Promise<ArchivePermissions> => {
   return Promise.resolve({})
 }
 
-const verifyAccountAllowed = (address: string, permissions: Record<string, unknown>) => {
+const verifyAccountAllowed = (address: string, permissions: ArchivePermissions) => {
   return false
 }
-const verifySchemaAllowed = (schema: string, permissions: Record<string, unknown>) => {
+const verifySchemaAllowed = (schema: string, permissions: ArchivePermissions) => {
   return false
 }
 
