@@ -17,7 +17,7 @@ export class ArchiveAccountStrategy extends Strategy {
       }
       const allowed = await verifyOperationAllowedByAddress(req)
       if (!allowed) {
-        this.fail('User not authorized for operation on this archive', StatusCodes.FORBIDDEN)
+        this.fail('Account not authorized for operation on this archive', StatusCodes.FORBIDDEN)
         return
       }
       this.success(user)

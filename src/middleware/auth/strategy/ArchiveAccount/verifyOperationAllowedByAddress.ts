@@ -7,8 +7,6 @@ const defaultArchivePermissions: ArchivePermissions = {
 }
 
 const getArchivePermissions = async (req: Request, archive: string): Promise<ArchivePermissions> => {
-  // TODO: Grab req.app.permissionsRepository/Diviner
-  // to allow determining of archive permissions
   const permissions = await req.app.archivePermissionsRepository.get(archive)
   return permissions?.[0] || defaultArchivePermissions
 }
