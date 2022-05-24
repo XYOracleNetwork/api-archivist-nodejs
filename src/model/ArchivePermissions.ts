@@ -7,8 +7,8 @@ export interface Permissions {
   schemas: string[]
 }
 export interface ArchivePermissions {
-  allow: Partial<Permissions>
-  reject: Partial<Permissions>
+  allow?: Partial<Permissions>
+  reject?: Partial<Permissions>
   schema: ArchivePermissionsPayloadSchema
 }
 
