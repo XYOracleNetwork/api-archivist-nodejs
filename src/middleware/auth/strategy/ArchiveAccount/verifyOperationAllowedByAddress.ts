@@ -6,6 +6,8 @@ export type ArchivePermissions = {
 }
 
 const getArchivePermissions = (req: Request, archive: string): Promise<ArchivePermissions> => {
+  // TODO: Grab req.app.permissionsRepository/Diviner
+  // to allow determining of archive permissions
   return Promise.resolve({})
 }
 
