@@ -11,7 +11,14 @@ const getArchivePermissions = async (req: Request, archive: string): Promise<Arc
   return permissions?.[0] || defaultArchivePermissions
 }
 
-const verifyAccountAllowed = (address: string, permissions: ArchivePermissions): boolean => {
+const verifyAccountAllowed = (address: string | undefined, permissions: ArchivePermissions): boolean => {
+  const allowedAddresses = permissions?.allow?.addresses
+  const disallowedAddresses = permissions?.reject?.addresses
+
+  // If there's address restrictions on the archive and this
+  // is an anonymous request
+  if ((allowedAddresses?.length || disallowedAddresses?.length) && !address) return false
+
   // If there's rejected addresses
   if (permissions?.reject?.addresses) {
     // And this address is one of them
@@ -39,11 +46,6 @@ const verifySchemaAllowed = (schema: string, permissions: ArchivePermissions): b
 }
 
 export const verifyOperationAllowedByAddress = async (req: Request): Promise<boolean> => {
-  // Validate user & address from request
-  const { user } = req
-  if (!user || !user.address) {
-    return false
-  }
   // Validate archive from request body
   const { _archive: archive, schema } = req.body
   if (!archive || !schema) {
@@ -51,5 +53,6 @@ export const verifyOperationAllowedByAddress = async (req: Request): Promise<boo
   }
   // Get archive permissions
   const permissions = await getArchivePermissions(req, archive)
-  return verifyAccountAllowed(user.address, permissions) && verifySchemaAllowed(schema, permissions)
+  const address = req?.user?.address
+  return verifyAccountAllowed(address, permissions) && verifySchemaAllowed(schema, permissions)
 }

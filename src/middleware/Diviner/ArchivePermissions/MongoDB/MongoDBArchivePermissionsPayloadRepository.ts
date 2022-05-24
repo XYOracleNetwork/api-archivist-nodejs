@@ -2,13 +2,16 @@ import { XyoBoundWitnessBuilder, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { Filter } from 'mongodb'
 
-import { AbstractMongoDBPayloadRepository, AbstractMongoDBPayloadRepositoryOpts, getDefaultAbstractMongoDBPayloadRepositoryOpts } from '../../../../lib'
+import { AbstractMongoDBPayloadRepository, AbstractMongoDBPayloadRepositoryOpts, getBaseMongoSdk, getDefaultAbstractMongoDBPayloadRepositoryOpts } from '../../../../lib'
 import { ArchivePermissionsPayload, ArchivePermissionsPayloadSchema } from '../../../../model'
 
 const schema: ArchivePermissionsPayloadSchema = 'network.xyo.security.archive.permissions'
 
 export class MongoDBArchivePermissionsPayloadPayloadRepository extends AbstractMongoDBPayloadRepository<ArchivePermissionsPayload> {
-  constructor(protected readonly items: BaseMongoSdk<ArchivePermissionsPayload>, opts: AbstractMongoDBPayloadRepositoryOpts = getDefaultAbstractMongoDBPayloadRepositoryOpts()) {
+  constructor(
+    protected readonly items: BaseMongoSdk<ArchivePermissionsPayload> = getBaseMongoSdk('payload'),
+    opts: AbstractMongoDBPayloadRepositoryOpts = getDefaultAbstractMongoDBPayloadRepositoryOpts()
+  ) {
     super(opts)
   }
   async find(filter: Filter<ArchivePermissionsPayload>): Promise<ArchivePermissionsPayload[]> {
