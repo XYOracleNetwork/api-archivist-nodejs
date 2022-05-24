@@ -1,7 +1,7 @@
 import { Express } from 'express'
 
 import { getByHash } from '../hash'
-import { allowAnonymous } from '../middleware'
+import { allowAnonymous, requireAccountOperationAccess } from '../middleware'
 import { postPayloads } from '../post'
 
 export const addNodeRoutes = (app: Express) => {
@@ -15,7 +15,7 @@ export const addNodeRoutes = (app: Express) => {
 
   app.post(
     '/',
-    allowAnonymous,
+    requireAccountOperationAccess,
     postPayloads
     /* #swagger.tags = ['Node'] */
     /* #swagger.summary = 'Query the payloads, implementation is dependent on payload schema' */
