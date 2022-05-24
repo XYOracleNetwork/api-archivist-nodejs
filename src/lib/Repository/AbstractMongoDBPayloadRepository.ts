@@ -6,7 +6,7 @@ import { AbstractPayloadRepository } from '../../model'
 import { AbstractMongoDBPayloadRepositoryOpts } from './AbstractMongoDBPayloadRepositoryOpts'
 import { getDefaultAbstractMongoDBPayloadRepositoryOpts } from './getDefaultAbstractMongoDBPayloadRepositoryOpts'
 
-export abstract class AbstractMongoDBPayloadRepository<T, TId = string, TQuery = Filter<T>> extends AbstractPayloadRepository<T, TId, TQuery> {
+export abstract class AbstractMongoDBPayloadRepository<T, TId = string, TQuery = Filter<XyoPayload<T>>> extends AbstractPayloadRepository<T, TId, TQuery> {
   protected readonly account: XyoAccount
   protected readonly boundWitnessSdk: BaseMongoSdk<XyoBoundWitness>
   protected readonly config: XyoBoundWitnessBuilderConfig
