@@ -5,7 +5,7 @@ import { Filter } from 'mongodb'
 import { getBaseMongoSdk } from '../../../../lib'
 import { AbstractPayloadRepository } from '../../../../model'
 
-export class MongoDBPayloadRepository extends AbstractPayloadRepository<XyoPayload, string, XyoPayload[], Filter<XyoPayload>> {
+export class MongoDBPayloadRepository extends AbstractPayloadRepository<XyoPayload, string, Filter<XyoPayload>> {
   constructor(protected sdk: BaseMongoSdk<XyoPayload> = getBaseMongoSdk<XyoPayload>('payloads')) {
     super()
   }
