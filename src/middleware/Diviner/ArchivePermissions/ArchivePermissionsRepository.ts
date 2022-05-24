@@ -1,5 +1,3 @@
-import { Repository, UpsertResult } from '../../../model'
-import { ArchivePermissions } from './ArchivePermissions'
+import { ArchivePermissions, Repository, UpsertResult } from '../../../model'
 
-// TODO: Abstract payload Repository as base type?
-export type ArchivePermissionsRepository = Repository<ArchivePermissions & UpsertResult, ArchivePermissions, ArchivePermissions | null, string>
+export type ArchivePermissionsRepository = Repository<ArchivePermissions[] & UpsertResult, ArchivePermissions[], ArchivePermissions[] | null, string>

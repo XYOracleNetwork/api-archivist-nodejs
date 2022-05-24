@@ -1,5 +1,6 @@
 export * from './archiveLocals'
 export * from './archivePathParams'
+export * from './ArchivePermissions'
 export * from './Repository'
 export * from './sortDirection'
 export * from './UpsertResult'

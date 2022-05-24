@@ -1,21 +1,43 @@
 import { Request } from 'express'
 
-export type ArchivePermissions = {
-  // TODO: Add to/grab from SDK
-  // TODO: Add to src/model temporarily
+import { ArchivePermissions } from '../../../../model'
+
+const defaultArchivePermissions: ArchivePermissions = {
+  schema: 'network.xyo.security.archive.permissions',
 }
 
-const getArchivePermissions = (req: Request, archive: string): Promise<ArchivePermissions> => {
+const getArchivePermissions = async (req: Request, archive: string): Promise<ArchivePermissions> => {
   // TODO: Grab req.app.permissionsRepository/Diviner
   // to allow determining of archive permissions
-  return Promise.resolve({})
+  const permissions = await req.app.archivePermissionsRepository.get(archive)
+  return permissions?.[0] || defaultArchivePermissions
 }
 
-const verifyAccountAllowed = (address: string, permissions: ArchivePermissions) => {
-  return false
+const verifyAccountAllowed = (address: string, permissions: ArchivePermissions): boolean => {
+  // If there's rejected addresses
+  if (permissions?.reject?.addresses) {
+    // And this address is one of them
+    if (permissions.reject.addresses.some((a) => a === address)) return false
+  }
+  // If there's allowed addresses
+  if (permissions?.allow?.addresses) {
+    // Return true if this address is allowed, otherwise false
+    permissions.allow.addresses.some((a) => a === address) ? true : false
+  }
+  return true
 }
-const verifySchemaAllowed = (schema: string, permissions: ArchivePermissions) => {
-  return false
+const verifySchemaAllowed = (schema: string, permissions: ArchivePermissions): boolean => {
+  // If there's rejected schemas
+  if (permissions?.reject?.schemas) {
+    // And this schema is one of them
+    if (permissions.reject.schemas.some((a) => a === schema)) return false
+  }
+  // If there's allowed schemas
+  if (permissions?.allow?.schemas) {
+    // Return true if this schema is allowed, otherwise false
+    permissions.allow.schemas.some((a) => a === schema) ? true : false
+  }
+  return true
 }
 
 export const verifyOperationAllowedByAddress = async (req: Request): Promise<boolean> => {
@@ -29,7 +51,7 @@ export const verifyOperationAllowedByAddress = async (req: Request): Promise<boo
   if (!archive || !schema) {
     return false
   }
-  // Get archive permissions from blockchain
+  // Get archive permissions
   const permissions = await getArchivePermissions(req, archive)
   return verifyAccountAllowed(user.address, permissions) && verifySchemaAllowed(schema, permissions)
 }
