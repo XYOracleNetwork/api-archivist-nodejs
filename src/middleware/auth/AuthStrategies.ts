@@ -50,4 +50,4 @@ export const requireArchiveAccess: RequestHandler[] = [allowAnonymous, archiveAc
 /**
  * Require that both the address and schema are allowed on the archive
  */
-export const requireArchiveAndSchemaAccess: RequestHandler[] = [allowAnonymous, archiveAccountStrategy]
+export const requireAccountOperationAccess: RequestHandler[] = [allowAnonymous, archiveAccountStrategy]
