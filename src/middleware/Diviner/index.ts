@@ -1,4 +1,5 @@
 export * from './Archive'
+export * from './ArchivePermissions'
 export * from './Archivist'
 export * from './Payload'
 export * from './User'

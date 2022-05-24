@@ -1,13 +1,34 @@
+import { StatusCodes } from 'http-status-codes'
+
+import { claimArchive, getArchivist, getExistingWeb3User, signInWeb3User } from '../../../../test'
+
+const postCommandToArchive = async (archive: string, token?: string, expectedStatus: StatusCodes = StatusCodes.OK) => {
+  const data = {
+    _archive: archive,
+    schema: 'network.xyo.debug',
+  }
+  const response = token
+    ? await getArchivist().post('/').send(data).auth(token, { type: 'bearer' }).expect(expectedStatus)
+    : await getArchivist().post('/').send(data).expect(expectedStatus)
+  return response.body.data
+}
+
 describe('ArchiveAccountStrategy', () => {
+  let token: string
+  let archive: string
+  beforeAll(async () => {
+    token = await signInWeb3User(await getExistingWeb3User())
+    archive = (await claimArchive(token)).archive
+  })
   describe('with no archive permissions', () => {
     describe('with allowed address', () => {
       it('allows operation by address', async () => {
-        // TODO:
+        await postCommandToArchive(archive, token)
       })
     })
     describe('with anonymous', () => {
       it('allows operation', async () => {
-        // TODO:
+        await postCommandToArchive(archive, token)
       })
     })
   })
@@ -16,7 +37,7 @@ describe('ArchiveAccountStrategy', () => {
       describe('address', () => {
         describe('with allowed address', () => {
           it('allows operation by address', async () => {
-            // TODO:
+            await postCommandToArchive(archive, token)
           })
         })
         describe('with address not in allowed list', () => {
