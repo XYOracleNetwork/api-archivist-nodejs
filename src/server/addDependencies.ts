@@ -1,4 +1,4 @@
-import { Application } from 'express-serve-static-core'
+import { Application } from 'express'
 
 import {
   MongoDBArchivePermissionsPayloadPayloadRepository,

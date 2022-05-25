@@ -1,4 +1,4 @@
-import { Application } from 'express-serve-static-core'
+import { Application } from 'express'
 
 import { GetArchivePermissionsQueryHandler, SetArchivePermissionsCommandHandler } from '../Handlers'
 import { XyoPayloadProcessorRegistry } from '../middleware'
