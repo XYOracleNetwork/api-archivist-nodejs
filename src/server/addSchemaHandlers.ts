@@ -7,6 +7,7 @@ import { getArchivePermissionsSchema, setArchivePermissionsSchema } from '../mod
 export const addSchemaHandlers = (app: Application) => {
   const registry: XyoPayloadProcessorRegistry = app.payloadProcessorRegistry
   registry.registerProcessorForSchema('network.xyo.debug', () => Promise.resolve())
+  registry.registerProcessorForSchema('network.xyo.test', () => Promise.resolve())
   registry.registerProcessorForSchema(setArchivePermissionsSchema, (x) => new SetArchivePermissionsCommandHandler({ ...app }).handle({ ...x, schema: setArchivePermissionsSchema }))
   registry.registerProcessorForSchema(getArchivePermissionsSchema, (x) => new GetArchivePermissionsQueryHandler({ ...app }).handle({ ...x }))
 }

@@ -8,7 +8,7 @@ const defaultArchivePermissions: SetArchivePermissions = {
 
 const getArchivePermissions = async (req: Request, archive: string): Promise<SetArchivePermissions> => {
   const permissions = await req.app.archivePermissionsRepository.get(archive)
-  return permissions?.[0] || defaultArchivePermissions
+  return permissions && permissions?.[0] ? permissions?.[0] : defaultArchivePermissions
 }
 
 const verifyAccountAllowed = (address: string | undefined, permissions: SetArchivePermissions): boolean => {
@@ -20,14 +20,14 @@ const verifyAccountAllowed = (address: string | undefined, permissions: SetArchi
   if ((allowedAddresses?.length || disallowedAddresses?.length) && !address) return false
 
   // If there's rejected addresses
-  if (permissions?.reject?.addresses) {
+  if (disallowedAddresses) {
     // And this address is one of them
-    if (permissions.reject.addresses.some((a) => a === address)) return false
+    if (disallowedAddresses.some((a) => a === address)) return false
   }
   // If there's allowed addresses
-  if (permissions?.allow?.addresses) {
+  if (allowedAddresses) {
     // Return true if this address is allowed, otherwise false
-    permissions.allow.addresses.some((a) => a === address) ? true : false
+    return allowedAddresses.some((a) => a === address) ? true : false
   }
   return true
 }
