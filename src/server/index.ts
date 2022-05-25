@@ -15,6 +15,7 @@ import { addMiddleware } from './addMiddleware'
 import { addNodeRoutes } from './addNodeRoutes'
 import { addPayloadRoutes } from './addPayloadRoutes'
 import { addPayloadSchemaRoutes } from './addPayloadSchemaRoutes'
+import { addSchemaHandlers } from './addSchemaHandlers'
 import { addSchemaRoutes } from './addSchemaRoutes'
 
 export const getApp = (): Express => {
@@ -33,6 +34,7 @@ export const getApp = (): Express => {
 
   addDependencies(app)
   addMiddleware(app)
+  addSchemaHandlers(app)
   addHealthChecks(app)
   addArchiveRoutes(app)
   addBlockRoutes(app)
