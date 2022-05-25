@@ -1,3 +1,3 @@
-import { ArchivePermissions, Repository } from '../../../model'
+import { Repository, SetArchivePermissions } from '../../../model'
 
-export type ArchivePermissionsRepository = Repository<ArchivePermissions[], ArchivePermissions[], ArchivePermissions[] | null, string>
+export type ArchivePermissionsRepository = Repository<SetArchivePermissions[], SetArchivePermissions[], SetArchivePermissions[] | null, string>

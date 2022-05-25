@@ -1,16 +1,16 @@
 import { StatusCodes } from 'http-status-codes'
 
-import { ArchivePermissions, ArchivePermissionsPayload } from '../../../../model'
+import { SetArchivePermissions, SetArchivePermissionsPayload, setArchivePermissionsSchema } from '../../../../model'
 import { claimArchive, getArchivist, getExistingWeb3User, signInWeb3User, TestWeb3User } from '../../../../test'
 
 const allowedSchema = 'network.xyo.debug'
 const otherSchema = 'network.xyo.test'
 
-const setArchivePermissions = async (archive: string, token: string, permissions: ArchivePermissions) => {
-  const data: ArchivePermissionsPayload = {
+const setArchivePermissions = async (archive: string, token: string, permissions: SetArchivePermissions) => {
+  const data: SetArchivePermissionsPayload = {
     ...permissions,
     _archive: archive,
-    schema: 'network.xyo.security.archive.permissions',
+    schema: setArchivePermissionsSchema,
   }
   const response = await getArchivist().post('/').send(data).auth(token, { type: 'bearer' }).expect(StatusCodes.OK)
   return response.body.data
@@ -59,7 +59,7 @@ describe('ArchiveAccountStrategy', () => {
             allow: {
               addresses: [user.address],
             },
-            schema: 'network.xyo.security.archive.permissions',
+            schema: setArchivePermissionsSchema,
           })
         })
         describe('with allowed address', () => {
@@ -89,7 +89,7 @@ describe('ArchiveAccountStrategy', () => {
             allow: {
               schemas: [allowedSchema],
             },
-            schema: 'network.xyo.security.archive.permissions',
+            schema: setArchivePermissionsSchema,
           })
         })
         describe('with allowed schema', () => {
@@ -118,7 +118,7 @@ describe('ArchiveAccountStrategy', () => {
             reject: {
               addresses: [otherUser.address],
             },
-            schema: 'network.xyo.security.archive.permissions',
+            schema: setArchivePermissionsSchema,
           })
         })
         describe('with disallowed address', () => {
@@ -148,7 +148,7 @@ describe('ArchiveAccountStrategy', () => {
             reject: {
               schemas: [otherSchema],
             },
-            schema: 'network.xyo.security.archive.permissions',
+            schema: setArchivePermissionsSchema,
           })
         })
         describe('with disallowed schema', () => {
