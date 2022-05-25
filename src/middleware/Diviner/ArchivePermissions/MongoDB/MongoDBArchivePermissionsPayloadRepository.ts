@@ -24,7 +24,7 @@ export class MongoDBArchivePermissionsPayloadPayloadRepository extends AbstractM
     const payloads = items.map((i) => new XyoPayloadBuilder({ schema }).fields({ i }).build())
     const bw = new XyoBoundWitnessBuilder(this.config).witness(this.account).payloads(payloads).build()
     const bwResult = await this.boundWitnessSdk.insertOne(bw)
-    if (bwResult.acknowledged && bwResult.insertedId) throw new Error('MongoDBArchivePermissionsPayloadPayloadRepository: Error inserting BoundWitness')
+    if (!bwResult.acknowledged || !bwResult.insertedId) throw new Error('MongoDBArchivePermissionsPayloadPayloadRepository: Error inserting BoundWitness')
     const result = await this.payloadsSdk.insertMany(payloads)
     if (result.insertedCount != payloads.length) throw new Error('MongoDBArchivePermissionsPayloadPayloadRepository: Error inserting Payloads')
     return payloads as SetArchivePermissionsPayload[]
