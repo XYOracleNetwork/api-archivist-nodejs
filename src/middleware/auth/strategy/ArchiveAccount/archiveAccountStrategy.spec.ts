@@ -123,7 +123,7 @@ describe('ArchiveAccountStrategy', () => {
         })
         describe('with disallowed address', () => {
           it('disallows operation by address', async () => {
-            await postCommandToArchive(archive, otherToken)
+            await postCommandToArchive(archive, otherToken, allowedSchema, StatusCodes.UNAUTHORIZED)
           })
         })
         describe('with address not in disallowed list', () => {
@@ -153,7 +153,7 @@ describe('ArchiveAccountStrategy', () => {
         })
         describe('with disallowed schema', () => {
           it('disallows operation by address', async () => {
-            await postCommandToArchive(archive, token, otherSchema)
+            await postCommandToArchive(archive, token, otherSchema, StatusCodes.UNAUTHORIZED)
           })
         })
         describe('with schema not in disallowed list', () => {

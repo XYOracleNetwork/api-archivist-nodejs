@@ -3,10 +3,10 @@ import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 
 // TODO: CQRS pattern of returning empty for commands, redirect for queries
-const handler: RequestHandler<NoReqParams, XyoPayload[], XyoPayload[]> = async (req, res, next) => {
+const handler: RequestHandler<NoReqParams, unknown[], XyoPayload[]> = async (req, res, next) => {
   const { processors } = res.app.payloadProcessorRegistry
   const payloads: XyoPayload[] = Array.isArray(req.body) ? req.body : [req.body]
-  const result: XyoPayload[] =
+  const result: unknown[] =
     (await Promise.all(
       payloads.map((p) => {
         const processor = processors[p.schema]
