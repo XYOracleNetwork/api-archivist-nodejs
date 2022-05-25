@@ -1,17 +1,17 @@
 import { Request } from 'express'
 
-import { ArchivePermissions } from '../../../../model'
+import { SetArchivePermissions, setArchivePermissionsSchema } from '../../../../model'
 
-const defaultArchivePermissions: ArchivePermissions = {
-  schema: 'network.xyo.security.archive.permissions',
+const defaultArchivePermissions: SetArchivePermissions = {
+  schema: setArchivePermissionsSchema,
 }
 
-const getArchivePermissions = async (req: Request, archive: string): Promise<ArchivePermissions> => {
+const getArchivePermissions = async (req: Request, archive: string): Promise<SetArchivePermissions> => {
   const permissions = await req.app.archivePermissionsRepository.get(archive)
   return permissions?.[0] || defaultArchivePermissions
 }
 
-const verifyAccountAllowed = (address: string | undefined, permissions: ArchivePermissions): boolean => {
+const verifyAccountAllowed = (address: string | undefined, permissions: SetArchivePermissions): boolean => {
   const allowedAddresses = permissions?.allow?.addresses
   const disallowedAddresses = permissions?.reject?.addresses
 
@@ -31,7 +31,7 @@ const verifyAccountAllowed = (address: string | undefined, permissions: ArchiveP
   }
   return true
 }
-const verifySchemaAllowed = (schema: string, permissions: ArchivePermissions): boolean => {
+const verifySchemaAllowed = (schema: string, permissions: SetArchivePermissions): boolean => {
   // If there's rejected schemas
   if (permissions?.reject?.schemas) {
     // And this schema is one of them
