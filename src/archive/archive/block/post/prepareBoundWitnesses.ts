@@ -22,7 +22,7 @@ export const prepareBoundWitnesses = (
   })
   const payloads = flattenArray(payloadLists).map((payload) => {
     const wrapper = new XyoPayloadWrapper(payload)
-    return { ...payload, ...payloadMetaData, _hash: wrapper.sortedHash() }
+    return { ...payload, ...payloadMetaData, _hash: wrapper.hash }
   })
   return { payloads, sanitized }
 }

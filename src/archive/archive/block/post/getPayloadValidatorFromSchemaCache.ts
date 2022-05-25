@@ -14,7 +14,7 @@ export const getPayloadValidatorFromSchemaCache: GetValidator<XyoPayload> = asyn
   const { definition, _hash } = schema.payload
   // Use the schema cache payload hash as the AJV cache key to memoize
   // the AJV validator
-  const key = _hash || new XyoPayloadWrapper(schema.payload).sortedHash()
+  const key = _hash || new XyoPayloadWrapper(schema.payload).hash
   // Check if we already cached the validator
   const validate = ajv.getSchema(key)
   // Return the cached validator for this schema

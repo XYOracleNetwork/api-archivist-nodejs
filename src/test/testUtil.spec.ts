@@ -4,7 +4,7 @@ import {
   XyoArchiveKey,
   XyoBoundWitness,
   XyoBoundWitnessBuilder,
-  XyoDomainConfig,
+  XyoDomainPayload,
   XyoPayload,
   XyoPayloadBuilder,
   XyoSchemaPayload,
@@ -150,7 +150,7 @@ export const getArchive = async (archive: string, token?: string, expectedStatus
   return response.body.data
 }
 
-export const getDomain = async (domain: string, token?: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoDomainConfig> => {
+export const getDomain = async (domain: string, token?: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoDomainPayload> => {
   const response = token
     ? await request.get(`/domain/${domain}`).auth(token, { type: 'bearer' }).expect(expectedStatus)
     : await request.get(`/domain/${domain}`).expect(expectedStatus)
