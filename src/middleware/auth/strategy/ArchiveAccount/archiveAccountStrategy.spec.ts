@@ -27,7 +27,7 @@ const postCommandToArchive = async (archive: string, token?: string, schema = al
   return response.body.data
 }
 
-describe('ArchiveAccountStrategy', () => {
+describe.skip('ArchiveAccountStrategy', () => {
   let user: TestWeb3User
   let token: string
   let archive: string
