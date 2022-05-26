@@ -93,12 +93,12 @@ describe('ArchiveAccountStrategy', () => {
           })
         })
         describe('with allowed schema', () => {
-          it('allows operation by address', async () => {
+          it('allows operation for schema', async () => {
             await postCommandToArchive(archive, token)
           })
         })
         describe('with schema not in allowed list', () => {
-          it('disallows operation by address', async () => {
+          it('disallows operation for schema', async () => {
             await postCommandToArchive(archive, token, otherSchema, StatusCodes.FORBIDDEN)
           })
         })
@@ -152,12 +152,12 @@ describe('ArchiveAccountStrategy', () => {
           })
         })
         describe('with disallowed schema', () => {
-          it('disallows operation by address', async () => {
+          it('disallows operation for schema', async () => {
             await postCommandToArchive(archive, token, otherSchema, StatusCodes.FORBIDDEN)
           })
         })
         describe('with schema not in disallowed list', () => {
-          it('allows operation by address', async () => {
+          it('allows operation for schema', async () => {
             await postCommandToArchive(archive, token)
           })
         })

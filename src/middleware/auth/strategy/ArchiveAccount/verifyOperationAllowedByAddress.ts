@@ -32,15 +32,21 @@ const verifyAccountAllowed = (address: string | undefined, permissions: SetArchi
   return true
 }
 const verifySchemaAllowed = (schema: string, permissions: SetArchivePermissions): boolean => {
+  const allowedSchemas = permissions?.allow?.schemas
+  const disallowedSchemas = permissions?.reject?.schemas
+
+  // If there's no schema restrictions on the archive
+  if (!allowedSchemas?.length && !disallowedSchemas?.length) return true
+
   // If there's rejected schemas
-  if (permissions?.reject?.schemas) {
+  if (disallowedSchemas) {
     // And this schema is one of them
-    if (permissions.reject.schemas.some((a) => a === schema)) return false
+    if (disallowedSchemas.some((a) => a === schema)) return false
   }
   // If there's allowed schemas
-  if (permissions?.allow?.schemas) {
+  if (allowedSchemas) {
     // Return true if this schema is allowed, otherwise false
-    permissions.allow.schemas.some((a) => a === schema) ? true : false
+    return allowedSchemas.some((a) => a === schema) ? true : false
   }
   return true
 }
