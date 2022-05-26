@@ -306,3 +306,10 @@ export const getArchiveSchemaPayloadsRecent = async (archive: string, schema: st
     : await request.get(`/archive/${archive}/schema/${schema}/recent`).expect(expectedStatus)
   return response.body.data
 }
+
+export const postCommands = async (commands: XyoBoundWitness[], token?: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoBoundWitness[]> => {
+  const response = token
+    ? await request.post('/').send(commands).auth(token, { type: 'bearer' }).expect(expectedStatus)
+    : await request.post('/').send(commands).expect(expectedStatus)
+  return response.body.data
+}

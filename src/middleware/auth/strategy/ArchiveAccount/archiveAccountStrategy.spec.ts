@@ -1,7 +1,8 @@
+import { XyoBoundWitnessBuilder, XyoPayloadBodyValidator, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
 import { StatusCodes } from 'http-status-codes'
 
 import { SetArchivePermissions, SetArchivePermissionsPayload, setArchivePermissionsSchema } from '../../../../model'
-import { claimArchive, getArchivist, getExistingWeb3User, signInWeb3User, TestWeb3User } from '../../../../test'
+import { claimArchive, getArchivist, getExistingWeb3User, postCommands, signInWeb3User, TestWeb3User } from '../../../../test'
 
 const allowedSchema = 'network.xyo.debug'
 const otherSchema = 'network.xyo.test'
@@ -16,15 +17,14 @@ const setArchivePermissions = async (archive: string, token: string, permissions
   return response.body.data
 }
 
-const postCommandToArchive = async (archive: string, token?: string, schema = allowedSchema, expectedStatus: StatusCodes = StatusCodes.OK) => {
+const postCommandToArchive = (archive: string, token?: string, schema = allowedSchema, expectedStatus: StatusCodes = StatusCodes.OK) => {
   const data = {
     _archive: archive,
     schema,
   }
-  const response = token
-    ? await getArchivist().post('/').send(data).auth(token, { type: 'bearer' }).expect(expectedStatus)
-    : await getArchivist().post('/').send(data).expect(expectedStatus)
-  return response.body.data
+  const payload = new XyoPayloadBuilder({ schema }).fields(data).build()
+  const bw = new XyoBoundWitnessBuilder({ inlinePayloads: true }).payload(payload).build()
+  return postCommands([bw], token, expectedStatus)
 }
 
 describe('ArchiveAccountStrategy', () => {
