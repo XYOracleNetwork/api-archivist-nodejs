@@ -1,3 +1,4 @@
+import { XyoBoundWitness, XyoPayload, XyoPayloadBody } from '@xyo-network/sdk-xyo-client-js'
 import { Request } from 'express'
 
 import { SetArchivePermissions, setArchivePermissionsSchema } from '../../../../model'
@@ -6,7 +7,7 @@ const defaultArchivePermissions: SetArchivePermissions = {
   schema: setArchivePermissionsSchema,
 }
 
-const getArchivePermissions = async (req: Request, archive: string): Promise<SetArchivePermissions> => {
+const getArchivePermissions = async (req: Request<unknown, unknown, XyoBoundWitness[]>, archive: string): Promise<SetArchivePermissions> => {
   const permissions = await req.app.archivePermissionsRepository.get(archive)
   return permissions && permissions?.[0] ? permissions?.[0] : defaultArchivePermissions
 }
@@ -51,14 +52,26 @@ const verifySchemaAllowed = (schema: string, permissions: SetArchivePermissions)
   return true
 }
 
-export const verifyOperationAllowedByAddress = async (req: Request): Promise<boolean> => {
-  // Validate archive from request body
-  const { _archive: archive, schema } = req.body
-  if (!archive || !schema) {
-    return false
-  }
-  // Get archive permissions
-  const permissions = await getArchivePermissions(req, archive)
+export const verifyOperationAllowedByAddress = async (req: Request<unknown, unknown, XyoBoundWitness[]>): Promise<boolean> => {
+  // NOTE: Communicate partial success for allowed/disallowed operations
+  // Short circuit & reduce all operations to binary success/failure for now
   const address = req?.user?.address
-  return verifyAccountAllowed(address, permissions) && verifySchemaAllowed(schema, permissions)
+  for (let i = 0; i < req.body.length; i++) {
+    const bw = req.body[i]
+    if (bw._payloads?.length) {
+      for (let j = 0; j < bw._payloads.length; j++) {
+        const p: XyoPayload = bw._payloads[j]
+        // Validate archive from request body
+        const { _archive: archive, schema } = p
+        if (!archive || !schema) {
+          return false
+        }
+        // Get archive permissions
+        const permissions = await getArchivePermissions(req, archive)
+        const allowed = verifyAccountAllowed(address, permissions) && verifySchemaAllowed(schema, permissions)
+        if (!allowed) return false
+      }
+    }
+  }
+  return true
 }
