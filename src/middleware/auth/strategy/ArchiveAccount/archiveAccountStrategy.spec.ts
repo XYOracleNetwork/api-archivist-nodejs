@@ -27,7 +27,7 @@ const postCommandToArchive = async (archive: string, token?: string, schema = al
   return response.body.data
 }
 
-describe.skip('ArchiveAccountStrategy', () => {
+describe('ArchiveAccountStrategy', () => {
   let user: TestWeb3User
   let token: string
   let archive: string
@@ -71,12 +71,12 @@ describe.skip('ArchiveAccountStrategy', () => {
           it('disallows operation by address', async () => {
             const otherUser = await getExistingWeb3User()
             const otherToken = await signInWeb3User(otherUser)
-            await postCommandToArchive(archive, otherToken, allowedSchema, StatusCodes.UNAUTHORIZED)
+            await postCommandToArchive(archive, otherToken, allowedSchema, StatusCodes.FORBIDDEN)
           })
         })
         describe('with anonymous', () => {
           it('disallows operation', async () => {
-            await postCommandToArchive(archive, undefined, allowedSchema, StatusCodes.UNAUTHORIZED)
+            await postCommandToArchive(archive, undefined, allowedSchema, StatusCodes.FORBIDDEN)
           })
         })
       })
@@ -99,7 +99,7 @@ describe.skip('ArchiveAccountStrategy', () => {
         })
         describe('with schema not in allowed list', () => {
           it('disallows operation by address', async () => {
-            await postCommandToArchive(archive, token, otherSchema, StatusCodes.UNAUTHORIZED)
+            await postCommandToArchive(archive, token, otherSchema, StatusCodes.FORBIDDEN)
           })
         })
       })
@@ -123,7 +123,7 @@ describe.skip('ArchiveAccountStrategy', () => {
         })
         describe('with disallowed address', () => {
           it('disallows operation by address', async () => {
-            await postCommandToArchive(archive, otherToken, allowedSchema, StatusCodes.UNAUTHORIZED)
+            await postCommandToArchive(archive, otherToken, allowedSchema, StatusCodes.FORBIDDEN)
           })
         })
         describe('with address not in disallowed list', () => {
@@ -153,7 +153,7 @@ describe.skip('ArchiveAccountStrategy', () => {
         })
         describe('with disallowed schema', () => {
           it('disallows operation by address', async () => {
-            await postCommandToArchive(archive, token, otherSchema, StatusCodes.UNAUTHORIZED)
+            await postCommandToArchive(archive, token, otherSchema, StatusCodes.FORBIDDEN)
           })
         })
         describe('with schema not in disallowed list', () => {

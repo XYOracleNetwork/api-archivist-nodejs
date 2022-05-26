@@ -33,10 +33,10 @@ export class MongoDBArchivePermissionsPayloadPayloadRepository extends AbstractM
       const archive = item._archive
       if (archive) {
         const payload = new XyoPayloadBuilder({ schema }).fields(item).build()
-        const payloadResult = await getArchivistPayloadMongoSdk(archive).insertOne(payload)
+        const payloadResult = await getArchivistPayloadMongoSdk(archive).insert(payload)
         if (!payloadResult.acknowledged || !payloadResult.insertedId) throw new Error('MongoDBArchivePermissionsPayloadPayloadRepository: Error inserting Payload')
         const bw = new XyoBoundWitnessBuilder(this.config).witness(this.account).payload(payload).build()
-        const bwResult = await getArchivistBoundWitnessesMongoSdk(archive).insertOne(bw)
+        const bwResult = await getArchivistBoundWitnessesMongoSdk(archive).insert(bw)
         if (!bwResult.acknowledged || !bwResult.insertedId) throw new Error('MongoDBArchivePermissionsPayloadPayloadRepository: Error inserting BoundWitness')
       }
     }
