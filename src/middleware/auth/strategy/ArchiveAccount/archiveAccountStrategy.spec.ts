@@ -134,8 +134,8 @@ describe('ArchiveAccountStrategy', () => {
           })
         })
         describe('with anonymous address', () => {
-          it('allows operation by address', async () => {
-            await postCommandToArchive(archive)
+          it('disallows operation', async () => {
+            await postCommandToArchive(archive, undefined, allowedSchema, StatusCodes.FORBIDDEN)
           })
         })
       })

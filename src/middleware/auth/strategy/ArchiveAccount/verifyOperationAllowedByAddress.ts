@@ -22,12 +22,12 @@ const verifyAccountAllowed = (address: string | undefined, permissions: SetArchi
   // If there's rejected addresses
   if (disallowedAddresses) {
     // And this address is one of them
-    if (disallowedAddresses.some((a) => a === address)) return false
+    if (disallowedAddresses.some((a) => a.toLowerCase() === address?.toLowerCase())) return false
   }
   // If there's allowed addresses
   if (allowedAddresses) {
     // Return true if this address is allowed, otherwise false
-    return allowedAddresses.some((a) => a === address) ? true : false
+    return allowedAddresses.some((a) => a.toLowerCase() === address?.toLowerCase()) ? true : false
   }
   return true
 }
