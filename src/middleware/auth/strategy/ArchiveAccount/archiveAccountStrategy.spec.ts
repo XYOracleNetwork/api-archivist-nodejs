@@ -1,20 +1,25 @@
-import { XyoBoundWitnessBuilder, XyoPayloadBodyValidator, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitnessBuilder, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
 import { StatusCodes } from 'http-status-codes'
 
 import { SetArchivePermissions, SetArchivePermissionsPayload, setArchivePermissionsSchema } from '../../../../model'
-import { claimArchive, getArchivist, getExistingWeb3User, postCommands, signInWeb3User, TestWeb3User } from '../../../../test'
+import { claimArchive, getExistingWeb3User, postCommands, signInWeb3User, TestWeb3User } from '../../../../test'
 
 const allowedSchema = 'network.xyo.debug'
 const otherSchema = 'network.xyo.test'
 
-const setArchivePermissions = async (archive: string, token: string, permissions: SetArchivePermissions) => {
+const setArchivePermissions = (archive: string, token: string, permissions: SetArchivePermissions) => {
   const data: SetArchivePermissionsPayload = {
     ...permissions,
     _archive: archive,
     schema: setArchivePermissionsSchema,
   }
-  const response = await getArchivist().post('/').send(data).auth(token, { type: 'bearer' }).expect(StatusCodes.OK)
-  return response.body.data
+  const payload = new XyoPayloadBuilder({ schema: setArchivePermissionsSchema }).fields(data).build()
+  payload._archive = archive
+  const bw = new XyoBoundWitnessBuilder({ inlinePayloads: true }).payload(payload).build()
+  bw._archive = archive
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  bw._payloads![0]._archive = archive
+  return postCommands([bw], token)
 }
 
 const postCommandToArchive = (archive: string, token?: string, schema = allowedSchema, expectedStatus: StatusCodes = StatusCodes.OK) => {
@@ -24,6 +29,9 @@ const postCommandToArchive = (archive: string, token?: string, schema = allowedS
   }
   const payload = new XyoPayloadBuilder({ schema }).fields(data).build()
   const bw = new XyoBoundWitnessBuilder({ inlinePayloads: true }).payload(payload).build()
+  bw._archive = archive
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  bw._payloads![0]._archive = archive
   return postCommands([bw], token, expectedStatus)
 }
 
