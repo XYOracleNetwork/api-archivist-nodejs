@@ -21,7 +21,7 @@ const handler: RequestHandler<NoReqParams, XyoBoundWitness[], XyoBoundWitness[]>
         const processor = processors[p.schema]
         // TODO: Communicate response schema back from command/query result
         // TODO: Link response to requested payload
-        return processor ? new XyoPayloadBuilder({ schema: 'todo' }).fields((await processor(p)) as Partial<XyoPayload>).build() : { schema: unsupportedSchemaType }
+        return processor ? new XyoPayloadBuilder({ schema: responseSchemaType }).fields((await processor(p)) as Partial<XyoPayload>).build() : { schema: unsupportedSchemaType }
       }) || []
     )
   })
