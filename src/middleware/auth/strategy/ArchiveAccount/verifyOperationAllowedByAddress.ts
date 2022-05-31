@@ -1,4 +1,4 @@
-import { XyoBoundWitness, XyoPayload, XyoPayloadBody } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitness, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { Request } from 'express'
 
 import { SetArchivePermissions, setArchivePermissionsSchema } from '../../../../model'
