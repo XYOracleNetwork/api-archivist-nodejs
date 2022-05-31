@@ -1,7 +1,6 @@
 import { XyoBoundWitnessBuilder, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
 
-import { getArchivistBoundWitnessesMongoSdk } from '../../../../../lib'
-import { exists } from './exists'
+import { exists, getArchivistBoundWitnessesMongoSdk } from '../../../../../lib'
 import { getAccount } from './getAccount'
 import { getAllCachedSchema } from './getAllCachedSchema'
 
