@@ -16,6 +16,6 @@ export class GetArchivePermissionsQueryHandler implements QueryHandler<GetArchiv
       return emptyPermissions
     }
     const permissions = await this.opts.archivePermissionsRepository.get(command._archive)
-    return (permissions || emptyPermissions) as XyoPayload<SetArchivePermissions>
+    return (permissions?.[0] || emptyPermissions) as XyoPayload<SetArchivePermissions>
   }
 }
