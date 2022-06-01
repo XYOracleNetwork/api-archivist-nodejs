@@ -6,7 +6,6 @@ import express, { Express } from 'express'
 import { configureAuth, configureDoc } from '../middleware'
 import { addArchiveRoutes } from './addArchiveRoutes'
 import { addBlockRoutes } from './addBlockRoutes'
-import { addDebugRoutes } from './addDebugRoutes'
 import { addDependencies } from './addDependencies'
 import { addDomainRoutes } from './addDomainRoutes'
 import { addErrorHandlers } from './addErrorHandlers'
@@ -42,7 +41,6 @@ export const getApp = (): Express => {
   addPayloadSchemaRoutes(app)
   addSchemaRoutes(app)
   addDomainRoutes(app)
-  addDebugRoutes(app)
 
   const userRoutes = configureAuth({
     apiKey: process.env.API_KEY,
@@ -50,14 +48,15 @@ export const getApp = (): Express => {
   })
   app.use('', userRoutes)
 
-  /* This needs to be the last true handler since it is a catch all for the root */
+  // This needs to be the last true route handler since it is
+  // a catch-all for the root paths
   addNodeRoutes(app)
   addErrorHandlers(app)
 
   return app
 }
 
-const server = async (port = 80) => {
+export const server = async (port = 80) => {
   // If an AWS ARN was supplied for Secrets Manager
   const awsEnvSecret = process.env.AWS_ENV_SECRET_ARN
   if (awsEnvSecret) {
@@ -78,5 +77,3 @@ const server = async (port = 80) => {
 
   server.setTimeout(3000)
 }
-
-export { server }
