@@ -2,13 +2,14 @@ import { Express } from 'express'
 
 import { getArchiveSchemaPayloadsRecent, getArchiveSchemaRecent, postArchiveSchemaCurrentWitness } from '../archive'
 import { allowAnonymous, requireArchiveAccess } from '../middleware'
-import { getSchema, getSchemas } from '../schema'
+import { getSchema } from '../schema'
+import { notImplemented } from './notImplemented'
 
 export const addSchemaRoutes = (app: Express) => {
   app.get(
     '/schema',
     allowAnonymous,
-    getSchemas
+    notImplemented
     /* #swagger.tags = ['Schema'] */
     /* #swagger.summary = 'Get list of known schemas on archivist' */
   )
