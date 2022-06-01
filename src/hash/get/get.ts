@@ -3,7 +3,7 @@ import { deepOmitUnderscoreFields, XyoPayload } from '@xyo-network/sdk-xyo-clien
 import { Request, RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
-import { findByHash, isPublicArchive, isRequestUserOwnerOfArchive } from '../../lib'
+import { findByHash, requestCanAccessArchive } from '../../lib'
 import { setRawResponseFormat } from '../../middleware'
 
 const reservedHashes = ['archive', 'schema', 'doc', 'domain']
@@ -14,14 +14,10 @@ export type HashPathParams = {
 
 const getBlockForRequest = async (req: Request, hash: string): Promise<XyoPayload | undefined> => {
   for (const block of await findByHash(hash)) {
-    const name = block?._archive
-    if (!name) {
+    if (!block?._archive) {
       continue
     }
-    const archive = await req.app.archiveRepository.get(name)
-    // If the archive is public or if the archive is private but this is
-    // an auth'd request from the archive owner
-    if (isPublicArchive(archive) || isRequestUserOwnerOfArchive(req, archive)) {
+    if (await requestCanAccessArchive(req, block._archive)) {
       return block
     }
   }
