@@ -66,6 +66,7 @@ export const addBlockRoutes = (app: Express) => {
     '/archive/:archive/block/sample/:size?',
     requireArchiveAccess,
     notImplemented
+    /* #swagger.deprecated = true */
     /* #swagger.tags = ['Block'] */
     /* #swagger.summary = 'Get a random sampling of blocks' */
   )
@@ -74,6 +75,7 @@ export const addBlockRoutes = (app: Express) => {
     '/archive/:archive/block/chain/:hash/:address/:limit?',
     requireArchiveAccess,
     notImplemented
+    /* #swagger.deprecated = true */
     /* #swagger.tags = ['Block'] */
     /* #swagger.summary = 'Get a proof of origin chain starting from a block hash' */
   )

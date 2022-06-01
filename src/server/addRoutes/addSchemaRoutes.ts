@@ -1,8 +1,7 @@
 import { notImplemented } from '@xylabs/sdk-api-express-ecs'
 import { Express } from 'express'
 
-import { getArchiveSchemaPayloadsRecent, getArchiveSchemaRecent, postArchiveSchemaCurrentWitness } from '../../archive'
-import { allowAnonymous, requireArchiveAccess } from '../../middleware'
+import { allowAnonymous } from '../../middleware'
 import { getSchema } from '../../schema'
 
 export const addSchemaRoutes = (app: Express) => {
@@ -10,6 +9,7 @@ export const addSchemaRoutes = (app: Express) => {
     '/schema',
     allowAnonymous,
     notImplemented
+    /* #swagger.deprecated = true */
     /* #swagger.tags = ['Schema'] */
     /* #swagger.summary = 'Get list of known schemas on archivist' */
   )
@@ -20,29 +20,5 @@ export const addSchemaRoutes = (app: Express) => {
     getSchema
     /* #swagger.tags = ['Schema'] */
     /* #swagger.summary = 'Get specific schema if known by archivist' */
-  )
-
-  app.post(
-    '/archive/:archive/schema/current/witness',
-    requireArchiveAccess,
-    postArchiveSchemaCurrentWitness
-    /* #swagger.tags = ['Schema'] */
-    /* #swagger.summary = 'Snapshot current schema payload hashes for the archive' */
-  )
-
-  app.get(
-    '/archive/:archive/schema/recent/:limit?',
-    requireArchiveAccess,
-    getArchiveSchemaRecent
-    /* #swagger.tags = ['Schema'] */
-    /* #swagger.summary = 'Get recent schema for the archive' */
-  )
-
-  app.get(
-    '/archive/:archive/schema/:schema/recent/:limit?',
-    requireArchiveAccess,
-    getArchiveSchemaPayloadsRecent
-    /* #swagger.tags = ['Schema'] */
-    /* #swagger.summary = 'Get recent payloads of the supplied schema type for the archive' */
   )
 }

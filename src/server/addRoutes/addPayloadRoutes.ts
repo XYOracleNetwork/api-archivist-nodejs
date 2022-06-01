@@ -50,6 +50,7 @@ export const addPayloadRoutes = (app: Express) => {
     '/archive/:archive/payload/sample/:size?',
     requireArchiveAccess,
     notImplemented
+    /* #swagger.deprecated = true */
     /* #swagger.tags = ['Payload'] */
     /* #swagger.summary = 'Get a random sampling of payloads' */
   )
@@ -58,6 +59,7 @@ export const addPayloadRoutes = (app: Express) => {
     '/archive/:archive/payload/chain/:hash/:limit?',
     requireArchiveAccess,
     notImplemented
+    /* #swagger.deprecated = true */
     /* #swagger.tags = ['Payload'] */
     /* #swagger.summary = 'Get a proof of origin chain starting from a payload hash' */
   )
