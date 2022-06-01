@@ -13,7 +13,7 @@ export class XyoSchemaToPayloadProcessorRegistry implements XyoPayloadProcessorR
     return this._processors
   }
 
-  public registerProcessorForSchema(schema: string, processor: XyoPayloadProcessor<XyoPayload, unknown>) {
-    this._processors[schema] = processor
+  public registerProcessorForSchema<T extends XyoPayload = XyoPayload, R = unknown>(schema: string, processor: XyoPayloadProcessor<T, R>) {
+    this._processors[schema] = processor as XyoPayloadProcessor
   }
 }

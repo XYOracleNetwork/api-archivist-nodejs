@@ -7,6 +7,7 @@ export type GetArchivePermissionsSchema = typeof getArchivePermissionsSchema
 
 export interface GetArchivePermissions extends Query {
   _archive?: string
+  schema: GetArchivePermissionsSchema
 }
 
 export type GetArchivePermissionsPayload = XyoPayload<GetArchivePermissions>

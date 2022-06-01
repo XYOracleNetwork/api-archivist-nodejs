@@ -1,16 +1,16 @@
 import { XyoPayload, XyoPayloadBody, XyoPayloadBuilder, XyoPayloadMeta } from '@xyo-network/sdk-xyo-client-js'
 
 import { ArchivePermissionsRepository } from '../../middleware'
-import { GetArchivePermissions, QueryHandler, SetArchivePermissions, SetArchivePermissionsPayload } from '../../model'
+import { GetArchivePermissions, QueryHandler, SetArchivePermissions, SetArchivePermissionsPayload, setArchivePermissionsSchema } from '../../model'
 
-const emptyPermissions = new XyoPayloadBuilder({ schema: 'network.xyo.security.archive.permissions.set' }).build() as XyoPayload<SetArchivePermissions>
+const emptyPermissions = new XyoPayloadBuilder({ schema: setArchivePermissionsSchema }).build() as XyoPayload<SetArchivePermissions>
 
-export interface GetArchivePermissionsCommandHandlerOpts {
+export interface GetArchivePermissionsQueryHandlerOpts {
   archivePermissionsRepository: ArchivePermissionsRepository
 }
 
 export class GetArchivePermissionsQueryHandler implements QueryHandler<GetArchivePermissions, SetArchivePermissionsPayload> {
-  constructor(protected readonly opts: GetArchivePermissionsCommandHandlerOpts) {}
+  constructor(protected readonly opts: GetArchivePermissionsQueryHandlerOpts) {}
   async handle(command: GetArchivePermissions): Promise<XyoPayloadBody & XyoPayloadMeta & SetArchivePermissions> {
     if (!command._archive) {
       return emptyPermissions
