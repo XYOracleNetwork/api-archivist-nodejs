@@ -1,9 +1,9 @@
+import { notImplemented } from '@xylabs/sdk-api-express-ecs'
 import { Express } from 'express'
 
 import { getArchive, getArchives, putArchive } from '../../archive'
 import { allowAnonymous, requireArchiveAccess, requireArchiveOwner, requireAuth } from '../../middleware'
 import { addArchiveSettingsRoutes } from './addArchiveSettingsRoutes'
-import { notImplemented } from './notImplemented'
 
 export const addArchiveRoutes = (app: Express) => {
   app.get(

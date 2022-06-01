@@ -1,8 +1,8 @@
+import { notImplemented } from '@xylabs/sdk-api-express-ecs'
 import { Express } from 'express'
 
 import { getArchiveBlockHash, getArchiveBlockHashPayloads, getArchiveBlockRecent, getArchiveBlocks, getArchiveBlockStats, postArchiveBlock } from '../../archive'
 import { requireArchiveAccess } from '../../middleware'
-import { notImplemented } from './notImplemented'
 
 export const addBlockRoutes = (app: Express) => {
   app.get(

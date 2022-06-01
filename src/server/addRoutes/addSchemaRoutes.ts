@@ -1,9 +1,9 @@
+import { notImplemented } from '@xylabs/sdk-api-express-ecs'
 import { Express } from 'express'
 
 import { getArchiveSchemaPayloadsRecent, getArchiveSchemaRecent, postArchiveSchemaCurrentWitness } from '../../archive'
 import { allowAnonymous, requireArchiveAccess } from '../../middleware'
 import { getSchema } from '../../schema'
-import { notImplemented } from './notImplemented'
 
 export const addSchemaRoutes = (app: Express) => {
   app.get(
