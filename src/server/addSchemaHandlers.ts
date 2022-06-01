@@ -1,12 +1,16 @@
+import { XyoSchemaCache } from '@xyo-network/sdk-xyo-client-js'
 import { Application } from 'express'
 
 import { GetArchivePermissionsQueryHandler, GetDomainConfigQueryHandler, SetArchivePermissionsCommandHandler } from '../Handlers'
+import { GetSchemaQueryHandler } from '../Handlers/Query/GetSchemaQueryHandler'
 import { XyoPayloadProcessorRegistry } from '../middleware'
 import {
   GetArchivePermissionsPayload,
   getArchivePermissionsSchema,
   GetDomainConfigPayload,
   getDomainConfigSchema,
+  GetSchemaPayload,
+  getSchemaSchema,
   SetArchivePermissionsPayload,
   setArchivePermissionsSchema,
 } from '../model'
@@ -30,4 +34,5 @@ export const addCommandHandlers = (app: Application, registry: XyoPayloadProcess
 export const addQueryHandlers = (app: Application, registry: XyoPayloadProcessorRegistry) => {
   registry.registerProcessorForSchema(getArchivePermissionsSchema, (x: GetArchivePermissionsPayload) => new GetArchivePermissionsQueryHandler({ ...app }).handle(x))
   registry.registerProcessorForSchema(getDomainConfigSchema, (x: GetDomainConfigPayload) => new GetDomainConfigQueryHandler({ ...app }).handle(x))
+  registry.registerProcessorForSchema(getSchemaSchema, (x: GetSchemaPayload) => new GetSchemaQueryHandler({ schemaRepository: XyoSchemaCache.instance }).handle(x))
 }
