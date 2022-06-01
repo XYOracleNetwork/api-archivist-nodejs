@@ -1,8 +1,7 @@
 import { XyoSchemaCache } from '@xyo-network/sdk-xyo-client-js'
 import { Application } from 'express'
 
-import { GetArchivePermissionsQueryHandler, GetDomainConfigQueryHandler, SetArchivePermissionsCommandHandler } from '../Handlers'
-import { GetSchemaQueryHandler } from '../Handlers/Query/GetSchemaQueryHandler'
+import { GetArchivePermissionsQueryHandler, GetDomainConfigQueryHandler, GetSchemaQueryHandler, SetArchivePermissionsCommandHandler } from '../Handlers'
 import { XyoPayloadProcessorRegistry } from '../middleware'
 import {
   GetArchivePermissionsPayload,
