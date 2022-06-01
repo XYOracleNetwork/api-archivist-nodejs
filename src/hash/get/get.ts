@@ -1,5 +1,5 @@
 import { asyncHandler, NoReqBody, NoReqQuery } from '@xylabs/sdk-api-express-ecs'
-import { deepOmitUnderscoreFields } from '@xyo-network/sdk-xyo-client-js'
+import { deepOmitUnderscoreFields, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
@@ -12,18 +12,17 @@ export type HashPathParams = {
   hash: string
 }
 
-export type HashResponse = Record<string, unknown>
-
-const validateUserCanAccessBlock: RequestHandler<HashPathParams, HashResponse, NoReqBody, NoReqQuery> = async (req, res, next) => {
+const handler: RequestHandler<HashPathParams, XyoPayload, NoReqBody, NoReqQuery> = async (req, res, next) => {
+  if (res.headersSent) {
+    return
+  }
   const { hash } = req.params
   if (!hash) {
     next({ message: 'Hash not supplied', statusCode: StatusCodes.BAD_REQUEST })
-  }
-  if (res.headersSent) {
     return
-  } else if (reservedHashes.find((reservedHash) => reservedHash === hash)) {
-    console.warn(`This should not happen: ':hash' path did not run: [res.headersSent !== true, reservedHashes did find, ${hash}]`)
-    next({ message: 'Error processing request', statusCode: StatusCodes.INTERNAL_SERVER_ERROR })
+  }
+  if (reservedHashes.find((reservedHash) => reservedHash === hash)) {
+    next()
     return
   }
   for (const block of await findByHash(hash)) {
@@ -43,4 +42,4 @@ const validateUserCanAccessBlock: RequestHandler<HashPathParams, HashResponse, N
   next({ message: 'Hash not found', statusCode: StatusCodes.NOT_FOUND })
 }
 
-export const getByHash = asyncHandler(validateUserCanAccessBlock)
+export const getByHash = asyncHandler(handler)
