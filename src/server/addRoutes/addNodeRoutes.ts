@@ -1,8 +1,8 @@
 import { Express } from 'express'
 
-import { getByHash } from '../hash'
-import { allowAnonymous, requireAccountOperationAccess } from '../middleware'
-import { postPayloads } from '../post'
+import { getByHash } from '../../hash'
+import { allowAnonymous, requireAccountOperationAccess } from '../../middleware'
+import { postPayloads } from '../../post'
 
 export const addNodeRoutes = (app: Express) => {
   app.get(

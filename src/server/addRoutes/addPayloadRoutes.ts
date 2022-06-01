@@ -1,7 +1,7 @@
 import { Express } from 'express'
 
-import { getArchivePayloadHash, getArchivePayloadRecent, getArchivePayloadRepair, getArchivePayloads, getArchivePayloadStats } from '../archive'
-import { requireArchiveAccess } from '../middleware'
+import { getArchivePayloadHash, getArchivePayloadRecent, getArchivePayloadRepair, getArchivePayloads, getArchivePayloadStats } from '../../archive'
+import { requireArchiveAccess } from '../../middleware'
 import { notImplemented } from './notImplemented'
 
 export const addPayloadRoutes = (app: Express) => {

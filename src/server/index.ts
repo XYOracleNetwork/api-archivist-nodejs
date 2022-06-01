@@ -3,19 +3,13 @@ import compression from 'compression'
 import cors from 'cors'
 import express, { Express } from 'express'
 
-import { configureAuth, configureDoc } from '../middleware'
-import { addArchiveRoutes } from './addArchiveRoutes'
-import { addBlockRoutes } from './addBlockRoutes'
+import { configureDoc } from '../middleware'
 import { addDependencies } from './addDependencies'
-import { addDomainRoutes } from './addDomainRoutes'
 import { addErrorHandlers } from './addErrorHandlers'
 import { addHealthChecks } from './addHealthChecks'
 import { addMiddleware } from './addMiddleware'
-import { addNodeRoutes } from './addNodeRoutes'
-import { addPayloadRoutes } from './addPayloadRoutes'
-import { addPayloadSchemaRoutes } from './addPayloadSchemaRoutes'
+import { addRoutes } from './addRoutes'
 import { addSchemaHandlers } from './addSchemaHandlers'
-import { addSchemaRoutes } from './addSchemaRoutes'
 
 export const getApp = (): Express => {
   const app = express()
@@ -35,24 +29,8 @@ export const getApp = (): Express => {
   addMiddleware(app)
   addSchemaHandlers(app)
   addHealthChecks(app)
-  addArchiveRoutes(app)
-  addBlockRoutes(app)
-  addPayloadRoutes(app)
-  addPayloadSchemaRoutes(app)
-  addSchemaRoutes(app)
-  addDomainRoutes(app)
-
-  const userRoutes = configureAuth({
-    apiKey: process.env.API_KEY,
-    secretOrKey: process.env.JWT_SECRET,
-  })
-  app.use('', userRoutes)
-
-  // This needs to be the last true route handler since it is
-  // a catch-all for the root paths
-  addNodeRoutes(app)
+  addRoutes(app)
   addErrorHandlers(app)
-
   return app
 }
 
