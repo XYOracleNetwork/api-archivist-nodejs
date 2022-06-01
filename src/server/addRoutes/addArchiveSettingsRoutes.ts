@@ -1,3 +1,4 @@
+import { notImplemented } from '@xylabs/sdk-api-express-ecs'
 import { Express } from 'express'
 
 import { getArchiveSettingsKeys, postArchiveSettingsKeys } from '../../archive'
@@ -23,7 +24,8 @@ export const addArchiveSettingsRoutes = (app: Express) => {
   app.delete(
     '/archive/:archive/settings/key',
     requireArchiveOwner,
-    postArchiveSettingsKeys
+    notImplemented
+    /* #swagger.deprecated = true */
     /* #swagger.tags = ['Archive'] */
     /* #swagger.summary = 'Deletes a specific key for a specific archive' */
   )
@@ -31,7 +33,8 @@ export const addArchiveSettingsRoutes = (app: Express) => {
   app.get(
     '/archive/:archive/settings/key/:key',
     requireArchiveOwner,
-    getArchiveSettingsKeys
+    notImplemented
+    /* #swagger.deprecated = true */
     /* #swagger.tags = ['Archive'] */
     /* #swagger.summary = 'Gets the configuration of a specific key for a specific archive' */
   )
@@ -39,7 +42,8 @@ export const addArchiveSettingsRoutes = (app: Express) => {
   app.post(
     '/archive/:archive/settings/key/:key',
     requireArchiveOwner,
-    postArchiveSettingsKeys
+    notImplemented
+    /* #swagger.deprecated = true */
     /* #swagger.tags = ['Archive'] */
     /* #swagger.summary = 'Sets the configuration of a specific key for a specific archive' */
   )
@@ -47,7 +51,8 @@ export const addArchiveSettingsRoutes = (app: Express) => {
   app.delete(
     '/archive/:archive/settings/key/:key',
     requireArchiveOwner,
-    postArchiveSettingsKeys
+    notImplemented
+    /* #swagger.deprecated = true */
     /* #swagger.tags = ['Archive'] */
     /* #swagger.summary = 'Deletes a specific key for a specific archive' */
   )
