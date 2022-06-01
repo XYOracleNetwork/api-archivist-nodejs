@@ -1,7 +1,7 @@
 import { Express } from 'express'
 
-import { getArchiveSettingsKeys, postArchiveSettingsKeys } from '../archive'
-import { requireArchiveOwner } from '../middleware'
+import { getArchiveSettingsKeys, postArchiveSettingsKeys } from '../../archive'
+import { requireArchiveOwner } from '../../middleware'
 
 export const addArchiveSettingsRoutes = (app: Express) => {
   app.get(

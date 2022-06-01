@@ -1,7 +1,7 @@
 import { Express } from 'express'
 
-import { getDomain } from '../domain'
-import { allowAnonymous } from '../middleware'
+import { getDomain } from '../../domain'
+import { allowAnonymous } from '../../middleware'
 
 export const addDomainRoutes = (app: Express) => {
   app.get(
