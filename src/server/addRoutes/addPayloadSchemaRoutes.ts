@@ -1,8 +1,8 @@
+import { notImplemented } from '@xylabs/sdk-api-express-ecs'
 import { Express } from 'express'
 
 import { getArchivePayloadSchemas, getArchivePayloadSchemaStats } from '../../archive'
 import { requireArchiveAccess } from '../../middleware'
-import { notImplemented } from './notImplemented'
 
 export const addPayloadSchemaRoutes = (app: Express) => {
   app.get(
