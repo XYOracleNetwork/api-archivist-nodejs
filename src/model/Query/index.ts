@@ -1,4 +1,5 @@
 export * from './GetArchivePermissions'
 export * from './GetDomainConfig'
+export * from './GetSchema'
 export * from './Query'
 export * from './QueryHandler'
