@@ -1,6 +1,5 @@
 export * from './dbSdk'
 export * from './determineArchiveAccessControl'
-export * from './exists'
 export * from './findByHash'
 export * from './getArchiveKeys'
 export * from './isArchiveOwner'

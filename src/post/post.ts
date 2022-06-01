@@ -1,8 +1,7 @@
 import { asyncHandler, NoReqParams } from '@xylabs/sdk-api-express-ecs'
+import { exists } from '@xylabs/sdk-js'
 import { XyoBoundWitness, XyoBoundWitnessBuilder, XyoPayload, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
-
-import { exists } from '../lib'
 
 const unsupportedSchemaType = 'network.xyo.unsupported'
 const responseSchemaType = 'network.xyo.command.response'

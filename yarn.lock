@@ -3508,14 +3508,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^17.0.27":
-  version: 17.0.35
-  resolution: "@types/node@npm:17.0.35"
-  checksum: 7a24946ae7fd20267ed92466384f594e448bfb151081158d565cc635d406ecb29ea8fb85fcd2a1f71efccf26fb5bd3c6f509bde56077eb8b832b847a6664bc62
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:^17.0.38":
+"@types/node@npm:*, @types/node@npm:^17.0.38":
   version: 17.0.38
   resolution: "@types/node@npm:17.0.38"
   checksum: 9db1c39d603850ced665ab60b8f8ebce674ff9d762dfff0f776d520e71e4d73fdcd4c7f69213b804d878cf3e726911b09cae4ee66e35ae2724538de9f4838681
@@ -4041,19 +4034,6 @@ __metadata:
   linkType: hard
 
 "@xylabs/sdk-js@npm:^2.4.2, @xylabs/sdk-js@npm:^2.5.5":
-  version: 2.5.5
-  resolution: "@xylabs/sdk-js@npm:2.5.5"
-  dependencies:
-    "@types/node": ^17.0.27
-    axios: ^0.26.1
-    bn.js: ^5.2.0
-    buffer: ^6.0.3
-    rollbar: ^2.25.0
-  checksum: c67665cf79f77602a953040476e344c96f3052e8973134df7deb66dc8b7d993e59b4135ac2e2d6235d96d9a19ed64ae5d160c921cfe9b642dd672b66d4139b3c
-  languageName: node
-  linkType: hard
-
-"@xylabs/sdk-js@npm:^2.5.6":
   version: 2.5.6
   resolution: "@xylabs/sdk-js@npm:2.5.6"
   dependencies:
@@ -4063,6 +4043,19 @@ __metadata:
     buffer: ^6.0.3
     rollbar: ^2.25.0
   checksum: 6c4e5de13c30c8b8f4350066e05de484f8e4508f21d6f917f9cc258ca6ea0d041ae24b2693273c6db3bd23bdaa5822970207832396c8cda995ad29a4f8c7c5a9
+  languageName: node
+  linkType: hard
+
+"@xylabs/sdk-js@npm:^2.5.7":
+  version: 2.5.7
+  resolution: "@xylabs/sdk-js@npm:2.5.7"
+  dependencies:
+    "@types/node": ^17.0.38
+    axios: ^0.27.2
+    bn.js: ^5.2.1
+    buffer: ^6.0.3
+    rollbar: ^2.25.0
+  checksum: f75d7d17262b5454684c22d0d590a2e6bfe6294218e2d6d48b828b9d9b2bbf1858163945f831215dc29ee645b898dd860f21f4896b0b0a6a98d8036a0a80fb6c
   languageName: node
   linkType: hard
 
@@ -4183,7 +4176,7 @@ __metadata:
     "@types/uuid": ^8.3.4
     "@xylabs/eslint-config": ^2.3.22
     "@xylabs/sdk-api-express-ecs": ^1.1.5
-    "@xylabs/sdk-js": ^2.5.6
+    "@xylabs/sdk-js": ^2.5.7
     "@xylabs/ts-scripts": ^1.0.66
     "@xylabs/tsconfig": ^1.0.13
     "@xyo-network/sdk-xyo-client-js": ^2.20.38
@@ -4741,15 +4734,6 @@ __metadata:
   version: 0.4.0
   resolution: "asynckit@npm:0.4.0"
   checksum: 7b78c451df768adba04e2d02e63e2d0bf3b07adcd6e42b4cf665cb7ce899bedd344c69a1dcbce355b5f972d597b25aaa1c1742b52cffd9caccb22f348114f6be
-  languageName: node
-  linkType: hard
-
-"axios@npm:^0.26.1":
-  version: 0.26.1
-  resolution: "axios@npm:0.26.1"
-  dependencies:
-    follow-redirects: ^1.14.8
-  checksum: d9eb58ff4bc0b36a04783fc9ff760e9245c829a5a1052ee7ca6013410d427036b1d10d04e7380c02f3508c5eaf3485b1ae67bd2adbfec3683704745c8d7a6e1a
   languageName: node
   linkType: hard
 
@@ -7111,7 +7095,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.14.8, follow-redirects@npm:^1.14.9":
+"follow-redirects@npm:^1.14.9":
   version: 1.14.9
   resolution: "follow-redirects@npm:1.14.9"
   peerDependenciesMeta:
