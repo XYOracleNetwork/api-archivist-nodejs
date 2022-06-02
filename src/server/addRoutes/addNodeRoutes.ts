@@ -14,7 +14,7 @@ export const addNodeRoutes = (app: Express) => {
   )
 
   app.post(
-    '/',
+    '/:archive?',
     requireAccountOperationAccess,
     postPayloads
     /* #swagger.tags = ['Node'] */
