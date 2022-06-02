@@ -1,7 +1,7 @@
 import { XyoBoundWitness, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { Request } from 'express'
 
-import { SetArchivePermissions, setArchivePermissionsSchema } from '../../../../model'
+import { PostNodePathParams, SetArchivePermissions, setArchivePermissionsSchema } from '../../../../model'
 
 const defaultArchivePermissions: SetArchivePermissions = {
   schema: setArchivePermissionsSchema,
@@ -52,24 +52,21 @@ const verifySchemaAllowed = (schema: string, permissions: SetArchivePermissions)
   return true
 }
 
-export const verifyOperationAllowedByAddress = async (req: Request<unknown, unknown, XyoBoundWitness[]>): Promise<boolean> => {
+export const verifyOperationAllowedByAddress = async (req: Request<PostNodePathParams, unknown, XyoBoundWitness[]>): Promise<boolean> => {
   // NOTE: Communicate partial success for allowed/disallowed operations
   // Short circuit & reduce all operations to binary success/failure for now
+  // Get archive permissions
+  const { archive } = req.params
+  if (!archive) return false
+  const permissions = await getArchivePermissions(req, archive)
   const address = req?.user?.address
+  if (!verifyAccountAllowed(address, permissions)) return false
   for (let i = 0; i < req.body.length; i++) {
     const bw = req.body[i]
     if (bw._payloads?.length) {
       for (let j = 0; j < bw._payloads.length; j++) {
         const p: XyoPayload = bw._payloads[j]
-        // Validate archive from request body
-        const { _archive: archive, schema } = p
-        if (!archive || !schema) {
-          return false
-        }
-        // Get archive permissions
-        const permissions = await getArchivePermissions(req, archive)
-        const allowed = verifyAccountAllowed(address, permissions) && verifySchemaAllowed(schema, permissions)
-        if (!allowed) return false
+        if (!p.schema || !verifySchemaAllowed(p.schema, permissions)) return false
       }
     }
   }
