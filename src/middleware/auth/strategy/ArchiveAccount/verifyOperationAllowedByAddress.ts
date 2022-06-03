@@ -23,12 +23,12 @@ const verifyAccountAllowed = (address: string | undefined, permissions: SetArchi
   // If there's rejected addresses
   if (disallowedAddresses) {
     // And this address is one of them
-    if (disallowedAddresses.some((a) => a.toLowerCase() === address?.toLowerCase())) return false
+    if (disallowedAddresses.some((disallowed) => disallowed.toLowerCase() === address?.toLowerCase())) return false
   }
   // If there's allowed addresses
   if (allowedAddresses) {
     // Return true if this address is allowed, otherwise false
-    return allowedAddresses.some((a) => a.toLowerCase() === address?.toLowerCase()) ? true : false
+    return allowedAddresses.some((allowed) => allowed.toLowerCase() === address?.toLowerCase()) ? true : false
   }
   return true
 }
@@ -39,15 +39,17 @@ const verifySchemaAllowed = (schema: string, permissions: SetArchivePermissions)
   // If there's no schema restrictions on the archive
   if (!allowedSchemas?.length && !disallowedSchemas?.length) return true
 
+  // TODO: Support GLOB patterns for allowed/disallowed schemas
+
   // If there's rejected schemas
   if (disallowedSchemas) {
     // And this schema is one of them
-    if (disallowedSchemas.some((a) => a === schema)) return false
+    if (disallowedSchemas.some((disallowed) => disallowed.toLowerCase() === schema.toLowerCase())) return false
   }
   // If there's allowed schemas
   if (allowedSchemas) {
     // Return true if this schema is allowed, otherwise false
-    return allowedSchemas.some((a) => a === schema) ? true : false
+    return allowedSchemas.some((allowed) => allowed.toLowerCase() === schema.toLowerCase()) ? true : false
   }
   return true
 }
