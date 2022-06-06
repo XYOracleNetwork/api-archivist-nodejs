@@ -13,6 +13,7 @@ export class InMemoryTransport<T extends XyoPayload = XyoPayload> implements Tra
     }
     throw new Error('Attempted to queue query with no hash')
   }
+
   get(hash: string): Promise<T> {
     return Promise.resolve(this.queue[hash])
   }
