@@ -10,15 +10,20 @@ const responseSchemaType = 'network.xyo.command.response'
 
 // TODO: CQRS pattern of returning empty for commands, redirect for queries
 const handler: RequestHandler<PostNodePathParams, XyoBoundWitness[], XyoBoundWitness[]> = async (req, res, next) => {
-  const archive = req.params.archive || 'temp'
+  const _archive = req.params.archive || 'temp'
+  const _source_ip = req.ip ?? undefined
+  const _user_agent = req.headers['User-agent'] ?? undefined
+  const _timestamp = Date.now()
+  const boundWitnessMetaData = { _archive, _source_ip, _timestamp, _user_agent }
+  const payloadMetaData = { _archive }
   const { processors } = res.app.payloadProcessorRegistry
   const boundWitnesses: XyoBoundWitness[] = Array.isArray(req.body) ? req.body : [req.body]
   const result = boundWitnesses.map((boundWitness) => {
-    boundWitness._archive = archive
-    const payloads: XyoPayload[] = boundWitness._payloads?.filter(exists) || []
+    const bw = { ...boundWitness, ...boundWitnessMetaData }
+    const payloads: XyoPayload[] = bw._payloads?.filter(exists) || []
     return (
-      payloads.map(async (p) => {
-        p._archive = archive
+      payloads.map(async (payload) => {
+        const p = { ...payload, ...payloadMetaData }
         const processor = processors[p.schema]
         // TODO: Communicate response schema back from command/query result
         // TODO: Link response to requested payload
