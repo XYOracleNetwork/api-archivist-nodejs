@@ -9,6 +9,7 @@ import {
   MongoDBUserRepository,
   XyoSchemaToPayloadProcessorRegistry,
 } from '../middleware'
+import { InMemoryQueryQueue } from '../QueryQueue'
 
 export const addDependencies = (app: Application) => {
   const account = getAccountFromSeedPhrase(process.env.ACCOUNT_SEED)
@@ -17,5 +18,6 @@ export const addDependencies = (app: Application) => {
   app.archiveRepository = new MongoDBArchiveRepository()
   app.archivePermissionsRepository = new MongoDBArchivePermissionsPayloadPayloadRepository()
   app.payloadProcessorRegistry = new XyoSchemaToPayloadProcessorRegistry(app)
+  app.queryQueue = new InMemoryQueryQueue()
   app.userManager = new MongoDBUserManager(new MongoDBUserRepository())
 }

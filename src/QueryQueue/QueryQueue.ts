@@ -3,7 +3,7 @@ import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { Transport } from './Transport'
 
 export abstract class QueryQueue<T extends XyoPayload = XyoPayload> {
-  protected abstract queue: Transport<T>
+  constructor(protected queue: Transport<T>) {}
 
   public async enqueue(query: T) {
     if (query._hash) {
