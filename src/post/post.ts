@@ -1,37 +1,33 @@
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
 import { exists } from '@xylabs/sdk-js'
-import { XyoBoundWitness, XyoBoundWitnessBuilder, XyoPayload, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitness, XyoBoundWitnessMeta, XyoPayload, XyoPayloadMeta, XyoPayloadWrapper } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
+import { StatusCodes } from 'http-status-codes'
 
 import { PostNodePathParams } from '../model'
 import { getRequestMetaData } from './getRequestMetaData'
 
-const unsupportedSchemaType = 'network.xyo.unsupported'
-const responseSchemaType = 'network.xyo.command.response'
-const unsupportedSchemaResponse: XyoPayload = { schema: unsupportedSchemaType }
-
-// TODO: CQRS pattern of returning empty for commands, redirect for queries
-const handler: RequestHandler<PostNodePathParams, XyoBoundWitness[], XyoBoundWitness[]> = async (req, res, next) => {
-  const { _archive, _source_ip, _timestamp, _user_agent } = getRequestMetaData(req)
-  const boundWitnessMetaData = { _archive, _source_ip, _timestamp, _user_agent }
-  const payloadMetaData = { _archive }
-  const { processors } = res.app.payloadProcessorRegistry
+const handler: RequestHandler<PostNodePathParams, string[][], XyoBoundWitness[]> = async (req, res, next) => {
+  const boundWitnessMetaData: XyoBoundWitnessMeta = getRequestMetaData(req)
+  const payloadMetaData: XyoPayloadMeta = { archive: boundWitnessMetaData._archive }
   const boundWitnesses: XyoBoundWitness[] = Array.isArray(req.body) ? req.body : [req.body]
-  const queries = boundWitnesses.map((boundWitness) => {
-    const bw = { ...boundWitness, ...boundWitnessMetaData }
-    const payloads: XyoPayload[] = bw._payloads?.filter(exists) || []
-    return (
-      payloads.map(async (payload) => {
-        const p = { ...payload, ...payloadMetaData }
-        const processor = processors[p.schema]
-        // TODO: Communicate response schema back from command/query result
-        // TODO: Link response to requested payload
-        return processor ? new XyoPayloadBuilder({ schema: responseSchemaType }).fields((await processor(p)) as Partial<XyoPayload>).build() : unsupportedSchemaResponse
+  const queries = boundWitnesses.map<XyoBoundWitness>((boundWitness) => {
+    const bw: XyoBoundWitness = { ...boundWitness, ...boundWitnessMetaData }
+    const payloads: XyoPayload[] =
+      bw._payloads?.filter(exists).map<XyoPayload>((payload) => {
+        const wrapper = new XyoPayloadWrapper(payload)
+        return { ...payload, ...payloadMetaData, _hash: wrapper.hash }
       }) || []
-    )
+    bw._payloads = payloads
+    return bw
   })
-  const result: XyoBoundWitness[] = await Promise.all(queries.map(async (query) => new XyoBoundWitnessBuilder({ inlinePayloads: true }).payloads(await Promise.all(query)).build()))
-  res.json(result)
+  const { enqueue } = req.app.queryQueue
+  const queued = queries
+    .map((bw) => bw._payloads)
+    .filter(exists)
+    .map((p) => p.map(enqueue))
+  const result: string[][] = await Promise.all(queued.map(async (x) => await Promise.all(x)))
+  res.status(StatusCodes.ACCEPTED).json(result)
   next()
 }
 

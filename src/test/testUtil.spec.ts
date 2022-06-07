@@ -301,7 +301,7 @@ export const postCommandsToArchive = async (
   commands: XyoBoundWitness[],
   archive: string,
   token?: string,
-  expectedStatus: StatusCodes = StatusCodes.OK
+  expectedStatus: StatusCodes = StatusCodes.ACCEPTED
 ): Promise<XyoBoundWitness[]> => {
   const path = `/${archive}`
   const response = token
