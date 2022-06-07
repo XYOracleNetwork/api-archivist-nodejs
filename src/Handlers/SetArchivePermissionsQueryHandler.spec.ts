@@ -1,8 +1,8 @@
 import { mock, MockProxy } from 'jest-mock-extended'
 
-import { ArchivePermissionsRepository } from '../../middleware'
-import { SetArchivePermissionsPayload, setArchivePermissionsSchema } from '../../model'
-import { SetArchivePermissionsCommandHandler } from './SetArchivePermissionsCommandHandler'
+import { ArchivePermissionsRepository } from '../middleware'
+import { SetArchivePermissionsPayload, setArchivePermissionsSchema } from '../model'
+import { SetArchivePermissionsQueryHandler } from './SetArchivePermissionsQueryHandler'
 
 const _archive = 'test'
 const permissions: SetArchivePermissionsPayload = {
@@ -17,7 +17,7 @@ const permissions: SetArchivePermissionsPayload = {
   schema: setArchivePermissionsSchema,
 }
 
-describe('SetArchivePermissionsCommandHandler', () => {
+describe('SetArchivePermissionsQueryHandler', () => {
   describe('handle', () => {
     let archivePermissionsRepository: MockProxy<ArchivePermissionsRepository>
     beforeEach(() => {
@@ -25,7 +25,7 @@ describe('SetArchivePermissionsCommandHandler', () => {
       archivePermissionsRepository.insert.mockResolvedValue([permissions])
     })
     it('sets the permissions for the archive', async () => {
-      const sut = new SetArchivePermissionsCommandHandler({ archivePermissionsRepository })
+      const sut = new SetArchivePermissionsQueryHandler({ archivePermissionsRepository })
       await sut.handle({ _archive, ...permissions })
     })
   })

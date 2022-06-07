@@ -1,6 +1,6 @@
 import { XyoDomainPayload, XyoDomainPayloadWrapper } from '@xyo-network/sdk-xyo-client-js'
 
-import { GetDomainConfig, QueryHandler } from '../../model'
+import { GetDomainConfig, QueryHandler } from '../model'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface GetDomainConfigQueryHandlerOpts {

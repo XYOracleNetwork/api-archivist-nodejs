@@ -1,4 +1,4 @@
-import { getDomainConfigSchema } from '../../model'
+import { getDomainConfigSchema } from '../model'
 import { GetDomainConfigQueryHandler } from './GetDomainConfigQueryHandler'
 
 const schema = getDomainConfigSchema

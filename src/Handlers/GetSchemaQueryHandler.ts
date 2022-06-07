@@ -1,6 +1,6 @@
 import { XyoSchemaCache, XyoSchemaCacheEntry, XyoSchemaNameToValidatorMap } from '@xyo-network/sdk-xyo-client-js'
 
-import { GetSchema, QueryHandler } from '../../model'
+import { GetSchema, QueryHandler } from '../model'
 
 export interface GetSchemaQueryHandlerOpts {
   schemaRepository: XyoSchemaCache<XyoSchemaNameToValidatorMap>
