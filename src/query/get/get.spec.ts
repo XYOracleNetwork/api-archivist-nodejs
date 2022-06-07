@@ -16,7 +16,7 @@ const postRequest = (payload = getTestRequest(1)): Promise<XyoPayload> => {
 
 describe('/query/:hash', () => {
   let payload: XyoPayload
-  describe('for processing query', () => {
+  describe.skip('for processing query', () => {
     beforeEach(async () => {
       payload = await postRequest(getTestRequest(10000))
     })
@@ -25,7 +25,7 @@ describe('/query/:hash', () => {
       await sut.get(`/query/${payload._hash}`).expect(StatusCodes.ACCEPTED)
     })
   })
-  describe.skip('for non-existent query', () => {
+  describe('for non-existent query', () => {
     beforeEach(() => {
       payload = getTestRequest(1)
     })
