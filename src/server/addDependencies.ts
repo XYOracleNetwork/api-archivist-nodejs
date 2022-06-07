@@ -15,16 +15,7 @@ import {
 import { Query } from '../model'
 import { IdentifiableHuri, InMemoryQueue } from '../Queue'
 
-export const addDependencies = (app: Application) => {
-  const account = getAccountFromSeedPhrase(process.env.ACCOUNT_SEED)
-  app.account = account
-  app.archivistWitnessedPayloadRepository = new MongoDBArchivistWitnessedPayloadRepository(account)
-  app.archiveRepository = new MongoDBArchiveRepository()
-  app.archivePermissionsRepository = new MongoDBArchivePermissionsPayloadPayloadRepository()
-  app.queryConverters = new XyoPayloadToQueryConverterRegistry(app)
-  app.queryProcessors = new SchemaToQueryProcessorRegistry(app)
-  app.queryQueue = new InMemoryQueue<Query>()
-  app.responseQueue = new InMemoryQueue<IdentifiableHuri>()
+const connectQueryQueueToResponseQueue = (app: Application) => {
   app.queryQueue.onQueued = async (id) => {
     const query = await app.queryQueue.tryDequeue(id)
     if (query) {
@@ -44,5 +35,19 @@ export const addDependencies = (app: Application) => {
       }
     }
   }
+}
+
+export const addDependencies = (app: Application) => {
+  const account = getAccountFromSeedPhrase(process.env.ACCOUNT_SEED)
+  app.account = account
+  app.archivistWitnessedPayloadRepository = new MongoDBArchivistWitnessedPayloadRepository(account)
+  app.archiveRepository = new MongoDBArchiveRepository()
+  app.archivePermissionsRepository = new MongoDBArchivePermissionsPayloadPayloadRepository()
+  app.queryConverters = new XyoPayloadToQueryConverterRegistry(app)
+  app.queryProcessors = new SchemaToQueryProcessorRegistry(app)
+  app.queryQueue = new InMemoryQueue<Query>()
+  app.responseQueue = new InMemoryQueue<IdentifiableHuri>()
+  // NOTE: Placeholder for distributed XyoPayload bus with persistence, etc.
+  connectQueryQueueToResponseQueue(app)
   app.userManager = new MongoDBUserManager(new MongoDBUserRepository())
 }
