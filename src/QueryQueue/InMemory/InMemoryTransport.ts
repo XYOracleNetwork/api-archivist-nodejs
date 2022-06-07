@@ -2,6 +2,7 @@ import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 
 import { Transport } from '../Transport'
 
+// TODO: Use LRU cache
 export class InMemoryTransport<T extends XyoPayload = XyoPayload> implements Transport<T> {
   protected queue: Record<string, T> = {}
 
