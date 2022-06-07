@@ -8,7 +8,7 @@ export type QueryPathParams = {
 }
 
 const handler: RequestHandler<QueryPathParams, XyoPayload, NoReqBody, NoReqQuery> = async (req, res, next) => {
-  const result = await req.app.queryQueue.tryDequeue(req.params.id)
+  const result = await req.app.responseQueue.tryDequeue(req.params.id)
   if (result === null) {
     next({ message: ReasonPhrases.ACCEPTED, statusCode: StatusCodes.ACCEPTED })
   } else if (result?.payload?._hash) {

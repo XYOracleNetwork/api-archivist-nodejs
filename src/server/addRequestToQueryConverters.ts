@@ -21,7 +21,7 @@ import {
 
 const debugCommandConverter = (payload: XyoPayload, _req: Request): Query => {
   return {
-    id: () => v4(),
+    id: v4(),
     payload,
   } as Query
 }
