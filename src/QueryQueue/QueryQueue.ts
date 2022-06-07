@@ -1,12 +1,11 @@
-import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
-
+import { Query } from '../model'
 import { Transport } from './Transport'
 
-export abstract class QueryQueue<T extends XyoPayload = XyoPayload> {
+export abstract class QueryQueue<T extends Query = Query> {
   constructor(protected readonly queue: Transport<T>) {}
 
   public readonly enqueue = (query: T) => {
-    if (query._hash) {
+    if (query.id()) {
       return this.queue.enqueue(query)
     }
     throw new Error('Error enqueuing query')

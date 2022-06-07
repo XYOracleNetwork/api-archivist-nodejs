@@ -1,10 +1,9 @@
-import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
-
+import { Query } from '../../model'
 import { QueryQueue } from '../QueryQueue'
 import { Transport } from '../Transport'
 import { InMemoryTransport } from './InMemoryTransport'
 
-export class InMemoryQueryQueue<T extends XyoPayload = XyoPayload> extends QueryQueue {
+export class InMemoryQueryQueue<T extends Query> extends QueryQueue<T> {
   constructor(protected queue: Transport<T> = new InMemoryTransport<T>()) {
     super(queue)
   }

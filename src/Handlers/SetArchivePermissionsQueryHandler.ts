@@ -1,13 +1,13 @@
 import { ArchivePermissionsRepository } from '../middleware'
-import { QueryHandler, SetArchivePermissions } from '../model'
+import { QueryHandler, SetArchivePermissionsQuery } from '../model'
 
 export interface SetArchivePermissionsQueryHandlerOpts {
   archivePermissionsRepository: ArchivePermissionsRepository
 }
 
-export class SetArchivePermissionsQueryHandler implements QueryHandler<SetArchivePermissions, void> {
+export class SetArchivePermissionsQueryHandler implements QueryHandler<SetArchivePermissionsQuery, void> {
   constructor(protected readonly opts: SetArchivePermissionsQueryHandlerOpts) {}
-  async handle(command: SetArchivePermissions): Promise<void> {
-    await this.opts.archivePermissionsRepository.insert([command])
+  async handle(query: SetArchivePermissionsQuery): Promise<void> {
+    await this.opts.archivePermissionsRepository.insert([query.payload])
   }
 }

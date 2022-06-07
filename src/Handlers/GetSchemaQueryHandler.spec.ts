@@ -1,6 +1,6 @@
 import { XyoSchemaCache } from '@xyo-network/sdk-xyo-client-js'
 
-import { getSchemaSchema } from '../model'
+import { GetSchemaQuery, getSchemaSchema } from '../model'
 import { GetSchemaQueryHandler } from './GetSchemaQueryHandler'
 
 const schema = getSchemaSchema
@@ -10,7 +10,7 @@ describe('GetSchemaQueryHandler', () => {
     it('returns the schema config', async () => {
       const name = 'network.xyo.schema'
       const sut = new GetSchemaQueryHandler({ schemaRepository: XyoSchemaCache.instance })
-      const actual = await sut.handle({ name, schema })
+      const actual = await sut.handle(new GetSchemaQuery({ name, schema }))
       expect(actual).toBeTruthy()
       expect(actual?.payload).toBeTruthy()
       expect(actual?.payload.schema).toBe(name)
@@ -21,7 +21,7 @@ describe('GetSchemaQueryHandler', () => {
     it('returns null', async () => {
       const name = 'network.xyo.foo'
       const sut = new GetSchemaQueryHandler({ schemaRepository: XyoSchemaCache.instance })
-      const actual = await sut.handle({ name, schema })
+      const actual = await sut.handle(new GetSchemaQuery({ name, schema }))
       expect(actual).toBeNull()
     })
   })

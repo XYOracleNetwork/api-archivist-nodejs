@@ -1,6 +1,6 @@
 import { XyoDomainPayload, XyoDomainPayloadWrapper } from '@xyo-network/sdk-xyo-client-js'
 
-import { GetDomainConfig, QueryHandler } from '../model'
+import { GetDomainConfigQuery, QueryHandler } from '../model'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface GetDomainConfigQueryHandlerOpts {
@@ -8,10 +8,12 @@ export interface GetDomainConfigQueryHandlerOpts {
   // domainRepository: XyoDomainPayloadWrapper
 }
 
-export class GetDomainConfigQueryHandler implements QueryHandler<GetDomainConfig, XyoDomainPayload | undefined> {
+export class GetDomainConfigQueryHandler implements QueryHandler<GetDomainConfigQuery, XyoDomainPayload | undefined> {
   constructor(protected readonly opts: GetDomainConfigQueryHandlerOpts) {}
-  async handle(command: GetDomainConfig): Promise<XyoDomainPayload | undefined> {
-    const config = command.proxy ? await XyoDomainPayloadWrapper.discover(command.domain, command.proxy) : await XyoDomainPayloadWrapper.discover(command.domain)
+  async handle(query: GetDomainConfigQuery): Promise<XyoDomainPayload | undefined> {
+    const config = query.payload.proxy
+      ? await XyoDomainPayloadWrapper.discover(query.payload.domain, query.payload.proxy)
+      : await XyoDomainPayloadWrapper.discover(query.payload.domain)
     return config?.body
   }
 }
