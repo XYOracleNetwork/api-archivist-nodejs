@@ -2,7 +2,7 @@ import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { Application, Request } from 'express'
 import { v4 } from 'uuid'
 
-import { RequestToQueryConverterRegistry } from '../middleware'
+import { QueryConverterRegistry } from '../middleware'
 import {
   GetArchivePermissionsPayload,
   GetArchivePermissionsQuery,
@@ -27,17 +27,17 @@ const debugCommandConverter = (payload: XyoPayload, _req: Request): Query => {
 }
 
 export const addRequestToQueryConverters = (app: Application) => {
-  const registry: RequestToQueryConverterRegistry = app.requestToQueryConverterRegistry
+  const registry: QueryConverterRegistry = app.queryConverters
   addDebugQueries(registry)
   addQueryHandlers(app, registry)
 }
 
-export const addDebugQueries = (registry: RequestToQueryConverterRegistry) => {
+export const addDebugQueries = (registry: QueryConverterRegistry) => {
   registry.registerConverterForSchema('network.xyo.debug', debugCommandConverter)
   registry.registerConverterForSchema('network.xyo.test', debugCommandConverter)
 }
 
-export const addQueryHandlers = (app: Application, registry: RequestToQueryConverterRegistry) => {
+export const addQueryHandlers = (app: Application, registry: QueryConverterRegistry) => {
   registry.registerConverterForSchema(setArchivePermissionsSchema, (x: SetArchivePermissionsPayload, _req: Request) => new SetArchivePermissionsQuery(x))
   registry.registerConverterForSchema(getArchivePermissionsSchema, (x: GetArchivePermissionsPayload, _req: Request) => new GetArchivePermissionsQuery(x))
   registry.registerConverterForSchema(getDomainConfigSchema, (x: GetDomainConfigPayload, _req: Request) => new GetDomainConfigQuery(x))

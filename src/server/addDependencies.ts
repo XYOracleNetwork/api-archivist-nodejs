@@ -7,8 +7,8 @@ import {
   MongoDBArchivistWitnessedPayloadRepository,
   MongoDBUserManager,
   MongoDBUserRepository,
-  XyoPayloadToQueryConverterRegistry,
   SchemaToQueryProcessorRegistry,
+  XyoPayloadToQueryConverterRegistry,
 } from '../middleware'
 import { InMemoryQueryQueue } from '../QueryQueue'
 
@@ -18,8 +18,18 @@ export const addDependencies = (app: Application) => {
   app.archivistWitnessedPayloadRepository = new MongoDBArchivistWitnessedPayloadRepository(account)
   app.archiveRepository = new MongoDBArchiveRepository()
   app.archivePermissionsRepository = new MongoDBArchivePermissionsPayloadPayloadRepository()
-  app.payloadProcessorRegistry = new SchemaToQueryProcessorRegistry(app)
+  app.queryConverters = new XyoPayloadToQueryConverterRegistry(app)
+  app.queryProcessors = new SchemaToQueryProcessorRegistry(app)
   app.queryQueue = new InMemoryQueryQueue()
-  app.requestToQueryConverterRegistry = new XyoPayloadToQueryConverterRegistry(app)
+  app.queryQueue.onQueryQueued = async (id) => {
+    const query = await app.queryQueue.tryDequeue(id)
+    if (query) {
+      const processor = app.queryProcessors.processors[query.payload.schema]
+      if (processor) {
+        const result = await processor(query)
+        // TODO: Store result
+      }
+    }
+  }
   app.userManager = new MongoDBUserManager(new MongoDBUserRepository())
 }

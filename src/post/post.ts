@@ -22,7 +22,7 @@ const handler: RequestHandler<PostNodePathParams, string[][], XyoBoundWitness[]>
   })
   // TODO: Validate protocol only here: new XyoBoundWitnessWrapper(bw).validator.all()
   const { enqueue } = req.app.queryQueue
-  const { converters } = req.app.requestToQueryConverterRegistry
+  const { converters } = req.app.queryConverters
   const queued = queries
     .map((bw) => bw._payloads)
     .filter(exists)

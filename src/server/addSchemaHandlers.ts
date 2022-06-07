@@ -1,7 +1,6 @@
 import { XyoSchemaCache } from '@xyo-network/sdk-xyo-client-js'
 import { Application } from 'express'
 
-import { GetArchivePermissionsQueryHandler, GetDomainConfigQueryHandler, GetSchemaQueryHandler, SetArchivePermissionsQueryHandler } from '../Handlers'
 import { QueryProcessorRegistry } from '../middleware'
 import {
   GetArchivePermissionsQuery,
@@ -13,9 +12,10 @@ import {
   SetArchivePermissionsQuery,
   setArchivePermissionsSchema,
 } from '../model'
+import { GetArchivePermissionsQueryHandler, GetDomainConfigQueryHandler, GetSchemaQueryHandler, SetArchivePermissionsQueryHandler } from '../QueryHandlers'
 
 export const addSchemaHandlers = (app: Application) => {
-  const registry: QueryProcessorRegistry = app.payloadProcessorRegistry
+  const registry: QueryProcessorRegistry = app.queryProcessors
   addDebugHandlers(registry)
   addCommandHandlers(app, registry)
   addQueryHandlers(app, registry)

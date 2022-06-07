@@ -1,4 +1,3 @@
-import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { Application } from 'express'
 
 import { Query } from '../../model'
