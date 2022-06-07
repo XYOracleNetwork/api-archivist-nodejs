@@ -1,2 +1,4 @@
-export * from './Command'
-export * from './Query'
+export * from './GetArchivePermissionsQueryHandler'
+export * from './GetDomainConfigQueryHandler'
+export * from './GetSchemaQueryHandler'
+export * from './SetArchivePermissionsQueryHandler'

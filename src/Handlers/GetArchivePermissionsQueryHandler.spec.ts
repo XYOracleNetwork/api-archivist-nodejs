@@ -1,7 +1,7 @@
 import { mock, MockProxy } from 'jest-mock-extended'
 
-import { ArchivePermissionsRepository } from '../../middleware'
-import { getArchivePermissionsSchema, SetArchivePermissionsPayload, setArchivePermissionsSchema } from '../../model'
+import { ArchivePermissionsRepository } from '../middleware'
+import { getArchivePermissionsSchema, SetArchivePermissionsPayload, setArchivePermissionsSchema } from '../model'
 import { GetArchivePermissionsQueryHandler } from './GetArchivePermissionsQueryHandler'
 
 const schema = getArchivePermissionsSchema

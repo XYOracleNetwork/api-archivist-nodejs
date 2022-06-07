@@ -1,7 +1,7 @@
 import { XyoPayload, XyoPayloadBody, XyoPayloadBuilder, XyoPayloadMeta } from '@xyo-network/sdk-xyo-client-js'
 
-import { ArchivePermissionsRepository } from '../../middleware'
-import { GetArchivePermissions, QueryHandler, SetArchivePermissions, SetArchivePermissionsPayload, setArchivePermissionsSchema } from '../../model'
+import { ArchivePermissionsRepository } from '../middleware'
+import { GetArchivePermissions, QueryHandler, SetArchivePermissions, SetArchivePermissionsPayload, setArchivePermissionsSchema } from '../model'
 
 const emptyPermissions = new XyoPayloadBuilder({ schema: setArchivePermissionsSchema }).build() as XyoPayload<SetArchivePermissions>
 

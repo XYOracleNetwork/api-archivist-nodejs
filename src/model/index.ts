@@ -1,5 +1,4 @@
 export * from './API'
-export * from './Command'
 export * from './Domain'
 export * from './Query'
 export * from './Repository'

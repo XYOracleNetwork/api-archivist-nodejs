@@ -1,12 +1,12 @@
 import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 
 import { ArchivePermissions } from '../Domain'
-import { Command } from './Command'
+import { Query } from './Query'
 
 export const setArchivePermissionsSchema = 'network.xyo.security.archive.permissions.set'
 export type SetArchivePermissionsSchema = typeof setArchivePermissionsSchema
 
-export interface SetArchivePermissions extends Command {
+export interface SetArchivePermissions extends Query {
   allow?: Partial<ArchivePermissions>
   reject?: Partial<ArchivePermissions>
   schema: SetArchivePermissionsSchema
