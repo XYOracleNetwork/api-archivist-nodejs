@@ -4,7 +4,7 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Application {
-      payloadProcessorRegistry: QueryProcessorRegistry
+      queryProcessors: QueryProcessorRegistry
     }
   }
 }

@@ -1,14 +1,14 @@
-import { RequestToQueryConverterRegistry } from './RequestToQueryConverterRegistry'
+import { QueryConverterRegistry } from './QueryConverterRegistry'
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Application {
-      requestToQueryConverterRegistry: RequestToQueryConverterRegistry
+      queryConverters: QueryConverterRegistry
     }
   }
 }
 
-export * from './RequestToQueryConverter'
-export * from './RequestToQueryConverterRegistry'
+export * from './QueryConverter'
+export * from './QueryConverterRegistry'
 export * from './XyoPayloadToQueryConverterRegistry'
