@@ -10,7 +10,8 @@ import {
   SchemaToQueryProcessorRegistry,
   XyoPayloadToQueryConverterRegistry,
 } from '../middleware'
-import { InMemoryQueryQueue } from '../QueryQueue'
+import { Query } from '../model'
+import { InMemoryQueue } from '../Queue'
 
 export const addDependencies = (app: Application) => {
   const account = getAccountFromSeedPhrase(process.env.ACCOUNT_SEED)
@@ -20,14 +21,17 @@ export const addDependencies = (app: Application) => {
   app.archivePermissionsRepository = new MongoDBArchivePermissionsPayloadPayloadRepository()
   app.queryConverters = new XyoPayloadToQueryConverterRegistry(app)
   app.queryProcessors = new SchemaToQueryProcessorRegistry(app)
-  app.queryQueue = new InMemoryQueryQueue()
-  app.queryQueue.onQueryQueued = async (id) => {
+  app.queryQueue = new InMemoryQueue<Query>()
+  app.responseQueue = new InMemoryQueue()
+  app.queryQueue.onQueued = async (id) => {
     const query = await app.queryQueue.tryDequeue(id)
     if (query) {
       const processor = app.queryProcessors.processors[query.payload.schema]
       if (processor) {
         const result = await processor(query)
-        // TODO: Store result
+        if (result) {
+          // TODO: Store result in response queue
+        }
       }
     }
   }

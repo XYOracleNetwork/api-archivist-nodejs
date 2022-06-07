@@ -11,7 +11,7 @@ export abstract class Query<T extends XyoPayload = XyoPayload> {
    * random uniqueness (GUID) to prevent that from being true
    * @returns Correlation ID for the query
    */
-  public id = (): string => {
+  public get id(): string {
     const hash = assertEx(this.payload._hash)
     const timestamp = assertEx(this.payload._timestamp)
     return `${timestamp}-${hash}`

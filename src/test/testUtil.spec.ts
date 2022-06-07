@@ -309,3 +309,9 @@ export const postCommandsToArchive = async (
     : await request.post(path).send(commands).expect(expectedStatus)
   return response.body.data
 }
+
+export const queryCommandResult = async (id: string, token?: string, expectedStatus: StatusCodes = StatusCodes.ACCEPTED): Promise<XyoBoundWitness[]> => {
+  const path = `/query/${id}`
+  const response = token ? await request.get(path).redirects(1).auth(token, { type: 'bearer' }).expect(expectedStatus) : await request.get(path).redirects(1).expect(expectedStatus)
+  return response.body.data
+}

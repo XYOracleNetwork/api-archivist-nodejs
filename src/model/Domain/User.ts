@@ -1,6 +1,5 @@
-export interface Identifiable {
-  id: string
-}
+import { Identifiable } from './Identifiable'
+
 export interface Web2User {
   email: string
   passwordHash: string
