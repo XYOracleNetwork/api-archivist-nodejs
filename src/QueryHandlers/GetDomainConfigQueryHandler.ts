@@ -8,7 +8,7 @@ export interface GetDomainConfigQueryHandlerOpts {
   // domainRepository: XyoDomainPayloadWrapper
 }
 
-export class GetDomainConfigQueryHandler implements QueryHandler<GetDomainConfigQuery, XyoDomainPayload | undefined> {
+export class GetDomainConfigQueryHandler implements QueryHandler<GetDomainConfigQuery, XyoDomainPayload> {
   constructor(protected readonly opts: GetDomainConfigQueryHandlerOpts) {}
   async handle(query: GetDomainConfigQuery): Promise<XyoDomainPayload | undefined> {
     const config = query.payload.proxy

@@ -1,4 +1,5 @@
 import { Query } from '../model'
+import { IdentifiableHuri } from './IdentifiableHuri'
 import { Queue } from './Queue'
 
 declare global {
@@ -6,10 +7,11 @@ declare global {
   namespace Express {
     interface Application {
       queryQueue: Queue<Query>
-      responseQueue: Queue<Query>
+      responseQueue: Queue<IdentifiableHuri>
     }
   }
 }
 
+export * from './IdentifiableHuri'
 export * from './InMemory'
 export * from './Queue'
