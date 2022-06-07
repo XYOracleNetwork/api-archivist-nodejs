@@ -1,5 +1,7 @@
 import { Request } from 'express'
 
+// TODO: Move to express ECS SDK
+
 /**
  * Since there can be multiple of certain HTTP headers or
  * to prevent ugliness if someone did send us multiple

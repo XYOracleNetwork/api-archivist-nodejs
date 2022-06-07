@@ -1,8 +1,7 @@
 import { Request } from 'express'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
-import { getArchiveKeys } from '../../../../lib'
-import { getHttpHeader } from './getHttpHeader'
+import { getArchiveKeys, getHttpHeader } from '../../../../lib'
 
 export class ArchiveApiKeyStrategy extends Strategy {
   constructor(public readonly apiKeyHeader = 'x-api-key') {

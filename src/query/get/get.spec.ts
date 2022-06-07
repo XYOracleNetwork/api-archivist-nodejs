@@ -25,7 +25,7 @@ describe('/query/:hash', () => {
       await sut.get(`/query/${payload._hash}`).expect(StatusCodes.ACCEPTED)
     })
   })
-  describe('for non-existent query', () => {
+  describe.skip('for non-existent query', () => {
     beforeEach(() => {
       payload = getTestRequest(1)
     })
@@ -34,7 +34,7 @@ describe('/query/:hash', () => {
       await sut.get(`/query/${payload._hash}`).expect(StatusCodes.NOT_FOUND)
     })
   })
-  describe('for completed query', () => {
+  describe.skip('for completed query', () => {
     beforeEach(async () => {
       payload = await postRequest()
     })
