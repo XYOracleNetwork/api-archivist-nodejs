@@ -7,10 +7,10 @@ export type QueryPathParams = {
   hash: string
 }
 
-const handler: RequestHandler<QueryPathParams, XyoPayload, NoReqBody, NoReqQuery> = async (req, _res, next) => {
+const handler: RequestHandler<QueryPathParams, XyoPayload, NoReqBody, NoReqQuery> = async (req, res, next) => {
   const result = await req.app.queryQueue.get(req.params.hash)
   if (result?._hash) {
-    _res.redirect(result._hash)
+    res.redirect(result._hash)
   } else {
     // TODO: How to differentiate between not issued and not completed
     next({ message: ReasonPhrases.ACCEPTED, statusCode: StatusCodes.ACCEPTED })
