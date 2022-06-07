@@ -9,7 +9,7 @@ import { getRequestMetaData } from './getRequestMetaData'
 
 const handler: RequestHandler<PostNodePathParams, string[][], XyoBoundWitness[]> = async (req, res, next) => {
   const boundWitnessMetaData: XyoBoundWitnessMeta = getRequestMetaData(req)
-  const payloadMetaData: XyoPayloadMeta = { archive: boundWitnessMetaData._archive }
+  const payloadMetaData: XyoPayloadMeta = { _archive: boundWitnessMetaData._archive }
   const boundWitnesses: XyoBoundWitness[] = Array.isArray(req.body) ? req.body : [req.body]
   const queries = boundWitnesses.map<XyoBoundWitness>((boundWitness) => {
     const bw: XyoBoundWitness = { ...boundWitness, ...boundWitnessMetaData }

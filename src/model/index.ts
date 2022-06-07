@@ -1,5 +1,6 @@
 export * from './API'
 export * from './Domain'
+export * from './Optional'
 export * from './Query'
 export * from './Repository'
 export * from './sortDirection'

@@ -11,8 +11,9 @@ const handler: RequestHandler<QueryPathParams, XyoPayload, NoReqBody, NoReqQuery
   const result = await req.app.responseQueue.tryDequeue(req.params.id)
   if (result === null) {
     next({ message: ReasonPhrases.ACCEPTED, statusCode: StatusCodes.ACCEPTED })
-  } else if (result?.payload?._hash) {
-    res.redirect(result.payload._hash)
+  } else if (result?.huri?.hash) {
+    // TODO: Redirect to archive
+    res.redirect(result.huri?.hash)
   }
   next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
 }
