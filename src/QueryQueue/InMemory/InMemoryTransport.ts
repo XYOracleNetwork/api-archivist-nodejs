@@ -1,18 +1,14 @@
-import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
-
+import { Query } from '../../model'
 import { Transport } from '../Transport'
 
 // TODO: Use LRU cache
-export class InMemoryTransport<T extends XyoPayload = XyoPayload> implements Transport<T> {
+export class InMemoryTransport<T extends Query> implements Transport<T> {
   protected queue: Record<string, T> = {}
 
   public enqueue(query: T): Promise<string> {
-    const hash = query._hash
-    if (hash) {
-      this.queue[hash] = query
-      return Promise.resolve(hash)
-    }
-    throw new Error('Attempted to queue query with no hash')
+    const id = query.id()
+    this.queue[id] = query
+    return Promise.resolve(id)
   }
 
   public get(hash: string): Promise<T> {

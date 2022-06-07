@@ -15,7 +15,7 @@ export const addNodeRoutes = (app: Express) => {
   )
 
   app.get(
-    '/query/:hash',
+    '/query/:id',
     allowAnonymous,
     getQuery
     /* #swagger.tags = ['Node'] */

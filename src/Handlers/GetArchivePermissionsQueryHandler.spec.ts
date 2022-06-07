@@ -1,7 +1,7 @@
 import { mock, MockProxy } from 'jest-mock-extended'
 
 import { ArchivePermissionsRepository } from '../middleware'
-import { getArchivePermissionsSchema, SetArchivePermissionsPayload, setArchivePermissionsSchema } from '../model'
+import { GetArchivePermissionsQuery, getArchivePermissionsSchema, SetArchivePermissionsPayload, setArchivePermissionsSchema } from '../model'
 import { GetArchivePermissionsQueryHandler } from './GetArchivePermissionsQueryHandler'
 
 const schema = getArchivePermissionsSchema
@@ -33,7 +33,7 @@ describe('GetArchivePermissionsQueryHandler', () => {
         })
         it('returns the latest archive permissions', async () => {
           const sut = new GetArchivePermissionsQueryHandler({ archivePermissionsRepository })
-          const actual = await sut.handle({ _archive, schema })
+          const actual = await sut.handle(new GetArchivePermissionsQuery({ _archive, schema }))
           expect(actual).toBeTruthy()
           expect(actual?.schema).toBe(setArchivePermissionsSchema)
           expect(actual?.allow).toBeDefined()
@@ -56,7 +56,7 @@ describe('GetArchivePermissionsQueryHandler', () => {
         })
         it('returns the empty permissions', async () => {
           const sut = new GetArchivePermissionsQueryHandler({ archivePermissionsRepository })
-          const actual = await sut.handle({ _archive, schema })
+          const actual = await sut.handle(new GetArchivePermissionsQuery({ _archive, schema }))
           expect(actual).toBeTruthy()
           expect(actual?.schema).toBe(setArchivePermissionsSchema)
           expect(actual?.allow).toBeUndefined()
