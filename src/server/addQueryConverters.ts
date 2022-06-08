@@ -26,7 +26,7 @@ const debugCommandConverter = (payload: XyoPayload, _req: Request): Query => {
   } as Query
 }
 
-export const addRequestToQueryConverters = (app: Application) => {
+export const addQueryConverters = (app: Application) => {
   const registry: QueryConverterRegistry = app.queryConverters
   addDebugQueries(registry)
   addQueryHandlers(app, registry)

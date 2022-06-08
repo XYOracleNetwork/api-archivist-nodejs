@@ -7,11 +7,11 @@ import { configureDoc } from '../middleware'
 import { addDependencies } from './addDependencies'
 import { addErrorHandlers } from './addErrorHandlers'
 import { addHealthChecks } from './addHealthChecks'
+import { addInMemoryQueryProcessing } from './addInMemoryQueryProcessing'
 import { addMiddleware } from './addMiddleware'
+import { addQueryConverters } from './addQueryConverters'
 import { addQueryProcessors } from './addQueryProcessors'
-import { addRequestToQueryConverters } from './addRequestToQueryConverters'
 import { addRoutes } from './addRoutes'
-import { addSchemaHandlers } from './addSchemaHandlers'
 
 export const getApp = (): Express => {
   const app = express()
@@ -29,9 +29,9 @@ export const getApp = (): Express => {
 
   addDependencies(app)
   addMiddleware(app)
-  addSchemaHandlers(app)
-  addRequestToQueryConverters(app)
+  addQueryConverters(app)
   addQueryProcessors(app)
+  addInMemoryQueryProcessing(app)
   addHealthChecks(app)
   addRoutes(app)
   addErrorHandlers(app)
