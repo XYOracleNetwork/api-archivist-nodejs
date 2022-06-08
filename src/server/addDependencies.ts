@@ -1,5 +1,6 @@
 import { Application } from 'express'
 
+import { getQueryQueue, getResponseQueue } from '../lib'
 import {
   getAccountFromSeedPhrase,
   MongoDBArchivePermissionsPayloadPayloadRepository,
@@ -10,8 +11,6 @@ import {
   SchemaToQueryProcessorRegistry,
   XyoPayloadToQueryConverterRegistry,
 } from '../middleware'
-import { Query } from '../model'
-import { IdentifiableHuri, InMemoryQueue } from '../Queue'
 
 export const addDependencies = (app: Application) => {
   const account = getAccountFromSeedPhrase(process.env.ACCOUNT_SEED)
@@ -21,7 +20,7 @@ export const addDependencies = (app: Application) => {
   app.archivePermissionsRepository = new MongoDBArchivePermissionsPayloadPayloadRepository()
   app.queryConverters = new XyoPayloadToQueryConverterRegistry(app)
   app.queryProcessors = new SchemaToQueryProcessorRegistry(app)
-  app.queryQueue = new InMemoryQueue<Query>()
-  app.responseQueue = new InMemoryQueue<IdentifiableHuri>()
+  app.queryQueue = getQueryQueue()
+  app.responseQueue = getResponseQueue()
   app.userManager = new MongoDBUserManager(new MongoDBUserRepository())
 }

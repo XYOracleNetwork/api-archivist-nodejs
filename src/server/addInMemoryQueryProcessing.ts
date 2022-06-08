@@ -8,12 +8,15 @@ export const addInMemoryQueryProcessing = (app: Application) => {
       const processor = app.queryProcessors.processors[query.payload.schema]
       if (processor) {
         // TODO: Validate auth (address/schema allowed)
+
+        // Enqueue null in the response queue to indicate we're processing it
+        await app.responseQueue.enqueue({ huri: null, id })
         const result = await processor(query)
         const hash = result?._hash
         if (hash) {
           // TODO: Store result in archive
           // Store result in response queue
-          await app.responseQueue.enqueue({ huri: new Huri(hash), id: hash })
+          await app.responseQueue.enqueue({ huri: new Huri(hash), id })
         }
       }
     }

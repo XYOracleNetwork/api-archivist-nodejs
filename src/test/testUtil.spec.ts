@@ -302,7 +302,7 @@ export const postCommandsToArchive = async (
   archive: string,
   token?: string,
   expectedStatus: StatusCodes = StatusCodes.ACCEPTED
-): Promise<XyoBoundWitness[]> => {
+): Promise<string[][]> => {
   const path = `/${archive}`
   const response = token
     ? await request.post(path).send(commands).auth(token, { type: 'bearer' }).expect(expectedStatus)

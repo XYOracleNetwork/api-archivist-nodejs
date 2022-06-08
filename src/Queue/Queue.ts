@@ -4,10 +4,10 @@ export abstract class Queue<T> {
   public onDequeued?: (id: string) => void
   public onQueued?: (id: string) => void
 
-  constructor(protected readonly queue: Transport<T>) {}
+  constructor(protected readonly transport: Transport<T>) {}
 
   public readonly enqueue = async (item: T) => {
-    const id = await this.queue.enqueue(item)
+    const id = await this.transport.enqueue(item)
     this.onQueued?.(id)
     return id
   }
@@ -19,7 +19,7 @@ export abstract class Queue<T> {
    * already been dequeue, undefined if it doesn't exist
    */
   public readonly get = (id: string) => {
-    return this.queue.get(id)
+    return this.transport.get(id)
   }
 
   /**
@@ -29,7 +29,7 @@ export abstract class Queue<T> {
    * already been dequeue, undefined if it doesn't exist
    */
   public readonly tryDequeue = async (id: string) => {
-    const result = await this.queue.get(id)
+    const result = await this.transport.get(id)
     if (result) {
       this.onDequeued?.(id)
     }
