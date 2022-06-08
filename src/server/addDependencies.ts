@@ -1,5 +1,5 @@
 import { assertEx } from '@xylabs/sdk-js'
-import { Huri, XyoPayload, XyoPayloadFull } from '@xyo-network/sdk-xyo-client-js'
+import { Huri, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { Application } from 'express'
 
 import {
@@ -47,7 +47,8 @@ export const addDependencies = (app: Application) => {
   app.queryProcessors = new SchemaToQueryProcessorRegistry(app)
   app.queryQueue = new InMemoryQueue<Query>()
   app.responseQueue = new InMemoryQueue<IdentifiableHuri>()
+  app.userManager = new MongoDBUserManager(new MongoDBUserRepository())
+
   // NOTE: Placeholder for distributed XyoPayload bus with persistence, etc.
   connectQueryQueueToResponseQueue(app)
-  app.userManager = new MongoDBUserManager(new MongoDBUserRepository())
 }

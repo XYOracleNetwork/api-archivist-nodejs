@@ -1,3 +1,5 @@
-import { Query } from '../../model'
+import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 
-export type QueryProcessor<T extends Query = Query, R = unknown> = (x: T) => Promise<R>
+import { Optional, Query } from '../../model'
+
+export type QueryProcessor<T extends Query = Query, R extends Optional<XyoPayload> = Optional<XyoPayload>> = (x: T) => Promise<R>

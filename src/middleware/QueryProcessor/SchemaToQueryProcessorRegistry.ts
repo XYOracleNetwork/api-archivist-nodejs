@@ -1,19 +1,20 @@
+import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { Application } from 'express'
 
-import { Query } from '../../model'
+import { Optional, Query } from '../../model'
 import { QueryProcessor } from './QueryProcessor'
 import { QueryProcessorRegistry } from './QueryProcessorRegistry'
 
-export class SchemaToQueryProcessorRegistry implements QueryProcessorRegistry {
-  private _processors: Record<string, QueryProcessor> = {}
+export class SchemaToQueryProcessorRegistry<T extends Query = Query, R extends Optional<XyoPayload> = Optional<XyoPayload>> implements QueryProcessorRegistry<T, R> {
+  private _processors: Record<string, QueryProcessor<T, R>> = {}
 
   constructor(protected readonly app: Application) {}
 
-  public get processors(): Readonly<Record<string, QueryProcessor>> {
+  public get processors(): Readonly<Record<string, QueryProcessor<T, R>>> {
     return this._processors
   }
 
-  public registerProcessorForSchema<T extends Query = Query, R = unknown>(schema: string, processor: QueryProcessor<T, R>) {
-    this._processors[schema] = processor as QueryProcessor
+  public registerProcessorForSchema(schema: string, processor: QueryProcessor<T, R>) {
+    this._processors[schema] = processor
   }
 }

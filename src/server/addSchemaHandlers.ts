@@ -27,11 +27,11 @@ export const addDebugHandlers = (registry: QueryProcessorRegistry) => {
 }
 
 export const addCommandHandlers = (app: Application, registry: QueryProcessorRegistry) => {
-  registry.registerProcessorForSchema(setArchivePermissionsSchema, (x: SetArchivePermissionsQuery) => new SetArchivePermissionsQueryHandler({ ...app }).handle(x))
+  registry.registerProcessorForSchema(setArchivePermissionsSchema, (x) => new SetArchivePermissionsQueryHandler({ ...app }).handle(x as SetArchivePermissionsQuery))
 }
 
 export const addQueryHandlers = (app: Application, registry: QueryProcessorRegistry) => {
-  registry.registerProcessorForSchema(getArchivePermissionsSchema, (x: GetArchivePermissionsQuery) => new GetArchivePermissionsQueryHandler({ ...app }).handle(x))
-  registry.registerProcessorForSchema(getDomainConfigSchema, (x: GetDomainConfigQuery) => new GetDomainConfigQueryHandler({ ...app }).handle(x))
-  registry.registerProcessorForSchema(getSchemaSchema, (x: GetSchemaQuery) => new GetSchemaQueryHandler({ schemaRepository: XyoSchemaCache.instance }).handle(x))
+  registry.registerProcessorForSchema(getArchivePermissionsSchema, (x) => new GetArchivePermissionsQueryHandler({ ...app }).handle(x as GetArchivePermissionsQuery))
+  registry.registerProcessorForSchema(getDomainConfigSchema, (x) => new GetDomainConfigQueryHandler({ ...app }).handle(x as GetDomainConfigQuery))
+  registry.registerProcessorForSchema(getSchemaSchema, (x) => new GetSchemaQueryHandler({ schemaRepository: XyoSchemaCache.instance }).handle(x as GetSchemaQuery))
 }
