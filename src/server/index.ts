@@ -8,6 +8,7 @@ import { addDependencies } from './addDependencies'
 import { addErrorHandlers } from './addErrorHandlers'
 import { addHealthChecks } from './addHealthChecks'
 import { addMiddleware } from './addMiddleware'
+import { addQueryProcessors } from './addQueryProcessors'
 import { addRequestToQueryConverters } from './addRequestToQueryConverters'
 import { addRoutes } from './addRoutes'
 import { addSchemaHandlers } from './addSchemaHandlers'
@@ -30,6 +31,7 @@ export const getApp = (): Express => {
   addMiddleware(app)
   addSchemaHandlers(app)
   addRequestToQueryConverters(app)
+  addQueryProcessors(app)
   addHealthChecks(app)
   addRoutes(app)
   addErrorHandlers(app)
