@@ -22,6 +22,7 @@ describe('SetArchivePermissionsQueryHandler', () => {
     let archivePermissionsRepository: MockProxy<ArchivePermissionsRepository>
     beforeEach(() => {
       archivePermissionsRepository = mock<ArchivePermissionsRepository>()
+      archivePermissionsRepository.get.mockResolvedValue([permissions])
       archivePermissionsRepository.insert.mockResolvedValue([permissions])
     })
     it('sets the permissions for the archive', async () => {

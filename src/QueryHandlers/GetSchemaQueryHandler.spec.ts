@@ -12,17 +12,16 @@ describe('GetSchemaQueryHandler', () => {
       const sut = new GetSchemaQueryHandler({ schemaRepository: XyoSchemaCache.instance })
       const actual = await sut.handle(new GetSchemaQuery({ name, schema }))
       expect(actual).toBeTruthy()
-      expect(actual?.payload).toBeTruthy()
-      expect(actual?.payload.schema).toBe(name)
-      expect(actual?.payload.definition).toBeTruthy()
+      expect(actual?.schema).toBe(name)
+      expect(actual?.definition).toBeTruthy()
     })
   })
   describe('with non-existent schema', () => {
-    it('returns null', async () => {
+    it('returns undefined', async () => {
       const name = 'network.xyo.foo'
       const sut = new GetSchemaQueryHandler({ schemaRepository: XyoSchemaCache.instance })
       const actual = await sut.handle(new GetSchemaQuery({ name, schema }))
-      expect(actual).toBeNull()
+      expect(actual).toBeUndefined()
     })
   })
 })
