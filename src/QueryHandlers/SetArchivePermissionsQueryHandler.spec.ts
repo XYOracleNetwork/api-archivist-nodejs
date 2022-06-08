@@ -1,7 +1,7 @@
 import { mock, MockProxy } from 'jest-mock-extended'
 
 import { ArchivePermissionsRepository } from '../middleware'
-import { SetArchivePermissionsPayload, SetArchivePermissionsQuery, setArchivePermissionsSchema } from '../model'
+import { debugSchema, SetArchivePermissionsPayload, SetArchivePermissionsQuery, setArchivePermissionsSchema } from '../model'
 import { SetArchivePermissionsQueryHandler } from './SetArchivePermissionsQueryHandler'
 
 const _archive = 'test'
@@ -12,7 +12,7 @@ const permissions: SetArchivePermissionsPayload = {
   },
   reject: {
     addresses: ['0x0ac1df02185025f65202660f8167210a80dd5086'],
-    schemas: ['network.xyo.debug'],
+    schemas: [debugSchema],
   },
   schema: setArchivePermissionsSchema,
 }

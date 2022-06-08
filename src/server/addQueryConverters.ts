@@ -2,8 +2,11 @@ import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { Application, Request } from 'express'
 import { v4 } from 'uuid'
 
-import { QueryConverterRegistry } from '../middleware'
+import { isProduction, QueryConverterRegistry } from '../middleware'
 import {
+  DebugPayload,
+  DebugQuery,
+  debugSchema,
   GetArchivePermissionsPayload,
   GetArchivePermissionsQuery,
   getArchivePermissionsSchema,
@@ -28,12 +31,14 @@ const debugCommandConverter = (payload: XyoPayload, _req: Request): Query => {
 
 export const addQueryConverters = (app: Application) => {
   const registry: QueryConverterRegistry = app.queryConverters
-  addDebugQueries(registry)
+  if (!isProduction()) {
+    addDebugQueries(registry)
+  }
   addQueryHandlers(app, registry)
 }
 
 export const addDebugQueries = (registry: QueryConverterRegistry) => {
-  registry.registerConverterForSchema('network.xyo.debug', debugCommandConverter)
+  registry.registerConverterForSchema(debugSchema, (x: DebugPayload, _req: Request) => new DebugQuery(x))
   registry.registerConverterForSchema('network.xyo.test', debugCommandConverter)
 }
 

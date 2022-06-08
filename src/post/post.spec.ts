@@ -9,9 +9,4 @@ describe('/', () => {
       // TODO: Test
     })
   })
-  describe('with unsupported schema type', () => {
-    it('Passes control to the next handler', async () => {
-      // TODO: Test
-    })
-  })
 })

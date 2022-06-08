@@ -1,8 +1,10 @@
 import { XyoSchemaCache } from '@xyo-network/sdk-xyo-client-js'
 import { Application } from 'express'
 
-import { QueryProcessorRegistry } from '../middleware'
+import { isProduction, QueryProcessorRegistry } from '../middleware'
 import {
+  DebugQuery,
+  debugSchema,
   GetArchivePermissionsQuery,
   getArchivePermissionsSchema,
   GetDomainConfigQuery,
@@ -12,16 +14,18 @@ import {
   SetArchivePermissionsQuery,
   setArchivePermissionsSchema,
 } from '../model'
-import { GetArchivePermissionsQueryHandler, GetDomainConfigQueryHandler, GetSchemaQueryHandler, SetArchivePermissionsQueryHandler } from '../QueryHandlers'
+import { DebugQueryHandler, GetArchivePermissionsQueryHandler, GetDomainConfigQueryHandler, GetSchemaQueryHandler, SetArchivePermissionsQueryHandler } from '../QueryHandlers'
 
 export const addQueryProcessors = (app: Application) => {
   const registry: QueryProcessorRegistry = app.queryProcessors
-  addDebug(registry)
+  if (!isProduction()) {
+    addDebug(registry)
+  }
   addQueries(app, registry)
 }
 
 const addDebug = (registry: QueryProcessorRegistry) => {
-  registry.registerProcessorForSchema('network.xyo.debug', () => Promise.resolve())
+  registry.registerProcessorForSchema(debugSchema, (x) => new DebugQueryHandler().handle(x as DebugQuery))
   registry.registerProcessorForSchema('network.xyo.test', () => Promise.resolve())
 }
 

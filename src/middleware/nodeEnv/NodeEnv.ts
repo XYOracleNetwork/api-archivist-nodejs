@@ -1,2 +1,2 @@
 // TODO: Move to Express SDK
-export type NodeEnv = 'production' | 'development' | undefined
+export type NodeEnv = 'production' | 'development' | 'test' | undefined
