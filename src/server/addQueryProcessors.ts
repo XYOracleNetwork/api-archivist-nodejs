@@ -1,21 +1,33 @@
-import { Huri } from '@xyo-network/sdk-xyo-client-js'
+import { XyoSchemaCache } from '@xyo-network/sdk-xyo-client-js'
 import { Application } from 'express'
 
+import { QueryProcessorRegistry } from '../middleware'
+import {
+  GetArchivePermissionsQuery,
+  getArchivePermissionsSchema,
+  GetDomainConfigQuery,
+  getDomainConfigSchema,
+  GetSchemaQuery,
+  getSchemaSchema,
+  SetArchivePermissionsQuery,
+  setArchivePermissionsSchema,
+} from '../model'
+import { GetArchivePermissionsQueryHandler, GetDomainConfigQueryHandler, GetSchemaQueryHandler, SetArchivePermissionsQueryHandler } from '../QueryHandlers'
+
 export const addQueryProcessors = (app: Application) => {
-  app.queryQueue.onQueued = async (id) => {
-    const query = await app.queryQueue.tryDequeue(id)
-    if (query) {
-      const processor = app.queryProcessors.processors[query.payload.schema]
-      if (processor) {
-        // TODO: Validate auth (address/schema allowed)
-        const result = await processor(query)
-        const hash = result?._hash
-        if (hash) {
-          // TODO: Store result in archive
-          // Store result in response queue
-          await app.responseQueue.enqueue({ huri: new Huri(hash), id: hash })
-        }
-      }
-    }
-  }
+  const registry: QueryProcessorRegistry = app.queryProcessors
+  addDebug(registry)
+  addQueries(app, registry)
+}
+
+const addDebug = (registry: QueryProcessorRegistry) => {
+  registry.registerProcessorForSchema('network.xyo.debug', () => Promise.resolve())
+  registry.registerProcessorForSchema('network.xyo.test', () => Promise.resolve())
+}
+
+const addQueries = (app: Application, registry: QueryProcessorRegistry) => {
+  registry.registerProcessorForSchema(setArchivePermissionsSchema, (x) => new SetArchivePermissionsQueryHandler({ ...app }).handle(x as SetArchivePermissionsQuery))
+  registry.registerProcessorForSchema(getArchivePermissionsSchema, (x) => new GetArchivePermissionsQueryHandler({ ...app }).handle(x as GetArchivePermissionsQuery))
+  registry.registerProcessorForSchema(getDomainConfigSchema, (x) => new GetDomainConfigQueryHandler({ ...app }).handle(x as GetDomainConfigQuery))
+  registry.registerProcessorForSchema(getSchemaSchema, (x) => new GetSchemaQueryHandler({ schemaRepository: XyoSchemaCache.instance }).handle(x as GetSchemaQuery))
 }
