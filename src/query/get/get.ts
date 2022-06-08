@@ -12,7 +12,8 @@ export type QueryPathParams = {
 const handler: RequestHandler<QueryPathParams, XyoPayload, NoReqBody, NoReqQuery> = async (req, res, next) => {
   const result = await getResponseQueue().get(req.params.id)
   if (result?.huri?.hash) {
-    res.redirect(result.huri?.hash)
+    res.redirect(`/${result.huri?.hash}`)
+    return
   }
   // TODO: Differentiate between processing vs doesn't exist via null/undefined
   next({ message: ReasonPhrases.ACCEPTED, statusCode: StatusCodes.ACCEPTED })

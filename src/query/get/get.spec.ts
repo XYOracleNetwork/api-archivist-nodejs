@@ -4,7 +4,7 @@ import { StatusCodes } from 'http-status-codes'
 import { v4 } from 'uuid'
 
 import { debugSchema } from '../../model'
-import { claimArchive, getArchivist, getTokenForNewUser, postCommandsToArchive } from '../../test'
+import { claimArchive, getArchivist, getTokenForNewUser, postCommandsToArchive, queryCommandResult } from '../../test'
 
 const schema = debugSchema
 
@@ -56,6 +56,11 @@ describe('/query/:hash', () => {
     })
     it('redirects to HURI', async () => {
       await getArchivist().get(`/query/${id}`).expect(StatusCodes.MOVED_TEMPORARILY)
+    })
+    it('returns query answer', async () => {
+      const result = await queryCommandResult(id, token, StatusCodes.OK)
+      expect(result).toBeTruthy()
+      expect(result.schema).toBe(schema)
     })
   })
 })

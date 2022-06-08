@@ -1,4 +1,4 @@
-import { Huri } from '@xyo-network/sdk-xyo-client-js'
+import { Huri, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { Application } from 'express'
 
 export const addInMemoryQueryProcessing = (app: Application) => {
@@ -12,11 +12,18 @@ export const addInMemoryQueryProcessing = (app: Application) => {
         // Enqueue null in the response queue to indicate we're processing it
         await app.responseQueue.enqueue({ huri: null, id })
         const result = await processor(query)
-        const hash = result?._hash
-        if (hash) {
-          // TODO: Store result in archive
-          // Store result in response queue
-          await app.responseQueue.enqueue({ huri: new Huri(hash), id })
+        // TODO: Handle queries with no result
+        if (result) {
+          // TODO: A better way to communicate destination archive
+          result._archive = query.payload._archive
+
+          // Witness result and store result in archive
+          const stored = await app.archivistWitnessedPayloadRepository.insert([result as XyoPayload])
+          const hash = stored?.[0]?._hash
+          if (hash) {
+            // Store result in response queue
+            await app.responseQueue.enqueue({ huri: new Huri(hash), id })
+          }
         }
       }
     }
