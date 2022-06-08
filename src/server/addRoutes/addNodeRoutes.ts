@@ -2,7 +2,7 @@ import { Express } from 'express'
 
 import { getByHash } from '../../hash'
 import { allowAnonymous, requireAccountOperationAccess } from '../../middleware'
-import { postPayloads } from '../../post'
+import { postNode } from '../../post'
 import { getQuery } from '../../query'
 
 export const addNodeRoutes = (app: Express) => {
@@ -25,8 +25,8 @@ export const addNodeRoutes = (app: Express) => {
   app.post(
     '/:archive?',
     requireAccountOperationAccess,
-    postPayloads
+    postNode
     /* #swagger.tags = ['Node'] */
-    /* #swagger.summary = 'Query the payloads, implementation is dependent on payload schema' */
+    /* #swagger.summary = 'Execute the supplied queries, contained as Payloads in one or more Bound Witnesses. Implementation is specific to the supplied payload schemas.' */
   )
 }
