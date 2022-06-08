@@ -4,7 +4,7 @@ import { Transport } from '../Transport'
 import { InMemoryTransport } from './InMemoryTransport'
 
 export class InMemoryQueue<T extends Identifiable> extends Queue<T> {
-  constructor(protected queue: Transport<T> = new InMemoryTransport<T>()) {
-    super(queue)
+  constructor(protected transport: Transport<T> = new InMemoryTransport<T>()) {
+    super(transport)
   }
 }
