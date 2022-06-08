@@ -1,3 +1,4 @@
+export * from './Debug'
 export * from './GetArchivePermissions'
 export * from './GetDomainConfig'
 export * from './GetSchema'

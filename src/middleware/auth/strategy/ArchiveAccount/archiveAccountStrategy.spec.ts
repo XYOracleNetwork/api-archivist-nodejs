@@ -1,10 +1,10 @@
 import { XyoBoundWitnessBuilder, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
 import { StatusCodes } from 'http-status-codes'
 
-import { SetArchivePermissions, SetArchivePermissionsPayload, setArchivePermissionsSchema } from '../../../../model'
+import { debugSchema, SetArchivePermissions, SetArchivePermissionsPayload, setArchivePermissionsSchema } from '../../../../model'
 import { claimArchive, getExistingWeb3User, postCommandsToArchive, signInWeb3User, TestWeb3User } from '../../../../test'
 
-const allowedSchema = 'network.xyo.debug'
+const allowedSchema = debugSchema
 const otherSchema = 'network.xyo.test'
 
 const setArchivePermissions = (archive: string, token: string, permissions: SetArchivePermissions) => {

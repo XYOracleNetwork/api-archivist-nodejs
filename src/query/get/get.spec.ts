@@ -2,10 +2,11 @@ import { XyoPayload, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
 import { StatusCodes } from 'http-status-codes'
 import { v4 } from 'uuid'
 
+import { debugSchema } from '../../model'
 import { getArchivist } from '../../test'
 
 const getTestRequest = (delay = 1): XyoPayload => {
-  const schema = 'network.xyo.debug'
+  const schema = debugSchema
   const fields = { delay, nonce: v4() }
   return new XyoPayloadBuilder({ schema }).fields(fields).build()
 }
