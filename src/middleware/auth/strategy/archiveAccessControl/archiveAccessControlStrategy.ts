@@ -7,7 +7,7 @@ import { isRequestUserOwnerOfRequestedArchive } from '../../../../lib'
 import { ArchiveLocals, ArchivePathParams } from '../../../../model'
 import { isPublicArchive } from './isPublicArchive'
 
-export class ArchiveOwnerStrategy extends Strategy {
+export class ArchiveAccessControlStrategy extends Strategy {
   constructor() {
     super()
   }
@@ -34,7 +34,7 @@ export class ArchiveOwnerStrategy extends Strategy {
       this.success(req.user || {})
       return
     } catch (error) {
-      this.error({ message: 'ArchiveOwner Auth Error' })
+      this.error({ message: 'ArchiveAccessControlStrategy Auth Error' })
     }
   }
 }

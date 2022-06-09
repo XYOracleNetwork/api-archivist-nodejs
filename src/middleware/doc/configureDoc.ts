@@ -1,60 +1,14 @@
 import { Application } from 'express'
 import swaggerAutogen from 'swagger-autogen'
 // eslint-disable-next-line import/no-deprecated
-import { serve, setup, SwaggerOptions } from 'swagger-ui-express'
+import { serve, setup } from 'swagger-ui-express'
+
+import { ConfigureDocOptions } from './ConfigureDocOptions'
+import { defaultOptions } from './DefaultOptions'
 
 const swaggerJsonFile = 'swagger.json'
 const swaggerJsonUrl = `/doc/${swaggerJsonFile}`
 const endpointsFiles = ['{src,dist}/**/*.{ts,js}']
-const defaultOptions: SwaggerOptions = {
-  basePath: '',
-  components: {},
-  consumes: ['application/json'],
-  definitions: {},
-  host: '',
-  info: {
-    description: 'API for storing & retrieving blocks/payloads in the Archivist',
-    title: 'XYO Archivist API',
-    version: '2.0',
-  },
-  produces: ['application/json'],
-  schemes: ['http', 'https'],
-  securityDefinitions: {},
-  tags: [
-    {
-      description: 'Create and manage archives',
-      name: 'Archive',
-    },
-    {
-      description: 'Add and query boundwitness blocks',
-      name: 'Block',
-    },
-    {
-      description: 'Check the health of the archivist',
-      name: 'Health',
-    },
-    {
-      description: 'View metrics of the archivist',
-      name: 'Metrics',
-    },
-    {
-      description: 'Add and query payloads',
-      name: 'Payload',
-    },
-    {
-      description: 'View data about schemas used in payloads',
-      name: 'Schema',
-    },
-    {
-      description: 'Add and query payloads',
-      name: 'Payload',
-    },
-    {
-      description: 'Manage user accounts and profiles',
-      name: 'User',
-    },
-  ],
-}
 
 const uiOptions = {
   swaggerOptions: {
@@ -67,10 +21,6 @@ const uiOptions = {
     tagsSorter: 'alpha',
     url: swaggerJsonUrl,
   },
-}
-
-export interface ConfigureDocOptions {
-  host: string
 }
 
 export const configureDoc = async (app: Application, options: ConfigureDocOptions) => {
