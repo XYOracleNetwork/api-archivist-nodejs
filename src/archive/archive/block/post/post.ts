@@ -4,9 +4,8 @@ import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
 import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 
-import { validatePayloadSchema } from '../../../../lib'
+import { prepareBoundWitnesses, validatePayloadSchema } from '../../../../lib'
 import { ArchivePathParams } from '../../../../model'
-import { prepareBoundWitnesses } from './prepareBoundWitnesses'
 import { storeBoundWitnesses } from './storeBoundWitnesses'
 import { storePayloads } from './storePayloads'
 
