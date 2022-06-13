@@ -2,8 +2,6 @@ import 'source-map-support/register'
 
 import { XyoBoundWitness, XyoPayload, XyoPayloadWrapper } from '@xyo-network/sdk-xyo-client-js'
 
-import { flattenArray } from './flattenArray'
-
 export interface PrepareBoundWitnessesResult {
   payloads: XyoPayload[]
   sanitized: XyoBoundWitness[]
@@ -14,15 +12,25 @@ export const prepareBoundWitnesses = (
   boundWitnessMetaData: Record<string, unknown>,
   payloadMetaData: Record<string, unknown>
 ): PrepareBoundWitnessesResult => {
-  const payloadLists: XyoPayload[][] = []
-  const sanitized = boundWitnesses.map((boundWitness) => {
+  const sanitized = removePayloads(augmentWithMetadata(boundWitnesses, boundWitnessMetaData))
+  const payloads = augmentWithMetadata(
+    boundWitnesses.map((bw) => bw._payloads || []).flatMap((p) => p),
+    payloadMetaData
+  )
+  return { payloads, sanitized }
+}
+
+export const removePayloads = (boundWitnesses: XyoBoundWitness[]): XyoBoundWitness[] => {
+  return boundWitnesses.map((boundWitness) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { _payloads, ...sanitized } = boundWitness
-    payloadLists.push(_payloads ?? [])
-    return { ...sanitized, ...boundWitnessMetaData }
+    return { ...sanitized }
   })
-  const payloads = flattenArray(payloadLists).map((payload) => {
+}
+
+export const augmentWithMetadata = <T extends XyoPayload>(payloads: T[], payloadMetaData: Record<string, unknown>): T[] => {
+  return payloads.map((payload) => {
     const wrapper = new XyoPayloadWrapper(payload)
     return { ...payload, ...payloadMetaData, _hash: wrapper.hash }
   })
-  return { payloads, sanitized }
 }
