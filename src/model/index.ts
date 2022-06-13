@@ -1,5 +1,6 @@
 export * from './API'
 export * from './Domain'
+export * from './GetValidator'
 export * from './Optional'
 export * from './Query'
 export * from './Repository'
