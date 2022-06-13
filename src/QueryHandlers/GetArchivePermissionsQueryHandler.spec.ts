@@ -6,6 +6,8 @@ import { GetArchivePermissionsQueryHandler } from './GetArchivePermissionsQueryH
 
 const schema = getArchivePermissionsSchema
 const _archive = 'test'
+const _hash = '1234567890'
+const _timestamp = Date.now()
 const emptyPermissions: SetArchivePermissionsPayload = {
   schema: 'network.xyo.security.archive.permissions.set',
 }
@@ -33,7 +35,7 @@ describe('GetArchivePermissionsQueryHandler', () => {
         })
         it('returns the latest archive permissions', async () => {
           const sut = new GetArchivePermissionsQueryHandler({ archivePermissionsRepository })
-          const actual = await sut.handle(new GetArchivePermissionsQuery({ _archive, schema }))
+          const actual = await sut.handle(new GetArchivePermissionsQuery({ _archive, _hash, _timestamp, schema }))
           expect(actual).toBeTruthy()
           expect(actual?.schema).toBe(setArchivePermissionsSchema)
           expect(actual?.allow).toBeDefined()
@@ -56,7 +58,7 @@ describe('GetArchivePermissionsQueryHandler', () => {
         })
         it('returns the empty permissions', async () => {
           const sut = new GetArchivePermissionsQueryHandler({ archivePermissionsRepository })
-          const actual = await sut.handle(new GetArchivePermissionsQuery({ _archive, schema }))
+          const actual = await sut.handle(new GetArchivePermissionsQuery({ _archive, _hash, _timestamp, schema }))
           expect(actual).toBeTruthy()
           expect(actual?.schema).toBe(setArchivePermissionsSchema)
           expect(actual?.allow).toBeUndefined()
