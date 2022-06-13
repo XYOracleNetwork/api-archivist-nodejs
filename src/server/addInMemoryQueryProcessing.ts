@@ -16,6 +16,8 @@ export const addInMemoryQueryProcessing = (app: Application) => {
         if (result) {
           // TODO: A better way to communicate destination archive
           result._archive = query.payload._archive
+          result._queryId = query.id
+          result._timestamp = Date.now()
 
           // Witness result and store result in archive
           const stored = await app.archivistWitnessedPayloadRepository.insert([result as XyoPayload])
