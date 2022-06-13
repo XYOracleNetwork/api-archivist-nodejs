@@ -6,6 +6,7 @@ import { prepareBoundWitnesses, PrepareBoundWitnessesResult } from './prepareBou
 const _archive = 'temp'
 const _client = 'js'
 const _observeDuration = 10
+const _source_ip = '192.168.1.20'
 const _timestamp = 1655137984429
 const _user_agent = 'Mozilla/5.0 (X11; CrOS x86_64 8172.45.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.64 Safari/537.36'
 
@@ -13,6 +14,7 @@ const boundWitnessMeta = {
   _archive,
   _client,
   _observeDuration,
+  _source_ip,
   _timestamp,
   _user_agent,
 }
@@ -20,6 +22,7 @@ const payloadMeta = {
   _archive,
   _client,
   _observeDuration,
+  _source_ip,
   _timestamp,
   _user_agent,
 }
@@ -32,6 +35,7 @@ const validateBeforeSanitization = (boundWitnesses: XyoBoundWitness[]) => {
     expect(bw._observeDuration).toBeUndefined()
     expect(bw._payloads).toBeDefined()
     expect(Array.isArray(bw._payloads)).toBeTruthy()
+    expect(bw._source_ip).toBeUndefined()
     expect(bw._timestamp).toBeTruthy()
     expect(bw._user_agent).toBeUndefined()
     expect(bw.addresses).toBeDefined()
@@ -46,6 +50,7 @@ const validateBeforeSanitization = (boundWitnesses: XyoBoundWitness[]) => {
       expect(p._client).toBe(_client)
       expect(p._hash).toBeDefined()
       expect(p._observeDuration).toBeUndefined()
+      expect(p._source_ip).toBeUndefined()
       expect(p._timestamp).toBeDefined()
       expect(p.schema).toBeDefined()
     })
@@ -59,6 +64,7 @@ const validateAfterSanitization = (actual: PrepareBoundWitnessesResult) => {
     expect(bw._hash).toBeTruthy()
     expect(bw._observeDuration).toBe(_observeDuration)
     expect(bw._payloads).toBeUndefined()
+    expect(bw._source_ip).toBe(_source_ip)
     expect(bw._timestamp).toBeTruthy()
     expect(bw._user_agent).toBeTruthy()
     expect(bw.addresses).toBeDefined()
@@ -74,6 +80,7 @@ const validateAfterSanitization = (actual: PrepareBoundWitnessesResult) => {
     expect(p._client).toBe(_client)
     expect(p._hash).toBeTruthy()
     expect(p._observeDuration).toBe(_observeDuration)
+    expect(p._source_ip).toBe(_source_ip)
     expect(p._timestamp).toBeTruthy()
     expect(p.schema).toBeTruthy()
   })
