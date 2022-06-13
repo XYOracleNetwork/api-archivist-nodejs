@@ -52,7 +52,7 @@ describe('/query/:hash', () => {
   describe('for completed query', () => {
     beforeEach(async () => {
       id = await postRequest()
-      await delay(100)
+      await delay(1000)
     })
     it('redirects to HURI', async () => {
       await getArchivist().get(`/query/${id}`).expect(StatusCodes.MOVED_TEMPORARILY)
