@@ -15,6 +15,8 @@ export class SetArchivePermissionsQueryHandler implements QueryHandler<SetArchiv
     const archive = assertEx(query.payload._archive)
     const permissions = await this.opts.archivePermissionsRepository.get(archive)
     const currentPermissions = assertEx(permissions?.[0])
-    return new XyoPayloadBuilder<SetArchivePermissionsPayload>({ schema: setArchivePermissionsSchema }).fields({ ...currentPermissions }).build()
+    return new XyoPayloadBuilder<SetArchivePermissionsPayload>({ schema: setArchivePermissionsSchema })
+      .fields({ ...currentPermissions, _queryId: query.id, _timestamp: Date.now() })
+      .build()
   }
 }

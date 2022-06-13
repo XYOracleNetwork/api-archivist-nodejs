@@ -2,7 +2,7 @@ import { XyoPayload, XyoPayloadWrapper, XyoSchemaCache } from '@xyo-network/sdk-
 // eslint-disable-next-line import/no-named-as-default
 import Ajv from 'ajv'
 
-import { GetValidator } from './GetValidator'
+import { GetValidator } from '../../model'
 
 const ajv = new Ajv()
 

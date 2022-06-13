@@ -5,6 +5,8 @@ import { debugSchema, SetArchivePermissionsPayload, SetArchivePermissionsQuery, 
 import { SetArchivePermissionsQueryHandler } from './SetArchivePermissionsQueryHandler'
 
 const _archive = 'test'
+const _hash = '1234567890'
+const _timestamp = Date.now()
 const permissions: SetArchivePermissionsPayload = {
   allow: {
     addresses: ['0x8ba1f109551bd432803012645ac136ddd64dba72'],
@@ -27,7 +29,7 @@ describe('SetArchivePermissionsQueryHandler', () => {
     })
     it('sets the permissions for the archive', async () => {
       const sut = new SetArchivePermissionsQueryHandler({ archivePermissionsRepository })
-      await sut.handle(new SetArchivePermissionsQuery({ _archive, ...permissions }))
+      await sut.handle(new SetArchivePermissionsQuery({ _archive, _hash, _timestamp, ...permissions }))
     })
   })
 })
