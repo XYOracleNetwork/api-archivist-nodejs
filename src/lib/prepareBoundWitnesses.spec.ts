@@ -88,11 +88,13 @@ const validateAfterSanitization = (actual: PrepareBoundWitnessesResult) => {
 
 describe('prepareBoundWitnesses', () => {
   describe.each([0, 1, 2])('with %d boundWitnesses', (numBoundWitnesses: number) => {
-    it.each([0, 1, 2])('with %d payloads', (numPayloadVersions: number) => {
-      const boundWitnesses = getNewBlockWithBoundWitnessesWithPayloads(numBoundWitnesses, numPayloadVersions)
-      validateBeforeSanitization(boundWitnesses)
-      const actual = prepareBoundWitnesses(boundWitnesses, boundWitnessMeta, payloadMeta)
-      validateAfterSanitization(actual)
+    describe.each([0, 1, 2])('with %d payloads', (numPayloadVersions: number) => {
+      it('prepares the boundWitness/payloads', () => {
+        const boundWitnesses = getNewBlockWithBoundWitnessesWithPayloads(numBoundWitnesses, numPayloadVersions)
+        validateBeforeSanitization(boundWitnesses)
+        const actual = prepareBoundWitnesses(boundWitnesses, boundWitnessMeta, payloadMeta)
+        validateAfterSanitization(actual)
+      })
     })
   })
 })
