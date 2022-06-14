@@ -9,6 +9,7 @@ import {
   getArchivistPayloadMongoSdk,
   getBaseMongoSdk,
   getDefaultAbstractMongoDBPayloadRepositoryOpts,
+  removeId,
 } from '../../../../lib'
 import { SetArchivePermissionsPayload, SetArchivePermissionsSchema, setArchivePermissionsSchema } from '../../../../model'
 
@@ -29,7 +30,7 @@ export class MongoDBArchivePermissionsPayloadPayloadRepository extends AbstractM
   }
   async insert(items: SetArchivePermissionsPayload[]): Promise<SetArchivePermissionsPayload[]> {
     for (let i = 0; i < items.length; i++) {
-      const item = items[i]
+      const item = removeId(items[i])
       const _timestamp = Date.now()
       const archive = item._archive
       if (archive) {
