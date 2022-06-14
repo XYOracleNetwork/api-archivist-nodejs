@@ -25,9 +25,10 @@ const handler: RequestHandler<ArchivePathParams, XyoBoundWitness[], XyoBoundWitn
   })
 
   await storeBoundWitnesses(archive, sanitized)
-  payloads.length ? await storePayloads(archive, payloads) : { insertedCount: 0 }
+  if (payloads.length) {
+    await storePayloads(archive, payloads)
+  }
   res.json(sanitized)
-
   next()
 }
 

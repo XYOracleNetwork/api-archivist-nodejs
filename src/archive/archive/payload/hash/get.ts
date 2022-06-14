@@ -7,15 +7,15 @@ import { RequestHandler } from 'express'
 import { getArchivistPayloadMongoSdk } from '../../../../lib'
 import { PayloadHashPathParams } from '../payloadHashPathParams'
 
-const getPayload = async (archive: string, hash: string) => {
+const getPayload = async (archive: string, hash: string): Promise<XyoPayload[]> => {
   const sdk = getArchivistPayloadMongoSdk(archive)
-  return await sdk.findByHash(hash)
+  return sdk.findByHash(hash)
 }
 
 const handler: RequestHandler<PayloadHashPathParams, XyoPayload[]> = async (req, res, next) => {
   const { archive, hash } = req.params
-
-  res.json((await getPayload(archive, hash)) ?? [])
+  const payload = (await getPayload(archive, hash)) ?? []
+  res.json(payload)
   next()
 }
 
