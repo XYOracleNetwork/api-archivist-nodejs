@@ -2,7 +2,7 @@ import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { Filter } from 'mongodb'
 
-import { getBaseMongoSdk, removeId } from '../../../../lib'
+import { getBaseMongoSdk } from '../../../../lib'
 import { AbstractBoundWitnessRepository } from '../../../../model'
 
 export class MongoDBBoundWitnessRepository extends AbstractBoundWitnessRepository<XyoBoundWitness, string, Filter<XyoBoundWitness>> {
