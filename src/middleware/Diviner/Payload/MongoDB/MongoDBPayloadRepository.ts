@@ -2,7 +2,7 @@ import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { Filter } from 'mongodb'
 
-import { getBaseMongoSdk } from '../../../../lib'
+import { getBaseMongoSdk, removeId } from '../../../../lib'
 import { AbstractPayloadRepository } from '../../../../model'
 
 export class MongoDBPayloadRepository extends AbstractPayloadRepository<XyoPayload, string, Filter<XyoPayload>> {
@@ -16,7 +16,7 @@ export class MongoDBPayloadRepository extends AbstractPayloadRepository<XyoPaylo
     return (await this.sdk.find({ _hash: hash })).toArray()
   }
   async insert(items: XyoPayload[]): Promise<XyoPayload[]> {
-    const result = await this.sdk.insertMany(items)
+    const result = await this.sdk.insertMany(items.map(removeId))
     if (result.insertedCount != items.length) {
       throw new Error('Error inserting Payloads')
     }

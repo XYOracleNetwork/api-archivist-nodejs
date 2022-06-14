@@ -3,7 +3,7 @@ import { XyoAccount, XyoBoundWitness, XyoBoundWitnessBuilder, XyoPayload } from 
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { Filter } from 'mongodb'
 
-import { getBaseMongoSdk } from '../../../../lib'
+import { getBaseMongoSdk, removeId } from '../../../../lib'
 import { AbstractPayloadRepository } from '../../../../model'
 
 const unique = <T>(value: T, index: number, self: T[]) => {
@@ -33,13 +33,15 @@ export class MongoDBArchivistWitnessedPayloadRepository extends AbstractPayloadR
   }
   async insert(payloads: XyoPayload[]): Promise<XyoPayload[]> {
     // Witness from archivist
+    const _timestamp = Date.now()
     const bw = new XyoBoundWitnessBuilder({ inlinePayloads: false }).payloads(payloads).build()
+    bw._timestamp = _timestamp
     const witnessResult = await this.boundWitnesses.insertOne(bw)
     if (!witnessResult.acknowledged || !witnessResult.insertedId) {
       throw new Error('Error inserting BoundWitness')
     }
     // Store payloads
-    const result = await this.payloads.insertMany(payloads)
+    const result = await this.payloads.insertMany(payloads.map(removeId))
     if (result.insertedCount != payloads.length) {
       throw new Error('Error inserting Payloads')
     }

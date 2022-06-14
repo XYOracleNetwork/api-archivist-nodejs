@@ -16,6 +16,7 @@ export class MongoDBBoundWitnessRepository extends AbstractBoundWitnessRepositor
     return (await this.sdk.find({ _hash: hash })).toArray()
   }
   async insert(items: XyoBoundWitness[]): Promise<XyoBoundWitness[]> {
+    // TODO: Remove _id if present
     const result = await this.sdk.insertMany(items)
     if (result.insertedCount != items.length) {
       throw new Error('Error inserting Payloads')
