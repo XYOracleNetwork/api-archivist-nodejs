@@ -3,7 +3,7 @@ import { XyoAccount, XyoBoundWitness, XyoBoundWitnessBuilder, XyoPayload } from 
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { Filter } from 'mongodb'
 
-import { getBaseMongoSdk } from '../../../../lib'
+import { getBaseMongoSdk, removeId } from '../../../../lib'
 import { AbstractPayloadRepository } from '../../../../model'
 
 const unique = <T>(value: T, index: number, self: T[]) => {
@@ -41,13 +41,7 @@ export class MongoDBArchivistWitnessedPayloadRepository extends AbstractPayloadR
       throw new Error('Error inserting BoundWitness')
     }
     // Store payloads
-    const result = await this.payloads.insertMany(
-      payloads.map((p) => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { _id, ...payload } = p
-        return { ...payload, _timestamp }
-      })
-    )
+    const result = await this.payloads.insertMany(payloads.map(removeId))
     if (result.insertedCount != payloads.length) {
       throw new Error('Error inserting Payloads')
     }

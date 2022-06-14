@@ -2,7 +2,7 @@ import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { Filter } from 'mongodb'
 
-import { getBaseMongoSdk } from '../../../../lib'
+import { getBaseMongoSdk, removeId } from '../../../../lib'
 import { AbstractBoundWitnessRepository } from '../../../../model'
 
 export class MongoDBBoundWitnessRepository extends AbstractBoundWitnessRepository<XyoBoundWitness, string, Filter<XyoBoundWitness>> {
@@ -16,6 +16,7 @@ export class MongoDBBoundWitnessRepository extends AbstractBoundWitnessRepositor
     return (await this.sdk.find({ _hash: hash })).toArray()
   }
   async insert(items: XyoBoundWitness[]): Promise<XyoBoundWitness[]> {
+    // TODO: Remove _id if present
     const result = await this.sdk.insertMany(items)
     if (result.insertedCount != items.length) {
       throw new Error('Error inserting Payloads')
