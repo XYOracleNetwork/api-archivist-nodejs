@@ -8,7 +8,7 @@ describe('/archive/:archive/block/payload/:hash', () => {
     archive = (await claimArchive(token)).archive
     await postBlock(knownBlock, archive)
   })
-  it('Retrieves previously posted blocks by hash', async () => {
+  it('Retrieves previously posted payloads by hash', async () => {
     const response = await getPayloadByHash(token, archive, knownPayloadHash)
     expect(response).toBeTruthy()
     expect(response.length).toBe(1)
@@ -19,7 +19,7 @@ describe('/archive/:archive/block/payload/:hash', () => {
     expect(typeof block._timestamp).toBe('number')
     expect(block._user_agent).toBe(undefined)
   })
-  it('Allows retreiving the same block if posted to multiple archives', async () => {
+  it('Allows retrieving the same payload if posted to multiple archives', async () => {
     const response = await getPayloadByHash(token, archive, knownPayloadHash)
     expect(response.length).toBe(1)
     const token2 = await getTokenForNewUser()

@@ -11,7 +11,7 @@ export const getRequestMeta = <T extends RequestWithArchive>(req: Request<T>): [
   const { archive } = req.params || 'temp'
   const _source_ip = req.ip ?? undefined
   const _timestamp = Date.now()
-  const _user_agent = getHttpHeader('User-agent', req) ?? undefined
+  const _user_agent = getHttpHeader('User-agent', req) || undefined
   const boundWitnessMetaData: XyoBoundWitnessMeta = {
     _archive: archive,
     _source_ip,
@@ -20,9 +20,7 @@ export const getRequestMeta = <T extends RequestWithArchive>(req: Request<T>): [
   }
   const payloadMetaData: XyoPayloadMeta = {
     _archive: archive,
-    _source_ip,
     _timestamp,
-    _user_agent,
   }
   return [boundWitnessMetaData, payloadMetaData]
 }
