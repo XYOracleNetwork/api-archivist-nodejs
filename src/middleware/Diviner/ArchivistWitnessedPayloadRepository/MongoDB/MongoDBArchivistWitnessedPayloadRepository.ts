@@ -33,13 +33,21 @@ export class MongoDBArchivistWitnessedPayloadRepository extends AbstractPayloadR
   }
   async insert(payloads: XyoPayload[]): Promise<XyoPayload[]> {
     // Witness from archivist
+    const _timestamp = Date.now()
     const bw = new XyoBoundWitnessBuilder({ inlinePayloads: false }).payloads(payloads).build()
+    bw._timestamp = _timestamp
     const witnessResult = await this.boundWitnesses.insertOne(bw)
     if (!witnessResult.acknowledged || !witnessResult.insertedId) {
       throw new Error('Error inserting BoundWitness')
     }
     // Store payloads
-    const result = await this.payloads.insertMany(payloads)
+    const result = await this.payloads.insertMany(
+      payloads.map((p) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { _id, ...payload } = p
+        return { ...payload, _timestamp }
+      })
+    )
     if (result.insertedCount != payloads.length) {
       throw new Error('Error inserting Payloads')
     }
