@@ -1,6 +1,6 @@
 import { XyoArchiveKey } from '@xyo-network/sdk-xyo-client-js'
 
-import { getArchivistArchiveKeysMongoSdk } from './dbSdk'
+import { getArchivistArchiveKeysMongoSdk } from '../dbSdk'
 
 export const getArchiveKeys = async (archive: string): Promise<XyoArchiveKey[]> => {
   const sdk = getArchivistArchiveKeysMongoSdk()

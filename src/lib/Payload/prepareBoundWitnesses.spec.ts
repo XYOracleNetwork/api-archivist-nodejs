@@ -1,6 +1,6 @@
 import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
 
-import { getNewBlockWithBoundWitnessesWithPayloads } from '../test'
+import { getNewBlockWithBoundWitnessesWithPayloads } from '../../test'
 import { prepareBoundWitnesses, PrepareBoundWitnessesResult } from './prepareBoundWitnesses'
 
 const _archive = 'temp'
