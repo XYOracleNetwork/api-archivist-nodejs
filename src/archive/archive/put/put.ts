@@ -21,6 +21,7 @@ const handler: RequestHandler<ArchivePathParams, XyoArchive, XyoArchive> = async
 
   const accessControl = determineArchiveAccessControl(req.body)
   try {
+    // TODO: Create permissions using new format if private archive
     const result = await req.app.archiveRepository.insert({ accessControl, archive, user: user.id })
     res.status(result.updated ? StatusCodes.OK : StatusCodes.CREATED).json(result)
     next()

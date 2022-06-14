@@ -1,7 +1,7 @@
 import { XyoBoundWitnessMeta, XyoPayloadMeta } from '@xyo-network/sdk-xyo-client-js'
 import { Request } from 'express'
 
-import { getHttpHeader } from './getHttpHeader'
+import { getHttpHeader } from '../getHttpHeader'
 
 export type RequestWithArchive = {
   archive?: string
