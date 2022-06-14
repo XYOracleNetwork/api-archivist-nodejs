@@ -20,6 +20,9 @@ export const getRequestMeta = <T extends RequestWithArchive>(req: Request<T>): [
   }
   const payloadMetaData: XyoPayloadMeta = {
     _archive: archive,
+    _source_ip,
+    _timestamp,
+    _user_agent,
   }
   return [boundWitnessMetaData, payloadMetaData]
 }
