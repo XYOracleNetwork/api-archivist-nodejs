@@ -1,32 +1,19 @@
-import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { assertEx } from '@xylabs/sdk-js'
+import { XyoBoundWitness, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
-import {
-  claimArchive,
-  getArchiveName,
-  getHash,
-  getNewBlockWithBoundWitnessesWithPayloads,
-  getNewBlockWithPayloads,
-  getTokenForNewUser,
-  postBlock,
-  setArchiveAccessControl,
-} from '../../test'
+import { claimArchive, getArchiveName, getHash, getNewBlockWithPayloads, getTokenForNewUser, postBlock, setArchiveAccessControl } from '../../test'
 
 const getPayloadPointer = () => {
   throw new Error('')
 }
 
 describe('/:hash', () => {
-  let token = ''
-  let archive = ''
-  const block = getNewBlockWithPayloads(1)
-  expect(block).toBeTruthy()
-  const boundWitnessHash = block?._hash as string
-  expect(boundWitnessHash).toBeTruthy()
-  const payload = block._payloads?.[0]
-  expect(payload).toBeTruthy()
-  const payloadHash = block.payload_hashes?.[0]
-  expect(payloadHash).toBeTruthy()
+  let token: string
+  let archive: string
+  let block: XyoBoundWitness
+  let payload: XyoPayload
+  let payloadHash: string
   beforeAll(() => {
     jest.spyOn(console, 'error').mockImplementation(() => {
       // Stop expected errors from being logged
@@ -36,6 +23,9 @@ describe('/:hash', () => {
     token = await getTokenForNewUser()
     archive = getArchiveName()
     await claimArchive(token, archive)
+    block = getNewBlockWithPayloads(1)
+    payload = assertEx(block._payloads?.[0])
+    payloadHash = assertEx(block.payload_hashes?.[0])
     const blockResponse = await postBlock(block, archive)
     expect(blockResponse.length).toBe(1)
   })
@@ -62,7 +52,7 @@ describe('/:hash', () => {
     })
   })
   describe('with private archive', () => {
-    beforeAll(async () => {
+    beforeEach(async () => {
       await setArchiveAccessControl(token, archive, { accessControl: true, archive })
       const blockResponse = await postBlock(block, archive, token)
       expect(blockResponse.length).toBe(1)
@@ -72,8 +62,8 @@ describe('/:hash', () => {
         await getHash(payloadHash, undefined, StatusCodes.NOT_FOUND)
       })
       it('with non-archive owner', async () => {
-        const token = await getTokenForNewUser()
-        await getHash(payloadHash, token, StatusCodes.NOT_FOUND)
+        const otherToken = await getTokenForNewUser()
+        await getHash(payloadHash, otherToken, StatusCodes.NOT_FOUND)
       })
     })
     it('with archive owner returns the payload', async () => {
