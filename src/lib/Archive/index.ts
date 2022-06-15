@@ -1,6 +1,5 @@
-export * from './determineArchiveAccessControl'
 export * from './getArchiveKeys'
 export * from './isArchiveOwner'
-export * from './isPublicArchive'
 export * from './isValidArchiveName'
+export * from './legacyArchiveAccessControl'
 export * from './requestCanAccessArchive'

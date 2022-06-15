@@ -3,7 +3,7 @@ import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
-import { determineArchiveAccessControl, isValidArchiveName } from '../../../lib'
+import { isPrivateArchive, isValidArchiveName } from '../../../lib'
 import { ArchivePathParams } from '../../../model'
 
 const handler: RequestHandler<ArchivePathParams, XyoArchive, XyoArchive> = async (req, res, next) => {
@@ -19,7 +19,7 @@ const handler: RequestHandler<ArchivePathParams, XyoArchive, XyoArchive> = async
     return
   }
 
-  const accessControl = determineArchiveAccessControl(req.body)
+  const accessControl = isPrivateArchive(req.body)
   try {
     // TODO: Create permissions using new format if private archive
     const result = await req.app.archiveRepository.insert({ accessControl, archive, user: user.id })
