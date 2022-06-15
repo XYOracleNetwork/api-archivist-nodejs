@@ -7,5 +7,6 @@ export const resolvePayloadPointer = async (payload: XyoPayload<PayloadPointer>)
   const { archive, schema, timestamp } = payload.reference
   // TODO: Sort order, etc.
   const payloads = await getPayloads(archive, timestamp, 1, 'desc', schema)
+  // TODO: Recursive if payload type is Payload Pointer
   return payloads ? payloads[0] : undefined
 }
