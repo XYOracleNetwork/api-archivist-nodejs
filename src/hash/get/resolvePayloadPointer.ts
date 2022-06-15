@@ -6,6 +6,6 @@ import { PayloadPointer } from './PayloadPointer'
 export const resolvePayloadPointer = async (payload: XyoPayload<PayloadPointer>): Promise<XyoPayload | undefined> => {
   const { archive, schema, timestamp } = payload.reference
   // TODO: Sort order, etc.
-  const payloads = await getPayloads(archive, timestamp, 1, 'asc', schema)
+  const payloads = await getPayloads(archive, timestamp, 1, 'desc', schema)
   return payloads ? payloads[0] : undefined
 }
