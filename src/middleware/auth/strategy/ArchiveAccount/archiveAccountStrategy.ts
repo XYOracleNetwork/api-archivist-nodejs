@@ -1,14 +1,21 @@
+import { NoReqQuery } from '@xylabs/sdk-api-express-ecs'
+import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
 import { Request } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
+import { ArchiveLocals, PostNodePathParams } from '../../../../model'
 import { verifyOperationAllowedByAddress } from './verifyOperationAllowedByAddress'
 
 export class ArchiveAccountStrategy extends Strategy {
   constructor() {
     super()
   }
-  override async authenticate(this: StrategyCreated<this, this & StrategyCreatedStatic>, req: Request, _options?: unknown) {
+  override async authenticate(
+    this: StrategyCreated<this, this & StrategyCreatedStatic>,
+    req: Request<PostNodePathParams, unknown, XyoBoundWitness[], NoReqQuery, ArchiveLocals>,
+    _options?: unknown
+  ) {
     try {
       const allowed = await verifyOperationAllowedByAddress(req)
       if (!allowed) {
