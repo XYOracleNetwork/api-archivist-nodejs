@@ -1,7 +1,7 @@
 import { Request } from 'express'
 
 import { isRequestUserOwnerOfArchive } from './isArchiveOwner'
-import { isPublicArchive } from './isPublicArchive'
+import { isPublicArchive } from './legacyArchiveAccessControl'
 
 export const requestCanAccessArchive = async (req: Request, name: string): Promise<boolean> => {
   const archive = await req.app.archiveRepository.get(name)
