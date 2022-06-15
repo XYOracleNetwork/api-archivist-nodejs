@@ -1,7 +1,9 @@
+import { NoReqQuery } from '@xylabs/sdk-api-express-ecs'
 import { XyoBoundWitness, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { Request } from 'express'
 
-import { PostNodePathParams, SetArchivePermissions, setArchivePermissionsSchema } from '../../../../model'
+import { isRequestUserOwnerOfRequestedArchive } from '../../../../lib'
+import { ArchiveLocals, PostNodePathParams, SetArchivePermissions, setArchivePermissionsSchema } from '../../../../model'
 
 const defaultArchivePermissions: SetArchivePermissions = {
   schema: setArchivePermissionsSchema,
@@ -54,7 +56,7 @@ const verifySchemaAllowed = (schema: string, permissions: SetArchivePermissions)
   return true
 }
 
-export const verifyOperationAllowedByAddress = async (req: Request<PostNodePathParams, unknown, XyoBoundWitness[]>): Promise<boolean> => {
+export const verifyOperationAllowedByAddress = async (req: Request<PostNodePathParams, unknown, XyoBoundWitness[], NoReqQuery, ArchiveLocals>): Promise<boolean> => {
   // NOTE: Communicate partial success for allowed/disallowed operations
   // Short circuit & reduce all operations to binary success/failure for now
   // Get archive permissions
@@ -62,6 +64,7 @@ export const verifyOperationAllowedByAddress = async (req: Request<PostNodePathP
   if (!archive) return false
   const permissions = await getArchivePermissions(req, archive)
   const address = req?.user?.address
+  if (address && isRequestUserOwnerOfRequestedArchive(req)) return true
   if (!verifyAccountAllowed(address, permissions)) return false
   for (let i = 0; i < req.body.length; i++) {
     const bw = req.body[i]

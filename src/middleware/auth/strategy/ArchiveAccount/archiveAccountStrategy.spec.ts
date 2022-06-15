@@ -26,139 +26,146 @@ const postCommandToArchive = (archive: string, token?: string, schema = allowedS
   return postCommandsToArchive([bw], archive, token, expectedStatus)
 }
 
+const initializeTestData = async () => {
+  const owner = await getExistingWeb3User()
+  const ownerToken = await signInWeb3User(owner)
+  const archive = (await claimArchive(ownerToken)).archive
+  const user = await getExistingWeb3User()
+  const userToken = await signInWeb3User(user)
+  return {
+    archive,
+    owner,
+    ownerToken,
+    user,
+    userToken,
+  }
+}
+
 describe('ArchiveAccountStrategy', () => {
   let user: TestWeb3User
-  let token: string
+  let ownerToken: string
+  let userToken: string
   let archive: string
   describe('with no archive permissions', () => {
     beforeAll(async () => {
-      user = await getExistingWeb3User()
-      token = await signInWeb3User(user)
-      archive = (await claimArchive(token)).archive
+      ;({ archive, ownerToken, user, userToken } = await initializeTestData())
     })
-    describe('with allowed address', () => {
-      it('allows operation by address', async () => {
-        await postCommandToArchive(archive, token)
+    describe('allows', () => {
+      it('owner', async () => {
+        await postCommandToArchive(archive, ownerToken)
       })
-    })
-    describe('with anonymous', () => {
-      it('allows operation', async () => {
+      it('address', async () => {
+        await postCommandToArchive(archive, userToken)
+      })
+      it('anonymous', async () => {
         await postCommandToArchive(archive)
       })
     })
   })
   describe('with archive permissions', () => {
-    describe('for allowing', () => {
-      describe('address', () => {
-        beforeAll(async () => {
-          user = await getExistingWeb3User()
-          token = await signInWeb3User(user)
-          archive = (await claimArchive(token)).archive
-          await setArchivePermissions(archive, token, {
-            allow: {
-              addresses: [user.address],
-            },
-            schema: setArchivePermissionsSchema,
-          })
-        })
-        describe('with allowed address', () => {
-          it('allows operation by address', async () => {
-            await postCommandToArchive(archive, token)
-          })
-        })
-        describe('with address not in allowed list', () => {
-          it('disallows operation by address', async () => {
-            const otherUser = await getExistingWeb3User()
-            const otherToken = await signInWeb3User(otherUser)
-            await postCommandToArchive(archive, otherToken, allowedSchema, StatusCodes.FORBIDDEN)
-          })
-        })
-        describe('with anonymous', () => {
-          it('disallows operation', async () => {
-            await postCommandToArchive(archive, undefined, allowedSchema, StatusCodes.FORBIDDEN)
-          })
+    describe('for allowing address', () => {
+      beforeAll(async () => {
+        ;({ archive, ownerToken, user, userToken } = await initializeTestData())
+        await setArchivePermissions(archive, ownerToken, {
+          allow: {
+            addresses: [user.address],
+          },
+          schema: setArchivePermissionsSchema,
         })
       })
-      describe('schema', () => {
-        beforeAll(async () => {
-          user = await getExistingWeb3User()
-          token = await signInWeb3User(user)
-          archive = (await claimArchive(token)).archive
-          await setArchivePermissions(archive, token, {
-            allow: {
-              schemas: [allowedSchema],
-            },
-            schema: setArchivePermissionsSchema,
-          })
+      describe('allows address of', () => {
+        it('owner', async () => {
+          await postCommandToArchive(archive, ownerToken)
         })
-        describe('with allowed schema', () => {
-          it('allows operation for schema', async () => {
-            await postCommandToArchive(archive, token)
-          })
+        it('address in list', async () => {
+          await postCommandToArchive(archive, userToken)
         })
-        describe('with schema not in allowed list', () => {
-          it('disallows operation for schema', async () => {
-            await postCommandToArchive(archive, token, otherSchema, StatusCodes.FORBIDDEN)
-          })
+      })
+      describe('disallows address of', () => {
+        it('user not in list', async () => {
+          const other = await getExistingWeb3User()
+          const otherToken = await signInWeb3User(other)
+          await postCommandToArchive(archive, otherToken, allowedSchema, StatusCodes.FORBIDDEN)
+        })
+        it('anonymous', async () => {
+          await postCommandToArchive(archive, undefined, allowedSchema, StatusCodes.FORBIDDEN)
         })
       })
     })
-    describe('for rejecting', () => {
-      describe('address', () => {
-        let otherUser: TestWeb3User
-        let otherToken: string
-        beforeAll(async () => {
-          otherUser = await getExistingWeb3User()
-          otherToken = await signInWeb3User(otherUser)
-          user = await getExistingWeb3User()
-          token = await signInWeb3User(user)
-          archive = (await claimArchive(token)).archive
-          await setArchivePermissions(archive, token, {
-            reject: {
-              addresses: [otherUser.address],
-            },
-            schema: setArchivePermissionsSchema,
-          })
-        })
-        describe('with disallowed address', () => {
-          it('disallows operation by address', async () => {
-            await postCommandToArchive(archive, otherToken, allowedSchema, StatusCodes.FORBIDDEN)
-          })
-        })
-        describe('with address not in disallowed list', () => {
-          it('allows operation by address', async () => {
-            const otherUser = await getExistingWeb3User()
-            const otherToken = await signInWeb3User(otherUser)
-            await postCommandToArchive(archive, otherToken)
-          })
-        })
-        describe('with anonymous address', () => {
-          it('disallows operation', async () => {
-            await postCommandToArchive(archive, undefined, allowedSchema, StatusCodes.FORBIDDEN)
-          })
+    describe('for allowing schema', () => {
+      beforeAll(async () => {
+        ;({ archive, ownerToken, user, userToken } = await initializeTestData())
+        await setArchivePermissions(archive, ownerToken, {
+          allow: {
+            schemas: [allowedSchema],
+          },
+          schema: setArchivePermissionsSchema,
         })
       })
-      describe('schema', () => {
-        beforeAll(async () => {
-          user = await getExistingWeb3User()
-          token = await signInWeb3User(user)
-          archive = (await claimArchive(token)).archive
-          await setArchivePermissions(archive, token, {
-            reject: {
-              schemas: [otherSchema],
-            },
-            schema: setArchivePermissionsSchema,
-          })
+      describe('allows schema', () => {
+        it('in list', async () => {
+          await postCommandToArchive(archive, ownerToken)
         })
-        describe('with disallowed schema', () => {
-          it('disallows operation for schema', async () => {
-            await postCommandToArchive(archive, token, otherSchema, StatusCodes.FORBIDDEN)
-          })
+        it('not in list for owner', async () => {
+          await postCommandToArchive(archive, ownerToken, otherSchema)
         })
-        describe('with schema not in disallowed list', () => {
-          it('allows operation for schema', async () => {
-            await postCommandToArchive(archive, token)
-          })
+      })
+      describe('disallows schema', () => {
+        it('not in list', async () => {
+          await postCommandToArchive(archive, userToken, otherSchema, StatusCodes.FORBIDDEN)
+        })
+      })
+    })
+    describe('for rejecting address', () => {
+      beforeAll(async () => {
+        ;({ archive, ownerToken, user, userToken } = await initializeTestData())
+        await setArchivePermissions(archive, ownerToken, {
+          reject: {
+            addresses: [user.address],
+          },
+          schema: setArchivePermissionsSchema,
+        })
+      })
+      describe('allows', () => {
+        it('owner', async () => {
+          await postCommandToArchive(archive, ownerToken)
+        })
+        it('address not in disallowed list', async () => {
+          const otherUser = await getExistingWeb3User()
+          const otherToken = await signInWeb3User(otherUser)
+          await postCommandToArchive(archive, otherToken)
+        })
+      })
+      describe('disallows', () => {
+        it('address in disallowed list', async () => {
+          await postCommandToArchive(archive, userToken, allowedSchema, StatusCodes.FORBIDDEN)
+        })
+        it('anonymous', async () => {
+          await postCommandToArchive(archive, undefined, allowedSchema, StatusCodes.FORBIDDEN)
+        })
+      })
+    })
+    describe('for rejecting schema', () => {
+      beforeAll(async () => {
+        ;({ archive, ownerToken, user, userToken } = await initializeTestData())
+        await setArchivePermissions(archive, ownerToken, {
+          reject: {
+            schemas: [otherSchema],
+          },
+          schema: setArchivePermissionsSchema,
+        })
+      })
+      describe('allows', () => {
+        it('owner to perform schema in disallowed list', async () => {
+          await postCommandToArchive(archive, ownerToken, otherSchema)
+        })
+        it('schema not in disallowed list', async () => {
+          await postCommandToArchive(archive, userToken)
+        })
+      })
+      describe('disallows', () => {
+        it('schema in disallowed list', async () => {
+          await postCommandToArchive(archive, userToken, otherSchema, StatusCodes.FORBIDDEN)
         })
       })
     })

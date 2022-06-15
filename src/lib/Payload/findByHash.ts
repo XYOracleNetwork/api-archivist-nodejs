@@ -1,6 +1,6 @@
 import { XyoBoundWitness, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 
-import { getArchivistAllBoundWitnessesMongoSdk, getArchivistAllPayloadMongoSdk, getArchivistBoundWitnessesMongoSdk, getArchivistPayloadMongoSdk } from './dbSdk'
+import { getArchivistAllBoundWitnessesMongoSdk, getArchivistAllPayloadMongoSdk, getArchivistBoundWitnessesMongoSdk, getArchivistPayloadMongoSdk } from '../dbSdk'
 
 export const findOnePayloadByHash = (hash: string, archive?: string): Promise<XyoPayload | null> => {
   const sdk = archive ? getArchivistPayloadMongoSdk(archive) : getArchivistAllPayloadMongoSdk()
