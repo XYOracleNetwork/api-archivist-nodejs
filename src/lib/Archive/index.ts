@@ -1,3 +1,4 @@
+export * from './archiveAccessControl'
 export * from './getArchiveKeys'
 export * from './isArchiveOwner'
 export * from './isValidArchiveName'
