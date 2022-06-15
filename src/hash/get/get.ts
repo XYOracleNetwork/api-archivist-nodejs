@@ -1,27 +1,13 @@
 import { asyncHandler, NoReqBody, NoReqQuery } from '@xylabs/sdk-api-express-ecs'
 import { deepOmitUnderscoreFields, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
-import { Request, RequestHandler } from 'express'
+import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
-import { findByHash, requestCanAccessArchive } from '../../lib'
 import { setRawResponseFormat } from '../../middleware'
+import { getBlockForRequest } from './getBlockForRequest'
+import { HashPathParams } from './HashPathParams'
 
 const reservedHashes = ['archive', 'schema', 'doc', 'domain']
-
-export type HashPathParams = {
-  hash: string
-}
-
-const getBlockForRequest = async (req: Request, hash: string): Promise<XyoPayload | undefined> => {
-  for (const block of await findByHash(hash)) {
-    if (!block?._archive) {
-      continue
-    }
-    if (await requestCanAccessArchive(req, block._archive)) {
-      return block
-    }
-  }
-}
 
 const handler: RequestHandler<HashPathParams, XyoPayload, NoReqBody, NoReqQuery> = async (req, res, next) => {
   if (res.headersSent) {
