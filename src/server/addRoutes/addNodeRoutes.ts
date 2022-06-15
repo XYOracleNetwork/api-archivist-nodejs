@@ -1,7 +1,7 @@
 import { Express } from 'express'
 
 import { getByHash } from '../../hash'
-import { allowAnonymous, requireAccountOperationAccess } from '../../middleware'
+import { allowAnonymous, archiveLocals, requireAccountOperationAccess } from '../../middleware'
 import { postNode } from '../../post'
 import { getQuery } from '../../query'
 
@@ -23,7 +23,8 @@ export const addNodeRoutes = (app: Express) => {
   )
 
   app.post(
-    '/:archive?',
+    '/:archive',
+    archiveLocals,
     requireAccountOperationAccess,
     postNode
     /* #swagger.tags = ['Node'] */
