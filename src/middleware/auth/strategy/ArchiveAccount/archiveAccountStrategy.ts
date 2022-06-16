@@ -4,7 +4,7 @@ import { Request } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
-import { ArchiveLocals, PostNodePathParams } from '../../../../model'
+import { ArchiveLocals, ArchivePathParams } from '../../../../model'
 import { verifyOperationAllowedByAddress } from './verifyOperationAllowedByAddress'
 
 export class ArchiveAccountStrategy extends Strategy {
@@ -13,7 +13,7 @@ export class ArchiveAccountStrategy extends Strategy {
   }
   override async authenticate(
     this: StrategyCreated<this, this & StrategyCreatedStatic>,
-    req: Request<PostNodePathParams, unknown, XyoBoundWitness[], NoReqQuery, ArchiveLocals>,
+    req: Request<ArchivePathParams, unknown, XyoBoundWitness[], NoReqQuery, ArchiveLocals>,
     _options?: unknown
   ) {
     try {

@@ -1,5 +1,4 @@
-import { ArchivePermissionsRepository } from '../../middleware'
-import { SetArchivePermissionsSchema, setArchivePermissionsSchema } from '../../model'
+import { ArchivePermissionsRepository, SetArchivePermissionsSchema, setArchivePermissionsSchema } from '../../model'
 
 const getPrivatePermissions = (archive: string) => {
   return {

@@ -11,14 +11,7 @@ export const getBlockForRequest = async (req: Request, hash: string): Promise<Xy
       continue
     }
     if (await requestCanAccessArchive(req, block._archive)) {
-      if (block.schema === payloadPointerSchema) {
-        const pointer = block as XyoPayload<PayloadPointer>
-        if (await requestCanAccessArchive(req, pointer.reference.archive)) {
-          return resolvePayloadPointer(pointer)
-        }
-      } else {
-        return block
-      }
+      return block.schema === payloadPointerSchema ? await resolvePayloadPointer(req, block as XyoPayload<PayloadPointer>) : block
     }
   }
 }

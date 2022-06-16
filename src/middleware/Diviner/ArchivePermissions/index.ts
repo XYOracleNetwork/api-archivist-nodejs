@@ -1,4 +1,4 @@
-import { ArchivePermissionsRepository } from './ArchivePermissionsRepository'
+import { ArchivePermissionsRepository } from '../../../model'
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -9,5 +9,5 @@ declare global {
   }
 }
 
-export * from './ArchivePermissionsRepository'
+export * from '../../../model'
 export * from './MongoDB'
