@@ -1,7 +1,7 @@
 import { NoReqBody, NoReqQuery, NoResBody } from '@xylabs/sdk-api-express-ecs'
 import { Request } from 'express'
 
-import { isPrivateArchive } from '../../../../lib'
+import { isLegacyPrivateArchive } from '../../../../lib'
 import { ArchiveLocals, ArchivePathParams } from '../../../../model'
 
 export const isPublicArchive = (req: Request<ArchivePathParams, NoResBody, NoReqBody, NoReqQuery, ArchiveLocals>): boolean => {
@@ -12,7 +12,7 @@ export const isPublicArchive = (req: Request<ArchivePathParams, NoResBody, NoReq
   if (!record) return false
 
   // If the archive exists, determine if it has any access controls
-  const accessControl = isPrivateArchive(record)
+  const accessControl = isLegacyPrivateArchive(record)
 
   // If there are any access controls it's not a public archive
   return !accessControl
