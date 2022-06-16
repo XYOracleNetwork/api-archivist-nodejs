@@ -4,7 +4,7 @@ import { Filter, SortDirection } from 'mongodb'
 import { getArchivistAllPayloadMongoSdk } from '../dbSdk'
 
 // TODO: Refactor to inject payload repository
-export const findPayload = async (archive: string[], timestamp: number = Date.now(), order: SortDirection = 'desc', schema?: string[]): Promise<XyoPayload | undefined> => {
+export const findPayload = async (archive: string[], schema: string[], timestamp: number, order: SortDirection): Promise<XyoPayload | undefined> => {
   const sdk = getArchivistAllPayloadMongoSdk()
   const _timestamp = order === 'desc' ? { $lt: timestamp } : { $gt: timestamp }
   const query: Filter<XyoPayload> = { _archive: { $in: archive }, _timestamp }
