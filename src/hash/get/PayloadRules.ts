@@ -1,4 +1,4 @@
-import { exists } from '@xylabs/sdk-js'
+import { assertEx, exists } from '@xylabs/sdk-js'
 
 import { SortDirection } from '../../model'
 
@@ -43,6 +43,8 @@ export const combineRules = (rules: PayloadRule[][]): PayloadSearchCriteria => {
     .map((r) => (r as PayloadTimestampDirectionRule)?.timestamp)
     .filter(exists)
   const timestamp: number = foundTimestamp.length ? foundTimestamp[0] : Date.now()
+  assertEx(archive.length, 'At least one archive must be supplied')
+  assertEx(schema.length, 'At least one schema must be supplied')
   return {
     archive,
     direction,
