@@ -23,6 +23,7 @@ export interface PayloadSearchCriteria {
   timestamp: number
 }
 
+// TODO: AND first dimension, OR 2nd dimension of array
 export const combineRules = (rules: PayloadRule[][]): PayloadSearchCriteria => {
   const archive = rules
     .flatMap((r) => r)
