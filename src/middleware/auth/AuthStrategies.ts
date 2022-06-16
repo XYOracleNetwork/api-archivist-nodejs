@@ -2,6 +2,7 @@ import { RequestHandler } from 'express'
 import passport from 'passport'
 
 import {
+  adminApiKeyStrategy,
   allowUnauthenticatedStrategyName,
   archiveAccessControlStrategy,
   archiveAccountStrategy,
@@ -16,6 +17,11 @@ import {
  * Require an Archive API Key in the appropriate request header
  */
 export const requireArchiveApiKey: RequestHandler = archiveApiKeyStrategy
+
+/**
+ * Require an Archive API Key in the appropriate request header
+ */
+export const requireAdminApiKey: RequestHandler = adminApiKeyStrategy
 
 /**
  * Require logged-in user as evidenced by a JWT in the request Auth header
