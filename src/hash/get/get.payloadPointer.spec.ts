@@ -2,11 +2,16 @@ import { assertEx } from '@xylabs/sdk-js'
 import { XyoBoundWitness, XyoPayload, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
+import { SortDirection } from '../../model'
 import { claimArchive, getArchiveName, getHash, getNewBlock, getNewBlockWithPayloads, getTokenForNewUser, postBlock, setArchiveAccessControl } from '../../test'
 import { PayloadPointerBody, payloadPointerSchema } from './PayloadPointer'
+import { PayloadArchiveRule, PayloadSchemaRule, PayloadTimestampDirectionRule } from './PayloadRules'
 
-const getPayloadPointer = (archive: string, schema: string, timestamp = Date.now()): XyoPayload => {
-  const fields: PayloadPointerBody = { reference: { archive, schema, timestamp }, schema }
+const getPayloadPointer = (archive: string, schema: string, timestamp = Date.now(), direction: SortDirection = 'desc'): XyoPayload => {
+  const archiveRule: PayloadArchiveRule = { archive }
+  const schemaRule: PayloadSchemaRule = { schema }
+  const timestampRule: PayloadTimestampDirectionRule = { direction, timestamp }
+  const fields: PayloadPointerBody = { reference: [[archiveRule], [schemaRule], [timestampRule]], schema: payloadPointerSchema }
   return new XyoPayloadBuilder<PayloadPointerBody>({ schema: payloadPointerSchema }).fields(fields).build()
 }
 

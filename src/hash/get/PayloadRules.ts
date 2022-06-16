@@ -10,7 +10,7 @@ const isPayloadArchiveRule = (rule: PayloadRule): rule is PayloadArchiveRule => 
 }
 
 export interface PayloadTimestampDirectionRule {
-  direction: SortDirection
+  direction?: SortDirection
   timestamp: number
 }
 const isPayloadTimestampDirectionRule = (rule: PayloadRule): rule is PayloadTimestampDirectionRule => {
@@ -54,7 +54,7 @@ export const combineRules = (rules: PayloadRule[][]): PayloadSearchCriteria => {
     .filter(exists)
   assertEx(directionTimestamp.length < 2, 'Must not supply more than 1 direction/timestamp rule')
 
-  const direction: SortDirection = directionTimestamp.length ? directionTimestamp[0]?.direction : 'desc'
+  const direction: SortDirection = directionTimestamp[0]?.direction || 'desc'
   const timestamp: number = directionTimestamp.length ? directionTimestamp[0]?.timestamp : Date.now()
 
   return {
