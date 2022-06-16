@@ -5,7 +5,7 @@ import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
  * @param archive The archive record
  * @returns True if there's no access controls, false otherwise
  */
-export const isLegacyPublicArchive = (archive?: XyoArchive | null): boolean => {
+export const isLegacyPublicArchive = (archive?: XyoArchive | null | undefined): boolean => {
   return !isLegacyPrivateArchive(archive)
 }
 
@@ -14,7 +14,7 @@ export const isLegacyPublicArchive = (archive?: XyoArchive | null): boolean => {
  * @param archive The archive record
  * @returns True if there's access controls, false otherwise
  */
-export const isLegacyPrivateArchive = (archive?: XyoArchive | null): boolean => {
+export const isLegacyPrivateArchive = (archive?: XyoArchive | null | undefined): boolean => {
   if (!archive) {
     return true
   }
