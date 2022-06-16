@@ -41,5 +41,34 @@ describe('PayloadRules', () => {
         })
       })
     })
+    describe('with PayloadArchiveRule rules', () => {
+      it('should combine multiple rules', () => {
+        const rules = [[{ archive: 'foo' }, { archive: 'bar' }], [{ schema: 'network.xyo.debug' }]]
+        const actual = combineRules(rules)
+        expect(actual.archive.sort()).toEqual(['bar', 'foo'])
+      })
+    })
+    describe('with PayloadSchemaRule rules', () => {
+      it('should combine multiple rules', () => {
+        const rules = [[{ archive: 'foo' }], [{ schema: 'network.xyo.test' }, { schema: 'network.xyo.debug' }]]
+        const actual = combineRules(rules)
+        expect(actual.schema.sort()).toEqual(['network.xyo.debug', 'network.xyo.test'])
+      })
+    })
+    describe('with PayloadTimestampDirectionRule rules', () => {
+      it('should only allow one rule', () => {
+        const rules: PayloadRule[][] = [
+          [{ archive: 'foo' }],
+          [{ schema: 'network.xyo.debug' }],
+          [
+            { direction: 'desc', timestamp: Date.now() },
+            { direction: 'asc', timestamp: Date.now() },
+          ],
+        ]
+        expect(() => {
+          combineRules(rules)
+        }).toThrow()
+      })
+    })
   })
 })
