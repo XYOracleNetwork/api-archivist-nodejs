@@ -20,7 +20,7 @@ const verifyAccountAllowed = (address: string | undefined, permissions: SetArchi
 
   // If there's address restrictions on the archive and this
   // is an anonymous request
-  if ((allowedAddresses?.length || disallowedAddresses?.length) && !address) return false
+  if ((allowedAddresses || disallowedAddresses) && !address) return false
 
   // If there's rejected addresses
   if (disallowedAddresses) {
@@ -39,7 +39,7 @@ const verifySchemaAllowed = (schema: string, permissions: SetArchivePermissions)
   const disallowedSchemas = permissions?.reject?.schemas
 
   // If there's no schema restrictions on the archive
-  if (!allowedSchemas?.length && !disallowedSchemas?.length) return true
+  if (!allowedSchemas && !disallowedSchemas) return true
 
   // TODO: Support GLOB patterns for allowed/disallowed schemas
 
