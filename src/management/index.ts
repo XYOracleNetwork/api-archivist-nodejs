@@ -1,1 +1,1 @@
-export * from './migrateLegacyPermissions'
+export * from './migrate'

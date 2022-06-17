@@ -4,7 +4,7 @@ import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
-import { getBaseMongoSdk } from '../../../lib'
+import { getBaseMongoSdk } from '../../../../lib'
 import { migrateLegacyArchives } from '../migrateLegacyArchives'
 
 export interface MigrateQueryParams extends NoReqQuery {
@@ -33,4 +33,4 @@ const handler: RequestHandler<NoReqParams, NoResBody, NoReqBody, MigrateQueryPar
   next()
 }
 
-export const postMigrateLegacyArchivesPermissions = asyncHandler(handler)
+export const postMigratePermissionsArchives = asyncHandler(handler)

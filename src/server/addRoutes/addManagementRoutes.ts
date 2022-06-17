@@ -1,21 +1,21 @@
 import { Express } from 'express'
 
-import { postMigrateLegacyArchivePermissions, postMigrateLegacyArchivesPermissions } from '../../management'
+import { postMigratePermissionsArchive, postMigratePermissionsArchives } from '../../management'
 import { requireAdminApiKey } from '../../middleware'
 
 export const addManagementRoutes = (app: Express) => {
   app.post(
-    '/management/migrateLegacyArchivePermissions',
+    '/management/migrate/permissions/archives',
     requireAdminApiKey,
-    postMigrateLegacyArchivesPermissions
+    postMigratePermissionsArchives
     /* #swagger.tags = ['Management'] */
     /* #swagger.ignore = true */
     /* #swagger.summary = 'Migrate multiple archives from using legacy permissions objects to new Payload-based permissions' */
   )
   app.post(
-    '/management/migrateLegacyArchivePermissions/:archive',
+    '/management/migrate/permissions/archives/:archive',
     requireAdminApiKey,
-    postMigrateLegacyArchivePermissions
+    postMigratePermissionsArchive
     /* #swagger.tags = ['Management'] */
     /* #swagger.ignore = true */
     /* #swagger.summary = 'Migrate a single archive from using legacy permissions to new Payload-based permissions' */
