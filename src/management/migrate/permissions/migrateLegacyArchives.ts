@@ -1,7 +1,7 @@
 import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 
-import { isLegacyPrivateArchive } from '../../lib'
-import { ArchivePermissionsRepository, SetArchivePermissions, setArchivePermissionsSchema } from '../../model'
+import { isLegacyPrivateArchive } from '../../../lib'
+import { ArchivePermissionsRepository, SetArchivePermissions, setArchivePermissionsSchema } from '../../../model'
 
 const schema = setArchivePermissionsSchema
 const publicArchivePermissions: SetArchivePermissions = {
