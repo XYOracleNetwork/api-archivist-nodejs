@@ -20,7 +20,7 @@ export const migrateLegacyArchives = async (repository: ArchivePermissionsReposi
   const migrations = archives.map((archive) => {
     // create a new public/private archive record for the legacy archive
     const permissions: SetArchivePermissions = isLegacyPrivateArchive(archive) ? privateArchivePermissions : publicArchivePermissions
-    return repository.insert([permissions])
+    return repository.insert([{ ...permissions, _archive: archive.archive } as SetArchivePermissions])
   })
   const results = await Promise.all(migrations)
   return results.map((result) => result?.[0])
