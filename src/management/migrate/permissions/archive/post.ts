@@ -17,7 +17,8 @@ const handler: RequestHandler<ArchivePathParams> = async (req, res, next) => {
   const { archivePermissionsRepository } = req.app
   const entity = await getArchive(archive)
   if (entity) {
-    const migrated = await migrateLegacyArchives(archivePermissionsRepository, [entity])
+    const result = await migrateLegacyArchives(archivePermissionsRepository, [entity])
+    const migrated = result?.[0]
     res.status(StatusCodes.OK).json({ archive: entity, migrated })
   } else {
     res.status(StatusCodes.NOT_FOUND)
