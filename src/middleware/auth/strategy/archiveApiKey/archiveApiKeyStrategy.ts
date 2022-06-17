@@ -1,7 +1,8 @@
+import { getHttpHeader } from '@xylabs/sdk-api-express-ecs'
 import { Request } from 'express'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
-import { getArchiveKeys, getHttpHeader } from '../../../../lib'
+import { getArchiveKeys } from '../../../../lib'
 
 export class ArchiveApiKeyStrategy extends Strategy {
   constructor(public readonly apiKeyHeader = 'x-api-key') {

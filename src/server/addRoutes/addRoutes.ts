@@ -4,6 +4,7 @@ import { configureAuth } from '../../middleware'
 import { addArchiveRoutes } from './addArchiveRoutes'
 import { addBlockRoutes } from './addBlockRoutes'
 import { addDomainRoutes } from './addDomainRoutes'
+import { addManagementRoutes } from './addManagementRoutes'
 import { addNodeRoutes } from './addNodeRoutes'
 import { addPayloadRoutes } from './addPayloadRoutes'
 import { addPayloadSchemaRoutes } from './addPayloadSchemaRoutes'
@@ -14,6 +15,7 @@ export const addRoutes = (app: Express): Express => {
   addBlockRoutes(app)
   addPayloadRoutes(app)
   addPayloadSchemaRoutes(app)
+  addManagementRoutes(app)
   addSchemaRoutes(app)
   addDomainRoutes(app)
 
