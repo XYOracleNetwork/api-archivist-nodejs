@@ -15,12 +15,11 @@ const getCount = async (archive: string) => {
   return await sdk.fetchCount()
 }
 
-const handler: RequestHandler<ArchivePathParams, GetArchiveBlockStats> = async (req, res, next) => {
+const handler: RequestHandler<ArchivePathParams, GetArchiveBlockStats> = async (req, res) => {
   const { archive } = req.params
   res.json({
     count: await getCount(archive),
   })
-  next()
 }
 
 export const getArchiveBlockStats = asyncHandler(handler)

@@ -11,7 +11,6 @@ const handler: RequestHandler<ArchivePathParams, XyoArchive, NoReqBody, NoReqQue
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
   } else {
     res.json(archive)
-    next()
   }
 }
 

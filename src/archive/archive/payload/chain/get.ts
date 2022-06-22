@@ -20,14 +20,13 @@ const getPayloads = async (archive: string, hash: string, payloads: WithId<XyoPa
   }
 }
 
-const handler: RequestHandler<PayloadChainPathParams, XyoPayload[]> = async (req, res, next) => {
+const handler: RequestHandler<PayloadChainPathParams, XyoPayload[]> = async (req, res) => {
   const { archive, limit, hash } = req.params
   const limitNumber = tryParseInt(limit) ?? 20
   assertEx(limitNumber > 0 && limitNumber <= 100, 'limit must be between 1 and 100')
   const payloads: WithId<XyoPayload>[] = []
   await getPayloads(archive, hash, payloads, limitNumber)
   res.json(payloads)
-  next()
 }
 
 export const getArchivePayloadChain = asyncHandler(handler)

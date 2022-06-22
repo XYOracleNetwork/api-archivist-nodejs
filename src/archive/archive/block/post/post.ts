@@ -9,7 +9,7 @@ import { ArchivePathParams } from '../../../../model'
 import { storeBoundWitnesses } from './storeBoundWitnesses'
 import { storePayloads } from './storePayloads'
 
-const handler: RequestHandler<ArchivePathParams, XyoBoundWitness[], XyoBoundWitness | XyoBoundWitness[]> = async (req, res, next) => {
+const handler: RequestHandler<ArchivePathParams, XyoBoundWitness[], XyoBoundWitness | XyoBoundWitness[]> = async (req, res) => {
   const { archive } = req.params || 'temp'
   const [boundWitnessMeta, payloadMeta] = getRequestMeta(req)
 
@@ -29,7 +29,6 @@ const handler: RequestHandler<ArchivePathParams, XyoBoundWitness[], XyoBoundWitn
     await storePayloads(archive, payloads)
   }
   res.json(sanitized)
-  next()
 }
 
 export const postArchiveBlock = asyncHandler(handler)

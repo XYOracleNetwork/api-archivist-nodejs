@@ -12,7 +12,6 @@ const handler: RequestHandler<DomainPathParams, XyoDomainPayload> = async (req, 
   const config = await XyoDomainPayloadWrapper.discover(domain)
   if (config) {
     res.json(config.payload)
-    next()
   } else {
     next({ message: 'Config not found', statusCode: StatusCodes.NOT_FOUND })
   }

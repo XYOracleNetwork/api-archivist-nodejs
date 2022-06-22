@@ -18,10 +18,9 @@ export type GetArchiveBlockHashResponse = {
   _user_agent?: string | null
 }[]
 
-const handler: RequestHandler<BlockHashPathParams, GetArchiveBlockHashResponse> = async (req, res, next) => {
+const handler: RequestHandler<BlockHashPathParams, GetArchiveBlockHashResponse> = async (req, res) => {
   const { archive, hash } = req.params
   res.json(scrubBoundWitnesses(await getBoundWitness(archive, hash)) ?? [])
-  next()
 }
 
 export const getArchiveBlockHash = asyncHandler(handler)

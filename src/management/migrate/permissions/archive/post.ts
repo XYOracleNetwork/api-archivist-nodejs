@@ -1,7 +1,7 @@
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
 import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
-import { StatusCodes } from 'http-status-codes'
+import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import { getBaseMongoSdk } from '../../../../lib'
 import { ArchivePathParams } from '../../../../model'
@@ -21,9 +21,8 @@ const handler: RequestHandler<ArchivePathParams> = async (req, res, next) => {
     const migrated = result?.[0]
     res.status(StatusCodes.OK).json({ archive: entity, migrated })
   } else {
-    res.status(StatusCodes.NOT_FOUND)
+    next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
   }
-  next()
 }
 
 export const postMigratePermissionsArchive = asyncHandler(handler)

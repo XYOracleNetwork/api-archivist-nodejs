@@ -25,7 +25,7 @@ export const getApp = (): Express => {
   }*/
 
   app.use(cors())
-  app.use(compression({ filter: () => false }))
+  app.use(compression())
 
   addDependencies(app)
   addMiddleware(app)

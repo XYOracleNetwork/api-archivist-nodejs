@@ -23,7 +23,6 @@ const handler: RequestHandler<ArchivePathParams, XyoPayload[], NoReqBody, GetArc
   const payloads = await getPayloads(archive.archive, timestampNumber, limitNumber, parsedOrder, schema)
   if (payloads) {
     res.json(payloads)
-    next()
   } else {
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
   }
