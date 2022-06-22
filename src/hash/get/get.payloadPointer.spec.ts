@@ -1,5 +1,5 @@
 import { assertEx } from '@xylabs/sdk-js'
-import { XyoBoundWitness, XyoPayload, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
+import { XyoAccount, XyoBoundWitness, XyoBoundWitnessBuilder, XyoPayload, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import { SortDirection } from '../../model'
@@ -88,5 +88,16 @@ describe('/:hash', () => {
     it(`returns ${ReasonPhrases.NOT_FOUND}`, async () => {
       await getHash('non_existent_hash', undefined, StatusCodes.NOT_FOUND)
     })
+  })
+})
+describe.skip('Generation of automation payload pointers', () => {
+  const schemas = ['network.xyo.crypto.market.coingecko', 'network.xyo.crypto.market.uniswap']
+  it.each(schemas)('Generates automation witness payload for %s schema', (schema) => {
+    const archiveRule: PayloadArchiveRule = { archive: 'temp' }
+    const schemaRule: PayloadSchemaRule = { schema }
+    const fields: PayloadPointerBody = { reference: [[archiveRule], [schemaRule]], schema: payloadPointerSchema }
+    const payload = new XyoPayloadBuilder<PayloadPointerBody>({ schema: payloadPointerSchema }).fields(fields).build()
+    const bw = new XyoBoundWitnessBuilder({ inlinePayloads: true }).witness(XyoAccount.random()).payload(payload).build()
+    console.log(JSON.stringify(bw))
   })
 })
