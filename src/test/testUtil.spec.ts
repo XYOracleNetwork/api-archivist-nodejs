@@ -307,7 +307,6 @@ export const postCommandsToArchive = async (
   const response = token
     ? await request.post(path).send(commands).auth(token, { type: 'bearer' }).expect(expectedStatus)
     : await request.post(path).send(commands).expect(expectedStatus)
-  console.log(`postCommandsToArchive: ${JSON.stringify(response.body.data, null, 2)}`)
   return response.body.data
 }
 
