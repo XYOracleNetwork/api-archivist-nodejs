@@ -30,7 +30,6 @@ const handler: RequestHandler<ArchivePathParams, XyoArchive, XyoArchive> = async
       accessControl ? await setArchiveAccessPublic(req.app.archivePermissionsRepository, archive) : await setArchiveAccessPrivate(req.app.archivePermissionsRepository, archive)
     }
     res.status(result.updated ? StatusCodes.OK : StatusCodes.CREATED).json(result)
-    next()
   } catch (error) {
     next({ message: ReasonPhrases.FORBIDDEN, statusCode: StatusCodes.FORBIDDEN })
   }

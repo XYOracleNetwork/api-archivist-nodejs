@@ -12,13 +12,12 @@ const getBoundWitness = async (archive: string, limit: number) => {
   return await sdk.findRecent(limit)
 }
 
-const handler: RequestHandler<BlockRecentPathParams> = async (req, res, next) => {
+const handler: RequestHandler<BlockRecentPathParams> = async (req, res) => {
   const { archive, limit } = req.params
   const limitNumber = tryParseInt(limit) ?? 20
   assertEx(limitNumber > 0 && limitNumber <= 100, 'limit must be between 1 and 100')
   const bw = await getBoundWitness(archive, limitNumber)
   res.json(bw?.map(({ _payloads, ...clean }) => clean))
-  next()
 }
 
 export const getArchiveBlockRecent = asyncHandler(handler)

@@ -24,14 +24,13 @@ const getBlocks = async (archive: string, hash: string, address: string, blocks:
   }
 }
 
-const handler: RequestHandler<BlockChainPathParams, XyoBoundWitness[]> = async (req, res, next) => {
+const handler: RequestHandler<BlockChainPathParams, XyoBoundWitness[]> = async (req, res) => {
   const { archive, address, limit, hash } = req.params
   const limitNumber = tryParseInt(limit) ?? 20
   assertEx(limitNumber > 0 && limitNumber <= 100, 'limit must be between 1 and 100')
   const blocks: WithId<XyoBoundWitness>[] = []
   await getBlocks(archive, hash, address, blocks, limitNumber)
   res.json(blocks)
-  next()
 }
 
 export const getArchiveBlockChain = asyncHandler(handler)

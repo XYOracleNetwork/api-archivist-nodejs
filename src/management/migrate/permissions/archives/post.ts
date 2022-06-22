@@ -20,7 +20,7 @@ const getArchives = async (limit: number, offset: number): Promise<XyoArchive[]>
   return (await sdk.find({})).sort({ _id: -1 }).skip(offset).limit(limit).toArray()
 }
 
-const handler: RequestHandler<NoReqParams, NoResBody, NoReqBody, MigrateQueryParams> = async (req, res, next) => {
+const handler: RequestHandler<NoReqParams, NoResBody, NoReqBody, MigrateQueryParams> = async (req, res) => {
   const { limit, offset } = req.query
   const { archivePermissionsRepository } = req.app
   const parsedLimit = tryParseInt(limit) || defaultLimit
@@ -30,7 +30,6 @@ const handler: RequestHandler<NoReqParams, NoResBody, NoReqBody, MigrateQueryPar
   const migrated = await migrateLegacyArchives(archivePermissionsRepository, archives)
   const migratedCount = migrated.filter(exists).length
   res.status(StatusCodes.OK).json({ archiveCount, migratedCount })
-  next()
 }
 
 export const postMigratePermissionsArchives = asyncHandler(handler)

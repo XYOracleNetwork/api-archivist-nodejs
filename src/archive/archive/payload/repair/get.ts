@@ -35,7 +35,6 @@ const handler: RequestHandler<PayloadHashPathParams, PayloadRepairHashResponse> 
   if (payload) {
     const result: UpdateResult = (await updatePayload(archive, hash, payload)) as UpdateResult
     res.json(result)
-    next()
   } else {
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
   }

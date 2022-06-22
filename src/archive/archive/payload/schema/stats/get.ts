@@ -8,11 +8,10 @@ export interface ArchiveSchemaStatsResponse {
   counts: Record<string, number>
 }
 
-const handler: RequestHandler<ArchivePathParams, ArchiveSchemaStatsResponse> = async (req, res, next) => {
+const handler: RequestHandler<ArchivePathParams, ArchiveSchemaStatsResponse> = async (req, res) => {
   const { archive } = req.params
   const counts = await getPayloadSchemaCountsInArchive(archive)
   res.json({ counts })
-  next()
 }
 
 export const getArchivePayloadSchemaStats = asyncHandler(handler)

@@ -35,7 +35,6 @@ const handler = async (req: Request<NoReqParams, UserCreationResponse, UserToCre
     message,
     user,
   })
-  next()
 }
 
 export const postUserSignup = asyncHandler(handler)

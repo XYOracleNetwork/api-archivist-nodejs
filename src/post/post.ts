@@ -5,13 +5,12 @@ import { formatRequest } from './formatRequest'
 import { PostNodeRequestHandler } from './PostNodeRequestHandler'
 import { queueQueries } from './queueQueries'
 
-const handler: PostNodeRequestHandler = async (req, res, next) => {
+const handler: PostNodeRequestHandler = async (req, res) => {
   const boundWitnesses = formatRequest(req)
   // TODO: Validate protocol only here: new XyoBoundWitnessWrapper(bw).validator.all()
   const queued = queueQueries(boundWitnesses, req)
   const result: string[][] = await Promise.all(queued.map(async (x) => await Promise.all(x)))
   res.status(StatusCodes.ACCEPTED).json(result)
-  next()
 }
 
 export const postNode = asyncHandler(handler)

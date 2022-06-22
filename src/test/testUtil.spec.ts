@@ -307,11 +307,13 @@ export const postCommandsToArchive = async (
   const response = token
     ? await request.post(path).send(commands).auth(token, { type: 'bearer' }).expect(expectedStatus)
     : await request.post(path).send(commands).expect(expectedStatus)
+  console.log(`postCommandsToArchive: ${JSON.stringify(response.body.data, null, 2)}`)
   return response.body.data
 }
 
 export const queryCommandResult = async (id: string, token?: string, expectedStatus: StatusCodes = StatusCodes.ACCEPTED): Promise<XyoPayload> => {
   const path = `/query/${id}`
+  console.log(`queryCommandResult: ${path}`)
   const response = token ? await request.get(path).redirects(1).auth(token, { type: 'bearer' }).expect(expectedStatus) : await request.get(path).redirects(1).expect(expectedStatus)
   // Redirects to raw HURI response so no .data
   return response.body

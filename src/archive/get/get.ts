@@ -11,7 +11,7 @@ const getArchivesDistinctByName = (archives: XyoArchive[]): XyoArchive[] => {
   return [...new Map(archives.map((x) => [x.archive, x])).values()]
 }
 
-const handler: RequestHandler<NoReqParams, XyoArchive[]> = async (req, res, next) => {
+const handler: RequestHandler<NoReqParams, XyoArchive[]> = async (req, res) => {
   const id = req?.user?.id
   if (!id) {
     res.json(defaultPublicArchives)
@@ -19,7 +19,6 @@ const handler: RequestHandler<NoReqParams, XyoArchive[]> = async (req, res, next
     const userArchives = (await req.app.archiveRepository.find({ user: id })) as XyoArchive[]
     res.json(getArchivesDistinctByName([...defaultPublicArchives, ...userArchives]))
   }
-  next()
 }
 
 export const getArchives = asyncHandler(handler)

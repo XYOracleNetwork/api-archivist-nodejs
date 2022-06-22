@@ -12,14 +12,13 @@ const getRecentPayloadsOfSchemaForArchive = async (archive: string, schema: stri
   return (await sdk.find({ _archive: archive, schema })).sort({ timestamp: -1 }).limit(limit).toArray()
 }
 
-const handler: RequestHandler<ArchiveSchemaPayloadsRecentPathParams> = async (req, res, next) => {
+const handler: RequestHandler<ArchiveSchemaPayloadsRecentPathParams> = async (req, res) => {
   const { archive, schema, limit } = req.params
   const limitNumber = tryParseInt(limit) ?? 20
   assertEx(limitNumber > 0 && limitNumber <= 100, 'limit must be between 1 and 100')
   assertEx(schema, 'schema must be supplied')
   const schemas = (await getRecentPayloadsOfSchemaForArchive(archive, schema, limitNumber)) || []
   res.json(schemas)
-  next()
 }
 
 export const getArchiveSchemaPayloadsRecent = asyncHandler(handler)

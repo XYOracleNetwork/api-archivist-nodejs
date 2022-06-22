@@ -52,6 +52,7 @@ describe('/query/:hash', () => {
   describe('for completed query', () => {
     beforeEach(async () => {
       id = await postRequest()
+      expect(id).toBeTruthy()
       await delay(1000)
     })
     it('redirects to HURI', async () => {

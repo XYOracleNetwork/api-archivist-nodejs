@@ -12,11 +12,10 @@ const getPayload = (archive: string, hash: string): Promise<XyoPayload[]> => {
   return sdk.findByHash(hash)
 }
 
-const handler: RequestHandler<PayloadHashPathParams, XyoPayload[]> = async (req, res, next) => {
+const handler: RequestHandler<PayloadHashPathParams, XyoPayload[]> = async (req, res) => {
   const { archive, hash } = req.params
   const payload = (await getPayload(archive, hash)) ?? []
   res.json(payload)
-  next()
 }
 
 export const getArchivePayloadHash = asyncHandler(handler)

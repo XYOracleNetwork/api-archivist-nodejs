@@ -30,7 +30,6 @@ const handler: RequestHandler<BlockHashPathParams, XyoPayload[][]> = async (req,
   const bw = await getBoundWitness(archive, hash)
   if (bw && bw.length > 0) {
     res.json(await getPayloads(archive, bw[0].payload_hashes))
-    next()
   } else {
     next({ message: 'Block not found', statusCode: StatusCodes.NOT_FOUND })
   }
