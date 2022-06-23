@@ -1,4 +1,6 @@
-import { combineRules, PayloadArchiveRule, PayloadRule, PayloadSchemaRule, PayloadTimestampDirectionRule } from './PayloadRules'
+import { combineRules } from './combineRules'
+import { PayloadRule } from './PayloadRule'
+import { PayloadArchiveRule, PayloadSchemaRule, PayloadTimestampDirectionRule } from './Rules'
 
 // Mock Date.now
 const now = new Date()

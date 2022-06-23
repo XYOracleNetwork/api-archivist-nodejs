@@ -1,36 +1,9 @@
 import { assertEx, exists } from '@xylabs/sdk-js'
 
 import { SortDirection } from '../../../model'
-
-export interface PayloadArchiveRule {
-  archive: string
-}
-const isPayloadArchiveRule = (rule: PayloadRule): rule is PayloadArchiveRule => {
-  return !!(rule as PayloadArchiveRule)?.archive
-}
-
-export interface PayloadTimestampDirectionRule {
-  direction?: SortDirection
-  timestamp: number
-}
-const isPayloadTimestampDirectionRule = (rule: PayloadRule): rule is PayloadTimestampDirectionRule => {
-  return !!(rule as PayloadTimestampDirectionRule)?.timestamp
-}
-
-export interface PayloadSchemaRule {
-  schema: string
-}
-const isPayloadSchemaRule = (rule: PayloadRule): rule is PayloadSchemaRule => {
-  return !!(rule as PayloadSchemaRule)?.schema
-}
-
-export type PayloadRule = PayloadArchiveRule | PayloadTimestampDirectionRule | PayloadSchemaRule
-export interface PayloadSearchCriteria {
-  archive: string[]
-  direction: SortDirection
-  schema: string[]
-  timestamp: number
-}
+import { PayloadRule } from './PayloadRule'
+import { PayloadSearchCriteria } from './PayloadSearchCriteria'
+import { isPayloadArchiveRule, isPayloadSchemaRule, isPayloadTimestampDirectionRule } from './TypePredicates'
 
 // TODO: AND first dimension, OR 2nd dimension of array
 export const combineRules = (rules: PayloadRule[][]): PayloadSearchCriteria => {
