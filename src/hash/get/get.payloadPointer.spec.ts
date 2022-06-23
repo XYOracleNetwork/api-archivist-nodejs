@@ -1,17 +1,28 @@
-import { assertEx } from '@xylabs/sdk-js'
+import { assertEx, delay } from '@xylabs/sdk-js'
 import { XyoAccount, XyoBoundWitness, XyoBoundWitnessBuilder, XyoPayload, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import { SortDirection } from '../../model'
-import { claimArchive, getArchiveName, getHash, getNewBlock, getNewBlockWithPayloads, getTokenForNewUser, postBlock, setArchiveAccessControl } from '../../test'
+import {
+  claimArchive,
+  getArchiveName,
+  getHash,
+  getNewBlock,
+  getNewBlockWithPayloads,
+  getTokenForNewUser,
+  postBlock,
+  setArchiveAccessControl,
+  unitTestSigningAccount,
+} from '../../test'
 import { PayloadPointerBody, payloadPointerSchema } from './PayloadPointer'
 import { PayloadAddressRule, PayloadArchiveRule, PayloadSchemaRule, PayloadTimestampDirectionRule } from './PayloadRules'
 
-const getPayloadPointer = (archive: string, schema: string, timestamp = Date.now(), direction: SortDirection = 'desc'): XyoPayload => {
+const getPayloadPointer = (archive: string, schema: string, timestamp = Date.now(), direction: SortDirection = 'desc', address?: string): XyoPayload => {
   const archiveRule: PayloadArchiveRule = { archive }
   const schemaRule: PayloadSchemaRule = { schema }
   const timestampRule: PayloadTimestampDirectionRule = { direction, timestamp }
   const fields: PayloadPointerBody = { reference: [[archiveRule], [schemaRule], [timestampRule]], schema: payloadPointerSchema }
+  if (address) fields.reference.push([{ address }])
   return new XyoPayloadBuilder<PayloadPointerBody>({ schema: payloadPointerSchema }).fields(fields).build()
 }
 
@@ -87,6 +98,20 @@ describe('/:hash', () => {
   describe('with nonexistent hash', () => {
     it(`returns ${ReasonPhrases.NOT_FOUND}`, async () => {
       await getHash('non_existent_hash', undefined, StatusCodes.NOT_FOUND)
+    })
+  })
+  describe('with signer address', () => {
+    it.each([unitTestSigningAccount, XyoAccount.random()])('returns only signed payloads', async (account) => {
+      const pointer = getPayloadPointer(archive, payload.schema, Date.now(), 'desc', account.addressValue.hex)
+      const pointerResponse = await postBlock(getNewBlock(pointer), archive)
+      expect(pointerResponse.length).toBe(1)
+      pointerHash = pointerResponse[0].payload_hashes[0]
+      if (account.addressValue.hex === unitTestSigningAccount.addressValue.hex) {
+        const result = await getHash(pointerHash, token)
+        expect(result).toBeTruthy()
+      } else {
+        await getHash(pointerHash, token, StatusCodes.NOT_FOUND)
+      }
     })
   })
 })

@@ -25,7 +25,7 @@ test('Must have API_KEY ENV VAR defined', () => {
 const request = supertest(getApp())
 
 const schema = 'co.coinapp.current.user.witness'
-const address = XyoAccount.fromPhrase('test')
+export const unitTestSigningAccount = XyoAccount.fromPhrase('test')
 const payloadTemplate = {
   balance: 10000.0,
   daysOld: 1,
@@ -186,7 +186,7 @@ export const getPayloads = (numPayloads: number) => {
 }
 
 export const getNewBlock = (...payloads: XyoPayload[]) => {
-  return new XyoBoundWitnessBuilder({ inlinePayloads: true }).witness(address).payloads(payloads).build()
+  return new XyoBoundWitnessBuilder({ inlinePayloads: true }).witness(unitTestSigningAccount).payloads(payloads).build()
 }
 
 export const getNewBlockWithPayloads = (numPayloads = 1) => {
