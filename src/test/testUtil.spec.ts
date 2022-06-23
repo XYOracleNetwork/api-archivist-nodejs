@@ -25,7 +25,7 @@ test('Must have API_KEY ENV VAR defined', () => {
 const request = supertest(getApp())
 
 const schema = 'co.coinapp.current.user.witness'
-const address = XyoAccount.fromPhrase('test')
+export const unitTestSigningAccount = XyoAccount.fromPhrase('test')
 const payloadTemplate = {
   balance: 10000.0,
   daysOld: 1,
@@ -186,7 +186,7 @@ export const getPayloads = (numPayloads: number) => {
 }
 
 export const getNewBlock = (...payloads: XyoPayload[]) => {
-  return new XyoBoundWitnessBuilder({ inlinePayloads: true }).witness(address).payloads(payloads).build()
+  return new XyoBoundWitnessBuilder({ inlinePayloads: true }).witness(unitTestSigningAccount).payloads(payloads).build()
 }
 
 export const getNewBlockWithPayloads = (numPayloads = 1) => {
@@ -307,13 +307,11 @@ export const postCommandsToArchive = async (
   const response = token
     ? await request.post(path).send(commands).auth(token, { type: 'bearer' }).expect(expectedStatus)
     : await request.post(path).send(commands).expect(expectedStatus)
-  console.log(`postCommandsToArchive: ${JSON.stringify(response.body.data, null, 2)}`)
   return response.body.data
 }
 
 export const queryCommandResult = async (id: string, token?: string, expectedStatus: StatusCodes = StatusCodes.ACCEPTED): Promise<XyoPayload> => {
   const path = `/query/${id}`
-  console.log(`queryCommandResult: ${path}`)
   const response = token ? await request.get(path).redirects(1).auth(token, { type: 'bearer' }).expect(expectedStatus) : await request.get(path).redirects(1).expect(expectedStatus)
   // Redirects to raw HURI response so no .data
   return response.body

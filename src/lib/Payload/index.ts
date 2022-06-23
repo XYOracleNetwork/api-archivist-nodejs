@@ -1,5 +1,4 @@
 export * from './findByHash'
-export * from './findPayload'
 export * from './getPayloads'
 export * from './getRequestMeta'
 export * from './prepareBoundWitnesses'
