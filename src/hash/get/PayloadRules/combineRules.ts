@@ -7,19 +7,19 @@ import { isPayloadArchiveRule, isPayloadSchemaRule, isPayloadTimestampDirectionR
 
 // TODO: AND first dimension, OR 2nd dimension of array
 export const combineRules = (rules: PayloadRule[][]): PayloadSearchCriteria => {
-  const archive = rules
+  const archives = rules
     .flatMap((r) => r)
     .filter(isPayloadArchiveRule)
     .map((r) => r.archive)
     .filter(exists)
-  assertEx(archive.length, 'At least one archive must be supplied')
+  assertEx(archives.length, 'At least one archive must be supplied')
 
-  const schema = rules
+  const schemas = rules
     .flatMap((r) => r)
     .filter(isPayloadSchemaRule)
     .map((r) => r.schema)
     .filter(exists)
-  assertEx(schema.length, 'At least one schema must be supplied')
+  assertEx(schemas.length, 'At least one schema must be supplied')
 
   const directionTimestamp = rules
     .flatMap((r) => r)
@@ -32,9 +32,9 @@ export const combineRules = (rules: PayloadRule[][]): PayloadSearchCriteria => {
   const addresses: string[] = []
   return {
     addresses,
-    archive,
+    archives,
     direction,
-    schema,
+    schemas,
     timestamp,
   }
 }

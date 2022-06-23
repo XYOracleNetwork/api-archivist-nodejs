@@ -8,8 +8,8 @@ import { combineRules } from './PayloadRules'
 
 export const resolvePayloadPointer = async (req: Request, pointer: XyoPayload<PayloadPointer>): Promise<XyoPayload | undefined> => {
   const searchCriteria = combineRules(pointer.reference)
-  const accessibleArchives = await requestAccessibleArchives(req, searchCriteria.archive)
+  const accessibleArchives = await requestAccessibleArchives(req, searchCriteria.archives)
   if (!accessibleArchives.length) return undefined
-  searchCriteria.archive = accessibleArchives
+  searchCriteria.archives = accessibleArchives
   return findPayload(searchCriteria)
 }

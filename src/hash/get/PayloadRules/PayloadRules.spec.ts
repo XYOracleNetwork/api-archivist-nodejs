@@ -47,14 +47,14 @@ describe('PayloadRules', () => {
       it('should combine multiple rules', () => {
         const rules = [[{ archive: 'foo' }, { archive: 'bar' }], [{ schema: 'network.xyo.debug' }]]
         const actual = combineRules(rules)
-        expect(actual.archive.sort()).toEqual(['bar', 'foo'])
+        expect(actual.archives.sort()).toEqual(['bar', 'foo'])
       })
     })
     describe('with PayloadSchemaRule rules', () => {
       it('should combine multiple rules', () => {
         const rules = [[{ archive: 'foo' }], [{ schema: 'network.xyo.test' }, { schema: 'network.xyo.debug' }]]
         const actual = combineRules(rules)
-        expect(actual.schema.sort()).toEqual(['network.xyo.debug', 'network.xyo.test'])
+        expect(actual.schemas.sort()).toEqual(['network.xyo.debug', 'network.xyo.test'])
       })
     })
     describe('with PayloadTimestampDirectionRule rules', () => {

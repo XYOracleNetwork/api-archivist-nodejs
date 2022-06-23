@@ -2,8 +2,8 @@ import { SortDirection } from '../../../model'
 
 export interface PayloadSearchCriteria {
   addresses: string[]
-  archive: string[]
+  archives: string[]
   direction: SortDirection
-  schema: string[]
+  schemas: string[]
   timestamp: number
 }
