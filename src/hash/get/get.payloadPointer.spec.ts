@@ -101,18 +101,23 @@ describe('/:hash', () => {
     })
   })
   describe('with signer address', () => {
-    it.each([unitTestSigningAccount, XyoAccount.random()])('returns only signed payloads', async (account) => {
+    it('returns only payloads signed by the address', async () => {
+      const account = unitTestSigningAccount
       const pointer = getPayloadPointer(archive, payload.schema, Date.now(), 'desc', account.addressValue.hex)
       const pointerResponse = await postBlock(getNewBlock(pointer), archive)
       expect(pointerResponse.length).toBe(1)
       pointerHash = pointerResponse[0].payload_hashes[0]
-      if (account.addressValue.hex === unitTestSigningAccount.addressValue.hex) {
-        const result = await getHash(pointerHash, token)
-        expect(result).toBeTruthy()
-      } else {
-        await getHash(pointerHash, token, StatusCodes.NOT_FOUND)
-      }
+      const result = await getHash(pointerHash, token)
+      expect(result).toBeTruthy()
     })
+  })
+  it('returns no payloads if not signed by address', async () => {
+    const account = XyoAccount.random()
+    const pointer = getPayloadPointer(archive, payload.schema, Date.now(), 'desc', account.addressValue.hex)
+    const pointerResponse = await postBlock(getNewBlock(pointer), archive)
+    expect(pointerResponse.length).toBe(1)
+    pointerHash = pointerResponse[0].payload_hashes[0]
+    await getHash(pointerHash, token, StatusCodes.NOT_FOUND)
   })
 })
 describe.skip('Generation of automation payload pointers', () => {
