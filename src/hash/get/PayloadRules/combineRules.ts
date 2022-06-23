@@ -29,8 +29,9 @@ export const combineRules = (rules: PayloadRule[][]): PayloadSearchCriteria => {
 
   const direction: SortDirection = directionTimestamp[0]?.direction || 'desc'
   const timestamp: number = directionTimestamp.length ? directionTimestamp[0]?.timestamp : Date.now()
-
+  const addresses: string[] = []
   return {
+    addresses,
     archive,
     direction,
     schema,

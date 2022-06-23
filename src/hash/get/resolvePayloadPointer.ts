@@ -1,13 +1,15 @@
 import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { Request } from 'express'
 
-import { findPayload, requestAccessibleArchives } from '../../lib'
+import { requestAccessibleArchives } from '../../lib'
+import { findPayload } from './findPayload'
 import { PayloadPointer } from './PayloadPointer'
 import { combineRules } from './PayloadRules'
 
 export const resolvePayloadPointer = async (req: Request, pointer: XyoPayload<PayloadPointer>): Promise<XyoPayload | undefined> => {
-  const { archive, direction, schema, timestamp } = combineRules(pointer.reference)
-  const accessibleArchives = await requestAccessibleArchives(req, archive)
+  const searchCriteria = combineRules(pointer.reference)
+  const accessibleArchives = await requestAccessibleArchives(req, searchCriteria.archive)
   if (!accessibleArchives.length) return undefined
-  return findPayload(accessibleArchives, schema, timestamp, direction)
+  searchCriteria.archive = accessibleArchives
+  return findPayload(searchCriteria)
 }
