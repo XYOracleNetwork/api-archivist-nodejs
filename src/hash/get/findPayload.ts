@@ -21,6 +21,10 @@ const createPayloadSortFromSearchCriteria = (searchCriteria: PayloadSearchCriter
 // TODO: Refactor to inject BW repository
 const isPayloadSignedByAddress = async (hash: string, addresses: string[]): Promise<boolean> => {
   const sdk = getArchivistAllBoundWitnessesMongoSdk()
+  // NOTE: Defaulting to $all since it makes the most sense when singing addresses are supplied
+  // but based on how MongoDB implements multi-key indexes $in might be much faster and we could
+  // solve the multi-sig problem via multiple API calls when multi-sig is desired instead of
+  // potentially impacting performance for all single-address queries
   const count = (await (await sdk.find({ addresses: { $all: addresses }, payload_hashes: hash })).limit(1).toArray()).length
   return count > 0
 }

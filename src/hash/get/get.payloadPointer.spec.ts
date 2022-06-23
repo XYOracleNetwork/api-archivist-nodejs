@@ -5,7 +5,7 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 import { SortDirection } from '../../model'
 import { claimArchive, getArchiveName, getHash, getNewBlock, getNewBlockWithPayloads, getTokenForNewUser, postBlock, setArchiveAccessControl } from '../../test'
 import { PayloadPointerBody, payloadPointerSchema } from './PayloadPointer'
-import { PayloadArchiveRule, PayloadSchemaRule, PayloadTimestampDirectionRule } from './PayloadRules'
+import { PayloadAddressRule, PayloadArchiveRule, PayloadSchemaRule, PayloadTimestampDirectionRule } from './PayloadRules'
 
 const getPayloadPointer = (archive: string, schema: string, timestamp = Date.now(), direction: SortDirection = 'desc'): XyoPayload => {
   const archiveRule: PayloadArchiveRule = { archive }
@@ -93,9 +93,10 @@ describe('/:hash', () => {
 describe.skip('Generation of automation payload pointers', () => {
   const schemas = ['network.xyo.crypto.market.coingecko', 'network.xyo.crypto.market.uniswap']
   it.each(schemas)('Generates automation witness payload for %s schema', (schema) => {
+    const addressRule: PayloadAddressRule = { address: '1d8cb128afeed493e0c3d9de7bfc415aecfde283' }
     const archiveRule: PayloadArchiveRule = { archive: 'temp' }
     const schemaRule: PayloadSchemaRule = { schema }
-    const fields: PayloadPointerBody = { reference: [[archiveRule], [schemaRule]], schema: payloadPointerSchema }
+    const fields: PayloadPointerBody = { reference: [[addressRule], [archiveRule], [schemaRule]], schema: payloadPointerSchema }
     const payload = new XyoPayloadBuilder<PayloadPointerBody>({ schema: payloadPointerSchema }).fields(fields).build()
     const bw = new XyoBoundWitnessBuilder({ inlinePayloads: true }).witness(XyoAccount.random()).payload(payload).build()
     console.log(JSON.stringify(bw))
