@@ -3,10 +3,18 @@ import { assertEx, exists } from '@xylabs/sdk-js'
 import { SortDirection } from '../../../model'
 import { PayloadRule } from './PayloadRule'
 import { PayloadSearchCriteria } from './PayloadSearchCriteria'
-import { isPayloadArchiveRule, isPayloadSchemaRule, isPayloadTimestampDirectionRule } from './TypePredicates'
+import { isPayloadAddressRule, isPayloadArchiveRule, isPayloadSchemaRule, isPayloadTimestampDirectionRule } from './TypePredicates'
 
-// TODO: AND first dimension, OR 2nd dimension of array
+// TODO: Could make it so that composability is such that we:
+// • AND first dimension of array
+// • OR 2nd dimension of array
 export const combineRules = (rules: PayloadRule[][]): PayloadSearchCriteria => {
+  const addresses = rules
+    .flatMap((r) => r)
+    .filter(isPayloadAddressRule)
+    .map((r) => r.address)
+    .filter(exists)
+
   const archives = rules
     .flatMap((r) => r)
     .filter(isPayloadArchiveRule)
@@ -29,7 +37,7 @@ export const combineRules = (rules: PayloadRule[][]): PayloadSearchCriteria => {
 
   const direction: SortDirection = directionTimestamp[0]?.direction || 'desc'
   const timestamp: number = directionTimestamp.length ? directionTimestamp[0]?.timestamp : Date.now()
-  const addresses: string[] = []
+
   return {
     addresses,
     archives,
