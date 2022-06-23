@@ -4,14 +4,29 @@ import { Filter, SortDirection } from 'mongodb'
 import { getArchivistAllPayloadMongoSdk } from '../../lib'
 import { PayloadSearchCriteria } from './PayloadRules'
 
-// TODO: Refactor to inject payload repository
-export const findPayload = async (searchCriteria: PayloadSearchCriteria): Promise<XyoPayload | undefined> => {
+const createQueryFromSearchCriteria = (searchCriteria: PayloadSearchCriteria): Filter<XyoPayload> => {
   const { timestamp, schema, archive, direction } = searchCriteria
-  const sdk = getArchivistAllPayloadMongoSdk()
   const _timestamp = direction === 'desc' ? { $lt: timestamp } : { $gt: timestamp }
   const query: Filter<XyoPayload> = { _archive: { $in: archive }, _timestamp }
   if (schema) query.schema = { $in: schema }
-  const sort: { [key: string]: SortDirection } = { _timestamp: direction === 'asc' ? 1 : -1 }
+  return query
+}
+
+const createSortFromSearchCriteria = (searchCriteria: PayloadSearchCriteria): { [key: string]: SortDirection } => {
+  const { direction } = searchCriteria
+  return { _timestamp: direction === 'asc' ? 1 : -1 }
+}
+
+// TODO: Refactor to inject payload repository
+export const findPayload = async (searchCriteria: PayloadSearchCriteria): Promise<XyoPayload | undefined> => {
+  const sdk = getArchivistAllPayloadMongoSdk()
+  const query = createQueryFromSearchCriteria(searchCriteria)
+  const sort = createSortFromSearchCriteria(searchCriteria)
   const result = await (await sdk.find(query)).sort(sort).limit(1).toArray()
-  return result[0] || undefined
+  const payload = result[0] || undefined
+  if (payload && searchCriteria.addresses.length) {
+    // We need to find this hash signed by any of the addresses
+    throw new Error('Not implemented')
+  }
+  return payload
 }
