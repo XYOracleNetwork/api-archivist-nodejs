@@ -5,10 +5,10 @@ import { getArchivistAllPayloadMongoSdk } from '../../lib'
 import { PayloadSearchCriteria } from './PayloadRules'
 
 const createQueryFromSearchCriteria = (searchCriteria: PayloadSearchCriteria): Filter<XyoPayload> => {
-  const { timestamp, schema, archive, direction } = searchCriteria
+  const { timestamp, schemas, archives, direction } = searchCriteria
   const _timestamp = direction === 'desc' ? { $lt: timestamp } : { $gt: timestamp }
-  const query: Filter<XyoPayload> = { _archive: { $in: archive }, _timestamp }
-  if (schema) query.schema = { $in: schema }
+  const query: Filter<XyoPayload> = { _archive: { $in: archives }, _timestamp }
+  if (schemas) query.schema = { $in: schemas }
   return query
 }
 
