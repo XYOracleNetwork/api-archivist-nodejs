@@ -1,6 +1,6 @@
 import { assertEx, exists } from '@xylabs/sdk-js'
 
-import { SortDirection } from '../../model'
+import { SortDirection } from '../../../model'
 
 export interface PayloadArchiveRule {
   archive: string
