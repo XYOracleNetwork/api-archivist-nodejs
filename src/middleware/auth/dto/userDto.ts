@@ -1,4 +1,4 @@
-import { User } from '../model'
+import { User } from '../../../model'
 
 export interface IUserDto {
   id: string

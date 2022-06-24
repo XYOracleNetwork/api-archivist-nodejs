@@ -21,7 +21,6 @@ const handler: RequestHandler<ArchivePathParams, XyoArchiveKey[]> = async (req, 
 
   const keys = await getArchiveKeys(req.params.archive)
   res.json(keys)
-  next()
 }
 
 export const getArchiveSettingsKeys = asyncHandler(handler)

@@ -38,7 +38,6 @@ const handler: RequestHandler<ArchivePathParams, Pick<XyoBoundWitness, string>[]
   const boundWitnesses = await getBoundWitnesses(archive.archive, timestampNumber, limitNumber, parsedOrder)
   if (boundWitnesses) {
     res.json(scrubBoundWitnesses(boundWitnesses))
-    next()
   } else {
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
   }

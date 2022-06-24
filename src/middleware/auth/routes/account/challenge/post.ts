@@ -4,7 +4,7 @@ import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { v1 } from 'uuid'
 
-export const postAccountChallenge: RequestHandler = (req, res, next) => {
+export const postAccountChallenge: RequestHandler = (req, res) => {
   const { address } = req.params
   if (!address) {
     res.sendStatus(StatusCodes.BAD_REQUEST)
@@ -15,5 +15,4 @@ export const postAccountChallenge: RequestHandler = (req, res, next) => {
   // within a reasonable window later.
   const state = v1()
   res.json({ state })
-  next()
 }

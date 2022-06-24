@@ -3,11 +3,10 @@ import { Request } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
-import { isRequestUserOwnerOfRequestedArchive } from '../../../../lib'
+import { isLegacyPrivateArchive, isRequestUserOwnerOfRequestedArchive } from '../../../../lib'
 import { ArchiveLocals, ArchivePathParams } from '../../../../model'
-import { isPublicArchive } from './isPublicArchive'
 
-export class ArchiveOwnerStrategy extends Strategy {
+export class ArchiveAccessControlStrategy extends Strategy {
   constructor() {
     super()
   }
@@ -18,7 +17,7 @@ export class ArchiveOwnerStrategy extends Strategy {
   ) {
     try {
       // If it's not a public archive
-      if (!isPublicArchive(req)) {
+      if (isLegacyPrivateArchive(req.res?.locals?.archive)) {
         // We require auth
         if (!req?.user?.id) {
           this.fail('Archive requires authorization', StatusCodes.UNAUTHORIZED)
@@ -34,7 +33,7 @@ export class ArchiveOwnerStrategy extends Strategy {
       this.success(req.user || {})
       return
     } catch (error) {
-      this.error({ message: 'ArchiveOwner Auth Error' })
+      this.error({ message: 'ArchiveAccessControlStrategy Auth Error' })
     }
   }
 }

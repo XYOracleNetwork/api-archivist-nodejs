@@ -17,7 +17,7 @@ const getPayload = async (archive: string, hash: string) => {
 const updatePayload = async (archive: string, hash: string, payload: XyoPayload) => {
   const sdk = getArchivistPayloadMongoSdk(archive)
   const wrapper = new XyoPayloadWrapper(payload)
-  return await sdk.updateByHash(hash, { ...payload, _hash: wrapper.sortedHash() })
+  return await sdk.updateByHash(hash, { ...payload, _hash: wrapper.hash })
 }
 
 export interface PayloadRepairHashResponse {
@@ -35,7 +35,6 @@ const handler: RequestHandler<PayloadHashPathParams, PayloadRepairHashResponse> 
   if (payload) {
     const result: UpdateResult = (await updatePayload(archive, hash, payload)) as UpdateResult
     res.json(result)
-    next()
   } else {
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
   }

@@ -2,7 +2,7 @@ import { asyncHandler, NoReqBody, NoReqQuery, NoResBody } from '@xylabs/sdk-api-
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
-import { getArchiveByName, isValidArchiveName } from '../../lib'
+import { isValidArchiveName } from '../../lib'
 import { ArchiveLocals, ArchivePathParams } from '../../model'
 
 const handler: RequestHandler<ArchivePathParams, NoResBody, NoReqBody, NoReqQuery, ArchiveLocals> = async (req, res, next) => {
@@ -16,7 +16,7 @@ const handler: RequestHandler<ArchivePathParams, NoResBody, NoReqBody, NoReqQuer
         return
       }
       // Lookup the archive
-      const response = await getArchiveByName(archive)
+      const response = await req.app.archiveRepository.get(archive)
       if (!response) {
         // TODO: Uncomment if/when we require a priori archive creation to
         // automatically reject all calls for archives that don't exist

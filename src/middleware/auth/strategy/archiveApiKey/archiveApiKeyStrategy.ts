@@ -1,35 +1,22 @@
+import { getHttpHeader } from '@xylabs/sdk-api-express-ecs'
 import { Request } from 'express'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
-import { getArchiveKeys, getArchivistArchiveMongoSdk } from '../../../../lib'
-import { UserStore } from '../../model'
+import { getArchiveKeys } from '../../../../lib'
 
 export class ArchiveApiKeyStrategy extends Strategy {
-  constructor(public readonly userStore: UserStore, public readonly apiKeyHeader = 'x-api-key') {
+  constructor(public readonly apiKeyHeader = 'x-api-key') {
     super()
   }
   override async authenticate(this: StrategyCreated<this, this & StrategyCreatedStatic>, req: Request, _options?: unknown) {
     try {
-      // NOTE: There should never be multiple of this header but
-      // just to prevent ugliness if someone did send us multiple
-      // we'll grab the 1st one
-      const apiKey =
-        // If the header exists
-        req.headers[this.apiKeyHeader]
-          ? // If there's multiple of the same header
-            Array.isArray(req.headers[this.apiKeyHeader])
-            ? // Grab the first one
-              (req.headers[this.apiKeyHeader] as string[]).shift()
-            : // Otherwise grab the only one
-              (req.headers[this.apiKeyHeader] as string)
-          : // Otherwise undefined
-            undefined
+      const apiKey = getHttpHeader(this.apiKeyHeader, req)
       if (!apiKey) {
         this.fail('Missing API key in header')
         return
       }
 
-      const archive = req.params.archive
+      const { archive } = req.params
       if (!archive) {
         this.fail('Invalid archive')
         return
@@ -44,14 +31,13 @@ export class ArchiveApiKeyStrategy extends Strategy {
       }
 
       // Get the archive owner
-      const owners = getArchivistArchiveMongoSdk()
-      const archiveOwner = await owners.findByArchive(archive)
-      if (!archiveOwner || !archiveOwner?.user) {
+      const existingArchive = await req.app.archiveRepository.get(archive)
+      if (!existingArchive || !existingArchive?.user) {
         this.fail('Invalid user')
         return
       }
 
-      const user = await this.userStore.getById(archiveOwner.user)
+      const user = await req.app.userManager.findById(existingArchive.user)
       if (!user) {
         this.fail('Invalid user')
         return

@@ -3,18 +3,15 @@ import compression from 'compression'
 import cors from 'cors'
 import express, { Express } from 'express'
 
-import { configureAuth, configureDoc } from '../middleware'
-import { addArchiveRoutes } from './addArchiveRoutes'
-import { addBlockRoutes } from './addBlockRoutes'
-import { addDebugRoutes } from './addDebugRoutes'
-import { addDomainRoutes } from './addDomainRoutes'
+import { configureDoc } from '../middleware'
+import { addDependencies } from './addDependencies'
 import { addErrorHandlers } from './addErrorHandlers'
-import { addHashRoutes } from './addHashRoutes'
 import { addHealthChecks } from './addHealthChecks'
+import { addInMemoryQueryProcessing } from './addInMemoryQueryProcessing'
 import { addMiddleware } from './addMiddleware'
-import { addPayloadRoutes } from './addPayloadRoutes'
-import { addPayloadSchemaRoutes } from './addPayloadSchemaRoutes'
-import { addSchemaRoutes } from './addSchemaRoutes'
+import { addQueryConverters } from './addQueryConverters'
+import { addQueryProcessors } from './addQueryProcessors'
+import { addRoutes } from './addRoutes'
 
 export const getApp = (): Express => {
   const app = express()
@@ -30,30 +27,18 @@ export const getApp = (): Express => {
   app.use(cors())
   app.use(compression())
 
+  addDependencies(app)
   addMiddleware(app)
+  addQueryConverters(app)
+  addQueryProcessors(app)
+  addInMemoryQueryProcessing(app)
   addHealthChecks(app)
-  addArchiveRoutes(app)
-  addBlockRoutes(app)
-  addPayloadRoutes(app)
-  addPayloadSchemaRoutes(app)
-  addSchemaRoutes(app)
-  addDomainRoutes(app)
-  addDebugRoutes(app)
-
-  const userRoutes = configureAuth({
-    apiKey: process.env.API_KEY,
-    secretOrKey: process.env.JWT_SECRET,
-  })
-  app.use('', userRoutes)
-
-  /* This needs to be the last true handler since it is a catch all for the root */
-  addHashRoutes(app)
+  addRoutes(app)
   addErrorHandlers(app)
-
   return app
 }
 
-const server = async (port = 80) => {
+export const server = async (port = 80) => {
   // If an AWS ARN was supplied for Secrets Manager
   const awsEnvSecret = process.env.AWS_ENV_SECRET_ARN
   if (awsEnvSecret) {
@@ -74,5 +59,3 @@ const server = async (port = 80) => {
 
   server.setTimeout(3000)
 }
-
-export { server }
