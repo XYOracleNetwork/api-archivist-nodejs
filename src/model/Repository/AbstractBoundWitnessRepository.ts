@@ -1,12 +1,9 @@
-import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitness, XyoBoundWitnessWithMeta } from '@xyo-network/sdk-xyo-client-js'
 
 import { BoundWitnessRepository } from './BoundWitnessRepository'
 
-// TODO: Move type to SDK
-export type XyoBoundWitnessFull<T> = XyoBoundWitness & T
-
-export abstract class AbstractBoundWitnessRepository<T, TId = string, TQuery = unknown> implements BoundWitnessRepository<TId, TQuery> {
-  abstract find(filter: TQuery): Promise<XyoBoundWitnessFull<T>[]>
-  abstract get(id: TId): Promise<XyoBoundWitnessFull<T>[]>
-  abstract insert(items: XyoBoundWitness[]): Promise<XyoBoundWitnessFull<T>[]>
+export abstract class AbstractBoundWitnessRepository<T extends object, TId = string, TQuery = unknown> implements BoundWitnessRepository<TId, TQuery> {
+  abstract find(filter: TQuery): Promise<XyoBoundWitnessWithMeta<T>[]>
+  abstract get(id: TId): Promise<XyoBoundWitnessWithMeta<T>[]>
+  abstract insert(items: XyoBoundWitness[]): Promise<XyoBoundWitnessWithMeta<T>[]>
 }

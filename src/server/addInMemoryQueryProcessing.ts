@@ -1,4 +1,4 @@
-import { Huri, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { Huri, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { Application } from 'express'
 
 export const addInMemoryQueryProcessing = (app: Application) => {
@@ -12,7 +12,7 @@ export const addInMemoryQueryProcessing = (app: Application) => {
 
           // Enqueue null in the response queue to indicate we're processing it
           await app.responseQueue.enqueue({ huri: null, id })
-          const result = await processor(query)
+          const result = (await processor(query)) as XyoPayloadWithMeta & { _queryId: string }
           // TODO: Handle queries with no result
           if (result) {
             // TODO: A better way to communicate destination archive
@@ -21,7 +21,7 @@ export const addInMemoryQueryProcessing = (app: Application) => {
             result._timestamp = Date.now()
 
             // Witness result and store result in archive
-            const stored = await app.archivistWitnessedPayloadRepository.insert([result as XyoPayload])
+            const stored = await app.archivistWitnessedPayloadRepository.insert([result])
             const hash = stored?.[0]?._hash
             if (hash) {
               // Store result in response queue

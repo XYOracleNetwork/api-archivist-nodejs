@@ -1,4 +1,4 @@
-import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 
 import { Query } from './Query'
 
@@ -11,6 +11,6 @@ export interface GetDomainConfig {
   schema: GetDomainConfigSchema
 }
 
-export type GetDomainConfigPayload = XyoPayload<GetDomainConfig>
+export type GetDomainConfigPayload = XyoPayloadWithMeta<GetDomainConfig>
 
 export class GetDomainConfigQuery extends Query<GetDomainConfigPayload> {}

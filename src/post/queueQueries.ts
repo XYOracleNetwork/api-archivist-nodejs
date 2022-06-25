@@ -1,9 +1,9 @@
 import { exists } from '@xylabs/sdk-js'
-import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitnessWithMeta } from '@xyo-network/sdk-xyo-client-js'
 
 import { PostNodeRequest } from './PostNodeRequest'
 
-export const queueQueries = (boundWitnesses: XyoBoundWitness[], req: PostNodeRequest): Promise<string>[][] => {
+export const queueQueries = (boundWitnesses: XyoBoundWitnessWithMeta[], req: PostNodeRequest): Promise<string>[][] => {
   const { enqueue } = req.app.queryQueue
   const { converters } = req.app.queryConverters
   return boundWitnesses

@@ -1,14 +1,14 @@
 import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 
 import { isLegacyPrivateArchive } from '../../../lib'
-import { ArchivePermissionsRepository, SetArchivePermissions, setArchivePermissionsSchema } from '../../../model'
+import { ArchivePermissionsRepository, SetArchivePermissionsPayload, setArchivePermissionsSchema } from '../../../model'
 
 const schema = setArchivePermissionsSchema
-const publicArchivePermissions: SetArchivePermissions = {
+const publicArchivePermissions: SetArchivePermissionsPayload = {
   schema,
 }
 
-const privateArchivePermissions: SetArchivePermissions = {
+const privateArchivePermissions: SetArchivePermissionsPayload = {
   allow: {
     addresses: [],
   },
@@ -19,8 +19,8 @@ const privateArchivePermissions: SetArchivePermissions = {
 export const migrateLegacyArchives = async (repository: ArchivePermissionsRepository, archives: XyoArchive[]) => {
   const migrations = archives.map((archive) => {
     // create a new public/private archive record for the legacy archive
-    const permissions: SetArchivePermissions = isLegacyPrivateArchive(archive) ? privateArchivePermissions : publicArchivePermissions
-    return repository.insert([{ ...permissions, _archive: archive.archive } as SetArchivePermissions])
+    const permissions: SetArchivePermissionsPayload = isLegacyPrivateArchive(archive) ? privateArchivePermissions : publicArchivePermissions
+    return repository.insert([{ ...permissions, _archive: archive.archive } as SetArchivePermissionsPayload])
   })
   const results = await Promise.all(migrations)
   return results.map((result) => result?.[0])

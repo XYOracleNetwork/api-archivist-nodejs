@@ -1,5 +1,5 @@
 import { NoReqQuery } from '@xylabs/sdk-api-express-ecs'
-import { XyoBoundWitness, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitness, XyoBoundWitnessWithMeta, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { Request } from 'express'
 
 import { isRequestUserOwnerOfRequestedArchive } from '../../../../lib'
@@ -56,7 +56,7 @@ const verifySchemaAllowed = (schema: string, permissions: SetArchivePermissions)
   return true
 }
 
-export const verifyOperationAllowedByAddress = async (req: Request<ArchivePathParams, unknown, XyoBoundWitness[], NoReqQuery, ArchiveLocals>): Promise<boolean> => {
+export const verifyOperationAllowedByAddress = async (req: Request<ArchivePathParams, unknown, XyoBoundWitnessWithMeta[], NoReqQuery, ArchiveLocals>): Promise<boolean> => {
   // NOTE: Communicate partial success for allowed/disallowed operations
   // Short circuit & reduce all operations to binary success/failure for now
   // Get archive permissions

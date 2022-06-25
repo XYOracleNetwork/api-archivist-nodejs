@@ -1,4 +1,4 @@
-import { XyoPayload, XyoPayloadBody } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 
 import { PayloadRule } from './PayloadRules'
 
@@ -9,5 +9,5 @@ export interface PayloadPointer {
   reference: PayloadRule[][]
 }
 
-export type PayloadPointerBody = PayloadPointer & XyoPayloadBody
+export type PayloadPointerBody = PayloadPointer & XyoPayload
 export type PayloadPointerPayload = XyoPayload<PayloadPointerBody>

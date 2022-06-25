@@ -1,12 +1,12 @@
 import { delay } from '@xylabs/sdk-js'
-import { XyoPayload, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
 
-import { DebugQuery, debugSchema, QueryHandler } from '../model'
+import { DebugPayload, DebugQuery, debugSchema, QueryHandler } from '../model'
 
-export class DebugQueryHandler implements QueryHandler<DebugQuery, XyoPayload> {
+export class DebugQueryHandler implements QueryHandler<DebugQuery, DebugPayload> {
   async handle(query: DebugQuery) {
     const ms = query?.payload?.delay || 1
     await delay(ms)
-    return new XyoPayloadBuilder({ schema: debugSchema }).fields(query.payload).build()
+    return new XyoPayloadBuilder<DebugPayload>({ schema: debugSchema }).fields(query.payload).build()
   }
 }

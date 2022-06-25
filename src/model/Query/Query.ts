@@ -1,8 +1,8 @@
 import { assertEx } from '@xylabs/sdk-js'
-import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 
 export abstract class Query<T extends XyoPayload = XyoPayload> {
-  constructor(public readonly payload: T) {}
+  constructor(public readonly payload: XyoPayloadWithMeta<T>) {}
   /**
    * Defaults to returning a concatenated string of the the
    * payload hash + timestamp. Two queries with the exact same

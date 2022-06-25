@@ -11,26 +11,29 @@ import {
   getDefaultAbstractMongoDBPayloadRepositoryOpts,
   removeId,
 } from '../../../../lib'
-import { SetArchivePermissionsPayload, SetArchivePermissionsSchema, setArchivePermissionsSchema } from '../../../../model'
+import { SetArchivePermissionsPayload, SetArchivePermissionsPayloadWithMeta, SetArchivePermissionsSchema, setArchivePermissionsSchema } from '../../../../model'
 
 const schema: SetArchivePermissionsSchema = setArchivePermissionsSchema
 
 export class MongoDBArchivePermissionsPayloadPayloadRepository extends AbstractMongoDBPayloadRepository<SetArchivePermissionsPayload> {
   constructor(
-    protected readonly items: BaseMongoSdk<SetArchivePermissionsPayload> = getBaseMongoSdk('payload'),
+    protected readonly items: BaseMongoSdk<SetArchivePermissionsPayloadWithMeta> = getBaseMongoSdk('payload'),
     opts: AbstractMongoDBPayloadRepositoryOpts = getDefaultAbstractMongoDBPayloadRepositoryOpts()
   ) {
     super(opts)
   }
-  async find(filter: Filter<SetArchivePermissionsPayload>): Promise<SetArchivePermissionsPayload[]> {
+  async find(filter: Filter<SetArchivePermissionsPayloadWithMeta>) {
     return (await this.items.find(filter)).toArray()
   }
-  async get(archive: string): Promise<SetArchivePermissionsPayload[]> {
-    return (await getArchivistPayloadMongoSdk(archive).find({ _archive: archive, schema })).sort({ _timestamp: -1 }).limit(1).toArray() as unknown as SetArchivePermissionsPayload[]
+  async get(archive: string): Promise<SetArchivePermissionsPayloadWithMeta[]> {
+    return (await getArchivistPayloadMongoSdk(archive).find({ _archive: archive, schema }))
+      .sort({ _timestamp: -1 })
+      .limit(1)
+      .toArray() as unknown as SetArchivePermissionsPayloadWithMeta[]
   }
-  async insert(items: SetArchivePermissionsPayload[]): Promise<SetArchivePermissionsPayload[]> {
+  async insert(items: SetArchivePermissionsPayloadWithMeta[]): Promise<SetArchivePermissionsPayloadWithMeta[]> {
     for (let i = 0; i < items.length; i++) {
-      const item = removeId(items[i])
+      const item = removeId(items[i]) as SetArchivePermissionsPayloadWithMeta
       const _timestamp = Date.now()
       const archive = item._archive
       if (archive) {

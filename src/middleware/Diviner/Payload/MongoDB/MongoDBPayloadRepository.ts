@@ -1,22 +1,22 @@
-import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { Filter } from 'mongodb'
 
 import { getBaseMongoSdk, removeId } from '../../../../lib'
 import { AbstractPayloadRepository } from '../../../../model'
 
-export class MongoDBPayloadRepository extends AbstractPayloadRepository<XyoPayload, string, Filter<XyoPayload>> {
-  constructor(protected sdk: BaseMongoSdk<XyoPayload> = getBaseMongoSdk<XyoPayload>('payloads')) {
+export class MongoDBPayloadRepository extends AbstractPayloadRepository<XyoPayloadWithMeta, string, Filter<XyoPayloadWithMeta>> {
+  constructor(protected sdk: BaseMongoSdk<XyoPayloadWithMeta> = getBaseMongoSdk<XyoPayloadWithMeta>('payloads')) {
     super()
   }
-  async find(filter: Filter<XyoPayload>): Promise<XyoPayload[]> {
+  async find(filter: Filter<XyoPayloadWithMeta>): Promise<XyoPayloadWithMeta[]> {
     return (await this.sdk.find(filter)).toArray()
   }
-  async get(hash: string): Promise<XyoPayload[]> {
+  async get(hash: string): Promise<XyoPayloadWithMeta[]> {
     return (await this.sdk.find({ _hash: hash })).toArray()
   }
-  async insert(items: XyoPayload[]): Promise<XyoPayload[]> {
-    const result = await this.sdk.insertMany(items.map(removeId))
+  async insert(items: XyoPayloadWithMeta[]): Promise<XyoPayloadWithMeta[]> {
+    const result = await this.sdk.insertMany(items.map(removeId) as XyoPayloadWithMeta[])
     if (result.insertedCount != items.length) {
       throw new Error('Error inserting Payloads')
     }

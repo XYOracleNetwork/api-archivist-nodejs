@@ -25,7 +25,11 @@ const getBoundWitnesses = (archive: string, timestamp?: number, limit = defaultL
   return sortOrder === 'asc' ? sdk.findAfter(0, limit) : sdk.findBefore(Date.now(), limit)
 }
 
-const handler: RequestHandler<ArchivePathParams, Pick<XyoBoundWitness, string>[], NoReqBody, GetArchiveBlocksQueryParams, ArchiveLocals> = async (req, res, next) => {
+const handler: RequestHandler<ArchivePathParams, Pick<XyoBoundWitness, keyof XyoBoundWitness>[], NoReqBody, GetArchiveBlocksQueryParams, ArchiveLocals> = async (
+  req,
+  res,
+  next
+) => {
   const { archive } = res.locals
   if (!archive) {
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
