@@ -12,7 +12,7 @@ const setArchivePermissions = (archive: string, token: string, permissions: SetA
     ...permissions,
     schema: setArchivePermissionsSchema,
   }
-  const payload = new XyoPayloadBuilder({ schema: setArchivePermissionsSchema }).fields(data).build()
+  const payload = new XyoPayloadBuilder<SetArchivePermissionsPayload>({ schema: setArchivePermissionsSchema }).fields(data).build()
   const bw = new XyoBoundWitnessBuilder({ inlinePayloads: true }).payload(payload).build()
   return postCommandsToArchive([bw], archive, token)
 }

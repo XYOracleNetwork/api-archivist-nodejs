@@ -1,7 +1,7 @@
 import { mock, MockProxy } from 'jest-mock-extended'
 
 import { ArchivePermissionsRepository } from '../middleware'
-import { debugSchema, SetArchivePermissionsPayload, SetArchivePermissionsQuery, setArchivePermissionsSchema } from '../model'
+import { debugSchema, SetArchivePermissionsPayloadWithMeta, SetArchivePermissionsQuery, setArchivePermissionsSchema } from '../model'
 import { SetArchivePermissionsQueryHandler } from './SetArchivePermissionsQueryHandler'
 
 const _archive = 'test'
@@ -11,16 +11,18 @@ const allowedAddress = '0x8ba1f109551bd432803012645ac136ddd64dba72'
 const disallowedAddress = '0x0ac1df02185025f65202660f8167210a80dd5086'
 const allowedSchema = 'network.xyo.test'
 const disallowedSchema = debugSchema
+const _queryId = '0'
 
 const getQueryPayload = (
   allowedAddresses: string[] = [allowedAddress],
   disallowedAddresses: string[] = [disallowedAddress],
   allowedSchemas: string[] = [allowedSchema],
   disallowedSchemas: string[] = [disallowedSchema]
-): SetArchivePermissionsPayload => {
+): SetArchivePermissionsPayloadWithMeta => {
   return {
     _archive,
     _hash,
+    _queryId,
     _timestamp,
     allow: {
       addresses: allowedAddresses,
@@ -51,9 +53,9 @@ describe('SetArchivePermissionsQueryHandler', () => {
     })
     describe('with invalid permissions', () => {
       it('detects missing archive', async () => {
-        const payload: Partial<SetArchivePermissionsPayload> = getQueryPayload()
+        const payload: Partial<SetArchivePermissionsPayloadWithMeta> = getQueryPayload()
         delete payload._archive
-        const query = new SetArchivePermissionsQuery({ ...payload } as SetArchivePermissionsPayload)
+        const query = new SetArchivePermissionsQuery({ ...payload } as SetArchivePermissionsPayloadWithMeta)
         await expect(sut.handle(query)).rejects.toThrow()
       })
       it('detects duplicate address in allow/reject', async () => {

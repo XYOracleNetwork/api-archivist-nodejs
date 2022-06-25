@@ -9,6 +9,7 @@ import {
   XyoPayload,
   XyoPayloadBuilder,
   XyoPayloadWithMeta,
+  XyoPayloadWrapper,
   XyoSchemaPayload,
 } from '@xyo-network/sdk-xyo-client-js'
 import { Wallet } from 'ethers'
@@ -49,7 +50,7 @@ const knownPayload = new XyoPayloadBuilder({ schema })
     uid: '0000000000000000000000000000',
   })
   .build()
-export const knownPayloadHash = knownPayload._hash || ''
+export const knownPayloadHash = new XyoPayloadWrapper(knownPayload).hash
 export const knownBlock = new XyoBoundWitnessBuilder({ inlinePayloads: true }).witness(XyoAccount.random()).payload(knownPayload).build()
 export const knownBlockHash = knownBlock._hash || ''
 

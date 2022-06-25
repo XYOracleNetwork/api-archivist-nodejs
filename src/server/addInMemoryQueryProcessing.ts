@@ -1,4 +1,5 @@
-import { Huri, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { assertEx } from '@xylabs/sdk-js'
+import { Huri, XyoQueryPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { Application } from 'express'
 
 export const addInMemoryQueryProcessing = (app: Application) => {
@@ -12,11 +13,11 @@ export const addInMemoryQueryProcessing = (app: Application) => {
 
           // Enqueue null in the response queue to indicate we're processing it
           await app.responseQueue.enqueue({ huri: null, id })
-          const result = (await processor(query)) as XyoPayloadWithMeta & { _queryId: string }
+          const result = (await processor(query)) as XyoQueryPayloadWithMeta
           // TODO: Handle queries with no result
           if (result) {
             // TODO: A better way to communicate destination archive
-            result._archive = query.payload._archive
+            result._archive = assertEx(query.payload._archive)
             result._queryId = query.id
             result._timestamp = Date.now()
 

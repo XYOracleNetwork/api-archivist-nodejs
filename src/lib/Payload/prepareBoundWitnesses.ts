@@ -1,9 +1,9 @@
 import 'source-map-support/register'
 
-import { XyoBoundWitnessMeta, XyoBoundWitnessWithMeta, XyoPayload, XyoPayloadMeta, XyoPayloadWrapper } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitnessMeta, XyoBoundWitnessWithMeta, XyoPayload, XyoPayloadMeta, XyoPayloadWithMeta, XyoPayloadWrapper } from '@xyo-network/sdk-xyo-client-js'
 
 export interface PrepareBoundWitnessesResult {
-  payloads: XyoPayload[]
+  payloads: XyoPayloadWithMeta[]
   sanitized: XyoBoundWitnessWithMeta[]
 }
 
@@ -28,7 +28,7 @@ export const removePayloads = (boundWitnesses: XyoBoundWitnessWithMeta[]): XyoBo
   })
 }
 
-export const augmentWithMetadata = <T extends XyoPayload>(payloads: T[], payloadMetaData: XyoPayloadMeta): T[] => {
+export const augmentWithMetadata = <T extends XyoPayload>(payloads: T[], payloadMetaData: XyoPayloadMeta): XyoPayloadWithMeta<T>[] => {
   return payloads.map((payload) => {
     const wrapper = new XyoPayloadWrapper(payload)
     return { ...payload, ...payloadMetaData, _hash: wrapper.hash }
