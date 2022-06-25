@@ -1,4 +1,4 @@
-import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 
 import { Query } from './Query'
 
@@ -10,6 +10,6 @@ export interface GetSchema {
   schema: GetSchemaSchema
 }
 
-export type GetSchemaPayload = XyoPayload<GetSchema>
+export type GetSchemaPayload = XyoPayloadWithMeta<GetSchema>
 
 export class GetSchemaQuery extends Query<GetSchemaPayload> {}

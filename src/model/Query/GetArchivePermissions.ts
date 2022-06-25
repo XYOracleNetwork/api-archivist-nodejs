@@ -1,4 +1,4 @@
-import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 
 import { Query } from './Query'
 
@@ -9,6 +9,6 @@ export interface GetArchivePermissions {
   schema: GetArchivePermissionsSchema
 }
 
-export type GetArchivePermissionsPayload = XyoPayload<GetArchivePermissions>
+export type GetArchivePermissionsPayload = XyoPayloadWithMeta<GetArchivePermissions>
 
 export class GetArchivePermissionsQuery extends Query<GetArchivePermissionsPayload> {}

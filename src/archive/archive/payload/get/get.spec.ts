@@ -1,4 +1,4 @@
-import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import { SortDirection } from '../../../../model'
@@ -32,8 +32,8 @@ describe('/archive/:archive/payload', () => {
     describe.each(sortDirections)('In %s order', (order: SortDirection) => {
       let hash = ''
       let timestamp = 0
-      let response: XyoPayload[] = []
-      let recentPayload: XyoPayload | undefined
+      let response: XyoPayloadWithMeta[] = []
+      let recentPayload: XyoPayloadWithMeta | undefined
       beforeEach(async () => {
         recentPayload = order === 'asc' ? recentPayloads.pop() : recentPayloads.shift()
         expect(recentPayload).toBeTruthy()

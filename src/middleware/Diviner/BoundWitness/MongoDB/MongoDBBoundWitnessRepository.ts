@@ -1,21 +1,21 @@
-import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitnessWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { Filter } from 'mongodb'
 
 import { getBaseMongoSdk } from '../../../../lib'
 import { AbstractBoundWitnessRepository } from '../../../../model'
 
-export class MongoDBBoundWitnessRepository extends AbstractBoundWitnessRepository<XyoBoundWitness, string, Filter<XyoBoundWitness>> {
-  constructor(protected sdk: BaseMongoSdk<XyoBoundWitness> = getBaseMongoSdk<XyoBoundWitness>('bound_witnesses')) {
+export class MongoDBBoundWitnessRepository extends AbstractBoundWitnessRepository<XyoBoundWitnessWithMeta, string, Filter<XyoBoundWitnessWithMeta>> {
+  constructor(protected sdk: BaseMongoSdk<XyoBoundWitnessWithMeta> = getBaseMongoSdk<XyoBoundWitnessWithMeta>('bound_witnesses')) {
     super()
   }
-  async find(filter: Filter<XyoBoundWitness>): Promise<XyoBoundWitness[]> {
+  async find(filter: Filter<XyoBoundWitnessWithMeta>): Promise<XyoBoundWitnessWithMeta[]> {
     return (await this.sdk.find(filter)).toArray()
   }
-  async get(hash: string): Promise<XyoBoundWitness[]> {
+  async get(hash: string): Promise<XyoBoundWitnessWithMeta[]> {
     return (await this.sdk.find({ _hash: hash })).toArray()
   }
-  async insert(items: XyoBoundWitness[]): Promise<XyoBoundWitness[]> {
+  async insert(items: XyoBoundWitnessWithMeta[]): Promise<XyoBoundWitnessWithMeta[]> {
     // TODO: Remove _id if present
     const result = await this.sdk.insertMany(items)
     if (result.insertedCount != items.length) {

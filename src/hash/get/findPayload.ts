@@ -1,5 +1,4 @@
-import { assertEx } from '@xylabs/sdk-js'
-import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload, XyoPayloadWrapper } from '@xyo-network/sdk-xyo-client-js'
 import { Filter, SortDirection } from 'mongodb'
 
 import { getArchivistAllBoundWitnessesMongoSdk, getArchivistAllPayloadMongoSdk } from '../../lib'
@@ -38,7 +37,7 @@ export const findPayload = async (searchCriteria: PayloadSearchCriteria): Promis
   const result = await (await sdk.find(query)).sort(sort).limit(1).toArray()
   const payload = result[0] || undefined
   if (payload && addresses.length) {
-    const hash = assertEx(payload?._hash)
+    const hash = new XyoPayloadWrapper(payload).hash
     const signed = await isPayloadSignedByAddress(hash, addresses)
     return signed ? payload : undefined
   } else {

@@ -51,9 +51,9 @@ describe('SetArchivePermissionsQueryHandler', () => {
     })
     describe('with invalid permissions', () => {
       it('detects missing archive', async () => {
-        const payload = getQueryPayload()
+        const payload: Partial<SetArchivePermissionsPayload> = getQueryPayload()
         delete payload._archive
-        const query = new SetArchivePermissionsQuery({ ...payload })
+        const query = new SetArchivePermissionsQuery({ ...payload } as SetArchivePermissionsPayload)
         await expect(sut.handle(query)).rejects.toThrow()
       })
       it('detects duplicate address in allow/reject', async () => {
