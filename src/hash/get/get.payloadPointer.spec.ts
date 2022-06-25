@@ -1,5 +1,5 @@
 import { assertEx } from '@xylabs/sdk-js'
-import { XyoAccount, XyoBoundWitness, XyoBoundWitnessBuilder, XyoPayload, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
+import { XyoAccount, XyoBoundWitnessBuilder, XyoBoundWitnessWithPartialMeta, XyoPayload, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import { SortDirection } from '../../model'
@@ -29,7 +29,7 @@ const getPayloadPointer = (archive: string, schema: string, timestamp = Date.now
 describe('/:hash', () => {
   let token: string
   let archive: string
-  let block: XyoBoundWitness
+  let block: XyoBoundWitnessWithPartialMeta
   let payload: XyoPayload
   let pointerHash: string
   beforeAll(() => jest.spyOn(console, 'error').mockImplementation())

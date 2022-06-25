@@ -1,4 +1,4 @@
-import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitnessWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import { SortDirection } from '../../../../model'
@@ -9,7 +9,7 @@ const sortDirections: SortDirection[] = ['asc', 'desc']
 describe('/archive/:archive/block', () => {
   let token = ''
   let archive = ''
-  let recentBlocks: XyoBoundWitness[] = []
+  let recentBlocks: XyoBoundWitnessWithMeta[] = []
   beforeAll(async () => {
     token = await getTokenForNewUser()
     archive = getArchiveName()
@@ -32,8 +32,8 @@ describe('/archive/:archive/block', () => {
     describe.each(sortDirections)('In %s order', (order: SortDirection) => {
       let hash = ''
       let timestamp = 0
-      let response: XyoBoundWitness[] = []
-      let recentBlock: XyoBoundWitness | undefined
+      let response: XyoBoundWitnessWithMeta[] = []
+      let recentBlock: XyoBoundWitnessWithMeta | undefined
       beforeEach(async () => {
         recentBlock = order === 'asc' ? recentBlocks.pop() : recentBlocks.shift()
         expect(recentBlock).toBeTruthy()

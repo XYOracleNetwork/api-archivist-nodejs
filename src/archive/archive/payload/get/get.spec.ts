@@ -1,4 +1,4 @@
-import { XyoPayload, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import { SortDirection } from '../../../../model'
@@ -9,7 +9,7 @@ const sortDirections: SortDirection[] = ['asc', 'desc']
 describe('/archive/:archive/payload', () => {
   let token = ''
   let archive = ''
-  let recentPayloads: XyoPayload[] = []
+  let recentPayloads: XyoPayloadWithMeta[] = []
   beforeAll(async () => {
     token = await getTokenForNewUser()
     archive = getArchiveName()

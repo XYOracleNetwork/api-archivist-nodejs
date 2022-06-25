@@ -1,4 +1,4 @@
-import { XyoAccount, XyoBoundWitnessBuilder } from '@xyo-network/sdk-xyo-client-js'
+import { XyoAccount, XyoBoundWitnessBuilder, XyoPayloadWithMeta, XyoSchemaPayload } from '@xyo-network/sdk-xyo-client-js'
 
 import { claimArchive, getArchiveSchemaRecent, getTokenForNewUser, postBlock } from '../../../../test'
 
@@ -18,7 +18,7 @@ describe('/archive/:archive/schema/recent', () => {
     }
   })
   it('Gets recently uploaded schema for the archive', async () => {
-    const response = await getArchiveSchemaRecent(archive)
+    const response = (await getArchiveSchemaRecent(archive)) as XyoPayloadWithMeta<XyoSchemaPayload>[]
     expect(response).toBeTruthy()
     expect(Array.isArray(response)).toBeTruthy()
     expect(response.length).toBe(schemaToAdd)

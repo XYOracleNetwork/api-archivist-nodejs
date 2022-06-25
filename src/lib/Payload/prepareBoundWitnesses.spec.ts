@@ -1,4 +1,4 @@
-import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitnessMeta, XyoBoundWitnessWithMeta, XyoPayloadWrapper } from '@xyo-network/sdk-xyo-client-js'
 
 import { getNewBlockWithBoundWitnessesWithPayloads } from '../../test'
 import { prepareBoundWitnesses, PrepareBoundWitnessesResult } from './prepareBoundWitnesses'
@@ -9,10 +9,12 @@ const _observeDuration = 10
 const _source_ip = '192.168.1.20'
 const _timestamp = 1655137984429
 const _user_agent = 'Mozilla/5.0 (X11; CrOS x86_64 8172.45.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.64 Safari/537.36'
+const _hash = new XyoPayloadWrapper({ schema: 'netowrk.xyo.test' }).hash
 
-const boundWitnessMeta = {
+const boundWitnessMeta: XyoBoundWitnessMeta = {
   _archive,
   _client,
+  _hash,
   _observeDuration,
   _source_ip,
   _timestamp,
@@ -21,13 +23,14 @@ const boundWitnessMeta = {
 const payloadMeta = {
   _archive,
   _client,
+  _hash,
   _observeDuration,
   _source_ip,
   _timestamp,
   _user_agent,
 }
 
-const validateBeforeSanitization = (boundWitnesses: XyoBoundWitness[]) => {
+const validateBeforeSanitization = (boundWitnesses: XyoBoundWitnessWithMeta[]) => {
   boundWitnesses.map((bw) => {
     expect(bw._archive).toBeUndefined()
     expect(bw._client).toBe(_client)
@@ -50,7 +53,6 @@ const validateBeforeSanitization = (boundWitnesses: XyoBoundWitness[]) => {
       expect(p._client).toBe(_client)
       expect(p._hash).toBeDefined()
       expect(p._observeDuration).toBeUndefined()
-      expect(p._source_ip).toBeUndefined()
       expect(p._timestamp).toBeDefined()
       expect(p.schema).toBeDefined()
     })
@@ -80,7 +82,6 @@ const validateAfterSanitization = (actual: PrepareBoundWitnessesResult) => {
     expect(p._client).toBe(_client)
     expect(p._hash).toBeTruthy()
     expect(p._observeDuration).toBe(_observeDuration)
-    expect(p._source_ip).toBe(_source_ip)
     expect(p._timestamp).toBeTruthy()
     expect(p.schema).toBeTruthy()
   })
