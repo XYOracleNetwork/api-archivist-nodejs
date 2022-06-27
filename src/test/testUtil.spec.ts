@@ -28,7 +28,7 @@ test('Must have API_KEY ENV VAR defined', () => {
 const request = supertest(getApp())
 
 const schema = 'co.coinapp.current.user.witness'
-export const unitTestSigningAccount = XyoAccount.fromPhrase('test')
+export const unitTestSigningAccount = new XyoAccount({ phrase: 'test' })
 const payloadTemplate = {
   balance: 10000.0,
   daysOld: 1,

@@ -10,7 +10,7 @@ import { v1 } from 'uuid'
  * Create an Account we'll use to witness each request with during the
  * lifetime of the program
  */
-const address = XyoAccount.fromPhrase(v1())
+const address = new XyoAccount({ phrase: v1() })
 
 export const getAccount = (): XyoAccount => {
   return address
