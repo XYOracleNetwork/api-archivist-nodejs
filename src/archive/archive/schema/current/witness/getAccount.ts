@@ -1,4 +1,4 @@
-import { XyoAccount } from '@xyo-network/sdk-xyo-client-js'
+import { XyoAccount } from '@xyo-network/account'
 import { v1 } from 'uuid'
 
 // TODO: Get via DI or static access so we can abstract away locality of
