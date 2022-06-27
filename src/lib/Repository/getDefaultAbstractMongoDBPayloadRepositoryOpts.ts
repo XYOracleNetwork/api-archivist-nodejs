@@ -1,4 +1,4 @@
-import { XyoAccount } from '@xyo-network/sdk-xyo-client-js'
+import { XyoAccount } from '@xyo-network/account'
 
 import { getArchivistAllBoundWitnessesMongoSdk, getArchivistAllPayloadMongoSdk } from '../dbSdk'
 import { AbstractMongoDBPayloadRepositoryOpts } from './AbstractMongoDBPayloadRepositoryOpts'
