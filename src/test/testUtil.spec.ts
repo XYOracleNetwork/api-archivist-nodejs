@@ -25,6 +25,13 @@ test('Must have API_KEY ENV VAR defined', () => {
   expect(process.env.API_KEY).toBeTruthy()
 })
 
+test('Must have temp archive created', async () => {
+  const name = 'temp'
+  const archive = await getArchive(name)
+  expect(archive.archive).toBe(name)
+  unitTestSigningAccount.addressValue.hex
+})
+
 const request = supertest(getApp())
 
 const schema = 'co.coinapp.current.user.witness'
