@@ -12,6 +12,7 @@ import {
   XyoPayloadWrapper,
   XyoSchemaPayload,
 } from '@xyo-network/sdk-xyo-client-js'
+import { config } from 'dotenv'
 import { Wallet } from 'ethers'
 import { StatusCodes } from 'http-status-codes'
 import supertest, { SuperTest, Test } from 'supertest'
@@ -21,24 +22,7 @@ import { PayloadRepairHashResponse } from '../archive'
 import { SortDirection } from '../model'
 import { getApp } from '../server'
 
-test('Must have API_KEY ENV VAR defined', () => {
-  expect(process.env.API_KEY).toBeTruthy()
-})
-
-test('Must have temp archive created', async () => {
-  const name = 'temp'
-  try {
-    const archive = await getArchive(name)
-    expect(archive).toBeTruthy()
-    expect(archive.archive).toBeTruthy()
-    expect(archive.archive).toBe(name)
-    expect(archive.accessControl).toBeFalsy()
-  } catch (error) {
-    // unitTestSigningAccount.addressValue.hex
-    const token = await getTokenForNewUser()
-    await claimArchive(token, name)
-  }
-})
+config()
 
 const request = supertest(getApp())
 

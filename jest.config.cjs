@@ -9,6 +9,7 @@ const generateJestConfig = ({ esModules }) => {
         statements: 70,
       },
     },
+    globalSetup: './src/test/setup.ts',
     globals: {
       'ts-jest': {
         tsconfig: 'tsconfig.test.json',
