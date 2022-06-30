@@ -48,7 +48,7 @@
       "name": "Debug Jest Tests",
       "type": "node",
       "request": "launch",
-      "linux": {
+      "osx": {
         "runtimeArgs": [
           "--inspect-brk",
           "${workspaceRoot}/node_modules/.bin/jest",
