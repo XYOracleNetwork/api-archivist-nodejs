@@ -5,7 +5,8 @@ import { claimArchive, getArchive, getTokenForNewUser } from './testUtil'
 
 /**
  * Jest global setup method run before
- * any tests
+ * any tests are run
+ * https://jestjs.io/docs/configuration#globalsetup-string
  */
 module.exports = async () => {
   const name = 'temp'
