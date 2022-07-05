@@ -67,8 +67,8 @@ describe('ArchiveAccountStrategy', () => {
       beforeAll(async () => {
         ;({ archive, ownerToken, user, userToken } = await initializeTestData())
         await setArchivePermissions(archive, ownerToken, {
-          allow: {
-            addresses: [user.address],
+          addresses: {
+            allow: [user.address],
           },
           schema: setArchivePermissionsSchema,
         })
@@ -96,10 +96,10 @@ describe('ArchiveAccountStrategy', () => {
       beforeAll(async () => {
         ;({ archive, ownerToken, user, userToken } = await initializeTestData())
         await setArchivePermissions(archive, ownerToken, {
-          allow: {
-            schemas: [allowedSchema],
-          },
           schema: setArchivePermissionsSchema,
+          schemas: {
+            allow: [allowedSchema],
+          },
         })
       })
       describe('allows schema', () => {
@@ -120,8 +120,8 @@ describe('ArchiveAccountStrategy', () => {
       beforeAll(async () => {
         ;({ archive, ownerToken, user, userToken } = await initializeTestData())
         await setArchivePermissions(archive, ownerToken, {
-          reject: {
-            addresses: [user.address],
+          addresses: {
+            reject: [user.address],
           },
           schema: setArchivePermissionsSchema,
         })
@@ -149,10 +149,10 @@ describe('ArchiveAccountStrategy', () => {
       beforeAll(async () => {
         ;({ archive, ownerToken, user, userToken } = await initializeTestData())
         await setArchivePermissions(archive, ownerToken, {
-          reject: {
-            schemas: [otherSchema],
-          },
           schema: setArchivePermissionsSchema,
+          schemas: {
+            reject: [otherSchema],
+          },
         })
       })
       describe('allows', () => {

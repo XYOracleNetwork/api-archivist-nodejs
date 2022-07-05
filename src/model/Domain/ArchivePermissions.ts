@@ -1,4 +1,4 @@
 export interface ArchivePermissions {
-  addresses: string[]
-  schemas: string[]
+  allow?: string[]
+  reject?: string[]
 }

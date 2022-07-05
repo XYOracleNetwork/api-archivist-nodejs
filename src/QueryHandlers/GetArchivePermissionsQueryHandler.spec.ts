@@ -12,15 +12,15 @@ const emptyPermissions: SetArchivePermissionsPayload = {
   schema: 'network.xyo.security.archive.permissions.set',
 }
 const permissions: SetArchivePermissionsPayload = {
-  allow: {
-    addresses: ['0x8ba1f109551bd432803012645ac136ddd64dba72'],
-    schemas: ['network.xyo.test'],
-  },
-  reject: {
-    addresses: ['0x0ac1df02185025f65202660f8167210a80dd5086'],
-    schemas: [debugSchema],
+  addresses: {
+    allow: ['0x8ba1f109551bd432803012645ac136ddd64dba72'],
+    reject: ['0x0ac1df02185025f65202660f8167210a80dd5086'],
   },
   schema: setArchivePermissionsSchema,
+  schemas: {
+    allow: ['network.xyo.test'],
+    reject: [debugSchema],
+  },
 }
 
 describe('GetArchivePermissionsQueryHandler', () => {
@@ -38,16 +38,16 @@ describe('GetArchivePermissionsQueryHandler', () => {
           const actual = await sut.handle(new GetArchivePermissionsQuery({ _archive, _hash, _timestamp, schema }))
           expect(actual).toBeTruthy()
           expect(actual?.schema).toBe(setArchivePermissionsSchema)
-          expect(actual?.allow).toBeDefined()
-          expect(actual?.allow?.addresses).toBeDefined()
-          expect(Array.isArray(actual?.allow?.addresses)).toBeTruthy()
-          expect(actual?.allow?.schemas).toBeDefined()
-          expect(Array.isArray(actual?.allow?.schemas)).toBeTruthy()
-          expect(actual?.reject).toBeDefined()
-          expect(actual?.reject?.addresses).toBeDefined()
-          expect(Array.isArray(actual?.reject?.addresses)).toBeTruthy()
-          expect(actual?.reject?.schemas).toBeDefined()
-          expect(Array.isArray(actual?.reject?.schemas)).toBeTruthy()
+          expect(actual?.addresses).toBeDefined()
+          expect(actual?.addresses?.allow).toBeDefined()
+          expect(Array.isArray(actual?.addresses?.allow)).toBeTruthy()
+          expect(actual?.addresses?.reject).toBeDefined()
+          expect(Array.isArray(actual?.addresses?.reject)).toBeTruthy()
+          expect(actual?.schemas).toBeDefined()
+          expect(actual?.schemas?.allow).toBeDefined()
+          expect(Array.isArray(actual?.schemas?.allow)).toBeTruthy()
+          expect(actual?.schemas?.reject).toBeDefined()
+          expect(Array.isArray(actual?.schemas?.reject)).toBeTruthy()
         })
       })
       describe('do not exist', () => {
@@ -61,8 +61,8 @@ describe('GetArchivePermissionsQueryHandler', () => {
           const actual = await sut.handle(new GetArchivePermissionsQuery({ _archive, _hash, _timestamp, schema }))
           expect(actual).toBeTruthy()
           expect(actual?.schema).toBe(setArchivePermissionsSchema)
-          expect(actual?.allow).toBeUndefined()
-          expect(actual?.reject).toBeUndefined()
+          expect(actual?.addresses).toBeUndefined()
+          expect(actual?.schemas).toBeUndefined()
         })
       })
     })

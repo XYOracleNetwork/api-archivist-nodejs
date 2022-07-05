@@ -9,8 +9,8 @@ const publicArchivePermissions: SetArchivePermissionsPayload = {
 }
 
 const privateArchivePermissions: SetArchivePermissionsPayload = {
-  allow: {
-    addresses: [],
+  addresses: {
+    allow: [],
   },
   schema,
 }
