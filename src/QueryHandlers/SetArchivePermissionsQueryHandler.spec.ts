@@ -24,15 +24,15 @@ const getQueryPayload = (
     _hash,
     _queryId,
     _timestamp,
-    allow: {
-      addresses: allowedAddresses,
-      schemas: allowedSchemas,
-    },
-    reject: {
-      addresses: disallowedAddresses,
-      schemas: disallowedSchemas,
+    addresses: {
+      allow: allowedAddresses,
+      reject: disallowedAddresses,
     },
     schema: setArchivePermissionsSchema,
+    schemas: {
+      allow: allowedSchemas,
+      reject: disallowedSchemas,
+    },
   }
 }
 

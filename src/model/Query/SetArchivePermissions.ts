@@ -7,9 +7,9 @@ export const setArchivePermissionsSchema = 'network.xyo.security.archive.permiss
 export type SetArchivePermissionsSchema = typeof setArchivePermissionsSchema
 
 export interface SetArchivePermissions {
-  allow?: Partial<ArchivePermissions>
-  reject?: Partial<ArchivePermissions>
+  addresses?: ArchivePermissions
   schema: SetArchivePermissionsSchema
+  schemas?: ArchivePermissions
 }
 
 export type SetArchivePermissionsPayloadWithMeta = XyoQueryPayloadWithMeta<SetArchivePermissions>

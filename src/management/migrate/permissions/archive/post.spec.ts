@@ -14,13 +14,13 @@ const migrateArchive = async (archive: string): Promise<MigrationResponse> => {
   const path = `/management/migrate/permissions/archives/${archive}`
   const header = { 'x-api-key': process.env.API_KEY }
   const response = await getArchivist().post(path).set(header).expect(StatusCodes.OK)
-  const result = response.body.data
+  const result: MigrationResponse = response.body.data
   expect(result).toBeDefined()
   expect(result.archive).toBeDefined()
   expect(result.archive.archive).toBe(archive)
   expect(result).toBeDefined()
   expect(result.migrated).toBeDefined()
-  expect(result.migrated?.reject).toBeUndefined()
+  expect(result.migrated?.schemas).toBeUndefined()
   return result
 }
 
@@ -33,13 +33,13 @@ describe('/management/migrate/permissions/archives/:archive', () => {
   })
   it('Migrates a public archive', async () => {
     const result = await migrateArchive(archive.archive)
-    expect(result.migrated?.allow).toBeUndefined()
+    expect(result.migrated?.addresses).toBeUndefined()
   })
   it('Migrates a private archive', async () => {
     archive.accessControl = true
     await setArchiveAccessControl(token, archive.archive, archive)
     const result = await migrateArchive(archive.archive)
-    expect(result.migrated?.allow?.addresses).toEqual([])
+    expect(result.migrated?.addresses?.allow).toEqual([])
   })
   afterAll(async () => {
     await ForgetPromise.awaitInactive()

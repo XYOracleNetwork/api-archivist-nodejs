@@ -9,13 +9,13 @@ export interface SetArchivePermissionsQueryHandlerOpts {
 }
 
 const validateAddresses = (query: SetArchivePermissionsQuery) => {
-  const allowed = query?.payload?.allow?.addresses
-  const disallowed = query?.payload?.reject?.addresses
+  const allowed = query?.payload?.addresses?.allow
+  const disallowed = query?.payload?.addresses?.reject
   validateArraysAreDistinct(allowed, disallowed)
 }
 const validateSchema = (query: SetArchivePermissionsQuery) => {
-  const allowed = query?.payload?.allow?.schemas
-  const disallowed = query?.payload?.reject?.schemas
+  const allowed = query?.payload?.schemas?.allow
+  const disallowed = query?.payload?.schemas?.reject
   validateArraysAreDistinct(allowed, disallowed)
 }
 const validateArraysAreDistinct = (allowed?: string[], disallowed?: string[]) => {
