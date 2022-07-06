@@ -34,12 +34,14 @@ describe('/management/migrate/permissions/archives/:archive', () => {
   it('Migrates a public archive', async () => {
     const result = await migrateArchive(archive.archive)
     expect(result.migrated?.addresses).toBeUndefined()
+    expect(result.migrated?.schemas).toBeUndefined()
   })
   it('Migrates a private archive', async () => {
     archive.accessControl = true
     await setArchiveAccessControl(token, archive.archive, archive)
     const result = await migrateArchive(archive.archive)
     expect(result.migrated?.addresses?.allow).toEqual([])
+    expect(result.migrated?.schemas).toBeUndefined()
   })
   afterAll(async () => {
     await ForgetPromise.awaitInactive()
