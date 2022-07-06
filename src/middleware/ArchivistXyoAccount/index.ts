@@ -1,4 +1,4 @@
-import { XyoAccount } from '@xyo-network/sdk-xyo-client-js'
+import { XyoAccount } from '@xyo-network/account'
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace

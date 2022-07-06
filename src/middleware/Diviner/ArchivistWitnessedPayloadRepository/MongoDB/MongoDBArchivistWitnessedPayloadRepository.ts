@@ -1,5 +1,5 @@
 import { exists } from '@xylabs/sdk-js'
-import { XyoAccount, XyoBoundWitness, XyoBoundWitnessBuilder, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoAccount, XyoBoundWitnessBuilder, XyoBoundWitnessWithMeta, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { Filter } from 'mongodb'
 
@@ -10,19 +10,19 @@ const unique = <T>(value: T, index: number, self: T[]) => {
   return self.indexOf(value) === index
 }
 
-export class MongoDBArchivistWitnessedPayloadRepository extends AbstractPayloadRepository<XyoPayload, string, Filter<XyoPayload>> {
+export class MongoDBArchivistWitnessedPayloadRepository extends AbstractPayloadRepository<XyoPayloadWithMeta, string, Filter<XyoPayloadWithMeta>> {
   constructor(
     protected account: XyoAccount,
-    protected payloads: BaseMongoSdk<XyoPayload> = getBaseMongoSdk<XyoPayload>('payloads'),
-    protected boundWitnesses: BaseMongoSdk<XyoBoundWitness> = getBaseMongoSdk<XyoBoundWitness>('bound_witnesses')
+    protected payloads: BaseMongoSdk<XyoPayloadWithMeta> = getBaseMongoSdk<XyoPayloadWithMeta>('payloads'),
+    protected boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta> = getBaseMongoSdk<XyoBoundWitnessWithMeta>('bound_witnesses')
   ) {
     super()
   }
-  find(_filter: Filter<XyoPayload>): Promise<XyoPayload[]> {
+  find(_filter: Filter<XyoPayloadWithMeta>): Promise<XyoPayloadWithMeta[]> {
     throw new Error('Not implemented')
     // TODO: How to support filtering but add our own filter in aggregation
   }
-  async get(hash: string): Promise<XyoPayload[]> {
+  async get(hash: string): Promise<XyoPayloadWithMeta[]> {
     // Find bw signed by us that has this hash
     const bound_witnesses = await (await this.boundWitnesses.find({ payload_hashes: hash })).toArray()
     const archives = bound_witnesses
@@ -31,7 +31,7 @@ export class MongoDBArchivistWitnessedPayloadRepository extends AbstractPayloadR
       .filter(unique)
     return (await this.payloads.find({ _archive: { $in: archives }, _hash: hash })).toArray()
   }
-  async insert(payloads: XyoPayload[]): Promise<XyoPayload[]> {
+  async insert(payloads: XyoPayloadWithMeta[]): Promise<XyoPayloadWithMeta[]> {
     // Witness from archivist
     const _timestamp = Date.now()
     const bw = new XyoBoundWitnessBuilder({ inlinePayloads: false }).payloads(payloads).build()
@@ -41,7 +41,7 @@ export class MongoDBArchivistWitnessedPayloadRepository extends AbstractPayloadR
       throw new Error('Error inserting BoundWitness')
     }
     // Store payloads
-    const result = await this.payloads.insertMany(payloads.map(removeId))
+    const result = await this.payloads.insertMany(payloads.map(removeId) as XyoPayloadWithMeta[])
     if (result.insertedCount != payloads.length) {
       throw new Error('Error inserting Payloads')
     }

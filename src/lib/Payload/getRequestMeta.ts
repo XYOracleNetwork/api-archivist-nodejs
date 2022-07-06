@@ -11,15 +11,15 @@ export const getRequestMeta = <T extends RequestWithArchive>(req: Request<T>): [
   const _source_ip = req.ip ?? undefined
   const _timestamp = Date.now()
   const _user_agent = getHttpHeader('User-agent', req) || undefined
-  const boundWitnessMetaData: XyoBoundWitnessMeta = {
+  const boundWitnessMetaData: Partial<XyoBoundWitnessMeta> = {
     _archive: archive,
     _source_ip,
     _timestamp,
     _user_agent,
   }
-  const payloadMetaData: XyoPayloadMeta = {
+  const payloadMetaData: Partial<XyoPayloadMeta> = {
     _archive: archive,
     _timestamp,
   }
-  return [boundWitnessMetaData, payloadMetaData]
+  return [boundWitnessMetaData as XyoBoundWitnessMeta, payloadMetaData as XyoPayloadMeta]
 }

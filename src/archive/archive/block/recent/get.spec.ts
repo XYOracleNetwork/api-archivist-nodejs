@@ -1,10 +1,10 @@
-import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitnessWithMeta } from '@xyo-network/sdk-xyo-client-js'
 
 import { claimArchive, getNewBlockWithPayloads, getRecentBlocks, getTokenForNewUser, postBlock } from '../../../../test'
 
 const defaultReturnLength = 20
 
-const getRecent = async (archive: string, token: string, expectedReturnLength = defaultReturnLength): Promise<XyoBoundWitness[]> => {
+const getRecent = async (archive: string, token: string, expectedReturnLength = defaultReturnLength): Promise<XyoBoundWitnessWithMeta[]> => {
   const recent = await getRecentBlocks(archive, token)
   expect(recent).toBeTruthy()
   expect(Array.isArray(recent)).toBe(true)

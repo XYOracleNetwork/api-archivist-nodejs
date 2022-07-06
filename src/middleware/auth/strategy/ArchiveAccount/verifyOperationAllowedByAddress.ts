@@ -1,5 +1,5 @@
 import { NoReqQuery } from '@xylabs/sdk-api-express-ecs'
-import { XyoBoundWitness, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitness, XyoBoundWitnessWithMeta, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { Request } from 'express'
 
 import { isRequestUserOwnerOfRequestedArchive } from '../../../../lib'
@@ -15,8 +15,8 @@ const getArchivePermissions = async (req: Request<unknown, unknown, XyoBoundWitn
 }
 
 const verifyAccountAllowed = (address: string | undefined, permissions: SetArchivePermissions): boolean => {
-  const allowedAddresses = permissions?.allow?.addresses
-  const disallowedAddresses = permissions?.reject?.addresses
+  const allowedAddresses = permissions?.addresses?.allow
+  const disallowedAddresses = permissions?.addresses?.reject
 
   // If there's address restrictions on the archive and this
   // is an anonymous request
@@ -35,8 +35,8 @@ const verifyAccountAllowed = (address: string | undefined, permissions: SetArchi
   return true
 }
 const verifySchemaAllowed = (schema: string, permissions: SetArchivePermissions): boolean => {
-  const allowedSchemas = permissions?.allow?.schemas
-  const disallowedSchemas = permissions?.reject?.schemas
+  const allowedSchemas = permissions?.schemas?.allow
+  const disallowedSchemas = permissions?.schemas?.reject
 
   // If there's no schema restrictions on the archive
   if (!allowedSchemas && !disallowedSchemas) return true
@@ -56,7 +56,7 @@ const verifySchemaAllowed = (schema: string, permissions: SetArchivePermissions)
   return true
 }
 
-export const verifyOperationAllowedByAddress = async (req: Request<ArchivePathParams, unknown, XyoBoundWitness[], NoReqQuery, ArchiveLocals>): Promise<boolean> => {
+export const verifyOperationAllowedByAddress = async (req: Request<ArchivePathParams, unknown, XyoBoundWitnessWithMeta[], NoReqQuery, ArchiveLocals>): Promise<boolean> => {
   // NOTE: Communicate partial success for allowed/disallowed operations
   // Short circuit & reduce all operations to binary success/failure for now
   // Get archive permissions

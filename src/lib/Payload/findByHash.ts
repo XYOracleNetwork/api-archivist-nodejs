@@ -22,7 +22,7 @@ export const findPayloadsByHash = async (hash: string, archive?: string): Promis
   return (await sdk.find({ _hash: hash })).toArray()
 }
 
-export const findBoundWitnessesByHash = async (hash: string, archive?: string): Promise<XyoBoundWitness[]> => {
+export const findBoundWitnessesByHash = async (hash: string, archive?: string) => {
   const sdk = archive ? getArchivistBoundWitnessesMongoSdk(archive) : getArchivistAllBoundWitnessesMongoSdk()
   return (await sdk.find({ _hash: hash })).toArray()
 }

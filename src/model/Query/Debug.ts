@@ -1,4 +1,4 @@
-import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 
 import { Query } from './Query'
 
@@ -11,5 +11,6 @@ export interface Debug {
 }
 
 export type DebugPayload = XyoPayload<Debug>
+export type DebugPayloadWithMeta = XyoPayloadWithMeta<Debug>
 
 export class DebugQuery extends Query<DebugPayload> {}

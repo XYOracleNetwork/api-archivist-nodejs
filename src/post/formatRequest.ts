@@ -1,14 +1,14 @@
-import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitnessWithMeta, XyoPayloadMeta } from '@xyo-network/sdk-xyo-client-js'
 
 import { augmentWithMetadata, getRequestMeta } from '../lib'
 import { PostNodeRequest } from './PostNodeRequest'
 
-export const formatRequest = (req: PostNodeRequest): XyoBoundWitness[] => {
+export const formatRequest = (req: PostNodeRequest): XyoBoundWitnessWithMeta[] => {
   const [boundWitnessMeta, payloadMeta] = getRequestMeta(req)
-  const boundWitnesses: XyoBoundWitness[] = Array.isArray(req.body) ? req.body : [req.body]
+  const boundWitnesses: XyoBoundWitnessWithMeta[] = (Array.isArray(req.body) ? req.body : [req.body]) as XyoBoundWitnessWithMeta[]
   return augmentWithMetadata(
-    boundWitnesses.map<XyoBoundWitness>((bw) => {
-      bw._payloads = bw._payloads?.length ? augmentWithMetadata(bw._payloads, payloadMeta as Record<string, unknown>) : []
+    boundWitnesses.map<XyoBoundWitnessWithMeta>((bw) => {
+      bw._payloads = bw._payloads?.length ? augmentWithMetadata(bw._payloads, payloadMeta as XyoPayloadMeta) : []
       return bw
     }),
     boundWitnessMeta

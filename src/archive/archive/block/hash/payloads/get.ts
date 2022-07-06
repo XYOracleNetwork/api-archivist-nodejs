@@ -1,7 +1,7 @@
 import 'source-map-support/register'
 
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
-import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPartialPayloadMeta } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
@@ -15,7 +15,7 @@ const getBoundWitness = async (archive: string, hash: string) => {
 
 const getPayloads = async (archive: string, hashes: string[]) => {
   const sdk = getArchivistPayloadMongoSdk(archive)
-  const map: Record<string, XyoPayload[]> = {}
+  const map: Record<string, XyoPartialPayloadMeta[]> = {}
   const payloads = await sdk.findByHashes(hashes)
   payloads.forEach((value) => {
     if (value._hash) {
@@ -25,7 +25,7 @@ const getPayloads = async (archive: string, hashes: string[]) => {
   return hashes.map((value) => map[value])
 }
 
-const handler: RequestHandler<BlockHashPathParams, XyoPayload[][]> = async (req, res, next) => {
+const handler: RequestHandler<BlockHashPathParams, XyoPartialPayloadMeta[][]> = async (req, res, next) => {
   const { archive, hash } = req.params
   const bw = await getBoundWitness(archive, hash)
   if (bw && bw.length > 0) {

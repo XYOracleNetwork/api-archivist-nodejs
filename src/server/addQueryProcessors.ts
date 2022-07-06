@@ -1,4 +1,5 @@
-import { XyoSchemaCache } from '@xyo-network/sdk-xyo-client-js'
+import { delay } from '@xylabs/sdk-js'
+import { XyoPayloadWithMeta, XyoSchemaCache } from '@xyo-network/sdk-xyo-client-js'
 import { Application } from 'express'
 
 import { isProduction, QueryProcessorRegistry } from '../middleware'
@@ -25,13 +26,16 @@ export const addQueryProcessors = (app: Application) => {
 }
 
 const addDebug = (registry: QueryProcessorRegistry) => {
-  registry.registerProcessorForSchema(debugSchema, (x) => new DebugQueryHandler().handle(x as DebugQuery))
-  registry.registerProcessorForSchema('network.xyo.test', () => Promise.resolve())
+  registry.registerProcessorForSchema(debugSchema, (payload) => new DebugQueryHandler().handle(payload as DebugQuery))
+  registry.registerProcessorForSchema('network.xyo.test', async () => {
+    await delay(0)
+    return {} as XyoPayloadWithMeta
+  })
 }
 
 const addQueries = (app: Application, registry: QueryProcessorRegistry) => {
-  registry.registerProcessorForSchema(setArchivePermissionsSchema, (x) => new SetArchivePermissionsQueryHandler({ ...app }).handle(x as SetArchivePermissionsQuery))
-  registry.registerProcessorForSchema(getArchivePermissionsSchema, (x) => new GetArchivePermissionsQueryHandler({ ...app }).handle(x as GetArchivePermissionsQuery))
-  registry.registerProcessorForSchema(getDomainConfigSchema, (x) => new GetDomainConfigQueryHandler({ ...app }).handle(x as GetDomainConfigQuery))
-  registry.registerProcessorForSchema(getSchemaSchema, (x) => new GetSchemaQueryHandler({ schemaRepository: XyoSchemaCache.instance }).handle(x as GetSchemaQuery))
+  registry.registerProcessorForSchema(setArchivePermissionsSchema, (payload) => new SetArchivePermissionsQueryHandler({ ...app }).handle(payload as SetArchivePermissionsQuery))
+  registry.registerProcessorForSchema(getArchivePermissionsSchema, (payload) => new GetArchivePermissionsQueryHandler({ ...app }).handle(payload as GetArchivePermissionsQuery))
+  registry.registerProcessorForSchema(getDomainConfigSchema, (payload) => new GetDomainConfigQueryHandler({ ...app }).handle(payload as GetDomainConfigQuery))
+  registry.registerProcessorForSchema(getSchemaSchema, (payload) => new GetSchemaQueryHandler({ schemaRepository: XyoSchemaCache.instance }).handle(payload as GetSchemaQuery))
 }

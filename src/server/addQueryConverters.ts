@@ -1,4 +1,4 @@
-import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload, XyoQueryPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { Application, Request } from 'express'
 import { v4 } from 'uuid'
 
@@ -38,13 +38,19 @@ export const addQueryConverters = (app: Application) => {
 }
 
 export const addDebugQueries = (registry: QueryConverterRegistry) => {
-  registry.registerConverterForSchema(debugSchema, (x: DebugPayload, _req: Request) => new DebugQuery(x))
+  registry.registerConverterForSchema(debugSchema, (payload: XyoQueryPayloadWithMeta<DebugPayload>, _req: Request) => new DebugQuery(payload))
   registry.registerConverterForSchema('network.xyo.test', debugCommandConverter)
 }
 
 export const addQueryHandlers = (app: Application, registry: QueryConverterRegistry) => {
-  registry.registerConverterForSchema(setArchivePermissionsSchema, (x: SetArchivePermissionsPayload, _req: Request) => new SetArchivePermissionsQuery(x))
-  registry.registerConverterForSchema(getArchivePermissionsSchema, (x: GetArchivePermissionsPayload, _req: Request) => new GetArchivePermissionsQuery(x))
-  registry.registerConverterForSchema(getDomainConfigSchema, (x: GetDomainConfigPayload, _req: Request) => new GetDomainConfigQuery(x))
-  registry.registerConverterForSchema(getSchemaSchema, (x: GetSchemaPayload, _req: Request) => new GetSchemaQuery(x))
+  registry.registerConverterForSchema(
+    setArchivePermissionsSchema,
+    (payload: XyoQueryPayloadWithMeta<SetArchivePermissionsPayload>, _req: Request) => new SetArchivePermissionsQuery(payload)
+  )
+  registry.registerConverterForSchema(
+    getArchivePermissionsSchema,
+    (payload: XyoQueryPayloadWithMeta<GetArchivePermissionsPayload>, _req: Request) => new GetArchivePermissionsQuery(payload)
+  )
+  registry.registerConverterForSchema(getDomainConfigSchema, (payload: XyoQueryPayloadWithMeta<GetDomainConfigPayload>, _req: Request) => new GetDomainConfigQuery(payload))
+  registry.registerConverterForSchema(getSchemaSchema, (payload: XyoQueryPayloadWithMeta<GetSchemaPayload>, _req: Request) => new GetSchemaQuery(payload))
 }

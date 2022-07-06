@@ -4,11 +4,15 @@ import {
   XyoArchiveKey,
   XyoBoundWitness,
   XyoBoundWitnessBuilder,
+  XyoBoundWitnessWithMeta,
   XyoDomainPayload,
   XyoPayload,
   XyoPayloadBuilder,
+  XyoPayloadWithMeta,
+  XyoPayloadWrapper,
   XyoSchemaPayload,
 } from '@xyo-network/sdk-xyo-client-js'
+import { config } from 'dotenv'
 import { Wallet } from 'ethers'
 import { StatusCodes } from 'http-status-codes'
 import supertest, { SuperTest, Test } from 'supertest'
@@ -18,14 +22,12 @@ import { PayloadRepairHashResponse } from '../archive'
 import { SortDirection } from '../model'
 import { getApp } from '../server'
 
-test('Must have API_KEY ENV VAR defined', () => {
-  expect(process.env.API_KEY).toBeTruthy()
-})
+config()
 
 const request = supertest(getApp())
 
 const schema = 'co.coinapp.current.user.witness'
-export const unitTestSigningAccount = XyoAccount.fromPhrase('test')
+export const unitTestSigningAccount = new XyoAccount({ phrase: 'test' })
 const payloadTemplate = {
   balance: 10000.0,
   daysOld: 1,
@@ -47,7 +49,7 @@ const knownPayload = new XyoPayloadBuilder({ schema })
     uid: '0000000000000000000000000000',
   })
   .build()
-export const knownPayloadHash = knownPayload._hash || ''
+export const knownPayloadHash = new XyoPayloadWrapper(knownPayload).hash
 export const knownBlock = new XyoBoundWitnessBuilder({ inlinePayloads: true }).witness(XyoAccount.random()).payload(knownPayload).build()
 export const knownBlockHash = knownBlock._hash || ''
 
@@ -205,7 +207,7 @@ export const getNewBlockWithBoundWitnessesWithPayloads = (numBoundWitnesses = 1,
   })
 }
 
-export const getHash = async (hash: string, token?: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoBoundWitness | XyoPayload> => {
+export const getHash = async (hash: string, token?: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoBoundWitnessWithMeta | XyoPayloadWithMeta> => {
   const path = `/${hash}`
   const response = token ? await request.get(path).auth(token, { type: 'bearer' }).expect(expectedStatus) : await request.get(path).expect(expectedStatus)
   return response.body
@@ -216,14 +218,14 @@ export const postBlock = async (
   archive: string,
   token?: string,
   expectedStatus: StatusCodes = StatusCodes.OK
-): Promise<XyoBoundWitness[]> => {
+): Promise<XyoBoundWitnessWithMeta[]> => {
   const data = ([] as XyoBoundWitness[]).concat(Array.isArray(boundWitnesses) ? boundWitnesses : [boundWitnesses])
   const path = `/archive/${archive}/block`
   const response = token ? await request.post(path).auth(token, { type: 'bearer' }).send(data).expect(expectedStatus) : await request.post(path).send(data).expect(expectedStatus)
   return response.body.data
 }
 
-export const getBlockByHash = async (token: string, archive: string, hash: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoPayload[]> => {
+export const getBlockByHash = async (token: string, archive: string, hash: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoPayloadWithMeta[]> => {
   const response = await request.get(`/archive/${archive}/block/hash/${hash}`).auth(token, { type: 'bearer' }).expect(expectedStatus)
   return response.body.data
 }
@@ -235,18 +237,18 @@ export const getBlocksByTimestamp = async (
   limit = 10,
   order: SortDirection = 'asc',
   expectedStatus: StatusCodes = StatusCodes.OK
-): Promise<XyoBoundWitness[]> => {
+): Promise<XyoBoundWitnessWithMeta[]> => {
   const response = await request.get(`/archive/${archive}/block`).query({ limit, order, timestamp }).auth(token, { type: 'bearer' }).expect(expectedStatus)
   return response.body.data
 }
 
-export const getRecentBlocks = async (archive: string, token?: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoBoundWitness[]> => {
+export const getRecentBlocks = async (archive: string, token?: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoBoundWitnessWithMeta[]> => {
   const path = `/archive/${archive}/block/recent`
   const response = token ? await request.get(path).auth(token, { type: 'bearer' }).expect(expectedStatus) : await request.get(path).expect(expectedStatus)
   return response.body.data
 }
 
-export const getPayloadByHash = async (token: string, archive: string, hash: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoPayload[]> => {
+export const getPayloadByHash = async (token: string, archive: string, hash: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoPayloadWithMeta[]> => {
   const response = await request.get(`/archive/${archive}/payload/hash/${hash}`).auth(token, { type: 'bearer' }).expect(expectedStatus)
   return response.body.data
 }
@@ -258,7 +260,7 @@ export const getPayloadsByTimestamp = async (
   limit = 10,
   order: SortDirection = 'asc',
   expectedStatus: StatusCodes = StatusCodes.OK
-): Promise<XyoPayload[]> => {
+): Promise<XyoPayloadWithMeta[]> => {
   const response = await request.get(`/archive/${archive}/payload`).query({ limit, order, timestamp }).auth(token, { type: 'bearer' }).expect(expectedStatus)
   return response.body.data
 }
@@ -268,13 +270,13 @@ export const repairPayloadByHash = async (token: string, archive: string, hash: 
   return response.body.data
 }
 
-export const getRecentPayloads = async (archive: string, token?: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoPayload[]> => {
+export const getRecentPayloads = async (archive: string, token?: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoPayloadWithMeta[]> => {
   const path = `/archive/${archive}/payload/recent`
   const response = token ? await request.get(path).auth(token, { type: 'bearer' }).expect(expectedStatus) : await request.get(path).expect(expectedStatus)
   return response.body.data
 }
 
-export const getPayloadByBlockHash = async (token: string, archive: string, hash: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoPayload[]> => {
+export const getPayloadByBlockHash = async (token: string, archive: string, hash: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoPayloadWithMeta[]> => {
   const response = await request.get(`/archive/${archive}/block/hash/${hash}/payloads`).auth(token, { type: 'bearer' }).expect(expectedStatus)
   return response.body.data
 }
@@ -285,13 +287,18 @@ export const getSchema = async (schema: string, token?: string, expectedStatus: 
   return response.body.data
 }
 
-export const getArchiveSchemaRecent = async (archive: string, token?: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoPayload[]> => {
+export const getArchiveSchemaRecent = async (archive: string, token?: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoPayloadWithMeta[]> => {
   const path = `/archive/${archive}/schema/recent`
   const response = token ? await request.get(path).auth(token, { type: 'bearer' }).expect(expectedStatus) : await request.get(path).expect(expectedStatus)
   return response.body.data
 }
 
-export const getArchiveSchemaPayloadsRecent = async (archive: string, schema: string, token?: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoPayload[]> => {
+export const getArchiveSchemaPayloadsRecent = async (
+  archive: string,
+  schema: string,
+  token?: string,
+  expectedStatus: StatusCodes = StatusCodes.OK
+): Promise<XyoPayloadWithMeta[]> => {
   const path = `/archive/${archive}/schema/${schema}/recent`
   const response = token ? await request.get(path).auth(token, { type: 'bearer' }).expect(expectedStatus) : await request.get(path).expect(expectedStatus)
   return response.body.data
@@ -310,7 +317,7 @@ export const postCommandsToArchive = async (
   return response.body.data
 }
 
-export const queryCommandResult = async (id: string, token?: string, expectedStatus: StatusCodes = StatusCodes.ACCEPTED): Promise<XyoPayload> => {
+export const queryCommandResult = async (id: string, token?: string, expectedStatus: StatusCodes = StatusCodes.ACCEPTED): Promise<XyoPayloadWithMeta> => {
   const path = `/query/${id}`
   const response = token ? await request.get(path).redirects(1).auth(token, { type: 'bearer' }).expect(expectedStatus) : await request.get(path).redirects(1).expect(expectedStatus)
   // Redirects to raw HURI response so no .data

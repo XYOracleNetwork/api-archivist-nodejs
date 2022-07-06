@@ -1,5 +1,5 @@
 import { assertEx } from '@xylabs/sdk-js'
-import { XyoAccount, XyoBoundWitness, XyoBoundWitnessBuilder, XyoPayload, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
+import { XyoAccount, XyoBoundWitnessBuilder, XyoBoundWitnessWithPartialMeta, XyoPayload, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import { SortDirection } from '../../model'
@@ -29,7 +29,7 @@ const getPayloadPointer = (archive: string, schema: string, timestamp = Date.now
 describe('/:hash', () => {
   let token: string
   let archive: string
-  let block: XyoBoundWitness
+  let block: XyoBoundWitnessWithPartialMeta
   let payload: XyoPayload
   let pointerHash: string
   beforeAll(() => jest.spyOn(console, 'error').mockImplementation())
@@ -123,8 +123,9 @@ describe('/:hash', () => {
 describe.skip('Generation of automation payload pointers', () => {
   const schemas = ['network.xyo.crypto.market.coingecko', 'network.xyo.crypto.market.uniswap']
   it.each(schemas)('Generates automation witness payload for %s schema', (schema) => {
-    const addressRule: PayloadAddressRule = { address: '1d8cb128afeed493e0c3d9de7bfc415aecfde283' }
-    const archiveRule: PayloadArchiveRule = { archive: 'temp' }
+    const addressRule: PayloadAddressRule = { address: '1d8cb128afeed493e0c3d9de7bfc415aecfde283' } // Beta
+    // const addressRule: PayloadAddressRule = { address: '4618fce2a84b9cbc64bb07f7249caa6df2a892c7' } // Prod
+    const archiveRule: PayloadArchiveRule = { archive: 'crypto-price-witness' }
     const schemaRule: PayloadSchemaRule = { schema }
     const fields: PayloadPointerBody = { reference: [[addressRule], [archiveRule], [schemaRule]], schema: payloadPointerSchema }
     const payload = new XyoPayloadBuilder<PayloadPointerBody>({ schema: payloadPointerSchema }).fields(fields).build()

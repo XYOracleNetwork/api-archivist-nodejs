@@ -1,8 +1,8 @@
 import { assertEx } from '@xylabs/sdk-js'
-import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload, XyoPayloadWithPartialMeta, XyoPayloadWrapper } from '@xyo-network/sdk-xyo-client-js'
 
 export abstract class Query<T extends XyoPayload = XyoPayload> {
-  constructor(public readonly payload: T) {}
+  constructor(public readonly payload: XyoPayloadWithPartialMeta<T>) {}
   /**
    * Defaults to returning a concatenated string of the the
    * payload hash + timestamp. Two queries with the exact same
@@ -12,7 +12,7 @@ export abstract class Query<T extends XyoPayload = XyoPayload> {
    * @returns Correlation ID for the query
    */
   public get id(): string {
-    const hash = assertEx(this.payload._hash)
+    const hash = new XyoPayloadWrapper(this.payload).hash
     const timestamp = assertEx(this.payload._timestamp)
     return `${timestamp}-${hash}`
   }

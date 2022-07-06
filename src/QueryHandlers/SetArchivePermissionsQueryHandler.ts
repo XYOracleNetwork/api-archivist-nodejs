@@ -2,20 +2,20 @@ import { assertEx } from '@xylabs/sdk-js'
 import { XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
 
 import { ArchivePermissionsRepository } from '../middleware'
-import { QueryHandler, SetArchivePermissionsPayload, SetArchivePermissionsQuery, setArchivePermissionsSchema } from '../model'
+import { QueryHandler, SetArchivePermissionsPayload, SetArchivePermissionsPayloadWithMeta, SetArchivePermissionsQuery, setArchivePermissionsSchema } from '../model'
 
 export interface SetArchivePermissionsQueryHandlerOpts {
   archivePermissionsRepository: ArchivePermissionsRepository
 }
 
 const validateAddresses = (query: SetArchivePermissionsQuery) => {
-  const allowed = query?.payload?.allow?.addresses
-  const disallowed = query?.payload?.reject?.addresses
+  const allowed = query?.payload?.addresses?.allow
+  const disallowed = query?.payload?.addresses?.reject
   validateArraysAreDistinct(allowed, disallowed)
 }
 const validateSchema = (query: SetArchivePermissionsQuery) => {
-  const allowed = query?.payload?.allow?.schemas
-  const disallowed = query?.payload?.reject?.schemas
+  const allowed = query?.payload?.schemas?.allow
+  const disallowed = query?.payload?.schemas?.reject
   validateArraysAreDistinct(allowed, disallowed)
 }
 const validateArraysAreDistinct = (allowed?: string[], disallowed?: string[]) => {
@@ -34,7 +34,7 @@ export class SetArchivePermissionsQueryHandler implements QueryHandler<SetArchiv
     await this.opts.archivePermissionsRepository.insert([query.payload])
     const permissions = await this.opts.archivePermissionsRepository.get(archive)
     const currentPermissions = assertEx(permissions?.[0])
-    return new XyoPayloadBuilder<SetArchivePermissionsPayload>({ schema: setArchivePermissionsSchema })
+    return new XyoPayloadBuilder<SetArchivePermissionsPayloadWithMeta>({ schema: setArchivePermissionsSchema })
       .fields({ ...currentPermissions, _queryId: query.id, _timestamp: Date.now() })
       .build()
   }
