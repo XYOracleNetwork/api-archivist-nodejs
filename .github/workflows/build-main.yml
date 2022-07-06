@@ -51,12 +51,10 @@ jobs:
       - name: bring down test environment
         run: docker compose down
       - name: format code coverage
-        # uses: ./.github/actions/cc-test-reporter
         uses: xylabs/action-code-climate-test-reporter@f5f7851fd8d1c9fdf8eff37d35be671d0bd4cd3d
         with:
           subcommand: "format-coverage -t lcov ./coverage/lcov.info"
       - name: upload code coverage
-        # uses: ./.github/actions/cc-test-reporter
         uses: xylabs/action-code-climate-test-reporter@f5f7851fd8d1c9fdf8eff37d35be671d0bd4cd3d
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
