@@ -1,6 +1,7 @@
 export * from './Archive'
 export * from './dbSdk'
 export * from './flattenArray'
+export * from './getArchivistAccount'
 export * from './getQueue'
 export * from './Payload'
 export * from './Repository'

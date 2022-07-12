@@ -16,3 +16,14 @@ export type SetArchivePermissionsPayloadWithMeta = XyoQueryPayloadWithMeta<SetAr
 export type SetArchivePermissionsPayload = XyoPayload<SetArchivePermissions>
 
 export class SetArchivePermissionsQuery extends Query<SetArchivePermissionsPayload> {}
+
+export const publicArchivePermissions: SetArchivePermissionsPayload = {
+  schema: setArchivePermissionsSchema,
+}
+
+export const privateArchivePermissions: SetArchivePermissionsPayload = {
+  addresses: {
+    allow: [],
+  },
+  schema: setArchivePermissionsSchema,
+}

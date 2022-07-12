@@ -1,8 +1,10 @@
+import { getDefaultLogger } from '@xylabs/sdk-api-express-ecs'
 import { assertEx } from '@xylabs/sdk-js'
 import { Huri, XyoQueryPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { Application } from 'express'
 
 export const addInMemoryQueryProcessing = (app: Application) => {
+  const logger = getDefaultLogger()
   app.queryQueue.onQueued = async (id) => {
     const query = await app.queryQueue.tryDequeue(id)
     if (query) {
@@ -31,7 +33,7 @@ export const addInMemoryQueryProcessing = (app: Application) => {
           }
         }
       } catch (error) {
-        console.log(error)
+        logger.log(error)
       }
     }
   }

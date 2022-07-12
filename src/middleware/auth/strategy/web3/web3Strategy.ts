@@ -1,3 +1,4 @@
+import { getDefaultLogger } from '@xylabs/sdk-api-express-ecs'
 import { Request } from 'express'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
@@ -5,6 +6,9 @@ import { verifyUuid } from './verifyUuid'
 import { verifyWallet } from './verifyWallet'
 
 export class Web3AuthStrategy extends Strategy {
+  constructor(public readonly logger = getDefaultLogger()) {
+    super()
+  }
   override async authenticate(this: StrategyCreated<this, this & StrategyCreatedStatic>, req: Request, _options?: unknown) {
     try {
       const { message, signature } = req.body
@@ -38,7 +42,7 @@ export class Web3AuthStrategy extends Strategy {
         return
       }
     } catch (error) {
-      console.log(JSON.stringify(error, null, 2))
+      this.logger.error(JSON.stringify(error, null, 2))
       this.error({ message: 'Web3 Auth Error' })
     }
   }
