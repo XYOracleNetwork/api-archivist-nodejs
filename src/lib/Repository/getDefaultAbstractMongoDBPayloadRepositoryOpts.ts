@@ -1,10 +1,10 @@
-import { getAccountFromSeedPhrase } from '../../middleware'
 import { getArchivistAllBoundWitnessesMongoSdk, getArchivistAllPayloadMongoSdk } from '../dbSdk'
+import { getArchivistAccount } from '../getArchivistAccount'
 import { AbstractMongoDBPayloadRepositoryOpts } from './AbstractMongoDBPayloadRepositoryOpts'
 
 export const getDefaultAbstractMongoDBPayloadRepositoryOpts = (): AbstractMongoDBPayloadRepositoryOpts => {
   return {
-    account: getAccountFromSeedPhrase(process.env.ACCOUNT_SEED),
+    account: getArchivistAccount(),
     boundWitnessSdk: getArchivistAllBoundWitnessesMongoSdk(),
     config: { inlinePayloads: false },
     payloadsSdk: getArchivistAllPayloadMongoSdk(),
