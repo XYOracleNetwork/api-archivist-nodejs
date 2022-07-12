@@ -1,8 +1,9 @@
-import { getEnvFromAws } from '@xylabs/sdk-api-express-ecs'
+import { getDefaultLogger, getEnvFromAws } from '@xylabs/sdk-api-express-ecs'
 import compression from 'compression'
 import cors from 'cors'
 import express, { Express } from 'express'
 
+import { getDefaultAbstractMongoDBPayloadRepositoryOpts } from '../lib'
 import { configureDoc } from '../middleware'
 import { addDependencies } from './addDependencies'
 import { addErrorHandlers } from './addErrorHandlers'
@@ -42,19 +43,19 @@ export const server = async (port = 80) => {
   // If an AWS ARN was supplied for Secrets Manager
   const awsEnvSecret = process.env.AWS_ENV_SECRET_ARN
   if (awsEnvSecret) {
-    console.log('Bootstrapping ENV from AWS')
     // Merge the values from AWS into the current ENV
     // with AWS taking precedence
     const awsEnv = await getEnvFromAws(awsEnvSecret)
     Object.assign(process.env, awsEnv)
   }
 
+  const logger = getDefaultLogger()
   const app = getApp()
   const host = process.env.PUBLIC_ORIGIN || `http://localhost:${port}`
   await configureDoc(app, { host })
 
   const server = app.listen(port, () => {
-    console.log(`Server listening at http://localhost:${port}`)
+    logger.log(`Server listening at http://localhost:${port}`)
   })
 
   server.setTimeout(3000)
