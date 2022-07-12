@@ -1,21 +1,8 @@
 import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 
 import { isLegacyPrivateArchive } from '../../../lib'
-import { ArchivePermissionsRepository, SetArchivePermissionsPayload, setArchivePermissionsSchema } from '../../../model'
+import { ArchivePermissionsRepository, privateArchivePermissions, publicArchivePermissions, SetArchivePermissionsPayload } from '../../../model'
 
-const schema = setArchivePermissionsSchema
-const publicArchivePermissions: SetArchivePermissionsPayload = {
-  schema,
-}
-
-const privateArchivePermissions: SetArchivePermissionsPayload = {
-  addresses: {
-    allow: [],
-  },
-  schema,
-}
-
-// TODO: Witness each record by Archivist?
 export const migrateLegacyArchives = async (repository: ArchivePermissionsRepository, archives: XyoArchive[]) => {
   const migrations = archives.map((archive) => {
     // create a new public/private archive record for the legacy archive
