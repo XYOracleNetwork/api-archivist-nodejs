@@ -1,11 +1,10 @@
-import { XyoAccount } from '@xyo-network/account'
-
+import { getAccountFromSeedPhrase } from '../../middleware'
 import { getArchivistAllBoundWitnessesMongoSdk, getArchivistAllPayloadMongoSdk } from '../dbSdk'
 import { AbstractMongoDBPayloadRepositoryOpts } from './AbstractMongoDBPayloadRepositoryOpts'
 
 export const getDefaultAbstractMongoDBPayloadRepositoryOpts = (): AbstractMongoDBPayloadRepositoryOpts => {
   return {
-    account: XyoAccount.random(),
+    account: getAccountFromSeedPhrase(process.env.ACCOUNT_SEED),
     boundWitnessSdk: getArchivistAllBoundWitnessesMongoSdk(),
     config: { inlinePayloads: false },
     payloadsSdk: getArchivistAllPayloadMongoSdk(),
