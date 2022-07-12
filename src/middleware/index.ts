@@ -1,5 +1,4 @@
 export * from './archiveLocals'
-export * from './ArchivistXyoAccount'
 export * from './auth'
 export * from './Diviner'
 export * from './doc'

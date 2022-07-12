@@ -1,8 +1,7 @@
 import { Application } from 'express'
 
-import { getQueryQueue, getResponseQueue } from '../lib'
+import { getArchivistAccount, getQueryQueue, getResponseQueue } from '../lib'
 import {
-  getAccountFromSeedPhrase,
   MongoDBArchivePermissionsPayloadPayloadRepository,
   MongoDBArchiveRepository,
   MongoDBArchivistWitnessedPayloadRepository,
@@ -13,8 +12,7 @@ import {
 } from '../middleware'
 
 export const addDependencies = (app: Application) => {
-  const account = getAccountFromSeedPhrase(process.env.ACCOUNT_SEED)
-  app.account = account
+  const account = getArchivistAccount()
   app.archivistWitnessedPayloadRepository = new MongoDBArchivistWitnessedPayloadRepository(account)
   app.archiveRepository = new MongoDBArchiveRepository()
   app.archivePermissionsRepository = new MongoDBArchivePermissionsPayloadPayloadRepository()
