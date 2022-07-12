@@ -1,13 +1,27 @@
-import { ForgetPromise } from '@xylabs/sdk-js'
-import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
+import { assertEx, delay, exists, ForgetPromise } from '@xylabs/sdk-js'
+import { XyoArchive, XyoBoundWitnessBuilder, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
 import { StatusCodes } from 'http-status-codes'
 
-import { SetArchivePermissionsPayload } from '../../../../model'
-import { claimArchive, getArchivist, getTokenForNewUser, setArchiveAccessControl } from '../../../../test'
+import { debugSchema, SetArchivePermissionsPayload } from '../../../../model'
+import { claimArchive, getArchivist, getTokenForNewUser, postCommandsToArchive, queryCommandResult, setArchiveAccessControl } from '../../../../test'
 
 interface MigrationResponse {
   archive: XyoArchive
   migrated: SetArchivePermissionsPayload
+}
+
+const schema = debugSchema
+
+const postCommandToArchive = async (archive: string, token?: string, expectedStatus: StatusCodes = StatusCodes.ACCEPTED) => {
+  const data = {
+    schema,
+  }
+  const payload = new XyoPayloadBuilder({ schema }).fields(data).build()
+  const bw = new XyoBoundWitnessBuilder({ inlinePayloads: true }).payload(payload).build()
+  const response = await postCommandsToArchive([bw], archive, token, StatusCodes.ACCEPTED)
+  const id = assertEx(response.flatMap((r) => r).filter(exists)?.[0])
+  await delay(1000)
+  await queryCommandResult(id, token, expectedStatus)
 }
 
 const migrateArchive = async (archive: string): Promise<MigrationResponse> => {
@@ -31,17 +45,39 @@ describe('/management/migrate/permissions/archives/:archive', () => {
     token = await getTokenForNewUser()
     archive = await claimArchive(token)
   })
-  it('Migrates a public archive', async () => {
-    const result = await migrateArchive(archive.archive)
-    expect(result.migrated?.addresses).toBeUndefined()
-    expect(result.migrated?.schemas).toBeUndefined()
+  describe('with public archive', () => {
+    it('migrates archive', async () => {
+      const result = await migrateArchive(archive.archive)
+      expect(result.migrated?.addresses).toBeUndefined()
+      expect(result.migrated?.schemas).toBeUndefined()
+    })
+    it('allows owner archive access', async () => {
+      await postCommandToArchive(archive.archive, token, StatusCodes.OK)
+    })
+    it('allows another user archive access', async () => {
+      await postCommandToArchive(archive.archive, await getTokenForNewUser(), StatusCodes.OK)
+    })
+    it('allows anonymous archive access', async () => {
+      await postCommandToArchive(archive.archive, undefined, StatusCodes.OK)
+    })
   })
-  it('Migrates a private archive', async () => {
-    archive.accessControl = true
-    await setArchiveAccessControl(token, archive.archive, archive)
-    const result = await migrateArchive(archive.archive)
-    expect(result.migrated?.addresses?.allow).toEqual([])
-    expect(result.migrated?.schemas).toBeUndefined()
+  describe('with private archive', () => {
+    it('migrates archive', async () => {
+      archive.accessControl = true
+      await setArchiveAccessControl(token, archive.archive, archive)
+      const result = await migrateArchive(archive.archive)
+      expect(result.migrated?.addresses?.allow).toEqual([])
+      expect(result.migrated?.schemas).toBeUndefined()
+    })
+    it('allows owner archive access', async () => {
+      await postCommandToArchive(archive.archive, token, StatusCodes.OK)
+    })
+    it('disallows another user archive access', async () => {
+      await postCommandToArchive(archive.archive, await getTokenForNewUser(), StatusCodes.OK)
+    })
+    it('disallows anonymous archive access', async () => {
+      await postCommandToArchive(archive.archive, undefined, StatusCodes.OK)
+    })
   })
   afterAll(async () => {
     await ForgetPromise.awaitInactive()
