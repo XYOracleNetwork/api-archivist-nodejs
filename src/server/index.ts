@@ -3,7 +3,6 @@ import compression from 'compression'
 import cors from 'cors'
 import express, { Express } from 'express'
 
-import { getDefaultAbstractMongoDBPayloadRepositoryOpts } from '../lib'
 import { configureDoc } from '../middleware'
 import { addDependencies } from './addDependencies'
 import { addErrorHandlers } from './addErrorHandlers'
