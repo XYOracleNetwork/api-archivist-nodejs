@@ -14,6 +14,8 @@ import {
   AllowUnauthenticatedStrategy,
   ArchiveAccessControlStrategy,
   ArchiveAccountStrategy,
+  ArchiveApiKeyStrategy,
+  ArchiveOwnerStrategy,
   ArchiveRepository,
   ArchivistWitnessedPayloadRepository,
   BcryptPasswordHasher,
@@ -65,6 +67,8 @@ container.bind(AdminApiKeyStrategy).to(AdminApiKeyStrategy)
 container.bind(AllowUnauthenticatedStrategy).to(AllowUnauthenticatedStrategy)
 container.bind(ArchiveAccessControlStrategy).to(ArchiveAccessControlStrategy)
 container.bind(ArchiveAccountStrategy).to(ArchiveAccountStrategy)
+container.bind(ArchiveApiKeyStrategy).to(ArchiveApiKeyStrategy)
+container.bind(ArchiveOwnerStrategy).to(ArchiveOwnerStrategy)
 container.bind(Web3AuthStrategy).to(Web3AuthStrategy)
 
 // eslint-disable-next-line import/no-default-export

@@ -16,6 +16,8 @@ import {
   archiveAccountStrategyName,
   ArchiveApiKeyStrategy,
   archiveApiKeyStrategyName,
+  ArchiveOwnerStrategy,
+  archiveOwnerStrategyName,
   Web3AuthStrategy,
   web3StrategyName,
 } from '../middleware'
@@ -28,5 +30,6 @@ export const addAuth = (_app: Application) => {
   passport.use(archiveAccessControlStrategyName, dependencies.get(ArchiveAccessControlStrategy))
   passport.use(archiveAccountStrategyName, dependencies.get(ArchiveAccountStrategy))
   passport.use(archiveApiKeyStrategyName, dependencies.get(ArchiveApiKeyStrategy))
+  passport.use(archiveOwnerStrategyName, dependencies.get(ArchiveOwnerStrategy))
   passport.use(web3StrategyName, dependencies.get(Web3AuthStrategy))
 }
