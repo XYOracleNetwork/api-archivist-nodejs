@@ -10,16 +10,16 @@ import { claimArchive, getArchive, getTokenForNewUser } from './testUtil'
  */
 module.exports = async () => {
   const name = 'temp'
-  let archive: XyoArchive
-  try {
-    archive = await getArchive(name)
-  } catch (error) {
-    // TODO: Should we create archive as owned by
-    // unit test account if non-existent
-    console.log('Temp archive does not exist, creating...')
-    const token = await getTokenForNewUser()
-    archive = await claimArchive(token, name)
-  }
-  assertEx(archive.archive === name, 'ERROR: Temp archive does not exist')
-  assertEx(!archive.accessControl, 'ERROR: Temp archive must be public')
+  // let archive: XyoArchive
+  // try {
+  //   archive = await getArchive(name)
+  // } catch (error) {
+  //   // TODO: Should we create archive as owned by
+  //   // unit test account if non-existent
+  //   console.log('Temp archive does not exist, creating...')
+  //   const token = await getTokenForNewUser()
+  //   archive = await claimArchive(token, name)
+  // }
+  // assertEx(archive.archive === name, 'ERROR: Temp archive does not exist')
+  // assertEx(!archive.accessControl, 'ERROR: Temp archive must be public')
 }
