@@ -1,11 +1,16 @@
+import 'reflect-metadata'
+
 import { getHttpHeader } from '@xylabs/sdk-api-express-ecs'
 import { Request } from 'express'
+import { inject, injectable } from 'inversify'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
 import { getArchiveKeys } from '../../../../lib'
+import { ArchiveRepository } from '../../../Diviner'
 
+@injectable()
 export class ArchiveApiKeyStrategy extends Strategy {
-  constructor(public readonly apiKeyHeader = 'x-api-key') {
+  constructor(@inject('ArchiveRepository') public readonly archiveRepository: ArchiveRepository, public readonly apiKeyHeader = 'x-api-key') {
     super()
   }
   override async authenticate(this: StrategyCreated<this, this & StrategyCreatedStatic>, req: Request, _options?: unknown) {
@@ -31,7 +36,7 @@ export class ArchiveApiKeyStrategy extends Strategy {
       }
 
       // Get the archive owner
-      const existingArchive = await req.app.archiveRepository.get(archive)
+      const existingArchive = await this.archiveRepository.get(archive)
       if (!existingArchive || !existingArchive?.user) {
         this.fail('Invalid user')
         return
