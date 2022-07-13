@@ -21,6 +21,7 @@ import {
   PasswordHasher,
   UserManager,
   UserRepository,
+  Web3AuthStrategy,
 } from './middleware'
 import { ArchivePermissionsRepository, Query, User } from './model'
 import { IdentifiableHuri, InMemoryQueue, Queue } from './Queue'
@@ -50,6 +51,8 @@ container.bind<MongoDBArchiveRepository>(MongoDBArchiveRepository).to(MongoDBArc
 
 container.bind<Queue<Query>>('Queue<Query>').toConstantValue(new InMemoryQueue<Query>())
 container.bind<Queue<IdentifiableHuri>>('Queue<IdentifiableHuri>').toConstantValue(new InMemoryQueue<IdentifiableHuri>())
+
+container.bind(Web3AuthStrategy).to(Web3AuthStrategy)
 
 // eslint-disable-next-line import/no-default-export
 export default container
