@@ -1,6 +1,9 @@
+import 'reflect-metadata'
+
 import { exists } from '@xylabs/sdk-js'
 import { XyoAccount, XyoBoundWitnessBuilder, XyoBoundWitnessWithMeta, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
+import { inject, injectable } from 'inversify'
 import { Filter } from 'mongodb'
 
 import { getBaseMongoSdk, removeId } from '../../../../lib'
@@ -10,9 +13,10 @@ const unique = <T>(value: T, index: number, self: T[]) => {
   return self.indexOf(value) === index
 }
 
+@injectable()
 export class MongoDBArchivistWitnessedPayloadRepository extends AbstractPayloadRepository<XyoPayloadWithMeta, string, Filter<XyoPayloadWithMeta>> {
   constructor(
-    protected account: XyoAccount,
+    @inject(XyoAccount) protected account: XyoAccount,
     protected payloads: BaseMongoSdk<XyoPayloadWithMeta> = getBaseMongoSdk<XyoPayloadWithMeta>('payloads'),
     protected boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta> = getBaseMongoSdk<XyoBoundWitnessWithMeta>('bound_witnesses')
   ) {
