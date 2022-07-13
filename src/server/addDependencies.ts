@@ -1,15 +1,16 @@
 import { Application } from 'express'
 
 import dependencies from '../inversify.config'
-import { getQueryQueue, getResponseQueue } from '../lib'
 import {
   ArchivePermissionsRepository,
   ArchivistWitnessedPayloadRepository,
   MongoDBArchiveRepository,
+  Query,
   SchemaToQueryProcessorRegistry,
   UserManager,
   XyoPayloadToQueryConverterRegistry,
 } from '../middleware'
+import { IdentifiableHuri, Queue } from '../Queue'
 
 export const addDependencies = (app: Application) => {
   app.archivistWitnessedPayloadRepository = dependencies.get<ArchivistWitnessedPayloadRepository>('ArchivistWitnessedPayloadRepository')
@@ -17,7 +18,7 @@ export const addDependencies = (app: Application) => {
   app.archivePermissionsRepository = dependencies.get<ArchivePermissionsRepository>('ArchivePermissionsRepository')
   app.queryConverters = new XyoPayloadToQueryConverterRegistry(app)
   app.queryProcessors = new SchemaToQueryProcessorRegistry(app)
-  app.queryQueue = getQueryQueue()
-  app.responseQueue = getResponseQueue()
+  app.queryQueue = dependencies.get<Queue<Query>>('Queue<Query>')
+  app.responseQueue = dependencies.get<Queue<IdentifiableHuri>>('Queue<IdentifiableHuri>')
   app.userManager = dependencies.get<UserManager>('UserManager')
 }

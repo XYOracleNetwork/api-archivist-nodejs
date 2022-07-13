@@ -21,7 +21,8 @@ import {
   UserManager,
   UserRepository,
 } from './middleware'
-import { ArchivePermissionsRepository, User } from './model'
+import { ArchivePermissionsRepository, Query, User } from './model'
+import { IdentifiableHuri, InMemoryQueue, Queue } from './Queue'
 
 config()
 
@@ -42,6 +43,9 @@ container.bind<UserManager>('UserManager').to(MongoDBUserManager)
 
 container.bind<BaseMongoSdk<Required<XyoArchive>>>('BaseMongoSdk<Required<XyoArchive>>').toConstantValue(getBaseMongoSdk<EntityArchive>('archives'))
 container.bind<MongoDBArchiveRepository>(MongoDBArchiveRepository).to(MongoDBArchiveRepository)
+
+container.bind<Queue<Query>>('Queue<Query>').toConstantValue(new InMemoryQueue<Query>())
+container.bind<Queue<IdentifiableHuri>>('Queue<IdentifiableHuri>').toConstantValue(new InMemoryQueue<IdentifiableHuri>())
 
 // eslint-disable-next-line import/no-default-export
 export default container
