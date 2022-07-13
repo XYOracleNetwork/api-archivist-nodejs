@@ -2,13 +2,12 @@ import 'reflect-metadata'
 
 import { Logger } from '@xylabs/sdk-api-express-ecs'
 import { Request } from 'express'
-import { decorate, inject, injectable } from 'inversify'
+import { inject, injectable } from 'inversify'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
 import { verifyUuid } from './verifyUuid'
 import { verifyWallet } from './verifyWallet'
 
-decorate(injectable(), Strategy)
 @injectable()
 export class Web3AuthStrategy extends Strategy {
   constructor(@inject('Logger') public readonly logger: Logger) {
