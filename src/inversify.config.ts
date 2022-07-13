@@ -1,5 +1,6 @@
 import 'reflect-metadata'
 
+import { getDefaultLogger, Logger } from '@xylabs/sdk-api-express-ecs'
 import { assertEx } from '@xylabs/sdk-js'
 import { XyoAccount } from '@xyo-network/account'
 import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
@@ -29,6 +30,9 @@ config()
 const phrase = assertEx(process.env.ACCOUNT_SEED, 'Seed phrase required to create Archivist XyoAccount')
 
 const container = new Container({ autoBindInjectable: true })
+
+container.bind<Logger>('Logger').toConstantValue(getDefaultLogger())
+
 container.bind(XyoAccount).toConstantValue(new XyoAccount({ phrase }))
 container.bind<ArchivePermissionsRepository>('ArchivePermissionsRepository').to(MongoDBArchivePermissionsPayloadPayloadRepository)
 container.bind<ArchivistWitnessedPayloadRepository>('ArchivistWitnessedPayloadRepository').to(MongoDBArchivistWitnessedPayloadRepository)
