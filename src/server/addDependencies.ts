@@ -13,7 +13,7 @@ import {
 
 export const addDependencies = (app: Application) => {
   app.archivistWitnessedPayloadRepository = dependencies.get<ArchivistWitnessedPayloadRepository>('ArchivistWitnessedPayloadRepository')
-  app.archiveRepository = new MongoDBArchiveRepository()
+  app.archiveRepository = dependencies.get<MongoDBArchiveRepository>(MongoDBArchiveRepository)
   app.archivePermissionsRepository = dependencies.get<ArchivePermissionsRepository>('ArchivePermissionsRepository')
   app.queryConverters = new XyoPayloadToQueryConverterRegistry(app)
   app.queryProcessors = new SchemaToQueryProcessorRegistry(app)
