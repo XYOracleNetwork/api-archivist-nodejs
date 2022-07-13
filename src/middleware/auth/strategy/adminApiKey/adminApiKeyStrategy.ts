@@ -1,11 +1,13 @@
+import 'reflect-metadata'
+
 import { Logger } from '@xylabs/sdk-api-express-ecs'
 import { Request } from 'express'
+import { inject, injectable } from 'inversify'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
-import dependencies from '../../../../inversify.config'
-
+@injectable()
 export class AdminApiKeyStrategy extends Strategy {
-  constructor(public readonly apiKey: string, public readonly apiKeyHeader = 'x-api-key', public readonly logger = dependencies.get<Logger>('Logger')) {
+  constructor(@inject('ApiKey') public readonly apiKey: string, @inject('Logger') public readonly logger: Logger, public readonly apiKeyHeader = 'x-api-key') {
     super()
   }
 

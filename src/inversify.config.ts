@@ -10,6 +10,7 @@ import { Container } from 'inversify'
 
 import { getBaseMongoSdk } from './lib'
 import {
+  AdminApiKeyStrategy,
   ArchivistWitnessedPayloadRepository,
   BcryptPasswordHasher,
   EntityArchive,
@@ -28,9 +29,12 @@ import { IdentifiableHuri, InMemoryQueue, Queue } from './Queue'
 
 config()
 
-const phrase = assertEx(process.env.ACCOUNT_SEED, 'Seed phrase required to create Archivist XyoAccount')
+const phrase = assertEx(process.env.ACCOUNT_SEED, 'ACCOUNT_SEED ENV VAR required to create Archivist')
+const apiKey = assertEx(process.env.API_KEY, 'API_KEY ENV VAR required to create Archivist')
 
 const container = new Container({ autoBindInjectable: true })
+
+container.bind<string>('ApiKey').toConstantValue(apiKey)
 
 container.bind<Logger>('Logger').toConstantValue(getDefaultLogger())
 
@@ -52,6 +56,7 @@ container.bind<MongoDBArchiveRepository>(MongoDBArchiveRepository).to(MongoDBArc
 container.bind<Queue<Query>>('Queue<Query>').toConstantValue(new InMemoryQueue<Query>())
 container.bind<Queue<IdentifiableHuri>>('Queue<IdentifiableHuri>').toConstantValue(new InMemoryQueue<IdentifiableHuri>())
 
+container.bind(AdminApiKeyStrategy).to(AdminApiKeyStrategy)
 container.bind(Web3AuthStrategy).to(Web3AuthStrategy)
 
 // eslint-disable-next-line import/no-default-export
