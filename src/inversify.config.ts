@@ -11,6 +11,7 @@ import { Container } from 'inversify'
 import { getBaseMongoSdk } from './lib'
 import {
   AdminApiKeyStrategy,
+  AllowUnauthenticatedStrategy,
   ArchivistWitnessedPayloadRepository,
   BcryptPasswordHasher,
   EntityArchive,
@@ -57,6 +58,7 @@ container.bind<Queue<Query>>('Queue<Query>').toConstantValue(new InMemoryQueue<Q
 container.bind<Queue<IdentifiableHuri>>('Queue<IdentifiableHuri>').toConstantValue(new InMemoryQueue<IdentifiableHuri>())
 
 container.bind(AdminApiKeyStrategy).to(AdminApiKeyStrategy)
+container.bind(AllowUnauthenticatedStrategy).to(AllowUnauthenticatedStrategy)
 container.bind(Web3AuthStrategy).to(Web3AuthStrategy)
 
 // eslint-disable-next-line import/no-default-export
