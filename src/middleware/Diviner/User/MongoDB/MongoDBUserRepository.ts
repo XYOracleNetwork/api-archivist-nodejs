@@ -1,7 +1,9 @@
+import 'reflect-metadata'
+
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
+import { inject, injectable } from 'inversify'
 import { Filter, ObjectId, WithId } from 'mongodb'
 
-import { getBaseMongoSdk } from '../../../../lib'
 import { UpsertResult, User, UserWithoutId } from '../../../../model'
 import { UserRepository } from '../UserRepository'
 
@@ -12,8 +14,9 @@ interface IUpsertFilter {
   }[]
 }
 
+@injectable()
 export class MongoDBUserRepository implements UserRepository {
-  constructor(protected readonly db: BaseMongoSdk<User> = getBaseMongoSdk<User>('users')) {}
+  constructor(@inject(BaseMongoSdk<User>) protected readonly db: BaseMongoSdk<User>) {}
 
   async find(query: Filter<User>): Promise<WithId<User>[]> {
     return (await this.db.find(query)).toArray()
