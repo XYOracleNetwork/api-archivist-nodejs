@@ -30,8 +30,8 @@ export const getApp = (): Express => {
   app.use(compression())
 
   addDependencies(app)
-  addAuth(app)
   addMiddleware(app)
+  addAuth(app)
   addQueryConverters(app)
   addQueryProcessors(app)
   addInMemoryQueryProcessing(app)
