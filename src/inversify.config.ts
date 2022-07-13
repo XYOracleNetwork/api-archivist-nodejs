@@ -13,6 +13,7 @@ import {
   AdminApiKeyStrategy,
   AllowUnauthenticatedStrategy,
   ArchiveAccessControlStrategy,
+  ArchiveAccountStrategy,
   ArchivistWitnessedPayloadRepository,
   BcryptPasswordHasher,
   EntityArchive,
@@ -61,6 +62,7 @@ container.bind<Queue<IdentifiableHuri>>('Queue<IdentifiableHuri>').toConstantVal
 container.bind(AdminApiKeyStrategy).to(AdminApiKeyStrategy)
 container.bind(AllowUnauthenticatedStrategy).to(AllowUnauthenticatedStrategy)
 container.bind(ArchiveAccessControlStrategy).to(ArchiveAccessControlStrategy)
+container.bind(ArchiveAccountStrategy).to(ArchiveAccountStrategy)
 container.bind(Web3AuthStrategy).to(Web3AuthStrategy)
 
 // eslint-disable-next-line import/no-default-export
