@@ -1,10 +1,12 @@
-import { getDefaultLogger } from '@xylabs/sdk-api-express-ecs'
+import { Logger } from '@xylabs/sdk-api-express-ecs'
 import { assertEx } from '@xylabs/sdk-js'
 import { Huri, XyoQueryPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { Application } from 'express'
 
+import dependencies from '../inversify.config'
+
 export const addInMemoryQueryProcessing = (app: Application) => {
-  const logger = getDefaultLogger()
+  const logger = dependencies.get<Logger>('Logger')
   app.queryQueue.onQueued = async (id) => {
     const query = await app.queryQueue.tryDequeue(id)
     if (query) {

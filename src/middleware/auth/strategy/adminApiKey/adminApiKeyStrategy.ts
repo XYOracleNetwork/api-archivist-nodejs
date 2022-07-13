@@ -1,9 +1,11 @@
-import { getDefaultLogger } from '@xylabs/sdk-api-express-ecs'
+import { Logger } from '@xylabs/sdk-api-express-ecs'
 import { Request } from 'express'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
+import dependencies from '../../../../inversify.config'
+
 export class AdminApiKeyStrategy extends Strategy {
-  constructor(public readonly apiKey: string, public readonly apiKeyHeader = 'x-api-key', public readonly logger = getDefaultLogger()) {
+  constructor(public readonly apiKey: string, public readonly apiKeyHeader = 'x-api-key', public readonly logger = dependencies.get<Logger>('Logger')) {
     super()
   }
 

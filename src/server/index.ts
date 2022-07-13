@@ -1,8 +1,9 @@
-import { getDefaultLogger, getEnvFromAws } from '@xylabs/sdk-api-express-ecs'
+import { getEnvFromAws, Logger } from '@xylabs/sdk-api-express-ecs'
 import compression from 'compression'
 import cors from 'cors'
 import express, { Express } from 'express'
 
+import dependencies from '../inversify.config'
 import { configureDoc } from '../middleware'
 import { addDependencies } from './addDependencies'
 import { addErrorHandlers } from './addErrorHandlers'
@@ -48,7 +49,7 @@ export const server = async (port = 80) => {
     Object.assign(process.env, awsEnv)
   }
 
-  const logger = getDefaultLogger()
+  const logger = dependencies.get<Logger>('Logger')
   const app = getApp()
   const host = process.env.PUBLIC_ORIGIN || `http://localhost:${port}`
   await configureDoc(app, { host })
