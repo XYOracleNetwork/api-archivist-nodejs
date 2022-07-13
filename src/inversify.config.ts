@@ -14,6 +14,7 @@ import {
   AllowUnauthenticatedStrategy,
   ArchiveAccessControlStrategy,
   ArchiveAccountStrategy,
+  ArchiveRepository,
   ArchivistWitnessedPayloadRepository,
   BcryptPasswordHasher,
   EntityArchive,
@@ -55,6 +56,7 @@ container.bind<UserManager>('UserManager').to(MongoDBUserManager)
 
 container.bind<BaseMongoSdk<Required<XyoArchive>>>('BaseMongoSdk<Required<XyoArchive>>').toConstantValue(getBaseMongoSdk<EntityArchive>('archives'))
 container.bind<MongoDBArchiveRepository>(MongoDBArchiveRepository).to(MongoDBArchiveRepository)
+container.bind<ArchiveRepository>('ArchiveRepository').to(MongoDBArchiveRepository)
 
 container.bind<Queue<Query>>('Queue<Query>').toConstantValue(new InMemoryQueue<Query>())
 container.bind<Queue<IdentifiableHuri>>('Queue<IdentifiableHuri>').toConstantValue(new InMemoryQueue<IdentifiableHuri>())
