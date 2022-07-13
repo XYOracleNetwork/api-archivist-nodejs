@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "module": "esnext",
     "outDir": "dist",
     "typeRoots": [
@@ -11,7 +13,8 @@
       "jest",
       "node",
       "@types/jest",
-      "jest-sorted"
+      "jest-sorted",
+      "reflect-metadata"
     ]
   },
   "exclude": [
