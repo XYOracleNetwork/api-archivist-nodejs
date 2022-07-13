@@ -2,16 +2,13 @@ import { XyoArchive, XyoBoundWitnessBuilder, XyoPayloadBuilder, XyoPayloadWithMe
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { Filter } from 'mongodb'
 
-import { AbstractMongoDBPayloadRepository, AbstractMongoDBPayloadRepositoryOpts, getDefaultAbstractMongoDBPayloadRepositoryOpts } from '../../../../lib'
+import { AbstractMongoDBPayloadRepository } from '../../../../lib'
 
 const schema = 'network.xyo.archive'
 
 export class MongoDBArchivePayloadRepository extends AbstractMongoDBPayloadRepository<XyoArchive> {
-  constructor(
-    protected readonly itemsSdk: BaseMongoSdk<XyoPayloadWithMeta<XyoArchive>>,
-    opts: AbstractMongoDBPayloadRepositoryOpts = getDefaultAbstractMongoDBPayloadRepositoryOpts()
-  ) {
-    super(opts)
+  constructor(protected readonly itemsSdk: BaseMongoSdk<XyoPayloadWithMeta<XyoArchive>>) {
+    super()
   }
   async find(filter: Filter<XyoPayloadWithMeta<XyoArchive>>): Promise<XyoPayloadWithMeta<XyoArchive>[]> {
     return (await this.itemsSdk.find(filter)).toArray()

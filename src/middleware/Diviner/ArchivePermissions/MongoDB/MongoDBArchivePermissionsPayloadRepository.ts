@@ -22,8 +22,8 @@ const schema: SetArchivePermissionsSchema = setArchivePermissionsSchema
 export class MongoDBArchivePermissionsPayloadPayloadRepository extends AbstractMongoDBPayloadRepository<SetArchivePermissionsPayload> {
   protected readonly items: BaseMongoSdk<SetArchivePermissionsPayloadWithMeta> = getBaseMongoSdk('payload')
   protected opts: AbstractMongoDBPayloadRepositoryOpts = getDefaultAbstractMongoDBPayloadRepositoryOpts()
-  constructor(@inject(XyoAccount) account: XyoAccount) {
-    super(getDefaultAbstractMongoDBPayloadRepositoryOpts())
+  constructor(@inject(XyoAccount) protected readonly account: XyoAccount) {
+    super()
   }
   async find(filter: Filter<SetArchivePermissionsPayloadWithMeta>) {
     return (await this.items.find(filter)).toArray()

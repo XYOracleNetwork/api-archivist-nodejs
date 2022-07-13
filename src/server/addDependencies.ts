@@ -4,7 +4,7 @@ import { Application } from 'express'
 import dependencies from '../inversify.config'
 import { getQueryQueue, getResponseQueue } from '../lib'
 import {
-  MongoDBArchivePermissionsPayloadPayloadRepository,
+  ArchivePermissionsRepository,
   MongoDBArchiveRepository,
   MongoDBArchivistWitnessedPayloadRepository,
   MongoDBUserManager,
@@ -17,7 +17,7 @@ export const addDependencies = (app: Application) => {
   const account = dependencies.get<XyoAccount>(XyoAccount)
   app.archivistWitnessedPayloadRepository = new MongoDBArchivistWitnessedPayloadRepository(account)
   app.archiveRepository = new MongoDBArchiveRepository()
-  app.archivePermissionsRepository = new MongoDBArchivePermissionsPayloadPayloadRepository(account)
+  app.archivePermissionsRepository = dependencies.get<ArchivePermissionsRepository>('ArchivePermissionsRepository')
   app.queryConverters = new XyoPayloadToQueryConverterRegistry(app)
   app.queryProcessors = new SchemaToQueryProcessorRegistry(app)
   app.queryQueue = getQueryQueue()
