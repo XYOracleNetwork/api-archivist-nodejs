@@ -5,6 +5,7 @@ import express, { Express } from 'express'
 
 import dependencies from '../inversify.config'
 import { configureDoc } from '../middleware'
+import { addAuth } from './addAuth'
 import { addDependencies } from './addDependencies'
 import { addErrorHandlers } from './addErrorHandlers'
 import { addHealthChecks } from './addHealthChecks'
@@ -29,6 +30,7 @@ export const getApp = (): Express => {
   app.use(compression())
 
   addDependencies(app)
+  addAuth(app)
   addMiddleware(app)
   addQueryConverters(app)
   addQueryProcessors(app)

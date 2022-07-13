@@ -1,13 +1,17 @@
+import 'reflect-metadata'
+
 import { Logger } from '@xylabs/sdk-api-express-ecs'
 import { Request } from 'express'
+import { decorate, inject, injectable } from 'inversify'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
-import dependencies from '../../../../inversify.config'
 import { verifyUuid } from './verifyUuid'
 import { verifyWallet } from './verifyWallet'
 
+decorate(injectable(), Strategy)
+@injectable()
 export class Web3AuthStrategy extends Strategy {
-  constructor(public readonly logger = dependencies.get<Logger>('Logger')) {
+  constructor(@inject('Logger') public readonly logger: Logger) {
     super()
   }
   override async authenticate(this: StrategyCreated<this, this & StrategyCreatedStatic>, req: Request, _options?: unknown) {
