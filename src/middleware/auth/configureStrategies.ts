@@ -2,7 +2,6 @@ import { assertEx } from '@xylabs/sdk-js'
 
 import { AuthConfig } from './AuthConfig'
 import {
-  configureAllowUnauthenticatedStrategy,
   configureArchiveAccessControlStrategy,
   configureArchiveAccountStrategy,
   configureArchiveApiKeyStrategy,
@@ -14,7 +13,6 @@ import {
 export const configureStrategies = (config: AuthConfig) => {
   assertEx(config?.secretOrKey, 'Missing JWT secretOrKey')
   const secretOrKey = config?.secretOrKey as string
-  configureAllowUnauthenticatedStrategy()
   configureArchiveAccessControlStrategy()
   configureArchiveAccountStrategy()
   configureArchiveApiKeyStrategy()
