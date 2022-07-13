@@ -1,9 +1,10 @@
+import 'reflect-metadata'
+
 import { Request } from 'express'
-import passport from 'passport'
 import { IStrategyOptionsWithRequest, Strategy } from 'passport-local'
 
 import { User } from '../../../../model'
-import { BcryptPasswordHasher, PasswordHasher } from '../../../PasswordHasher'
+import { PasswordHasher } from '../../../PasswordHasher'
 
 const strategyOptions: IStrategyOptionsWithRequest = {
   passReqToCallback: true,
@@ -11,13 +12,9 @@ const strategyOptions: IStrategyOptionsWithRequest = {
   usernameField: 'email',
 }
 
-export const localStrategyName = 'local'
-export const localStrategy = passport.authenticate(localStrategyName, { session: false })
-
-export const configureLocalStrategy = (passwordHasher: PasswordHasher<User> = BcryptPasswordHasher) => {
-  passport.use(
-    localStrategyName,
-    new Strategy(strategyOptions, async (req: Request, email, providedPassword, done) => {
+export class LocalStrategy extends Strategy {
+  constructor(public readonly passwordHasher: PasswordHasher<User>) {
+    super(strategyOptions, async (req: Request, email, providedPassword, done) => {
       try {
         // Find user
         const user = await req.app.userManager.findByEmail(email)
@@ -26,7 +23,7 @@ export const configureLocalStrategy = (passwordHasher: PasswordHasher<User> = Bc
           return done(null, false, { message: 'User not found' })
         }
         // Validate user's password
-        const valid = await passwordHasher.verify(user, providedPassword)
+        const valid = await this.passwordHasher.verify(user, providedPassword)
         if (!valid) {
           return done(null, false, { message: 'Wrong Password' })
         }
@@ -35,5 +32,5 @@ export const configureLocalStrategy = (passwordHasher: PasswordHasher<User> = Bc
         return done(error)
       }
     })
-  )
+  }
 }

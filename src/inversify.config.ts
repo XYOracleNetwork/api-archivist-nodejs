@@ -20,6 +20,8 @@ import {
   ArchivistWitnessedPayloadRepository,
   BcryptPasswordHasher,
   EntityArchive,
+  JwtStrategy,
+  LocalStrategy,
   MongoDBArchivePermissionsPayloadPayloadRepository,
   MongoDBArchiveRepository,
   MongoDBArchivistWitnessedPayloadRepository,
@@ -37,6 +39,7 @@ config()
 
 const phrase = assertEx(process.env.ACCOUNT_SEED, 'ACCOUNT_SEED ENV VAR required to create Archivist')
 const apiKey = assertEx(process.env.API_KEY, 'API_KEY ENV VAR required to create Archivist')
+const jwtSecret = assertEx(process.env.JWT_SECRET, 'JWT_SECRET ENV VAR required to create Archivist')
 
 const container = new Container({ autoBindInjectable: true })
 
@@ -52,7 +55,8 @@ container.bind<MongoDBUserRepository>(MongoDBUserRepository).to(MongoDBUserRepos
 container.bind<MongoDBUserManager>(MongoDBUserManager).to(MongoDBUserManager)
 container.bind<UserRepository>('UserRepository').to(MongoDBUserRepository)
 
-container.bind<PasswordHasher<User>>('PasswordHasher<User>').toConstantValue(BcryptPasswordHasher)
+const passwordHasher = BcryptPasswordHasher
+container.bind<PasswordHasher<User>>('PasswordHasher<User>').toConstantValue(passwordHasher)
 container.bind<BaseMongoSdk<User>>(BaseMongoSdk<User>).toConstantValue(getBaseMongoSdk<User>('users'))
 container.bind<UserManager>('UserManager').to(MongoDBUserManager)
 
@@ -69,6 +73,8 @@ container.bind(ArchiveAccessControlStrategy).to(ArchiveAccessControlStrategy)
 container.bind(ArchiveAccountStrategy).to(ArchiveAccountStrategy)
 container.bind(ArchiveApiKeyStrategy).to(ArchiveApiKeyStrategy)
 container.bind(ArchiveOwnerStrategy).to(ArchiveOwnerStrategy)
+container.bind(JwtStrategy).toConstantValue(new JwtStrategy(jwtSecret))
+container.bind(LocalStrategy).toConstantValue(new LocalStrategy(passwordHasher))
 container.bind(Web3AuthStrategy).to(Web3AuthStrategy)
 
 // eslint-disable-next-line import/no-default-export
