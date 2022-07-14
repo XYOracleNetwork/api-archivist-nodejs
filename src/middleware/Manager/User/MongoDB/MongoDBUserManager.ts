@@ -1,8 +1,11 @@
+import 'reflect-metadata'
+
+import { inject, injectable } from 'inversify'
 import { WithId } from 'mongodb'
 
 import { Identifiable, UpsertResult, User, UserWithoutId, Web2User, Web3User } from '../../../../model'
 import { MongoDBUserRepository } from '../../../Diviner'
-import { BcryptPasswordHasher, PasswordHasher } from '../../../PasswordHasher'
+import { PasswordHasher } from '../../../PasswordHasher'
 import { UserManager } from '../UserManager'
 
 const fromDbEntity = (user: WithId<User>): User => {
@@ -24,8 +27,12 @@ const toDbEntity = (user: UserWithoutId) => {
   return user
 }
 
+@injectable()
 export class MongoDBUserManager implements UserManager {
-  constructor(protected readonly mongo: MongoDBUserRepository, protected readonly passwordHasher: PasswordHasher<User> = BcryptPasswordHasher) {}
+  constructor(
+    @inject(MongoDBUserRepository) protected readonly mongo: MongoDBUserRepository,
+    @inject('PasswordHasher<User>') protected readonly passwordHasher: PasswordHasher<User>
+  ) {}
   async create(user: UserWithoutId, password?: string): Promise<Identifiable & Partial<Web2User> & Partial<Web3User> & UpsertResult> {
     if (password) {
       user.passwordHash = await this.passwordHasher.hash(password)

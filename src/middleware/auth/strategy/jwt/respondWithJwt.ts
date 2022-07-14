@@ -1,3 +1,4 @@
+import { assertEx } from '@xylabs/sdk-js'
 import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { SignOptions } from 'jsonwebtoken'
@@ -18,6 +19,7 @@ export const defaultSignOptions: SignOptions = {
 }
 
 export const getJwtRequestHandler = (secretOrKey: string, opts: SignOptions = defaultSignOptions): RequestHandler => {
+  const secret: string = assertEx(secretOrKey, 'JWT Secret must be supplied')
   const respondWithJwt: RequestHandler = (req, res, next) => {
     try {
       const { user } = req
@@ -30,7 +32,7 @@ export const getJwtRequestHandler = (secretOrKey: string, opts: SignOptions = de
           return next(error)
         }
         const options: SignOptions = { ...defaultSignOptions, ...opts, subject: user.id }
-        const token = await signJwt(toUserDto(user), secretOrKey, options)
+        const token = await signJwt(toUserDto(user), secret, options)
         res.json({ token })
         return
       })

@@ -1,6 +1,5 @@
 import { Express } from 'express'
 
-import { configureAuth } from '../../middleware'
 import { addArchiveRoutes } from './addArchiveRoutes'
 import { addBlockRoutes } from './addBlockRoutes'
 import { addDomainRoutes } from './addDomainRoutes'
@@ -18,13 +17,6 @@ export const addRoutes = (app: Express): Express => {
   addManagementRoutes(app)
   addSchemaRoutes(app)
   addDomainRoutes(app)
-
-  const userRoutes = configureAuth({
-    apiKey: process.env.API_KEY,
-    secretOrKey: process.env.JWT_SECRET,
-  })
-  app.use('', userRoutes)
-
   // This needs to be the last true route handler since it is
   // a catch-all for the root paths
   addNodeRoutes(app)

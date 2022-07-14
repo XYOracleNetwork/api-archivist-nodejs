@@ -1,8 +1,10 @@
+import 'reflect-metadata'
+
 import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
+import { inject, injectable } from 'inversify'
 import { Filter, WithId } from 'mongodb'
 
-import { getBaseMongoSdk } from '../../../../lib'
 import { UpsertResult } from '../../../../model'
 import { ArchiveRepository, EntityArchive } from '../ArchiveRepository'
 
@@ -17,8 +19,9 @@ interface UpsertFilter {
   ]
 }
 
+@injectable()
 export class MongoDBArchiveRepository implements ArchiveRepository {
-  constructor(protected archives: BaseMongoSdk<Required<XyoArchive>> = getBaseMongoSdk<EntityArchive>('archives')) {}
+  constructor(@inject('BaseMongoSdk<Required<XyoArchive>>') protected archives: BaseMongoSdk<Required<XyoArchive>>) {}
 
   async find(query: Filter<EntityArchive>): Promise<XyoArchive[]> {
     return (await this.archives.find(query)).toArray()

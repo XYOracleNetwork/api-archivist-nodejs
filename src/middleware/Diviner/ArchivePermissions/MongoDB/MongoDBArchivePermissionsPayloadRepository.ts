@@ -1,5 +1,8 @@
-import { XyoBoundWitnessBuilder, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
+import 'reflect-metadata'
+
+import { XyoAccount, XyoBoundWitnessBuilder, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
+import { inject, injectable } from 'inversify'
 import { Filter } from 'mongodb'
 
 import {
@@ -15,12 +18,12 @@ import { SetArchivePermissionsPayload, SetArchivePermissionsPayloadWithMeta, Set
 
 const schema: SetArchivePermissionsSchema = setArchivePermissionsSchema
 
+@injectable()
 export class MongoDBArchivePermissionsPayloadPayloadRepository extends AbstractMongoDBPayloadRepository<SetArchivePermissionsPayload> {
-  constructor(
-    protected readonly items: BaseMongoSdk<SetArchivePermissionsPayloadWithMeta> = getBaseMongoSdk('payload'),
-    opts: AbstractMongoDBPayloadRepositoryOpts = getDefaultAbstractMongoDBPayloadRepositoryOpts()
-  ) {
-    super(opts)
+  protected readonly items: BaseMongoSdk<SetArchivePermissionsPayloadWithMeta> = getBaseMongoSdk('payload')
+  protected opts: AbstractMongoDBPayloadRepositoryOpts = getDefaultAbstractMongoDBPayloadRepositoryOpts()
+  constructor(@inject(XyoAccount) protected readonly account: XyoAccount) {
+    super()
   }
   async find(filter: Filter<SetArchivePermissionsPayloadWithMeta>) {
     return (await this.items.find(filter)).toArray()

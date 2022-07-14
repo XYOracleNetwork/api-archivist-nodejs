@@ -1,11 +1,21 @@
+import 'reflect-metadata'
+
 import { getHttpHeader } from '@xylabs/sdk-api-express-ecs'
 import { Request } from 'express'
+import { inject, injectable } from 'inversify'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
 import { getArchiveKeys } from '../../../../lib'
+import { ArchiveRepository } from '../../../Diviner'
+import { UserManager } from '../../../Manager'
 
+@injectable()
 export class ArchiveApiKeyStrategy extends Strategy {
-  constructor(public readonly apiKeyHeader = 'x-api-key') {
+  constructor(
+    @inject('ArchiveRepository') public readonly archiveRepository: ArchiveRepository,
+    @inject('UserManager') public readonly userManager: UserManager,
+    public readonly apiKeyHeader = 'x-api-key'
+  ) {
     super()
   }
   override async authenticate(this: StrategyCreated<this, this & StrategyCreatedStatic>, req: Request, _options?: unknown) {
@@ -31,13 +41,13 @@ export class ArchiveApiKeyStrategy extends Strategy {
       }
 
       // Get the archive owner
-      const existingArchive = await req.app.archiveRepository.get(archive)
+      const existingArchive = await this.archiveRepository.get(archive)
       if (!existingArchive || !existingArchive?.user) {
         this.fail('Invalid user')
         return
       }
 
-      const user = await req.app.userManager.findById(existingArchive.user)
+      const user = await this.userManager.findById(existingArchive.user)
       if (!user) {
         this.fail('Invalid user')
         return

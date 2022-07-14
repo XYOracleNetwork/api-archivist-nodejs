@@ -1,24 +1,24 @@
 import { Application } from 'express'
 
-import { getArchivistAccount, getQueryQueue, getResponseQueue } from '../lib'
+import dependencies from '../inversify.config'
 import {
-  MongoDBArchivePermissionsPayloadPayloadRepository,
-  MongoDBArchiveRepository,
-  MongoDBArchivistWitnessedPayloadRepository,
-  MongoDBUserManager,
-  MongoDBUserRepository,
+  ArchivePermissionsRepository,
+  ArchiveRepository,
+  ArchivistWitnessedPayloadRepository,
+  Query,
   SchemaToQueryProcessorRegistry,
+  UserManager,
   XyoPayloadToQueryConverterRegistry,
 } from '../middleware'
+import { IdentifiableHuri, Queue } from '../Queue'
 
 export const addDependencies = (app: Application) => {
-  const account = getArchivistAccount()
-  app.archivistWitnessedPayloadRepository = new MongoDBArchivistWitnessedPayloadRepository(account)
-  app.archiveRepository = new MongoDBArchiveRepository()
-  app.archivePermissionsRepository = new MongoDBArchivePermissionsPayloadPayloadRepository()
-  app.queryConverters = new XyoPayloadToQueryConverterRegistry(app)
-  app.queryProcessors = new SchemaToQueryProcessorRegistry(app)
-  app.queryQueue = getQueryQueue()
-  app.responseQueue = getResponseQueue()
-  app.userManager = new MongoDBUserManager(new MongoDBUserRepository())
+  app.archivistWitnessedPayloadRepository = dependencies.get<ArchivistWitnessedPayloadRepository>('ArchivistWitnessedPayloadRepository')
+  app.archiveRepository = dependencies.get<ArchiveRepository>('ArchiveRepository')
+  app.archivePermissionsRepository = dependencies.get<ArchivePermissionsRepository>('ArchivePermissionsRepository')
+  app.queryConverters = dependencies.get<XyoPayloadToQueryConverterRegistry>('XyoPayloadToQueryConverterRegistry')
+  app.queryProcessors = dependencies.get<SchemaToQueryProcessorRegistry>('SchemaToQueryProcessorRegistry')
+  app.queryQueue = dependencies.get<Queue<Query>>('Queue<Query>')
+  app.responseQueue = dependencies.get<Queue<IdentifiableHuri>>('Queue<IdentifiableHuri>')
+  app.userManager = dependencies.get<UserManager>('UserManager')
 }

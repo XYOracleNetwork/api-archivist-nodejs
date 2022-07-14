@@ -1,3 +1,5 @@
+import { config } from 'dotenv'
+config()
 import { assertEx } from '@xylabs/sdk-js'
 import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 

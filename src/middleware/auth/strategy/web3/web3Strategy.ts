@@ -1,12 +1,17 @@
-import { getDefaultLogger } from '@xylabs/sdk-api-express-ecs'
+import 'reflect-metadata'
+
+import { Logger } from '@xylabs/sdk-api-express-ecs'
 import { Request } from 'express'
+import { inject, injectable } from 'inversify'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
+import { UserManager } from '../../../Manager'
 import { verifyUuid } from './verifyUuid'
 import { verifyWallet } from './verifyWallet'
 
+@injectable()
 export class Web3AuthStrategy extends Strategy {
-  constructor(public readonly logger = getDefaultLogger()) {
+  constructor(@inject('Logger') public readonly logger: Logger, @inject('UserManager') public readonly userManager: UserManager) {
     super()
   }
   override async authenticate(this: StrategyCreated<this, this & StrategyCreatedStatic>, req: Request, _options?: unknown) {
@@ -26,14 +31,14 @@ export class Web3AuthStrategy extends Strategy {
         return
       }
       // Lookup existing user
-      const user = await req.app.userManager.findByWallet(address)
+      const user = await this.userManager.findByWallet(address)
       if (user) {
         // if found, return them
         this.success(user, { updated: false })
         return
       } else {
         // if not found, create them (since they've verified they own the wallet)
-        const createdUser = await req.app.userManager.create({ address })
+        const createdUser = await this.userManager.create({ address })
         if (!createdUser) {
           this.error({ message: 'Error creating user' })
           return
