@@ -1,13 +1,11 @@
 import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
-import { Application, Request } from 'express'
+import { Request } from 'express'
 
 import { QueryConverter } from './QueryConverter'
 import { QueryConverterRegistry } from './QueryConverterRegistry'
 
 export class XyoPayloadToQueryConverterRegistry implements QueryConverterRegistry {
   private _converters: Record<string, QueryConverter> = {}
-
-  constructor(protected readonly app: Application) {}
 
   public get converters(): Readonly<Record<string, QueryConverter>> {
     return this._converters
