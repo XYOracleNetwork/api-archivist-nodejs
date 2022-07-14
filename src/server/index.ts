@@ -3,7 +3,7 @@ import compression from 'compression'
 import cors from 'cors'
 import express, { Express } from 'express'
 
-import dependencies from '../inversify.config'
+import dependencies, { configure } from '../inversify.config'
 import { configureDoc } from '../middleware'
 import { addAuth } from './addAuth'
 import { addDependencies } from './addDependencies'
@@ -16,6 +16,7 @@ import { addQueryProcessors } from './addQueryProcessors'
 import { addRoutes } from './addRoutes'
 
 export const getApp = (): Express => {
+  configure()
   const app = express()
   app.set('etag', false)
 
@@ -51,8 +52,8 @@ export const server = async (port = 80) => {
     Object.assign(process.env, awsEnv)
   }
 
-  const logger = dependencies.get<Logger>('Logger')
   const app = getApp()
+  const logger = dependencies.get<Logger>('Logger')
   const host = process.env.PUBLIC_ORIGIN || `http://localhost:${port}`
   await configureDoc(app, { host })
 
