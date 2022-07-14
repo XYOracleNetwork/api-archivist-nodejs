@@ -28,9 +28,13 @@ import {
   MongoDBUserManager,
   MongoDBUserRepository,
   PasswordHasher,
+  QueryConverterRegistry,
+  QueryProcessorRegistry,
+  SchemaToQueryProcessorRegistry,
   UserManager,
   UserRepository,
   Web3AuthStrategy,
+  XyoPayloadToQueryConverterRegistry,
 } from './middleware'
 import { ArchivePermissionsRepository, Query, User } from './model'
 import { IdentifiableHuri, InMemoryQueue, Queue } from './Queue'
@@ -76,6 +80,9 @@ container.bind(ArchiveOwnerStrategy).to(ArchiveOwnerStrategy)
 container.bind(JwtStrategy).toConstantValue(new JwtStrategy(jwtSecret))
 container.bind(LocalStrategy).toConstantValue(new LocalStrategy(passwordHasher))
 container.bind(Web3AuthStrategy).to(Web3AuthStrategy)
+
+container.bind<QueryConverterRegistry>('XyoPayloadToQueryConverterRegistry').toConstantValue(new XyoPayloadToQueryConverterRegistry())
+container.bind<QueryProcessorRegistry>('SchemaToQueryProcessorRegistry').toConstantValue(new SchemaToQueryProcessorRegistry())
 
 // eslint-disable-next-line import/no-default-export
 export default container
