@@ -9,7 +9,7 @@ import { IdentifiableHuri, Queue } from '../Queue'
 
 export const addInMemoryQueryProcessing = (app: Application) => {
   const logger = dependencies.get<Logger>('Logger')
-  const witnessedPayloadArchivist = dependencies.get<WitnessedPayloadArchivist>('ArchivistWitnessedPayloadRepository')
+  const witnessedPayloadArchivist = dependencies.get<WitnessedPayloadArchivist>('WitnessedPayloadArchivist')
   const queryQueue = dependencies.get<Queue<Query>>('Queue<Query>')
   const responseQueue = dependencies.get<Queue<IdentifiableHuri>>('Queue<IdentifiableHuri>')
 

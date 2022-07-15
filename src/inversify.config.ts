@@ -54,12 +54,12 @@ export const configure = () => {
   container.bind<Logger>('Logger').toConstantValue(getDefaultLogger())
 
   container.bind(XyoAccount).toConstantValue(new XyoAccount({ phrase }))
-  container.bind<ArchivePermissionsArchivist>('ArchivePermissionsRepository').toService(MongoDBArchivePermissionsPayloadPayloadArchivist)
-  container.bind<WitnessedPayloadArchivist>('ArchivistWitnessedPayloadRepository').toService(MongoDBArchivistWitnessedPayloadArchivist)
+  container.bind<ArchivePermissionsArchivist>('ArchivePermissionsArchivist').toService(MongoDBArchivePermissionsPayloadPayloadArchivist)
+  container.bind<WitnessedPayloadArchivist>('WitnessedPayloadArchivist').toService(MongoDBArchivistWitnessedPayloadArchivist)
 
   container.bind<MongoDBUserArchivist>(MongoDBUserArchivist).to(MongoDBUserArchivist).inSingletonScope()
   container.bind<MongoDBUserManager>(MongoDBUserManager).to(MongoDBUserManager).inSingletonScope()
-  container.bind<UserArchivist>('UserRepository').to(MongoDBUserArchivist).inSingletonScope()
+  container.bind<UserArchivist>('UserArchivist').to(MongoDBUserArchivist).inSingletonScope()
 
   const passwordHasher = BcryptPasswordHasher
   container.bind<PasswordHasher<User>>('PasswordHasher<User>').toConstantValue(passwordHasher)
@@ -68,7 +68,7 @@ export const configure = () => {
 
   container.bind<BaseMongoSdk<Required<XyoArchive>>>('BaseMongoSdk<Required<XyoArchive>>').toConstantValue(getBaseMongoSdk<EntityArchive>('archives'))
   container.bind<MongoDBArchiveArchivist>(MongoDBArchiveArchivist).to(MongoDBArchiveArchivist)
-  container.bind<ArchiveArchivist>('ArchiveRepository').to(MongoDBArchiveArchivist)
+  container.bind<ArchiveArchivist>('ArchiveArchivist').to(MongoDBArchiveArchivist)
 
   container.bind<Queue<Query>>('Queue<Query>').toConstantValue(new InMemoryQueue<Query>())
   container.bind<Queue<IdentifiableHuri>>('Queue<IdentifiableHuri>').toConstantValue(new InMemoryQueue<IdentifiableHuri>())
