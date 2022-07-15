@@ -15,28 +15,28 @@ import {
   ArchiveAccessControlStrategy,
   ArchiveAccountStrategy,
   ArchiveApiKeyStrategy,
+  ArchiveArchivist,
   ArchiveOwnerStrategy,
-  ArchiveRepository,
-  ArchivistWitnessedPayloadRepository,
   BcryptPasswordHasher,
   EntityArchive,
   JwtStrategy,
   LocalStrategy,
-  MongoDBArchivePermissionsPayloadPayloadRepository,
-  MongoDBArchiveRepository,
-  MongoDBArchivistWitnessedPayloadRepository,
+  MongoDBArchiveArchivist,
+  MongoDBArchivePermissionsPayloadPayloadArchivist,
+  MongoDBArchivistWitnessedPayloadArchivist,
+  MongoDBUserArchivist,
   MongoDBUserManager,
-  MongoDBUserRepository,
   PasswordHasher,
   QueryConverterRegistry,
   QueryProcessorRegistry,
   SchemaToQueryProcessorRegistry,
+  UserArchivist,
   UserManager,
-  UserRepository,
   Web3AuthStrategy,
+  WitnessedPayloadArchivist,
   XyoPayloadToQueryConverterRegistry,
 } from './middleware'
-import { ArchivePermissionsRepository, Query, User } from './model'
+import { ArchivePermissionsArchivist, Query, User } from './model'
 import { IdentifiableHuri, InMemoryQueue, Queue } from './Queue'
 
 config()
@@ -54,12 +54,12 @@ export const configure = () => {
   container.bind<Logger>('Logger').toConstantValue(getDefaultLogger())
 
   container.bind(XyoAccount).toConstantValue(new XyoAccount({ phrase }))
-  container.bind<ArchivePermissionsRepository>('ArchivePermissionsRepository').toService(MongoDBArchivePermissionsPayloadPayloadRepository)
-  container.bind<ArchivistWitnessedPayloadRepository>('ArchivistWitnessedPayloadRepository').toService(MongoDBArchivistWitnessedPayloadRepository)
+  container.bind<ArchivePermissionsArchivist>('ArchivePermissionsRepository').toService(MongoDBArchivePermissionsPayloadPayloadArchivist)
+  container.bind<WitnessedPayloadArchivist>('ArchivistWitnessedPayloadRepository').toService(MongoDBArchivistWitnessedPayloadArchivist)
 
-  container.bind<MongoDBUserRepository>(MongoDBUserRepository).to(MongoDBUserRepository).inSingletonScope()
+  container.bind<MongoDBUserArchivist>(MongoDBUserArchivist).to(MongoDBUserArchivist).inSingletonScope()
   container.bind<MongoDBUserManager>(MongoDBUserManager).to(MongoDBUserManager).inSingletonScope()
-  container.bind<UserRepository>('UserRepository').to(MongoDBUserRepository).inSingletonScope()
+  container.bind<UserArchivist>('UserRepository').to(MongoDBUserArchivist).inSingletonScope()
 
   const passwordHasher = BcryptPasswordHasher
   container.bind<PasswordHasher<User>>('PasswordHasher<User>').toConstantValue(passwordHasher)
@@ -67,8 +67,8 @@ export const configure = () => {
   container.bind<UserManager>('UserManager').to(MongoDBUserManager).inSingletonScope()
 
   container.bind<BaseMongoSdk<Required<XyoArchive>>>('BaseMongoSdk<Required<XyoArchive>>').toConstantValue(getBaseMongoSdk<EntityArchive>('archives'))
-  container.bind<MongoDBArchiveRepository>(MongoDBArchiveRepository).to(MongoDBArchiveRepository)
-  container.bind<ArchiveRepository>('ArchiveRepository').to(MongoDBArchiveRepository)
+  container.bind<MongoDBArchiveArchivist>(MongoDBArchiveArchivist).to(MongoDBArchiveArchivist)
+  container.bind<ArchiveArchivist>('ArchiveRepository').to(MongoDBArchiveArchivist)
 
   container.bind<Queue<Query>>('Queue<Query>').toConstantValue(new InMemoryQueue<Query>())
   container.bind<Queue<IdentifiableHuri>>('Queue<IdentifiableHuri>').toConstantValue(new InMemoryQueue<IdentifiableHuri>())

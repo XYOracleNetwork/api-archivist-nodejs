@@ -6,7 +6,7 @@ import { inject, injectable } from 'inversify'
 import { Filter, WithId } from 'mongodb'
 
 import { UpsertResult } from '../../../../model'
-import { ArchiveRepository, EntityArchive } from '../ArchiveRepository'
+import { ArchiveArchivist, EntityArchive } from '../ArchiveRepository'
 
 interface UpsertFilter {
   $and: [
@@ -20,7 +20,7 @@ interface UpsertFilter {
 }
 
 @injectable()
-export class MongoDBArchiveRepository implements ArchiveRepository {
+export class MongoDBArchiveArchivist implements ArchiveArchivist {
   constructor(@inject('BaseMongoSdk<Required<XyoArchive>>') protected archives: BaseMongoSdk<Required<XyoArchive>>) {}
 
   async find(query: Filter<EntityArchive>): Promise<XyoArchive[]> {

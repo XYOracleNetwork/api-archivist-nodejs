@@ -3,9 +3,9 @@ import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { Filter } from 'mongodb'
 
 import { getBaseMongoSdk } from '../../../../lib'
-import { AbstractBoundWitnessRepository } from '../../../../model'
+import { AbstractBoundWitnessArchivist } from '../../../../model'
 
-export class MongoDBBoundWitnessRepository extends AbstractBoundWitnessRepository<XyoBoundWitnessWithMeta, string, Filter<XyoBoundWitnessWithMeta>> {
+export class MongoDBBoundWitnessArchivist extends AbstractBoundWitnessArchivist<XyoBoundWitnessWithMeta, string, Filter<XyoBoundWitnessWithMeta>> {
   constructor(protected sdk: BaseMongoSdk<XyoBoundWitnessWithMeta> = getBaseMongoSdk<XyoBoundWitnessWithMeta>('bound_witnesses')) {
     super()
   }

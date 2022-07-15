@@ -3,9 +3,9 @@ import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { Filter } from 'mongodb'
 
 import { getBaseMongoSdk, removeId } from '../../../../lib'
-import { AbstractPayloadRepository } from '../../../../model'
+import { AbstractPayloadArchivist } from '../../../../model'
 
-export class MongoDBPayloadRepository extends AbstractPayloadRepository<XyoPayloadWithMeta, string, Filter<XyoPayloadWithMeta>> {
+export class MongoDBPayloadArchivist extends AbstractPayloadArchivist<XyoPayloadWithMeta, string, Filter<XyoPayloadWithMeta>> {
   constructor(protected sdk: BaseMongoSdk<XyoPayloadWithMeta> = getBaseMongoSdk<XyoPayloadWithMeta>('payloads')) {
     super()
   }

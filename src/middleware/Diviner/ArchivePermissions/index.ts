@@ -1,10 +1,10 @@
-import { ArchivePermissionsRepository } from '../../../model'
+import { ArchivePermissionsArchivist } from '../../../model'
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Application {
-      archivePermissionsRepository: ArchivePermissionsRepository
+      archivePermissionsArchivist: ArchivePermissionsArchivist
     }
   }
 }

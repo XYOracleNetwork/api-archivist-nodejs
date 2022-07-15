@@ -7,14 +7,14 @@ import { inject, injectable } from 'inversify'
 import { Filter } from 'mongodb'
 
 import { getBaseMongoSdk, removeId } from '../../../../lib'
-import { AbstractPayloadRepository } from '../../../../model'
+import { AbstractPayloadArchivist } from '../../../../model'
 
 const unique = <T>(value: T, index: number, self: T[]) => {
   return self.indexOf(value) === index
 }
 
 @injectable()
-export class MongoDBArchivistWitnessedPayloadRepository extends AbstractPayloadRepository<XyoPayloadWithMeta, string, Filter<XyoPayloadWithMeta>> {
+export class MongoDBArchivistWitnessedPayloadArchivist extends AbstractPayloadArchivist<XyoPayloadWithMeta, string, Filter<XyoPayloadWithMeta>> {
   constructor(
     @inject(XyoAccount) protected account: XyoAccount,
     protected payloads: BaseMongoSdk<XyoPayloadWithMeta> = getBaseMongoSdk<XyoPayloadWithMeta>('payloads'),

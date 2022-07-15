@@ -2,11 +2,11 @@ import { XyoArchive, XyoBoundWitnessBuilder, XyoPayloadBuilder, XyoPayloadWithMe
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { Filter } from 'mongodb'
 
-import { AbstractMongoDBPayloadRepository } from '../../../../lib'
+import { AbstractMongoDBPayloadArchivist } from '../../../../lib'
 
 const schema = 'network.xyo.archive'
 
-export class MongoDBArchivePayloadRepository extends AbstractMongoDBPayloadRepository<XyoArchive> {
+export class MongoDBArchivePayloadArchivist extends AbstractMongoDBPayloadArchivist<XyoArchive> {
   constructor(protected readonly itemsSdk: BaseMongoSdk<XyoPayloadWithMeta<XyoArchive>>) {
     super()
   }
@@ -20,9 +20,9 @@ export class MongoDBArchivePayloadRepository extends AbstractMongoDBPayloadRepos
     const payloads = items.map((i) => new XyoPayloadBuilder<XyoPayloadWithMeta<XyoArchive>>({ schema }).fields(i).build())
     const bw = new XyoBoundWitnessBuilder(this.config).witness(this.account).payloads(payloads).build()
     const bwResult = await this.boundWitnessSdk.insertOne(bw)
-    if (bwResult.acknowledged && bwResult.insertedId) throw new Error('MongoDBPayloadRepository: Error inserting BoundWitness')
+    if (bwResult.acknowledged && bwResult.insertedId) throw new Error('MongoDBArchivePayloadArchivist: Error inserting BoundWitness')
     const result = await this.payloadsSdk.insertMany(payloads)
-    if (result.insertedCount != payloads.length) throw new Error('MongoDBPayloadRepository: Error inserting Payloads')
+    if (result.insertedCount != payloads.length) throw new Error('MongoDBArchivePayloadArchivist: Error inserting Payloads')
     return payloads as XyoPayloadWithMeta<XyoArchive>[]
   }
 }

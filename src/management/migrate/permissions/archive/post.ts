@@ -14,10 +14,10 @@ const getArchive = (archive: string): Promise<XyoArchive | null> => {
 
 const handler: RequestHandler<ArchivePathParams> = async (req, res, next) => {
   const { archive } = req.params
-  const { archivePermissionsRepository } = req.app
+  const { archivePermissionsArchivist } = req.app
   const entity = await getArchive(archive)
   if (entity) {
-    const result = await migrateLegacyArchives(archivePermissionsRepository, [entity])
+    const result = await migrateLegacyArchives(archivePermissionsArchivist, [entity])
     const migrated = result?.[0]
     res.status(StatusCodes.OK).json({ archive: entity, migrated })
   } else {

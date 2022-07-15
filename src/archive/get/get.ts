@@ -16,7 +16,7 @@ const handler: RequestHandler<NoReqParams, XyoArchive[]> = async (req, res) => {
   if (!id) {
     res.json(defaultPublicArchives)
   } else {
-    const userArchives = (await req.app.archiveRepository.find({ user: id })) as XyoArchive[]
+    const userArchives = (await req.app.archiveArchivist.find({ user: id })) as XyoArchive[]
     res.json(getArchivesDistinctByName([...defaultPublicArchives, ...userArchives]))
   }
 }

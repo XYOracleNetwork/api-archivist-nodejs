@@ -1,3 +1,3 @@
-import { Repository, User, UserWithoutId } from '../../../model'
+import { Archivist, User, UserWithoutId } from '../../../model'
 
-export type UserRepository = Repository<User, UserWithoutId, User | null, string>
+export type UserArchivist = Archivist<User, UserWithoutId, User | null, string>

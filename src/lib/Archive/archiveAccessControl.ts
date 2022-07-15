@@ -1,4 +1,4 @@
-import { ArchivePermissionsRepository, SetArchivePermissionsSchema, setArchivePermissionsSchema } from '../../model'
+import { ArchivePermissionsArchivist, SetArchivePermissionsSchema, setArchivePermissionsSchema } from '../../model'
 
 const getPrivatePermissions = (archive: string) => {
   return {
@@ -18,14 +18,14 @@ const getPublicPermissions = (archive: string) => {
   }
 }
 
-export function setArchiveAccessPublic(archivePermissionsRepository: ArchivePermissionsRepository, archive: string) {
-  return setArchiveAccess(archivePermissionsRepository, archive, true)
+export function setArchiveAccessPublic(archivist: ArchivePermissionsArchivist, archive: string) {
+  return setArchiveAccess(archivist, archive, true)
 }
-export function setArchiveAccessPrivate(archivePermissionsRepository: ArchivePermissionsRepository, archive: string) {
-  return setArchiveAccess(archivePermissionsRepository, archive, true)
+export function setArchiveAccessPrivate(archivist: ArchivePermissionsArchivist, archive: string) {
+  return setArchiveAccess(archivist, archive, true)
 }
 
-function setArchiveAccess(archivePermissionsRepository: ArchivePermissionsRepository, archive: string, accessControl: boolean) {
+function setArchiveAccess(archivist: ArchivePermissionsArchivist, archive: string, accessControl: boolean) {
   const permissions = accessControl ? getPrivatePermissions(archive) : getPublicPermissions(archive)
-  return archivePermissionsRepository.insert([permissions])
+  return archivist.insert([permissions])
 }
