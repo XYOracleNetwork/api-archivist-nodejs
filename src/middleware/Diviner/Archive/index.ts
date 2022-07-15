@@ -1,4 +1,4 @@
-import { ArchiveArchivist } from './ArchiveRepository'
+import { ArchiveArchivist } from './ArchiveArchivist'
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -9,5 +9,5 @@ declare global {
   }
 }
 
-export * from './ArchiveRepository'
+export * from './ArchiveArchivist'
 export * from './MongoDB'

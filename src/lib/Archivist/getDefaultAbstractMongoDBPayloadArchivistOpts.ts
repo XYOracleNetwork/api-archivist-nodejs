@@ -1,6 +1,6 @@
 import { getArchivistAllBoundWitnessesMongoSdk, getArchivistAllPayloadMongoSdk } from '../dbSdk'
 import { getArchivistAccount } from '../getArchivistAccount'
-import { AbstractMongoDBPayloadArchivistOpts } from './AbstractMongoDBPayloadRepositoryOpts'
+import { AbstractMongoDBPayloadArchivistOpts } from './AbstractMongoDBPayloadArchivistOpts'
 
 export const getDefaultAbstractMongoDBPayloadArchivistOpts = (): AbstractMongoDBPayloadArchivistOpts => {
   return {

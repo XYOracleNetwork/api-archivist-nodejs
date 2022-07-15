@@ -6,7 +6,7 @@ import { inject, injectable } from 'inversify'
 import { Filter, WithId } from 'mongodb'
 
 import { UpsertResult } from '../../../../model'
-import { ArchiveArchivist, EntityArchive } from '../ArchiveRepository'
+import { ArchiveArchivist, EntityArchive } from '../ArchiveArchivist'
 
 interface UpsertFilter {
   $and: [

@@ -1,2 +1,2 @@
 export * from './MongoDB'
-export * from './UserRepository'
+export * from './UserArchivist'

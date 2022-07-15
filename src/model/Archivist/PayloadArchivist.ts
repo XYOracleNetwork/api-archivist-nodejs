@@ -1,6 +1,6 @@
 import { XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 
-import { Archivist } from './Repository'
+import { Archivist } from './Archivist'
 
 export type PayloadArchivist<T extends object, TId = string, TQuery = unknown> = Archivist<
   XyoPayloadWithMeta<T>[],

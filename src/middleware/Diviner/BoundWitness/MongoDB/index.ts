@@ -1,1 +1,1 @@
-export * from './MongoDBBoundWitnessRepository'
+export * from './MongoDBBoundWitnessArchivist'
