@@ -1,5 +1,5 @@
 import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
 
-import { PayloadRepository } from './PayloadRepository'
+import { PayloadArchivist } from './PayloadRepository'
 
-export type BoundWitnessRepository<TId = string, TQuery = unknown> = PayloadRepository<XyoBoundWitness, TId, TQuery>
+export type BoundWitnessArchivist<TId = string, TQuery = unknown> = PayloadArchivist<XyoBoundWitness, TId, TQuery>

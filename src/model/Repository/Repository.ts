@@ -1,20 +1,20 @@
-export interface QueryableRepository<TQueryResponse, TQuery> {
+export interface QueryableArchivist<TQueryResponse, TQuery> {
   find(query: TQuery): Promise<TQueryResponse>
 }
-export interface ReadRepository<TReadResponse, TId = string> {
+export interface ReadArchivist<TReadResponse, TId = string> {
   get(id: TId): Promise<TReadResponse>
 }
 
-export interface WriteRepository<TWriteResponse, TWrite> {
+export interface WriteArchivist<TWriteResponse, TWrite> {
   insert(item: TWrite): Promise<TWriteResponse>
 }
 
-export type ReadWriteRepository<TWriteResponse, TWrite, TReadResponse = TWriteResponse, TId = string> = ReadRepository<TReadResponse, TId> & WriteRepository<TWriteResponse, TWrite>
+export type ReadWriteArchivist<TWriteResponse, TWrite, TReadResponse = TWriteResponse, TId = string> = ReadArchivist<TReadResponse, TId> & WriteArchivist<TWriteResponse, TWrite>
 
-export type Repository<TWriteResponse, TWrite, TReadResponse = TWriteResponse, TId = string, TQueryResponse = unknown, TQuery = unknown> = ReadWriteRepository<
+export type Archivist<TWriteResponse, TWrite, TReadResponse = TWriteResponse, TId = string, TQueryResponse = unknown, TQuery = unknown> = ReadWriteArchivist<
   TWriteResponse,
   TWrite,
   TReadResponse,
   TId
 > &
-  QueryableRepository<TQueryResponse, TQuery>
+  QueryableArchivist<TQueryResponse, TQuery>

@@ -37,5 +37,5 @@ const addQueries = (app: Application, registry: QueryProcessorRegistry) => {
   registry.registerProcessorForSchema(setArchivePermissionsSchema, (payload) => new SetArchivePermissionsQueryHandler({ ...app }).handle(payload as SetArchivePermissionsQuery))
   registry.registerProcessorForSchema(getArchivePermissionsSchema, (payload) => new GetArchivePermissionsQueryHandler({ ...app }).handle(payload as GetArchivePermissionsQuery))
   registry.registerProcessorForSchema(getDomainConfigSchema, (payload) => new GetDomainConfigQueryHandler({ ...app }).handle(payload as GetDomainConfigQuery))
-  registry.registerProcessorForSchema(getSchemaSchema, (payload) => new GetSchemaQueryHandler({ schemaRepository: XyoSchemaCache.instance }).handle(payload as GetSchemaQuery))
+  registry.registerProcessorForSchema(getSchemaSchema, (payload) => new GetSchemaQueryHandler({ schemaArchivist: XyoSchemaCache.instance }).handle(payload as GetSchemaQuery))
 }

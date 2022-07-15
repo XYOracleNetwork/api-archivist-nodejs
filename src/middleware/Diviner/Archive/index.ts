@@ -1,10 +1,10 @@
-import { ArchiveRepository } from './ArchiveRepository'
+import { ArchiveArchivist } from './ArchiveRepository'
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Application {
-      archiveRepository: ArchiveRepository
+      archiveArchivist: ArchiveArchivist
     }
   }
 }

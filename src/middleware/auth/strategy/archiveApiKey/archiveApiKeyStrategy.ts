@@ -6,13 +6,13 @@ import { inject, injectable } from 'inversify'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
 import { getArchiveKeys } from '../../../../lib'
-import { ArchiveRepository } from '../../../Diviner'
+import { ArchiveArchivist } from '../../../Diviner'
 import { UserManager } from '../../../Manager'
 
 @injectable()
 export class ArchiveApiKeyStrategy extends Strategy {
   constructor(
-    @inject('ArchiveRepository') public readonly archiveRepository: ArchiveRepository,
+    @inject('ArchiveRepository') public readonly archiveRepository: ArchiveArchivist,
     @inject('UserManager') public readonly userManager: UserManager,
     public readonly apiKeyHeader = 'x-api-key'
   ) {

@@ -1,10 +1,10 @@
-import { ArchivistWitnessedPayloadRepository } from './ArchivistWitnessedPayloadRepository'
+import { WitnessedPayloadArchivist } from './ArchivistWitnessedPayloadRepository'
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Application {
-      archivistWitnessedPayloadRepository: ArchivistWitnessedPayloadRepository
+      archivistWitnessedPayloadArchivist: WitnessedPayloadArchivist
     }
   }
 }

@@ -5,7 +5,7 @@ import { inject, injectable } from 'inversify'
 import { Filter, ObjectId, WithId } from 'mongodb'
 
 import { UpsertResult, User, UserWithoutId } from '../../../../model'
-import { UserRepository } from '../UserRepository'
+import { UserArchivist } from '../UserRepository'
 
 interface IUpsertFilter {
   $or: {
@@ -15,7 +15,7 @@ interface IUpsertFilter {
 }
 
 @injectable()
-export class MongoDBUserRepository implements UserRepository {
+export class MongoDBUserArchivist implements UserArchivist {
   constructor(@inject(BaseMongoSdk<User>) protected readonly db: BaseMongoSdk<User>) {}
 
   async find(query: Filter<User>): Promise<WithId<User>[]> {

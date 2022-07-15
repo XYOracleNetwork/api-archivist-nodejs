@@ -1,4 +1,4 @@
 import { SetArchivePermissions } from '../Query'
-import { Repository } from './Repository'
+import { Archivist } from './Repository'
 
-export type ArchivePermissionsRepository = Repository<SetArchivePermissions[], SetArchivePermissions[], SetArchivePermissions[] | null, string>
+export type ArchivePermissionsArchivist = Archivist<SetArchivePermissions[], SetArchivePermissions[], SetArchivePermissions[] | null, string>

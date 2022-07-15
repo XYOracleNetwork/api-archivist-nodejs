@@ -4,12 +4,12 @@ import { Huri, XyoQueryPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { Application } from 'express'
 
 import dependencies from '../inversify.config'
-import { ArchivistWitnessedPayloadRepository, Query } from '../middleware'
+import { Query, WitnessedPayloadArchivist } from '../middleware'
 import { IdentifiableHuri, Queue } from '../Queue'
 
 export const addInMemoryQueryProcessing = (app: Application) => {
   const logger = dependencies.get<Logger>('Logger')
-  const archivistWitnessedPayloadRepository = dependencies.get<ArchivistWitnessedPayloadRepository>('ArchivistWitnessedPayloadRepository')
+  const witnessedPayloadArchivist = dependencies.get<WitnessedPayloadArchivist>('ArchivistWitnessedPayloadRepository')
   const queryQueue = dependencies.get<Queue<Query>>('Queue<Query>')
   const responseQueue = dependencies.get<Queue<IdentifiableHuri>>('Queue<IdentifiableHuri>')
 
@@ -32,7 +32,7 @@ export const addInMemoryQueryProcessing = (app: Application) => {
             result._timestamp = Date.now()
 
             // Witness result and store result in archive
-            const stored = await archivistWitnessedPayloadRepository.insert([result])
+            const stored = await witnessedPayloadArchivist.insert([result])
             const hash = stored?.[0]?._hash
             if (hash) {
               // Store result in response queue
