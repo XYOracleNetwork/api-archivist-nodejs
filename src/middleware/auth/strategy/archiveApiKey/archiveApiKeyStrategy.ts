@@ -12,7 +12,7 @@ import { UserManager } from '../../../Manager'
 @injectable()
 export class ArchiveApiKeyStrategy extends Strategy {
   constructor(
-    @inject('ArchiveRepository') public readonly archiveRepository: ArchiveArchivist,
+    @inject('ArchiveArchivist') public readonly archiveArchivist: ArchiveArchivist,
     @inject('UserManager') public readonly userManager: UserManager,
     public readonly apiKeyHeader = 'x-api-key'
   ) {
@@ -41,7 +41,7 @@ export class ArchiveApiKeyStrategy extends Strategy {
       }
 
       // Get the archive owner
-      const existingArchive = await this.archiveRepository.get(archive)
+      const existingArchive = await this.archiveArchivist.get(archive)
       if (!existingArchive || !existingArchive?.user) {
         this.fail('Invalid user')
         return
