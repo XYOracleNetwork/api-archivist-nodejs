@@ -1,4 +1,5 @@
+import { Archivist } from '@xyo-network/sdk-xyo-client-js'
+
 import { SetArchivePermissions } from '../Query'
-import { Archivist } from './Archivist'
 
 export type ArchivePermissionsArchivist = Archivist<SetArchivePermissions[], SetArchivePermissions[], SetArchivePermissions[] | null, string>

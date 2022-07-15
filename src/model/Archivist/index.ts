@@ -1,6 +1,5 @@
 export * from './AbstractBoundWitnessArchivist'
 export * from './AbstractPayloadArchivist'
 export * from './ArchivePermissionsArchivist'
-export * from './Archivist'
 export * from './BoundWitnessArchivist'
 export * from './PayloadArchivist'
