@@ -4,6 +4,7 @@
     "experimentalDecorators": true,
     "module": "esnext",
     "outDir": "dist",
+    "plugins": [{ "transform": "ts-nameof", "type": "raw" }],
     "typeRoots": [
       "./node_modules/@types",
       "./types"
@@ -13,6 +14,7 @@
       "jest",
       "node",
       "@types/jest",
+      "@types/ts-nameof",
       "jest-sorted",
       "reflect-metadata"
     ]
