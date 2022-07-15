@@ -13,12 +13,12 @@ import {
 import { IdentifiableHuri, Queue } from '../Queue'
 
 export const addDependencies = (app: Application) => {
-  app.archivistWitnessedPayloadRepository = dependencies.get<ArchivistWitnessedPayloadRepository>('ArchivistWitnessedPayloadRepository')
-  app.archiveRepository = dependencies.get<ArchiveRepository>('ArchiveRepository')
-  app.archivePermissionsRepository = dependencies.get<ArchivePermissionsRepository>('ArchivePermissionsRepository')
-  app.queryConverters = dependencies.get<XyoPayloadToQueryConverterRegistry>('XyoPayloadToQueryConverterRegistry')
-  app.queryProcessors = dependencies.get<SchemaToQueryProcessorRegistry>('SchemaToQueryProcessorRegistry')
-  app.queryQueue = dependencies.get<Queue<Query>>('Queue<Query>')
-  app.responseQueue = dependencies.get<Queue<IdentifiableHuri>>('Queue<IdentifiableHuri>')
-  app.userManager = dependencies.get<UserManager>('UserManager')
+  app.archivistWitnessedPayloadRepository = dependencies.get<ArchivistWitnessedPayloadRepository>(nameof<ArchivistWitnessedPayloadRepository>())
+  app.archiveRepository = dependencies.get<ArchiveRepository>(nameof<ArchiveRepository>())
+  app.archivePermissionsRepository = dependencies.get<ArchivePermissionsRepository>(nameof<ArchivePermissionsRepository>())
+  app.queryConverters = dependencies.get<XyoPayloadToQueryConverterRegistry>(nameof<XyoPayloadToQueryConverterRegistry>())
+  app.queryProcessors = dependencies.get<SchemaToQueryProcessorRegistry>(nameof<SchemaToQueryProcessorRegistry>())
+  app.queryQueue = dependencies.get<Queue<Query>>(nameof<Queue<Query>>())
+  app.responseQueue = dependencies.get<Queue<IdentifiableHuri>>(nameof<Queue<IdentifiableHuri>>())
+  app.userManager = dependencies.get<UserManager>(nameof<UserManager>())
 }

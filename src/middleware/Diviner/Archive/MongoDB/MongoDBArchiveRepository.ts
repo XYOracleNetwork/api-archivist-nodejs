@@ -21,7 +21,7 @@ interface UpsertFilter {
 
 @injectable()
 export class MongoDBArchiveRepository implements ArchiveRepository {
-  constructor(@inject('BaseMongoSdk<Required<XyoArchive>>') protected archives: BaseMongoSdk<Required<XyoArchive>>) {}
+  constructor(@inject(nameof<BaseMongoSdk<Required<XyoArchive>>>()) protected archives: BaseMongoSdk<Required<XyoArchive>>) {}
 
   async find(query: Filter<EntityArchive>): Promise<XyoArchive[]> {
     return (await this.archives.find(query)).toArray()
