@@ -5,7 +5,7 @@ import { inject, injectable } from 'inversify'
 import { Filter, ObjectId, WithId } from 'mongodb'
 
 import { UpsertResult, User, UserWithoutId } from '../../../../model'
-import { UserArchivist } from '../UserRepository'
+import { UserArchivist } from '../UserArchivist'
 
 interface IUpsertFilter {
   $or: {

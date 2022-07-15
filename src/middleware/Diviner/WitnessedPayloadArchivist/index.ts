@@ -1,4 +1,4 @@
-import { WitnessedPayloadArchivist } from './ArchivistWitnessedPayloadRepository'
+import { WitnessedPayloadArchivist } from './WitnessedPayloadArchivist'
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -9,5 +9,5 @@ declare global {
   }
 }
 
-export * from './ArchivistWitnessedPayloadRepository'
 export * from './MongoDB'
+export * from './WitnessedPayloadArchivist'

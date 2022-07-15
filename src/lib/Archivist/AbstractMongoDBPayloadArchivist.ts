@@ -6,8 +6,8 @@ import { injectable } from 'inversify'
 import { Filter } from 'mongodb'
 
 import { AbstractPayloadArchivist } from '../../model'
-import { AbstractMongoDBPayloadArchivistOpts } from './AbstractMongoDBPayloadRepositoryOpts'
-import { getDefaultAbstractMongoDBPayloadArchivistOpts } from './getDefaultAbstractMongoDBPayloadRepositoryOpts'
+import { AbstractMongoDBPayloadArchivistOpts } from './AbstractMongoDBPayloadArchivistOpts'
+import { getDefaultAbstractMongoDBPayloadArchivistOpts } from './getDefaultAbstractMongoDBPayloadArchivistOpts'
 
 @injectable()
 export abstract class AbstractMongoDBPayloadArchivist<T extends object, TId = string, TQuery = Filter<T>> extends AbstractPayloadArchivist<T, TId, TQuery> {
