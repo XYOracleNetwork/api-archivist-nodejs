@@ -13,6 +13,7 @@ const generateJestConfig = ({ esModules }) => {
     globals: {
       'ts-jest': {
         astTransformers: ['ts-nameof'],
+        compiler: 'ttypescript',
         tsconfig: 'tsconfig.test.json',
       },
     },
