@@ -54,9 +54,9 @@ export const configure = () => {
 
   container.bind<Logger>(TYPES.Logger).toConstantValue(getDefaultLogger())
 
-  container.bind<XyoAccount>(TYPES.XyoAccount).toConstantValue(new XyoAccount({ phrase }))
-  container.bind<ArchivePermissionsArchivist>(TYPES.ArchivePermissionsArchivist).toService(MongoDBArchivePermissionsPayloadPayloadArchivist)
-  container.bind<WitnessedPayloadArchivist>(TYPES.WitnessedPayloadArchivist).toService(MongoDBArchivistWitnessedPayloadArchivist)
+  container.bind<XyoAccount>(XyoAccount).toConstantValue(new XyoAccount({ phrase }))
+  container.bind<ArchivePermissionsArchivist>(TYPES.ArchivePermissionsArchivist).to(MongoDBArchivePermissionsPayloadPayloadArchivist)
+  container.bind<WitnessedPayloadArchivist>(TYPES.WitnessedPayloadArchivist).to(MongoDBArchivistWitnessedPayloadArchivist)
 
   container.bind<MongoDBUserArchivist>(TYPES.UserArchivistMongoDb).to(MongoDBUserArchivist).inSingletonScope()
   container.bind<MongoDBUserManager>(TYPES.UserManagerMongoDb).to(MongoDBUserManager).inSingletonScope()
