@@ -3,7 +3,7 @@ import { assertEx } from '@xylabs/sdk-js'
 import { Huri, XyoQueryPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { Application } from 'express'
 
-import dependencies from '../inversify.config'
+import { dependencies } from '../Dependencies'
 import { Query, WitnessedPayloadArchivist } from '../middleware'
 import { IdentifiableHuri, Queue } from '../Queue'
 

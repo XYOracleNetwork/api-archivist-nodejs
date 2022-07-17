@@ -3,7 +3,7 @@ import compression from 'compression'
 import cors from 'cors'
 import express, { Express } from 'express'
 
-import dependencies, { configure } from '../inversify.config'
+import { configure, dependencies } from '../Dependencies'
 import { configureDoc } from '../middleware'
 import { addAuth } from './addAuth'
 import { addDependencies } from './addDependencies'

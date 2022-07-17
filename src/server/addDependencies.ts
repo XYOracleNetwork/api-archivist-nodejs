@@ -1,6 +1,6 @@
 import { Application } from 'express'
 
-import dependencies from '../inversify.config'
+import { dependencies } from '../Dependencies'
 import {
   ArchiveArchivist,
   ArchivePermissionsArchivist,
