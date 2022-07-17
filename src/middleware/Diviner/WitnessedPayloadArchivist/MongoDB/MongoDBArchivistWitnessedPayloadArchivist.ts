@@ -6,6 +6,7 @@ import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter } from 'mongodb'
 
+import { TYPES } from '../../../../Dependencies'
 import { getBaseMongoSdk, removeId } from '../../../../lib'
 import { AbstractPayloadArchivist } from '../../../../model'
 
@@ -16,7 +17,7 @@ const unique = <T>(value: T, index: number, self: T[]) => {
 @injectable()
 export class MongoDBArchivistWitnessedPayloadArchivist extends AbstractPayloadArchivist<XyoPayloadWithMeta, string, Filter<XyoPayloadWithMeta>> {
   constructor(
-    @inject(XyoAccount) protected readonly account: XyoAccount,
+    @inject(TYPES.Account) protected readonly account: XyoAccount,
     protected payloads: BaseMongoSdk<XyoPayloadWithMeta> = getBaseMongoSdk<XyoPayloadWithMeta>('payloads'),
     protected boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta> = getBaseMongoSdk<XyoBoundWitnessWithMeta>('bound_witnesses')
   ) {
