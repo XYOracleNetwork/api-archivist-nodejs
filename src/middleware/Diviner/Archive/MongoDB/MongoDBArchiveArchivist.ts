@@ -5,6 +5,7 @@ import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter, WithId } from 'mongodb'
 
+import { TYPES } from '../../../../Dependencies'
 import { UpsertResult } from '../../../../model'
 import { ArchiveArchivist, EntityArchive } from '../ArchiveArchivist'
 
@@ -21,7 +22,7 @@ interface UpsertFilter {
 
 @injectable()
 export class MongoDBArchiveArchivist implements ArchiveArchivist {
-  constructor(@inject('BaseMongoSdk<Required<XyoArchive>>') protected archives: BaseMongoSdk<Required<XyoArchive>>) {}
+  constructor(@inject(TYPES.ArchiveSdkMongo) protected archives: BaseMongoSdk<Required<XyoArchive>>) {}
 
   async find(query: Filter<EntityArchive>): Promise<XyoArchive[]> {
     return (await this.archives.find(query)).toArray()

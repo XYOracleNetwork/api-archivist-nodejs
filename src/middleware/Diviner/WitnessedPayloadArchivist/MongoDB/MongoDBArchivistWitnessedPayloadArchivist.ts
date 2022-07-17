@@ -16,7 +16,7 @@ const unique = <T>(value: T, index: number, self: T[]) => {
 @injectable()
 export class MongoDBArchivistWitnessedPayloadArchivist extends AbstractPayloadArchivist<XyoPayloadWithMeta, string, Filter<XyoPayloadWithMeta>> {
   constructor(
-    @inject(XyoAccount) protected account: XyoAccount,
+    @inject(XyoAccount) protected readonly account: XyoAccount,
     protected payloads: BaseMongoSdk<XyoPayloadWithMeta> = getBaseMongoSdk<XyoPayloadWithMeta>('payloads'),
     protected boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta> = getBaseMongoSdk<XyoBoundWitnessWithMeta>('bound_witnesses')
   ) {
