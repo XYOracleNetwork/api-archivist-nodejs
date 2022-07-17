@@ -3,7 +3,7 @@ import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
-import dependencies from '../../inversify.config'
+import { dependencies } from '../../Dependencies'
 import { IdentifiableHuri, Queue } from '../../Queue'
 
 export type QueryPathParams = {
