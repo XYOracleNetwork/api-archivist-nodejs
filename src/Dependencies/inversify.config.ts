@@ -54,7 +54,7 @@ export const configure = () => {
 
   container.bind<Logger>(TYPES.Logger).toConstantValue(getDefaultLogger())
 
-  container.bind<XyoAccount>(XyoAccount).toConstantValue(new XyoAccount({ phrase }))
+  container.bind<XyoAccount>(TYPES.Account).toConstantValue(new XyoAccount({ phrase }))
   container.bind<ArchivePermissionsArchivist>(TYPES.ArchivePermissionsArchivist).to(MongoDBArchivePermissionsPayloadPayloadArchivist)
   container.bind<WitnessedPayloadArchivist>(TYPES.WitnessedPayloadArchivist).to(MongoDBArchivistWitnessedPayloadArchivist)
 
@@ -76,7 +76,7 @@ export const configure = () => {
 
   configureAuth(jwtSecret, passwordHasher)
 
-  container.bind<QueryConverterRegistry>(TYPES.XyoPayloadToQueryConverterRegistry).toConstantValue(new XyoPayloadToQueryConverterRegistry())
+  container.bind<QueryConverterRegistry>(TYPES.PayloadToQueryConverterRegistry).toConstantValue(new XyoPayloadToQueryConverterRegistry())
   container.bind<QueryProcessorRegistry>(TYPES.SchemaToQueryProcessorRegistry).toConstantValue(new SchemaToQueryProcessorRegistry())
 }
 

@@ -31,7 +31,7 @@ const toDbEntity = (user: UserWithoutId) => {
 @injectable()
 export class MongoDBUserManager implements UserManager {
   constructor(
-    @inject(MongoDBUserArchivist) protected readonly mongo: MongoDBUserArchivist,
+    @inject(TYPES.UserArchivistMongoDb) protected readonly mongo: MongoDBUserArchivist,
     @inject(TYPES.PasswordHasher) protected readonly passwordHasher: PasswordHasher<User>
   ) {}
   async create(user: UserWithoutId, password?: string): Promise<Identifiable & Partial<Web2User> & Partial<Web3User> & UpsertResult> {

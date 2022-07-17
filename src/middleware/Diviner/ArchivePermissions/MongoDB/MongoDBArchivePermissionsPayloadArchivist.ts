@@ -23,7 +23,7 @@ const schema: SetArchivePermissionsSchema = setArchivePermissionsSchema
 export class MongoDBArchivePermissionsPayloadPayloadArchivist extends AbstractMongoDBPayloadArchivist<SetArchivePermissionsPayload> {
   protected readonly items: BaseMongoSdk<SetArchivePermissionsPayloadWithMeta> = getBaseMongoSdk('payload')
   protected opts: AbstractMongoDBPayloadArchivistOpts = getDefaultAbstractMongoDBPayloadArchivistOpts()
-  constructor(@inject(XyoAccount) protected readonly account: XyoAccount) {
+  constructor(@inject(TYPES.Account) protected readonly account: XyoAccount) {
     super()
   }
   async find(filter: Filter<SetArchivePermissionsPayloadWithMeta>) {

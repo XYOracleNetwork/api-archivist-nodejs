@@ -1,4 +1,5 @@
 export const TYPES = {
+  Account: Symbol('Account'),
   ApiKey: Symbol('ApiKey'),
   ArchiveArchivist: Symbol('ArchiveArchivist'),
   ArchiveArchivistMongoDb: Symbol('ArchiveArchivistMongoDb'),
@@ -6,6 +7,7 @@ export const TYPES = {
   ArchiveSdkMongo: Symbol('ArchiveSdkMongo'),
   Logger: Symbol('Logger'),
   PasswordHasher: Symbol('PasswordHasher'),
+  PayloadToQueryConverterRegistry: Symbol('PayloadToQueryConverterRegistry'),
   QueryQueue: Symbol('QueryQueue'),
   ResponseQueue: Symbol('ResponseQueue'),
   SchemaToQueryProcessorRegistry: Symbol('SchemaToQueryProcessorRegistry'),
@@ -15,6 +17,4 @@ export const TYPES = {
   UserManagerMongoDb: Symbol('UserManagerMongoDb'),
   UserSdkMongo: Symbol('UserSdkMongo'),
   WitnessedPayloadArchivist: Symbol('WitnessedPayloadArchivist'),
-  XyoAccount: Symbol('XyoAccount'),
-  XyoPayloadToQueryConverterRegistry: Symbol('XyoPayloadToQueryConverterRegistry'),
 }
