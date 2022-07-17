@@ -18,8 +18,8 @@ const unique = <T>(value: T, index: number, self: T[]) => {
 export class MongoDBArchivistWitnessedPayloadArchivist extends AbstractPayloadArchivist<XyoPayloadWithMeta, string, Filter<XyoPayloadWithMeta>> {
   constructor(
     @inject(TYPES.Account) protected readonly account: XyoAccount,
-    protected payloads: BaseMongoSdk<XyoPayloadWithMeta> = getBaseMongoSdk<XyoPayloadWithMeta>('payloads'),
-    protected boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta> = getBaseMongoSdk<XyoBoundWitnessWithMeta>('bound_witnesses')
+    @inject(TYPES.PayloadSdkMongo) protected readonly payloads: BaseMongoSdk<XyoPayloadWithMeta> = getBaseMongoSdk<XyoPayloadWithMeta>('payloads'),
+    @inject(TYPES.BoundWitnessSdkMongo) protected readonly boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta> = getBaseMongoSdk<XyoBoundWitnessWithMeta>('bound_witnesses')
   ) {
     super()
   }
