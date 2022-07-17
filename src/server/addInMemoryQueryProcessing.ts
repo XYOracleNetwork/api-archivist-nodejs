@@ -3,15 +3,15 @@ import { assertEx } from '@xylabs/sdk-js'
 import { Huri, XyoQueryPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { Application } from 'express'
 
-import { dependencies } from '../Dependencies'
+import { dependencies, TYPES } from '../Dependencies'
 import { Query, WitnessedPayloadArchivist } from '../middleware'
 import { IdentifiableHuri, Queue } from '../Queue'
 
 export const addInMemoryQueryProcessing = (app: Application) => {
-  const logger = dependencies.get<Logger>('Logger')
-  const witnessedPayloadArchivist = dependencies.get<WitnessedPayloadArchivist>('WitnessedPayloadArchivist')
-  const queryQueue = dependencies.get<Queue<Query>>('Queue<Query>')
-  const responseQueue = dependencies.get<Queue<IdentifiableHuri>>('Queue<IdentifiableHuri>')
+  const logger = dependencies.get<Logger>(TYPES.Logger)
+  const witnessedPayloadArchivist = dependencies.get<WitnessedPayloadArchivist>(TYPES.WitnessedPayloadArchivist)
+  const queryQueue = dependencies.get<Queue<Query>>(TYPES.QueryQueue)
+  const responseQueue = dependencies.get<Queue<IdentifiableHuri>>(TYPES.ResponseQueue)
 
   queryQueue.onQueued = async (id) => {
     const query = await queryQueue.tryDequeue(id)
