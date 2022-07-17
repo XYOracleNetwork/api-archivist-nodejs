@@ -3,7 +3,7 @@ import compression from 'compression'
 import cors from 'cors'
 import express, { Express } from 'express'
 
-import { configure, dependencies } from '../Dependencies'
+import { configure, dependencies, TYPES } from '../Dependencies'
 import { configureDoc } from '../middleware'
 import { addAuth } from './addAuth'
 import { addDependencies } from './addDependencies'
@@ -53,7 +53,7 @@ export const server = async (port = 80) => {
   }
 
   const app = getApp()
-  const logger = dependencies.get<Logger>('Logger')
+  const logger = dependencies.get<Logger>(TYPES.Logger)
   const host = process.env.PUBLIC_ORIGIN || `http://localhost:${port}`
   await configureDoc(app, { host })
 

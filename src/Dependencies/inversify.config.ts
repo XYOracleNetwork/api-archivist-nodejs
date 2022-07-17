@@ -38,6 +38,7 @@ import {
 } from '../middleware'
 import { ArchivePermissionsArchivist, Query, User } from '../model'
 import { IdentifiableHuri, InMemoryQueue, Queue } from '../Queue'
+import { TYPES } from './types'
 
 config()
 const container = new Container({ autoBindInjectable: true })
@@ -49,34 +50,34 @@ export const configure = () => {
   const phrase = assertEx(process.env.ACCOUNT_SEED, 'ACCOUNT_SEED ENV VAR required to create Archivist')
   const apiKey = assertEx(process.env.API_KEY, 'API_KEY ENV VAR required to create Archivist')
   const jwtSecret = assertEx(process.env.JWT_SECRET, 'JWT_SECRET ENV VAR required to create Archivist')
-  container.bind<string>('ApiKey').toConstantValue(apiKey)
+  container.bind<string>(TYPES.ApiKey).toConstantValue(apiKey)
 
-  container.bind<Logger>('Logger').toConstantValue(getDefaultLogger())
+  container.bind<Logger>(TYPES.Logger).toConstantValue(getDefaultLogger())
 
-  container.bind(XyoAccount).toConstantValue(new XyoAccount({ phrase }))
-  container.bind<ArchivePermissionsArchivist>('ArchivePermissionsArchivist').toService(MongoDBArchivePermissionsPayloadPayloadArchivist)
-  container.bind<WitnessedPayloadArchivist>('WitnessedPayloadArchivist').toService(MongoDBArchivistWitnessedPayloadArchivist)
+  container.bind<XyoAccount>(TYPES.XyoAccount).toConstantValue(new XyoAccount({ phrase }))
+  container.bind<ArchivePermissionsArchivist>(TYPES.ArchivePermissionsArchivist).toService(MongoDBArchivePermissionsPayloadPayloadArchivist)
+  container.bind<WitnessedPayloadArchivist>(TYPES.WitnessedPayloadArchivist).toService(MongoDBArchivistWitnessedPayloadArchivist)
 
-  container.bind<MongoDBUserArchivist>(MongoDBUserArchivist).to(MongoDBUserArchivist).inSingletonScope()
-  container.bind<MongoDBUserManager>(MongoDBUserManager).to(MongoDBUserManager).inSingletonScope()
-  container.bind<UserArchivist>('UserArchivist').to(MongoDBUserArchivist).inSingletonScope()
+  container.bind<MongoDBUserArchivist>(TYPES.UserArchivistMongoDb).to(MongoDBUserArchivist).inSingletonScope()
+  container.bind<MongoDBUserManager>(TYPES.UserManagerMongoDb).to(MongoDBUserManager).inSingletonScope()
+  container.bind<UserArchivist>(TYPES.UserArchivist).to(MongoDBUserArchivist).inSingletonScope()
 
   const passwordHasher = BcryptPasswordHasher
-  container.bind<PasswordHasher<User>>('PasswordHasher<User>').toConstantValue(passwordHasher)
-  container.bind<BaseMongoSdk<User>>(BaseMongoSdk<User>).toConstantValue(getBaseMongoSdk<User>('users'))
-  container.bind<UserManager>('UserManager').to(MongoDBUserManager).inSingletonScope()
+  container.bind<PasswordHasher<User>>(TYPES.PasswordHasher).toConstantValue(passwordHasher)
+  container.bind<BaseMongoSdk<User>>(TYPES.UserSdkMongo).toConstantValue(getBaseMongoSdk<User>('users'))
+  container.bind<UserManager>(TYPES.UserManager).to(MongoDBUserManager).inSingletonScope()
 
-  container.bind<BaseMongoSdk<Required<XyoArchive>>>('BaseMongoSdk<Required<XyoArchive>>').toConstantValue(getBaseMongoSdk<EntityArchive>('archives'))
-  container.bind<MongoDBArchiveArchivist>(MongoDBArchiveArchivist).to(MongoDBArchiveArchivist)
-  container.bind<ArchiveArchivist>('ArchiveArchivist').to(MongoDBArchiveArchivist)
+  container.bind<BaseMongoSdk<Required<XyoArchive>>>(TYPES.ArchiveSdkMongo).toConstantValue(getBaseMongoSdk<EntityArchive>('archives'))
+  container.bind<MongoDBArchiveArchivist>(TYPES.ArchiveArchivistMongoDb).to(MongoDBArchiveArchivist)
+  container.bind<ArchiveArchivist>(TYPES.ArchiveArchivist).to(MongoDBArchiveArchivist)
 
-  container.bind<Queue<Query>>('Queue<Query>').toConstantValue(new InMemoryQueue<Query>())
-  container.bind<Queue<IdentifiableHuri>>('Queue<IdentifiableHuri>').toConstantValue(new InMemoryQueue<IdentifiableHuri>())
+  container.bind<Queue<Query>>(TYPES.QueryQueue).toConstantValue(new InMemoryQueue<Query>())
+  container.bind<Queue<IdentifiableHuri>>(TYPES.ResponseQueue).toConstantValue(new InMemoryQueue<IdentifiableHuri>())
 
   configureAuth(jwtSecret, passwordHasher)
 
-  container.bind<QueryConverterRegistry>('XyoPayloadToQueryConverterRegistry').toConstantValue(new XyoPayloadToQueryConverterRegistry())
-  container.bind<QueryProcessorRegistry>('SchemaToQueryProcessorRegistry').toConstantValue(new SchemaToQueryProcessorRegistry())
+  container.bind<QueryConverterRegistry>(TYPES.XyoPayloadToQueryConverterRegistry).toConstantValue(new XyoPayloadToQueryConverterRegistry())
+  container.bind<QueryProcessorRegistry>(TYPES.SchemaToQueryProcessorRegistry).toConstantValue(new SchemaToQueryProcessorRegistry())
 }
 
 const configureAuth = (jwtSecret: string, passwordHasher: PasswordHasher<User>) => {
