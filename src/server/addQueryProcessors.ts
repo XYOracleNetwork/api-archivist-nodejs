@@ -28,7 +28,7 @@ export const addQueryProcessors = (app: Application) => {
 const addDebug = (registry: QueryProcessorRegistry) => {
   registry.registerProcessorForSchema(debugSchema, (payload) => new DebugQueryHandler().handle(payload as DebugQuery))
   registry.registerProcessorForSchema('network.xyo.test', async () => {
-    await delay(0)
+    await delay(1)
     return {} as XyoPayloadWithMeta
   })
 }
