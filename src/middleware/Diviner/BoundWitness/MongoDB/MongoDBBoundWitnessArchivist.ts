@@ -12,10 +12,10 @@ export class MongoDBBoundWitnessArchivist extends AbstractBoundWitnessArchivist<
     super()
   }
   async find(filter: Filter<XyoBoundWitnessWithMeta>): Promise<XyoBoundWitnessWithMeta[]> {
-    return (await this.sdk.find(filter)).toArray()
+    return (await this.sdk.find(filter)).limit(100).toArray()
   }
   async get(hash: string): Promise<XyoBoundWitnessWithMeta[]> {
-    return (await this.sdk.find({ _hash: hash })).toArray()
+    return (await this.sdk.find({ _hash: hash })).limit(100).toArray()
   }
   async insert(items: XyoBoundWitnessWithMeta[]): Promise<XyoBoundWitnessWithMeta[]> {
     // TODO: Remove _id if present

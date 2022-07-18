@@ -20,7 +20,7 @@ export class MongoDBArchivePermissionsPayloadPayloadArchivist extends AbstractMo
     super()
   }
   async find(filter: Filter<SetArchivePermissionsPayloadWithMeta>) {
-    return (await this.items.find(filter)).toArray()
+    return (await this.items.find(filter)).limit(100).toArray()
   }
   async get(archive: string): Promise<SetArchivePermissionsPayloadWithMeta[]> {
     return (await getArchivistPayloadMongoSdk(archive).find({ _archive: archive, schema }))

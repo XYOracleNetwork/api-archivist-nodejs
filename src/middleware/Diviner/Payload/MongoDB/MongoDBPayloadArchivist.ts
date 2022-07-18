@@ -13,10 +13,10 @@ export class MongoDBPayloadArchivist extends AbstractPayloadArchivist<XyoPayload
     super()
   }
   async find(filter: Filter<XyoPayloadWithMeta>): Promise<XyoPayloadWithMeta[]> {
-    return (await this.sdk.find(filter)).toArray()
+    return (await this.sdk.find(filter)).limit(100).toArray()
   }
   async get(hash: string): Promise<XyoPayloadWithMeta[]> {
-    return (await this.sdk.find({ _hash: hash })).toArray()
+    return (await this.sdk.find({ _hash: hash })).limit(100).toArray()
   }
   async insert(items: XyoPayloadWithMeta[]): Promise<XyoPayloadWithMeta[]> {
     const result = await this.sdk.insertMany(items.map(removeId) as XyoPayloadWithMeta[])
