@@ -29,12 +29,12 @@ export class MongoDBArchivistWitnessedPayloadArchivist extends AbstractPayloadAr
   }
   async get(hash: string): Promise<XyoPayloadWithMeta[]> {
     // Find bw signed by us that has this hash
-    const bound_witnesses = await (await this.boundWitnesses.find({ payload_hashes: hash })).toArray()
+    const bound_witnesses = await (await this.boundWitnesses.find({ payload_hashes: hash })).limit(100).toArray()
     const archives = bound_witnesses
       .map((bw) => bw._archive)
       .filter(exists)
       .filter(unique)
-    return (await this.payloads.find({ _archive: { $in: archives }, _hash: hash })).toArray()
+    return (await this.payloads.find({ _archive: { $in: archives }, _hash: hash })).limit(100).toArray()
   }
   async insert(payloads: XyoPayloadWithMeta[]): Promise<XyoPayloadWithMeta[]> {
     // Witness from archivist
