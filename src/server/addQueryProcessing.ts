@@ -1,23 +1,23 @@
 import { Logger } from '@xylabs/sdk-api-express-ecs'
 import { assertEx } from '@xylabs/sdk-js'
 import { Huri, XyoQueryPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
-import { Application } from 'express'
 
 import { dependencies, TYPES } from '../Dependencies'
-import { Query, WitnessedPayloadArchivist } from '../middleware'
+import { Query, QueryProcessorRegistry, WitnessedPayloadArchivist } from '../middleware'
 import { IdentifiableHuri, Queue } from '../Queue'
 
-export const addInMemoryQueryProcessing = (app: Application) => {
+export const addQueryProcessing = () => {
   const logger = dependencies.get<Logger>(TYPES.Logger)
   const witnessedPayloadArchivist = dependencies.get<WitnessedPayloadArchivist>(TYPES.WitnessedPayloadArchivist)
   const queryQueue = dependencies.get<Queue<Query>>(TYPES.QueryQueue)
   const responseQueue = dependencies.get<Queue<IdentifiableHuri>>(TYPES.ResponseQueue)
+  const queryProcessors = dependencies.get<QueryProcessorRegistry>(TYPES.SchemaToQueryProcessorRegistry)
 
   queryQueue.onQueued = async (id) => {
     const query = await queryQueue.tryDequeue(id)
     if (query) {
       try {
-        const processor = app.queryProcessors.processors[query.payload.schema]
+        const processor = queryProcessors.processors[query.payload.schema]
         if (processor) {
           // TODO: Validate auth (address/schema allowed)
 
