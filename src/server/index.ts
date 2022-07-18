@@ -9,9 +9,9 @@ import { addAuth } from './addAuth'
 import { addDependencies } from './addDependencies'
 import { addErrorHandlers } from './addErrorHandlers'
 import { addHealthChecks } from './addHealthChecks'
-import { addInMemoryQueryProcessing } from './addInMemoryQueryProcessing'
 import { addMiddleware } from './addMiddleware'
 import { addQueryConverters } from './addQueryConverters'
+import { addQueryProcessing } from './addQueryProcessing'
 import { addQueryProcessors } from './addQueryProcessors'
 import { addRoutes } from './addRoutes'
 
@@ -33,9 +33,9 @@ export const getApp = (): Express => {
   addDependencies(app)
   addMiddleware(app)
   addAuth(app)
-  addQueryConverters(app)
+  addQueryConverters()
   addQueryProcessors(app)
-  addInMemoryQueryProcessing(app)
+  addQueryProcessing()
   addHealthChecks(app)
   addRoutes(app)
   addErrorHandlers(app)

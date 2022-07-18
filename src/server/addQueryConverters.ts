@@ -1,7 +1,8 @@
 import { XyoPayload, XyoQueryPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
-import { Application, Request } from 'express'
+import { Request } from 'express'
 import { v4 } from 'uuid'
 
+import { dependencies, TYPES } from '../Dependencies'
 import { isProduction, QueryConverterRegistry } from '../middleware'
 import {
   DebugPayload,
@@ -29,12 +30,12 @@ const debugCommandConverter = (payload: XyoPayload, _req: Request): Query => {
   } as Query
 }
 
-export const addQueryConverters = (app: Application) => {
-  const registry: QueryConverterRegistry = app.queryConverters
+export const addQueryConverters = () => {
+  const registry = dependencies.get<QueryConverterRegistry>(TYPES.PayloadToQueryConverterRegistry)
   if (!isProduction()) {
     addDebugQueries(registry)
   }
-  addQueryHandlers(app, registry)
+  addQueryHandlers(registry)
 }
 
 export const addDebugQueries = (registry: QueryConverterRegistry) => {
@@ -42,7 +43,7 @@ export const addDebugQueries = (registry: QueryConverterRegistry) => {
   registry.registerConverterForSchema('network.xyo.test', debugCommandConverter)
 }
 
-export const addQueryHandlers = (app: Application, registry: QueryConverterRegistry) => {
+export const addQueryHandlers = (registry: QueryConverterRegistry) => {
   registry.registerConverterForSchema(
     setArchivePermissionsSchema,
     (payload: XyoQueryPayloadWithMeta<SetArchivePermissionsPayload>, _req: Request) => new SetArchivePermissionsQuery(payload)
