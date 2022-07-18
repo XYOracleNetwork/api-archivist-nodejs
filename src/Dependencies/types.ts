@@ -1,22 +1,26 @@
+const MONGO_TYPES = {
+  ArchiveArchivistMongoDb: Symbol('ArchiveArchivistMongoDb'),
+  ArchiveSdkMongo: Symbol('ArchiveSdkMongo'),
+  BoundWitnessSdkMongo: Symbol('BoundWitnessSdkMongo'),
+  PayloadSdkMongo: Symbol('PayloadSdkMongo'),
+  UserArchivistMongoDb: Symbol('UserArchivistMongoDb'),
+  UserManagerMongoDb: Symbol('UserManagerMongoDb'),
+  UserSdkMongo: Symbol('UserSdkMongo'),
+}
+
 export const TYPES = {
+  ...MONGO_TYPES,
   Account: Symbol('Account'),
   ApiKey: Symbol('ApiKey'),
   ArchiveArchivist: Symbol('ArchiveArchivist'),
-  ArchiveArchivistMongoDb: Symbol('ArchiveArchivistMongoDb'),
   ArchivePermissionsArchivist: Symbol('ArchivePermissionsArchivist'),
-  ArchiveSdkMongo: Symbol('ArchiveSdkMongo'),
-  BoundWitnessSdkMongo: Symbol('BoundWitnessSdkMongo'),
   Logger: Symbol('Logger'),
   PasswordHasher: Symbol('PasswordHasher'),
-  PayloadSdkMongo: Symbol('PayloadSdkMongo'),
   PayloadToQueryConverterRegistry: Symbol('PayloadToQueryConverterRegistry'),
   QueryQueue: Symbol('QueryQueue'),
   ResponseQueue: Symbol('ResponseQueue'),
   SchemaToQueryProcessorRegistry: Symbol('SchemaToQueryProcessorRegistry'),
   UserArchivist: Symbol('UserArchivist'),
-  UserArchivistMongoDb: Symbol('UserArchivistMongoDb'),
   UserManager: Symbol('UserManager'),
-  UserManagerMongoDb: Symbol('UserManagerMongoDb'),
-  UserSdkMongo: Symbol('UserSdkMongo'),
   WitnessedPayloadArchivist: Symbol('WitnessedPayloadArchivist'),
 }
