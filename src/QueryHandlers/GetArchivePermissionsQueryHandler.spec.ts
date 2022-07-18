@@ -1,6 +1,6 @@
 import { mock, MockProxy } from 'jest-mock-extended'
 
-import { ArchivePermissionsRepository } from '../middleware'
+import { ArchivePermissionsArchivist } from '../middleware'
 import { debugSchema, GetArchivePermissionsQuery, getArchivePermissionsSchema, SetArchivePermissionsPayload, setArchivePermissionsSchema } from '../model'
 import { GetArchivePermissionsQueryHandler } from './GetArchivePermissionsQueryHandler'
 
@@ -26,15 +26,15 @@ const permissions: SetArchivePermissionsPayload = {
 describe('GetArchivePermissionsQueryHandler', () => {
   describe('handle', () => {
     describe('when permissions for the archive', () => {
-      let archivePermissionsRepository: MockProxy<ArchivePermissionsRepository>
+      let archivist: MockProxy<ArchivePermissionsArchivist>
       describe('exist', () => {
         beforeEach(() => {
-          archivePermissionsRepository = mock<ArchivePermissionsRepository>()
-          archivePermissionsRepository.get.mockResolvedValue([permissions, emptyPermissions])
-          archivePermissionsRepository.find.mockResolvedValue([permissions, emptyPermissions])
+          archivist = mock<ArchivePermissionsArchivist>()
+          archivist.get.mockResolvedValue([permissions, emptyPermissions])
+          archivist.find.mockResolvedValue([permissions, emptyPermissions])
         })
         it('returns the latest archive permissions', async () => {
-          const sut = new GetArchivePermissionsQueryHandler({ archivePermissionsRepository })
+          const sut = new GetArchivePermissionsQueryHandler({ archivePermissionsArchivist: archivist })
           const actual = await sut.handle(new GetArchivePermissionsQuery({ _archive, _hash, _timestamp, schema }))
           expect(actual).toBeTruthy()
           expect(actual?.schema).toBe(setArchivePermissionsSchema)
@@ -52,12 +52,12 @@ describe('GetArchivePermissionsQueryHandler', () => {
       })
       describe('do not exist', () => {
         beforeEach(() => {
-          archivePermissionsRepository = mock<ArchivePermissionsRepository>()
-          archivePermissionsRepository.get.mockResolvedValue([])
-          archivePermissionsRepository.find.mockResolvedValue([])
+          archivist = mock<ArchivePermissionsArchivist>()
+          archivist.get.mockResolvedValue([])
+          archivist.find.mockResolvedValue([])
         })
         it('returns the empty permissions', async () => {
-          const sut = new GetArchivePermissionsQueryHandler({ archivePermissionsRepository })
+          const sut = new GetArchivePermissionsQueryHandler({ archivePermissionsArchivist: archivist })
           const actual = await sut.handle(new GetArchivePermissionsQuery({ _archive, _hash, _timestamp, schema }))
           expect(actual).toBeTruthy()
           expect(actual?.schema).toBe(setArchivePermissionsSchema)

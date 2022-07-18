@@ -24,10 +24,10 @@ const handler: RequestHandler<ArchivePathParams, XyoArchive, XyoArchive> = async
   const accessControl = isLegacyPrivateArchive(req.body)
   try {
     // Create/update archive and set legacy permissions
-    const result = await req.app.archiveRepository.insert({ accessControl, archive, user: user.id })
+    const result = await req.app.archiveArchivist.insert({ accessControl, archive, user: user.id })
     // Set newer permissions
     if (alsoSetNewerPermissions) {
-      accessControl ? await setArchiveAccessPublic(req.app.archivePermissionsRepository, archive) : await setArchiveAccessPrivate(req.app.archivePermissionsRepository, archive)
+      accessControl ? await setArchiveAccessPublic(req.app.archivePermissionsArchivist, archive) : await setArchiveAccessPrivate(req.app.archivePermissionsArchivist, archive)
     }
     res.status(result.updated ? StatusCodes.OK : StatusCodes.CREATED).json(result)
   } catch (error) {

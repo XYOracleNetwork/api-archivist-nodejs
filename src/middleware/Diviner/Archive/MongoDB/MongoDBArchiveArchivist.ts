@@ -5,8 +5,9 @@ import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter, WithId } from 'mongodb'
 
+import { TYPES } from '../../../../Dependencies'
 import { UpsertResult } from '../../../../model'
-import { ArchiveRepository, EntityArchive } from '../ArchiveRepository'
+import { ArchiveArchivist, EntityArchive } from '../ArchiveArchivist'
 
 interface UpsertFilter {
   $and: [
@@ -20,11 +21,11 @@ interface UpsertFilter {
 }
 
 @injectable()
-export class MongoDBArchiveRepository implements ArchiveRepository {
-  constructor(@inject('BaseMongoSdk<Required<XyoArchive>>') protected archives: BaseMongoSdk<Required<XyoArchive>>) {}
+export class MongoDBArchiveArchivist implements ArchiveArchivist {
+  constructor(@inject(TYPES.ArchiveSdkMongo) protected archives: BaseMongoSdk<Required<XyoArchive>>) {}
 
   async find(query: Filter<EntityArchive>): Promise<XyoArchive[]> {
-    return (await this.archives.find(query)).toArray()
+    return (await this.archives.find(query)).limit(100).toArray()
   }
 
   get(name: string): Promise<Required<XyoArchive> | null> {

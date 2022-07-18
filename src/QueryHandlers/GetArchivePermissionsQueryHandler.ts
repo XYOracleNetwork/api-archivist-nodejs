@@ -1,6 +1,6 @@
 import { WithAdditional, XyoPayloadBuilder, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 
-import { ArchivePermissionsRepository } from '../middleware'
+import { ArchivePermissionsArchivist } from '../middleware'
 import { GetArchivePermissionsQuery, QueryHandler, SetArchivePermissionsPayload, setArchivePermissionsSchema } from '../model'
 
 const getEmptyPermissions = (query: GetArchivePermissionsQuery): XyoPayloadWithMeta<SetArchivePermissionsPayload> => {
@@ -12,7 +12,7 @@ const getEmptyPermissions = (query: GetArchivePermissionsQuery): XyoPayloadWithM
     .build()
 }
 export interface GetArchivePermissionsQueryHandlerOpts {
-  archivePermissionsRepository: ArchivePermissionsRepository
+  archivePermissionsArchivist: ArchivePermissionsArchivist
 }
 
 export class GetArchivePermissionsQueryHandler implements QueryHandler<GetArchivePermissionsQuery, SetArchivePermissionsPayload> {
@@ -21,7 +21,7 @@ export class GetArchivePermissionsQueryHandler implements QueryHandler<GetArchiv
     if (!query.payload._archive) {
       return getEmptyPermissions(query)
     }
-    const permissions = await this.opts.archivePermissionsRepository.get(query.payload._archive)
+    const permissions = await this.opts.archivePermissionsArchivist.get(query.payload._archive)
     return (permissions?.[0] || getEmptyPermissions(query)) as WithAdditional<XyoPayloadWithMeta<SetArchivePermissionsPayload>>
   }
 }

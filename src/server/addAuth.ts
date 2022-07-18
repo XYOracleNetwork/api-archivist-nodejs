@@ -4,7 +4,7 @@ import { Application } from 'express'
 import { decorate, injectable } from 'inversify'
 import passport, { Strategy } from 'passport'
 
-import dependencies from '../inversify.config'
+import { dependencies } from '../Dependencies'
 import {
   addAuthRoutes,
   AdminApiKeyStrategy,

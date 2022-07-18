@@ -1,19 +1,22 @@
 import { XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
+import { inject, injectable } from 'inversify'
 import { Filter } from 'mongodb'
 
-import { getBaseMongoSdk, removeId } from '../../../../lib'
-import { AbstractPayloadRepository } from '../../../../model'
+import { TYPES } from '../../../../Dependencies'
+import { removeId } from '../../../../lib'
+import { AbstractPayloadArchivist } from '../../../../model'
 
-export class MongoDBPayloadRepository extends AbstractPayloadRepository<XyoPayloadWithMeta, string, Filter<XyoPayloadWithMeta>> {
-  constructor(protected sdk: BaseMongoSdk<XyoPayloadWithMeta> = getBaseMongoSdk<XyoPayloadWithMeta>('payloads')) {
+@injectable()
+export class MongoDBPayloadArchivist extends AbstractPayloadArchivist<XyoPayloadWithMeta, string, Filter<XyoPayloadWithMeta>> {
+  constructor(@inject(TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayloadWithMeta>) {
     super()
   }
   async find(filter: Filter<XyoPayloadWithMeta>): Promise<XyoPayloadWithMeta[]> {
-    return (await this.sdk.find(filter)).toArray()
+    return (await this.sdk.find(filter)).limit(100).toArray()
   }
   async get(hash: string): Promise<XyoPayloadWithMeta[]> {
-    return (await this.sdk.find({ _hash: hash })).toArray()
+    return (await this.sdk.find({ _hash: hash })).limit(100).toArray()
   }
   async insert(items: XyoPayloadWithMeta[]): Promise<XyoPayloadWithMeta[]> {
     const result = await this.sdk.insertMany(items.map(removeId) as XyoPayloadWithMeta[])

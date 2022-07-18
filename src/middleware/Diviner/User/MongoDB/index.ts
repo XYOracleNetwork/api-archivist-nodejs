@@ -1,1 +1,1 @@
-export * from './MongoDBUserRepository'
+export * from './MongoDBUserArchivist'

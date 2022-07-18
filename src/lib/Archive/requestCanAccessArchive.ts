@@ -10,7 +10,7 @@ import { isLegacyPublicArchive } from './legacyArchiveAccessControl'
  * @returns True if the request can access the archive, false otherwise
  */
 export const requestCanAccessArchive = async (req: Request, name: string): Promise<boolean> => {
-  const archive = await req.app.archiveRepository.get(name)
+  const archive = await req.app.archiveArchivist.get(name)
   // If the archive is public or if the archive is private but this is
   // an auth'd request from the archive owner
   return isLegacyPublicArchive(archive) || isRequestUserOwnerOfArchive(req, archive)

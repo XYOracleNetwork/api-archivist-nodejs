@@ -6,19 +6,20 @@ import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter } from 'mongodb'
 
-import { getBaseMongoSdk, removeId } from '../../../../lib'
-import { AbstractPayloadRepository } from '../../../../model'
+import { TYPES } from '../../../../Dependencies'
+import { removeId } from '../../../../lib'
+import { AbstractPayloadArchivist } from '../../../../model'
 
 const unique = <T>(value: T, index: number, self: T[]) => {
   return self.indexOf(value) === index
 }
 
 @injectable()
-export class MongoDBArchivistWitnessedPayloadRepository extends AbstractPayloadRepository<XyoPayloadWithMeta, string, Filter<XyoPayloadWithMeta>> {
+export class MongoDBArchivistWitnessedPayloadArchivist extends AbstractPayloadArchivist<XyoPayloadWithMeta, string, Filter<XyoPayloadWithMeta>> {
   constructor(
-    @inject(XyoAccount) protected account: XyoAccount,
-    protected payloads: BaseMongoSdk<XyoPayloadWithMeta> = getBaseMongoSdk<XyoPayloadWithMeta>('payloads'),
-    protected boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta> = getBaseMongoSdk<XyoBoundWitnessWithMeta>('bound_witnesses')
+    @inject(TYPES.Account) protected readonly account: XyoAccount,
+    @inject(TYPES.PayloadSdkMongo) protected readonly payloads: BaseMongoSdk<XyoPayloadWithMeta>,
+    @inject(TYPES.BoundWitnessSdkMongo) protected readonly boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta>
   ) {
     super()
   }
@@ -28,12 +29,12 @@ export class MongoDBArchivistWitnessedPayloadRepository extends AbstractPayloadR
   }
   async get(hash: string): Promise<XyoPayloadWithMeta[]> {
     // Find bw signed by us that has this hash
-    const bound_witnesses = await (await this.boundWitnesses.find({ payload_hashes: hash })).toArray()
+    const bound_witnesses = await (await this.boundWitnesses.find({ payload_hashes: hash })).limit(100).toArray()
     const archives = bound_witnesses
       .map((bw) => bw._archive)
       .filter(exists)
       .filter(unique)
-    return (await this.payloads.find({ _archive: { $in: archives }, _hash: hash })).toArray()
+    return (await this.payloads.find({ _archive: { $in: archives }, _hash: hash })).limit(100).toArray()
   }
   async insert(payloads: XyoPayloadWithMeta[]): Promise<XyoPayloadWithMeta[]> {
     // Witness from archivist

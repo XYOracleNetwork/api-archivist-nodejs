@@ -3,15 +3,15 @@ import compression from 'compression'
 import cors from 'cors'
 import express, { Express } from 'express'
 
-import dependencies, { configure } from '../inversify.config'
+import { configure, dependencies, TYPES } from '../Dependencies'
 import { configureDoc } from '../middleware'
 import { addAuth } from './addAuth'
 import { addDependencies } from './addDependencies'
 import { addErrorHandlers } from './addErrorHandlers'
 import { addHealthChecks } from './addHealthChecks'
-import { addInMemoryQueryProcessing } from './addInMemoryQueryProcessing'
 import { addMiddleware } from './addMiddleware'
 import { addQueryConverters } from './addQueryConverters'
+import { addQueryProcessing } from './addQueryProcessing'
 import { addQueryProcessors } from './addQueryProcessors'
 import { addRoutes } from './addRoutes'
 
@@ -33,9 +33,9 @@ export const getApp = (): Express => {
   addDependencies(app)
   addMiddleware(app)
   addAuth(app)
-  addQueryConverters(app)
+  addQueryConverters()
   addQueryProcessors(app)
-  addInMemoryQueryProcessing(app)
+  addQueryProcessing()
   addHealthChecks(app)
   addRoutes(app)
   addErrorHandlers(app)
@@ -53,7 +53,7 @@ export const server = async (port = 80) => {
   }
 
   const app = getApp()
-  const logger = dependencies.get<Logger>('Logger')
+  const logger = dependencies.get<Logger>(TYPES.Logger)
   const host = process.env.PUBLIC_ORIGIN || `http://localhost:${port}`
   await configureDoc(app, { host })
 

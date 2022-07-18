@@ -1,23 +1,24 @@
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
 import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
+import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
-import { getBaseMongoSdk } from '../../../../lib'
+import { dependencies, TYPES } from '../../../../Dependencies'
 import { ArchivePathParams } from '../../../../model'
 import { migrateLegacyArchives } from '../migrateLegacyArchives'
 
 const getArchive = (archive: string): Promise<XyoArchive | null> => {
-  const sdk = getBaseMongoSdk<XyoArchive>('archives')
+  const sdk = dependencies.get<BaseMongoSdk<XyoArchive>>(TYPES.ArchiveSdkMongo)
   return sdk.findOne({ archive })
 }
 
 const handler: RequestHandler<ArchivePathParams> = async (req, res, next) => {
   const { archive } = req.params
-  const { archivePermissionsRepository } = req.app
+  const { archivePermissionsArchivist } = req.app
   const entity = await getArchive(archive)
   if (entity) {
-    const result = await migrateLegacyArchives(archivePermissionsRepository, [entity])
+    const result = await migrateLegacyArchives(archivePermissionsArchivist, [entity])
     const migrated = result?.[0]
     res.status(StatusCodes.OK).json({ archive: entity, migrated })
   } else {

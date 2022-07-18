@@ -1,24 +1,24 @@
 import { Application } from 'express'
 
-import dependencies from '../inversify.config'
+import { dependencies, TYPES } from '../Dependencies'
 import {
-  ArchivePermissionsRepository,
-  ArchiveRepository,
-  ArchivistWitnessedPayloadRepository,
+  ArchiveArchivist,
+  ArchivePermissionsArchivist,
   Query,
   SchemaToQueryProcessorRegistry,
   UserManager,
+  WitnessedPayloadArchivist,
   XyoPayloadToQueryConverterRegistry,
 } from '../middleware'
 import { IdentifiableHuri, Queue } from '../Queue'
 
 export const addDependencies = (app: Application) => {
-  app.archivistWitnessedPayloadRepository = dependencies.get<ArchivistWitnessedPayloadRepository>('ArchivistWitnessedPayloadRepository')
-  app.archiveRepository = dependencies.get<ArchiveRepository>('ArchiveRepository')
-  app.archivePermissionsRepository = dependencies.get<ArchivePermissionsRepository>('ArchivePermissionsRepository')
-  app.queryConverters = dependencies.get<XyoPayloadToQueryConverterRegistry>('XyoPayloadToQueryConverterRegistry')
-  app.queryProcessors = dependencies.get<SchemaToQueryProcessorRegistry>('SchemaToQueryProcessorRegistry')
-  app.queryQueue = dependencies.get<Queue<Query>>('Queue<Query>')
-  app.responseQueue = dependencies.get<Queue<IdentifiableHuri>>('Queue<IdentifiableHuri>')
-  app.userManager = dependencies.get<UserManager>('UserManager')
+  app.archivistWitnessedPayloadArchivist = dependencies.get<WitnessedPayloadArchivist>(TYPES.WitnessedPayloadArchivist)
+  app.archiveArchivist = dependencies.get<ArchiveArchivist>(TYPES.ArchiveArchivist)
+  app.archivePermissionsArchivist = dependencies.get<ArchivePermissionsArchivist>(TYPES.ArchivePermissionsArchivist)
+  app.queryConverters = dependencies.get<XyoPayloadToQueryConverterRegistry>(TYPES.PayloadToQueryConverterRegistry)
+  app.queryProcessors = dependencies.get<SchemaToQueryProcessorRegistry>(TYPES.SchemaToQueryProcessorRegistry)
+  app.queryQueue = dependencies.get<Queue<Query>>(TYPES.QueryQueue)
+  app.responseQueue = dependencies.get<Queue<IdentifiableHuri>>(TYPES.ResponseQueue)
+  app.userManager = dependencies.get<UserManager>(TYPES.UserManager)
 }

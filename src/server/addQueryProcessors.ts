@@ -28,7 +28,7 @@ export const addQueryProcessors = (app: Application) => {
 const addDebug = (registry: QueryProcessorRegistry) => {
   registry.registerProcessorForSchema(debugSchema, (payload) => new DebugQueryHandler().handle(payload as DebugQuery))
   registry.registerProcessorForSchema('network.xyo.test', async () => {
-    await delay(0)
+    await delay(1)
     return {} as XyoPayloadWithMeta
   })
 }
@@ -37,5 +37,5 @@ const addQueries = (app: Application, registry: QueryProcessorRegistry) => {
   registry.registerProcessorForSchema(setArchivePermissionsSchema, (payload) => new SetArchivePermissionsQueryHandler({ ...app }).handle(payload as SetArchivePermissionsQuery))
   registry.registerProcessorForSchema(getArchivePermissionsSchema, (payload) => new GetArchivePermissionsQueryHandler({ ...app }).handle(payload as GetArchivePermissionsQuery))
   registry.registerProcessorForSchema(getDomainConfigSchema, (payload) => new GetDomainConfigQueryHandler({ ...app }).handle(payload as GetDomainConfigQuery))
-  registry.registerProcessorForSchema(getSchemaSchema, (payload) => new GetSchemaQueryHandler({ schemaRepository: XyoSchemaCache.instance }).handle(payload as GetSchemaQuery))
+  registry.registerProcessorForSchema(getSchemaSchema, (payload) => new GetSchemaQueryHandler({ schemaArchivist: XyoSchemaCache.instance }).handle(payload as GetSchemaQuery))
 }

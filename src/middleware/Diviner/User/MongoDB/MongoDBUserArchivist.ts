@@ -4,8 +4,9 @@ import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter, ObjectId, WithId } from 'mongodb'
 
+import { TYPES } from '../../../../Dependencies'
 import { UpsertResult, User, UserWithoutId } from '../../../../model'
-import { UserRepository } from '../UserRepository'
+import { UserArchivist } from '../UserArchivist'
 
 interface IUpsertFilter {
   $or: {
@@ -15,11 +16,11 @@ interface IUpsertFilter {
 }
 
 @injectable()
-export class MongoDBUserRepository implements UserRepository {
-  constructor(@inject(BaseMongoSdk<User>) protected readonly db: BaseMongoSdk<User>) {}
+export class MongoDBUserArchivist implements UserArchivist {
+  constructor(@inject(TYPES.UserSdkMongo) protected readonly db: BaseMongoSdk<User>) {}
 
   async find(query: Filter<User>): Promise<WithId<User>[]> {
-    return (await this.db.find(query)).toArray()
+    return (await this.db.find(query)).limit(100).toArray()
   }
 
   async get(id: string): Promise<WithId<User> | null> {
