@@ -5,28 +5,22 @@ import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter } from 'mongodb'
 
-import {
-  AbstractMongoDBPayloadArchivist,
-  AbstractMongoDBPayloadArchivistOpts,
-  getArchivistBoundWitnessesMongoSdk,
-  getArchivistPayloadMongoSdk,
-  getBaseMongoSdk,
-  getDefaultAbstractMongoDBPayloadArchivistOpts,
-  removeId,
-} from '../../../../lib'
+import { TYPES } from '../../../../Dependencies'
+import { AbstractMongoDBPayloadArchivist, getArchivistBoundWitnessesMongoSdk, getArchivistPayloadMongoSdk, removeId } from '../../../../lib'
 import { SetArchivePermissionsPayload, SetArchivePermissionsPayloadWithMeta, SetArchivePermissionsSchema, setArchivePermissionsSchema } from '../../../../model'
 
 const schema: SetArchivePermissionsSchema = setArchivePermissionsSchema
 
 @injectable()
 export class MongoDBArchivePermissionsPayloadPayloadArchivist extends AbstractMongoDBPayloadArchivist<SetArchivePermissionsPayload> {
-  protected readonly items: BaseMongoSdk<SetArchivePermissionsPayloadWithMeta> = getBaseMongoSdk('payload')
-  protected opts: AbstractMongoDBPayloadArchivistOpts = getDefaultAbstractMongoDBPayloadArchivistOpts()
-  constructor(@inject(XyoAccount) protected readonly account: XyoAccount) {
+  constructor(
+    @inject(TYPES.Account) protected readonly account: XyoAccount,
+    @inject(TYPES.PayloadSdkMongo) protected readonly items: BaseMongoSdk<SetArchivePermissionsPayloadWithMeta>
+  ) {
     super()
   }
   async find(filter: Filter<SetArchivePermissionsPayloadWithMeta>) {
-    return (await this.items.find(filter)).toArray()
+    return (await this.items.find(filter)).limit(100).toArray()
   }
   async get(archive: string): Promise<SetArchivePermissionsPayloadWithMeta[]> {
     return (await getArchivistPayloadMongoSdk(archive).find({ _archive: archive, schema }))

@@ -19,12 +19,12 @@ export const findOneByHash = async (hash: string, archive?: string): Promise<Xyo
 
 export const findPayloadsByHash = async (hash: string, archive?: string): Promise<XyoPayload[]> => {
   const sdk = archive ? getArchivistPayloadMongoSdk(archive) : getArchivistAllPayloadMongoSdk()
-  return (await sdk.find({ _hash: hash })).toArray()
+  return (await sdk.find({ _hash: hash })).limit(100).toArray()
 }
 
 export const findBoundWitnessesByHash = async (hash: string, archive?: string) => {
   const sdk = archive ? getArchivistBoundWitnessesMongoSdk(archive) : getArchivistAllBoundWitnessesMongoSdk()
-  return (await sdk.find({ _hash: hash })).toArray()
+  return (await sdk.find({ _hash: hash })).limit(100).toArray()
 }
 
 export const findByHash = async (hash: string, archive?: string): Promise<XyoPayload[]> => {

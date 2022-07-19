@@ -5,13 +5,14 @@ import { Request } from 'express'
 import { inject, injectable } from 'inversify'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
+import { TYPES } from '../../../../Dependencies'
 import { UserManager } from '../../../Manager'
 import { verifyUuid } from './verifyUuid'
 import { verifyWallet } from './verifyWallet'
 
 @injectable()
 export class Web3AuthStrategy extends Strategy {
-  constructor(@inject('Logger') public readonly logger: Logger, @inject('UserManager') public readonly userManager: UserManager) {
+  constructor(@inject(TYPES.Logger) public readonly logger: Logger, @inject(TYPES.UserManager) public readonly userManager: UserManager) {
     super()
   }
   override async authenticate(this: StrategyCreated<this, this & StrategyCreatedStatic>, req: Request, _options?: unknown) {

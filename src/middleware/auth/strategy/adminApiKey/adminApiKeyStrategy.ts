@@ -5,9 +5,11 @@ import { Request } from 'express'
 import { inject, injectable } from 'inversify'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
+import { TYPES } from '../../../../Dependencies'
+
 @injectable()
 export class AdminApiKeyStrategy extends Strategy {
-  constructor(@inject('ApiKey') public readonly apiKey: string, @inject('Logger') public readonly logger: Logger, public readonly apiKeyHeader = 'x-api-key') {
+  constructor(@inject(TYPES.ApiKey) public readonly apiKey: string, @inject(TYPES.Logger) public readonly logger: Logger, public readonly apiKeyHeader = 'x-api-key') {
     super()
   }
 

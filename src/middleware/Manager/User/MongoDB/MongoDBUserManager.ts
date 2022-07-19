@@ -3,6 +3,7 @@ import 'reflect-metadata'
 import { inject, injectable } from 'inversify'
 import { WithId } from 'mongodb'
 
+import { TYPES } from '../../../../Dependencies'
 import { Identifiable, UpsertResult, User, UserWithoutId, Web2User, Web3User } from '../../../../model'
 import { MongoDBUserArchivist } from '../../../Diviner'
 import { PasswordHasher } from '../../../PasswordHasher'
@@ -30,8 +31,8 @@ const toDbEntity = (user: UserWithoutId) => {
 @injectable()
 export class MongoDBUserManager implements UserManager {
   constructor(
-    @inject(MongoDBUserArchivist) protected readonly mongo: MongoDBUserArchivist,
-    @inject('PasswordHasher<User>') protected readonly passwordHasher: PasswordHasher<User>
+    @inject(TYPES.UserArchivistMongoDb) protected readonly mongo: MongoDBUserArchivist,
+    @inject(TYPES.PasswordHasher) protected readonly passwordHasher: PasswordHasher<User>
   ) {}
   async create(user: UserWithoutId, password?: string): Promise<Identifiable & Partial<Web2User> & Partial<Web3User> & UpsertResult> {
     if (password) {

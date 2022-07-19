@@ -11,10 +11,10 @@ export class MongoDBArchivePayloadArchivist extends AbstractMongoDBPayloadArchiv
     super()
   }
   async find(filter: Filter<XyoPayloadWithMeta<XyoArchive>>): Promise<XyoPayloadWithMeta<XyoArchive>[]> {
-    return (await this.itemsSdk.find(filter)).toArray()
+    return (await this.itemsSdk.find(filter)).limit(100).toArray()
   }
   async get(name: string): Promise<XyoPayloadWithMeta<XyoArchive>[]> {
-    return (await this.itemsSdk.find({ name })).toArray()
+    return (await this.itemsSdk.find({ name })).limit(100).toArray()
   }
   async insert(items: XyoPayloadWithMeta<XyoArchive>[]): Promise<XyoPayloadWithMeta<XyoArchive>[]> {
     const payloads = items.map((i) => new XyoPayloadBuilder<XyoPayloadWithMeta<XyoArchive>>({ schema }).fields(i).build())

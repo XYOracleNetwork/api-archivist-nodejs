@@ -5,6 +5,7 @@ import { Request } from 'express'
 import { inject, injectable } from 'inversify'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
+import { TYPES } from '../../../../Dependencies'
 import { getArchiveKeys } from '../../../../lib'
 import { ArchiveArchivist } from '../../../Diviner'
 import { UserManager } from '../../../Manager'
@@ -12,8 +13,8 @@ import { UserManager } from '../../../Manager'
 @injectable()
 export class ArchiveApiKeyStrategy extends Strategy {
   constructor(
-    @inject('ArchiveArchivist') public readonly archiveArchivist: ArchiveArchivist,
-    @inject('UserManager') public readonly userManager: UserManager,
+    @inject(TYPES.ArchiveArchivist) public readonly archiveArchivist: ArchiveArchivist,
+    @inject(TYPES.UserManager) public readonly userManager: UserManager,
     public readonly apiKeyHeader = 'x-api-key'
   ) {
     super()
