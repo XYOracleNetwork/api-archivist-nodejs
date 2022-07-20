@@ -3,7 +3,6 @@ import { inject, injectable } from 'inversify'
 import { ExtractJwt, Strategy, StrategyOptions, VerifyCallbackWithRequest } from 'passport-jwt'
 
 import { TYPES } from '../../../../Dependencies'
-import { jwtStrategy } from '.'
 import { getJwtRequestHandler } from './respondWithJwt'
 import { algorithms } from './SupportedAlgorithms'
 
