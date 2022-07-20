@@ -1,6 +1,9 @@
 import { RequestHandler } from 'express'
+import { inject, injectable } from 'inversify'
 import { ExtractJwt, Strategy, StrategyOptions, VerifyCallbackWithRequest } from 'passport-jwt'
 
+import { TYPES } from '../../../../Dependencies'
+import { jwtStrategy } from '.'
 import { getJwtRequestHandler } from './respondWithJwt'
 import { algorithms } from './SupportedAlgorithms'
 
@@ -24,8 +27,9 @@ export const verifyCallbackWithRequest: VerifyCallbackWithRequest = (token, done
   }
 }
 
+@injectable()
 export class JwtStrategy extends Strategy {
-  constructor(public readonly secretOrKey: string) {
+  constructor(@inject(TYPES.JwtSecret) public readonly secretOrKey: string) {
     super({ ...defaults, secretOrKey }, verifyCallbackWithRequest)
   }
 

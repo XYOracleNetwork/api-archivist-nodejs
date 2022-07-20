@@ -41,7 +41,17 @@ import { IdentifiableHuri, InMemoryQueue, Queue } from '../Queue'
 import { TYPES } from './types'
 
 config()
-const container = new Container({ autoBindInjectable: true })
+const container = new Container({
+  autoBindInjectable: true,
+  // Set to true to prevent warning when child constructor has less
+  // parameters than the parent
+  // "The number of constructor arguments in the derived
+  // class <ClassName> must be >= than the number of constructor
+  // arguments of its base class."
+  // See:
+  // https://github.com/inversify/InversifyJS/issues/522#issuecomment-682246076
+  skipBaseClassChecks: true,
+})
 let configured = false
 export const configure = () => {
   if (configured) return
@@ -53,6 +63,7 @@ export const configure = () => {
   const passwordHasher = BcryptPasswordHasher
 
   container.bind<string>(TYPES.ApiKey).toConstantValue(apiKey)
+  container.bind<string>(TYPES.JwtSecret).toConstantValue(jwtSecret)
 
   container.bind<Logger>(TYPES.Logger).toConstantValue(getDefaultLogger())
   container.bind<XyoAccount>(TYPES.Account).toConstantValue(new XyoAccount({ phrase }))
@@ -66,7 +77,7 @@ export const configure = () => {
   container.bind<UserManager>(TYPES.UserManager).to(MongoDBUserManager).inSingletonScope()
   container.bind<WitnessedPayloadArchivist>(TYPES.WitnessedPayloadArchivist).to(MongoDBArchivistWitnessedPayloadArchivist).inSingletonScope()
 
-  configureAuth(jwtSecret, passwordHasher)
+  configureAuth()
 
   container.bind<Queue<Query>>(TYPES.QueryQueue).toConstantValue(new InMemoryQueue<Query>())
   container.bind<Queue<IdentifiableHuri>>(TYPES.ResponseQueue).toConstantValue(new InMemoryQueue<IdentifiableHuri>())
@@ -87,15 +98,15 @@ const configureMongo = () => {
   container.bind<MongoDBArchiveArchivist>(TYPES.ArchiveArchivistMongoDb).to(MongoDBArchiveArchivist).inSingletonScope()
 }
 
-const configureAuth = (jwtSecret: string, passwordHasher: PasswordHasher<User>) => {
+const configureAuth = () => {
   container.bind(AdminApiKeyStrategy).to(AdminApiKeyStrategy).inSingletonScope()
   container.bind(AllowUnauthenticatedStrategy).toConstantValue(new AllowUnauthenticatedStrategy())
   container.bind(ArchiveAccessControlStrategy).toConstantValue(new ArchiveAccessControlStrategy())
   container.bind(ArchiveAccountStrategy).toConstantValue(new ArchiveAccountStrategy())
   container.bind(ArchiveApiKeyStrategy).to(ArchiveApiKeyStrategy).inSingletonScope()
   container.bind(ArchiveOwnerStrategy).toConstantValue(new ArchiveOwnerStrategy())
-  container.bind(JwtStrategy).toConstantValue(new JwtStrategy(jwtSecret))
-  container.bind(LocalStrategy).toConstantValue(new LocalStrategy(passwordHasher))
+  container.bind(JwtStrategy).to(JwtStrategy).inSingletonScope()
+  container.bind(LocalStrategy).to(LocalStrategy).inSingletonScope()
   container.bind(Web3AuthStrategy).to(Web3AuthStrategy).inSingletonScope()
 }
 

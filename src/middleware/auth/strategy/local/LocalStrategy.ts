@@ -1,8 +1,10 @@
 import 'reflect-metadata'
 
 import { Request } from 'express'
+import { decorate, inject, injectable, unmanaged } from 'inversify'
 import { IStrategyOptionsWithRequest, Strategy } from 'passport-local'
 
+import { TYPES } from '../../../../Dependencies'
 import { User } from '../../../../model'
 import { PasswordHasher } from '../../../PasswordHasher'
 
@@ -12,8 +14,9 @@ const strategyOptions: IStrategyOptionsWithRequest = {
   usernameField: 'email',
 }
 
+@injectable()
 export class LocalStrategy extends Strategy {
-  constructor(public readonly passwordHasher: PasswordHasher<User>) {
+  constructor(@inject(TYPES.PasswordHasher) public readonly passwordHasher: PasswordHasher<User>) {
     super(strategyOptions, async (req: Request, email, providedPassword, done) => {
       try {
         // Find user
