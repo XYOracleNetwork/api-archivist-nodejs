@@ -1,11 +1,12 @@
 import 'reflect-metadata'
 
 import { Request } from 'express'
-import { decorate, inject, injectable, unmanaged } from 'inversify'
+import { inject, injectable } from 'inversify'
 import { IStrategyOptionsWithRequest, Strategy } from 'passport-local'
 
 import { TYPES } from '../../../../Dependencies'
 import { User } from '../../../../model'
+import { UserManager } from '../../../Manager'
 import { PasswordHasher } from '../../../PasswordHasher'
 
 const strategyOptions: IStrategyOptionsWithRequest = {
@@ -16,11 +17,11 @@ const strategyOptions: IStrategyOptionsWithRequest = {
 
 @injectable()
 export class LocalStrategy extends Strategy {
-  constructor(@inject(TYPES.PasswordHasher) public readonly passwordHasher: PasswordHasher<User>) {
+  constructor(@inject(TYPES.UserManager) public readonly userManager: UserManager, @inject(TYPES.PasswordHasher) public readonly passwordHasher: PasswordHasher<User>) {
     super(strategyOptions, async (req: Request, email, providedPassword, done) => {
       try {
         // Find user
-        const user = await req.app.userManager.findByEmail(email)
+        const user = await this.userManager.findByEmail(email)
         // If we didn't find the user or they have no passwordHash
         if (!user || !user?.passwordHash) {
           return done(null, false, { message: 'User not found' })
