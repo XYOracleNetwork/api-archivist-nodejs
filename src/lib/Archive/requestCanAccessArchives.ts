@@ -5,7 +5,7 @@ import { requestCanAccessArchive } from './requestCanAccessArchive'
 /**
  * Determines if the incoming request can access the supplied archives
  * @param req The incoming request
- * @param name The name of the archives to test if the request can access
+ * @param archives The name of the archives to test if the request can access
  * @returns True if the request can access the archives, false otherwise
  */
 export const requestCanAccessArchives = async (req: Request, archives: string[]): Promise<boolean> => {
