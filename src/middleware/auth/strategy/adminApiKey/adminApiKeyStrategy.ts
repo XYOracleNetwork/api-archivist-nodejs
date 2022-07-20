@@ -5,7 +5,7 @@ import { Request } from 'express'
 import { inject, injectable } from 'inversify'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
-import { TYPES } from '../../../../Dependencies'
+import { TYPES } from '../../../../types'
 
 @injectable()
 export class AdminApiKeyStrategy extends Strategy {

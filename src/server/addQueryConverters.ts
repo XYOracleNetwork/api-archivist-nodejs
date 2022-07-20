@@ -2,7 +2,7 @@ import { XyoPayload, XyoQueryPayloadWithMeta } from '@xyo-network/sdk-xyo-client
 import { Request } from 'express'
 import { v4 } from 'uuid'
 
-import { dependencies, TYPES } from '../Dependencies'
+import dependencies from '../inversify.config'
 import { isProduction, QueryConverterRegistry } from '../middleware'
 import {
   DebugPayload,
@@ -22,6 +22,7 @@ import {
   SetArchivePermissionsQuery,
   setArchivePermissionsSchema,
 } from '../model'
+import { TYPES } from '../types'
 
 const debugCommandConverter = (payload: XyoPayload, _req: Request): Query => {
   return {

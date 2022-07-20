@@ -8,7 +8,7 @@ import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { config } from 'dotenv'
 import { Container } from 'inversify'
 
-import { getBaseMongoSdk } from '../lib'
+import { getBaseMongoSdk } from './lib'
 import {
   AdminApiKeyStrategy,
   AllowUnauthenticatedStrategy,
@@ -35,13 +35,12 @@ import {
   Web3AuthStrategy,
   WitnessedPayloadArchivist,
   XyoPayloadToQueryConverterRegistry,
-} from '../middleware'
-import { ArchivePermissionsArchivist, Query, User } from '../model'
-import { IdentifiableHuri, InMemoryQueue, Queue } from '../Queue'
+} from './middleware'
+import { ArchivePermissionsArchivist, Query, User } from './model'
+import { IdentifiableHuri, InMemoryQueue, Queue } from './Queue'
 import { TYPES } from './types'
-
 config()
-const container = new Container({
+const dependencies = new Container({
   autoBindInjectable: true,
   // Set to true to prevent warning when child constructor has less
   // parameters than the parent
@@ -62,30 +61,30 @@ export const configure = () => {
   const jwtSecret = assertEx(process.env.JWT_SECRET, 'JWT_SECRET ENV VAR required to create Archivist')
   const passwordHasher = BcryptPasswordHasher
 
-  container.bind<string>(TYPES.ApiKey).toConstantValue(apiKey)
-  container.bind<string>(TYPES.JwtSecret).toConstantValue(jwtSecret)
+  dependencies.bind<string>(TYPES.ApiKey).toConstantValue(apiKey)
+  dependencies.bind<string>(TYPES.JwtSecret).toConstantValue(jwtSecret)
 
-  container.bind<Logger>(TYPES.Logger).toConstantValue(getDefaultLogger())
-  container.bind<XyoAccount>(TYPES.Account).toConstantValue(new XyoAccount({ phrase }))
+  dependencies.bind<Logger>(TYPES.Logger).toConstantValue(getDefaultLogger())
+  dependencies.bind<XyoAccount>(TYPES.Account).toConstantValue(new XyoAccount({ phrase }))
 
-  configureMongo()
+  configureMongo(dependencies)
 
-  container.bind<ArchiveArchivist>(TYPES.ArchiveArchivist).to(MongoDBArchiveArchivist).inSingletonScope()
-  container.bind<ArchivePermissionsArchivist>(TYPES.ArchivePermissionsArchivist).to(MongoDBArchivePermissionsPayloadPayloadArchivist).inSingletonScope()
-  container.bind<PasswordHasher<User>>(TYPES.PasswordHasher).toConstantValue(passwordHasher)
-  container.bind<UserArchivist>(TYPES.UserArchivist).to(MongoDBUserArchivist).inSingletonScope()
-  container.bind<UserManager>(TYPES.UserManager).to(MongoDBUserManager).inSingletonScope()
-  container.bind<WitnessedPayloadArchivist>(TYPES.WitnessedPayloadArchivist).to(MongoDBArchivistWitnessedPayloadArchivist).inSingletonScope()
+  dependencies.bind<ArchiveArchivist>(TYPES.ArchiveArchivist).to(MongoDBArchiveArchivist).inSingletonScope()
+  dependencies.bind<ArchivePermissionsArchivist>(TYPES.ArchivePermissionsArchivist).to(MongoDBArchivePermissionsPayloadPayloadArchivist).inSingletonScope()
+  dependencies.bind<PasswordHasher<User>>(TYPES.PasswordHasher).toConstantValue(passwordHasher)
+  dependencies.bind<UserArchivist>(TYPES.UserArchivist).to(MongoDBUserArchivist).inSingletonScope()
+  dependencies.bind<UserManager>(TYPES.UserManager).to(MongoDBUserManager).inSingletonScope()
+  dependencies.bind<WitnessedPayloadArchivist>(TYPES.WitnessedPayloadArchivist).to(MongoDBArchivistWitnessedPayloadArchivist).inSingletonScope()
 
-  configureAuth()
+  configureAuth(dependencies)
 
-  container.bind<Queue<Query>>(TYPES.QueryQueue).toConstantValue(new InMemoryQueue<Query>())
-  container.bind<Queue<IdentifiableHuri>>(TYPES.ResponseQueue).toConstantValue(new InMemoryQueue<IdentifiableHuri>())
-  container.bind<QueryConverterRegistry>(TYPES.PayloadToQueryConverterRegistry).toConstantValue(new XyoPayloadToQueryConverterRegistry())
-  container.bind<QueryProcessorRegistry>(TYPES.SchemaToQueryProcessorRegistry).toConstantValue(new SchemaToQueryProcessorRegistry())
+  dependencies.bind<Queue<Query>>(TYPES.QueryQueue).toConstantValue(new InMemoryQueue<Query>())
+  dependencies.bind<Queue<IdentifiableHuri>>(TYPES.ResponseQueue).toConstantValue(new InMemoryQueue<IdentifiableHuri>())
+  dependencies.bind<QueryConverterRegistry>(TYPES.PayloadToQueryConverterRegistry).toConstantValue(new XyoPayloadToQueryConverterRegistry())
+  dependencies.bind<QueryProcessorRegistry>(TYPES.SchemaToQueryProcessorRegistry).toConstantValue(new SchemaToQueryProcessorRegistry())
 }
 
-const configureMongo = () => {
+export const configureMongo = (container: Container) => {
   // SDKs
   container.bind<BaseMongoSdk<Required<XyoArchive>>>(TYPES.ArchiveSdkMongo).toConstantValue(getBaseMongoSdk<EntityArchive>('archives'))
   container.bind<BaseMongoSdk<XyoPayloadWithMeta>>(TYPES.PayloadSdkMongo).toConstantValue(getBaseMongoSdk<XyoPayloadWithMeta>('payloads'))
@@ -98,7 +97,7 @@ const configureMongo = () => {
   container.bind<MongoDBArchiveArchivist>(TYPES.ArchiveArchivistMongoDb).to(MongoDBArchiveArchivist).inSingletonScope()
 }
 
-const configureAuth = () => {
+export const configureAuth = (container: Container) => {
   container.bind(AdminApiKeyStrategy).to(AdminApiKeyStrategy).inSingletonScope()
   container.bind(AllowUnauthenticatedStrategy).toConstantValue(new AllowUnauthenticatedStrategy())
   container.bind(ArchiveAccessControlStrategy).toConstantValue(new ArchiveAccessControlStrategy())
@@ -111,4 +110,4 @@ const configureAuth = () => {
 }
 
 // eslint-disable-next-line import/no-default-export
-export default container
+export default dependencies

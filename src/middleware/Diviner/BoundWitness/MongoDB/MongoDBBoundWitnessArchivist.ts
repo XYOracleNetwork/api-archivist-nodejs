@@ -3,8 +3,8 @@ import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter } from 'mongodb'
 
-import { TYPES } from '../../../../Dependencies'
 import { AbstractBoundWitnessArchivist } from '../../../../model'
+import { TYPES } from '../../../../types'
 
 @injectable()
 export class MongoDBBoundWitnessArchivist extends AbstractBoundWitnessArchivist<XyoBoundWitnessWithMeta, string, Filter<XyoBoundWitnessWithMeta>> {

@@ -5,7 +5,8 @@ import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
-import { dependencies, TYPES } from '../../../../Dependencies'
+import dependencies from '../../../../inversify.config'
+import { TYPES } from '../../../../types'
 import { migrateLegacyArchives } from '../migrateLegacyArchives'
 
 export interface MigrateQueryParams extends NoReqQuery {

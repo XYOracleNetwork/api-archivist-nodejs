@@ -4,8 +4,9 @@ import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
-import { dependencies, TYPES } from '../../../../Dependencies'
+import dependencies from '../../../../inversify.config'
 import { ArchivePathParams } from '../../../../model'
+import { TYPES } from '../../../../types'
 import { migrateLegacyArchives } from '../migrateLegacyArchives'
 
 const getArchive = (archive: string): Promise<XyoArchive | null> => {

@@ -5,8 +5,8 @@ import { Request } from 'express'
 import { inject, injectable } from 'inversify'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
-import { TYPES } from '../../../../Dependencies'
 import { getArchiveKeys } from '../../../../lib'
+import { TYPES } from '../../../../types'
 import { ArchiveArchivist } from '../../../Diviner'
 import { UserManager } from '../../../Manager'
 

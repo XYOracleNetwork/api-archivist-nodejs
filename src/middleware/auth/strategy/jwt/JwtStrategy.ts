@@ -2,7 +2,7 @@ import { RequestHandler } from 'express'
 import { inject, injectable } from 'inversify'
 import { ExtractJwt, Strategy, StrategyOptions, VerifyCallbackWithRequest } from 'passport-jwt'
 
-import { TYPES } from '../../../../Dependencies'
+import { TYPES } from '../../../../types'
 import { getJwtRequestHandler } from './respondWithJwt'
 import { algorithms } from './SupportedAlgorithms'
 

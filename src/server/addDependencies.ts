@@ -1,6 +1,6 @@
 import { Application } from 'express'
 
-import { dependencies, TYPES } from '../Dependencies'
+import dependencies from '../inversify.config'
 import {
   ArchiveArchivist,
   ArchivePermissionsArchivist,
@@ -11,6 +11,7 @@ import {
   XyoPayloadToQueryConverterRegistry,
 } from '../middleware'
 import { IdentifiableHuri, Queue } from '../Queue'
+import { TYPES } from '../types'
 
 export const addDependencies = (app: Application) => {
   app.archivistWitnessedPayloadArchivist = dependencies.get<WitnessedPayloadArchivist>(TYPES.WitnessedPayloadArchivist)

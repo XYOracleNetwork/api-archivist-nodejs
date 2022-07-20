@@ -5,9 +5,9 @@ import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter } from 'mongodb'
 
-import { TYPES } from '../../../../Dependencies'
 import { AbstractMongoDBPayloadArchivist, getArchivistBoundWitnessesMongoSdk, getArchivistPayloadMongoSdk, removeId } from '../../../../lib'
 import { SetArchivePermissionsPayload, SetArchivePermissionsPayloadWithMeta, SetArchivePermissionsSchema, setArchivePermissionsSchema } from '../../../../model'
+import { TYPES } from '../../../../types'
 
 const schema: SetArchivePermissionsSchema = setArchivePermissionsSchema
 
