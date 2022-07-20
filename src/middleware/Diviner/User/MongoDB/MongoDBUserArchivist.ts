@@ -4,8 +4,8 @@ import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter, ObjectId, WithId } from 'mongodb'
 
-import { TYPES } from '../../../../Dependencies'
 import { UpsertResult, User, UserWithoutId } from '../../../../model'
+import { TYPES } from '../../../../types'
 import { UserArchivist } from '../UserArchivist'
 
 interface IUpsertFilter {

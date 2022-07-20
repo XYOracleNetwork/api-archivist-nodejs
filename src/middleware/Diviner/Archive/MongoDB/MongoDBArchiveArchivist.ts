@@ -5,8 +5,8 @@ import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter, WithId } from 'mongodb'
 
-import { TYPES } from '../../../../Dependencies'
 import { UpsertResult } from '../../../../model'
+import { TYPES } from '../../../../types'
 import { ArchiveArchivist, EntityArchive } from '../ArchiveArchivist'
 
 interface UpsertFilter {

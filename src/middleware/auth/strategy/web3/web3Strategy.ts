@@ -5,7 +5,7 @@ import { Request } from 'express'
 import { inject, injectable } from 'inversify'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
-import { TYPES } from '../../../../Dependencies'
+import { TYPES } from '../../../../types'
 import { UserManager } from '../../../Manager'
 import { verifyUuid } from './verifyUuid'
 import { verifyWallet } from './verifyWallet'

@@ -4,8 +4,8 @@ import { Request } from 'express'
 import { inject, injectable } from 'inversify'
 import { IStrategyOptionsWithRequest, Strategy } from 'passport-local'
 
-import { TYPES } from '../../../../Dependencies'
 import { User } from '../../../../model'
+import { TYPES } from '../../../../types'
 import { UserManager } from '../../../Manager'
 import { PasswordHasher } from '../../../PasswordHasher'
 

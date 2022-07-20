@@ -44,7 +44,7 @@ describe('SetArchivePermissionsQueryHandler', () => {
       archivist = mock<ArchivePermissionsArchivist>()
       archivist.get.mockResolvedValue([getQueryPayload()])
       archivist.insert.mockResolvedValue([getQueryPayload()])
-      sut = new SetArchivePermissionsQueryHandler({ archivePermissionsArchivist: archivist })
+      sut = new SetArchivePermissionsQueryHandler(archivist)
     })
     describe('with valid permissions', () => {
       it('sets the permissions for the archive', async () => {
