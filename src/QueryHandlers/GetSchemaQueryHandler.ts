@@ -1,15 +1,13 @@
-import { XyoSchemaCache, XyoSchemaNameToValidatorMap, XyoSchemaPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoSchemaCache, XyoSchemaPayload } from '@xyo-network/sdk-xyo-client-js'
+import { inject, injectable } from 'inversify'
 
 import { GetSchemaQuery, QueryHandler } from '../model'
 
-export interface GetSchemaQueryHandlerOpts {
-  schemaArchivist: XyoSchemaCache<XyoSchemaNameToValidatorMap>
-}
-
+@injectable()
 export class GetSchemaQueryHandler implements QueryHandler<GetSchemaQuery, XyoSchemaPayload> {
-  constructor(protected readonly opts: GetSchemaQueryHandlerOpts) {}
+  constructor(@inject(XyoSchemaCache) protected readonly schemaArchivist: XyoSchemaCache) {}
   async handle(query: GetSchemaQuery) {
-    const entry = await this.opts.schemaArchivist.get(query.payload.name)
+    const entry = await this.schemaArchivist.get(query.payload.name)
     return entry?.payload
   }
 }

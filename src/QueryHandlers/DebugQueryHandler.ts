@@ -1,8 +1,10 @@
 import { assertEx, delay } from '@xylabs/sdk-js'
 import { XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
+import { injectable } from 'inversify'
 
 import { DebugPayload, DebugQuery, debugSchema, QueryHandler } from '../model'
 
+@injectable()
 export class DebugQueryHandler implements QueryHandler<DebugQuery, DebugPayload> {
   async handle(query: DebugQuery) {
     const ms = query?.payload?.delay || 1
