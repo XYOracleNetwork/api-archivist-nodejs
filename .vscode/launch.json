@@ -49,6 +49,7 @@
       "type": "node",
       "request": "launch",
       "osx": {
+        "cwd": "${workspaceFolder}",
         "runtimeArgs": [
           "--inspect-brk",
           "${workspaceRoot}/node_modules/.bin/jest",
