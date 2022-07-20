@@ -34,7 +34,7 @@ describe('GetArchivePermissionsQueryHandler', () => {
           archivist.find.mockResolvedValue([permissions, emptyPermissions])
         })
         it('returns the latest archive permissions', async () => {
-          const sut = new GetArchivePermissionsQueryHandler({ archivePermissionsArchivist: archivist })
+          const sut = new GetArchivePermissionsQueryHandler(archivist)
           const actual = await sut.handle(new GetArchivePermissionsQuery({ _archive, _hash, _timestamp, schema }))
           expect(actual).toBeTruthy()
           expect(actual?.schema).toBe(setArchivePermissionsSchema)
@@ -57,7 +57,7 @@ describe('GetArchivePermissionsQueryHandler', () => {
           archivist.find.mockResolvedValue([])
         })
         it('returns the empty permissions', async () => {
-          const sut = new GetArchivePermissionsQueryHandler({ archivePermissionsArchivist: archivist })
+          const sut = new GetArchivePermissionsQueryHandler(archivist)
           const actual = await sut.handle(new GetArchivePermissionsQuery({ _archive, _hash, _timestamp, schema }))
           expect(actual).toBeTruthy()
           expect(actual?.schema).toBe(setArchivePermissionsSchema)

@@ -37,6 +37,7 @@ import {
   XyoPayloadToQueryConverterRegistry,
 } from './middleware'
 import { ArchivePermissionsArchivist, Query, User } from './model'
+import { DebugQueryHandler, GetArchivePermissionsQueryHandler, GetDomainConfigQueryHandler, GetSchemaQueryHandler, SetArchivePermissionsQueryHandler } from './QueryHandlers'
 import { IdentifiableHuri, InMemoryQueue, Queue } from './Queue'
 import { TYPES } from './types'
 config()
@@ -78,6 +79,8 @@ export const configure = () => {
 
   configureAuth(dependencies)
 
+  configureQueryProcessors(dependencies)
+
   dependencies.bind<Queue<Query>>(TYPES.QueryQueue).toConstantValue(new InMemoryQueue<Query>())
   dependencies.bind<Queue<IdentifiableHuri>>(TYPES.ResponseQueue).toConstantValue(new InMemoryQueue<IdentifiableHuri>())
   dependencies.bind<QueryConverterRegistry>(TYPES.PayloadToQueryConverterRegistry).toConstantValue(new XyoPayloadToQueryConverterRegistry())
@@ -107,6 +110,14 @@ export const configureAuth = (container: Container) => {
   container.bind(JwtStrategy).to(JwtStrategy).inSingletonScope()
   container.bind(LocalStrategy).to(LocalStrategy).inSingletonScope()
   container.bind(Web3AuthStrategy).to(Web3AuthStrategy).inSingletonScope()
+}
+
+export const configureQueryProcessors = (container: Container) => {
+  container.bind(DebugQueryHandler).to(DebugQueryHandler).inTransientScope()
+  container.bind(SetArchivePermissionsQueryHandler).to(SetArchivePermissionsQueryHandler).inTransientScope()
+  container.bind(GetArchivePermissionsQueryHandler).to(GetArchivePermissionsQueryHandler).inTransientScope()
+  container.bind(GetDomainConfigQueryHandler).to(GetDomainConfigQueryHandler).inTransientScope()
+  container.bind(GetSchemaQueryHandler).to(GetSchemaQueryHandler).inTransientScope()
 }
 
 // eslint-disable-next-line import/no-default-export

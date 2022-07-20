@@ -7,7 +7,7 @@ const domain = 'network.xyo'
 describe('GetDomainConfigQueryHandler', () => {
   describe('With valid domain', () => {
     it('Returns the domain config', async () => {
-      const sut = new GetDomainConfigQueryHandler({})
+      const sut = new GetDomainConfigQueryHandler()
       const actual = await sut.handle(new GetDomainConfigQuery({ domain, schema }))
       expect(actual).toBeTruthy()
       // TODO: Replace with const from SDK

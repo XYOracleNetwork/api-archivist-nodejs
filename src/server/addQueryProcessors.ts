@@ -1,20 +1,10 @@
 import { delay } from '@xylabs/sdk-js'
-import { XyoPayloadWithMeta, XyoSchemaCache } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { Application } from 'express'
 
+import dependencies from '../inversify.config'
 import { isProduction, QueryProcessorRegistry } from '../middleware'
-import {
-  DebugQuery,
-  debugSchema,
-  GetArchivePermissionsQuery,
-  getArchivePermissionsSchema,
-  GetDomainConfigQuery,
-  getDomainConfigSchema,
-  GetSchemaQuery,
-  getSchemaSchema,
-  SetArchivePermissionsQuery,
-  setArchivePermissionsSchema,
-} from '../model'
+import { debugSchema, getArchivePermissionsSchema, getDomainConfigSchema, getSchemaSchema, Query, QueryHandler, setArchivePermissionsSchema } from '../model'
 import { DebugQueryHandler, GetArchivePermissionsQueryHandler, GetDomainConfigQueryHandler, GetSchemaQueryHandler, SetArchivePermissionsQueryHandler } from '../QueryHandlers'
 
 export const addQueryProcessors = (app: Application) => {
@@ -22,22 +12,24 @@ export const addQueryProcessors = (app: Application) => {
   if (!isProduction()) {
     addDebug(registry)
   }
-  addQueries(app, registry)
+  addQueries(registry)
 }
 
 const addDebug = (registry: QueryProcessorRegistry) => {
-  registry.registerProcessorForSchema(debugSchema, (payload) => new DebugQueryHandler().handle(payload as DebugQuery))
+  registry.registerProcessorForSchema(debugSchema, (payload) => dependencies.get<QueryHandler<Query<XyoPayload>>>(DebugQueryHandler).handle(payload))
   registry.registerProcessorForSchema('network.xyo.test', async () => {
     await delay(1)
     return {} as XyoPayloadWithMeta
   })
 }
 
-const addQueries = (app: Application, registry: QueryProcessorRegistry) => {
+const addQueries = (registry: QueryProcessorRegistry) => {
   registry.registerProcessorForSchema(setArchivePermissionsSchema, (payload) =>
-    new SetArchivePermissionsQueryHandler(app.archivePermissionsArchivist).handle(payload as SetArchivePermissionsQuery)
+    dependencies.get<QueryHandler<Query<XyoPayload>>>(SetArchivePermissionsQueryHandler).handle(payload)
   )
-  registry.registerProcessorForSchema(getArchivePermissionsSchema, (payload) => new GetArchivePermissionsQueryHandler({ ...app }).handle(payload as GetArchivePermissionsQuery))
-  registry.registerProcessorForSchema(getDomainConfigSchema, (payload) => new GetDomainConfigQueryHandler({ ...app }).handle(payload as GetDomainConfigQuery))
-  registry.registerProcessorForSchema(getSchemaSchema, (payload) => new GetSchemaQueryHandler({ schemaArchivist: XyoSchemaCache.instance }).handle(payload as GetSchemaQuery))
+  registry.registerProcessorForSchema(getArchivePermissionsSchema, (payload) =>
+    dependencies.get<QueryHandler<Query<XyoPayload>>>(GetArchivePermissionsQueryHandler).handle(payload)
+  )
+  registry.registerProcessorForSchema(getDomainConfigSchema, (payload) => dependencies.get<QueryHandler<Query<XyoPayload>>>(GetDomainConfigQueryHandler).handle(payload))
+  registry.registerProcessorForSchema(getSchemaSchema, (payload) => dependencies.get<QueryHandler<Query<XyoPayload>>>(GetSchemaQueryHandler).handle(payload))
 }
