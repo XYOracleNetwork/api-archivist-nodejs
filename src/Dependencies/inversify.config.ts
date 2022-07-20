@@ -59,12 +59,12 @@ export const configure = () => {
 
   configureMongo()
 
-  container.bind<ArchiveArchivist>(TYPES.ArchiveArchivist).to(MongoDBArchiveArchivist)
-  container.bind<ArchivePermissionsArchivist>(TYPES.ArchivePermissionsArchivist).to(MongoDBArchivePermissionsPayloadPayloadArchivist)
+  container.bind<ArchiveArchivist>(TYPES.ArchiveArchivist).to(MongoDBArchiveArchivist).inSingletonScope()
+  container.bind<ArchivePermissionsArchivist>(TYPES.ArchivePermissionsArchivist).to(MongoDBArchivePermissionsPayloadPayloadArchivist).inSingletonScope()
   container.bind<PasswordHasher<User>>(TYPES.PasswordHasher).toConstantValue(passwordHasher)
   container.bind<UserArchivist>(TYPES.UserArchivist).to(MongoDBUserArchivist).inSingletonScope()
   container.bind<UserManager>(TYPES.UserManager).to(MongoDBUserManager).inSingletonScope()
-  container.bind<WitnessedPayloadArchivist>(TYPES.WitnessedPayloadArchivist).to(MongoDBArchivistWitnessedPayloadArchivist)
+  container.bind<WitnessedPayloadArchivist>(TYPES.WitnessedPayloadArchivist).to(MongoDBArchivistWitnessedPayloadArchivist).inSingletonScope()
 
   configureAuth(jwtSecret, passwordHasher)
 
@@ -84,19 +84,19 @@ const configureMongo = () => {
   // Archivists
   container.bind<MongoDBUserArchivist>(TYPES.UserArchivistMongoDb).to(MongoDBUserArchivist).inSingletonScope()
   container.bind<MongoDBUserManager>(TYPES.UserManagerMongoDb).to(MongoDBUserManager).inSingletonScope()
-  container.bind<MongoDBArchiveArchivist>(TYPES.ArchiveArchivistMongoDb).to(MongoDBArchiveArchivist)
+  container.bind<MongoDBArchiveArchivist>(TYPES.ArchiveArchivistMongoDb).to(MongoDBArchiveArchivist).inSingletonScope()
 }
 
 const configureAuth = (jwtSecret: string, passwordHasher: PasswordHasher<User>) => {
-  container.bind(AdminApiKeyStrategy).to(AdminApiKeyStrategy)
+  container.bind(AdminApiKeyStrategy).to(AdminApiKeyStrategy).inSingletonScope()
   container.bind(AllowUnauthenticatedStrategy).toConstantValue(new AllowUnauthenticatedStrategy())
   container.bind(ArchiveAccessControlStrategy).toConstantValue(new ArchiveAccessControlStrategy())
   container.bind(ArchiveAccountStrategy).toConstantValue(new ArchiveAccountStrategy())
-  container.bind(ArchiveApiKeyStrategy).to(ArchiveApiKeyStrategy)
+  container.bind(ArchiveApiKeyStrategy).to(ArchiveApiKeyStrategy).inSingletonScope()
   container.bind(ArchiveOwnerStrategy).toConstantValue(new ArchiveOwnerStrategy())
   container.bind(JwtStrategy).toConstantValue(new JwtStrategy(jwtSecret))
   container.bind(LocalStrategy).toConstantValue(new LocalStrategy(passwordHasher))
-  container.bind(Web3AuthStrategy).to(Web3AuthStrategy)
+  container.bind(Web3AuthStrategy).to(Web3AuthStrategy).inSingletonScope()
 }
 
 // eslint-disable-next-line import/no-default-export
