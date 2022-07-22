@@ -1,6 +1,6 @@
-import { Archivist, XyoArchive } from '@xyo-network/sdk-xyo-client-js'
+import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 
-import { UpsertResult } from '../../../model'
+import { Archivist, UpsertResult } from '../../../model'
 
 export type EntityArchive = Required<XyoArchive>
 
