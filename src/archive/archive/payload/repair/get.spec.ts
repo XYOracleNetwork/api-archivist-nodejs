@@ -1,6 +1,6 @@
 import { claimArchive, getTokenForNewUser, knownBlock, knownPayloadHash, postBlock, repairPayloadByHash } from '../../../../test'
 
-describe('/archive/:archive/block/payload/:hash', () => {
+describe.skip('/archive/:archive/block/payload/:hash', () => {
   let token = ''
   let archive = ''
   beforeEach(async () => {
