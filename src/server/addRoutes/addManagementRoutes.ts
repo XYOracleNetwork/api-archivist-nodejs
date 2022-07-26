@@ -1,7 +1,7 @@
+import { requireAdminApiKey } from '@xyo-network/archivist-middleware'
 import { Express } from 'express'
 
 import { postMigratePermissionsArchive, postMigratePermissionsArchives } from '../../management'
-import { requireAdminApiKey } from '../../middleware'
 
 export const addManagementRoutes = (app: Express) => {
   app.post(

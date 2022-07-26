@@ -1,4 +1,4 @@
-import { getDomain, getTokenForNewUser } from '../../test'
+import { getDomain, getTokenForNewUser } from '@xyo-network/archivist-test'
 
 const domain = 'network.xyo'
 

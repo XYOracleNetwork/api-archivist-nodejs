@@ -1,6 +1,3 @@
-import { XyoBoundWitness, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
-import { ReasonPhrases, StatusCodes } from 'http-status-codes'
-
 import {
   claimArchive,
   getArchiveName,
@@ -10,7 +7,9 @@ import {
   getTokenForNewUser,
   postBlock,
   setArchiveAccessControl,
-} from '../../test'
+} from '@xyo-network/archivist-test'
+import { XyoBoundWitness, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 describe('/:hash', () => {
   describe('return format is', () => {

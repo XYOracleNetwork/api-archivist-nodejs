@@ -1,9 +1,8 @@
 import { assertEx, delay, exists, ForgetPromise } from '@xylabs/sdk-js'
+import { debugSchema, SetArchivePermissionsPayload } from '@xyo-network/archivist-model'
+import { claimArchive, getArchivist, getTokenForNewUser, postCommandsToArchive, queryCommandResult, setArchiveAccessControl } from '@xyo-network/archivist-test'
 import { XyoArchive, XyoBoundWitnessBuilder, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
 import { StatusCodes } from 'http-status-codes'
-
-import { debugSchema, SetArchivePermissionsPayload } from '../../../../model'
-import { claimArchive, getArchivist, getTokenForNewUser, postCommandsToArchive, queryCommandResult, setArchiveAccessControl } from '../../../../test'
 
 interface MigrationResponse {
   archive: XyoArchive

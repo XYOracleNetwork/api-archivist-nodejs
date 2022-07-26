@@ -1,7 +1,7 @@
+import { allowAnonymous, archiveLocals, requireAccountOperationAccess } from '@xyo-network/archivist-middleware'
 import { Express } from 'express'
 
 import { getByHash } from '../../hash'
-import { allowAnonymous, archiveLocals, requireAccountOperationAccess } from '../../middleware'
 import { postNode } from '../../post'
 import { getQuery } from '../../query'
 

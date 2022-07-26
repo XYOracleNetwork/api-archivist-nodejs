@@ -4,7 +4,7 @@ FROM node:16 AS builder
 WORKDIR /app
 COPY . .
 RUN yarn install
-RUN yarn compile
+RUN yarn build
 
 # Just install the production dependencies here
 FROM node:16 AS dependencies

@@ -1,4 +1,5 @@
-import { Identifiable } from '../../model'
+import { Identifiable } from '@xyo-network/archivist-model'
+
 import { Transport } from '../Transport'
 
 // TODO: Use LRU cache

@@ -1,10 +1,15 @@
 import { assertEx } from '@xylabs/sdk-js'
+import { ArchivePermissionsArchivist } from '@xyo-network/archivist-middleware'
+import {
+  QueryHandler,
+  SetArchivePermissionsPayload,
+  SetArchivePermissionsPayloadWithMeta,
+  SetArchivePermissionsQuery,
+  setArchivePermissionsSchema,
+} from '@xyo-network/archivist-model'
+import { TYPES } from '@xyo-network/archivist-types'
 import { XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
 import { inject, injectable } from 'inversify'
-
-import { ArchivePermissionsArchivist } from '../middleware'
-import { QueryHandler, SetArchivePermissionsPayload, SetArchivePermissionsPayloadWithMeta, SetArchivePermissionsQuery, setArchivePermissionsSchema } from '../model'
-import { TYPES } from '../types'
 
 const validateAddresses = (query: SetArchivePermissionsQuery) => {
   const allowed = query?.payload?.addresses?.allow

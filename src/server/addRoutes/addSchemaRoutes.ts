@@ -1,7 +1,7 @@
 import { notImplemented } from '@xylabs/sdk-api-express-ecs'
+import { allowAnonymous } from '@xyo-network/archivist-middleware'
 import { Express } from 'express'
 
-import { allowAnonymous } from '../../middleware'
 import { getSchema } from '../../schema'
 
 export const addSchemaRoutes = (app: Express) => {

@@ -1,4 +1,5 @@
-import { GetDomainConfigQuery, getDomainConfigSchema } from '../model'
+import { GetDomainConfigQuery, getDomainConfigSchema } from '@xyo-network/archivist-model'
+
 import { GetDomainConfigQueryHandler } from './GetDomainConfigQueryHandler'
 
 const schema = getDomainConfigSchema

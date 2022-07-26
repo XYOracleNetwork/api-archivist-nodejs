@@ -3,12 +3,7 @@ import 'reflect-metadata'
 import { getDefaultLogger, Logger } from '@xylabs/sdk-api-express-ecs'
 import { assertEx } from '@xylabs/sdk-js'
 import { XyoAccount } from '@xyo-network/account'
-import { XyoArchive, XyoBoundWitnessWithMeta, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
-import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
-import { config } from 'dotenv'
-import { Container } from 'inversify'
-
-import { getBaseMongoSdk } from './lib'
+import { getBaseMongoSdk } from '@xyo-network/archivist-lib'
 import {
   AdminApiKeyStrategy,
   AllowUnauthenticatedStrategy,
@@ -35,11 +30,16 @@ import {
   Web3AuthStrategy,
   WitnessedPayloadArchivist,
   XyoPayloadToQueryConverterRegistry,
-} from './middleware'
-import { ArchivePermissionsArchivist, Query, User } from './model'
+} from '@xyo-network/archivist-middleware'
+import { ArchivePermissionsArchivist, Query, User } from '@xyo-network/archivist-model'
+import { TYPES } from '@xyo-network/archivist-types'
+import { XyoArchive, XyoBoundWitnessWithMeta, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
+import { config } from 'dotenv'
+import { Container } from 'inversify'
+
 import { DebugQueryHandler, GetArchivePermissionsQueryHandler, GetDomainConfigQueryHandler, GetSchemaQueryHandler, SetArchivePermissionsQueryHandler } from './QueryHandlers'
 import { IdentifiableHuri, InMemoryQueue, Queue } from './Queue'
-import { TYPES } from './types'
 config()
 const dependencies = new Container({
   autoBindInjectable: true,

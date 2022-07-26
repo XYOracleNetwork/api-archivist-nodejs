@@ -1,3 +1,5 @@
+import { PayloadRepairHashResponse } from '@xyo-network/archivist-archive'
+import { SortDirection } from '@xyo-network/archivist-model'
 import {
   XyoAccount,
   XyoArchive,
@@ -18,8 +20,6 @@ import { StatusCodes } from 'http-status-codes'
 import supertest, { SuperTest, Test } from 'supertest'
 import { v4 } from 'uuid'
 
-import { PayloadRepairHashResponse } from '../archive'
-import { SortDirection } from '../model'
 import { getApp } from '../server'
 
 config()

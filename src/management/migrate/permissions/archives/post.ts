@@ -1,12 +1,12 @@
 import { asyncHandler, NoReqBody, NoReqParams, NoReqQuery, NoResBody, tryParseInt } from '@xylabs/sdk-api-express-ecs'
 import { exists } from '@xylabs/sdk-js'
+import { TYPES } from '@xyo-network/archivist-types'
 import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
 import dependencies from '../../../../inversify.config'
-import { TYPES } from '../../../../types'
 import { migrateLegacyArchives } from '../migrateLegacyArchives'
 
 export interface MigrateQueryParams extends NoReqQuery {

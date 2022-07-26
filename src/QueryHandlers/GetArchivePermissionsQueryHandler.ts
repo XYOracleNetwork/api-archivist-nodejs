@@ -1,9 +1,8 @@
+import { ArchivePermissionsArchivist } from '@xyo-network/archivist-middleware'
+import { GetArchivePermissionsQuery, QueryHandler, SetArchivePermissionsPayload, setArchivePermissionsSchema } from '@xyo-network/archivist-model'
+import { TYPES } from '@xyo-network/archivist-types'
 import { WithAdditional, XyoPayloadBuilder, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { inject, injectable } from 'inversify'
-
-import { ArchivePermissionsArchivist } from '../middleware'
-import { GetArchivePermissionsQuery, QueryHandler, SetArchivePermissionsPayload, setArchivePermissionsSchema } from '../model'
-import { TYPES } from '../types'
 
 const getEmptyPermissions = (query: GetArchivePermissionsQuery): XyoPayloadWithMeta<SetArchivePermissionsPayload> => {
   return new XyoPayloadBuilder<WithAdditional<XyoPayloadWithMeta<SetArchivePermissionsPayload>>>({ schema: setArchivePermissionsSchema })

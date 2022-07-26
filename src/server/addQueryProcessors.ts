@@ -1,10 +1,10 @@
 import { delay } from '@xylabs/sdk-js'
+import { isProduction, QueryProcessorRegistry } from '@xyo-network/archivist-middleware'
+import { debugSchema, getArchivePermissionsSchema, getDomainConfigSchema, getSchemaSchema, Query, QueryHandler, setArchivePermissionsSchema } from '@xyo-network/archivist-model'
 import { XyoPayload, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { Application } from 'express'
 
 import dependencies from '../inversify.config'
-import { isProduction, QueryProcessorRegistry } from '../middleware'
-import { debugSchema, getArchivePermissionsSchema, getDomainConfigSchema, getSchemaSchema, Query, QueryHandler, setArchivePermissionsSchema } from '../model'
 import { DebugQueryHandler, GetArchivePermissionsQueryHandler, GetDomainConfigQueryHandler, GetSchemaQueryHandler, SetArchivePermissionsQueryHandler } from '../QueryHandlers'
 
 export const addQueryProcessors = (app: Application) => {
