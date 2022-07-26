@@ -1,11 +1,11 @@
 import { getEnvFromAws, Logger } from '@xylabs/sdk-api-express-ecs'
+import { configureDoc } from '@xyo-network/archivist-middleware'
+import { TYPES } from '@xyo-network/archivist-types'
 import compression from 'compression'
 import cors from 'cors'
 import express, { Express } from 'express'
 
 import dependencies, { configure } from '../inversify.config'
-import { configureDoc } from '../middleware'
-import { TYPES } from '../types'
 import { addAuth } from './addAuth'
 import { addDependencies } from './addDependencies'
 import { addErrorHandlers } from './addErrorHandlers'

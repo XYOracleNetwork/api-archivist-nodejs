@@ -1,7 +1,7 @@
+import { getArchivistAllBoundWitnessesMongoSdk, getArchivistAllPayloadMongoSdk } from '@xyo-network/archivist-lib'
 import { XyoPayload, XyoPayloadWrapper } from '@xyo-network/sdk-xyo-client-js'
 import { Filter, SortDirection } from 'mongodb'
 
-import { getArchivistAllBoundWitnessesMongoSdk, getArchivistAllPayloadMongoSdk } from '../../lib'
 import { PayloadSearchCriteria } from './PayloadRules'
 
 const createPayloadQueryFromSearchCriteria = (searchCriteria: PayloadSearchCriteria): Filter<XyoPayload> => {

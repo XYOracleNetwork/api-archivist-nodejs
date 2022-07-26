@@ -1,11 +1,11 @@
 import { Logger } from '@xylabs/sdk-api-express-ecs'
 import { assertEx } from '@xylabs/sdk-js'
+import { Query, QueryProcessorRegistry, WitnessedPayloadArchivist } from '@xyo-network/archivist-middleware'
+import { TYPES } from '@xyo-network/archivist-types'
 import { Huri, XyoQueryPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 
 import dependencies from '../inversify.config'
-import { Query, QueryProcessorRegistry, WitnessedPayloadArchivist } from '../middleware'
 import { IdentifiableHuri, Queue } from '../Queue'
-import { TYPES } from '../types'
 
 export const addQueryProcessing = () => {
   const logger = dependencies.get<Logger>(TYPES.Logger)

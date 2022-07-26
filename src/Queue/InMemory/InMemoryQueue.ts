@@ -1,4 +1,5 @@
-import { Identifiable } from '../../model'
+import { Identifiable } from '@xyo-network/archivist-model'
+
 import { Queue } from '../Queue'
 import { Transport } from '../Transport'
 import { InMemoryTransport } from './InMemoryTransport'

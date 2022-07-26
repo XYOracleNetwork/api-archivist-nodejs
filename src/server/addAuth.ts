@@ -1,10 +1,5 @@
 import 'reflect-metadata'
 
-import { Application } from 'express'
-import { decorate, injectable } from 'inversify'
-import passport, { Strategy } from 'passport'
-
-import dependencies from '../inversify.config'
 import {
   addAuthRoutes,
   AdminApiKeyStrategy,
@@ -25,7 +20,12 @@ import {
   localStrategyName,
   Web3AuthStrategy,
   web3StrategyName,
-} from '../middleware'
+} from '@xyo-network/archivist-middleware'
+import { Application } from 'express'
+import { decorate, injectable } from 'inversify'
+import passport, { Strategy } from 'passport'
+
+import dependencies from '../inversify.config'
 
 decorate(injectable(), Strategy)
 

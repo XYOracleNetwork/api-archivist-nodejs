@@ -1,7 +1,6 @@
+import { getArchiveSchemaPayloadsRecent, getArchiveSchemaRecent, postArchiveSchemaCurrentWitness } from '@xyo-network/archivist-archive'
+import { requireArchiveAccess } from '@xyo-network/archivist-middleware'
 import { Express } from 'express'
-
-import { getArchiveSchemaPayloadsRecent, getArchiveSchemaRecent, postArchiveSchemaCurrentWitness } from '../../archive'
-import { requireArchiveAccess } from '../../middleware'
 
 export const addArchiveSchemaRoutes = (app: Express) => {
   app.post(

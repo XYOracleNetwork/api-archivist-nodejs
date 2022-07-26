@@ -1,10 +1,9 @@
 import { assertEx, delay } from '@xylabs/sdk-js'
+import { debugSchema } from '@xyo-network/archivist-model'
+import { claimArchive, getArchivist, getTokenForNewUser, postCommandsToArchive, queryCommandResult } from '@xyo-network/archivist-test'
 import { XyoBoundWitnessBuilder, XyoPayload, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
 import { StatusCodes } from 'http-status-codes'
 import { v4 } from 'uuid'
-
-import { debugSchema } from '../../model'
-import { claimArchive, getArchivist, getTokenForNewUser, postCommandsToArchive, queryCommandResult } from '../../test'
 
 const schema = debugSchema
 

@@ -1,6 +1,6 @@
 import { assertEx, exists } from '@xylabs/sdk-js'
+import { SortDirection } from '@xyo-network/archivist-model'
 
-import { SortDirection } from '../../../model'
 import { PayloadRule } from './PayloadRule'
 import { PayloadSearchCriteria } from './PayloadSearchCriteria'
 import { isPayloadAddressRule, isPayloadArchiveRule, isPayloadSchemaRule, isPayloadTimestampDirectionRule } from './TypePredicates'

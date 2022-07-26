@@ -1,7 +1,6 @@
+import { GetSchemaQuery, QueryHandler } from '@xyo-network/archivist-model'
 import { XyoSchemaCache, XyoSchemaPayload } from '@xyo-network/sdk-xyo-client-js'
 import { inject, injectable } from 'inversify'
-
-import { GetSchemaQuery, QueryHandler } from '../model'
 
 @injectable()
 export class GetSchemaQueryHandler implements QueryHandler<GetSchemaQuery, XyoSchemaPayload> {

@@ -1,4 +1,5 @@
-import { Query } from '../model'
+import { Query } from '@xyo-network/archivist-model'
+
 import { IdentifiableHuri } from './IdentifiableHuri'
 import { Queue } from './Queue'
 

@@ -1,6 +1,5 @@
+import { getArchivist } from '@xyo-network/archivist-test'
 import { StatusCodes } from 'http-status-codes'
-
-import { getArchivist } from './test'
 
 describe('/', () => {
   it('Provides health checks', async () => {

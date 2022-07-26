@@ -1,11 +1,11 @@
 import { asyncHandler, NoReqBody, NoReqQuery } from '@xylabs/sdk-api-express-ecs'
+import { TYPES } from '@xyo-network/archivist-types'
 import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import dependencies from '../../inversify.config'
 import { IdentifiableHuri, Queue } from '../../Queue'
-import { TYPES } from '../../types'
 
 export type QueryPathParams = {
   id: string

@@ -1,8 +1,5 @@
 import { assertEx } from '@xylabs/sdk-js'
-import { XyoAccount, XyoBoundWitnessBuilder, XyoBoundWitnessWithPartialMeta, XyoPayload, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
-import { ReasonPhrases, StatusCodes } from 'http-status-codes'
-
-import { SortDirection } from '../../model'
+import { SortDirection } from '@xyo-network/archivist-model'
 import {
   claimArchive,
   getArchiveName,
@@ -13,7 +10,10 @@ import {
   postBlock,
   setArchiveAccessControl,
   unitTestSigningAccount,
-} from '../../test'
+} from '@xyo-network/archivist-test'
+import { XyoAccount, XyoBoundWitnessBuilder, XyoBoundWitnessWithPartialMeta, XyoPayload, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
+import { ReasonPhrases, StatusCodes } from 'http-status-codes'
+
 import { PayloadPointerBody, payloadPointerSchema } from './PayloadPointer'
 import { PayloadAddressRule, PayloadArchiveRule, PayloadSchemaRule, PayloadTimestampDirectionRule } from './PayloadRules'
 

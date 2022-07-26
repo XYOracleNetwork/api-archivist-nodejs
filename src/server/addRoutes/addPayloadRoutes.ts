@@ -1,8 +1,7 @@
 import { notImplemented } from '@xylabs/sdk-api-express-ecs'
+import { getArchivePayloadHash, getArchivePayloadRecent, getArchivePayloadRepair, getArchivePayloads, getArchivePayloadStats } from '@xyo-network/archivist-archive'
+import { requireArchiveAccess } from '@xyo-network/archivist-middleware'
 import { Express } from 'express'
-
-import { getArchivePayloadHash, getArchivePayloadRecent, getArchivePayloadRepair, getArchivePayloads, getArchivePayloadStats } from '../../archive'
-import { requireArchiveAccess } from '../../middleware'
 
 export const addPayloadRoutes = (app: Express) => {
   app.get(

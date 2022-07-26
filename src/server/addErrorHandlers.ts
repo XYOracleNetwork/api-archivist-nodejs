@@ -1,7 +1,6 @@
 import { standardErrors } from '@xylabs/sdk-api-express-ecs'
+import { rollbarErrorHandler } from '@xyo-network/archivist-middleware'
 import { Express } from 'express'
-
-import { rollbarErrorHandler } from '../middleware'
 
 export const addErrorHandlers = (app: Express) => {
   app.use(rollbarErrorHandler())

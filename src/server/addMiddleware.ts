@@ -6,9 +6,8 @@ import {
   responseProfiler,
   useRequestCounters,
 } from '@xylabs/sdk-api-express-ecs'
+import { archiveLocals, standardResponses } from '@xyo-network/archivist-middleware'
 import { Express } from 'express'
-
-import { archiveLocals, standardResponses } from '../middleware'
 
 export const addMiddleware = (app: Express) => {
   app.use(responseProfiler)

@@ -1,9 +1,4 @@
-import { XyoPayload, XyoQueryPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
-import { Request } from 'express'
-import { v4 } from 'uuid'
-
-import dependencies from '../inversify.config'
-import { isProduction, QueryConverterRegistry } from '../middleware'
+import { isProduction, QueryConverterRegistry } from '@xyo-network/archivist-middleware'
 import {
   DebugPayload,
   DebugQuery,
@@ -21,8 +16,13 @@ import {
   SetArchivePermissionsPayload,
   SetArchivePermissionsQuery,
   setArchivePermissionsSchema,
-} from '../model'
-import { TYPES } from '../types'
+} from '@xyo-network/archivist-model'
+import { TYPES } from '@xyo-network/archivist-types'
+import { XyoPayload, XyoQueryPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { Request } from 'express'
+import { v4 } from 'uuid'
+
+import dependencies from '../inversify.config'
 
 const debugCommandConverter = (payload: XyoPayload, _req: Request): Query => {
   return {

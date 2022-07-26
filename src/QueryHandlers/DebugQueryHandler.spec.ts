@@ -1,4 +1,5 @@
-import { DebugQuery, debugSchema } from '../model'
+import { DebugQuery, debugSchema } from '@xyo-network/archivist-model'
+
 import { DebugQueryHandler } from './DebugQueryHandler'
 
 const schema = debugSchema

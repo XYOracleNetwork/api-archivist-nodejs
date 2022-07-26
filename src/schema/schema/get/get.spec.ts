@@ -1,6 +1,5 @@
+import { claimArchive, getHash, getSchema, getTokenForNewUser, postBlock } from '@xyo-network/archivist-test'
 import { XyoAccount, XyoBoundWitnessBase, XyoBoundWitnessBuilder, XyoSchemaPayload } from '@xyo-network/sdk-xyo-client-js'
-
-import { claimArchive, getHash, getSchema, getTokenForNewUser, postBlock } from '../../../test'
 
 describe('/schema/:schema', () => {
   const schema = 'network.xyo.schema'

@@ -1,9 +1,9 @@
 import { asyncHandler, NoReqBody, NoReqQuery } from '@xylabs/sdk-api-express-ecs'
+import { setRawResponseFormat } from '@xyo-network/archivist-middleware'
 import { deepOmitUnderscoreFields, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
-import { setRawResponseFormat } from '../../middleware'
 import { getBlockForRequest } from './getBlockForRequest'
 import { HashPathParams } from './HashPathParams'
 
