@@ -1,5 +1,10 @@
-import { ArchivePermissionsArchivist } from '@xyo-network/archivist-middleware'
-import { debugSchema, SetArchivePermissionsPayloadWithMeta, SetArchivePermissionsQuery, setArchivePermissionsSchema } from '@xyo-network/archivist-model'
+import {
+  ArchivePermissionsArchivist,
+  debugSchema,
+  SetArchivePermissionsPayloadWithMeta,
+  SetArchivePermissionsQuery,
+  setArchivePermissionsSchema,
+} from '@xyo-network/archivist-model'
 import { mock, MockProxy } from 'jest-mock-extended'
 
 import { SetArchivePermissionsQueryHandler } from './SetArchivePermissionsQueryHandler'
