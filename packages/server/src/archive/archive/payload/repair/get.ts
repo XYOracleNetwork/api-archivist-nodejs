@@ -2,6 +2,7 @@ import 'source-map-support/register'
 
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
 import { getArchivistPayloadMongoSdk } from '@xyo-network/archivist-lib'
+import { PayloadRepairHashResponse } from '@xyo-network/archivist-model'
 import { XyoPayload, XyoPayloadWrapper } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
@@ -18,14 +19,6 @@ const updatePayload = async (archive: string, hash: string, payload: XyoPayload)
   const sdk = getArchivistPayloadMongoSdk(archive)
   const wrapper = new XyoPayloadWrapper(payload)
   return await sdk.updateByHash(hash, { ...payload, _hash: wrapper.hash })
-}
-
-export interface PayloadRepairHashResponse {
-  acknowledged: boolean
-  matchedCount: number
-  modifiedCount: number
-  upsertedCount: number
-  // upsertedId: null | string
 }
 
 const handler: RequestHandler<PayloadHashPathParams, PayloadRepairHashResponse> = async (req, res, next) => {
