@@ -1,12 +1,10 @@
 import 'reflect-metadata'
 
-import { UpsertResult, User, UserWithoutId } from '@xyo-network/archivist-model'
+import { UpsertResult, User, UserArchivist, UserWithoutId } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter, ObjectId, WithId } from 'mongodb'
-
-import { UserArchivist } from '../UserArchivist'
 
 interface IUpsertFilter {
   $or: {

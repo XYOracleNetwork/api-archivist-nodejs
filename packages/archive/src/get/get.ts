@@ -1,4 +1,5 @@
 import { asyncHandler, NoReqParams } from '@xylabs/sdk-api-express-ecs'
+import { ArchiveArchivist } from '@xyo-network/archivist-model'
 import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 
@@ -16,7 +17,8 @@ const handler: RequestHandler<NoReqParams, XyoArchive[]> = async (req, res) => {
   if (!id) {
     res.json(defaultPublicArchives)
   } else {
-    const userArchives = (await req.app.archiveArchivist.find({ user: id })) as XyoArchive[]
+    const { archiveArchivist } = req.app as unknown as { archiveArchivist: ArchiveArchivist }
+    const userArchives = (await archiveArchivist.find({ user: id })) as XyoArchive[]
     res.json(getArchivesDistinctByName([...defaultPublicArchives, ...userArchives]))
   }
 }

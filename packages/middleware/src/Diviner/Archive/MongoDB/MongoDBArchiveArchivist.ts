@@ -1,13 +1,11 @@
 import 'reflect-metadata'
 
-import { UpsertResult } from '@xyo-network/archivist-model'
+import { ArchiveArchivist, EntityArchive, UpsertResult } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter, WithId } from 'mongodb'
-
-import { ArchiveArchivist, EntityArchive } from '../ArchiveArchivist'
 
 interface UpsertFilter {
   $and: [
