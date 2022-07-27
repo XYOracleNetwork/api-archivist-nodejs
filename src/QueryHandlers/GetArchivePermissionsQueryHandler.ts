@@ -1,5 +1,4 @@
-import { ArchivePermissionsArchivist } from '@xyo-network/archivist-middleware'
-import { GetArchivePermissionsQuery, QueryHandler, SetArchivePermissionsPayload, setArchivePermissionsSchema } from '@xyo-network/archivist-model'
+import { ArchivePermissionsArchivist, GetArchivePermissionsQuery, QueryHandler, SetArchivePermissionsPayload, setArchivePermissionsSchema } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { WithAdditional, XyoPayloadBuilder, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { inject, injectable } from 'inversify'

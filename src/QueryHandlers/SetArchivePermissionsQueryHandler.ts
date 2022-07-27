@@ -1,6 +1,6 @@
 import { assertEx } from '@xylabs/sdk-js'
-import { ArchivePermissionsArchivist } from '@xyo-network/archivist-middleware'
 import {
+  ArchivePermissionsArchivist,
   QueryHandler,
   SetArchivePermissionsPayload,
   SetArchivePermissionsPayloadWithMeta,

@@ -1,3 +1,4 @@
+import { ArchiveArchivist } from '@xyo-network/archivist-model'
 import { Request } from 'express'
 
 import { isRequestUserOwnerOfArchive } from './isArchiveOwner'
@@ -10,7 +11,8 @@ import { isLegacyPublicArchive } from './legacyArchiveAccessControl'
  * @returns True if the request can access the archive, false otherwise
  */
 export const requestCanAccessArchive = async (req: Request, name: string): Promise<boolean> => {
-  const archive = await req.app.archiveArchivist.get(name)
+  const { archiveArchivist } = req.app as unknown as { archiveArchivist: ArchiveArchivist }
+  const archive = await archiveArchivist.get(name)
   // If the archive is public or if the archive is private but this is
   // an auth'd request from the archive owner
   return isLegacyPublicArchive(archive) || isRequestUserOwnerOfArchive(req, archive)

@@ -1,4 +1,4 @@
-import { WitnessedPayloadArchivist } from './WitnessedPayloadArchivist'
+import { WitnessedPayloadArchivist } from '@xyo-network/archivist-model'
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -10,4 +10,3 @@ declare global {
 }
 
 export * from './MongoDB'
-export * from './WitnessedPayloadArchivist'
