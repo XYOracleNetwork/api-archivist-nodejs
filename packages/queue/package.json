@@ -1,6 +1,6 @@
 {
   "$schema": "http://json.schemastore.org/package.json",
-  "name": "@xyo-network/archivist",
+  "name": "@xyo-network/archivist-queue",
   "publishConfig": {
     "access": "public"
   },
@@ -28,20 +28,19 @@
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "scripts": {
-    "deploy": "echo Deploy not allowed!",
-    "deploy3": "echo Deploy3 not allowed!",
     "start": "nodemon",
     "launch": "node --max-old-space-size=8192 --experimental-specifier-resolution=node ./dist/cjs/index.js",
     "clean": "yarn workspaces foreach -pv run clean:package",
     "deps": "yarn workspaces foreach -pv run deps:package",
     "lint": "echo Linting... && yarn eslint .",
     "cycle": "yarn workspaces foreach -pv run cycle:package",
-    "fix": "echo Fixing... && yarn eslint . --fix",
+    "fix": "yarn workspaces foreach -pv run fix:package",
     "outdated": "yarn workspaces foreach -pv outdated",
     "clean:package": "yarn rimraf -q $INIT_CWD/dist && yarn rimraf -q $INIT_CWD/build",
+    "fix:package": "yarn eslint $INIT_CWD/src --fix",
     "cycle:package": "yarn eslint --rule \"import/no-cycle:[1, { maxDepth: 10 }]\" $INIT_CWD/src",
     "deps:package": "depcheck $INIT_CWD",
-    "build": "yarn build:esm && yarn build:cjs",
+    "build": "yarn lint && yarn build:esm && yarn build:cjs",
     "build:cjs": "yarn workspaces foreach -ptRv run build:package:cjs",
     "build:esm": "yarn workspaces foreach -ptRv run build:package:esm",
     "build:package:cjs": "tsc -p $INIT_CWD/tsconfig.build.cjs.json",
@@ -58,14 +57,6 @@
     "@xylabs/sdk-api-express-ecs": "^1.2.4",
     "@xylabs/sdk-js": "^2.6.2",
     "@xyo-network/account": "^2.22.15",
-    "@xyo-network/archivist-dependencies": "workspace:^",
-    "@xyo-network/archivist-lib": "workspace:^",
-    "@xyo-network/archivist-middleware": "workspace:^",
-    "@xyo-network/archivist-model": "workspace:^",
-    "@xyo-network/archivist-query-handlers": "workspace:^",
-    "@xyo-network/archivist-queue": "workspace:^",
-    "@xyo-network/archivist-server": "workspace:^",
-    "@xyo-network/archivist-test": "workspace:^",
     "@xyo-network/archivist-types": "workspace:^",
     "@xyo-network/sdk-xyo-client-js": "^2.22.15",
     "@xyo-network/sdk-xyo-mongo-js": "^2.2.9",
@@ -126,9 +117,5 @@
     "ts-node": "^10.9.1",
     "typescript": "^4.7.4"
   },
-  "packageManager": "yarn@3.2.2",
-  "volta": {
-    "node": "16.15.1",
-    "yarn": "1.22.19"
-  }
+  "types": "dist/esm/index.d.ts"
 }
