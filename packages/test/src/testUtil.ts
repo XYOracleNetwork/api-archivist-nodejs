@@ -1,4 +1,4 @@
-import { SortDirection } from '@xyo-network/archivist-model'
+import { PayloadRepairHashResponse, SortDirection } from '@xyo-network/archivist-model'
 import { getApp } from '@xyo-network/archivist-server'
 import {
   XyoAccount,
@@ -263,9 +263,7 @@ export const getPayloadsByTimestamp = async (
   return response.body.data
 }
 
-// TODO: Strongly typed response
-// export const repairPayloadByHash = async (token: string, archive: string, hash: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<PayloadRepairHashResponse> => {
-export const repairPayloadByHash = async (token: string, archive: string, hash: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<unknown> => {
+export const repairPayloadByHash = async (token: string, archive: string, hash: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<PayloadRepairHashResponse> => {
   const response = await request.get(`/archive/${archive}/payload/hash/${hash}/repair`).auth(token, { type: 'bearer' }).expect(expectedStatus)
   return response.body.data
 }
