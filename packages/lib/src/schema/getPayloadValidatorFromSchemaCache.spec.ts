@@ -1,11 +1,10 @@
-import { getSchemaName } from '@xyo-network/archivist-test'
 import { XyoPayload, XyoSchemaCache, XyoSchemaCacheEntry } from '@xyo-network/sdk-xyo-client-js'
 
 import { getPayloadValidatorFromSchemaCache } from './getPayloadValidatorFromSchemaCache'
 
 const getPayload = (): XyoPayload => {
   return {
-    schema: getSchemaName(),
+    schema: 'network.xyo.test',
   }
 }
 

@@ -4303,7 +4303,6 @@ __metadata:
     "@xylabs/ts-scripts": ^2.5.3
     "@xyo-network/account": ^2.22.18
     "@xyo-network/archivist-model": "workspace:^"
-    "@xyo-network/archivist-test": "workspace:^"
     "@xyo-network/sdk-xyo-client-js": ^2.22.18
     "@xyo-network/sdk-xyo-mongo-js": ^2.2.9
     ajv: ^8.11.0
@@ -4319,6 +4318,7 @@ __metadata:
     rimraf: ^3.0.2
     source-map-support: ^0.5.21
     typescript: ^4.7.4
+    uuid: ^8.3.2
   languageName: unknown
   linkType: soft
 
@@ -4498,7 +4498,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@xyo-network/archivist-test@workspace:^, @xyo-network/archivist-test@workspace:packages/test":
+"@xyo-network/archivist-test@workspace:packages/test":
   version: 0.0.0-use.local
   resolution: "@xyo-network/archivist-test@workspace:packages/test"
   dependencies:
