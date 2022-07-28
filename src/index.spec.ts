@@ -1,8 +1,8 @@
-import { parse, parseValue } from 'graphql'
-import jsonLogic, { add_operation, AdditionalOperation, apply, RulesLogic } from 'json-logic-js'
-import Parser from 'tree-sitter'
+// import { parse, parseValue } from 'graphql'
+import { AdditionalOperation, apply, RulesLogic } from 'json-logic-js'
+// import Parser from 'tree-sitter'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const JavaScript = require('tree-sitter-javascript')
+// const JavaScript = require('tree-sitter-javascript')
 
 const etherscan = {
   _archive: 'crypto-price-witness',
@@ -329,50 +329,50 @@ const coingecko = {
   timestamp: 1659012060785,
 }
 
-describe.skip('graphql', () => {
-  const graphql = `query Hero($episode: Episode, $withFriends: Boolean!) {
-    hero(episode: $episode) {
-      name
-      friends @include(if: $withFriends) {
-        name
-      }
-    }
-  }`
-  it('parse', () => {
-    const results = parse(graphql)
-    console.log(results)
-  })
-  it.skip('parseValue', () => {
-    const results = parseValue(graphql)
-    console.log(results)
-  })
-})
+// describe.skip('graphql', () => {
+//   const graphql = `query Hero($episode: Episode, $withFriends: Boolean!) {
+//     hero(episode: $episode) {
+//       name
+//       friends @include(if: $withFriends) {
+//         name
+//       }
+//     }
+//   }`
+//   it('parse', () => {
+//     const results = parse(graphql)
+//     console.log(results)
+//   })
+//   it.skip('parseValue', () => {
+//     const results = parseValue(graphql)
+//     console.log(results)
+//   })
+// })
 
-describe.skip('tree-sitter', () => {
-  it('parse', () => {
-    const parser = new Parser()
-    parser.setLanguage(JavaScript)
-    const sourceCode = 'let x = 1; console.log(x);'
-    const tree = parser.parse(sourceCode)
-    console.log(tree)
-  })
-})
-describe.skip('map/reduce', () => {
-  it('parse', () => {
-    const filterPredicate = (n: number | undefined): n is number => !!n
-    const coingeckoPrice = coingecko?.assets?.xyo?.usd
-    const uniswapPrice = uniswap.pairs
-      .map((p) => p.tokens)
-      .filter((t) => t.some((t) => t.symbol === 'xyo'))
-      ?.find((t) => t.some((t) => t.symbol === 'usdt'))
-      ?.find((t) => t.symbol === 'xyo')?.value
-    const xyoPrice = [coingeckoPrice, uniswapPrice].filter<number>(filterPredicate).reduce((a, b) => a + b) / 2
-    // const average = (prices: number[]) => prices.reduce((a, b) => a + b) / prices.length
-    console.log(coingeckoPrice)
-    console.log(uniswapPrice)
-    console.log(xyoPrice)
-  })
-})
+// describe.skip('tree-sitter', () => {
+//   it('parse', () => {
+//     const parser = new Parser()
+//     parser.setLanguage(JavaScript)
+//     const sourceCode = 'let x = 1; console.log(x);'
+//     const tree = parser.parse(sourceCode)
+//     console.log(tree)
+//   })
+// })
+// describe.skip('map/reduce', () => {
+//   it('parse', () => {
+//     const filterPredicate = (n: number | undefined): n is number => !!n
+//     const coingeckoPrice = coingecko?.assets?.xyo?.usd
+//     const uniswapPrice = uniswap.pairs
+//       .map((p) => p.tokens)
+//       .filter((t) => t.some((t) => t.symbol === 'xyo'))
+//       ?.find((t) => t.some((t) => t.symbol === 'usdt'))
+//       ?.find((t) => t.symbol === 'xyo')?.value
+//     const xyoPrice = [coingeckoPrice, uniswapPrice].filter<number>(filterPredicate).reduce((a, b) => a + b) / 2
+//     // const average = (prices: number[]) => prices.reduce((a, b) => a + b) / prices.length
+//     console.log(coingeckoPrice)
+//     console.log(uniswapPrice)
+//     console.log(xyoPrice)
+//   })
+// })
 describe('JSON Logic', () => {
   it('parse', () => {
     const coingeckoPrice = apply({ var: 'assets.xyo.usd' }, coingecko)
@@ -418,5 +418,20 @@ describe('JSON Logic', () => {
     // https://github.com/jwadhams/json-logic-js/#compound
     const combined = apply(getTokenPrice, { token: apply(getXyoTokenFromArray, { tokens: apply(getXyoTokenFromPair, { tokens }) }) })
     console.log(combined)
+    console.log('===============================')
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const arrayedApply = apply as any
+    const inline = arrayedApply([
+      { var: 'token.value' },
+      [
+        'token',
+        [
+          { reduce: [{ var: 'tokens' }, { or: [{ var: 'current' }, { var: 'accumulator' }] }, {}] },
+          ['tokens', [{ filter: [{ var: 'tokens' }, { '===': [{ var: 'symbol' }, 'xyo'] }] }, { tokens }]],
+        ],
+      ],
+    ])
+    console.log(inline)
+    console.log('===============================')
   })
 })
