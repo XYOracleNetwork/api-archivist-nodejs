@@ -1,7 +1,7 @@
 import { allowAnonymous } from '@xyo-network/archivist-middleware'
 import { Express } from 'express'
 
-import { getDomain } from '../../domain'
+import { getDomain } from '../routes'
 
 export const addDomainRoutes = (app: Express) => {
   app.get(
