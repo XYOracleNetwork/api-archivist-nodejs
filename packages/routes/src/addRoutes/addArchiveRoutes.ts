@@ -2,7 +2,7 @@ import { notImplemented } from '@xylabs/sdk-api-express-ecs'
 import { allowAnonymous, requireArchiveAccess, requireArchiveOwner, requireAuth } from '@xyo-network/archivist-middleware'
 import { Express } from 'express'
 
-import { getArchive, getArchives, putArchive } from '../../archive'
+import { getArchive, getArchives, putArchive } from '../routes'
 import { addArchiveSchemaRoutes } from './addArchiveSchemaRoutes'
 import { addArchiveSettingsRoutes } from './addArchiveSettingsRoutes'
 

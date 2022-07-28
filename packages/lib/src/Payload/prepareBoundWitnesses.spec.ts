@@ -1,5 +1,5 @@
-import { getNewBlockWithBoundWitnessesWithPayloads } from '@xyo-network/archivist-test'
-import { XyoBoundWitnessMeta, XyoBoundWitnessWithMeta, XyoPayloadWrapper } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitnessBuilder, XyoBoundWitnessMeta, XyoBoundWitnessWithMeta, XyoPayload, XyoPayloadBuilder, XyoPayloadWrapper } from '@xyo-network/sdk-xyo-client-js'
+import { v4 } from 'uuid'
 
 import { prepareBoundWitnesses, PrepareBoundWitnessesResult } from './prepareBoundWitnesses'
 
@@ -9,7 +9,7 @@ const _observeDuration = 10
 const _source_ip = '192.168.1.20'
 const _timestamp = 1655137984429
 const _user_agent = 'Mozilla/5.0 (X11; CrOS x86_64 8172.45.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.64 Safari/537.36'
-const _hash = new XyoPayloadWrapper({ schema: 'netowrk.xyo.test' }).hash
+const _hash = new XyoPayloadWrapper({ schema: 'network.xyo.test' }).hash
 
 const boundWitnessMeta: XyoBoundWitnessMeta = {
   _archive,
@@ -28,6 +28,16 @@ const payloadMeta = {
   _source_ip,
   _timestamp,
   _user_agent,
+}
+
+const getPayloads = (numPayloads: number): XyoPayload[] => {
+  return new Array(numPayloads).fill(0).map(() => new XyoPayloadBuilder({ schema: 'network.xyo.test' }).fields({ ...payloadMeta, uid: v4() }).build())
+}
+
+const getNewBlockWithBoundWitnessesWithPayloads = (numBoundWitnesses = 1, numPayloads = 1) => {
+  return new Array(numBoundWitnesses).fill(0).map(() => {
+    return new XyoBoundWitnessBuilder({ inlinePayloads: true }).payloads(getPayloads(numPayloads)).build()
+  })
 }
 
 const validateBeforeSanitization = (boundWitnesses: XyoBoundWitnessWithMeta[]) => {

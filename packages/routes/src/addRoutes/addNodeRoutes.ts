@@ -1,9 +1,7 @@
 import { allowAnonymous, archiveLocals, requireAccountOperationAccess } from '@xyo-network/archivist-middleware'
 import { Express } from 'express'
 
-import { getByHash } from '../../hash'
-import { postNode } from '../../post'
-import { getQuery } from '../../query'
+import { getByHash, getQuery, postNode } from '../routes'
 
 export const addNodeRoutes = (app: Express) => {
   app.get(

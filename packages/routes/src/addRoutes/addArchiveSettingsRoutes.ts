@@ -2,7 +2,7 @@ import { notImplemented } from '@xylabs/sdk-api-express-ecs'
 import { requireArchiveOwner } from '@xyo-network/archivist-middleware'
 import { Express } from 'express'
 
-import { getArchiveSettingsKeys, postArchiveSettingsKeys } from '../../archive'
+import { getArchiveSettingsKeys, postArchiveSettingsKeys } from '../routes'
 
 export const addArchiveSettingsRoutes = (app: Express) => {
   app.get(

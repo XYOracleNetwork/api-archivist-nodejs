@@ -2,7 +2,7 @@ import { notImplemented } from '@xylabs/sdk-api-express-ecs'
 import { allowAnonymous } from '@xyo-network/archivist-middleware'
 import { Express } from 'express'
 
-import { getSchema } from '../../schema'
+import { getSchema } from '../routes'
 
 export const addSchemaRoutes = (app: Express) => {
   app.get(
