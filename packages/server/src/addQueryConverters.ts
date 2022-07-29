@@ -52,6 +52,9 @@ export const addQueryHandlers = (registry: QueryConverterRegistry) => {
     getArchivePermissionsSchema,
     (payload: XyoQueryPayloadWithMeta<GetArchivePermissionsPayload>, _req: Request) => new GetArchivePermissionsQuery(payload)
   )
-  registry.registerConverterForSchema(getDomainConfigSchema, (payload: XyoQueryPayloadWithMeta<GetDomainConfigPayload>, _req: Request) => new GetDomainConfigQuery(payload))
+  registry.registerConverterForSchema(
+    getDomainConfigSchema,
+    (payload: XyoQueryPayloadWithMeta<GetDomainConfigPayload>, _req: Request) => new GetDomainConfigQuery(payload)
+  )
   registry.registerConverterForSchema(getSchemaSchema, (payload: XyoQueryPayloadWithMeta<GetSchemaPayload>, _req: Request) => new GetSchemaQuery(payload))
 }

@@ -9,7 +9,8 @@ export interface WriteArchivist<TWriteResponse, TWrite> {
   insert(item: TWrite): Promise<TWriteResponse>
 }
 
-export type ReadWriteArchivist<TWriteResponse, TWrite, TReadResponse = TWriteResponse, TId = string> = ReadArchivist<TReadResponse, TId> & WriteArchivist<TWriteResponse, TWrite>
+export type ReadWriteArchivist<TWriteResponse, TWrite, TReadResponse = TWriteResponse, TId = string> = ReadArchivist<TReadResponse, TId> &
+  WriteArchivist<TWriteResponse, TWrite>
 
 export type Archivist<TWriteResponse, TWrite, TReadResponse = TWriteResponse, TId = string, TQueryResponse = unknown, TQuery = unknown> = ReadWriteArchivist<
   TWriteResponse,

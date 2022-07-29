@@ -1,4 +1,11 @@
-import { claimArchive, getNewBlock, getNewBlockWithBoundWitnessesWithPayloads, getPayloadByBlockHash, getTokenForNewUser, postBlock } from '@xyo-network/archivist-test'
+import {
+  claimArchive,
+  getNewBlock,
+  getNewBlockWithBoundWitnessesWithPayloads,
+  getPayloadByBlockHash,
+  getTokenForNewUser,
+  postBlock,
+} from '@xyo-network/archivist-test'
 
 describe('/archive/:archive/block/hash/:hash/payloads', () => {
   let token = ''

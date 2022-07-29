@@ -1,7 +1,15 @@
 import { delay } from '@xylabs/sdk-js'
 import { dependencies } from '@xyo-network/archivist-dependencies'
 import { isProduction, QueryProcessorRegistry } from '@xyo-network/archivist-middleware'
-import { debugSchema, getArchivePermissionsSchema, getDomainConfigSchema, getSchemaSchema, Query, QueryHandler, setArchivePermissionsSchema } from '@xyo-network/archivist-model'
+import {
+  debugSchema,
+  getArchivePermissionsSchema,
+  getDomainConfigSchema,
+  getSchemaSchema,
+  Query,
+  QueryHandler,
+  setArchivePermissionsSchema,
+} from '@xyo-network/archivist-model'
 import {
   DebugQueryHandler,
   GetArchivePermissionsQueryHandler,
@@ -35,6 +43,8 @@ const addQueries = (registry: QueryProcessorRegistry) => {
   registry.registerProcessorForSchema(getArchivePermissionsSchema, (payload) =>
     dependencies.get<QueryHandler<Query<XyoPayload>>>(GetArchivePermissionsQueryHandler).handle(payload)
   )
-  registry.registerProcessorForSchema(getDomainConfigSchema, (payload) => dependencies.get<QueryHandler<Query<XyoPayload>>>(GetDomainConfigQueryHandler).handle(payload))
+  registry.registerProcessorForSchema(getDomainConfigSchema, (payload) =>
+    dependencies.get<QueryHandler<Query<XyoPayload>>>(GetDomainConfigQueryHandler).handle(payload)
+  )
   registry.registerProcessorForSchema(getSchemaSchema, (payload) => dependencies.get<QueryHandler<Query<XyoPayload>>>(GetSchemaQueryHandler).handle(payload))
 }
