@@ -1,7 +1,12 @@
 import 'reflect-metadata'
 
 import { AbstractMongoDBPayloadArchivist, getArchivistBoundWitnessesMongoSdk, getArchivistPayloadMongoSdk, removeId } from '@xyo-network/archivist-lib'
-import { SetArchivePermissionsPayload, SetArchivePermissionsPayloadWithMeta, SetArchivePermissionsSchema, setArchivePermissionsSchema } from '@xyo-network/archivist-model'
+import {
+  SetArchivePermissionsPayload,
+  SetArchivePermissionsPayloadWithMeta,
+  SetArchivePermissionsSchema,
+  setArchivePermissionsSchema,
+} from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoAccount, XyoBoundWitnessBuilder, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
@@ -35,7 +40,8 @@ export class MongoDBArchivePermissionsPayloadPayloadArchivist extends AbstractMo
       if (archive) {
         const payload = new XyoPayloadBuilder({ schema }).fields({ ...item, _timestamp }).build()
         const payloadResult = await getArchivistPayloadMongoSdk(archive).insert(payload)
-        if (!payloadResult.acknowledged || !payloadResult.insertedId) throw new Error('MongoDBArchivePermissionsPayloadPayloadArchivist: Error inserting Payload')
+        if (!payloadResult.acknowledged || !payloadResult.insertedId)
+          throw new Error('MongoDBArchivePermissionsPayloadPayloadArchivist: Error inserting Payload')
         const bw = new XyoBoundWitnessBuilder(this.config).witness(this.account).payload(payload).build()
         const bwResult = await getArchivistBoundWitnessesMongoSdk(archive).insert(bw)
         if (!bwResult.acknowledged || !bwResult.insertedId) throw new Error('MongoDBArchivePermissionsPayloadPayloadArchivist: Error inserting BoundWitness')

@@ -1,4 +1,11 @@
-import { XyoBoundWitnessBuilder, XyoBoundWitnessMeta, XyoBoundWitnessWithMeta, XyoPayload, XyoPayloadBuilder, XyoPayloadWrapper } from '@xyo-network/sdk-xyo-client-js'
+import {
+  XyoBoundWitnessBuilder,
+  XyoBoundWitnessMeta,
+  XyoBoundWitnessWithMeta,
+  XyoPayload,
+  XyoPayloadBuilder,
+  XyoPayloadWrapper,
+} from '@xyo-network/sdk-xyo-client-js'
 import { v4 } from 'uuid'
 
 import { prepareBoundWitnesses, PrepareBoundWitnessesResult } from './prepareBoundWitnesses'

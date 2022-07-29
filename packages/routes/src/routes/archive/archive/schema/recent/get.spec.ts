@@ -11,7 +11,10 @@ describe('/archive/:archive/schema/recent', () => {
     token = await getTokenForNewUser()
     archive = (await claimArchive(token)).archive
     for (let i = 0; i < schemaToAdd; i++) {
-      const bw = new XyoBoundWitnessBuilder<XyoBoundWitnessBase, XyoSchemaPayload>({ inlinePayloads: true }).payload({ definition, schema }).witness(XyoAccount.random()).build()
+      const bw = new XyoBoundWitnessBuilder<XyoBoundWitnessBase, XyoSchemaPayload>({ inlinePayloads: true })
+        .payload({ definition, schema })
+        .witness(XyoAccount.random())
+        .build()
       const response = await postBlock(bw, archive)
       expect(response).toBeTruthy()
     }

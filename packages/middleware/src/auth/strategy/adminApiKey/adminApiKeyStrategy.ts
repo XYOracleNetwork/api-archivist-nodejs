@@ -8,7 +8,11 @@ import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
 @injectable()
 export class AdminApiKeyStrategy extends Strategy {
-  constructor(@inject(TYPES.ApiKey) public readonly apiKey: string, @inject(TYPES.Logger) public readonly logger: Logger, public readonly apiKeyHeader = 'x-api-key') {
+  constructor(
+    @inject(TYPES.ApiKey) public readonly apiKey: string,
+    @inject(TYPES.Logger) public readonly logger: Logger,
+    public readonly apiKeyHeader = 'x-api-key'
+  ) {
     super()
   }
 

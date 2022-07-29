@@ -1,4 +1,12 @@
-import { claimArchive, getArchiveSchemaPayloadsRecent, getNewBlock, getPayloads, getSchemaName, getTokenForNewUser, postBlock } from '@xyo-network/archivist-test'
+import {
+  claimArchive,
+  getArchiveSchemaPayloadsRecent,
+  getNewBlock,
+  getPayloads,
+  getSchemaName,
+  getTokenForNewUser,
+  postBlock,
+} from '@xyo-network/archivist-test'
 
 describe('/archive/:archive/schema/:schema/recent', () => {
   const schema = getSchemaName()
