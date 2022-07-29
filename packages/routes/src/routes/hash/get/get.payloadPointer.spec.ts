@@ -11,11 +11,11 @@ import {
   setArchiveAccessControl,
   unitTestSigningAccount,
 } from '@xyo-network/archivist-test'
-import { XyoAccount, XyoBoundWitnessBuilder, XyoBoundWitnessWithPartialMeta, XyoPayload, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
+import { XyoAccount, XyoBoundWitnessWithPartialMeta, XyoPayload, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import { PayloadPointerBody, payloadPointerSchema } from './PayloadPointer'
-import { PayloadAddressRule, PayloadArchiveRule, PayloadSchemaRule, PayloadTimestampDirectionRule } from './PayloadRules'
+import { PayloadArchiveRule, PayloadSchemaRule, PayloadTimestampDirectionRule } from './PayloadRules'
 
 const getPayloadPointer = (archive: string, schema: string, timestamp = Date.now(), direction: SortDirection = 'desc', address?: string): XyoPayload => {
   const archiveRule: PayloadArchiveRule = { archive }
@@ -118,18 +118,5 @@ describe('/:hash', () => {
     expect(pointerResponse.length).toBe(1)
     pointerHash = pointerResponse[0].payload_hashes[0]
     await getHash(pointerHash, token, StatusCodes.NOT_FOUND)
-  })
-})
-describe.skip('Generation of automation payload pointers', () => {
-  const schemas = ['network.xyo.crypto.market.coingecko', 'network.xyo.crypto.market.uniswap']
-  it.each(schemas)('Generates automation witness payload for %s schema', (schema) => {
-    const addressRule: PayloadAddressRule = { address: '1d8cb128afeed493e0c3d9de7bfc415aecfde283' } // Beta
-    // const addressRule: PayloadAddressRule = { address: '4618fce2a84b9cbc64bb07f7249caa6df2a892c7' } // Prod
-    const archiveRule: PayloadArchiveRule = { archive: 'crypto-price-witness' }
-    const schemaRule: PayloadSchemaRule = { schema }
-    const fields: PayloadPointerBody = { reference: [[addressRule], [archiveRule], [schemaRule]], schema: payloadPointerSchema }
-    const payload = new XyoPayloadBuilder<PayloadPointerBody>({ schema: payloadPointerSchema }).fields(fields).build()
-    const bw = new XyoBoundWitnessBuilder({ inlinePayloads: true }).witness(XyoAccount.random()).payload(payload).build()
-    console.log(JSON.stringify(bw))
   })
 })
