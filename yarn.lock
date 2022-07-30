@@ -4244,6 +4244,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@xyo-network/account@npm:^2.22.23":
+  version: 2.22.23
+  resolution: "@xyo-network/account@npm:2.22.23"
+  dependencies:
+    "@xyo-network/core": ^2.22.23
+    elliptic: ^6.5.4
+    sha.js: ^2.4.11
+  checksum: 9a0089cca794bed1217554650edaf829817253e2e69937de8ddc419b37864d362d23bc429f490a3e870b2431dde729640fa3bb4eda0ba126fccf09823cc968d5
+  languageName: node
+  linkType: hard
+
 "@xyo-network/api@npm:^2.22.20":
   version: 2.22.20
   resolution: "@xyo-network/api@npm:2.22.20"
@@ -4262,9 +4273,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xyo-network/archivist-dependencies@workspace:^, @xyo-network/archivist-dependencies@workspace:packages/dependencies":
+"@xyo-network/archivist-dependencies@workspace:^, @xyo-network/archivist-dependencies@workspace:packages/express/dependencies":
   version: 0.0.0-use.local
-  resolution: "@xyo-network/archivist-dependencies@workspace:packages/dependencies"
+  resolution: "@xyo-network/archivist-dependencies@workspace:packages/express/dependencies"
   dependencies:
     "@xylabs/sdk-api-express-ecs": ^1.2.4
     "@xylabs/sdk-js": ^2.6.2
@@ -4291,12 +4302,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@xyo-network/archivist-lib@workspace:^, @xyo-network/archivist-lib@workspace:packages/lib":
+"@xyo-network/archivist-express-lib@workspace:^, @xyo-network/archivist-express-lib@workspace:packages/express/lib":
   version: 0.0.0-use.local
-  resolution: "@xyo-network/archivist-lib@workspace:packages/lib"
+  resolution: "@xyo-network/archivist-express-lib@workspace:packages/express/lib"
   dependencies:
     "@types/express": 4.17.13
-    "@types/passport": ^1.0.9
     "@types/source-map-support": 0.5.4
     "@xylabs/sdk-api-express-ecs": ^1.2.4
     "@xylabs/sdk-js": ^2.6.2
@@ -4313,6 +4323,32 @@ __metadata:
     license-checker: ^25.0.1
     mongodb: ^4.8.1
     nodemon: ^2.0.19
+    reflect-metadata: ^0.1.13
+    rimraf: ^3.0.2
+    source-map-support: ^0.5.21
+    typescript: ^4.7.4
+  languageName: unknown
+  linkType: soft
+
+"@xyo-network/archivist-lib@workspace:^, @xyo-network/archivist-lib@workspace:packages/core/lib":
+  version: 0.0.0-use.local
+  resolution: "@xyo-network/archivist-lib@workspace:packages/core/lib"
+  dependencies:
+    "@types/passport": ^1.0.9
+    "@types/source-map-support": 0.5.4
+    "@xylabs/sdk-js": ^2.6.2
+    "@xylabs/ts-scripts": ^2.5.6
+    "@xyo-network/account": ^2.22.20
+    "@xyo-network/archivist-model": "workspace:^"
+    "@xyo-network/sdk-xyo-client-js": ^2.22.20
+    "@xyo-network/sdk-xyo-mongo-js": ^2.2.9
+    ajv: ^8.11.0
+    eslint: ^8.20.0
+    inversify: ^6.0.1
+    jest: ^28.1.3
+    license-checker: ^25.0.1
+    mongodb: ^4.8.1
+    nodemon: ^2.0.19
     passport: ^0.6.0
     reflect-metadata: ^0.1.13
     rimraf: ^3.0.2
@@ -4322,9 +4358,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@xyo-network/archivist-middleware@workspace:^, @xyo-network/archivist-middleware@workspace:packages/middleware":
+"@xyo-network/archivist-middleware@workspace:^, @xyo-network/archivist-middleware@workspace:packages/express/middleware":
   version: 0.0.0-use.local
-  resolution: "@xyo-network/archivist-middleware@workspace:packages/middleware"
+  resolution: "@xyo-network/archivist-middleware@workspace:packages/express/middleware"
   dependencies:
     "@types/bcrypt": ^5.0.0
     "@types/express": 4.17.13
@@ -4370,9 +4406,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@xyo-network/archivist-model@workspace:^, @xyo-network/archivist-model@workspace:packages/model":
+"@xyo-network/archivist-model@workspace:^, @xyo-network/archivist-model@workspace:packages/core/model":
   version: 0.0.0-use.local
-  resolution: "@xyo-network/archivist-model@workspace:packages/model"
+  resolution: "@xyo-network/archivist-model@workspace:packages/core/model"
   dependencies:
     "@types/passport": ^1.0.9
     "@xylabs/sdk-js": ^2.6.2
@@ -4391,9 +4427,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@xyo-network/archivist-query-handlers@workspace:^, @xyo-network/archivist-query-handlers@workspace:packages/query-handlers":
+"@xyo-network/archivist-query-handlers@workspace:^, @xyo-network/archivist-query-handlers@workspace:packages/core/query-handlers":
   version: 0.0.0-use.local
-  resolution: "@xyo-network/archivist-query-handlers@workspace:packages/query-handlers"
+  resolution: "@xyo-network/archivist-query-handlers@workspace:packages/core/query-handlers"
   dependencies:
     "@xylabs/sdk-js": ^2.6.2
     "@xylabs/ts-scripts": ^2.5.6
@@ -4411,9 +4447,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@xyo-network/archivist-queue@workspace:^, @xyo-network/archivist-queue@workspace:packages/queue":
+"@xyo-network/archivist-queue@workspace:^, @xyo-network/archivist-queue@workspace:packages/core/queue":
   version: 0.0.0-use.local
-  resolution: "@xyo-network/archivist-queue@workspace:packages/queue"
+  resolution: "@xyo-network/archivist-queue@workspace:packages/core/queue"
   dependencies:
     "@xylabs/ts-scripts": ^2.5.6
     "@xyo-network/archivist-model": "workspace:^"
@@ -4427,9 +4463,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@xyo-network/archivist-routes@workspace:^, @xyo-network/archivist-routes@workspace:packages/routes":
+"@xyo-network/archivist-routes@workspace:^, @xyo-network/archivist-routes@workspace:packages/express/routes":
   version: 0.0.0-use.local
-  resolution: "@xyo-network/archivist-routes@workspace:packages/routes"
+  resolution: "@xyo-network/archivist-routes@workspace:packages/express/routes"
   dependencies:
     "@types/express": 4.17.13
     "@types/passport": ^1.0.9
@@ -4440,6 +4476,7 @@ __metadata:
     "@xylabs/ts-scripts": ^2.5.6
     "@xyo-network/account": ^2.22.20
     "@xyo-network/archivist-dependencies": "workspace:^"
+    "@xyo-network/archivist-express-lib": "workspace:^"
     "@xyo-network/archivist-lib": "workspace:^"
     "@xyo-network/archivist-middleware": "workspace:^"
     "@xyo-network/archivist-model": "workspace:^"
@@ -4462,9 +4499,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@xyo-network/archivist-server@workspace:^, @xyo-network/archivist-server@workspace:packages/server":
+"@xyo-network/archivist-server@workspace:^, @xyo-network/archivist-server@workspace:packages/express/server":
   version: 0.0.0-use.local
-  resolution: "@xyo-network/archivist-server@workspace:packages/server"
+  resolution: "@xyo-network/archivist-server@workspace:packages/express/server"
   dependencies:
     "@types/compression": ^1.7.2
     "@types/cors": ^2.8.12
@@ -4474,7 +4511,9 @@ __metadata:
     "@xylabs/sdk-api-express-ecs": ^1.2.4
     "@xylabs/sdk-js": ^2.6.2
     "@xylabs/ts-scripts": ^2.5.6
+    "@xyo-network/account": ^2.22.23
     "@xyo-network/archivist-dependencies": "workspace:^"
+    "@xyo-network/archivist-lib": "workspace:^"
     "@xyo-network/archivist-middleware": "workspace:^"
     "@xyo-network/archivist-model": "workspace:^"
     "@xyo-network/archivist-query-handlers": "workspace:^"
@@ -4486,6 +4525,7 @@ __metadata:
     cors: ^2.8.5
     eslint: ^8.20.0
     express: ^4.18.1
+    http-status-codes: ^2.2.0
     inversify: ^6.0.1
     jest: ^28.1.3
     license-checker: ^25.0.1
@@ -4493,14 +4533,15 @@ __metadata:
     passport: ^0.6.0
     reflect-metadata: ^0.1.13
     rimraf: ^3.0.2
+    source-map-support: ^0.5.21
     typescript: ^4.7.4
     uuid: ^8.3.2
   languageName: unknown
   linkType: soft
 
-"@xyo-network/archivist-test@workspace:^, @xyo-network/archivist-test@workspace:packages/test":
+"@xyo-network/archivist-test@workspace:^, @xyo-network/archivist-test@workspace:packages/core/test":
   version: 0.0.0-use.local
-  resolution: "@xyo-network/archivist-test@workspace:packages/test"
+  resolution: "@xyo-network/archivist-test@workspace:packages/core/test"
   dependencies:
     "@types/supertest": ^2.0.12
     "@types/uuid": ^8.3.4
@@ -4523,9 +4564,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@xyo-network/archivist-types@workspace:^, @xyo-network/archivist-types@workspace:packages/types":
+"@xyo-network/archivist-types@workspace:^, @xyo-network/archivist-types@workspace:packages/core/types":
   version: 0.0.0-use.local
-  resolution: "@xyo-network/archivist-types@workspace:packages/types"
+  resolution: "@xyo-network/archivist-types@workspace:packages/core/types"
   dependencies:
     "@xylabs/ts-scripts": ^2.5.6
     eslint: ^8.20.0
@@ -4610,6 +4651,21 @@ __metadata:
     lodash: ^4.17.21
     sha.js: ^2.4.11
   checksum: 190f5c0036ad745082e81329097165f934d03a33388be1ca6d92526bef16bdec3831e4dfad669c38ebcd427df6f3aa7382b818960c1967e17287c9fe7dafc47d
+  languageName: node
+  linkType: hard
+
+"@xyo-network/core@npm:^2.22.23":
+  version: 2.22.23
+  resolution: "@xyo-network/core@npm:2.22.23"
+  dependencies:
+    "@xylabs/buffer": ^2.6.2
+    "@xylabs/sdk-js": ^2.6.2
+    "@xyo-network/typeof": ^2.22.23
+    axios: ^0.27.2
+    keccak256: ^1.0.6
+    lodash: ^4.17.21
+    sha.js: ^2.4.11
+  checksum: a1ae1b3101854888e8769ffb18aec45140e4dd09ff86d353a2b66f7e48a68ab466703527986f82fb20254f2ff710fdc7657524596e0db6b7d19c70e0932c37cc
   languageName: node
   linkType: hard
 
@@ -4805,6 +4861,13 @@ __metadata:
   version: 2.22.20
   resolution: "@xyo-network/typeof@npm:2.22.20"
   checksum: f6163a22095345b169be03750f798440c48c1d7e283ae1320d448b7be20d71d0caebf2c28091c3aaf18decc9e5ff7a7c485098d43b72e5810334924c6526d656
+  languageName: node
+  linkType: hard
+
+"@xyo-network/typeof@npm:^2.22.23":
+  version: 2.22.23
+  resolution: "@xyo-network/typeof@npm:2.22.23"
+  checksum: 06f6e83533032379b6382a00144e62e532d06ad8bac812acacc490e3c464f8b53cb0c2b24c11d7eb5ae78cd5d1b22782a8e87a4d4f9d71b0d4a6236dae9351c1
   languageName: node
   linkType: hard
 

@@ -11,7 +11,7 @@
     "node": ">=16 <17"
   },
   "workspaces": [
-    "packages/*"
+    "packages/**/*"
   ],
   "esm5": "dist/esm/index.js",
   "exports": {
@@ -32,7 +32,7 @@
     "deploy3": "echo Deploy3 not allowed!",
     "start": "nodemon",
     "launch": "node --max-old-space-size=8192 --experimental-specifier-resolution=node ./dist/cjs/index.js",
-    "clean": "echo Cleaning... && yarn workspaces foreach -pv run clean:package",
+    "clean": "echo Cleaning... && yarn workspaces foreach -p run clean:package",
     "deps": "yarn workspaces foreach -pv run deps:package",
     "lint": "echo Linting... && yarn eslint .",
     "cycle": "echo Checking cycles... && yarn workspaces foreach -pv run cycle:package",
@@ -41,9 +41,9 @@
     "clean:package": "yarn rimraf -q $INIT_CWD/dist && yarn rimraf -q $INIT_CWD/build",
     "cycle:package": "yarn eslint --rule \"import/no-cycle:[1, { maxDepth: 10 }]\" $INIT_CWD/src",
     "deps:package": "depcheck $INIT_CWD",
-    "build": "echo Building... && yarn build:esm && yarn build:cjs",
-    "build:cjs": "echo Building CJS... && yarn workspaces foreach -ptRv run build:package:cjs",
-    "build:esm": "echo Building ESM... && yarn workspaces foreach -ptRv run build:package:esm",
+    "build": "echo Building... && yarn clean && yarn build:esm && yarn build:cjs && yarn lint",
+    "build:cjs": "echo Building CJS... && yarn workspaces foreach -ptR run build:package:cjs",
+    "build:esm": "echo Building ESM... && yarn workspaces foreach -ptR run build:package:esm",
     "build:package:cjs": "tsc -p $INIT_CWD/tsconfig.build.cjs.json",
     "build:package:esm": "tsc -p $INIT_CWD/tsconfig.build.esm.json",
     "license": "yarn license-checker --exclude \"MIT, ISC, Apache-2.0, BSD, BSD-2-Clause, CC-BY-4.0, Unlicense, CC-BY-3.0, CC0-1.0\"",
