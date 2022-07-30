@@ -4096,9 +4096,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xylabs/eslint-config@npm:^2.5.6":
-  version: 2.5.6
-  resolution: "@xylabs/eslint-config@npm:2.5.6"
+"@xylabs/eslint-config@npm:^2.5.11":
+  version: 2.5.11
+  resolution: "@xylabs/eslint-config@npm:2.5.11"
   dependencies:
     "@babel/core": ^7.18.9
     "@babel/eslint-parser": ^7.18.9
@@ -4121,7 +4121,7 @@ __metadata:
     remark-lint-maximum-line-length: ^3.1.2
     remark-preset-lint-markdown-style-guide: ^5.1.2
     typescript: ^4.7.4
-  checksum: d42c4b7d7b2229604f2c3ce390a5aeb5398932c316fa56cd9dfe918b499a62b307686c93afb56c8a42c47b33792ad5713bba3e30c3c095441ef68437c3c28801
+  checksum: beccff0847254d1c4423444426e0ac19aef5bee4e9ab0850f044cf50b0dc8d5367d0f36f3a56a0186e7532868cfbf210c4de4267bb80ed4bcbc880ae7c868d20
   languageName: node
   linkType: hard
 
@@ -4153,13 +4153,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xylabs/ts-scripts@npm:^2.5.6":
-  version: 2.5.6
-  resolution: "@xylabs/ts-scripts@npm:2.5.6"
+"@xylabs/ts-scripts@npm:^2.5.11":
+  version: 2.5.11
+  resolution: "@xylabs/ts-scripts@npm:2.5.11"
   dependencies:
     "@types/jest": ^28.1.6
-    "@xylabs/eslint-config": ^2.5.6
-    chalk: ^5.0.1
+    "@xylabs/eslint-config": ^2.5.11
+    chalk: 4.1.2
     copyfiles: ^2.4.1
     depcheck: ^1.4.3
     eslint: ^8.20.0
@@ -4167,16 +4167,15 @@ __metadata:
     jest: ^28.1.3
     jest-sorted: ^1.0.14
     node-cmd: ^5.0.0
-    npm-check-updates: ^16.0.1
+    npm-check-updates: ^16.0.3
     npm-package-json-lint: ^6.3.0
     npm-package-json-lint-config-default: ^5.0.0
     parse-git-config: ^3.0.0
+    prettier: ^2.7.1
     rimraf: ^3.0.2
     ts-jest: ^28.0.7
     ts-prune: ^0.10.3
     typescript: ^4.7.4
-  peerDependencies:
-    typescript: ^4
   bin:
     build: dist/cjs/build.js
     clean: dist/cjs/clean.js
@@ -4220,27 +4219,16 @@ __metadata:
     xylabs-up3: dist/cjs/up3.js
     xylabs-updo: dist/cjs/updo.js
     xylabs-updo3: dist/cjs/updo3.js
-  checksum: 5eb5a94a6643d7a74ecdbf1c66afc42a1cd055c6ce9d800fd93e5f0a91f8ce91e92483393c45882edfdbf514b1fadb7c96d446ae5cb5f9786dc8d548ae3aea5c
+  checksum: 5568b681c1e49509c79bc404ac274ce17c120b6f7e7d6923d531ea47f03b2234b495f45af45d42590dd5c19248dfb13c6cf477b9f879d9ace746ef2c6323ca70
   languageName: node
   linkType: hard
 
-"@xylabs/tsconfig@npm:^2.5.6":
-  version: 2.5.6
-  resolution: "@xylabs/tsconfig@npm:2.5.6"
+"@xylabs/tsconfig@npm:^2.5.11":
+  version: 2.5.11
+  resolution: "@xylabs/tsconfig@npm:2.5.11"
   dependencies:
     typescript: ^4.7.4
-  checksum: 8bad4bf96a2c89aecb60b55e3a2b85c4e588c93ea64b4e9686bfc053cf715d708d33aae1ed67eb0803b41926e8ac1758b3ebc4da841e603f7a9a33b55118b869
-  languageName: node
-  linkType: hard
-
-"@xyo-network/account@npm:^2.22.20":
-  version: 2.22.20
-  resolution: "@xyo-network/account@npm:2.22.20"
-  dependencies:
-    "@xyo-network/core": ^2.22.20
-    elliptic: ^6.5.4
-    sha.js: ^2.4.11
-  checksum: 2daff15e182f8bf9799c4dd2b5dfc2b339a27a7cfca257dc39ceeadc61d7a1d1111daf7a07456e9ef33ff12e4bf7ce952330bb13d313b850b5b8bf8d3354cd9f
+  checksum: c542e058f074a233d9321ca57f73d19747ac3977ec6ee415d076a3ed66d894891b679a9d1b05728086ad830b489ee10f8216b3f76a65b4361559de23a5d2427e
   languageName: node
   linkType: hard
 
@@ -4255,21 +4243,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xyo-network/api@npm:^2.22.20":
-  version: 2.22.20
-  resolution: "@xyo-network/api@npm:2.22.20"
+"@xyo-network/api@npm:^2.22.23":
+  version: 2.22.23
+  resolution: "@xyo-network/api@npm:2.22.23"
   dependencies:
     "@xylabs/sdk-js": ^2.6.2
-    "@xyo-network/account": ^2.22.20
-    "@xyo-network/archivist": ^2.22.20
-    "@xyo-network/boundwitness": ^2.22.20
-    "@xyo-network/core": ^2.22.20
-    "@xyo-network/payload": ^2.22.20
-    "@xyo-network/typeof": ^2.22.20
+    "@xyo-network/account": ^2.22.23
+    "@xyo-network/archivist": ^2.22.23
+    "@xyo-network/boundwitness": ^2.22.23
+    "@xyo-network/core": ^2.22.23
+    "@xyo-network/payload": ^2.22.23
+    "@xyo-network/typeof": ^2.22.23
     axios: ^0.27.2
     pako: ^2.0.4
     uuid: ^8.3.2
-  checksum: eb210705ef79d2236a15d5173ed678361f8f10340a72eeb582e6e5ed8bcecfeee90e2cc26357923664a0ac632b1f47fd8b3e24410168671d1afaf4aa47c33b14
+  checksum: ee51e2b68894e5438ca9b133742367424155e0e9239ef4d5219d55be4e19a94c32aad2a6bd38f4b5f6b1e58d30795212b2accb73b3199479cc6c08156de4cf85
   languageName: node
   linkType: hard
 
@@ -4279,15 +4267,15 @@ __metadata:
   dependencies:
     "@xylabs/sdk-api-express-ecs": ^1.2.4
     "@xylabs/sdk-js": ^2.6.2
-    "@xylabs/ts-scripts": ^2.5.6
-    "@xyo-network/account": ^2.22.20
+    "@xylabs/ts-scripts": ^2.5.11
+    "@xyo-network/account": ^2.22.23
     "@xyo-network/archivist-lib": "workspace:^"
     "@xyo-network/archivist-middleware": "workspace:^"
     "@xyo-network/archivist-model": "workspace:^"
     "@xyo-network/archivist-query-handlers": "workspace:^"
     "@xyo-network/archivist-queue": "workspace:^"
     "@xyo-network/archivist-types": "workspace:^"
-    "@xyo-network/sdk-xyo-client-js": ^2.22.20
+    "@xyo-network/sdk-xyo-client-js": ^2.22.23
     "@xyo-network/sdk-xyo-mongo-js": ^2.2.9
     dotenv: ^16.0.1
     eslint: ^8.20.0
@@ -4310,10 +4298,10 @@ __metadata:
     "@types/source-map-support": 0.5.4
     "@xylabs/sdk-api-express-ecs": ^1.2.4
     "@xylabs/sdk-js": ^2.6.2
-    "@xylabs/ts-scripts": ^2.5.6
-    "@xyo-network/account": ^2.22.20
+    "@xylabs/ts-scripts": ^2.5.11
+    "@xyo-network/account": ^2.22.23
     "@xyo-network/archivist-model": "workspace:^"
-    "@xyo-network/sdk-xyo-client-js": ^2.22.20
+    "@xyo-network/sdk-xyo-client-js": ^2.22.23
     "@xyo-network/sdk-xyo-mongo-js": ^2.2.9
     ajv: ^8.11.0
     eslint: ^8.20.0
@@ -4337,10 +4325,10 @@ __metadata:
     "@types/passport": ^1.0.9
     "@types/source-map-support": 0.5.4
     "@xylabs/sdk-js": ^2.6.2
-    "@xylabs/ts-scripts": ^2.5.6
-    "@xyo-network/account": ^2.22.20
+    "@xylabs/ts-scripts": ^2.5.11
+    "@xyo-network/account": ^2.22.23
     "@xyo-network/archivist-model": "workspace:^"
-    "@xyo-network/sdk-xyo-client-js": ^2.22.20
+    "@xyo-network/sdk-xyo-client-js": ^2.22.23
     "@xyo-network/sdk-xyo-mongo-js": ^2.2.9
     ajv: ^8.11.0
     eslint: ^8.20.0
@@ -4374,11 +4362,11 @@ __metadata:
     "@types/uuid": ^8.3.4
     "@xylabs/sdk-api-express-ecs": ^1.2.4
     "@xylabs/sdk-js": ^2.6.2
-    "@xylabs/ts-scripts": ^2.5.6
+    "@xylabs/ts-scripts": ^2.5.11
     "@xyo-network/archivist-lib": "workspace:^"
     "@xyo-network/archivist-model": "workspace:^"
     "@xyo-network/archivist-types": "workspace:^"
-    "@xyo-network/sdk-xyo-client-js": ^2.22.20
+    "@xyo-network/sdk-xyo-client-js": ^2.22.23
     "@xyo-network/sdk-xyo-mongo-js": ^2.2.9
     bcrypt: ^5.0.1
     eslint: ^8.20.0
@@ -4412,8 +4400,8 @@ __metadata:
   dependencies:
     "@types/passport": ^1.0.9
     "@xylabs/sdk-js": ^2.6.2
-    "@xylabs/ts-scripts": ^2.5.6
-    "@xyo-network/sdk-xyo-client-js": ^2.22.20
+    "@xylabs/ts-scripts": ^2.5.11
+    "@xyo-network/sdk-xyo-client-js": ^2.22.23
     ajv: ^8.11.0
     eslint: ^8.20.0
     inversify: ^6.0.1
@@ -4432,10 +4420,10 @@ __metadata:
   resolution: "@xyo-network/archivist-query-handlers@workspace:packages/core/query-handlers"
   dependencies:
     "@xylabs/sdk-js": ^2.6.2
-    "@xylabs/ts-scripts": ^2.5.6
+    "@xylabs/ts-scripts": ^2.5.11
     "@xyo-network/archivist-model": "workspace:^"
     "@xyo-network/archivist-types": "workspace:^"
-    "@xyo-network/sdk-xyo-client-js": ^2.22.20
+    "@xyo-network/sdk-xyo-client-js": ^2.22.23
     eslint: ^8.20.0
     inversify: ^6.0.1
     jest: ^28.1.3
@@ -4451,9 +4439,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@xyo-network/archivist-queue@workspace:packages/core/queue"
   dependencies:
-    "@xylabs/ts-scripts": ^2.5.6
+    "@xylabs/ts-scripts": ^2.5.11
     "@xyo-network/archivist-model": "workspace:^"
-    "@xyo-network/sdk-xyo-client-js": ^2.22.20
+    "@xyo-network/sdk-xyo-client-js": ^2.22.23
     eslint: ^8.20.0
     jest: ^28.1.3
     license-checker: ^25.0.1
@@ -4473,8 +4461,8 @@ __metadata:
     "@types/uuid": ^8.3.4
     "@xylabs/sdk-api-express-ecs": ^1.2.4
     "@xylabs/sdk-js": ^2.6.2
-    "@xylabs/ts-scripts": ^2.5.6
-    "@xyo-network/account": ^2.22.20
+    "@xylabs/ts-scripts": ^2.5.11
+    "@xyo-network/account": ^2.22.23
     "@xyo-network/archivist-dependencies": "workspace:^"
     "@xyo-network/archivist-express-lib": "workspace:^"
     "@xyo-network/archivist-lib": "workspace:^"
@@ -4482,7 +4470,7 @@ __metadata:
     "@xyo-network/archivist-model": "workspace:^"
     "@xyo-network/archivist-queue": "workspace:^"
     "@xyo-network/archivist-types": "workspace:^"
-    "@xyo-network/sdk-xyo-client-js": ^2.22.20
+    "@xyo-network/sdk-xyo-client-js": ^2.22.23
     "@xyo-network/sdk-xyo-mongo-js": ^2.2.9
     eslint: ^8.20.0
     express: ^4.18.1
@@ -4510,7 +4498,7 @@ __metadata:
     "@types/uuid": ^8.3.4
     "@xylabs/sdk-api-express-ecs": ^1.2.4
     "@xylabs/sdk-js": ^2.6.2
-    "@xylabs/ts-scripts": ^2.5.6
+    "@xylabs/ts-scripts": ^2.5.11
     "@xyo-network/account": ^2.22.23
     "@xyo-network/archivist-dependencies": "workspace:^"
     "@xyo-network/archivist-lib": "workspace:^"
@@ -4520,7 +4508,7 @@ __metadata:
     "@xyo-network/archivist-queue": "workspace:^"
     "@xyo-network/archivist-routes": "workspace:^"
     "@xyo-network/archivist-types": "workspace:^"
-    "@xyo-network/sdk-xyo-client-js": ^2.22.20
+    "@xyo-network/sdk-xyo-client-js": ^2.22.23
     compression: ^1.7.4
     cors: ^2.8.5
     eslint: ^8.20.0
@@ -4546,10 +4534,10 @@ __metadata:
     "@types/supertest": ^2.0.12
     "@types/uuid": ^8.3.4
     "@xylabs/sdk-js": ^2.6.2
-    "@xylabs/ts-scripts": ^2.5.6
+    "@xylabs/ts-scripts": ^2.5.11
     "@xyo-network/archivist-model": "workspace:^"
     "@xyo-network/archivist-server": "workspace:^"
-    "@xyo-network/sdk-xyo-client-js": ^2.22.20
+    "@xyo-network/sdk-xyo-client-js": ^2.22.23
     dotenv: ^16.0.1
     eslint: ^8.20.0
     ethers: ^5.6.9
@@ -4568,7 +4556,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@xyo-network/archivist-types@workspace:packages/core/types"
   dependencies:
-    "@xylabs/ts-scripts": ^2.5.6
+    "@xylabs/ts-scripts": ^2.5.11
     eslint: ^8.20.0
     jest: ^28.1.3
     license-checker: ^25.0.1
@@ -4578,16 +4566,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@xyo-network/archivist@npm:^2.22.20":
-  version: 2.22.20
-  resolution: "@xyo-network/archivist@npm:2.22.20"
+"@xyo-network/archivist@npm:^2.22.23":
+  version: 2.22.23
+  resolution: "@xyo-network/archivist@npm:2.22.23"
   dependencies:
     "@xylabs/sdk-js": ^2.6.2
-    "@xyo-network/account": ^2.22.20
-    "@xyo-network/boundwitness": ^2.22.20
-    "@xyo-network/payload": ^2.22.20
+    "@xyo-network/account": ^2.22.23
+    "@xyo-network/boundwitness": ^2.22.23
+    "@xyo-network/payload": ^2.22.23
     lru-cache: ^7.13.1
-  checksum: ed98e0c9c995144bad12a2a0acbad00a5f255bfebd934b6cb761c3f9504465ff8a50b81ccf7862d5c9817a31b72258e5d17cbc5f92d4e2bb5d107b71d3700f6f
+  checksum: 2a128c080a633000e0d9a95fbd366dc5110b02c8afc26eef233f585ad1b6f27ea9d20cd6ec5c5a3d6e9c591512952b42add84f067e0d1d9504bf7f0c16b94055
   languageName: node
   linkType: hard
 
@@ -4600,13 +4588,13 @@ __metadata:
     "@types/jest": ^28.1.6
     "@types/node": ^18.6.2
     "@types/source-map-support": 0.5.4
-    "@xylabs/eslint-config": ^2.5.6
+    "@xylabs/eslint-config": ^2.5.11
     "@xylabs/sdk-api-express-ecs": ^1.2.4
-    "@xylabs/ts-scripts": ^2.5.6
-    "@xylabs/tsconfig": ^2.5.6
+    "@xylabs/ts-scripts": ^2.5.11
+    "@xylabs/tsconfig": ^2.5.11
     "@xyo-network/archivist-server": "workspace:^"
     "@xyo-network/archivist-test": "workspace:^"
-    "@xyo-network/sdk-xyo-client-js": 2.22.20
+    "@xyo-network/sdk-xyo-client-js": ^2.22.23
     babel-jest: ^28.1.3
     depcheck: ^1.4.3
     dotenv: ^16.0.1
@@ -4623,34 +4611,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@xyo-network/boundwitness@npm:^2.22.20":
-  version: 2.22.20
-  resolution: "@xyo-network/boundwitness@npm:2.22.20"
+"@xyo-network/boundwitness@npm:^2.22.23":
+  version: 2.22.23
+  resolution: "@xyo-network/boundwitness@npm:2.22.23"
   dependencies:
     "@xylabs/buffer": ^2.6.2
     "@xylabs/sdk-js": ^2.6.2
-    "@xyo-network/account": ^2.22.20
-    "@xyo-network/core": ^2.22.20
-    "@xyo-network/payload": ^2.22.20
-    "@xyo-network/typeof": ^2.22.20
+    "@xyo-network/account": ^2.22.23
+    "@xyo-network/core": ^2.22.23
+    "@xyo-network/payload": ^2.22.23
+    "@xyo-network/typeof": ^2.22.23
     lodash: ^4.17.21
     ua-parser-js: ^1.0.2
-  checksum: 916dce10633765e47807cf79cac02890d2884275d8c61d06bf5d2c4a21371f68b5c839fd1db9dbd33c1d16468c6237e5fe3348db941da3b37668a24992496c84
-  languageName: node
-  linkType: hard
-
-"@xyo-network/core@npm:^2.22.20":
-  version: 2.22.20
-  resolution: "@xyo-network/core@npm:2.22.20"
-  dependencies:
-    "@xylabs/buffer": ^2.6.2
-    "@xylabs/sdk-js": ^2.6.2
-    "@xyo-network/typeof": ^2.22.20
-    axios: ^0.27.2
-    keccak256: ^1.0.6
-    lodash: ^4.17.21
-    sha.js: ^2.4.11
-  checksum: 190f5c0036ad745082e81329097165f934d03a33388be1ca6d92526bef16bdec3831e4dfad669c38ebcd427df6f3aa7382b818960c1967e17287c9fe7dafc47d
+  checksum: ba66e58d8e2fb426ad8e186c676c0259194ccc66a37984568952fae10ffa2a32018b6b67f6463a2eaa69bc67f85832f4ce443c2b263c3e8fac5c77f416611574
   languageName: node
   linkType: hard
 
@@ -4669,9 +4642,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xyo-network/cryptomarket-witness@npm:^2.22.20":
-  version: 2.22.20
-  resolution: "@xyo-network/cryptomarket-witness@npm:2.22.20"
+"@xyo-network/cryptomarket-witness@npm:^2.22.23":
+  version: 2.22.23
+  resolution: "@xyo-network/cryptomarket-witness@npm:2.22.23"
   dependencies:
     "@ethersproject/address": ^5.6.1
     "@ethersproject/bignumber": ^5.6.2
@@ -4683,127 +4656,128 @@ __metadata:
     "@uniswap/sdk-core": ^3.0.1
     "@uniswap/v3-sdk": ^3.9.0
     "@xylabs/sdk-js": ^2.6.2
-    "@xyo-network/payload": ^2.22.20
+    "@xyo-network/payload": ^2.22.23
     "@xyo-network/sdk-xyo-typechain": ^1.0.4
-    "@xyo-network/witness": ^2.22.20
+    "@xyo-network/witness": ^2.22.23
     axios: ^0.27.2
-  checksum: f19f40b9fca99b21d113e5b57d0e2da49e998b46a0d90be17294fbff8de3b4393a153f5b17fdac4c56c73ac1617a2be42d8a3ca4dc340c574bab7ffd4e757d5e
+  checksum: 5e818a530fdb104106d4b933496afc7f5223beaf6059ea68a859da4d562dd3aa535bce7b005c94d0c229f6895e21fd2980a27446791868bb09394b85e10be910
   languageName: node
   linkType: hard
 
-"@xyo-network/domain@npm:^2.22.20":
-  version: 2.22.20
-  resolution: "@xyo-network/domain@npm:2.22.20"
+"@xyo-network/domain@npm:^2.22.23":
+  version: 2.22.23
+  resolution: "@xyo-network/domain@npm:2.22.23"
   dependencies:
-    "@xyo-network/api": ^2.22.20
-    "@xyo-network/core": ^2.22.20
-    "@xyo-network/network": ^2.22.20
-    "@xyo-network/payload": ^2.22.20
-    "@xyo-network/witness": ^2.22.20
+    "@xyo-network/api": ^2.22.23
+    "@xyo-network/core": ^2.22.23
+    "@xyo-network/network": ^2.22.23
+    "@xyo-network/payload": ^2.22.23
+    "@xyo-network/witness": ^2.22.23
     axios: ^0.27.2
     lodash: ^4.17.21
-  checksum: 7ee0166b5dad3aed541766883e670cdec7ef73cc88322fca02650e26dc23aab5d70054f7d73fa91d56095feb7b280d899c37c80592294ce74ab42e56a3e93455
+  checksum: e191b717640f6ddba99e7e71a328eff4205ed1d7e9e7f6edd26b6b02ea2f85e9b0290d650d9160a8a26e6bcdd9f517a46ee66149a2161a50b7278932c4dbe20c
   languageName: node
   linkType: hard
 
-"@xyo-network/ethereum-witness@npm:^2.22.20":
-  version: 2.22.20
-  resolution: "@xyo-network/ethereum-witness@npm:2.22.20"
+"@xyo-network/ethereum-witness@npm:^2.22.23":
+  version: 2.22.23
+  resolution: "@xyo-network/ethereum-witness@npm:2.22.23"
   dependencies:
     "@ethersproject/providers": ^5.6.8
     "@xylabs/sdk-js": ^2.6.2
-    "@xyo-network/payload": ^2.22.20
-    "@xyo-network/witness": ^2.22.20
+    "@xyo-network/payload": ^2.22.23
+    "@xyo-network/witness": ^2.22.23
     axios: ^0.27.2
-  checksum: 7f5487e2f181613cbb25d9bd3bbc4c652818ef13b39ab87256dee52ceac70f46f0bdffa960813e75d2eca4930d9b1918b30d7975795dbb7c0a4ddb5d527481f2
+  checksum: d542b8a8904084fab8351e55e8e7aa5211dff8581f17c63602fe44bd4117fd728b67de266323268091e0d4d2386e258aa68b4487930b1811c5aa56ec67f8f404
   languageName: node
   linkType: hard
 
-"@xyo-network/network@npm:^2.22.20":
-  version: 2.22.20
-  resolution: "@xyo-network/network@npm:2.22.20"
+"@xyo-network/network@npm:^2.22.23":
+  version: 2.22.23
+  resolution: "@xyo-network/network@npm:2.22.23"
   dependencies:
     "@xylabs/sdk-js": ^2.6.2
-    "@xyo-network/payload": ^2.22.20
-  checksum: ddd6a36d84ca594506085c5b97f9300e95b4f83a840d460dd4d4c61bc212b2d4b5b6ce5d535ec3c41d907287c02ac03c99dcbcb4195382b1081381864ea73896
+    "@xyo-network/payload": ^2.22.23
+  checksum: 346320ccb7c7de6ac2df919a876e3e1c68e8c5f4e2db2f689035ed5b811b7cf73b8d24154289b8438c49a26790836c11f651b46d73b7e1ec6e3dd9b71d4e0f6e
   languageName: node
   linkType: hard
 
-"@xyo-network/panel@npm:^2.22.20":
-  version: 2.22.20
-  resolution: "@xyo-network/panel@npm:2.22.20"
+"@xyo-network/panel@npm:^2.22.23":
+  version: 2.22.23
+  resolution: "@xyo-network/panel@npm:2.22.23"
   dependencies:
     "@xylabs/sdk-js": ^2.6.2
-    "@xyo-network/account": ^2.22.20
-    "@xyo-network/api": ^2.22.20
-    "@xyo-network/boundwitness": ^2.22.20
-    "@xyo-network/payload": ^2.22.20
-    "@xyo-network/systeminfo-witness": ^2.22.20
-    "@xyo-network/witness": ^2.22.20
-  checksum: 205b895652111a9fb66da7f868a10cb76f89ea6f39d5572fcbfdc93cfac1f60b4fabc013a0016ea777ddce5813cef3dfe2727962690e7103f274aff5d896f74d
+    "@xyo-network/account": ^2.22.23
+    "@xyo-network/api": ^2.22.23
+    "@xyo-network/boundwitness": ^2.22.23
+    "@xyo-network/payload": ^2.22.23
+    "@xyo-network/systeminfo-witness": ^2.22.23
+    "@xyo-network/witness": ^2.22.23
+  checksum: 2b574bbe3bdba08ad513dde568040f2e38b881f7bbc7b5025819a468f663f780749f5309b423c48afdd304f558b7dd8c0dc87d1af7539ff4d3f328ad2e51480c
   languageName: node
   linkType: hard
 
-"@xyo-network/payload-plugin@npm:^2.22.20":
-  version: 2.22.20
-  resolution: "@xyo-network/payload-plugin@npm:2.22.20"
+"@xyo-network/payload-plugin@npm:^2.22.23":
+  version: 2.22.23
+  resolution: "@xyo-network/payload-plugin@npm:2.22.23"
   dependencies:
     "@xylabs/sdk-js": ^2.6.2
-    "@xyo-network/core": ^2.22.20
-    "@xyo-network/payload": ^2.22.20
-    "@xyo-network/witness": ^2.22.20
+    "@xyo-network/core": ^2.22.23
+    "@xyo-network/payload": ^2.22.23
+    "@xyo-network/witness": ^2.22.23
     tslib: ^2.4.0
-  checksum: df99ce528a864035b0d7a54b85e875033e329507a616df00115a92af60fbb841df634d67f3ea5a89a27a52d085f7a6355a6fecdb3c6ba8829bcc44468399605d
+  checksum: a4e7f16d1fa48420d93dcdd0df7e2f958184e0b608a6640929a9c213123cbbfee1f7cb841a35dc6e0f150d82eb5706a27c35354ec82feace486717ea4cc1d9aa
   languageName: node
   linkType: hard
 
-"@xyo-network/payload@npm:^2.22.20":
-  version: 2.22.20
-  resolution: "@xyo-network/payload@npm:2.22.20"
+"@xyo-network/payload@npm:^2.22.23":
+  version: 2.22.23
+  resolution: "@xyo-network/payload@npm:2.22.23"
   dependencies:
     "@xylabs/sdk-js": ^2.6.2
-    "@xyo-network/account": ^2.22.20
-    "@xyo-network/core": ^2.22.20
+    "@xyo-network/account": ^2.22.23
+    "@xyo-network/core": ^2.22.23
     axios: ^0.27.2
-  checksum: 42b212380b4e2344860e106cb639e03c486e0132045f6761385330bbfc912c603f17a22639b2e80c7eef1b439c34139dc90732b2f4691121c11660b862443622
+  checksum: ffa06b42c765ce929d03f8b28563766ff960a6607fa63160f6a0adae0154ba994ef454f5a6c49c60abc3ab9bf0e14368f29c1366617dc5ac9ca5c9cf831cc936
   languageName: node
   linkType: hard
 
-"@xyo-network/schema-witness@npm:^2.22.20":
-  version: 2.22.20
-  resolution: "@xyo-network/schema-witness@npm:2.22.20"
+"@xyo-network/schema-witness@npm:^2.22.23":
+  version: 2.22.23
+  resolution: "@xyo-network/schema-witness@npm:2.22.23"
   dependencies:
-    "@xyo-network/payload": ^2.22.20
-    "@xyo-network/witness": ^2.22.20
+    "@xyo-network/payload": ^2.22.23
+    "@xyo-network/witness": ^2.22.23
     lodash: ^4.17.21
-  checksum: dab9f08b1ab6a2916fd23533ba02db16921e8ec23638375c15bbced2d549d7bab36f27e9a266be4802465626dde2b4b73b98b4eb0948367934c57b3d6656a361
+  checksum: 949f5343b932c5b59bc340ed8a2f02ea498b5aac860af36689d40e3d60f93ea2848fb4e3c2ef03dc59c15265b58df5912880ae2ab01629b5ec44d6f3d37fc1b5
   languageName: node
   linkType: hard
 
-"@xyo-network/sdk-xyo-client-js@npm:2.22.20, @xyo-network/sdk-xyo-client-js@npm:^2.22.20":
-  version: 2.22.20
-  resolution: "@xyo-network/sdk-xyo-client-js@npm:2.22.20"
+"@xyo-network/sdk-xyo-client-js@npm:^2.22.23":
+  version: 2.22.23
+  resolution: "@xyo-network/sdk-xyo-client-js@npm:2.22.23"
   dependencies:
-    "@xyo-network/account": ^2.22.20
-    "@xyo-network/api": ^2.22.20
-    "@xyo-network/archivist": ^2.22.20
-    "@xyo-network/boundwitness": ^2.22.20
-    "@xyo-network/core": ^2.22.20
-    "@xyo-network/cryptomarket-witness": ^2.22.20
-    "@xyo-network/domain": ^2.22.20
-    "@xyo-network/ethereum-witness": ^2.22.20
-    "@xyo-network/network": ^2.22.20
-    "@xyo-network/panel": ^2.22.20
-    "@xyo-network/payload": ^2.22.20
-    "@xyo-network/payload-plugin": ^2.22.20
-    "@xyo-network/schema-witness": ^2.22.20
-    "@xyo-network/storage": ^2.22.20
-    "@xyo-network/systeminfo-witness": ^2.22.20
-    "@xyo-network/typeof": ^2.22.20
-    "@xyo-network/utils": ^2.22.20
-    "@xyo-network/wallet": ^2.22.20
-    "@xyo-network/witnesses": ^2.22.20
-  checksum: 9f0ebaf9843949b31b7e61545b1cbb8f6e733989360e016f645c4a4325a51382261bbee16e6d792a0059c5963b18d4458e5b12ab360da3272118f33ed51cd9a5
+    "@xyo-network/account": ^2.22.23
+    "@xyo-network/api": ^2.22.23
+    "@xyo-network/archivist": ^2.22.23
+    "@xyo-network/boundwitness": ^2.22.23
+    "@xyo-network/core": ^2.22.23
+    "@xyo-network/cryptomarket-witness": ^2.22.23
+    "@xyo-network/domain": ^2.22.23
+    "@xyo-network/ethereum-witness": ^2.22.23
+    "@xyo-network/network": ^2.22.23
+    "@xyo-network/panel": ^2.22.23
+    "@xyo-network/payload": ^2.22.23
+    "@xyo-network/payload-plugin": ^2.22.23
+    "@xyo-network/schema-witness": ^2.22.23
+    "@xyo-network/storage": ^2.22.23
+    "@xyo-network/systeminfo-witness": ^2.22.23
+    "@xyo-network/typeof": ^2.22.23
+    "@xyo-network/utils": ^2.22.23
+    "@xyo-network/wallet": ^2.22.23
+    "@xyo-network/witness": ^2.22.23
+    "@xyo-network/witnesses": ^2.22.23
+  checksum: 87ec6a1d6d74553dcd690d4b9ce00790cd404025bc85f33819ed83a9ac6189825291a191c92f90d01af4858107c5b454c149ed0ac31bfdc925fc51ca6ad739df
   languageName: node
   linkType: hard
 
@@ -4829,38 +4803,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xyo-network/storage@npm:^2.22.20":
-  version: 2.22.20
-  resolution: "@xyo-network/storage@npm:2.22.20"
+"@xyo-network/storage@npm:^2.22.23":
+  version: 2.22.23
+  resolution: "@xyo-network/storage@npm:2.22.23"
   dependencies:
     "@xylabs/sdk-js": ^2.6.2
-    "@xyo-network/account": ^2.22.20
-    "@xyo-network/boundwitness": ^2.22.20
-    "@xyo-network/payload": ^2.22.20
+    "@xyo-network/account": ^2.22.23
+    "@xyo-network/boundwitness": ^2.22.23
+    "@xyo-network/payload": ^2.22.23
     "@xyo-network/sdk-xyo-mongo-js": ^2.2.9
     mongodb: ^4.8.1
     uuid: ^8.3.2
-  checksum: 197e5e7a08ec14f82fef929391c43a484fcdded91e226c9655f443d5cda0e0eb316299615ca2107a69e5b694f0184187363768674badd6f03b97ad3d08d3d77c
+  checksum: 863ffe94a3d08a6739c45d6e1ba3f89d6dca5a3e0656b19420d70949060a6ef167071e0a9c49b4c6b64ef79094e4ff0b1b7214c5144ad95508d1456cedf3c649
   languageName: node
   linkType: hard
 
-"@xyo-network/systeminfo-witness@npm:^2.22.20":
-  version: 2.22.20
-  resolution: "@xyo-network/systeminfo-witness@npm:2.22.20"
+"@xyo-network/systeminfo-witness@npm:^2.22.23":
+  version: 2.22.23
+  resolution: "@xyo-network/systeminfo-witness@npm:2.22.23"
   dependencies:
-    "@xyo-network/payload": ^2.22.20
-    "@xyo-network/witness": ^2.22.20
+    "@xyo-network/payload": ^2.22.23
+    "@xyo-network/witness": ^2.22.23
     bowser: ^2.11.0
     lodash: ^4.17.21
     systeminformation: ^5.12.1
-  checksum: 524f87bb03d737bacfa7601e2caccc94bd795813ea8fce383ee2350f030c3c49a7ef2a14b737d30b3efdba7ceec1f7d2b9c7807020885c1f17a1ef5893f53ad6
-  languageName: node
-  linkType: hard
-
-"@xyo-network/typeof@npm:^2.22.20":
-  version: 2.22.20
-  resolution: "@xyo-network/typeof@npm:2.22.20"
-  checksum: f6163a22095345b169be03750f798440c48c1d7e283ae1320d448b7be20d71d0caebf2c28091c3aaf18decc9e5ff7a7c485098d43b72e5810334924c6526d656
+  checksum: 036f76a89d859e0bf9c9575b5ee7e5cd94390454a0b88fbaa7595b691f23c4a94f312f3fcfceaa993a0673c21090797b7b3449c45529bb755934559cded40755
   languageName: node
   linkType: hard
 
@@ -4871,53 +4838,53 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xyo-network/utils@npm:^2.22.20":
-  version: 2.22.20
-  resolution: "@xyo-network/utils@npm:2.22.20"
+"@xyo-network/utils@npm:^2.22.23":
+  version: 2.22.23
+  resolution: "@xyo-network/utils@npm:2.22.23"
   dependencies:
     "@ethersproject/providers": ^5.6.8
     "@metamask/providers": ^9.0.0
     "@xylabs/sdk-js": ^2.6.2
-    "@xyo-network/domain": ^2.22.20
-    "@xyo-network/payload": ^2.22.20
+    "@xyo-network/domain": ^2.22.23
+    "@xyo-network/payload": ^2.22.23
     ajv: ^8.11.0
     lru-cache: ^7.13.1
-  checksum: 2975d46699acf6d55398a334f4539e2e4c7328a19167867f46e49b3b3781b8e6067668b22772194c8b66ca8a406253451ddfee5987fa50faaf6767ab978a6c5e
+  checksum: c97a47f52b96ee55c3396cb02c9c10e759bf61ddfba93b0e538c436ab900b4a1acafb310d0d0882a2ba9cb5e9a9dc2d58742ef7c222711aa3472d47a95f26c15
   languageName: node
   linkType: hard
 
-"@xyo-network/wallet@npm:^2.22.20":
-  version: 2.22.20
-  resolution: "@xyo-network/wallet@npm:2.22.20"
+"@xyo-network/wallet@npm:^2.22.23":
+  version: 2.22.23
+  resolution: "@xyo-network/wallet@npm:2.22.23"
   dependencies:
     "@xylabs/sdk-js": ^2.6.2
-    "@xyo-network/account": ^2.22.20
-    "@xyo-network/payload": ^2.22.20
+    "@xyo-network/account": ^2.22.23
+    "@xyo-network/payload": ^2.22.23
     sha.js: ^2.4.11
-  checksum: bed68523731363d0652f4ff6f942a485260785715756dc05bc1a8a1024ab60644ddc6c0a6be7e9ac977099a7a6ab3a975bf0d9db7d058dc6580488c8d72ae6d7
+  checksum: 71750d2513d83c108a748d02728256c7c455b414bd616f593829fbd474717d790f8b9f2b3ce70044237d566a86941e80cd43f0f7eda418996de3e09b3e94e78f
   languageName: node
   linkType: hard
 
-"@xyo-network/witness@npm:^2.22.20":
-  version: 2.22.20
-  resolution: "@xyo-network/witness@npm:2.22.20"
+"@xyo-network/witness@npm:^2.22.23":
+  version: 2.22.23
+  resolution: "@xyo-network/witness@npm:2.22.23"
   dependencies:
-    "@xyo-network/core": ^2.22.20
-    "@xyo-network/payload": ^2.22.20
-  checksum: 89ccc7d713c05563afcc023ebf4b391d7fa02b6ddb1ad0c1c400d9ab65a2e0556915c979e2a7be0ab344011bab2599e73191972673b0efe01ac791648a120551
+    "@xyo-network/core": ^2.22.23
+    "@xyo-network/payload": ^2.22.23
+  checksum: 0795f165377348e175e7ecb46ef74e94d276a58cb54e8329a03a978cdd83c48388e76a44e332801c482ce56ab1df4a5c8f44685e3a3893f1d3666412840bce9a
   languageName: node
   linkType: hard
 
-"@xyo-network/witnesses@npm:^2.22.20":
-  version: 2.22.20
-  resolution: "@xyo-network/witnesses@npm:2.22.20"
+"@xyo-network/witnesses@npm:^2.22.23":
+  version: 2.22.23
+  resolution: "@xyo-network/witnesses@npm:2.22.23"
   dependencies:
-    "@xyo-network/account": ^2.22.20
-    "@xyo-network/core": ^2.22.20
-    "@xyo-network/payload": ^2.22.20
-    "@xyo-network/witness": ^2.22.20
+    "@xyo-network/account": ^2.22.23
+    "@xyo-network/core": ^2.22.23
+    "@xyo-network/payload": ^2.22.23
+    "@xyo-network/witness": ^2.22.23
     uuid: ^8.3.2
-  checksum: 024a1d75a5ae675f4fb2e66a38d12e9c58056c23f0e6d6a3646ec77c3d939a2c43768779ec8bd00b4a4870a9887d4e668b7529ecc290c115000865166d08fa96
+  checksum: 9f2f4060b73bd0cc0a17b6cef92fd8269f7983b1c75cac7d3a9753f44ef30fd522c16726c2f2753684d81e6f6470f88f5c3bf6f22e324e7c3cb9e867a864cba0
   languageName: node
   linkType: hard
 
@@ -5798,6 +5765,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"chalk@npm:4.1.2, chalk@npm:^4.0.0, chalk@npm:^4.1.0, chalk@npm:^4.1.2":
+  version: 4.1.2
+  resolution: "chalk@npm:4.1.2"
+  dependencies:
+    ansi-styles: ^4.1.0
+    supports-color: ^7.1.0
+  checksum: fe75c9d5c76a7a98d45495b91b2172fa3b7a09e0cc9370e5c8feb1c567b85c4288e2b3fded7cfdd7359ac28d6b3844feb8b82b8686842e93d23c827c417e83fc
+  languageName: node
+  linkType: hard
+
 "chalk@npm:^2.0.0, chalk@npm:^2.1.0, chalk@npm:^2.4.1":
   version: 2.4.2
   resolution: "chalk@npm:2.4.2"
@@ -5806,16 +5783,6 @@ __metadata:
     escape-string-regexp: ^1.0.5
     supports-color: ^5.3.0
   checksum: ec3661d38fe77f681200f878edbd9448821924e0f93a9cefc0e26a33b145f1027a2084bf19967160d11e1f03bfe4eaffcabf5493b89098b2782c3fe0b03d80c2
-  languageName: node
-  linkType: hard
-
-"chalk@npm:^4.0.0, chalk@npm:^4.1.0, chalk@npm:^4.1.2":
-  version: 4.1.2
-  resolution: "chalk@npm:4.1.2"
-  dependencies:
-    ansi-styles: ^4.1.0
-    supports-color: ^7.1.0
-  checksum: fe75c9d5c76a7a98d45495b91b2172fa3b7a09e0cc9370e5c8feb1c567b85c4288e2b3fded7cfdd7359ac28d6b3844feb8b82b8686842e93d23c827c417e83fc
   languageName: node
   linkType: hard
 
@@ -6112,7 +6079,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:^9.3.0":
+"commander@npm:^9.4.0":
   version: 9.4.0
   resolution: "commander@npm:9.4.0"
   checksum: a322de584a6ccd1ea83c24f6a660e52d16ffbe2613fcfbb8d2cc68bc9dec637492456d754fe8bb5b039ad843ed8e04fb0b107e581a75f62cde9e1a0ab1546e09
@@ -11063,13 +11030,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"npm-check-updates@npm:^16.0.1":
-  version: 16.0.1
-  resolution: "npm-check-updates@npm:16.0.1"
+"npm-check-updates@npm:^16.0.3":
+  version: 16.0.3
+  resolution: "npm-check-updates@npm:16.0.3"
   dependencies:
     chalk: ^5.0.1
     cli-table: ^0.3.11
-    commander: ^9.3.0
+    commander: ^9.4.0
     fast-memoize: ^2.5.2
     find-up: 5.0.0
     fp-and-or: ^0.1.3
@@ -11097,7 +11064,7 @@ __metadata:
   bin:
     ncu: build/src/bin/cli.js
     npm-check-updates: build/src/bin/cli.js
-  checksum: 1e747421f3d34055183037335437db91cd300448dccaad305925499719d4d34e6c1adfa3ce35a178f209106a40dcd57da088d9125dab2bd125ae54f5ae1c131c
+  checksum: 06c53c3f1988a3427074d216f02c84f905718c1e666f8ea98d079072de9f50919a21540cbbe5f9b4552c7607440a471d7a04345822a9d3a4b68fabfaea5a8cf7
   languageName: node
   linkType: hard
 
