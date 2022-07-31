@@ -49,6 +49,7 @@
       "type": "node",
       "request": "launch",
       "osx": {
+        "pauseForSourceMap": true,
         "runtimeArgs": [
           "--inspect-brk",
           "${workspaceRoot}/node_modules/.bin/jest",
