@@ -3,9 +3,9 @@ import {
   claimArchive,
   getArchiveName,
   getArchivist,
-  getNewBlockWithPayloads,
+  getNewBlock,
+  getPayload,
   getPayloadsByTimestamp,
-  getRecentPayloads,
   getTokenForNewUser,
   postBlock,
 } from '@xyo-network/archivist-test'
@@ -17,48 +17,39 @@ const sortDirections: SortDirection[] = ['asc', 'desc']
 describe('/archive/:archive/payload', () => {
   let token = ''
   let archive = ''
-  let recentPayloads: XyoPayloadWithMeta[] = []
+  const startTime = Date.now() - 1
   beforeAll(async () => {
     token = await getTokenForNewUser()
     archive = getArchiveName()
     await claimArchive(token, archive)
-    const blocksPosted = 25
+    const blocksPosted = 15
     for (let blockCount = 0; blockCount < blocksPosted; blockCount++) {
-      const block = getNewBlockWithPayloads()
+      const payload = getPayload()
+      payload.timestamp = Date.now()
+      const block = getNewBlock(payload)
       const blockResponse = await postBlock(block, archive)
       expect(blockResponse.length).toBe(1)
     }
-    recentPayloads = await getRecentPayloads(archive, token)
-    expect(recentPayloads).toBeTruthy()
-    expect(Array.isArray(recentPayloads)).toBe(true)
-    expect(recentPayloads.length).toBeGreaterThan(10)
   })
   it(`With missing timestamp returns ${ReasonPhrases.OK}`, async () => {
     await getArchivist().get(`/archive/${archive}/block`).query({ limit: 10, order: 'asc' }).auth(token, { type: 'bearer' }).expect(StatusCodes.OK)
   })
   describe('With valid data', () => {
     describe.each(sortDirections)('In %s order', (order: SortDirection) => {
-      let hash = ''
-      let timestamp = 0
       let response: XyoPayloadWithMeta[] = []
-      let recentPayload: XyoPayloadWithMeta | undefined
+      let time: number = Date.now()
       beforeEach(async () => {
-        recentPayload = order === 'asc' ? recentPayloads.pop() : recentPayloads.shift()
-        expect(recentPayload).toBeTruthy()
-        hash = recentPayload?._hash || ''
-        expect(hash).toBeTruthy()
-        timestamp = recentPayload?._timestamp || 0
-        expect(timestamp).toBeTruthy()
-        response = await getPayloadsByTimestamp(token, archive, timestamp, 10, order)
+        time = order === 'asc' ? startTime : Date.now()
+        response = await getPayloadsByTimestamp(token, archive, time, 10, order)
         expect(response).toBeTruthy()
         expect(Array.isArray(response)).toBe(true)
         expect(response.length).toBe(10)
       })
       it('Returns blocks not including the specified timestamp', () => {
-        expect(response.map((x) => x._timestamp)).not.toContain(timestamp)
+        expect(response.map((x) => x.timestamp)).not.toContain(time)
       })
       it('Returns blocks in the correct sort order', () => {
-        expect(response).toBeSortedBy('_timestamp', { descending: order === 'desc' })
+        expect(response).toBeSortedBy('timestamp', { descending: order === 'desc' })
       })
     })
   })
