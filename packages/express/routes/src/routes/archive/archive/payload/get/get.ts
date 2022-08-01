@@ -2,7 +2,7 @@ import { asyncHandler, NoReqBody, tryParseInt } from '@xylabs/sdk-api-express-ec
 import { assertEx } from '@xylabs/sdk-js'
 import { getPayloads } from '@xyo-network/archivist-lib'
 import { ArchiveLocals, ArchivePathParams } from '@xyo-network/archivist-model'
-import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload, XyoPayloadWrapper } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
@@ -22,8 +22,7 @@ const handler: RequestHandler<ArchivePathParams, XyoPayload[], NoReqBody, GetArc
   const parsedOrder = order?.toLowerCase?.() === 'asc' ? 'asc' : 'desc'
   const payloads = await getPayloads(archive.archive, timestampNumber, limitNumber, parsedOrder, schema)
   if (payloads) {
-    // res.json(payloads.map((payload) => new XyoPayloadWrapper(payload).body))
-    res.json(payloads)
+    res.json(payloads.map((payload) => new XyoPayloadWrapper(payload).body))
   } else {
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
   }
