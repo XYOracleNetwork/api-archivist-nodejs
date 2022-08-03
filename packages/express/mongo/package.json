@@ -27,25 +27,13 @@
   "author": "Arie Trouw",
   "license": "LGPL-3.0",
   "dependencies": {
-    "@xylabs/sdk-js": "^2.6.3",
-    "@xyo-network/account": "^2.23.3",
     "@xyo-network/archivist-lib": "workspace:^",
     "@xyo-network/archivist-middleware": "workspace:^",
     "@xyo-network/archivist-model": "workspace:^",
     "@xyo-network/archivist-types": "workspace:^",
     "@xyo-network/sdk-xyo-client-js": "^2.23.3",
     "@xyo-network/sdk-xyo-mongo-js": "^2.2.9",
-    "inversify": "^6.0.1",
-    "reflect-metadata": "^0.1.13"
-  },
-  "devDependencies": {
-    "@xylabs/ts-scripts": "^2.5.13",
-    "eslint": "^8.21.0",
-    "jest": "^28.1.3",
-    "license-checker": "^25.0.1",
-    "nodemon": "^2.0.19",
-    "rimraf": "^3.0.2",
-    "typescript": "^4.7.4"
+    "inversify": "^6.0.1"
   },
   "private": true,
   "types": "dist/esm/index.d.ts"
