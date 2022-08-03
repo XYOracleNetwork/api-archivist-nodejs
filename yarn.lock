@@ -4355,7 +4355,6 @@ __metadata:
     "@xyo-network/archivist-model": "workspace:^"
     "@xyo-network/archivist-types": "workspace:^"
     "@xyo-network/sdk-xyo-client-js": ^2.23.3
-    "@xyo-network/sdk-xyo-mongo-js": ^2.2.9
     bcrypt: ^5.0.1
     ethers: ^5.6.9
     express: ^4.18.1
@@ -4363,7 +4362,6 @@ __metadata:
     http-status-codes: ^2.2.0
     inversify: ^6.0.1
     jsonwebtoken: ^8.5.1
-    mongodb: ^4.8.1
     passport: ^0.6.0
     passport-jwt: ^4.0.0
     passport-local: ^1.0.0
@@ -4394,13 +4392,15 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@xyo-network/archivist-mongo@workspace:packages/core/mongo"
   dependencies:
+    "@xylabs/sdk-js": ^2.6.3
     "@xyo-network/archivist-lib": "workspace:^"
-    "@xyo-network/archivist-middleware": "workspace:^"
     "@xyo-network/archivist-model": "workspace:^"
     "@xyo-network/archivist-types": "workspace:^"
     "@xyo-network/sdk-xyo-client-js": ^2.23.3
     "@xyo-network/sdk-xyo-mongo-js": ^2.2.9
     inversify: ^6.0.1
+    mongodb: ^4.8.1
+    reflect-metadata: ^0.1.13
   languageName: unknown
   linkType: soft
 
