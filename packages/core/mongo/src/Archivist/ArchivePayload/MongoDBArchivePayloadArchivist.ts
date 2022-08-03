@@ -1,7 +1,8 @@
-import { AbstractMongoDBPayloadArchivist } from '@xyo-network/archivist-lib'
 import { XyoArchive, XyoBoundWitnessBuilder, XyoPayloadBuilder, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { Filter } from 'mongodb'
+
+import { AbstractMongoDBPayloadArchivist } from '../../AbstractArchivist'
 
 const schema = 'network.xyo.archive'
 
