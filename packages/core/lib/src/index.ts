@@ -25,6 +25,5 @@ declare global {
 
 export * from './Archive'
 export * from './dbSdk'
-export * from './flattenArray'
 export * from './Payload'
 export * from './schema'
