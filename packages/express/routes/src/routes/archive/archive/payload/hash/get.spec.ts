@@ -14,9 +14,6 @@ describe('/archive/:archive/block/payload/:hash', () => {
     expect(response.length).toBe(1)
     const block = response[0]
     expect(block).toBeTruthy()
-    expect(typeof block._archive).toBe('string')
-    expect(typeof block._hash).toBe('string')
-    expect(typeof block._timestamp).toBe('number')
     expect(block._user_agent).toBe(undefined)
   })
   it('Allows retrieving the same payload if posted to multiple archives', async () => {
