@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 
-import { AbstractMongoDBPayloadArchivist, getArchivistBoundWitnessesMongoSdk, getArchivistPayloadMongoSdk, removeId } from '@xyo-network/archivist-lib'
+import { AbstractMongoDBPayloadArchivist, getArchivistBoundWitnessesMongoSdk, getArchivistPayloadMongoSdk } from '@xyo-network/archivist-lib'
 import {
   SetArchivePermissionsPayload,
   SetArchivePermissionsPayloadWithMeta,
@@ -12,6 +12,8 @@ import { XyoAccount, XyoBoundWitnessBuilder, XyoPayloadBuilder } from '@xyo-netw
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter } from 'mongodb'
+
+import { removeId } from '../../dbSdk'
 
 const schema: SetArchivePermissionsSchema = setArchivePermissionsSchema
 

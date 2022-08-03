@@ -1,4 +1,5 @@
-import { UpsertResult, User, UserWithoutId } from '@xyo-network/archivist-model'
+import { User, UserWithoutId } from '../Domain'
+import { UpsertResult } from '../UpsertResult'
 
 export interface UserManager {
   create(user: UserWithoutId, password?: string): Promise<User & UpsertResult>

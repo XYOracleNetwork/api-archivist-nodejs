@@ -1,16 +1,15 @@
+import { ArchiveArchivist, ArchivePermissionsArchivist, UserArchivist, UserManager, WitnessedPayloadArchivist } from '@xyo-network/archivist-model'
+import { TYPES } from '@xyo-network/archivist-types'
+import { Container } from 'inversify'
+
+import { addMongoArchivist } from './addMongoArchivist'
 import {
   MongoDBArchiveArchivist,
   MongoDBArchivePermissionsPayloadPayloadArchivist,
   MongoDBArchivistWitnessedPayloadArchivist,
   MongoDBUserArchivist,
-  MongoDBUserManager,
-  UserManager,
-} from '@xyo-network/archivist-middleware'
-import { ArchiveArchivist, ArchivePermissionsArchivist, UserArchivist, WitnessedPayloadArchivist } from '@xyo-network/archivist-model'
-import { TYPES } from '@xyo-network/archivist-types'
-import { Container } from 'inversify'
-
-import { addMongoArchivist } from './addMongoArchivist'
+} from './Archivist'
+import { MongoDBUserManager } from './Manager'
 
 export const addArchivist = (container: Container) => {
   addMongoArchivist(container)

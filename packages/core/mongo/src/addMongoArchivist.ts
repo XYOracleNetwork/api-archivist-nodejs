@@ -1,8 +1,9 @@
-import { MongoDBArchiveArchivist, MongoDBUserArchivist, MongoDBUserManager } from '@xyo-network/archivist-middleware'
 import { TYPES } from '@xyo-network/archivist-types'
 import { Container } from 'inversify'
 
 import { addMongoSdks } from './addMongoSdks'
+import { MongoDBArchiveArchivist, MongoDBUserArchivist } from './Archivist'
+import { MongoDBUserManager } from './Manager'
 
 export const addMongoArchivist = (container: Container) => {
   addMongoSdks(container)

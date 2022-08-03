@@ -1,13 +1,10 @@
 import 'reflect-metadata'
 
-import { User } from '@xyo-network/archivist-model'
+import { PasswordHasher, User, UserManager } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { Request } from 'express'
 import { inject, injectable } from 'inversify'
 import { IStrategyOptionsWithRequest, Strategy } from 'passport-local'
-
-import { UserManager } from '../../../Manager'
-import { PasswordHasher } from '../../../PasswordHasher'
 
 const strategyOptions: IStrategyOptionsWithRequest = {
   passReqToCallback: true,

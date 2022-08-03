@@ -1,13 +1,11 @@
 import 'reflect-metadata'
 
-import { Identifiable, UpsertResult, User, UserWithoutId, Web2User, Web3User } from '@xyo-network/archivist-model'
+import { Identifiable, PasswordHasher, UpsertResult, User, UserManager, UserWithoutId, Web2User, Web3User } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { inject, injectable } from 'inversify'
 import { WithId } from 'mongodb'
 
-import { MongoDBUserArchivist } from '../../../Diviner'
-import { PasswordHasher } from '../../../PasswordHasher'
-import { UserManager } from '../UserManager'
+import { MongoDBUserArchivist } from '../Archivist'
 
 const fromDbEntity = (user: WithId<User>): User => {
   const id = user?._id?.toHexString?.()

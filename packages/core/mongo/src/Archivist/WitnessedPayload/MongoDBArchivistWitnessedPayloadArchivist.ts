@@ -1,13 +1,14 @@
 import 'reflect-metadata'
 
 import { exists } from '@xylabs/sdk-js'
-import { removeId } from '@xyo-network/archivist-lib'
 import { AbstractPayloadArchivist } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoAccount, XyoBoundWitnessBuilder, XyoBoundWitnessWithMeta, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter } from 'mongodb'
+
+import { removeId } from '../../dbSdk'
 
 const unique = <T>(value: T, index: number, self: T[]) => {
   return self.indexOf(value) === index
