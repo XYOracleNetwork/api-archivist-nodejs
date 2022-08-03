@@ -1,4 +1,4 @@
-import { ArchiveArchivist, ArchivePermissionsArchivist, UserManager, UserWithoutId, WitnessedPayloadArchivist } from '@xyo-network/archivist-model'
+import { ArchiveArchivist, ArchivePermissionsArchivist, QueryConverterRegistry, UserManager, UserWithoutId, WitnessedPayloadArchivist } from '@xyo-network/archivist-model'
 // NOTE: Required import since passport types (which we need to extend) extend Express
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import passport from 'passport'
@@ -25,6 +25,7 @@ declare global {
       archiveArchivist: ArchiveArchivist
       archivePermissionsArchivist: ArchivePermissionsArchivist
       archivistWitnessedPayloadArchivist: WitnessedPayloadArchivist
+      queryConverters: QueryConverterRegistry
       userManager: UserManager
     }
   }
