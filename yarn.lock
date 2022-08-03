@@ -4390,9 +4390,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@xyo-network/archivist-mongo@workspace:^, @xyo-network/archivist-mongo@workspace:packages/express/mongo":
+"@xyo-network/archivist-mongo@workspace:^, @xyo-network/archivist-mongo@workspace:packages/core/mongo":
   version: 0.0.0-use.local
-  resolution: "@xyo-network/archivist-mongo@workspace:packages/express/mongo"
+  resolution: "@xyo-network/archivist-mongo@workspace:packages/core/mongo"
   dependencies:
     "@xyo-network/archivist-lib": "workspace:^"
     "@xyo-network/archivist-middleware": "workspace:^"
@@ -4486,9 +4486,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@xyo-network/archivist-test@workspace:^, @xyo-network/archivist-test@workspace:packages/core/test":
+"@xyo-network/archivist-test@workspace:^, @xyo-network/archivist-test@workspace:packages/express/test":
   version: 0.0.0-use.local
-  resolution: "@xyo-network/archivist-test@workspace:packages/core/test"
+  resolution: "@xyo-network/archivist-test@workspace:packages/express/test"
   dependencies:
     "@types/supertest": ^2.0.12
     "@types/uuid": ^8.3.4
