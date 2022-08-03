@@ -14,10 +14,6 @@ describe('/archive/:archive/block/hash/:hash', () => {
     expect(response.length).toBe(1)
     const block = response[0]
     expect(block).toBeTruthy()
-    expect(typeof block._archive).toBe('string')
-    expect(typeof block._hash).toBe('string')
-    expect(typeof block._timestamp).toBe('number')
-    expect(block._user_agent).toBe(null)
   })
   it('Allows retrieving the same block if posted to multiple archives', async () => {
     const response = await getBlockByHash(token, archive, knownBlockHash)
