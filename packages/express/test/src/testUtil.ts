@@ -1,5 +1,6 @@
 import { PayloadRepairHashResponse, SortDirection } from '@xyo-network/archivist-model'
 import { getApp } from '@xyo-network/archivist-server'
+import { XyoDomainPayload } from '@xyo-network/domain-payload-plugin'
 import {
   XyoAccount,
   XyoArchive,
@@ -7,7 +8,6 @@ import {
   XyoBoundWitness,
   XyoBoundWitnessBuilder,
   XyoBoundWitnessWithMeta,
-  XyoDomainPayload,
   XyoPayload,
   XyoPayloadBuilder,
   XyoPayloadWithMeta,
