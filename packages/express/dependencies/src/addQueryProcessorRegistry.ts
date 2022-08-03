@@ -1,4 +1,5 @@
-import { QueryProcessorRegistry, SchemaToQueryProcessorRegistry } from '@xyo-network/archivist-middleware'
+import { SchemaToQueryProcessorRegistry } from '@xyo-network/archivist-middleware'
+import { QueryProcessorRegistry } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { Container } from 'inversify'
 
