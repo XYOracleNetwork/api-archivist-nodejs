@@ -6,7 +6,9 @@
       "request": "launch",
       "name": "Debug",
       "program": "${workspaceFolder}/src/index.ts",
-      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+      "outFiles": [
+        "${workspaceFolder}/dist/**/*.js"
+      ],
       "runtimeArgs": [
         "--max-old-space-size=8192",
         "--experimental-specifier-resolution=node",
@@ -25,7 +27,9 @@
       "request": "launch",
       "name": "Build & Debug",
       "program": "${workspaceFolder}/src/index.ts",
-      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+      "outFiles": [
+        "${workspaceFolder}/dist/**/*.js"
+      ],
       "runtimeArgs": [
         "--max-old-space-size=8192",
         "--experimental-specifier-resolution=node",
@@ -44,10 +48,12 @@
       "name": "Debug Jest Tests",
       "type": "node",
       "request": "launch",
-      "linux": {
+      "osx": {
+        "pauseForSourceMap": true,
         "runtimeArgs": [
           "--inspect-brk",
           "${workspaceRoot}/node_modules/.bin/jest",
+          "packages/express/routes/src/routes/archive/archive/block/get/get.spec.ts",
           "--runInBand"
         ]
       },
@@ -61,8 +67,7 @@
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "cwd": "${workspaceFolder}",
-      "envFile": "${workspaceFolder}/.env",
-      // "preLaunchTask": "build"
+      "envFile": "${workspaceFolder}/.env"
     }
   ]
 }

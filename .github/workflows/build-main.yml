@@ -22,7 +22,7 @@ jobs:
       - name: install
         run: yarn install
       - name: build
-        run: yarn
+        run: yarn build
   test:
     runs-on: ubuntu-latest
     env:
@@ -38,12 +38,14 @@ jobs:
           cache: "yarn"
       - name: install
         run: yarn install
+      - name: build
+        run: yarn build
       - name: copy env file
         run: cp .example.env .env
       - name: setup test db
         run: docker compose up -d mongo
       - name: test
-        run: yarn test --detectOpenHandles --coverage || echo "Possible test failure, attempting to upload coverage anyway"
+        run: yarn test --forceExit --coverage
         env:
           # Current max memory size of Linux hosted runner is 7 GB
           # https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources
@@ -51,11 +53,11 @@ jobs:
       - name: bring down test environment
         run: docker compose down
       - name: format code coverage
-        uses: ./.github/actions/cc-test-reporter
+        uses: xylabs/action-code-climate-test-reporter@v1.0.0
         with:
           subcommand: "format-coverage -t lcov ./coverage/lcov.info"
       - name: upload code coverage
-        uses: ./.github/actions/cc-test-reporter
+        uses: xylabs/action-code-climate-test-reporter@v1.0.0
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         with:

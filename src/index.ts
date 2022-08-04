@@ -1,8 +1,6 @@
-import { tryParseInt } from '@xylabs/sdk-api-express-ecs'
 import { config } from 'dotenv'
-
-import { server } from './server'
-
 config()
+import { tryParseInt } from '@xylabs/sdk-api-express-ecs'
+import { server } from '@xyo-network/archivist-server'
 
 void server(tryParseInt(process.env.APP_PORT))
