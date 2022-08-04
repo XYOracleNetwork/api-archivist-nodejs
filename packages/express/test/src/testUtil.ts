@@ -1,6 +1,7 @@
 import { PayloadRepairHashResponse, SortDirection } from '@xyo-network/archivist-model'
 import { getApp } from '@xyo-network/archivist-server'
 import { XyoDomainPayload } from '@xyo-network/domain-payload-plugin'
+import { XyoSchemaPayload } from '@xyo-network/schema-payload-plugin'
 import {
   XyoAccount,
   XyoArchive,
@@ -12,7 +13,6 @@ import {
   XyoPayloadBuilder,
   XyoPayloadWithMeta,
   XyoPayloadWrapper,
-  XyoSchemaPayload,
 } from '@xyo-network/sdk-xyo-client-js'
 import { config } from 'dotenv'
 import { Wallet } from 'ethers'
@@ -32,7 +32,6 @@ const payloadTemplate = {
   deviceId: '77040732-4c6d-47e1-af15-06159b51d879',
   geomines: 1,
   planType: 'pro',
-  schema,
   uid: '',
 }
 
@@ -43,7 +42,6 @@ const knownPayload = new XyoPayloadBuilder({ schema })
     deviceId: '00000000-0000-0000-0000-000000000000',
     geomines: 41453,
     planType: 'pro',
-    schema: 'co.coinapp.current.user.witness',
     uid: '0000000000000000000000000000',
   })
   .build()
