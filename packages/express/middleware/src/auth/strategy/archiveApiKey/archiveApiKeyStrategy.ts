@@ -2,13 +2,11 @@ import 'reflect-metadata'
 
 import { getHttpHeader } from '@xylabs/sdk-api-express-ecs'
 import { getArchiveKeys } from '@xyo-network/archivist-lib'
+import { ArchiveArchivist, UserManager } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { Request } from 'express'
 import { inject, injectable } from 'inversify'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
-
-import { ArchiveArchivist } from '../../../Diviner'
-import { UserManager } from '../../../Manager'
 
 @injectable()
 export class ArchiveApiKeyStrategy extends Strategy {

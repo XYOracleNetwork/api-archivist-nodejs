@@ -1,7 +1,5 @@
-import { User } from '@xyo-network/archivist-model'
+import { PasswordHasher, User } from '@xyo-network/archivist-model'
 import { compare, hash } from 'bcrypt'
-
-import { PasswordHasher } from '../PasswordHasher'
 
 export const BcryptPasswordHasher: PasswordHasher<User> = {
   hash: (password: string) => {

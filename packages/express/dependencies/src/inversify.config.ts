@@ -3,48 +3,18 @@ import 'reflect-metadata'
 import { getDefaultLogger, Logger } from '@xylabs/sdk-api-express-ecs'
 import { assertEx } from '@xylabs/sdk-js'
 import { XyoAccount } from '@xyo-network/account'
-import { getBaseMongoSdk } from '@xyo-network/archivist-lib'
-import {
-  AdminApiKeyStrategy,
-  AllowUnauthenticatedStrategy,
-  ArchiveAccessControlStrategy,
-  ArchiveAccountStrategy,
-  ArchiveApiKeyStrategy,
-  ArchiveArchivist,
-  ArchiveOwnerStrategy,
-  BcryptPasswordHasher,
-  EntityArchive,
-  JwtStrategy,
-  LocalStrategy,
-  MongoDBArchiveArchivist,
-  MongoDBArchivePermissionsPayloadPayloadArchivist,
-  MongoDBArchivistWitnessedPayloadArchivist,
-  MongoDBUserArchivist,
-  MongoDBUserManager,
-  PasswordHasher,
-  QueryConverterRegistry,
-  QueryProcessorRegistry,
-  SchemaToQueryProcessorRegistry,
-  UserArchivist,
-  UserManager,
-  Web3AuthStrategy,
-  WitnessedPayloadArchivist,
-  XyoPayloadToQueryConverterRegistry,
-} from '@xyo-network/archivist-middleware'
-import { ArchivePermissionsArchivist, Query, User } from '@xyo-network/archivist-model'
-import {
-  DebugQueryHandler,
-  GetArchivePermissionsQueryHandler,
-  GetDomainConfigQueryHandler,
-  GetSchemaQueryHandler,
-  SetArchivePermissionsQueryHandler,
-} from '@xyo-network/archivist-query-handlers'
-import { IdentifiableHuri, InMemoryQueue, Queue } from '@xyo-network/archivist-queue'
+import { BcryptPasswordHasher } from '@xyo-network/archivist-middleware'
+import { PasswordHasher, User } from '@xyo-network/archivist-model'
+import { addArchivist } from '@xyo-network/archivist-mongo'
 import { TYPES } from '@xyo-network/archivist-types'
-import { XyoArchive, XyoBoundWitnessWithMeta, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
-import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { config } from 'dotenv'
 import { Container } from 'inversify'
+
+import { addAuth } from './addAuth'
+import { addInMemoryQueueing } from './addInMemoryQueueing'
+import { addPayloadHandlers } from './addPayloadHandlers'
+import { addQueryConverterRegistry } from './addQueryConverterRegistry'
+import { addQueryProcessorRegistry } from './addQueryProcessorRegistry'
 config()
 export const dependencies = new Container({
   autoBindInjectable: true,
@@ -69,58 +39,14 @@ export const configure = () => {
 
   dependencies.bind<string>(TYPES.ApiKey).toConstantValue(apiKey)
   dependencies.bind<string>(TYPES.JwtSecret).toConstantValue(jwtSecret)
-
+  dependencies.bind<PasswordHasher<User>>(TYPES.PasswordHasher).toConstantValue(passwordHasher)
   dependencies.bind<Logger>(TYPES.Logger).toConstantValue(getDefaultLogger())
   dependencies.bind<XyoAccount>(TYPES.Account).toConstantValue(new XyoAccount({ phrase }))
 
-  configureMongo(dependencies)
-
-  dependencies.bind<ArchiveArchivist>(TYPES.ArchiveArchivist).to(MongoDBArchiveArchivist).inSingletonScope()
-  dependencies.bind<ArchivePermissionsArchivist>(TYPES.ArchivePermissionsArchivist).to(MongoDBArchivePermissionsPayloadPayloadArchivist).inSingletonScope()
-  dependencies.bind<PasswordHasher<User>>(TYPES.PasswordHasher).toConstantValue(passwordHasher)
-  dependencies.bind<UserArchivist>(TYPES.UserArchivist).to(MongoDBUserArchivist).inSingletonScope()
-  dependencies.bind<UserManager>(TYPES.UserManager).to(MongoDBUserManager).inSingletonScope()
-  dependencies.bind<WitnessedPayloadArchivist>(TYPES.WitnessedPayloadArchivist).to(MongoDBArchivistWitnessedPayloadArchivist).inSingletonScope()
-
-  configureAuth(dependencies)
-
-  configureQueryProcessors(dependencies)
-
-  dependencies.bind<Queue<Query>>(TYPES.QueryQueue).toConstantValue(new InMemoryQueue<Query>())
-  dependencies.bind<Queue<IdentifiableHuri>>(TYPES.ResponseQueue).toConstantValue(new InMemoryQueue<IdentifiableHuri>())
-  dependencies.bind<QueryConverterRegistry>(TYPES.PayloadToQueryConverterRegistry).toConstantValue(new XyoPayloadToQueryConverterRegistry())
-  dependencies.bind<QueryProcessorRegistry>(TYPES.SchemaToQueryProcessorRegistry).toConstantValue(new SchemaToQueryProcessorRegistry())
-}
-
-export const configureMongo = (container: Container) => {
-  // SDKs
-  container.bind<BaseMongoSdk<Required<XyoArchive>>>(TYPES.ArchiveSdkMongo).toConstantValue(getBaseMongoSdk<EntityArchive>('archives'))
-  container.bind<BaseMongoSdk<XyoPayloadWithMeta>>(TYPES.PayloadSdkMongo).toConstantValue(getBaseMongoSdk<XyoPayloadWithMeta>('payloads'))
-  container.bind<BaseMongoSdk<XyoBoundWitnessWithMeta>>(TYPES.BoundWitnessSdkMongo).toConstantValue(getBaseMongoSdk<XyoBoundWitnessWithMeta>('bound_witnesses'))
-  container.bind<BaseMongoSdk<User>>(TYPES.UserSdkMongo).toConstantValue(getBaseMongoSdk<User>('users'))
-
-  // Archivists
-  container.bind<MongoDBUserArchivist>(TYPES.UserArchivistMongoDb).to(MongoDBUserArchivist).inSingletonScope()
-  container.bind<MongoDBUserManager>(TYPES.UserManagerMongoDb).to(MongoDBUserManager).inSingletonScope()
-  container.bind<MongoDBArchiveArchivist>(TYPES.ArchiveArchivistMongoDb).to(MongoDBArchiveArchivist).inSingletonScope()
-}
-
-export const configureAuth = (container: Container) => {
-  container.bind(AdminApiKeyStrategy).to(AdminApiKeyStrategy).inSingletonScope()
-  container.bind(AllowUnauthenticatedStrategy).toConstantValue(new AllowUnauthenticatedStrategy())
-  container.bind(ArchiveAccessControlStrategy).toConstantValue(new ArchiveAccessControlStrategy())
-  container.bind(ArchiveAccountStrategy).toConstantValue(new ArchiveAccountStrategy())
-  container.bind(ArchiveApiKeyStrategy).to(ArchiveApiKeyStrategy).inSingletonScope()
-  container.bind(ArchiveOwnerStrategy).toConstantValue(new ArchiveOwnerStrategy())
-  container.bind(JwtStrategy).to(JwtStrategy).inSingletonScope()
-  container.bind(LocalStrategy).to(LocalStrategy).inSingletonScope()
-  container.bind(Web3AuthStrategy).to(Web3AuthStrategy).inSingletonScope()
-}
-
-export const configureQueryProcessors = (container: Container) => {
-  container.bind(DebugQueryHandler).to(DebugQueryHandler).inTransientScope()
-  container.bind(SetArchivePermissionsQueryHandler).to(SetArchivePermissionsQueryHandler).inTransientScope()
-  container.bind(GetArchivePermissionsQueryHandler).to(GetArchivePermissionsQueryHandler).inTransientScope()
-  container.bind(GetDomainConfigQueryHandler).to(GetDomainConfigQueryHandler).inTransientScope()
-  container.bind(GetSchemaQueryHandler).to(GetSchemaQueryHandler).inTransientScope()
+  addArchivist(dependencies)
+  addAuth(dependencies)
+  addPayloadHandlers(dependencies)
+  addInMemoryQueueing(dependencies)
+  addQueryConverterRegistry(dependencies)
+  addQueryProcessorRegistry(dependencies)
 }

@@ -1,5 +1,5 @@
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
-import { XyoDomainPayload, XyoDomainPayloadWrapper } from '@xyo-network/sdk-xyo-client-js'
+import { XyoDomainPayload, XyoDomainPayloadWrapper } from '@xyo-network/domain-payload-plugin'
 import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 

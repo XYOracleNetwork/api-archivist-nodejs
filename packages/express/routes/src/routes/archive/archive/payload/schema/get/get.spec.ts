@@ -1,5 +1,6 @@
 import { claimArchive, getArchivist, getSchemaName, getTokenForNewUser, postBlock, testSchemaPrefix } from '@xyo-network/archivist-test'
-import { XyoAccount, XyoBoundWitnessBuilder, XyoSchemaPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoSchemaPayload } from '@xyo-network/schema-payload-plugin'
+import { XyoAccount, XyoBoundWitnessBuilder } from '@xyo-network/sdk-xyo-client-js'
 import { StatusCodes } from 'http-status-codes'
 
 const blocksPosted = 2

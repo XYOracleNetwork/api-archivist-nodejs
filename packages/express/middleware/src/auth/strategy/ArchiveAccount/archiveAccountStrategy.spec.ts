@@ -6,6 +6,8 @@ import { StatusCodes } from 'http-status-codes'
 const allowedSchema = debugSchema
 const otherSchema = 'network.xyo.test'
 
+type TestSchemaTypes = typeof allowedSchema | typeof otherSchema
+
 const setArchivePermissions = (archive: string, token: string, permissions: SetArchivePermissions) => {
   const data: SetArchivePermissionsPayload = {
     ...permissions,
@@ -16,11 +18,11 @@ const setArchivePermissions = (archive: string, token: string, permissions: SetA
   return postCommandsToArchive([bw], archive, token)
 }
 
-const postCommandToArchive = (archive: string, token?: string, schema = allowedSchema, expectedStatus: StatusCodes = StatusCodes.ACCEPTED) => {
+const postCommandToArchive = (archive: string, token?: string, schema: TestSchemaTypes = allowedSchema, expectedStatus: StatusCodes = StatusCodes.ACCEPTED) => {
   const data = {
     schema,
   }
-  const payload = new XyoPayloadBuilder({ schema }).fields(data).build()
+  const payload = new XyoPayloadBuilder<{ schema: TestSchemaTypes }>({ schema }).fields(data).build()
   const bw = new XyoBoundWitnessBuilder({ inlinePayloads: true }).payload(payload).build()
   return postCommandsToArchive([bw], archive, token, expectedStatus)
 }

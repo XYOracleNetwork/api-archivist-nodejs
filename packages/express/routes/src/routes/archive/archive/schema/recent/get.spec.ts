@@ -1,5 +1,6 @@
 import { claimArchive, getArchiveSchemaRecent, getTokenForNewUser, postBlock } from '@xyo-network/archivist-test'
-import { XyoAccount, XyoBoundWitnessBase, XyoBoundWitnessBuilder, XyoPayloadWithMeta, XyoSchemaPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoSchemaPayload } from '@xyo-network/schema-payload-plugin'
+import { XyoAccount, XyoBoundWitness, XyoBoundWitnessBuilder, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 
 describe('/archive/:archive/schema/recent', () => {
   const schema = 'network.xyo.schema'
@@ -11,7 +12,7 @@ describe('/archive/:archive/schema/recent', () => {
     token = await getTokenForNewUser()
     archive = (await claimArchive(token)).archive
     for (let i = 0; i < schemaToAdd; i++) {
-      const bw = new XyoBoundWitnessBuilder<XyoBoundWitnessBase, XyoSchemaPayload>({ inlinePayloads: true })
+      const bw = new XyoBoundWitnessBuilder<XyoBoundWitness, XyoSchemaPayload>({ inlinePayloads: true })
         .payload({ definition, schema })
         .witness(XyoAccount.random())
         .build()

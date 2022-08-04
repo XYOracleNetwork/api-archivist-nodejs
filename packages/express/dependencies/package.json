@@ -29,28 +29,17 @@
   "dependencies": {
     "@xylabs/sdk-api-express-ecs": "^1.2.4",
     "@xylabs/sdk-js": "^2.6.3",
-    "@xyo-network/account": "^2.23.3",
-    "@xyo-network/archivist-lib": "workspace:^",
+    "@xyo-network/account": "^2.24.6",
     "@xyo-network/archivist-middleware": "workspace:^",
     "@xyo-network/archivist-model": "workspace:^",
+    "@xyo-network/archivist-mongo": "workspace:^",
     "@xyo-network/archivist-query-handlers": "workspace:^",
     "@xyo-network/archivist-queue": "workspace:^",
     "@xyo-network/archivist-types": "workspace:^",
-    "@xyo-network/sdk-xyo-client-js": "^2.23.3",
-    "@xyo-network/sdk-xyo-mongo-js": "^2.2.9",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "inversify": "^6.0.1",
     "reflect-metadata": "^0.1.13"
-  },
-  "devDependencies": {
-    "@xylabs/ts-scripts": "^2.5.13",
-    "eslint": "^8.21.0",
-    "jest": "^28.1.3",
-    "license-checker": "^25.0.1",
-    "nodemon": "^2.0.19",
-    "rimraf": "^3.0.2",
-    "typescript": "^4.7.4"
   },
   "private": true,
   "types": "dist/esm/index.d.ts"
