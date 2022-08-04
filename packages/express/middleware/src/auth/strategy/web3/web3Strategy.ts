@@ -1,12 +1,12 @@
 import 'reflect-metadata'
 
 import { Logger } from '@xylabs/sdk-api-express-ecs'
+import { UserManager } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { Request } from 'express'
 import { inject, injectable } from 'inversify'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
-import { UserManager } from '../../../Manager'
 import { verifyUuid } from './verifyUuid'
 import { verifyWallet } from './verifyWallet'
 

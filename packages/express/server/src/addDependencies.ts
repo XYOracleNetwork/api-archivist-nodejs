@@ -1,13 +1,6 @@
 import { dependencies } from '@xyo-network/archivist-dependencies'
-import {
-  ArchiveArchivist,
-  ArchivePermissionsArchivist,
-  Query,
-  SchemaToQueryProcessorRegistry,
-  UserManager,
-  WitnessedPayloadArchivist,
-  XyoPayloadToQueryConverterRegistry,
-} from '@xyo-network/archivist-middleware'
+import { SchemaToQueryProcessorRegistry, XyoPayloadToQueryConverterRegistry } from '@xyo-network/archivist-middleware'
+import { ArchiveArchivist, ArchivePermissionsArchivist, Query, UserManager, WitnessedPayloadArchivist } from '@xyo-network/archivist-model'
 import { IdentifiableHuri, Queue } from '@xyo-network/archivist-queue'
 import { TYPES } from '@xyo-network/archivist-types'
 import { Application } from 'express'

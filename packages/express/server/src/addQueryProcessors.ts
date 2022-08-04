@@ -1,6 +1,6 @@
 import { delay } from '@xylabs/sdk-js'
 import { dependencies } from '@xyo-network/archivist-dependencies'
-import { isProduction, QueryProcessorRegistry } from '@xyo-network/archivist-middleware'
+import { isProduction } from '@xyo-network/archivist-middleware'
 import {
   debugSchema,
   getArchivePermissionsSchema,
@@ -8,6 +8,7 @@ import {
   getSchemaSchema,
   Query,
   QueryHandler,
+  QueryProcessorRegistry,
   setArchivePermissionsSchema,
 } from '@xyo-network/archivist-model'
 import {

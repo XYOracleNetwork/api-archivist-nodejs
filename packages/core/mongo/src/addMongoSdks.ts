@@ -1,9 +1,10 @@
-import { getBaseMongoSdk } from '@xyo-network/archivist-lib'
 import { EntityArchive, User } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoArchive, XyoBoundWitnessWithMeta, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { Container } from 'inversify'
+
+import { getBaseMongoSdk } from './dbSdk'
 
 export const addMongoSdks = (container: Container) => {
   container.bind<BaseMongoSdk<Required<XyoArchive>>>(TYPES.ArchiveSdkMongo).toConstantValue(getBaseMongoSdk<EntityArchive>('archives'))

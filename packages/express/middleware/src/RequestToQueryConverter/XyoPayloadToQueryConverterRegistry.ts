@@ -1,8 +1,6 @@
+import { QueryConverter, QueryConverterRegistry } from '@xyo-network/archivist-model'
 import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { Request } from 'express'
-
-import { QueryConverter } from './QueryConverter'
-import { QueryConverterRegistry } from './QueryConverterRegistry'
 
 export class XyoPayloadToQueryConverterRegistry implements QueryConverterRegistry {
   private _converters: Record<string, QueryConverter> = {}
