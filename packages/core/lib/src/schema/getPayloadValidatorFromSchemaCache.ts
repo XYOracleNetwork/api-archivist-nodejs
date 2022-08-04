@@ -1,5 +1,6 @@
 import { GetValidator } from '@xyo-network/archivist-model'
-import { XyoPayload, XyoPayloadWithPartialMeta, XyoPayloadWrapper, XyoSchemaCache, XyoSchemaPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoSchemaPayload } from '@xyo-network/schema-payload-plugin'
+import { XyoPayload, XyoPayloadWithPartialMeta, XyoPayloadWrapper, XyoSchemaCache } from '@xyo-network/sdk-xyo-client-js'
 // eslint-disable-next-line import/no-named-as-default
 import Ajv from 'ajv'
 

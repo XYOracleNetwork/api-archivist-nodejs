@@ -1,8 +1,8 @@
 import { XyoBoundWitness, XyoBoundWitnessWrapper } from '@xyo-network/sdk-xyo-client-js'
 
-export const scrubBoundWitnesses = <T extends object>(boundWitnesses: XyoBoundWitness<T>[]) => {
+export const scrubBoundWitnesses = (boundWitnesses: XyoBoundWitness[]) => {
   return boundWitnesses?.map((boundWitness) => {
     const bwWrapper = new XyoBoundWitnessWrapper(boundWitness)
-    return bwWrapper.scrubbedFields as XyoBoundWitness<T>
+    return bwWrapper.scrubbedFields as XyoBoundWitness
   })
 }

@@ -21,7 +21,7 @@ const handler: RequestHandler<ArchivePathParams, XyoBoundWitnessWithMeta[], XyoB
   payloads.forEach(async (payload) => {
     const valid = await validatePayloadSchema(payload)
     if (!valid) {
-      const payloadWithExtraMeta = payload as XyoPayload<{ _schemaValid: boolean }>
+      const payloadWithExtraMeta = payload as XyoPayload<{ _schemaValid: boolean; schema: string }>
       payloadWithExtraMeta._schemaValid = false
     }
   })

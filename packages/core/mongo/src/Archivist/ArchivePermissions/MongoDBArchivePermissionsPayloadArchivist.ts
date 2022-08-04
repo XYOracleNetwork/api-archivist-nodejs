@@ -40,7 +40,7 @@ export class MongoDBArchivePermissionsPayloadPayloadArchivist extends AbstractMo
       const _timestamp = Date.now()
       const archive = item._archive
       if (archive) {
-        const payload = new XyoPayloadBuilder({ schema }).fields({ ...item, _timestamp }).build()
+        const payload = new XyoPayloadBuilder<SetArchivePermissionsPayloadWithMeta>({ schema }).fields({ ...item, _timestamp }).build()
         const payloadResult = await getArchivistPayloadMongoSdk(archive).insert(payload)
         if (!payloadResult.acknowledged || !payloadResult.insertedId)
           throw new Error('MongoDBArchivePermissionsPayloadPayloadArchivist: Error inserting Payload')
