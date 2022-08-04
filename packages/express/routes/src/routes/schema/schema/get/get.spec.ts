@@ -1,10 +1,11 @@
 import { claimArchive, getHash, getSchema, getTokenForNewUser, postBlock } from '@xyo-network/archivist-test'
-import { XyoAccount, XyoBoundWitnessBase, XyoBoundWitnessBuilder, XyoSchemaPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoSchemaPayload } from '@xyo-network/schema-payload-plugin'
+import { XyoAccount, XyoBoundWitness, XyoBoundWitnessBuilder } from '@xyo-network/sdk-xyo-client-js'
 
 describe('/schema/:schema', () => {
   const schema = 'network.xyo.schema'
   const definition = { $schema: 'http://json-schema.org/draft-07/schema#' }
-  const bw = new XyoBoundWitnessBuilder<XyoBoundWitnessBase, XyoSchemaPayload>({ inlinePayloads: true })
+  const bw = new XyoBoundWitnessBuilder<XyoBoundWitness, XyoSchemaPayload>({ inlinePayloads: true })
     .payload({ definition, schema })
     .witness(XyoAccount.random())
     .build()

@@ -1,5 +1,5 @@
 import { assertEx, delay, exists, ForgetPromise } from '@xylabs/sdk-js'
-import { debugSchema, SetArchivePermissionsPayload } from '@xyo-network/archivist-model'
+import { DebugPayload, debugSchema, SetArchivePermissionsPayload } from '@xyo-network/archivist-model'
 import { claimArchive, getArchivist, getTokenForNewUser, postCommandsToArchive, queryCommandResult, setArchiveAccessControl } from '@xyo-network/archivist-test'
 import { XyoArchive, XyoBoundWitnessBuilder, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
 import { StatusCodes } from 'http-status-codes'
@@ -12,10 +12,7 @@ interface MigrationResponse {
 const schema = debugSchema
 
 const postCommandToArchive = async (archive: string, token?: string, expectedStatus: StatusCodes = StatusCodes.ACCEPTED) => {
-  const data = {
-    schema,
-  }
-  const payload = new XyoPayloadBuilder({ schema }).fields(data).build()
+  const payload = new XyoPayloadBuilder<DebugPayload>({ schema }).build()
   const bw = new XyoBoundWitnessBuilder({ inlinePayloads: true }).payload(payload).build()
   const response = await postCommandsToArchive([bw], archive, token, StatusCodes.ACCEPTED)
   const id = assertEx(response.flatMap((r) => r).filter(exists)?.[0])
