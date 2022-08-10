@@ -13,7 +13,7 @@ export class ArchiveApiKeyStrategy extends Strategy {
   constructor(
     @inject(TYPES.ArchiveArchivist) public readonly archiveArchivist: ArchiveArchivist,
     @inject(TYPES.UserManager) public readonly userManager: UserManager,
-    public readonly apiKeyHeader = 'x-api-key'
+    public readonly apiKeyHeader = 'x-api-key',
   ) {
     super()
   }

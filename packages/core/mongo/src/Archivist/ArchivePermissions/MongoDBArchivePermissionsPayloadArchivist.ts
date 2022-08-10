@@ -21,7 +21,7 @@ const schema: SetArchivePermissionsSchema = setArchivePermissionsSchema
 export class MongoDBArchivePermissionsPayloadPayloadArchivist extends AbstractMongoDBPayloadArchivist<SetArchivePermissionsPayload> {
   constructor(
     @inject(TYPES.Account) protected readonly account: XyoAccount,
-    @inject(TYPES.PayloadSdkMongo) protected readonly items: BaseMongoSdk<SetArchivePermissionsPayloadWithMeta>
+    @inject(TYPES.PayloadSdkMongo) protected readonly items: BaseMongoSdk<SetArchivePermissionsPayloadWithMeta>,
   ) {
     super()
   }
@@ -46,7 +46,8 @@ export class MongoDBArchivePermissionsPayloadPayloadArchivist extends AbstractMo
           throw new Error('MongoDBArchivePermissionsPayloadPayloadArchivist: Error inserting Payload')
         const bw = new XyoBoundWitnessBuilder(this.config).witness(this.account).payload(payload).build()
         const bwResult = await getArchivistBoundWitnessesMongoSdk(archive).insert(bw)
-        if (!bwResult.acknowledged || !bwResult.insertedId) throw new Error('MongoDBArchivePermissionsPayloadPayloadArchivist: Error inserting BoundWitness')
+        if (!bwResult.acknowledged || !bwResult.insertedId)
+          throw new Error('MongoDBArchivePermissionsPayloadPayloadArchivist: Error inserting BoundWitness')
       }
     }
     return items

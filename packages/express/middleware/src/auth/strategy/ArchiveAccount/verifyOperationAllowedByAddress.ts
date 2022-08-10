@@ -56,7 +56,7 @@ const verifySchemaAllowed = (schema: string, permissions: SetArchivePermissions)
 }
 
 export const verifyOperationAllowedByAddress = async (
-  req: Request<ArchivePathParams, unknown, XyoBoundWitnessWithMeta[], NoReqQuery, ArchiveLocals>
+  req: Request<ArchivePathParams, unknown, XyoBoundWitnessWithMeta[], NoReqQuery, ArchiveLocals>,
 ): Promise<boolean> => {
   // NOTE: Communicate partial success for allowed/disallowed operations
   // Short circuit & reduce all operations to binary success/failure for now

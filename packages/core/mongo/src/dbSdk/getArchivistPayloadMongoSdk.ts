@@ -16,7 +16,7 @@ export const getArchivistPayloadMongoSdk = (archive: string) => {
       dbPassword: assertEx(env.MONGO_PASSWORD, 'Missing Mongo Password'),
       dbUserName: assertEx(env.MONGO_USERNAME, 'Missing Mongo Username'),
     },
-    archive
+    archive,
   )
 }
 

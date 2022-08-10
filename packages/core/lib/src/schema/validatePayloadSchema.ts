@@ -5,7 +5,7 @@ import { getPayloadValidatorFromSchemaCache } from './getPayloadValidatorFromSch
 
 export const validatePayloadSchema = async (
   payload: XyoPayload,
-  getValidator: GetValidator<XyoPayload> = getPayloadValidatorFromSchemaCache
+  getValidator: GetValidator<XyoPayload> = getPayloadValidatorFromSchemaCache,
 ): Promise<boolean> => {
   const validate = await getValidator(payload)
   if (!validate) return true

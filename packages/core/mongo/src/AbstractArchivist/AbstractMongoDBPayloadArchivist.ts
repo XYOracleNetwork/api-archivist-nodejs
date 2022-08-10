@@ -10,7 +10,11 @@ import { AbstractMongoDBPayloadArchivistOpts } from './AbstractMongoDBPayloadArc
 import { getDefaultAbstractMongoDBPayloadArchivistOpts } from './getDefaultAbstractMongoDBPayloadArchivistOpts'
 
 @injectable()
-export abstract class AbstractMongoDBPayloadArchivist<T extends object, TId = string, TQuery = Filter<T>> extends AbstractPayloadArchivist<T, TId, TQuery> {
+export abstract class AbstractMongoDBPayloadArchivist<T extends object, TId = string, TQuery = Filter<T>> extends AbstractPayloadArchivist<
+  T,
+  TId,
+  TQuery
+> {
   protected readonly account: XyoAccount
   protected readonly boundWitnessSdk: BaseMongoSdk<XyoBoundWitness>
   protected readonly config: XyoBoundWitnessBuilderConfig

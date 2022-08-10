@@ -18,7 +18,12 @@ const setArchivePermissions = (archive: string, token: string, permissions: SetA
   return postCommandsToArchive([bw], archive, token)
 }
 
-const postCommandToArchive = (archive: string, token?: string, schema: TestSchemaTypes = allowedSchema, expectedStatus: StatusCodes = StatusCodes.ACCEPTED) => {
+const postCommandToArchive = (
+  archive: string,
+  token?: string,
+  schema: TestSchemaTypes = allowedSchema,
+  expectedStatus: StatusCodes = StatusCodes.ACCEPTED,
+) => {
   const data = {
     schema,
   }

@@ -15,7 +15,12 @@ export interface GetArchiveBlocksQueryParams extends NoReqQuery {
   timestamp?: string
 }
 
-const getBoundWitnesses = (archive: string, timestamp?: number, limit = defaultLimit, sortOrder: SortDirection = 'asc'): Promise<XyoBoundWitness[] | null> => {
+const getBoundWitnesses = (
+  archive: string,
+  timestamp?: number,
+  limit = defaultLimit,
+  sortOrder: SortDirection = 'asc',
+): Promise<XyoBoundWitness[] | null> => {
   const sdk = getArchivistBoundWitnessesMongoSdk(archive)
   if (timestamp) {
     return sortOrder === 'asc' ? sdk.findAfter(timestamp, limit) : sdk.findBefore(timestamp, limit)

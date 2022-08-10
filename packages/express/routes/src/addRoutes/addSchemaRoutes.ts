@@ -8,7 +8,7 @@ export const addSchemaRoutes = (app: Express) => {
   app.get(
     '/schema',
     allowAnonymous,
-    notImplemented
+    notImplemented,
     /* #swagger.deprecated = true */
     /* #swagger.tags = ['Schema'] */
     /* #swagger.summary = 'Get list of known schemas on archivist' */
@@ -17,7 +17,7 @@ export const addSchemaRoutes = (app: Express) => {
   app.get(
     '/schema/:schema',
     allowAnonymous,
-    getSchema
+    getSchema,
     /* #swagger.tags = ['Schema'] */
     /* #swagger.summary = 'Get specific schema if known by archivist' */
   )

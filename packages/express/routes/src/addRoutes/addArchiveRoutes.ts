@@ -10,7 +10,7 @@ export const addArchiveRoutes = (app: Express) => {
   app.get(
     '/archive',
     allowAnonymous,
-    getArchives
+    getArchives,
     /* #swagger.tags = ['Archive'] */
     /* #swagger.summary = 'Get list of archives on archivist' */
   )
@@ -18,7 +18,7 @@ export const addArchiveRoutes = (app: Express) => {
   app.get(
     '/archive/:archive',
     requireArchiveAccess,
-    getArchive
+    getArchive,
     /* #swagger.tags = ['Archive'] */
     /* #swagger.summary = 'Get archive configuration' */
   )
@@ -26,7 +26,7 @@ export const addArchiveRoutes = (app: Express) => {
   app.put(
     '/archive/:archive',
     requireAuth,
-    putArchive
+    putArchive,
     /* #swagger.tags = ['Archive'] */
     /* #swagger.summary = 'Put archive configuration' */
   )
@@ -34,7 +34,7 @@ export const addArchiveRoutes = (app: Express) => {
   app.delete(
     '/archive/:archive',
     requireArchiveOwner,
-    notImplemented
+    notImplemented,
     /* #swagger.deprecated = true */
     /* #swagger.tags = ['Archive'] */
     /* #swagger.summary = 'Delete an archive' */

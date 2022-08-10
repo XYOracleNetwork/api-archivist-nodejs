@@ -30,7 +30,9 @@ const handler: RequestHandler<ArchivePathParams, XyoArchive, XyoArchive> = async
     const result = await archiveArchivist.insert({ accessControl, archive, user: user.id })
     // Set newer permissions
     if (alsoSetNewerPermissions) {
-      accessControl ? await setArchiveAccessPublic(archivePermissionsArchivist, archive) : await setArchiveAccessPrivate(archivePermissionsArchivist, archive)
+      accessControl
+        ? await setArchiveAccessPublic(archivePermissionsArchivist, archive)
+        : await setArchiveAccessPrivate(archivePermissionsArchivist, archive)
     }
     res.status(result.updated ? StatusCodes.OK : StatusCodes.CREATED).json(result)
   } catch (error) {

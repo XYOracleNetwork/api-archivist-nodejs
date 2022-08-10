@@ -14,7 +14,7 @@ interface UpsertFilter {
     },
     {
       user: string
-    }
+    },
   ]
 }
 

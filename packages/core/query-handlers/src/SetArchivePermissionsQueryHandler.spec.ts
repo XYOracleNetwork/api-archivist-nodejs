@@ -22,7 +22,7 @@ const getQueryPayload = (
   allowedAddresses: string[] = [allowedAddress],
   disallowedAddresses: string[] = [disallowedAddress],
   allowedSchemas: string[] = [allowedSchema],
-  disallowedSchemas: string[] = [disallowedSchema]
+  disallowedSchemas: string[] = [disallowedSchema],
 ): SetArchivePermissionsPayloadWithMeta => {
   return {
     _archive,

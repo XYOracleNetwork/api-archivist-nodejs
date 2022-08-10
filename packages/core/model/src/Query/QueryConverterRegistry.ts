@@ -7,6 +7,6 @@ export interface QueryConverterRegistry {
   converters: Readonly<Record<string, QueryConverter>>
   registerConverterForSchema: <T extends XyoPayloadWithMeta = XyoPayloadWithMeta, R extends Request = Request>(
     schema: string,
-    processor: QueryConverter<T, R>
+    processor: QueryConverter<T, R>,
   ) => void
 }

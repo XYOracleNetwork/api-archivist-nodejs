@@ -19,7 +19,7 @@ export class MongoDBArchivistWitnessedPayloadArchivist extends AbstractPayloadAr
   constructor(
     @inject(TYPES.Account) protected readonly account: XyoAccount,
     @inject(TYPES.PayloadSdkMongo) protected readonly payloads: BaseMongoSdk<XyoPayloadWithMeta>,
-    @inject(TYPES.BoundWitnessSdkMongo) protected readonly boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta>
+    @inject(TYPES.BoundWitnessSdkMongo) protected readonly boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta>,
   ) {
     super()
   }

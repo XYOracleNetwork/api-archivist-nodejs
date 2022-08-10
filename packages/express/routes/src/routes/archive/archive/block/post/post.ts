@@ -10,7 +10,10 @@ import { RequestHandler } from 'express'
 import { storeBoundWitnesses } from './storeBoundWitnesses'
 import { storePayloads } from './storePayloads'
 
-const handler: RequestHandler<ArchivePathParams, XyoBoundWitnessWithMeta[], XyoBoundWitnessWithMeta | XyoBoundWitnessWithMeta[]> = async (req, res) => {
+const handler: RequestHandler<ArchivePathParams, XyoBoundWitnessWithMeta[], XyoBoundWitnessWithMeta | XyoBoundWitnessWithMeta[]> = async (
+  req,
+  res,
+) => {
   const { archive } = req.params || 'temp'
   const [boundWitnessMeta, payloadMeta] = getRequestMeta(req)
 

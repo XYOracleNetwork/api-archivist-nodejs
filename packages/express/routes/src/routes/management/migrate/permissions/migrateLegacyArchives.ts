@@ -1,5 +1,10 @@
 import { isLegacyPrivateArchive } from '@xyo-network/archivist-lib'
-import { ArchivePermissionsArchivist, privateArchivePermissions, publicArchivePermissions, SetArchivePermissionsPayload } from '@xyo-network/archivist-model'
+import {
+  ArchivePermissionsArchivist,
+  privateArchivePermissions,
+  publicArchivePermissions,
+  SetArchivePermissionsPayload,
+} from '@xyo-network/archivist-model'
 import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 
 export const migrateLegacyArchives = async (archivist: ArchivePermissionsArchivist, archives: XyoArchive[]) => {

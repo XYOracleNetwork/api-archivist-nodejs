@@ -11,7 +11,7 @@ export const getPayloads = (
   timestamp?: number,
   limit = defaultLimit,
   sortOrder: SortDirection = 'desc',
-  schema?: string
+  schema?: string,
 ): Promise<XyoPayload[] | null> => {
   const sdk = getArchivistPayloadMongoSdk(archive)
   // If no hash/timestamp was supplied, just return from the start/end of the archive

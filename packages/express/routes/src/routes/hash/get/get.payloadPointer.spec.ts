@@ -17,7 +17,13 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 import { PayloadPointerBody, payloadPointerSchema } from './PayloadPointer'
 import { PayloadArchiveRule, PayloadSchemaRule, PayloadTimestampDirectionRule } from './PayloadRules'
 
-const getPayloadPointer = (archive: string, schema: string, timestamp = Date.now(), direction: SortDirection = 'desc', address?: string): XyoPayload => {
+const getPayloadPointer = (
+  archive: string,
+  schema: string,
+  timestamp = Date.now(),
+  direction: SortDirection = 'desc',
+  address?: string,
+): XyoPayload => {
   const archiveRule: PayloadArchiveRule = { archive }
   const schemaRule: PayloadSchemaRule = { schema }
   const timestampRule: PayloadTimestampDirectionRule = { direction, timestamp }

@@ -47,15 +47,18 @@ export const addDebugQueries = (registry: QueryConverterRegistry) => {
 export const addQueryHandlers = (registry: QueryConverterRegistry) => {
   registry.registerConverterForSchema(
     setArchivePermissionsSchema,
-    (payload: XyoQueryPayloadWithMeta<SetArchivePermissionsPayload>, _req: Request) => new SetArchivePermissionsQuery(payload)
+    (payload: XyoQueryPayloadWithMeta<SetArchivePermissionsPayload>, _req: Request) => new SetArchivePermissionsQuery(payload),
   )
   registry.registerConverterForSchema(
     getArchivePermissionsSchema,
-    (payload: XyoQueryPayloadWithMeta<GetArchivePermissionsPayload>, _req: Request) => new GetArchivePermissionsQuery(payload)
+    (payload: XyoQueryPayloadWithMeta<GetArchivePermissionsPayload>, _req: Request) => new GetArchivePermissionsQuery(payload),
   )
   registry.registerConverterForSchema(
     getDomainConfigSchema,
-    (payload: XyoQueryPayloadWithMeta<GetDomainConfigPayload>, _req: Request) => new GetDomainConfigQuery(payload)
+    (payload: XyoQueryPayloadWithMeta<GetDomainConfigPayload>, _req: Request) => new GetDomainConfigQuery(payload),
   )
-  registry.registerConverterForSchema(getSchemaSchema, (payload: XyoQueryPayloadWithMeta<GetSchemaPayload>, _req: Request) => new GetSchemaQuery(payload))
+  registry.registerConverterForSchema(
+    getSchemaSchema,
+    (payload: XyoQueryPayloadWithMeta<GetSchemaPayload>, _req: Request) => new GetSchemaQuery(payload),
+  )
 }
