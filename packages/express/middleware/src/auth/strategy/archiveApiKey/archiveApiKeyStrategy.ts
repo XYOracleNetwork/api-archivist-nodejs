@@ -1,8 +1,7 @@
 import 'reflect-metadata'
 
 import { getHttpHeader } from '@xylabs/sdk-api-express-ecs'
-import { getArchiveKeys } from '@xyo-network/archivist-lib'
-import { ArchiveArchivist, UserManager } from '@xyo-network/archivist-model'
+import { ArchiveArchivist, ArchiveKeyArchivist, UserManager } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { Request } from 'express'
 import { inject, injectable } from 'inversify'
@@ -12,6 +11,7 @@ import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 export class ArchiveApiKeyStrategy extends Strategy {
   constructor(
     @inject(TYPES.ArchiveArchivist) public readonly archiveArchivist: ArchiveArchivist,
+    @inject(TYPES.ArchiveKeyArchivist) public readonly archiveKeyArchivist: ArchiveKeyArchivist,
     @inject(TYPES.UserManager) public readonly userManager: UserManager,
     public readonly apiKeyHeader = 'x-api-key',
   ) {
@@ -32,7 +32,7 @@ export class ArchiveApiKeyStrategy extends Strategy {
       }
 
       // Validate API Key is valid for this archive
-      const result = await getArchiveKeys(archive)
+      const result = await this.archiveKeyArchivist.get(archive)
       const keys = result.map((key) => key.key)
       if (!keys.includes(apiKey)) {
         this.fail('Invalid API key')
