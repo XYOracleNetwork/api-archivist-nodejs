@@ -1,4 +1,4 @@
-import { isLegacyPrivateArchive } from '@xyo-network/archivist-lib'
+import { isLegacyPrivateArchive } from '@xyo-network/archivist-express-lib'
 import {
   ArchivePermissionsArchivist,
   privateArchivePermissions,

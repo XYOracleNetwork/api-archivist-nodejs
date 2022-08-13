@@ -1,4 +1,5 @@
-import { findByHash, requestCanAccessArchive } from '@xyo-network/archivist-lib'
+import { requestCanAccessArchive } from '@xyo-network/archivist-express-lib'
+import { findByHash } from '@xyo-network/archivist-lib'
 import { XyoPayload, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { Request } from 'express'
 

@@ -1,5 +1,5 @@
 import { NoReqBody, NoReqQuery, NoResBody } from '@xylabs/sdk-api-express-ecs'
-import { isLegacyPrivateArchive, isRequestUserOwnerOfRequestedArchive } from '@xyo-network/archivist-lib'
+import { isLegacyPrivateArchive, isRequestUserOwnerOfRequestedArchive } from '@xyo-network/archivist-express-lib'
 import { ArchiveLocals, ArchivePathParams } from '@xyo-network/archivist-model'
 import { Request } from 'express'
 import { StatusCodes } from 'http-status-codes'
