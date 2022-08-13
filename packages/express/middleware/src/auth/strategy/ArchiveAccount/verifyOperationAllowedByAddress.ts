@@ -1,5 +1,5 @@
 import { NoReqQuery } from '@xylabs/sdk-api-express-ecs'
-import { isRequestUserOwnerOfRequestedArchive } from '@xyo-network/archivist-lib'
+import { isRequestUserOwnerOfRequestedArchive } from '@xyo-network/archivist-express-lib'
 import { ArchiveLocals, ArchivePathParams, SetArchivePermissions, setArchivePermissionsSchema } from '@xyo-network/archivist-model'
 import { XyoBoundWitness, XyoBoundWitnessWithMeta, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { Request } from 'express'

@@ -1,5 +1,6 @@
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
-import { isLegacyPrivateArchive, isValidArchiveName, setArchiveAccessPrivate, setArchiveAccessPublic } from '@xyo-network/archivist-lib'
+import { isLegacyPrivateArchive } from '@xyo-network/archivist-express-lib'
+import { isValidArchiveName, setArchiveAccessPrivate, setArchiveAccessPublic } from '@xyo-network/archivist-lib'
 import { ArchiveArchivist, ArchivePathParams, ArchivePermissionsArchivist } from '@xyo-network/archivist-model'
 import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
