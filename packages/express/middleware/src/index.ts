@@ -2,11 +2,13 @@ import { QueryConverterRegistry } from '@xyo-network/archivist-express-lib'
 import {
   ArchiveArchivist,
   ArchivePermissionsArchivist,
+  Query,
   QueryProcessorRegistry,
   UserManager,
   UserWithoutId,
   WitnessedPayloadArchivist,
 } from '@xyo-network/archivist-model'
+import { IdentifiableHuri, Queue } from '@xyo-network/archivist-queue'
 // NOTE: Required import since passport types (which we need to extend) extend Express
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import passport from 'passport'
@@ -35,6 +37,8 @@ declare global {
       archivistWitnessedPayloadArchivist: WitnessedPayloadArchivist
       queryConverters: QueryConverterRegistry
       queryProcessors: QueryProcessorRegistry
+      queryQueue: Queue<Query>
+      responseQueue: Queue<IdentifiableHuri>
       userManager: UserManager
     }
   }
