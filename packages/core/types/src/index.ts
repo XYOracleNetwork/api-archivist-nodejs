@@ -1,5 +1,6 @@
 const MONGO_TYPES = {
   ArchiveArchivistMongoDb: Symbol('ArchiveArchivistMongoDb'),
+  ArchiveKeySdkMongo: Symbol('ArchiveKeySdkMongo'),
   ArchiveSdkMongo: Symbol('ArchiveSdkMongo'),
   BoundWitnessSdkMongo: Symbol('BoundWitnessSdkMongo'),
   PayloadSdkMongo: Symbol('PayloadSdkMongo'),
