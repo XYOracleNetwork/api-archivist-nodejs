@@ -7,6 +7,7 @@ const MONGO_TYPES = {
   UserArchivistMongoDb: Symbol('UserArchivistMongoDb'),
   UserManagerMongoDb: Symbol('UserManagerMongoDb'),
   UserSdkMongo: Symbol('UserSdkMongo'),
+  XyoArchiveKeySdkMongo: Symbol('XyoArchiveKeySdkMongo'),
 }
 
 export const TYPES = {
