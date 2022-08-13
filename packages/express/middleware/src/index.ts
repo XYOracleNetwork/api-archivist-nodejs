@@ -1,7 +1,7 @@
+import { QueryConverterRegistry } from '@xyo-network/archivist-express-lib'
 import {
   ArchiveArchivist,
   ArchivePermissionsArchivist,
-  QueryConverterRegistry,
   QueryProcessorRegistry,
   UserManager,
   UserWithoutId,
