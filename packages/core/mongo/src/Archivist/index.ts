@@ -1,4 +1,5 @@
 export * from './Archive'
+export * from './ArchiveKey'
 export * from './ArchivePayload'
 export * from './ArchivePermissions'
 export * from './BoundWitness'
