@@ -1,10 +1,18 @@
-import { ArchiveArchivist, ArchivePermissionsArchivist, UserArchivist, UserManager, WitnessedPayloadArchivist } from '@xyo-network/archivist-model'
+import {
+  ArchiveArchivist,
+  ArchiveKeyArchivist,
+  ArchivePermissionsArchivist,
+  UserArchivist,
+  UserManager,
+  WitnessedPayloadArchivist,
+} from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { Container } from 'inversify'
 
 import { addMongoArchivist } from './addMongoArchivist'
 import {
   MongoDBArchiveArchivist,
+  MongoDBArchiveKeyArchivist,
   MongoDBArchivePermissionsPayloadPayloadArchivist,
   MongoDBArchivistWitnessedPayloadArchivist,
   MongoDBUserArchivist,
@@ -14,6 +22,7 @@ import { MongoDBUserManager } from './Manager'
 export const addArchivist = (container: Container) => {
   addMongoArchivist(container)
   container.bind<ArchiveArchivist>(TYPES.ArchiveArchivist).to(MongoDBArchiveArchivist).inSingletonScope()
+  container.bind<ArchiveKeyArchivist>(TYPES.ArchiveKeyArchivist).to(MongoDBArchiveKeyArchivist).inSingletonScope()
   container
     .bind<ArchivePermissionsArchivist>(TYPES.ArchivePermissionsArchivist)
     .to(MongoDBArchivePermissionsPayloadPayloadArchivist)
