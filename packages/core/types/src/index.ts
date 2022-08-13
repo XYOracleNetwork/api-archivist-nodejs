@@ -14,6 +14,7 @@ export const TYPES = {
   Account: Symbol('Account'),
   ApiKey: Symbol('ApiKey'),
   ArchiveArchivist: Symbol('ArchiveArchivist'),
+  ArchiveKeyArchivist: Symbol('ArchiveKeyArchivist'),
   ArchivePermissionsArchivist: Symbol('ArchivePermissionsArchivist'),
   JwtSecret: Symbol('JwtSecret'),
   Logger: Symbol('Logger'),
