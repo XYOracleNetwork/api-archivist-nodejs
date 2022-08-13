@@ -1,4 +1,5 @@
 import { dependencies } from '@xyo-network/archivist-dependencies'
+import { QueryConverterRegistry } from '@xyo-network/archivist-express-lib'
 import { isProduction } from '@xyo-network/archivist-middleware'
 import {
   DebugPayload,
@@ -14,7 +15,6 @@ import {
   GetSchemaQuery,
   getSchemaSchema,
   Query,
-  QueryConverterRegistry,
   SetArchivePermissionsPayload,
   SetArchivePermissionsQuery,
   setArchivePermissionsSchema,

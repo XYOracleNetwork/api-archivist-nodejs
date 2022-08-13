@@ -23,9 +23,5 @@ declare global {
   }
 }
 
-export * from './getRequestMeta'
-export * from './isArchiveOwner'
-export * from './legacyArchiveAccessControl'
-export * from './requestAccessibleArchives'
-export * from './requestCanAccessArchive'
-export * from './requestCanAccessArchives'
+export * from './Archive'
+export * from './Query'

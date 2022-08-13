@@ -4229,6 +4229,7 @@ __metadata:
     "@xylabs/sdk-api-express-ecs": ^1.2.4
     "@xylabs/sdk-js": ^2.6.5
     "@xyo-network/account": ^2.25.2
+    "@xyo-network/archivist-express-lib": "workspace:^"
     "@xyo-network/archivist-middleware": "workspace:^"
     "@xyo-network/archivist-model": "workspace:^"
     "@xyo-network/archivist-mongo": "workspace:^"
@@ -4247,6 +4248,7 @@ __metadata:
   resolution: "@xyo-network/archivist-express-lib@workspace:packages/express/lib"
   dependencies:
     "@types/express": 4.17.13
+    "@types/passport": ^1.0.10
     "@xylabs/sdk-api-express-ecs": ^1.2.4
     "@xyo-network/archivist-model": "workspace:^"
     "@xyo-network/sdk-xyo-client-js": ^2.25.2
@@ -4259,9 +4261,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@xyo-network/archivist-lib@workspace:packages/core/lib"
   dependencies:
-    "@types/passport": ^1.0.10
     "@types/source-map-support": 0.5.4
-    "@xylabs/sdk-api-express-ecs": ^1.2.4
     "@xylabs/sdk-js": ^2.6.5
     "@xyo-network/archivist-model": "workspace:^"
     "@xyo-network/schema-payload-plugin": ^2.25.2
@@ -4318,12 +4318,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@xyo-network/archivist-model@workspace:packages/core/model"
   dependencies:
-    "@types/passport": ^1.0.10
     "@xylabs/sdk-js": ^2.6.5
     "@xyo-network/sdk-xyo-client-js": ^2.25.2
     ajv: ^8.11.0
     inversify: ^6.0.1
-    passport: ^0.6.0
     reflect-metadata: ^0.1.13
   languageName: unknown
   linkType: soft
@@ -4413,6 +4411,7 @@ __metadata:
     "@xylabs/sdk-api-express-ecs": ^1.2.4
     "@xylabs/sdk-js": ^2.6.5
     "@xyo-network/archivist-dependencies": "workspace:^"
+    "@xyo-network/archivist-express-lib": "workspace:^"
     "@xyo-network/archivist-middleware": "workspace:^"
     "@xyo-network/archivist-model": "workspace:^"
     "@xyo-network/archivist-query-handlers": "workspace:^"
