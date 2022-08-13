@@ -1,4 +1,4 @@
-import { assertEx, delay, exists, ForgetPromise } from '@xylabs/sdk-js'
+import { assertEx, delay, exists } from '@xylabs/sdk-js'
 import { DebugPayload, debugSchema, SetArchivePermissionsPayload } from '@xyo-network/archivist-model'
 import {
   claimArchive,
@@ -81,8 +81,5 @@ describe('/management/migrate/permissions/archives/:archive', () => {
     it('disallows anonymous archive access', async () => {
       await postCommandToArchive(archive.archive, undefined, StatusCodes.OK)
     })
-  })
-  afterAll(async () => {
-    await ForgetPromise.awaitInactive()
   })
 })
