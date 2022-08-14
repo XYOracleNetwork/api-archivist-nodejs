@@ -1,4 +1,4 @@
-// import { ForgetPromise } from '@xylabs/forget'
+import { ForgetPromise } from '@xylabs/forget'
 import { assertEx, delay, exists } from '@xylabs/sdk-js'
 import { DebugPayload, debugSchema, SetArchivePermissionsPayload } from '@xyo-network/archivist-model'
 import {
@@ -83,7 +83,7 @@ describe('/management/migrate/permissions/archives/:archive', () => {
       await postCommandToArchive(archive.archive, undefined, StatusCodes.OK)
     })
   })
-  // afterAll(async () => {
-  //   await ForgetPromise.awaitInactive()
-  // })
+  afterAll(async () => {
+    await ForgetPromise.awaitInactive()
+  })
 })
