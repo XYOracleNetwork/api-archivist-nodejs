@@ -5,7 +5,7 @@ import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter } from 'mongodb'
 
-import { removeId } from '../../dbSdk'
+import { removeId } from '../../Mongo'
 
 @injectable()
 export class MongoDBPayloadArchivist extends AbstractPayloadArchivist<XyoPayloadWithMeta, string, Filter<XyoPayloadWithMeta>> {

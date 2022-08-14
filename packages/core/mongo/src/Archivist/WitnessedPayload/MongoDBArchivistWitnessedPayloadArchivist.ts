@@ -8,7 +8,7 @@ import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter } from 'mongodb'
 
-import { removeId } from '../../dbSdk'
+import { removeId } from '../../Mongo'
 
 const unique = <T>(value: T, index: number, self: T[]) => {
   return self.indexOf(value) === index
