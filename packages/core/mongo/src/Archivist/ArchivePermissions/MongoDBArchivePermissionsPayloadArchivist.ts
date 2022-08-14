@@ -13,7 +13,7 @@ import { inject, injectable } from 'inversify'
 import { Filter } from 'mongodb'
 
 import { AbstractMongoDBPayloadArchivist } from '../../AbstractArchivist'
-import { getArchivistBoundWitnessesMongoSdk, getArchivistPayloadMongoSdk, removeId } from '../../dbSdk'
+import { getArchivistBoundWitnessesMongoSdk, getArchivistPayloadMongoSdk, removeId } from '../../Mongo'
 
 const schema: SetArchivePermissionsSchema = setArchivePermissionsSchema
 
