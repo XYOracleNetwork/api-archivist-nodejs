@@ -9,6 +9,7 @@ import { inject, injectable } from 'inversify'
 import { Filter } from 'mongodb'
 
 import { removeId } from '../../Mongo'
+import { MONGO_TYPES } from '../../types'
 
 const unique = <T>(value: T, index: number, self: T[]) => {
   return self.indexOf(value) === index
@@ -18,8 +19,8 @@ const unique = <T>(value: T, index: number, self: T[]) => {
 export class MongoDBArchivistWitnessedPayloadArchivist extends AbstractPayloadArchivist<XyoPayloadWithMeta, string, Filter<XyoPayloadWithMeta>> {
   constructor(
     @inject(TYPES.Account) protected readonly account: XyoAccount,
-    @inject(TYPES.PayloadSdkMongo) protected readonly payloads: BaseMongoSdk<XyoPayloadWithMeta>,
-    @inject(TYPES.BoundWitnessSdkMongo) protected readonly boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta>,
+    @inject(MONGO_TYPES.PayloadSdkMongo) protected readonly payloads: BaseMongoSdk<XyoPayloadWithMeta>,
+    @inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta>,
   ) {
     super()
   }
