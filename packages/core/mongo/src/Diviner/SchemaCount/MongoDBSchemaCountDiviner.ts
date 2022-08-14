@@ -8,7 +8,7 @@ interface PayloadSchemaCountsAggregateResult {
 }
 
 export class MongoDBSchemaCountDiviner implements SchemaCountDiviner {
-  async find(archive: string): Promise<unknown> {
+  async find(archive: string): Promise<Record<string, number>> {
     // TODO: Pass in via ctor as SDK or Archivist
     const sdk = getArchivistPayloadMongoSdk(archive)
     const result: PayloadSchemaCountsAggregateResult[] = await sdk.useCollection((collection) => {
