@@ -1,9 +1,10 @@
 import { ArchiveKeyArchivist } from '@xyo-network/archivist-model'
-import { TYPES } from '@xyo-network/archivist-types'
 import { XyoArchiveKey } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Collection, Filter, WithId } from 'mongodb'
+
+import { MONGO_TYPES } from '../../types'
 
 const fromDb = (k: WithId<XyoArchiveKey>) => {
   return {
@@ -15,7 +16,7 @@ const fromDb = (k: WithId<XyoArchiveKey>) => {
 
 @injectable()
 export class MongoDBArchiveKeyArchivist implements ArchiveKeyArchivist {
-  constructor(@inject(TYPES.ArchiveKeySdkMongo) protected readonly keys: BaseMongoSdk<XyoArchiveKey>) {}
+  constructor(@inject(MONGO_TYPES.ArchiveKeySdkMongo) protected readonly keys: BaseMongoSdk<XyoArchiveKey>) {}
   async find(filter: Filter<XyoArchiveKey>): Promise<XyoArchiveKey[]> {
     return (await (await this.keys.find(filter)).toArray()).map(fromDb)
   }

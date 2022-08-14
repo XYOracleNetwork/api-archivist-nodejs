@@ -1,8 +1,9 @@
 import { SchemaCountDiviner } from '@xyo-network/archivist-model'
-import { TYPES } from '@xyo-network/archivist-types'
 import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
+
+import { MONGO_TYPES } from '../../types'
 
 interface PayloadSchemaCountsAggregateResult {
   _id: string
@@ -11,7 +12,7 @@ interface PayloadSchemaCountsAggregateResult {
 
 @injectable()
 export class MongoDBSchemaCountDiviner implements SchemaCountDiviner {
-  constructor(@inject(TYPES.PayloadSdkMongo) protected readonly sdk: BaseMongoSdk<XyoPayload>) {}
+  constructor(@inject(MONGO_TYPES.PayloadSdkMongo) protected readonly sdk: BaseMongoSdk<XyoPayload>) {}
   async find(archive: string): Promise<Record<string, number>> {
     const result: PayloadSchemaCountsAggregateResult[] = await this.sdk.useCollection((collection) => {
       return collection

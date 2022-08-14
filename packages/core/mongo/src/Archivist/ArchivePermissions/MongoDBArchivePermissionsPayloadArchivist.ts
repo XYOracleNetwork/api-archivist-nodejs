@@ -14,6 +14,7 @@ import { Filter } from 'mongodb'
 
 import { AbstractMongoDBPayloadArchivist } from '../../AbstractArchivist'
 import { getArchivistBoundWitnessesMongoSdk, getArchivistPayloadMongoSdk, removeId } from '../../Mongo'
+import { MONGO_TYPES } from '../../types'
 
 const schema: SetArchivePermissionsSchema = setArchivePermissionsSchema
 
@@ -21,7 +22,7 @@ const schema: SetArchivePermissionsSchema = setArchivePermissionsSchema
 export class MongoDBArchivePermissionsPayloadPayloadArchivist extends AbstractMongoDBPayloadArchivist<SetArchivePermissionsPayload> {
   constructor(
     @inject(TYPES.Account) protected readonly account: XyoAccount,
-    @inject(TYPES.PayloadSdkMongo) protected readonly items: BaseMongoSdk<SetArchivePermissionsPayloadWithMeta>,
+    @inject(MONGO_TYPES.PayloadSdkMongo) protected readonly items: BaseMongoSdk<SetArchivePermissionsPayloadWithMeta>,
   ) {
     super()
   }
