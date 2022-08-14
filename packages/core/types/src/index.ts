@@ -23,6 +23,7 @@ export const TYPES = {
   PayloadToQueryConverterRegistry: Symbol('PayloadToQueryConverterRegistry'),
   QueryQueue: Symbol('QueryQueue'),
   ResponseQueue: Symbol('ResponseQueue'),
+  SchemaCountDiviner: Symbol('SchemaCountDiviner'),
   SchemaToQueryProcessorRegistry: Symbol('SchemaToQueryProcessorRegistry'),
   UserArchivist: Symbol('UserArchivist'),
   UserManager: Symbol('UserManager'),

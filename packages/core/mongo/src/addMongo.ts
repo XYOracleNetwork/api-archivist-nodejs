@@ -6,7 +6,7 @@ import { Container } from 'inversify'
 
 import { getBaseMongoSdk } from './dbSdk'
 
-export const addMongoSdks = (container: Container) => {
+export const addMongo = (container: Container) => {
   container.bind<BaseMongoSdk<Required<XyoArchive>>>(TYPES.ArchiveSdkMongo).toConstantValue(getBaseMongoSdk<EntityArchive>('archives'))
   container.bind<BaseMongoSdk<XyoArchiveKey>>(TYPES.ArchiveKeySdkMongo).toConstantValue(getBaseMongoSdk<XyoArchiveKey>('archive_keys'))
   container.bind<BaseMongoSdk<XyoPayloadWithMeta>>(TYPES.PayloadSdkMongo).toConstantValue(getBaseMongoSdk<XyoPayloadWithMeta>('payloads'))

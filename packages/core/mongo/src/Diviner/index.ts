@@ -1,1 +1,1 @@
-export * from './SchemaCount'
+export * from './addDiviners'
