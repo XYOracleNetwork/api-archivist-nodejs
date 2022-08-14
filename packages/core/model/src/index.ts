@@ -1,5 +1,6 @@
 export * from './API'
 export * from './Archivist'
+export * from './Diviner'
 export * from './Domain'
 export * from './GetValidator'
 export * from './Manager'
