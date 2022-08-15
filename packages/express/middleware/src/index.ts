@@ -5,6 +5,7 @@ import {
   ArchivePermissionsArchivist,
   Query,
   QueryProcessorRegistry,
+  SchemaCountDiviner,
   UserManager,
   UserWithoutId,
   WitnessedPayloadArchivist,
@@ -41,6 +42,7 @@ declare global {
       queryProcessors: QueryProcessorRegistry
       queryQueue: Queue<Query>
       responseQueue: Queue<IdentifiableHuri>
+      schemaCountDiviner: SchemaCountDiviner
       userManager: UserManager
     }
   }
