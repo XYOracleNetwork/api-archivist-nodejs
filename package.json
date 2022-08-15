@@ -33,7 +33,7 @@
     "start": "nodemon",
     "launch": "node --max-old-space-size=8192 --experimental-specifier-resolution=node ./dist/cjs/index.js",
     "outdated": "yarn workspaces foreach -pv outdated",
-    "test:ci": "./node_modules/jest/bin/jest.js --coverage --forceExit"
+    "test:ci": "jest --coverage --forceExit"
   },
   "author": "Arie Trouw",
   "license": "LGPL-3.0",
