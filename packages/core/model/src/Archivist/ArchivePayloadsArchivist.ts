@@ -2,9 +2,9 @@ import { XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 
 import { PayloadArchivist } from './PayloadArchivist'
 
-export interface ArchivePayloadsId {
+export interface ArchivePayloadsArchivistId {
   archive: string
   hash: string
 }
 
-export type ArchivePayloadsArchivist = PayloadArchivist<XyoPayloadWithMeta, ArchivePayloadsId>
+export type ArchivePayloadsArchivist = PayloadArchivist<XyoPayloadWithMeta, ArchivePayloadsArchivistId>
