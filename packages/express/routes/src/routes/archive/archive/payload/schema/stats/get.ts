@@ -8,8 +8,8 @@ export interface ArchiveSchemaStatsResponse {
 
 const handler: RequestHandler<ArchivePathParams, ArchiveSchemaStatsResponse> = async (req, res) => {
   const { archive } = req.params
-  const { schemaCountDiviner } = req.app
-  const counts = await schemaCountDiviner.find(archive)
+  const { archiveSchemaCountDiviner } = req.app
+  const counts = await archiveSchemaCountDiviner.find(archive)
   res.json({ counts })
 }
 

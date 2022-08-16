@@ -4,6 +4,7 @@ import {
   ArchiveKeyArchivist,
   ArchivePermissionsArchivist,
   ArchiveSchemaCountDiviner,
+  ArchiveSchemaListDiviner,
   Query,
   QueryProcessorRegistry,
   UserManager,
@@ -37,12 +38,13 @@ declare global {
       archiveArchivist: ArchiveArchivist
       archiveKeyArchivist: ArchiveKeyArchivist
       archivePermissionsArchivist: ArchivePermissionsArchivist
+      archiveSchemaCountDiviner: ArchiveSchemaCountDiviner
+      archiveSchemaListDiviner: ArchiveSchemaListDiviner
       archivistWitnessedPayloadArchivist: WitnessedPayloadArchivist
       queryConverters: QueryConverterRegistry
       queryProcessors: QueryProcessorRegistry
       queryQueue: Queue<Query>
       responseQueue: Queue<IdentifiableHuri>
-      schemaCountDiviner: ArchiveSchemaCountDiviner
       userManager: UserManager
     }
   }

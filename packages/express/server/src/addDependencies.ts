@@ -6,6 +6,7 @@ import {
   ArchiveKeyArchivist,
   ArchivePermissionsArchivist,
   ArchiveSchemaCountDiviner,
+  ArchiveSchemaListDiviner,
   Query,
   UserManager,
   WitnessedPayloadArchivist,
@@ -25,6 +26,14 @@ export const addDependencies = (app: Application) => {
     dependencies.get<ArchivePermissionsArchivist>(TYPES.ArchivePermissionsArchivist),
     'Missing ArchivePermissionsArchivist',
   )
+  app.archiveSchemaCountDiviner = assertEx(
+    dependencies.get<ArchiveSchemaCountDiviner>(TYPES.ArchiveSchemaCountDiviner),
+    'Missing ArchiveSchemaCountDiviner',
+  )
+  app.archiveSchemaListDiviner = assertEx(
+    dependencies.get<ArchiveSchemaListDiviner>(TYPES.ArchiveSchemaListDiviner),
+    'Missing ArchiveSchemaListDiviner',
+  )
   app.queryConverters = assertEx(
     dependencies.get<XyoPayloadToQueryConverterRegistry>(TYPES.PayloadToQueryConverterRegistry),
     'Missing QueryConverters',
@@ -32,6 +41,5 @@ export const addDependencies = (app: Application) => {
   app.queryProcessors = assertEx(dependencies.get<SchemaToQueryProcessorRegistry>(TYPES.SchemaToQueryProcessorRegistry), 'Missing QueryProcessors')
   app.queryQueue = assertEx(dependencies.get<Queue<Query>>(TYPES.QueryQueue), 'Missing QueryQueue')
   app.responseQueue = assertEx(dependencies.get<Queue<IdentifiableHuri>>(TYPES.ResponseQueue), 'Missing ResponseQueue')
-  app.schemaCountDiviner = assertEx(dependencies.get<ArchiveSchemaCountDiviner>(TYPES.ArchiveSchemaCountDiviner), 'Missing ArchiveSchemaCountDiviner')
   app.userManager = assertEx(dependencies.get<UserManager>(TYPES.UserManager), 'Missing UserManager')
 }
