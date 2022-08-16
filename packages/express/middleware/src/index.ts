@@ -1,7 +1,9 @@
 import { QueryConverterRegistry } from '@xyo-network/archivist-express-lib'
 import {
   ArchiveArchivist,
+  ArchiveBoundWitnessesArchivist,
   ArchiveKeyArchivist,
+  ArchivePayloadsArchivist,
   ArchivePermissionsArchivist,
   ArchiveSchemaCountDiviner,
   ArchiveSchemaListDiviner,
@@ -38,7 +40,9 @@ declare global {
 
     interface Application {
       archiveArchivist: ArchiveArchivist
+      archiveBoundWitnessesArchivist: ArchiveBoundWitnessesArchivist
       archiveKeyArchivist: ArchiveKeyArchivist
+      archivePayloadsArchivist: ArchivePayloadsArchivist
       archivePermissionsArchivist: ArchivePermissionsArchivist
       archiveSchemaCountDiviner: ArchiveSchemaCountDiviner
       archiveSchemaListDiviner: ArchiveSchemaListDiviner
