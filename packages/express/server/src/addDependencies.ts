@@ -7,6 +7,7 @@ import {
   ArchivePermissionsArchivist,
   ArchiveSchemaCountDiviner,
   ArchiveSchemaListDiviner,
+  BoundWitnessesArchivist,
   PayloadsArchivist,
   Query,
   UserManager,
@@ -35,6 +36,7 @@ export const addDependencies = (app: Application) => {
     dependencies.get<ArchiveSchemaListDiviner>(TYPES.ArchiveSchemaListDiviner),
     'Missing ArchiveSchemaListDiviner',
   )
+  app.boundWitnessesArchivist = assertEx(dependencies.get<BoundWitnessesArchivist>(TYPES.BoundWitnessesArchivist), 'Missing BoundWitnessesArchivist')
   app.payloadsArchivist = assertEx(dependencies.get<PayloadsArchivist>(TYPES.PayloadsArchivist), 'Missing PayloadsArchivist')
   app.queryConverters = assertEx(
     dependencies.get<XyoPayloadToQueryConverterRegistry>(TYPES.PayloadToQueryConverterRegistry),

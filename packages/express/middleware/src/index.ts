@@ -5,6 +5,7 @@ import {
   ArchivePermissionsArchivist,
   ArchiveSchemaCountDiviner,
   ArchiveSchemaListDiviner,
+  BoundWitnessesArchivist,
   PayloadsArchivist,
   Query,
   QueryProcessorRegistry,
@@ -42,6 +43,7 @@ declare global {
       archiveSchemaCountDiviner: ArchiveSchemaCountDiviner
       archiveSchemaListDiviner: ArchiveSchemaListDiviner
       archivistWitnessedPayloadArchivist: WitnessedPayloadArchivist
+      boundWitnessesArchivist: BoundWitnessesArchivist
       payloadsArchivist: PayloadsArchivist
       queryConverters: QueryConverterRegistry
       queryProcessors: QueryProcessorRegistry

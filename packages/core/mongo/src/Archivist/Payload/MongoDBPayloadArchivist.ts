@@ -16,7 +16,7 @@ export class MongoDBPayloadArchivist extends AbstractPayloadArchivist<XyoPayload
     return (await this.sdk.find(filter)).limit(100).toArray()
   }
   async get(hash: string): Promise<XyoPayloadWithMeta[]> {
-    return (await this.sdk.find({ _hash: hash })).limit(100).toArray()
+    return (await this.sdk.find({ _hash: hash })).limit(1).toArray()
   }
   async insert(items: XyoPayloadWithMeta[]): Promise<XyoPayloadWithMeta[]> {
     const result = await this.sdk.insertMany(items.map(removeId) as XyoPayloadWithMeta[])
