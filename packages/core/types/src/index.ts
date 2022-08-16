@@ -5,6 +5,7 @@ export const TYPES = {
   ArchiveKeyArchivist: Symbol('ArchiveKeyArchivist'),
   ArchivePermissionsArchivist: Symbol('ArchivePermissionsArchivist'),
   ArchiveSchemaCountDiviner: Symbol('ArchiveSchemaCountDiviner'),
+  ArchiveSchemaListDiviner: Symbol('ArchiveSchemaListDiviner'),
   JwtSecret: Symbol('JwtSecret'),
   Logger: Symbol('Logger'),
   PasswordHasher: Symbol('PasswordHasher'),
