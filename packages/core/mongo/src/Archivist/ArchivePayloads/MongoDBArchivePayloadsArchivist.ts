@@ -15,7 +15,7 @@ export class MongoDBArchivePayloadsArchivist implements ArchivePayloadsArchivist
     return (await this.sdk.find(filter)).limit(100).toArray()
   }
   async get(id: ArchivePayloadsArchivistId): Promise<XyoPayloadWithMeta[]> {
-    const predicate = { _hash: assertEx(id.hash), archive: assertEx(id.archive) }
+    const predicate = { _archive: assertEx(id.archive), _hash: assertEx(id.hash) }
     return (await this.sdk.find(predicate)).limit(1).toArray()
   }
   async insert(items: XyoPayloadWithMeta[]): Promise<XyoPayloadWithMeta[]> {

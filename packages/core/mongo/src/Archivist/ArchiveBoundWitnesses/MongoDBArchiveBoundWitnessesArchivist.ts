@@ -15,7 +15,7 @@ export class MongoDBArchiveBoundWitnessesArchivist implements ArchiveBoundWitnes
     return (await this.sdk.find(filter)).limit(100).toArray()
   }
   async get(id: ArchiveBoundWitnessesArchivistId): Promise<XyoBoundWitnessWithMeta[]> {
-    const predicate = { _hash: assertEx(id.hash), archive: assertEx(id.archive) }
+    const predicate = { _archive: assertEx(id.archive), _hash: assertEx(id.hash) }
     return (await this.sdk.find(predicate)).limit(1).toArray()
   }
   async insert(items: XyoBoundWitnessWithMeta[]): Promise<XyoBoundWitnessWithMeta[]> {
