@@ -1,12 +1,12 @@
 import { assertEx } from '@xylabs/sdk-js'
-import { SortDirection } from '@xyo-network/archivist-model'
 import {
   PayloadArchiveRule,
   PayloadPointerBody,
   payloadPointerSchema,
   PayloadSchemaRule,
   PayloadTimestampDirectionRule,
-} from '@xyo-network/archivist-routes'
+  SortDirection,
+} from '@xyo-network/archivist-model'
 import { XyoAccount, XyoBoundWitnessWithPartialMeta, XyoPayload, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 

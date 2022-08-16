@@ -1,6 +1,6 @@
+import { PayloadAddressRule, PayloadArchiveRule, PayloadRule, PayloadSchemaRule, PayloadTimestampDirectionRule } from '@xyo-network/archivist-model'
+
 import { combineRules } from './combineRules'
-import { PayloadRule } from './PayloadRule'
-import { PayloadAddressRule, PayloadArchiveRule, PayloadSchemaRule, PayloadTimestampDirectionRule } from './Rules'
 
 // Mock Date.now
 const now = new Date()

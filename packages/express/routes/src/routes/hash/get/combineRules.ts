@@ -1,9 +1,13 @@
 import { assertEx, exists } from '@xylabs/sdk-js'
-import { SortDirection } from '@xyo-network/archivist-model'
-
-import { PayloadRule } from './PayloadRule'
-import { PayloadSearchCriteria } from './PayloadSearchCriteria'
-import { isPayloadAddressRule, isPayloadArchiveRule, isPayloadSchemaRule, isPayloadTimestampDirectionRule } from './TypePredicates'
+import {
+  isPayloadAddressRule,
+  isPayloadArchiveRule,
+  isPayloadSchemaRule,
+  isPayloadTimestampDirectionRule,
+  PayloadRule,
+  PayloadSearchCriteria,
+  SortDirection,
+} from '@xyo-network/archivist-model'
 
 // TODO: Could make it so that composability is such that we:
 // • AND first dimension of array

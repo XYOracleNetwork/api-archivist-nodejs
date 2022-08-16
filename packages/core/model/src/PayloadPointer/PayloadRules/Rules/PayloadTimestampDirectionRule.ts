@@ -1,4 +1,4 @@
-import { SortDirection } from '@xyo-network/archivist-model'
+import { SortDirection } from '../../../sortDirection'
 
 export interface PayloadTimestampDirectionRule {
   direction?: SortDirection

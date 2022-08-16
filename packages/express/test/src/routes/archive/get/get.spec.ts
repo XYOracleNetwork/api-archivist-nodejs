@@ -1,4 +1,4 @@
-import { defaultPublicArchives } from '@xyo-network/archivist-routes'
+import { defaultPublicArchives } from '@xyo-network/archivist-model'
 
 import { claimArchive, getArchives, getTokenForNewUser } from '../../../testUtil'
 
