@@ -2,6 +2,7 @@ import { Container } from 'inversify'
 
 import { addArchivists, addMongoArchivists } from './Archivist'
 import { addDiviners } from './Diviner'
+import { addManagers } from './Manager'
 import { addMongoSdks } from './Mongo'
 
 export const addMongo = (container: Container) => {
@@ -9,4 +10,5 @@ export const addMongo = (container: Container) => {
   addMongoArchivists(container)
   addArchivists(container)
   addDiviners(container)
+  addManagers(container)
 }
