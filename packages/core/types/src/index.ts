@@ -10,6 +10,7 @@ export const TYPES = {
   Logger: Symbol('Logger'),
   PasswordHasher: Symbol('PasswordHasher'),
   PayloadToQueryConverterRegistry: Symbol('PayloadToQueryConverterRegistry'),
+  PayloadsArchivist: Symbol('PayloadsArchivist'),
   QueryQueue: Symbol('QueryQueue'),
   ResponseQueue: Symbol('ResponseQueue'),
   SchemaToQueryProcessorRegistry: Symbol('SchemaToQueryProcessorRegistry'),
