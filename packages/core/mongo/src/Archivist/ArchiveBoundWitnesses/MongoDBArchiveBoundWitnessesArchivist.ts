@@ -9,7 +9,7 @@ import { removeId } from '../../Mongo'
 import { MONGO_TYPES } from '../../types'
 
 @injectable()
-export class MongoDBArchiveBoundWitnessArchivist implements ArchiveBoundWitnessesArchivist {
+export class MongoDBArchiveBoundWitnessesArchivist implements ArchiveBoundWitnessesArchivist {
   constructor(@inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly sdk: BaseMongoSdk<XyoBoundWitnessWithMeta>) {}
   async find(filter: Filter<XyoBoundWitnessWithMeta>): Promise<XyoBoundWitnessWithMeta[]> {
     return (await this.sdk.find(filter)).limit(100).toArray()
