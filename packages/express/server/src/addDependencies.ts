@@ -5,8 +5,8 @@ import {
   ArchiveArchivist,
   ArchiveKeyArchivist,
   ArchivePermissionsArchivist,
+  ArchiveSchemaCountDiviner,
   Query,
-  SchemaCountDiviner,
   UserManager,
   WitnessedPayloadArchivist,
 } from '@xyo-network/archivist-model'
@@ -32,6 +32,6 @@ export const addDependencies = (app: Application) => {
   app.queryProcessors = assertEx(dependencies.get<SchemaToQueryProcessorRegistry>(TYPES.SchemaToQueryProcessorRegistry), 'Missing QueryProcessors')
   app.queryQueue = assertEx(dependencies.get<Queue<Query>>(TYPES.QueryQueue), 'Missing QueryQueue')
   app.responseQueue = assertEx(dependencies.get<Queue<IdentifiableHuri>>(TYPES.ResponseQueue), 'Missing ResponseQueue')
-  app.schemaCountDiviner = assertEx(dependencies.get<SchemaCountDiviner>(TYPES.SchemaCountDiviner), 'Missing SchemaCountDiviner')
+  app.schemaCountDiviner = assertEx(dependencies.get<ArchiveSchemaCountDiviner>(TYPES.ArchiveSchemaCountDiviner), 'Missing ArchiveSchemaCountDiviner')
   app.userManager = assertEx(dependencies.get<UserManager>(TYPES.UserManager), 'Missing UserManager')
 }
