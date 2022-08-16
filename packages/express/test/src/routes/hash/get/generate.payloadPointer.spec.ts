@@ -1,4 +1,4 @@
-import { PayloadAddressRule, PayloadArchiveRule, PayloadPointerBody, payloadPointerSchema, PayloadSchemaRule } from '@xyo-network/archivist-routes'
+import { PayloadAddressRule, PayloadArchiveRule, PayloadPointerBody, payloadPointerSchema, PayloadSchemaRule } from '@xyo-network/archivist-model'
 import { XyoAccount, XyoBoundWitnessBuilder, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
 
 describe.skip('Generation of automation payload pointers', () => {
