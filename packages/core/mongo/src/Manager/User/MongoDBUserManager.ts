@@ -5,8 +5,8 @@ import { TYPES } from '@xyo-network/archivist-types'
 import { inject, injectable } from 'inversify'
 import { WithId } from 'mongodb'
 
-import { MongoDBUserArchivist } from '../Archivist'
-import { MONGO_TYPES } from '../types'
+import { MongoDBUserArchivist } from '../../Archivist'
+import { MONGO_TYPES } from '../../types'
 
 const fromDbEntity = (user: WithId<User>): User => {
   const id = user?._id?.toHexString?.()

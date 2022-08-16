@@ -1,1 +1,1 @@
-export * from './MongoDBUserManager'
+export * from './addManagers'
