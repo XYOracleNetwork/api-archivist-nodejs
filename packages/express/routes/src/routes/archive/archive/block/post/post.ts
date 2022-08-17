@@ -7,14 +7,12 @@ import { ArchivePathParams } from '@xyo-network/archivist-model'
 import { XyoBoundWitnessWithMeta, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 
-import { storeBoundWitnesses } from './storeBoundWitnesses'
-import { storePayloads } from './storePayloads'
-
 const handler: RequestHandler<ArchivePathParams, XyoBoundWitnessWithMeta[], XyoBoundWitnessWithMeta | XyoBoundWitnessWithMeta[]> = async (
   req,
   res,
 ) => {
   const { archive } = req.params || 'temp'
+  const { archiveBoundWitnessesArchivist, archivePayloadsArchivist } = req.app
   const [boundWitnessMeta, payloadMeta] = getRequestMeta(req)
 
   // Handle payload of single object or (preferred) array of bound witnesses
@@ -29,9 +27,17 @@ const handler: RequestHandler<ArchivePathParams, XyoBoundWitnessWithMeta[], XyoB
     }
   })
 
-  await storeBoundWitnesses(archive, sanitized)
+  await archiveBoundWitnessesArchivist.insert(
+    sanitized.map((bw) => {
+      return { ...bw, _archive: archive }
+    }),
+  )
   if (payloads.length) {
-    await storePayloads(archive, payloads)
+    await archivePayloadsArchivist.insert(
+      payloads.map((p) => {
+        return { ...p, _archive: archive }
+      }),
+    )
   }
   res.json(sanitized)
 }
