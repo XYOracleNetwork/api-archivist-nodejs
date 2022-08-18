@@ -7,10 +7,9 @@ import {
   setArchivePermissionsSchema,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { XyoAccount, XyoBoundWitnessBuilder, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
+import { XyoAccount, XyoBoundWitnessBuilder, XyoPayloadBuilder, XyoPayloadFindFilter } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
-import { Filter } from 'mongodb'
 
 import { AbstractMongoDBPayloadArchivist } from '../../AbstractArchivist'
 import { getArchivistBoundWitnessesMongoSdk, getArchivistPayloadMongoSdk, removeId } from '../../Mongo'
@@ -26,8 +25,8 @@ export class MongoDBArchivePermissionsPayloadPayloadArchivist extends AbstractMo
   ) {
     super()
   }
-  async find(filter: Filter<SetArchivePermissionsPayloadWithMeta>) {
-    return (await this.items.find(filter)).limit(100).toArray()
+  find(_filter: XyoPayloadFindFilter): Promise<SetArchivePermissionsPayloadWithMeta[]> {
+    throw new Error('Not Implemented')
   }
   async get(archive: string): Promise<SetArchivePermissionsPayloadWithMeta[]> {
     return (await getArchivistPayloadMongoSdk(archive).find({ _archive: archive, schema }))
