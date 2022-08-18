@@ -2,7 +2,7 @@ import { notImplemented } from '@xylabs/sdk-api-express-ecs'
 import { requireArchiveAccess } from '@xyo-network/archivist-middleware'
 import { Express } from 'express'
 
-import { getArchivePayloadHash, getArchivePayloadRecent, getArchivePayloadRepair, getArchivePayloads, getArchivePayloadStats } from '../routes'
+import { getArchivePayloadHash, getArchivePayloadRecent, getArchivePayloads, getArchivePayloadStats } from '../routes'
 
 export const addPayloadRoutes = (app: Express) => {
   app.get(
@@ -29,11 +29,11 @@ export const addPayloadRoutes = (app: Express) => {
     /* #swagger.summary = 'Get payloads by hash' */
   )
 
-  /* Todo: Should this be a POST or PUT instead? */
+  /* TODO: Should this be a POST or PUT instead? */
   app.get(
     '/archive/:archive/payload/hash/:hash/repair',
     requireArchiveAccess,
-    getArchivePayloadRepair,
+    notImplemented,
     /* #swagger.tags = ['Payload'] */
     /* #swagger.summary = 'Repair a payload' */
   )
