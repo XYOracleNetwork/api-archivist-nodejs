@@ -1,24 +1,20 @@
-import 'source-map-support/register'
-
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
-import { getArchivistBoundWitnessesMongoSdk, getArchivistPayloadMongoSdk } from '@xyo-network/archivist-lib'
-import { XyoPartialPayloadMeta } from '@xyo-network/sdk-xyo-client-js'
+import { ArchivePayloadsArchivist } from '@xyo-network/archivist-model'
+import { XyoPartialPayloadMeta, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
 import { BlockHashPathParams } from '../blockHashPathParams'
 
-const getBoundWitness = async (archive: string, hash: string) => {
-  const sdk = getArchivistBoundWitnessesMongoSdk(archive)
-  return await sdk.findByHash(hash)
-}
-
-const getPayloads = async (archive: string, hashes: string[]) => {
-  const sdk = getArchivistPayloadMongoSdk(archive)
+const getPayloadsByHashes = async (archivePayloadsArchivist: ArchivePayloadsArchivist, archive: string, hashes: string[]) => {
   const map: Record<string, XyoPartialPayloadMeta[]> = {}
-  const payloads = await sdk.findByHashes(hashes)
+  const payloads: (XyoPayloadWithMeta | undefined)[] = []
+  for (const hash of hashes) {
+    const payload = await archivePayloadsArchivist.get({ archive, hash })
+    payloads.push(payload.pop())
+  }
   payloads.forEach((value) => {
-    if (value._hash) {
+    if (value?._hash) {
       map[value._hash] = map[value._hash] ? [...map[value._hash], value] : [value]
     }
   })
@@ -27,9 +23,11 @@ const getPayloads = async (archive: string, hashes: string[]) => {
 
 const handler: RequestHandler<BlockHashPathParams, XyoPartialPayloadMeta[][]> = async (req, res, next) => {
   const { archive, hash } = req.params
-  const bw = await getBoundWitness(archive, hash)
+  const { archivePayloadsArchivist, archiveBoundWitnessesArchivist } = req.app
+  const bw = await archiveBoundWitnessesArchivist.get({ archive, hash })
   if (bw && bw.length > 0) {
-    res.json(await getPayloads(archive, bw[0].payload_hashes))
+    // TODO: remove meta
+    res.json(await getPayloadsByHashes(archivePayloadsArchivist, archive, bw[0].payload_hashes))
   } else {
     next({ message: 'Block not found', statusCode: StatusCodes.NOT_FOUND })
   }
