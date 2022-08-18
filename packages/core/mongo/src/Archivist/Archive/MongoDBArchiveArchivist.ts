@@ -23,7 +23,7 @@ interface UpsertFilter {
 export class MongoDBArchiveArchivist implements ArchiveArchivist {
   constructor(@inject(MONGO_TYPES.ArchiveSdkMongo) protected archives: BaseMongoSdk<Required<XyoArchive>>) {}
 
-  async find(query: Filter<EntityArchive>): Promise<XyoArchive[]> {
+  async find(query: Filter<EntityArchive>): Promise<Required<XyoArchive>[]> {
     return (await this.archives.find(query)).limit(100).toArray()
   }
 

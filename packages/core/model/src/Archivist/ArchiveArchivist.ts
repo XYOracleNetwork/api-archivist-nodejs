@@ -5,4 +5,4 @@ import { Archivist } from './Archivist'
 
 export type EntityArchive = Required<XyoArchive>
 
-export type ArchiveArchivist = Archivist<EntityArchive & UpsertResult, EntityArchive, EntityArchive | null, string>
+export type ArchiveArchivist = Archivist<EntityArchive & UpsertResult, EntityArchive, EntityArchive | null, string, EntityArchive[]>
