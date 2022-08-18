@@ -13,7 +13,7 @@ export class MongoDBArchivePayloadsArchivist implements ArchivePayloadsArchivist
   constructor(@inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayloadWithMeta>) {}
   async find(predicate: XyoArchivePayloadFilterPredicate): Promise<XyoPayloadWithMeta[]> {
     const { archive, limit, order, schema, timestamp, ...props } = predicate
-    const parsedLimit = limit || 20
+    const parsedLimit = limit || 100
     const parsedOrder = order || 'desc'
     const sort: { [key: string]: SortDirection } = { _timestamp: parsedOrder === 'asc' ? 1 : -1 }
     const parsedTimestamp = timestamp ? timestamp : parsedOrder === 'desc' ? Date.now() : 0

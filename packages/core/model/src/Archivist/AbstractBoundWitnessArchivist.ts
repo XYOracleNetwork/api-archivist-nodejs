@@ -4,13 +4,11 @@ import { EmptyObject, XyoBoundWitness, XyoBoundWitnessWithMeta, XyoPayloadWithPa
 import { injectable } from 'inversify'
 
 import { BoundWitnessArchivist } from './BoundWitnessArchivist'
-import { XyoPayloadFilterPredicate } from './XyoPayloadFilterPredicate'
+import { XyoBoundWitnessFilterPredicate } from './XyoBoundWitnessFilterPredicate'
 
 @injectable()
 export abstract class AbstractBoundWitnessArchivist<TId> implements BoundWitnessArchivist<TId> {
-  abstract find(
-    query: XyoPayloadFilterPredicate<Partial<{ hash: string; schema: string }>>,
-  ): Promise<XyoBoundWitnessWithMeta<EmptyObject, XyoPayloadWithPartialMeta<EmptyObject>>[]>
+  abstract find(query: XyoBoundWitnessFilterPredicate): Promise<XyoBoundWitnessWithMeta<EmptyObject, XyoPayloadWithPartialMeta<EmptyObject>>[]>
   abstract get(id: TId): Promise<XyoBoundWitnessWithMeta<EmptyObject, XyoPayloadWithPartialMeta<EmptyObject>>[]>
   abstract insert(item: XyoBoundWitness[]): Promise<XyoBoundWitnessWithMeta<EmptyObject, XyoPayloadWithPartialMeta<EmptyObject>>[]>
 }
