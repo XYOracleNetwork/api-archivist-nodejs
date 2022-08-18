@@ -1,5 +1,5 @@
-import { XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { EmptyObject } from '@xyo-network/sdk-xyo-client-js'
 
 import { PayloadArchivist } from './PayloadArchivist'
 
-export type PayloadsArchivist = PayloadArchivist<XyoPayloadWithMeta, string>
+export type PayloadsArchivist = PayloadArchivist<EmptyObject, string>
