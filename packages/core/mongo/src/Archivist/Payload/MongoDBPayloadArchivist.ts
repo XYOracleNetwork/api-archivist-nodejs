@@ -1,7 +1,8 @@
 import { AbstractPayloadArchivist, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
-import { XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { EmptyObject, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
+import { Filter, SortDirection } from 'mongodb'
 
 import { removeId } from '../../Mongo'
 import { MONGO_TYPES } from '../../types'
@@ -12,13 +13,20 @@ export class MongoDBPayloadArchivist extends AbstractPayloadArchivist<XyoPayload
     super()
   }
   async find(predicate: XyoPayloadFilterPredicate<XyoPayloadWithMeta>): Promise<XyoPayloadWithMeta[]> {
-    const { limit, order, ...props } = predicate
-    const sortOrder = order || 'desc'
+    const { limit, order, schema, timestamp, ...props } = predicate
     const parsedLimit = limit || 20
-    const filter = {
+    const parsedOrder = order || 'desc'
+    const sort: { [key: string]: SortDirection } = { _timestamp: parsedOrder === 'asc' ? 1 : -1 }
+    const parsedTimestamp = timestamp ? timestamp : parsedOrder === 'desc' ? Date.now() : 0
+    const _timestamp = parsedOrder === 'desc' ? { $lt: parsedTimestamp } : { $gt: parsedTimestamp }
+    const filter: Filter<XyoPayloadWithMeta<EmptyObject>> = {
       ...props,
+      _timestamp,
     }
-    return (await this.sdk.find(filter)).sort({ _timestamp: sortOrder }).limit(parsedLimit).toArray()
+    if (schema) {
+      filter.schema = schema
+    }
+    return (await this.sdk.find(filter)).sort(sort).limit(parsedLimit).maxTimeMS(2000).toArray()
   }
   async get(hash: string): Promise<XyoPayloadWithMeta[]> {
     return (await this.sdk.find({ _hash: hash })).limit(1).toArray()
