@@ -19,7 +19,7 @@ export class MongoDBUserArchivist implements UserArchivist {
   constructor(@inject(MONGO_TYPES.UserSdkMongo) protected readonly db: BaseMongoSdk<User>) {}
 
   async find(query: Filter<User>): Promise<WithId<User>[]> {
-    return (await this.db.find(query)).limit(100).toArray()
+    return (await this.db.find(query)).limit(20).toArray()
   }
 
   async get(id: string): Promise<WithId<User> | null> {

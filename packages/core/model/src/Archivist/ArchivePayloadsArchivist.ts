@@ -8,8 +8,9 @@ export interface ArchivePayloadsArchivistId {
   hash: string
 }
 
-export type ArchivePayloadsArchivist = PayloadArchivist<
-  XyoPayloadWithMeta,
+export type ArchivePayloadsArchivist<T extends { schema: string } = { schema: string }> = PayloadArchivist<
+  T,
   ArchivePayloadsArchivistId,
-  XyoArchivePayloadFilterPredicate<Partial<XyoPayloadWithMeta>>
+  XyoPayloadWithMeta<T>[],
+  XyoArchivePayloadFilterPredicate<Partial<XyoPayloadWithMeta<T>>>
 >
