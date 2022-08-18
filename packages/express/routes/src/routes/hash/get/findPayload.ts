@@ -21,7 +21,6 @@ const isPayloadSignedByAddress = async (archivist: BoundWitnessesArchivist, hash
   return count > 0
 }
 
-// TODO: Refactor to inject Payload repository
 export const findPayload = async (
   boundWitnessesArchivist: BoundWitnessesArchivist,
   payloadsArchivist: PayloadsArchivist,
