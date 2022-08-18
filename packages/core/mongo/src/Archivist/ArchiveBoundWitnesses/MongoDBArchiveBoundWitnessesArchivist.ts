@@ -1,8 +1,9 @@
 import { assertEx } from '@xylabs/sdk-js'
-import { ArchiveBoundWitnessesArchivist, ArchiveBoundWitnessesArchivistId, XyoBoundWitnessFilterPredicate } from '@xyo-network/archivist-model'
+import { ArchiveBoundWitnessesArchivist, ArchiveBoundWitnessesArchivistId, XyoArchiveBoundWitnessFilterPredicate } from '@xyo-network/archivist-model'
 import { EmptyObject, XyoBoundWitnessWithMeta, XyoPayloadWithPartialMeta } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
+import { Filter, SortDirection } from 'mongodb'
 
 import { removeId } from '../../Mongo'
 import { MONGO_TYPES } from '../../types'
@@ -10,8 +11,24 @@ import { MONGO_TYPES } from '../../types'
 @injectable()
 export class MongoDBArchiveBoundWitnessesArchivist implements ArchiveBoundWitnessesArchivist {
   constructor(@inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly sdk: BaseMongoSdk<XyoBoundWitnessWithMeta>) {}
-  async find(query: XyoBoundWitnessFilterPredicate): Promise<XyoBoundWitnessWithMeta<EmptyObject, XyoPayloadWithPartialMeta<EmptyObject>>[]> {
-    return (await this.sdk.find(query)).limit(100).toArray()
+  async find(
+    predicate: XyoArchiveBoundWitnessFilterPredicate,
+  ): Promise<XyoBoundWitnessWithMeta<EmptyObject, XyoPayloadWithPartialMeta<EmptyObject>>[]> {
+    const { archive, limit, order, schema, timestamp, ...props } = predicate
+    const parsedLimit = limit || 100
+    const parsedOrder = order || 'desc'
+    const sort: { [key: string]: SortDirection } = { _timestamp: parsedOrder === 'asc' ? 1 : -1 }
+    const parsedTimestamp = timestamp ? timestamp : parsedOrder === 'desc' ? Date.now() : 0
+    const _timestamp = parsedOrder === 'desc' ? { $lt: parsedTimestamp } : { $gt: parsedTimestamp }
+    const filter: Filter<XyoBoundWitnessWithMeta> = {
+      ...props,
+      _archive: archive,
+      _timestamp,
+    }
+    if (schema) {
+      filter.schema = schema
+    }
+    return (await this.sdk.find(filter)).sort(sort).limit(parsedLimit).maxTimeMS(2000).toArray()
   }
   async get(id: ArchiveBoundWitnessesArchivistId): Promise<XyoBoundWitnessWithMeta<EmptyObject, XyoPayloadWithPartialMeta<EmptyObject>>[]> {
     const predicate = { _archive: assertEx(id.archive), _hash: assertEx(id.hash) }

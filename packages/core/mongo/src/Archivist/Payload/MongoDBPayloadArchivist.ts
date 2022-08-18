@@ -14,7 +14,7 @@ export class MongoDBPayloadArchivist extends AbstractPayloadArchivist<XyoPayload
   }
   async find(predicate: XyoPayloadFilterPredicate<XyoPayloadWithMeta>): Promise<XyoPayloadWithMeta[]> {
     const { limit, order, schema, timestamp, ...props } = predicate
-    const parsedLimit = limit || 20
+    const parsedLimit = limit || 100
     const parsedOrder = order || 'desc'
     const sort: { [key: string]: SortDirection } = { _timestamp: parsedOrder === 'asc' ? 1 : -1 }
     const parsedTimestamp = timestamp ? timestamp : parsedOrder === 'desc' ? Date.now() : 0
