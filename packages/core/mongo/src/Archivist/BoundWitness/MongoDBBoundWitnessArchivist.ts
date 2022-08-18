@@ -12,7 +12,7 @@ export class MongoDBBoundWitnessArchivist extends AbstractBoundWitnessArchivist<
     super()
   }
   async find(predicate: XyoBoundWitnessFilterPredicate): Promise<XyoBoundWitnessWithMeta[]> {
-    const { hash, limit, order, schema, timestamp, ...props } = predicate
+    const { hash, limit, order, timestamp, ...props } = predicate
     const parsedLimit = limit || 100
     const parsedOrder = order || 'desc'
     const sort: { [key: string]: SortDirection } = { _timestamp: parsedOrder === 'asc' ? 1 : -1 }
@@ -21,9 +21,7 @@ export class MongoDBBoundWitnessArchivist extends AbstractBoundWitnessArchivist<
     const filter: Filter<XyoBoundWitnessWithMeta> = {
       ...props,
       _timestamp,
-    }
-    if (schema) {
-      filter.schema = schema
+      schema: 'network.xyo.boundwitness',
     }
     if (hash) {
       filter._hash = hash
