@@ -1,9 +1,8 @@
 import { assertEx } from '@xylabs/sdk-js'
-import { ArchivePayloadsArchivist, ArchivePayloadsArchivistId } from '@xyo-network/archivist-model'
+import { ArchivePayloadsArchivist, ArchivePayloadsArchivistId, XyoArchivePayloadFilterPredicate } from '@xyo-network/archivist-model'
 import { XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
-import { Filter } from 'mongodb'
 
 import { removeId } from '../../Mongo'
 import { MONGO_TYPES } from '../../types'
@@ -11,8 +10,15 @@ import { MONGO_TYPES } from '../../types'
 @injectable()
 export class MongoDBArchivePayloadsArchivist implements ArchivePayloadsArchivist {
   constructor(@inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayloadWithMeta>) {}
-  async find(filter: Filter<XyoPayloadWithMeta>): Promise<XyoPayloadWithMeta[]> {
-    return (await this.sdk.find(filter)).limit(100).toArray()
+  async find(predicate: XyoArchivePayloadFilterPredicate<Partial<XyoPayloadWithMeta>>): Promise<XyoPayloadWithMeta[]> {
+    const { archive, limit, order, ...props } = predicate
+    const sortOrder = order || 'desc'
+    const parsedLimit = limit || 20
+    const filter = {
+      ...props,
+      _archive: archive,
+    }
+    return (await this.sdk.find(filter)).sort({ _timestamp: sortOrder }).limit(parsedLimit).toArray()
   }
   async get(id: ArchivePayloadsArchivistId): Promise<XyoPayloadWithMeta[]> {
     const predicate = { _archive: assertEx(id.archive), _hash: assertEx(id.hash) }
