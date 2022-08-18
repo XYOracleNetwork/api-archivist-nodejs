@@ -1,9 +1,14 @@
-import { XyoBoundWitness, XyoBoundWitnessWithMeta, XyoPayloadFindFilter } from '@xyo-network/sdk-xyo-client-js'
+import 'reflect-metadata'
+
+import { EmptyObject, XyoBoundWitness, XyoBoundWitnessWithMeta, XyoPayloadWithPartialMeta } from '@xyo-network/sdk-xyo-client-js'
+import { injectable } from 'inversify'
 
 import { BoundWitnessArchivist } from './BoundWitnessArchivist'
+import { XyoBoundWitnessFilterPredicate } from './XyoBoundWitnessFilterPredicate'
 
-export abstract class AbstractBoundWitnessArchivist<T extends object, TId = string> implements BoundWitnessArchivist<TId> {
-  abstract find(filter: XyoPayloadFindFilter): Promise<XyoBoundWitnessWithMeta<T>[]>
-  abstract get(id: TId): Promise<XyoBoundWitnessWithMeta<T>[]>
-  abstract insert(items: XyoBoundWitness[]): Promise<XyoBoundWitnessWithMeta<T>[]>
+@injectable()
+export abstract class AbstractBoundWitnessArchivist<TId> implements BoundWitnessArchivist<TId> {
+  abstract find(query: XyoBoundWitnessFilterPredicate): Promise<XyoBoundWitnessWithMeta<EmptyObject, XyoPayloadWithPartialMeta<EmptyObject>>[]>
+  abstract get(id: TId): Promise<XyoBoundWitnessWithMeta<EmptyObject, XyoPayloadWithPartialMeta<EmptyObject>>[]>
+  abstract insert(item: XyoBoundWitness[]): Promise<XyoBoundWitnessWithMeta<EmptyObject, XyoPayloadWithPartialMeta<EmptyObject>>[]>
 }
