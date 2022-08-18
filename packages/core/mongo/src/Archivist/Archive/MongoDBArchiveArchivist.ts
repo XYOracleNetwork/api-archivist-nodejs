@@ -1,10 +1,10 @@
 import 'reflect-metadata'
 
-import { ArchiveArchivist, EntityArchive, UpsertResult } from '@xyo-network/archivist-model'
+import { ArchiveArchivist, EntityArchive, UpsertResult, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
 import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
-import { Filter, WithId } from 'mongodb'
+import { WithId } from 'mongodb'
 
 import { MONGO_TYPES } from '../../types'
 
@@ -23,7 +23,7 @@ interface UpsertFilter {
 export class MongoDBArchiveArchivist implements ArchiveArchivist {
   constructor(@inject(MONGO_TYPES.ArchiveSdkMongo) protected archives: BaseMongoSdk<Required<XyoArchive>>) {}
 
-  async find(query: Filter<EntityArchive>): Promise<Required<XyoArchive>[]> {
+  async find(query: XyoPayloadFilterPredicate<EntityArchive>): Promise<Required<XyoArchive>[]> {
     return (await this.archives.find(query)).limit(100).toArray()
   }
 
