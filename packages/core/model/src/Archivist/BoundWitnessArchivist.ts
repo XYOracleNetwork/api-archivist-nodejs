@@ -6,5 +6,6 @@ import { XyoPayloadFilterPredicate } from './XyoPayloadFilterPredicate'
 export type BoundWitnessArchivist<TId = string, TQuery = XyoPayloadFilterPredicate<Partial<XyoBoundWitness>>> = PayloadArchivist<
   XyoBoundWitness,
   TId,
+  XyoBoundWitness[],
   TQuery
 >

@@ -17,6 +17,6 @@ export type Archivist<
   TWrite,
   TReadResponse = TWriteResponse,
   TId = string,
-  TQueryResponse = unknown,
+  TQueryResponse = TReadResponse,
   TQuery = unknown,
 > = ReadWriteArchivist<TWriteResponse, TWrite, TReadResponse, TId> & QueryableArchivist<TQueryResponse, TQuery>

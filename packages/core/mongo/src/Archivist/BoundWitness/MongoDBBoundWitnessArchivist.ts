@@ -7,7 +7,7 @@ import { Filter } from 'mongodb'
 import { MONGO_TYPES } from '../../types'
 
 @injectable()
-export class MongoDBBoundWitnessArchivist extends AbstractBoundWitnessArchivist<XyoBoundWitnessWithMeta, string> {
+export class MongoDBBoundWitnessArchivist extends AbstractBoundWitnessArchivist<string> {
   constructor(@inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly sdk: BaseMongoSdk<XyoBoundWitnessWithMeta>) {
     super()
   }
