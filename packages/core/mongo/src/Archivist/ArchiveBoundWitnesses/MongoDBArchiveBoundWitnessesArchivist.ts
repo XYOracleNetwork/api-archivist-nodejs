@@ -1,9 +1,8 @@
 import { assertEx } from '@xylabs/sdk-js'
-import { ArchiveBoundWitnessesArchivist, ArchiveBoundWitnessesArchivistId } from '@xyo-network/archivist-model'
-import { XyoBoundWitnessWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { ArchiveBoundWitnessesArchivist, ArchiveBoundWitnessesArchivistId, XyoBoundWitnessFilterPredicate } from '@xyo-network/archivist-model'
+import { EmptyObject, XyoBoundWitnessWithMeta, XyoPayloadWithPartialMeta } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
-import { Filter } from 'mongodb'
 
 import { removeId } from '../../Mongo'
 import { MONGO_TYPES } from '../../types'
@@ -11,10 +10,10 @@ import { MONGO_TYPES } from '../../types'
 @injectable()
 export class MongoDBArchiveBoundWitnessesArchivist implements ArchiveBoundWitnessesArchivist {
   constructor(@inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly sdk: BaseMongoSdk<XyoBoundWitnessWithMeta>) {}
-  async find(filter: Filter<XyoBoundWitnessWithMeta>): Promise<XyoBoundWitnessWithMeta[]> {
-    return (await this.sdk.find(filter)).limit(100).toArray()
+  async find(query: XyoBoundWitnessFilterPredicate): Promise<XyoBoundWitnessWithMeta<EmptyObject, XyoPayloadWithPartialMeta<EmptyObject>>[]> {
+    return (await this.sdk.find(query)).limit(100).toArray()
   }
-  async get(id: ArchiveBoundWitnessesArchivistId): Promise<XyoBoundWitnessWithMeta[]> {
+  async get(id: ArchiveBoundWitnessesArchivistId): Promise<XyoBoundWitnessWithMeta<EmptyObject, XyoPayloadWithPartialMeta<EmptyObject>>[]> {
     const predicate = { _archive: assertEx(id.archive), _hash: assertEx(id.hash) }
     return (await this.sdk.find(predicate)).limit(1).toArray()
   }

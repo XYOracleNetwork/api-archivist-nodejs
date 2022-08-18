@@ -7,5 +7,5 @@ export type PayloadArchivist<
   T extends EmptyObject,
   TId = string,
   TQueryResponse = XyoPayloadWithMeta<T>[],
-  TQuery = XyoPayloadFilterPredicate<Partial<T>>,
+  TQuery = XyoPayloadFilterPredicate<T>,
 > = Archivist<XyoPayloadWithMeta<T>[], T[], XyoPayloadWithMeta<T>[], TId, TQueryResponse, TQuery>

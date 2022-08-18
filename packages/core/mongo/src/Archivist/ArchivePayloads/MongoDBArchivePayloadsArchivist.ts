@@ -11,7 +11,7 @@ import { MONGO_TYPES } from '../../types'
 @injectable()
 export class MongoDBArchivePayloadsArchivist implements ArchivePayloadsArchivist {
   constructor(@inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayloadWithMeta>) {}
-  async find(predicate: XyoArchivePayloadFilterPredicate<Partial<XyoPayloadWithMeta>>): Promise<XyoPayloadWithMeta[]> {
+  async find(predicate: XyoArchivePayloadFilterPredicate): Promise<XyoPayloadWithMeta[]> {
     const { archive, limit, order, schema, timestamp, ...props } = predicate
     const parsedLimit = limit || 20
     const parsedOrder = order || 'desc'
