@@ -12,7 +12,7 @@ import { MONGO_TYPES } from '../../types'
 export class MongoDBArchivePayloadsArchivist implements ArchivePayloadsArchivist {
   constructor(@inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayloadWithMeta>) {}
   async find(predicate: XyoArchivePayloadFilterPredicate): Promise<XyoPayloadWithMeta[]> {
-    const { archive, limit, order, schema, timestamp, ...props } = predicate
+    const { archive, hash, limit, order, schema, timestamp, ...props } = predicate
     const parsedLimit = limit || 100
     const parsedOrder = order || 'desc'
     const sort: { [key: string]: SortDirection } = { _timestamp: parsedOrder === 'asc' ? 1 : -1 }
@@ -25,6 +25,9 @@ export class MongoDBArchivePayloadsArchivist implements ArchivePayloadsArchivist
     }
     if (schema) {
       filter.schema = schema
+    }
+    if (hash) {
+      filter._hash = hash
     }
     return (await this.sdk.find(filter)).sort(sort).limit(parsedLimit).maxTimeMS(2000).toArray()
   }
