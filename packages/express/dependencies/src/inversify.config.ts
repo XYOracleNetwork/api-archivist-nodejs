@@ -5,7 +5,7 @@ import { assertEx } from '@xylabs/sdk-js'
 import { XyoAccount } from '@xyo-network/account'
 import { BcryptPasswordHasher } from '@xyo-network/archivist-middleware'
 import { PasswordHasher, User } from '@xyo-network/archivist-model'
-import { addArchivist } from '@xyo-network/archivist-mongo'
+import { addMongo } from '@xyo-network/archivist-mongo'
 import { TYPES } from '@xyo-network/archivist-types'
 import { config } from 'dotenv'
 import { Container } from 'inversify'
@@ -43,7 +43,7 @@ export const configure = () => {
   dependencies.bind<Logger>(TYPES.Logger).toConstantValue(getDefaultLogger())
   dependencies.bind<XyoAccount>(TYPES.Account).toConstantValue(new XyoAccount({ phrase }))
 
-  addArchivist(dependencies)
+  addMongo(dependencies)
   addAuth(dependencies)
   addPayloadHandlers(dependencies)
   addInMemoryQueueing(dependencies)

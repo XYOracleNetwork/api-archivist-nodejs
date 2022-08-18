@@ -1,11 +1,12 @@
 import 'reflect-metadata'
 
-import { ArchiveArchivist, EntityArchive, UpsertResult } from '@xyo-network/archivist-model'
-import { TYPES } from '@xyo-network/archivist-types'
+import { ArchiveArchivist, EntityArchive, UpsertResult, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
 import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
-import { Filter, WithId } from 'mongodb'
+import { WithId } from 'mongodb'
+
+import { MONGO_TYPES } from '../../types'
 
 interface UpsertFilter {
   $and: [
@@ -14,20 +15,20 @@ interface UpsertFilter {
     },
     {
       user: string
-    }
+    },
   ]
 }
 
 @injectable()
 export class MongoDBArchiveArchivist implements ArchiveArchivist {
-  constructor(@inject(TYPES.ArchiveSdkMongo) protected archives: BaseMongoSdk<Required<XyoArchive>>) {}
+  constructor(@inject(MONGO_TYPES.ArchiveSdkMongo) protected archives: BaseMongoSdk<Required<XyoArchive>>) {}
 
-  async find(query: Filter<EntityArchive>): Promise<XyoArchive[]> {
+  async find(query: XyoPayloadFilterPredicate<EntityArchive>): Promise<Required<XyoArchive>[]> {
     return (await this.archives.find(query)).limit(100).toArray()
   }
 
-  get(name: string): Promise<Required<XyoArchive> | null> {
-    return this.archives.findOne({ archive: name })
+  get(archive: string): Promise<Required<XyoArchive> | null> {
+    return this.archives.findOne({ archive })
   }
 
   async insert(item: Required<XyoArchive>): Promise<WithId<Required<XyoArchive> & UpsertResult>> {

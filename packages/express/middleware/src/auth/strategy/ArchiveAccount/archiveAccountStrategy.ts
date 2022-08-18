@@ -14,7 +14,7 @@ export class ArchiveAccountStrategy extends Strategy {
   override async authenticate(
     this: StrategyCreated<this, this & StrategyCreatedStatic>,
     req: Request<ArchivePathParams, unknown, XyoBoundWitnessWithMeta[], NoReqQuery, ArchiveLocals>,
-    _options?: unknown
+    _options?: unknown,
   ) {
     try {
       const allowed = await verifyOperationAllowedByAddress(req)

@@ -1,5 +1,5 @@
 import { NoReqBody, NoReqQuery, NoResBody } from '@xylabs/sdk-api-express-ecs'
-import { isLegacyPrivateArchive, isRequestUserOwnerOfRequestedArchive } from '@xyo-network/archivist-lib'
+import { isLegacyPrivateArchive, isRequestUserOwnerOfRequestedArchive } from '@xyo-network/archivist-express-lib'
 import { ArchiveLocals, ArchivePathParams } from '@xyo-network/archivist-model'
 import { Request } from 'express'
 import { StatusCodes } from 'http-status-codes'
@@ -12,7 +12,7 @@ export class ArchiveAccessControlStrategy extends Strategy {
   override authenticate(
     this: StrategyCreated<this, this & StrategyCreatedStatic>,
     req: Request<ArchivePathParams, NoResBody, NoReqBody, NoReqQuery, ArchiveLocals>,
-    _options?: unknown
+    _options?: unknown,
   ) {
     try {
       // If it's not a public archive

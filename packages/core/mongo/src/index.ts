@@ -1,1 +1,1 @@
-export * from './addArchivist'
+export * from './addMongo'

@@ -1,10 +1,10 @@
-import { requestAccessibleArchives } from '@xyo-network/archivist-lib'
+import { requestAccessibleArchives } from '@xyo-network/archivist-express-lib'
+import { PayloadPointerPayload } from '@xyo-network/archivist-model'
 import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { Request } from 'express'
 
+import { combineRules } from './combineRules'
 import { findPayload } from './findPayload'
-import { PayloadPointerPayload } from './PayloadPointer'
-import { combineRules } from './PayloadRules'
 
 export const resolvePayloadPointer = async (req: Request, pointer: PayloadPointerPayload): Promise<XyoPayload | undefined> => {
   const searchCriteria = combineRules(pointer.reference)

@@ -7,7 +7,7 @@ export const addNodeRoutes = (app: Express) => {
   app.get(
     '/:hash',
     allowAnonymous,
-    getByHash
+    getByHash,
     /* #swagger.tags = ['Node'] */
     /* #swagger.summary = 'Get the HURI from the archivist' */
   )
@@ -15,7 +15,7 @@ export const addNodeRoutes = (app: Express) => {
   app.get(
     '/query/:id',
     allowAnonymous,
-    getQuery
+    getQuery,
     /* #swagger.tags = ['Node'] */
     /* #swagger.summary = 'Get the status of a query from the archivist' */
   )
@@ -24,7 +24,7 @@ export const addNodeRoutes = (app: Express) => {
     '/:archive',
     archiveLocals,
     requireAccountOperationAccess,
-    postNode
+    postNode,
     /* #swagger.tags = ['Node'] */
     /* #swagger.summary = 'Execute the supplied queries, contained as Payloads in one or more Bound Witnesses. Implementation is specific to the supplied payload schemas.' */
   )

@@ -7,13 +7,13 @@ import {
   setArchivePermissionsSchema,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { XyoAccount, XyoBoundWitnessBuilder, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
+import { XyoAccount, XyoBoundWitnessBuilder, XyoPayloadBuilder, XyoPayloadFindFilter } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
-import { Filter } from 'mongodb'
 
 import { AbstractMongoDBPayloadArchivist } from '../../AbstractArchivist'
-import { getArchivistBoundWitnessesMongoSdk, getArchivistPayloadMongoSdk, removeId } from '../../dbSdk'
+import { getArchivistBoundWitnessesMongoSdk, getArchivistPayloadMongoSdk, removeId } from '../../Mongo'
+import { MONGO_TYPES } from '../../types'
 
 const schema: SetArchivePermissionsSchema = setArchivePermissionsSchema
 
@@ -21,12 +21,12 @@ const schema: SetArchivePermissionsSchema = setArchivePermissionsSchema
 export class MongoDBArchivePermissionsPayloadPayloadArchivist extends AbstractMongoDBPayloadArchivist<SetArchivePermissionsPayload> {
   constructor(
     @inject(TYPES.Account) protected readonly account: XyoAccount,
-    @inject(TYPES.PayloadSdkMongo) protected readonly items: BaseMongoSdk<SetArchivePermissionsPayloadWithMeta>
+    @inject(MONGO_TYPES.PayloadSdkMongo) protected readonly items: BaseMongoSdk<SetArchivePermissionsPayloadWithMeta>,
   ) {
     super()
   }
-  async find(filter: Filter<SetArchivePermissionsPayloadWithMeta>) {
-    return (await this.items.find(filter)).limit(100).toArray()
+  find(_filter: XyoPayloadFindFilter): Promise<SetArchivePermissionsPayloadWithMeta[]> {
+    throw new Error('Not Implemented')
   }
   async get(archive: string): Promise<SetArchivePermissionsPayloadWithMeta[]> {
     return (await getArchivistPayloadMongoSdk(archive).find({ _archive: archive, schema }))
@@ -46,7 +46,8 @@ export class MongoDBArchivePermissionsPayloadPayloadArchivist extends AbstractMo
           throw new Error('MongoDBArchivePermissionsPayloadPayloadArchivist: Error inserting Payload')
         const bw = new XyoBoundWitnessBuilder(this.config).witness(this.account).payload(payload).build()
         const bwResult = await getArchivistBoundWitnessesMongoSdk(archive).insert(bw)
-        if (!bwResult.acknowledged || !bwResult.insertedId) throw new Error('MongoDBArchivePermissionsPayloadPayloadArchivist: Error inserting BoundWitness')
+        if (!bwResult.acknowledged || !bwResult.insertedId)
+          throw new Error('MongoDBArchivePermissionsPayloadPayloadArchivist: Error inserting BoundWitness')
       }
     }
     return items

@@ -1,6 +1,7 @@
 const generateJestConfig = ({ esModules }) => {
   const esModuleslist = Array.isArray(esModules) ? esModules.join('|') : esModules
   return {
+    coveragePathIgnorePatterns: ['./packages/express/test'],
     coverageThreshold: {
       global: {
         branches: 50,

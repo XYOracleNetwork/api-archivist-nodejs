@@ -1,5 +1,5 @@
 import { NoReqQuery } from '@xylabs/sdk-api-express-ecs'
-import { isRequestUserOwnerOfRequestedArchive } from '@xyo-network/archivist-lib'
+import { isRequestUserOwnerOfRequestedArchive } from '@xyo-network/archivist-express-lib'
 import { ArchiveLocals, ArchivePathParams, SetArchivePermissions, setArchivePermissionsSchema } from '@xyo-network/archivist-model'
 import { XyoBoundWitness, XyoBoundWitnessWithMeta, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { Request } from 'express'
@@ -56,7 +56,7 @@ const verifySchemaAllowed = (schema: string, permissions: SetArchivePermissions)
 }
 
 export const verifyOperationAllowedByAddress = async (
-  req: Request<ArchivePathParams, unknown, XyoBoundWitnessWithMeta[], NoReqQuery, ArchiveLocals>
+  req: Request<ArchivePathParams, unknown, XyoBoundWitnessWithMeta[], NoReqQuery, ArchiveLocals>,
 ): Promise<boolean> => {
   // NOTE: Communicate partial success for allowed/disallowed operations
   // Short circuit & reduce all operations to binary success/failure for now

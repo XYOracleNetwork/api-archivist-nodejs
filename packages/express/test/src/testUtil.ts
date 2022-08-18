@@ -86,7 +86,10 @@ export const getNewWeb3User = (): TestWeb3User => {
   return user
 }
 
-export const getExistingWeb2User = async (user: TestWeb2User = getNewWeb2User(), expectedStatus: StatusCodes = StatusCodes.CREATED): Promise<TestWeb2User> => {
+export const getExistingWeb2User = async (
+  user: TestWeb2User = getNewWeb2User(),
+  expectedStatus: StatusCodes = StatusCodes.CREATED,
+): Promise<TestWeb2User> => {
   const apiKey = process.env.API_KEY as string
   await request.post('/user/signup').set('x-api-key', apiKey).send(user).expect(expectedStatus)
   return user
@@ -142,13 +145,17 @@ export const claimArchive = async (token: string, archive?: string, expectedStat
 
 export const getArchive = async (archive: string, token?: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoArchive> => {
   const path = `/archive/${archive}`
-  const response = token ? await request.get(path).auth(token, { type: 'bearer' }).expect(expectedStatus) : await request.get(path).expect(expectedStatus)
+  const response = token
+    ? await request.get(path).auth(token, { type: 'bearer' }).expect(expectedStatus)
+    : await request.get(path).expect(expectedStatus)
   return response.body.data
 }
 
 export const getDomain = async (domain: string, token?: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoDomainPayload> => {
   const path = `/domain/${domain}`
-  const response = token ? await request.get(path).auth(token, { type: 'bearer' }).expect(expectedStatus) : await request.get(path).expect(expectedStatus)
+  const response = token
+    ? await request.get(path).auth(token, { type: 'bearer' }).expect(expectedStatus)
+    : await request.get(path).expect(expectedStatus)
   return response.body.data
 }
 
@@ -156,7 +163,7 @@ export const setArchiveAccessControl = async (
   token: string,
   archive: string,
   data: XyoArchive,
-  expectedStatus: StatusCodes = StatusCodes.OK
+  expectedStatus: StatusCodes = StatusCodes.OK,
 ): Promise<XyoArchive> => {
   if (!archive) archive = getArchiveName()
   const response = await request
@@ -213,10 +220,12 @@ export const getNewBlockWithBoundWitnessesWithPayloads = (numBoundWitnesses = 1,
 export const getHash = async (
   hash: string,
   token?: string,
-  expectedStatus: StatusCodes = StatusCodes.OK
+  expectedStatus: StatusCodes = StatusCodes.OK,
 ): Promise<XyoBoundWitnessWithMeta | XyoPayloadWithMeta> => {
   const path = `/${hash}`
-  const response = token ? await request.get(path).auth(token, { type: 'bearer' }).expect(expectedStatus) : await request.get(path).expect(expectedStatus)
+  const response = token
+    ? await request.get(path).auth(token, { type: 'bearer' }).expect(expectedStatus)
+    : await request.get(path).expect(expectedStatus)
   return response.body
 }
 
@@ -224,7 +233,7 @@ export const postBlock = async (
   boundWitnesses: XyoBoundWitness | XyoBoundWitness[],
   archive: string,
   token?: string,
-  expectedStatus: StatusCodes = StatusCodes.OK
+  expectedStatus: StatusCodes = StatusCodes.OK,
 ): Promise<XyoBoundWitnessWithMeta[]> => {
   const data = ([] as XyoBoundWitness[]).concat(Array.isArray(boundWitnesses) ? boundWitnesses : [boundWitnesses])
   const path = `/archive/${archive}/block`
@@ -238,7 +247,7 @@ export const getBlockByHash = async (
   token: string,
   archive: string,
   hash: string,
-  expectedStatus: StatusCodes = StatusCodes.OK
+  expectedStatus: StatusCodes = StatusCodes.OK,
 ): Promise<XyoPayloadWithMeta[]> => {
   const response = await request.get(`/archive/${archive}/block/hash/${hash}`).auth(token, { type: 'bearer' }).expect(expectedStatus)
   return response.body.data
@@ -250,15 +259,25 @@ export const getBlocksByTimestamp = async (
   timestamp: number,
   limit = 10,
   order: SortDirection = 'asc',
-  expectedStatus: StatusCodes = StatusCodes.OK
+  expectedStatus: StatusCodes = StatusCodes.OK,
 ): Promise<XyoBoundWitnessWithMeta[]> => {
-  const response = await request.get(`/archive/${archive}/block`).query({ limit, order, timestamp }).auth(token, { type: 'bearer' }).expect(expectedStatus)
+  const response = await request
+    .get(`/archive/${archive}/block`)
+    .query({ limit, order, timestamp })
+    .auth(token, { type: 'bearer' })
+    .expect(expectedStatus)
   return response.body.data
 }
 
-export const getRecentBlocks = async (archive: string, token?: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoBoundWitnessWithMeta[]> => {
+export const getRecentBlocks = async (
+  archive: string,
+  token?: string,
+  expectedStatus: StatusCodes = StatusCodes.OK,
+): Promise<XyoBoundWitnessWithMeta[]> => {
   const path = `/archive/${archive}/block/recent`
-  const response = token ? await request.get(path).auth(token, { type: 'bearer' }).expect(expectedStatus) : await request.get(path).expect(expectedStatus)
+  const response = token
+    ? await request.get(path).auth(token, { type: 'bearer' }).expect(expectedStatus)
+    : await request.get(path).expect(expectedStatus)
   return response.body.data
 }
 
@@ -266,7 +285,7 @@ export const getPayloadByHash = async (
   token: string,
   archive: string,
   hash: string,
-  expectedStatus: StatusCodes = StatusCodes.OK
+  expectedStatus: StatusCodes = StatusCodes.OK,
 ): Promise<XyoPayloadWithMeta[]> => {
   const response = await request.get(`/archive/${archive}/payload/hash/${hash}`).auth(token, { type: 'bearer' }).expect(expectedStatus)
   return response.body.data
@@ -278,9 +297,13 @@ export const getPayloadsByTimestamp = async (
   timestamp: number,
   limit = 10,
   order: SortDirection = 'asc',
-  expectedStatus: StatusCodes = StatusCodes.OK
+  expectedStatus: StatusCodes = StatusCodes.OK,
 ): Promise<XyoPayloadWithMeta[]> => {
-  const response = await request.get(`/archive/${archive}/payload`).query({ limit, order, timestamp }).auth(token, { type: 'bearer' }).expect(expectedStatus)
+  const response = await request
+    .get(`/archive/${archive}/payload`)
+    .query({ limit, order, timestamp })
+    .auth(token, { type: 'bearer' })
+    .expect(expectedStatus)
   return response.body.data
 }
 
@@ -288,15 +311,21 @@ export const repairPayloadByHash = async (
   token: string,
   archive: string,
   hash: string,
-  expectedStatus: StatusCodes = StatusCodes.OK
+  expectedStatus: StatusCodes = StatusCodes.OK,
 ): Promise<PayloadRepairHashResponse> => {
   const response = await request.get(`/archive/${archive}/payload/hash/${hash}/repair`).auth(token, { type: 'bearer' }).expect(expectedStatus)
   return response.body.data
 }
 
-export const getRecentPayloads = async (archive: string, token?: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoPayloadWithMeta[]> => {
+export const getRecentPayloads = async (
+  archive: string,
+  token?: string,
+  expectedStatus: StatusCodes = StatusCodes.OK,
+): Promise<XyoPayloadWithMeta[]> => {
   const path = `/archive/${archive}/payload/recent`
-  const response = token ? await request.get(path).auth(token, { type: 'bearer' }).expect(expectedStatus) : await request.get(path).expect(expectedStatus)
+  const response = token
+    ? await request.get(path).auth(token, { type: 'bearer' }).expect(expectedStatus)
+    : await request.get(path).expect(expectedStatus)
   return response.body.data
 }
 
@@ -304,7 +333,7 @@ export const getPayloadByBlockHash = async (
   token: string,
   archive: string,
   hash: string,
-  expectedStatus: StatusCodes = StatusCodes.OK
+  expectedStatus: StatusCodes = StatusCodes.OK,
 ): Promise<XyoPayloadWithMeta[]> => {
   const response = await request.get(`/archive/${archive}/block/hash/${hash}/payloads`).auth(token, { type: 'bearer' }).expect(expectedStatus)
   return response.body.data
@@ -312,13 +341,21 @@ export const getPayloadByBlockHash = async (
 
 export const getSchema = async (schema: string, token?: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoSchemaPayload> => {
   const path = `/schema/${schema}`
-  const response = token ? await request.get(path).auth(token, { type: 'bearer' }).expect(expectedStatus) : await request.get(path).expect(expectedStatus)
+  const response = token
+    ? await request.get(path).auth(token, { type: 'bearer' }).expect(expectedStatus)
+    : await request.get(path).expect(expectedStatus)
   return response.body.data
 }
 
-export const getArchiveSchemaRecent = async (archive: string, token?: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoPayloadWithMeta[]> => {
+export const getArchiveSchemaRecent = async (
+  archive: string,
+  token?: string,
+  expectedStatus: StatusCodes = StatusCodes.OK,
+): Promise<XyoPayloadWithMeta[]> => {
   const path = `/archive/${archive}/schema/recent`
-  const response = token ? await request.get(path).auth(token, { type: 'bearer' }).expect(expectedStatus) : await request.get(path).expect(expectedStatus)
+  const response = token
+    ? await request.get(path).auth(token, { type: 'bearer' }).expect(expectedStatus)
+    : await request.get(path).expect(expectedStatus)
   return response.body.data
 }
 
@@ -326,10 +363,12 @@ export const getArchiveSchemaPayloadsRecent = async (
   archive: string,
   schema: string,
   token?: string,
-  expectedStatus: StatusCodes = StatusCodes.OK
+  expectedStatus: StatusCodes = StatusCodes.OK,
 ): Promise<XyoPayloadWithMeta[]> => {
   const path = `/archive/${archive}/schema/${schema}/recent`
-  const response = token ? await request.get(path).auth(token, { type: 'bearer' }).expect(expectedStatus) : await request.get(path).expect(expectedStatus)
+  const response = token
+    ? await request.get(path).auth(token, { type: 'bearer' }).expect(expectedStatus)
+    : await request.get(path).expect(expectedStatus)
   return response.body.data
 }
 
@@ -337,7 +376,7 @@ export const postCommandsToArchive = async (
   commands: XyoBoundWitness[],
   archive: string,
   token?: string,
-  expectedStatus: StatusCodes = StatusCodes.ACCEPTED
+  expectedStatus: StatusCodes = StatusCodes.ACCEPTED,
 ): Promise<string[][]> => {
   const path = `/${archive}`
   const response = token
@@ -346,7 +385,11 @@ export const postCommandsToArchive = async (
   return response.body.data
 }
 
-export const queryCommandResult = async (id: string, token?: string, expectedStatus: StatusCodes = StatusCodes.ACCEPTED): Promise<XyoPayloadWithMeta> => {
+export const queryCommandResult = async (
+  id: string,
+  token?: string,
+  expectedStatus: StatusCodes = StatusCodes.ACCEPTED,
+): Promise<XyoPayloadWithMeta> => {
   const path = `/query/${id}`
   const response = token
     ? await request.get(path).redirects(1).auth(token, { type: 'bearer' }).expect(expectedStatus)

@@ -1,6 +1,7 @@
 import { asyncHandler, NoReqBody, NoReqParams, NoReqQuery, NoResBody, tryParseInt } from '@xylabs/sdk-api-express-ecs'
 import { exists } from '@xylabs/sdk-js'
 import { dependencies } from '@xyo-network/archivist-dependencies'
+import { ArchiveArchivist, EntityArchive } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
@@ -18,7 +19,10 @@ const defaultLimit = 200
 const defaultOffset = 0
 
 const getArchives = async (limit: number, offset: number): Promise<XyoArchive[]> => {
-  const sdk = dependencies.get<BaseMongoSdk<XyoArchive>>(TYPES.ArchiveSdkMongo)
+  // TODO: Take less of hard dependency on Mongo here!
+  // NOTE: Really this is a Diviner that finds all archives in an archivist
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const sdk: BaseMongoSdk<EntityArchive> = dependencies.get<ArchiveArchivist>(TYPES.ArchiveArchivist) as any
   return (await sdk.find({})).sort({ _id: -1 }).skip(offset).limit(limit).toArray()
 }
 

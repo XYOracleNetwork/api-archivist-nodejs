@@ -2,13 +2,20 @@ import { notImplemented } from '@xylabs/sdk-api-express-ecs'
 import { requireArchiveAccess } from '@xyo-network/archivist-middleware'
 import { Express } from 'express'
 
-import { getArchiveBlockHash, getArchiveBlockHashPayloads, getArchiveBlockRecent, getArchiveBlocks, getArchiveBlockStats, postArchiveBlock } from '../routes'
+import {
+  getArchiveBlockHash,
+  getArchiveBlockHashPayloads,
+  getArchiveBlockRecent,
+  getArchiveBlocks,
+  getArchiveBlockStats,
+  postArchiveBlock,
+} from '../routes'
 
 export const addBlockRoutes = (app: Express) => {
   app.get(
     '/archive/:archive/block',
     requireArchiveAccess,
-    getArchiveBlocks
+    getArchiveBlocks,
     /* #swagger.tags = ['Block'] */
     /* #swagger.summary = 'Get blocks' */
   )
@@ -16,7 +23,7 @@ export const addBlockRoutes = (app: Express) => {
   app.post(
     '/archive/:archive/block',
     // requireArchiveAccess,
-    postArchiveBlock
+    postArchiveBlock,
     /* #swagger.tags = ['Block'] */
     /* #swagger.summary = 'Post blocks' */
   )
@@ -24,7 +31,7 @@ export const addBlockRoutes = (app: Express) => {
   app.post(
     '/archive/:archive/bw',
     // requireArchiveAccess,
-    postArchiveBlock
+    postArchiveBlock,
     /* #swagger.tags = ['Block'] */
     /* #swagger.deprecated = true */
     /* #swagger.summary = 'Temporary support for legacy calls' */
@@ -33,7 +40,7 @@ export const addBlockRoutes = (app: Express) => {
   app.get(
     '/archive/:archive/block/stats',
     requireArchiveAccess,
-    getArchiveBlockStats
+    getArchiveBlockStats,
     /* #swagger.tags = ['Block'] */
     /* #swagger.summary = 'Get block stats' */
   )
@@ -41,7 +48,7 @@ export const addBlockRoutes = (app: Express) => {
   app.get(
     '/archive/:archive/block/hash/:hash',
     requireArchiveAccess,
-    getArchiveBlockHash
+    getArchiveBlockHash,
     /* #swagger.tags = ['Block'] */
     /* #swagger.summary = 'Get blocks by block hash' */
   )
@@ -49,7 +56,7 @@ export const addBlockRoutes = (app: Express) => {
   app.get(
     '/archive/:archive/block/hash/:hash/payloads',
     requireArchiveAccess,
-    getArchiveBlockHashPayloads
+    getArchiveBlockHashPayloads,
     /* #swagger.tags = ['Block'] */
     /* #swagger.summary = 'Get block payloads by block hash' */
   )
@@ -57,7 +64,7 @@ export const addBlockRoutes = (app: Express) => {
   app.get(
     '/archive/:archive/block/recent/:limit?',
     requireArchiveAccess,
-    getArchiveBlockRecent
+    getArchiveBlockRecent,
     /* #swagger.tags = ['Block'] */
     /* #swagger.summary = 'Get the most recent blocks' */
   )
@@ -65,7 +72,7 @@ export const addBlockRoutes = (app: Express) => {
   app.get(
     '/archive/:archive/block/sample/:size?',
     requireArchiveAccess,
-    notImplemented
+    notImplemented,
     /* #swagger.deprecated = true */
     /* #swagger.tags = ['Block'] */
     /* #swagger.summary = 'Get a random sampling of blocks' */
@@ -74,7 +81,7 @@ export const addBlockRoutes = (app: Express) => {
   app.get(
     '/archive/:archive/block/chain/:hash/:address/:limit?',
     requireArchiveAccess,
-    notImplemented
+    notImplemented,
     /* #swagger.deprecated = true */
     /* #swagger.tags = ['Block'] */
     /* #swagger.summary = 'Get a proof of origin chain starting from a block hash' */

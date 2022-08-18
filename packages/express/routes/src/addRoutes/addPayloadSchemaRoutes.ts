@@ -8,7 +8,7 @@ export const addPayloadSchemaRoutes = (app: Express) => {
   app.get(
     '/archive/:archive/payload/schema',
     requireArchiveAccess,
-    getArchivePayloadSchemas
+    getArchivePayloadSchemas,
     /* #swagger.tags = ['Schema'] */
     /* #swagger.summary = 'Get list of payload schemas used in this archive' */
   )
@@ -16,7 +16,7 @@ export const addPayloadSchemaRoutes = (app: Express) => {
   app.get(
     '/archive/:archive/payload/schema/stats',
     requireArchiveAccess,
-    getArchivePayloadSchemaStats
+    getArchivePayloadSchemaStats,
     /* #swagger.tags = ['Schema'] */
     /* #swagger.summary = 'Get payload schema stats' */
   )
@@ -24,7 +24,7 @@ export const addPayloadSchemaRoutes = (app: Express) => {
   app.get(
     '/archive/:archive/payload/schema/:schema',
     requireArchiveAccess,
-    notImplemented
+    notImplemented,
     /* #swagger.deprecated = true */
     /* #swagger.tags = ['Schema'] */
     /* #swagger.summary = 'Get payloads filtered by schema' */
@@ -33,7 +33,7 @@ export const addPayloadSchemaRoutes = (app: Express) => {
   app.get(
     '/archive/:archive/payload/schema/:schema/stats',
     requireArchiveAccess,
-    notImplemented
+    notImplemented,
     /* #swagger.deprecated = true */
     /* #swagger.tags = ['Schema'] */
     /* #swagger.summary = 'Get payload stats filtered by schema' */
@@ -42,7 +42,7 @@ export const addPayloadSchemaRoutes = (app: Express) => {
   app.get(
     '/archive/:archive/payload/schema/:schema/recent/limit',
     requireArchiveAccess,
-    notImplemented
+    notImplemented,
     /* #swagger.deprecated = true */
     /* #swagger.tags = ['Schema'] */
     /* #swagger.summary = 'Get recent payloads filtered by schema' */
