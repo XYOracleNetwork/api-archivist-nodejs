@@ -6,11 +6,11 @@ import { StatusCodes } from 'http-status-codes'
 
 import { BlockHashPathParams } from '../blockHashPathParams'
 
-const getPayloadsByHashes = async (archivePayloadsArchivist: ArchivePayloadsArchivist, archive: string, hashes: string[]) => {
+const getPayloadsByHashes = async (archivist: ArchivePayloadsArchivist, archive: string, hashes: string[]) => {
   const map: Record<string, XyoPartialPayloadMeta[]> = {}
   const payloads: (XyoPayloadWithMeta | undefined)[] = []
   for (const hash of hashes) {
-    const payload = await archivePayloadsArchivist.get({ archive, hash })
+    const payload = await archivist.get({ archive, hash })
     payloads.push(payload.pop())
   }
   payloads.forEach((value) => {
