@@ -1,4 +1,3 @@
-import { getArchivistAllBoundWitnessesMongoSdk } from '@xyo-network/archivist-lib'
 import { BoundWitnessesArchivist, PayloadsArchivist, PayloadSearchCriteria, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
 import { XyoPayload, XyoPayloadWrapper } from '@xyo-network/sdk-xyo-client-js'
 
@@ -11,15 +10,9 @@ const createPayloadFilterFromSearchCriteria = (searchCriteria: PayloadSearchCrit
   return query
 }
 
-// TODO: Refactor to inject BW repository
 const isPayloadSignedByAddress = async (archivist: BoundWitnessesArchivist, hash: string, addresses: string[]): Promise<boolean> => {
-  const sdk = getArchivistAllBoundWitnessesMongoSdk()
-  // NOTE: Defaulting to $all since it makes the most sense when singing addresses are supplied
-  // but based on how MongoDB implements multi-key indexes $in might be much faster and we could
-  // solve the multi-sig problem via multiple API calls when multi-sig is desired instead of
-  // potentially impacting performance for all single-address queries
-  const count = (await (await sdk.find({ addresses: { $all: addresses }, payload_hashes: hash })).limit(1).toArray()).length
-  return count > 0
+  const result = await archivist.find({ addresses, limit: 1, payload_hashes: [hash] })
+  return result.length > 0
 }
 
 export const findPayload = async (
