@@ -2,21 +2,22 @@ import 'source-map-support/register'
 
 import { asyncHandler, tryParseInt } from '@xylabs/sdk-api-express-ecs'
 import { assertEx } from '@xylabs/sdk-js'
-import { getArchivistBoundWitnessesMongoSdk } from '@xyo-network/archivist-lib'
+import { ArchiveBoundWitnessesArchivist, XyoArchiveBoundWitnessFilterPredicate } from '@xyo-network/archivist-model'
 import { RequestHandler } from 'express'
 
 import { BlockRecentPathParams } from './BlockRecentPathParams'
 
-const getBoundWitness = async (archive: string, limit: number) => {
-  const sdk = getArchivistBoundWitnessesMongoSdk(archive)
-  return await sdk.findRecent(limit)
+const getBoundWitness = (archivist: ArchiveBoundWitnessesArchivist, archive: string, limit: number) => {
+  const query: XyoArchiveBoundWitnessFilterPredicate = { archive, limit }
+  return archivist.find(query)
 }
 
 const handler: RequestHandler<BlockRecentPathParams> = async (req, res) => {
   const { archive, limit } = req.params
+  const { archiveBoundWitnessesArchivist: archivist } = req.app
   const limitNumber = tryParseInt(limit) ?? 20
   assertEx(limitNumber > 0 && limitNumber <= 100, 'limit must be between 1 and 100')
-  const bw = await getBoundWitness(archive, limitNumber)
+  const bw = await getBoundWitness(archivist, archive, limitNumber)
   res.json(bw?.map(({ _payloads, ...clean }) => clean))
 }
 
