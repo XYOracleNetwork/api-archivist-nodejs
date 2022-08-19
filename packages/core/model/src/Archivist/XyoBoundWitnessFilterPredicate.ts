@@ -2,6 +2,9 @@ import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
 
 import { XyoArchivePayloadFilterPredicate, XyoPayloadFilterPredicate } from './XyoPayloadFilterPredicate'
 
-export type XyoBoundWitnessFilterPredicate = Omit<XyoPayloadFilterPredicate, 'schema'> & Partial<XyoBoundWitness>
+type WithoutSchema<T> = Omit<Omit<T, 'schema'>, 'schemas'>
 
-export type XyoArchiveBoundWitnessFilterPredicate = Omit<XyoArchivePayloadFilterPredicate, 'schema'> & Partial<XyoBoundWitness>
+// TODO: Should we just accept "schema"/"schemas" here and infer that they mean "payload_schemas"?
+export type XyoBoundWitnessFilterPredicate = WithoutSchema<XyoPayloadFilterPredicate> & Partial<XyoBoundWitness>
+
+export type XyoArchiveBoundWitnessFilterPredicate = WithoutSchema<XyoArchivePayloadFilterPredicate> & Partial<XyoBoundWitness>
