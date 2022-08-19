@@ -5,7 +5,6 @@ import { getMongoDBConfig } from './getMongoDBConfig'
 
 export const getArchivistPayloadMongoSdk = (archive: string) => {
   const env = getMongoDBConfig()
-
   return new XyoArchivistPayloadMongoSdk(
     {
       collection: 'payloads',
