@@ -3,10 +3,11 @@ import { BoundWitnessesArchivist, PayloadsArchivist, PayloadSearchCriteria, XyoP
 import { XyoPayload, XyoPayloadWrapper } from '@xyo-network/sdk-xyo-client-js'
 
 const createPayloadFilterFromSearchCriteria = (searchCriteria: PayloadSearchCriteria): XyoPayloadFilterPredicate => {
-  const { direction, schemas, timestamp } = searchCriteria
+  const { archives, direction, schemas, timestamp } = searchCriteria
   const order = direction === 'asc' ? 'asc' : 'desc'
   const query: XyoPayloadFilterPredicate = { order, timestamp }
-  if (schemas) query.schemas
+  if (archives?.length) query.archives = archives
+  if (schemas?.length) query.schemas = schemas
   return query
 }
 
