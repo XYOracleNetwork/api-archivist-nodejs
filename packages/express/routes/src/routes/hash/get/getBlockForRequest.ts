@@ -1,6 +1,6 @@
 import { requestCanAccessArchive } from '@xyo-network/archivist-express-lib'
 import { PayloadPointerPayload, payloadPointerSchema, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
-import { XyoBoundWitnessWithMeta, XyoPayload, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { Request } from 'express'
 
 import { resolvePayloadPointer } from './resolvePayloadPointer'
@@ -9,8 +9,7 @@ const findByHash = async (req: Request, hash: string) => {
   const { payloadsArchivist, boundWitnessesArchivist } = req.app
   const filter: XyoPayloadFilterPredicate = { hash }
   const payloads: XyoPayloadWithMeta[] = await payloadsArchivist.find(filter)
-  const boundWitnesses: XyoBoundWitnessWithMeta[] = await boundWitnessesArchivist.find(filter)
-  return payloads.length ? payloads : boundWitnesses
+  return payloads.length ? payloads : await boundWitnessesArchivist.find({ ...filter, schema: 'network.xyo.boundwitness' })
 }
 
 export const getBlockForRequest = async (req: Request, hash: string): Promise<XyoPayload | undefined> => {
