@@ -1,13 +1,14 @@
+import { notImplemented } from '@xylabs/sdk-api-express-ecs'
 import { requireArchiveAccess } from '@xyo-network/archivist-middleware'
 import { Express } from 'express'
 
-import { getArchiveSchemaPayloadsRecent, getArchiveSchemaRecent, postArchiveSchemaCurrentWitness } from '../routes'
+import { getArchiveSchemaPayloadsRecent, getArchiveSchemaRecent } from '../routes'
 
 export const addArchiveSchemaRoutes = (app: Express) => {
   app.post(
     '/archive/:archive/schema/current/witness',
     requireArchiveAccess,
-    postArchiveSchemaCurrentWitness,
+    notImplemented,
     /* #swagger.tags = ['Schema'] */
     /* #swagger.summary = 'Snapshot current schema payload hashes for the archive' */
   )
