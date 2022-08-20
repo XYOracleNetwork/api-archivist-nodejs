@@ -26,12 +26,11 @@ describe('/archive/:archive/payload/stats', () => {
       expect(blockResponse.length).toBe(1)
     }
   }, 25000)
-  it('Returns stats on all archives', async () => {
-    // Verify the counts are for more than just 1 archive
+  it('Returns stats on jus a single archive', async () => {
     const response = await getArchivist().get(`/archive/${archive}/payload/stats`).expect(StatusCodes.OK)
     const recent = response.body.data
     expect(recent).toBeTruthy()
     expect(typeof recent?.count).toBe('number')
-    expect(recent.count).toBeGreaterThanOrEqual(2 * blocksPosted)
+    expect(recent.count).toBe(blocksPosted)
   })
 })
