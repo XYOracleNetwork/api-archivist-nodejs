@@ -2,31 +2,28 @@ import { StatusCodes } from 'http-status-codes'
 
 import { claimArchive, getArchivist, getNewBlockWithPayloads, getTokenForNewUser, postBlock } from '../../../../../testUtil'
 
-const blocksPosted = 25
+const blocksPosted = 5
+
+const postBlocksToArchive = async (archive: string, token: string, count = blocksPosted) => {
+  for (let blockCount = 0; blockCount < count; blockCount++) {
+    const block = getNewBlockWithPayloads()
+    const blockResponse = await postBlock(block, archive)
+    expect(blockResponse.length).toBe(1)
+  }
+}
 
 describe('/archive/:archive/payload/stats', () => {
   let token = ''
   let archive = ''
   beforeAll(async () => {
-    token = await getTokenForNewUser()
-    archive = (await claimArchive(token)).archive
-    // Post blocks to one archive
-    for (let blockCount = 0; blockCount < blocksPosted; blockCount++) {
-      const block = getNewBlockWithPayloads()
-      const blockResponse = await postBlock(block, archive)
-      expect(blockResponse.length).toBe(1)
-    }
-
-    // Post blocks to another archive
-    token = await getTokenForNewUser()
-    archive = (await claimArchive(token)).archive
-    for (let blockCount = 0; blockCount < blocksPosted; blockCount++) {
-      const block = getNewBlockWithPayloads()
-      const blockResponse = await postBlock(block, archive)
-      expect(blockResponse.length).toBe(1)
+    // Post blocks to two different archives
+    for (let i = 0; i < 2; i++) {
+      token = await getTokenForNewUser()
+      archive = (await claimArchive(token)).archive
+      await postBlocksToArchive(archive, token)
     }
   }, 25000)
-  it('Returns stats on jus a single archive', async () => {
+  it('Returns stats on the desired archive', async () => {
     const response = await getArchivist().get(`/archive/${archive}/payload/stats`).expect(StatusCodes.OK)
     const recent = response.body.data
     expect(recent).toBeTruthy()
