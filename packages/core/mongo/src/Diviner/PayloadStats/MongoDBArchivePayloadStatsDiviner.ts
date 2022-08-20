@@ -1,5 +1,6 @@
 import 'reflect-metadata'
 
+import { PayloadStatsDiviner, PayloadStatsPayload, PayloadStatsQueryPayload, PayloadStatsSchema } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoModuleQueryResult } from '@xyo-network/module'
 import {
@@ -25,16 +26,16 @@ export type ArchiveQueryPayload = XyoQueryPayload<XyoPayload & { archive?: strin
 export type StatsDiviner = XyoDiviner<ArchiveQueryPayload>
 
 @injectable()
-export class MongoDBArchivePayloadStatsDiviner extends XyoAbstractDiviner<ArchiveQueryPayload> implements StatsDiviner {
+export class MongoDBArchivePayloadStatsDiviner extends XyoAbstractDiviner<PayloadStatsQueryPayload> implements PayloadStatsDiviner {
   constructor(@inject(TYPES.Account) account: XyoAccount, @inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayload>) {
     super({ account, schema: XyoArchivistPayloadDivinerConfigSchema })
   }
-  async query(query: XyoQueryPayload<ArchiveQueryPayload>): Promise<XyoModuleQueryResult<ArchiveStatsPayload>> {
+  async query(query: XyoQueryPayload<PayloadStatsQueryPayload>): Promise<XyoModuleQueryResult<PayloadStatsPayload>> {
     const archive = query.archive
     const count = archive
       ? await this.sdk.useCollection((collection) => collection.countDocuments({ _archive: archive }))
       : await this.sdk.useCollection((collection) => collection.estimatedDocumentCount())
-    const result = new XyoPayloadBuilder<ArchiveStatsPayload>({ schema: 'foo' }).fields({ count }).build()
+    const result = new XyoPayloadBuilder<PayloadStatsPayload>({ schema: PayloadStatsSchema }).fields({ count }).build()
     const witnessedResult = this.bindPayloads([result])
     return [witnessedResult, [result]]
   }
