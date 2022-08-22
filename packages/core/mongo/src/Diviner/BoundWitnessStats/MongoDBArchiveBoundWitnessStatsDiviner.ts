@@ -1,6 +1,11 @@
 import 'reflect-metadata'
 
-import { BoundWitnessStatsDiviner, BoundWitnessStatsPayload, BoundWitnessStatsSchema } from '@xyo-network/archivist-model'
+import {
+  ArchivistPayloadStatsDivinerConfigSchema,
+  BoundWitnessStatsDiviner,
+  BoundWitnessStatsPayload,
+  BoundWitnessStatsSchema,
+} from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoArchivistPayloadDivinerConfigSchema, XyoDivinerQueryPayload, XyoDivinerQueryPayloadSchema } from '@xyo-network/diviner'
 import { XyoModuleQueryResult } from '@xyo-network/module'
@@ -26,8 +31,10 @@ export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoAbstractDiviner<A
 
   async query(query: XyoDivinerQueryPayload): Promise<XyoModuleQueryResult<BoundWitnessStatsPayload>> {
     //TODO [AT]: Make a archive descriptor payload to send in here
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const overrideArchivePayload: any = query.payloads?.find((payload) => payload.schema === 'network.xyo.diviner.archive')
+    const overrideArchivePayload = query.payloads?.find(
+      (payload): payload is ArchiveConfigPayload => payload.schema === ArchivistPayloadStatsDivinerConfigSchema,
+    )
+
     const archive = overrideArchivePayload?.archive ?? this.config.archive
     const count = archive
       ? await this.sdk.useCollection((collection) => collection.countDocuments({ _archive: archive }))
