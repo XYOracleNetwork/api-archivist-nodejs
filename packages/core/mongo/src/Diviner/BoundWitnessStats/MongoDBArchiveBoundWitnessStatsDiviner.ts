@@ -1,19 +1,14 @@
 import 'reflect-metadata'
 
-import {
-  ArchivistPayloadStatsDivinerConfigSchema,
-  BoundWitnessStatsDiviner,
-  BoundWitnessStatsPayload,
-  BoundWitnessStatsSchema,
-} from '@xyo-network/archivist-model'
+import { BoundWitnessStatsDiviner, BoundWitnessStatsPayload, BoundWitnessStatsSchema } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { XyoArchivistPayloadDivinerConfigSchema, XyoDivinerQueryPayload, XyoDivinerQueryPayloadSchema } from '@xyo-network/diviner'
-import { XyoModuleQueryResult } from '@xyo-network/module'
-import { XyoAbstractDiviner, XyoAccount, XyoBoundWitnessWithMeta, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
+import { XyoArchivistPayloadDivinerConfigSchema, XyoDivinerDivineQuerySchema } from '@xyo-network/diviner'
+import { XyoAbstractDiviner, XyoAccount, XyoBoundWitnessWithMeta, XyoPayload, XyoPayloadBuilder, XyoPayloads } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 
 import { MONGO_TYPES } from '../../types'
+import { MongoArchivePayload, MongoArchiveSchema } from '../MongoArchivePayload'
 import { ArchiveConfigPayload } from '../PayloadStats'
 
 @injectable()
@@ -25,22 +20,19 @@ export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoAbstractDiviner<A
     super({ account, schema: XyoArchivistPayloadDivinerConfigSchema })
   }
 
-  get queries(): string[] {
-    return [XyoDivinerQueryPayloadSchema]
+  get queries() {
+    return [XyoDivinerDivineQuerySchema]
   }
 
-  async query(query: XyoDivinerQueryPayload): Promise<XyoModuleQueryResult<BoundWitnessStatsPayload>> {
-    //TODO [AT]: Make a archive descriptor payload to send in here
-    const overrideArchivePayload = query.payloads?.find(
-      (payload): payload is ArchiveConfigPayload => payload.schema === ArchivistPayloadStatsDivinerConfigSchema,
-    )
+  override async divine(payloads?: XyoPayloads | undefined): Promise<XyoPayload> {
+    const archivePayload = payloads?.find((payload): payload is MongoArchivePayload => payload?.schema === MongoArchiveSchema)
+    const archive = archivePayload?.archive ?? this.config.archive
 
-    const archive = overrideArchivePayload?.archive ?? this.config.archive
     const count = archive
       ? await this.sdk.useCollection((collection) => collection.countDocuments({ _archive: archive }))
       : await this.sdk.useCollection((collection) => collection.estimatedDocumentCount())
     const result = new XyoPayloadBuilder<BoundWitnessStatsPayload>({ schema: BoundWitnessStatsSchema }).fields({ count }).build()
-    const witnessedResult = this.bindPayloads([result])
-    return [witnessedResult, [result]]
+
+    return result
   }
 }
