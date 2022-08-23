@@ -30,23 +30,22 @@ export class MongoDBArchivePermissionsPayloadPayloadArchivist extends AbstractMo
     throw new Error('Not Implemented')
   }
   async get(archive: string): Promise<SetArchivePermissionsPayloadWithMeta[]> {
-    return (await getArchivistPayloadMongoSdk(archive).find({ _archive: archive, schema }))
-      .sort({ _timestamp: -1 })
-      .limit(1)
-      .toArray() as unknown as SetArchivePermissionsPayloadWithMeta[]
+    return (await this.payloads.find({ _archive: archive, schema })).sort({ _timestamp: -1 }).limit(1).toArray()
   }
   async insert(items: SetArchivePermissionsPayloadWithMeta[]): Promise<SetArchivePermissionsPayloadWithMeta[]> {
-    for (let i = 0; i < items.length; i++) {
-      const item = removeId(items[i]) as SetArchivePermissionsPayloadWithMeta
+    const sanitized: SetArchivePermissionsPayloadWithMeta[] = items.map<SetArchivePermissionsPayloadWithMeta>(removeId)
+    for (let i = 0; i < sanitized.length; i++) {
+      const item = sanitized[i]
       const _timestamp = Date.now()
       const archive = item._archive
       if (archive) {
         const payload = new XyoPayloadBuilder<SetArchivePermissionsPayloadWithMeta>({ schema }).fields({ ...item, _timestamp }).build()
         const bw = new XyoBoundWitnessBuilder(this.config).witness(this.account).payload(payload).build()
-        const payloadResult = await getArchivistPayloadMongoSdk(archive).insert(payload)
+        bw._archive = archive
+        const payloadResult = await this.payloads.insertOne(payload)
         if (!payloadResult.acknowledged || !payloadResult.insertedId)
           throw new Error('MongoDBArchivePermissionsPayloadPayloadArchivist: Error inserting Payload')
-        const bwResult = await getArchivistBoundWitnessesMongoSdk(archive).insert(bw)
+        const bwResult = await this.boundWitnesses.insertOne(bw)
         if (!bwResult.acknowledged || !bwResult.insertedId)
           throw new Error('MongoDBArchivePermissionsPayloadPayloadArchivist: Error inserting BoundWitness')
       }
