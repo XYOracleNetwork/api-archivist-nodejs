@@ -1,8 +1,7 @@
-import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
-import { OptionalId } from 'mongodb'
+import { OptionalId, WithoutId } from 'mongodb'
 
-export const removeId = (payload: OptionalId<XyoPayload>) => {
+export const removeId = <T>(payload: OptionalId<T>): WithoutId<T> => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { _id, ...withoutId } = payload
-  return withoutId
+  return withoutId as WithoutId<T>
 }
