@@ -43,12 +43,13 @@ export class MongoDBArchivePermissionsPayloadPayloadArchivist extends AbstractMo
       const _archive = p._archive
       return { ...bw, _archive, _timestamp }
     })
-    const payloadsResult = await this.payloads.insertMany(payloads)
-    if (!payloadsResult.acknowledged || payloadsResult.insertedCount !== payloads.length)
+
+    const payloadsResults = await this.payloads.insertMany(payloads)
+    if (!payloadsResults.acknowledged || payloadsResults.insertedCount !== payloads.length)
       throw new Error('MongoDBArchivePermissionsPayloadPayloadArchivist: Error inserting Payloads')
 
-    const boundWitnessesResult = await this.boundWitnesses.insertMany(boundWitnesses)
-    if (!boundWitnessesResult.acknowledged || boundWitnessesResult.insertedCount !== boundWitnesses.length)
+    const witnessResults = await this.boundWitnesses.insertMany(boundWitnesses)
+    if (!witnessResults.acknowledged || witnessResults.insertedCount !== boundWitnesses.length)
       throw new Error('MongoDBArchivePermissionsPayloadPayloadArchivist: Error inserting BoundWitnesses')
 
     return items
