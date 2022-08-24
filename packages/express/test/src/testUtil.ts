@@ -169,7 +169,7 @@ export const setArchiveAccessControl = async (
   const response = await request
     .put(`/archive/${archive}`)
     .auth(token, { type: 'bearer' })
-    .send(data ?? { accessControl: false, archive })
+    .send({ accessControl: false, ...data, archive })
     .expect(expectedStatus)
   return response.body.data
 }
