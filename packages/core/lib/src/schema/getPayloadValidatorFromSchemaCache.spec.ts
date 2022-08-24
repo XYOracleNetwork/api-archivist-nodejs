@@ -15,7 +15,7 @@ describe('getPayloadValidatorFromSchemaCache', () => {
       const name = 'foo'
       const schema = 'network.xyo.schema'
       const definition = { $schema: 'http://json-schema.org/draft-07/schema#' }
-      mock = jest.spyOn(XyoSchemaCache.prototype, 'get').mockImplementation((_schema: string) => {
+      mock = jest.spyOn(XyoSchemaCache.prototype, 'get').mockImplementation((_schema?: string) => {
         const entry: XyoSchemaCacheEntry = { payload: { definition, name, schema } }
         return Promise.resolve(entry)
       })
@@ -32,7 +32,7 @@ describe('getPayloadValidatorFromSchemaCache', () => {
   describe('when validator does not exist', () => {
     let mock: jest.SpyInstance
     beforeAll(() => {
-      mock = jest.spyOn(XyoSchemaCache.prototype, 'get').mockImplementation((_schema: string) => {
+      mock = jest.spyOn(XyoSchemaCache.prototype, 'get').mockImplementation((_schema?: string) => {
         return Promise.resolve(undefined)
       })
     })

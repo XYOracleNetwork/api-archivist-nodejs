@@ -1,7 +1,8 @@
 import 'source-map-support/register'
 
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
-import { ArchivePathParams, PayloadStatsPayload, PayloadStatsQuerySchema, PayloadStatsSchema } from '@xyo-network/archivist-model'
+import { ArchivePathParams, PayloadStatsPayload, PayloadStatsSchema } from '@xyo-network/archivist-model'
+import { XyoDivinerDivineQuerySchema, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 
 const unknownCount: PayloadStatsPayload = { count: -1, schema: PayloadStatsSchema }
@@ -13,7 +14,11 @@ export interface ArchivePayloadStats {
 const handler: RequestHandler<ArchivePathParams, ArchivePayloadStats> = async (req, res) => {
   const { archive } = req.params
   const { payloadStatsDiviner: diviner } = req.app
-  const result = await diviner.query({ archive, schema: PayloadStatsQuerySchema })
+  const payload: XyoPayload<{ archive: string }> = {
+    archive,
+    schema: 'xyo.network.mongo.archive',
+  }
+  const result = await diviner.query({ payloads: [payload], schema: XyoDivinerDivineQuerySchema })
   const answer: PayloadStatsPayload = (result[1].pop() as PayloadStatsPayload) || unknownCount
   res.json(answer)
 }

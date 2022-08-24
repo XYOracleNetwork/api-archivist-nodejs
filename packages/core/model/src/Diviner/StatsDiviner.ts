@@ -4,4 +4,4 @@ export type StatsPayload<T extends XyoPayload = XyoPayload> = XyoPayload<T & { c
 
 export type ArchiveStatsQueryPayload<T extends XyoQueryPayload = XyoQueryPayload> = XyoQueryPayload<T & { archive?: string }>
 
-export type StatsDiviner<T extends XyoQueryPayload = ArchiveStatsQueryPayload> = XyoDiviner<T>
+export type StatsDiviner = XyoDiviner
