@@ -4,7 +4,7 @@ import { ArchiveArchivist, UpsertResult, XyoPayloadFilterPredicate } from '@xyo-
 import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
-import { Filter, WithId } from 'mongodb'
+import { Filter, SortDirection, WithId } from 'mongodb'
 
 import { MONGO_TYPES } from '../../types'
 
@@ -24,13 +24,15 @@ export class MongoDBArchiveArchivist implements ArchiveArchivist {
   constructor(@inject(MONGO_TYPES.ArchiveSdkMongo) protected archives: BaseMongoSdk<Required<XyoArchive>>) {}
 
   async find(predicate: XyoPayloadFilterPredicate<XyoArchive>): Promise<Required<XyoArchive>[]> {
-    const { archives, limit, order, user } = predicate
+    const { archives, limit, offset, order, user } = predicate
     const parsedLimit = limit || 100
     const parsedOrder = order || 'desc'
+    const sort: { [key: string]: SortDirection } = { $natural: parsedOrder === 'asc' ? 1 : -1 }
     const filter: Filter<Required<XyoArchive>> = {}
     if (archives?.length) filter.archive = { $in: archives }
     if (user) filter.user = user
-    return (await this.archives.find(filter)).sort({}, parsedOrder).limit(parsedLimit).maxTimeMS(2000).toArray()
+    const skip = offset && offset > 0 ? offset : 0
+    return (await this.archives.find(filter)).sort(sort).limit(parsedLimit).skip(skip).maxTimeMS(2000).toArray()
   }
 
   get(archive: string): Promise<Required<XyoArchive> | null> {
