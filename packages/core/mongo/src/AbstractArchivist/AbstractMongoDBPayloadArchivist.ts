@@ -20,5 +20,5 @@ export abstract class AbstractMongoDBPayloadArchivist<T extends object, TId = st
     super()
   }
 
-  // public abstract get schema(): string
+  public abstract get schema(): string
 }
