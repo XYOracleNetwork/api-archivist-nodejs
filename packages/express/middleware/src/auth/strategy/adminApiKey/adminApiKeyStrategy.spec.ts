@@ -1,4 +1,4 @@
-import { getExistingWeb2User, getExistingWeb3User, getNewWeb2User } from '@xyo-network/archivist-test'
+import { getExistingUser, getExistingWeb2User, getNewWeb2User } from '@xyo-network/archivist-test'
 import { StatusCodes } from 'http-status-codes'
 
 describe('/user/signup', () => {
@@ -6,7 +6,7 @@ describe('/user/signup', () => {
     await getExistingWeb2User()
   })
   it('Creates a user with wallet address', async () => {
-    await getExistingWeb3User()
+    await getExistingUser()
   })
   it('Updates an existing user', async () => {
     const user = await getExistingWeb2User()
