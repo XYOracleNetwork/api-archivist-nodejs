@@ -94,7 +94,7 @@ describe('ArchiveAccountStrategy', () => {
           await postCommandToArchive(archive, otherToken, allowedSchema, StatusCodes.FORBIDDEN)
         })
         it('anonymous', async () => {
-          await postCommandToArchive(archive, undefined, allowedSchema, StatusCodes.FORBIDDEN)
+          await postCommandToArchive(archive, undefined, allowedSchema, StatusCodes.UNAUTHORIZED)
         })
       })
     })
@@ -147,7 +147,7 @@ describe('ArchiveAccountStrategy', () => {
           await postCommandToArchive(archive, userToken, allowedSchema, StatusCodes.FORBIDDEN)
         })
         it('anonymous', async () => {
-          await postCommandToArchive(archive, undefined, allowedSchema, StatusCodes.FORBIDDEN)
+          await postCommandToArchive(archive, undefined, allowedSchema, StatusCodes.UNAUTHORIZED)
         })
       })
     })
