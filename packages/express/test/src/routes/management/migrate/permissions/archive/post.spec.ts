@@ -70,7 +70,7 @@ describe('/management/migrate/permissions/archives/:archive', () => {
       await postCommandToArchive(archive.archive, await getTokenForNewUser(), StatusCodes.FORBIDDEN)
     })
     it('disallows anonymous archive access', async () => {
-      await postCommandToArchive(archive.archive, undefined, StatusCodes.FORBIDDEN)
+      await postCommandToArchive(archive.archive, undefined, StatusCodes.UNAUTHORIZED)
     })
   })
   afterAll(async () => {
