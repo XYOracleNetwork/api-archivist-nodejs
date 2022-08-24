@@ -122,7 +122,7 @@ export const signInWeb3User = async (user: TestWeb3User): Promise<string> => {
 }
 
 export const getTokenForNewUser = async (): Promise<string> => {
-  return signInWeb2User(await getExistingWeb2User())
+  return signInWeb3User(await getExistingWeb3User())
 }
 
 export const invalidateToken = (token: string) => {
