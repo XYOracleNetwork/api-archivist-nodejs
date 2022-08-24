@@ -72,6 +72,9 @@ export const getSchemaName = (): string => {
   return `${testSchemaPrefix}${v4()}`
 }
 
+/**
+ * @deprecated Use getNewWeb3User instead
+ */
 export const getNewWeb2User = (): TestWeb2User => {
   const user = {
     email: `test-user-${v4()}@test.com`,
@@ -86,6 +89,9 @@ export const getNewWeb3User = (): TestWeb3User => {
   return user
 }
 
+/**
+ * @deprecated Use getExistingWeb3User instead
+ */
 export const getExistingWeb2User = async (
   user: TestWeb2User = getNewWeb2User(),
   expectedStatus: StatusCodes = StatusCodes.CREATED,
@@ -95,6 +101,9 @@ export const getExistingWeb2User = async (
   return user
 }
 
+/**
+ * @deprecated Use signInWeb3User instead
+ */
 export const signInWeb2User = async (user: TestWeb2User): Promise<string> => {
   const tokenResponse = await request.post('/user/login').send(user).expect(StatusCodes.OK)
   return tokenResponse.body.data.token
