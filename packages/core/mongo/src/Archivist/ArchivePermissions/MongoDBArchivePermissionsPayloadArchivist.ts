@@ -30,8 +30,7 @@ export class MongoDBArchivePermissionsPayloadPayloadArchivist extends AbstractMo
   find(_filter: XyoPayloadFindFilter): Promise<SetArchivePermissionsPayloadWithMeta[]> {
     throw new Error('Not Implemented')
   }
-  async get(archive: string): Promise<SetArchivePermissionsPayloadWithMeta[]> {
-    const _archive = archive
+  async get(_archive: string): Promise<SetArchivePermissionsPayloadWithMeta[]> {
     const payloads = await (await this.payloads.find({ _archive, schema })).sort({ _timestamp: -1 }).limit(1).toArray()
     const permissions = payloads.map(removeId).pop()
     if (!permissions) return []
