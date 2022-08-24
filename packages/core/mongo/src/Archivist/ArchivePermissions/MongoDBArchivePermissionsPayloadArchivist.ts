@@ -11,6 +11,7 @@ import { TYPES } from '@xyo-network/archivist-types'
 import { XyoAccount, XyoBoundWitness, XyoBoundWitnessBuilder, XyoPayloadFindFilter, XyoPayloadWrapper } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
+import { Filter } from 'mongodb'
 
 import { AbstractMongoDBPayloadArchivist } from '../../AbstractArchivist'
 import { removeId } from '../../Mongo'
@@ -31,12 +32,20 @@ export class MongoDBArchivePermissionsPayloadPayloadArchivist extends AbstractMo
     throw new Error('Not Implemented')
   }
   async get(_archive: string): Promise<SetArchivePermissionsPayloadWithMeta[]> {
-    const payloads = await (await this.payloads.find({ _archive, schema })).sort({ _timestamp: -1 }).limit(1).toArray()
-    const permissions = payloads.map(removeId).pop()
-    if (!permissions) return []
-    const payload_hashes = new XyoPayloadWrapper(permissions).hash
-    const witness = await this.boundWitnesses.findOne({ _archive, payload_hashes })
-    return witness ? [permissions] : []
+    const addresses: string = this.account.addressValue.bn.toString('hex')
+    const filter: Filter<XyoBoundWitness> = {
+      _archive,
+      addresses,
+      payload_schemas: schema,
+    }
+    const boundWitnesses = await (await this.boundWitnesses.find(filter)).sort({ _timestamp: -1 }).limit(1).toArray()
+    const lastWitnessedPermissions = boundWitnesses.pop()
+    if (!lastWitnessedPermissions) return []
+    const permissionsPayloadIndex = lastWitnessedPermissions.payload_schemas.findIndex((s) => s === schema)
+    assertEx(permissionsPayloadIndex > -1, 'Invalid permissions index')
+    const _hash = assertEx(lastWitnessedPermissions.payload_hashes[permissionsPayloadIndex], 'Missing hash')
+    const permissions = assertEx(await this.payloads.findOne({ _archive, _hash, schema }), 'Permissions hash missing')
+    return [permissions]
   }
   async insert(items: SetArchivePermissionsPayloadWithMeta[]): Promise<SetArchivePermissionsPayloadWithMeta[]> {
     const _timestamp = Date.now()
