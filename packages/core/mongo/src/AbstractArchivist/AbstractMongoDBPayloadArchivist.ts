@@ -9,6 +9,7 @@ import {
   XyoBoundWitnessBuilder,
   XyoBoundWitnessBuilderConfig,
   XyoBoundWitnessWithMeta,
+  XyoPayloadBuilder,
   XyoPayloadFindFilter,
   XyoPayloadWithMeta,
 } from '@xyo-network/sdk-xyo-client-js'
@@ -71,7 +72,7 @@ export abstract class AbstractMongoDBPayloadArchivist<
     const _timestamp = Date.now()
     const payloads = items.map((p) => {
       return {
-        ...removeId(p),
+        ...new XyoPayloadBuilder({ schema: this.schema }).fields(p).build(),
         _archive: assertEx(p._archive, 'No archive supplied for SetArchivePermissionsPayload'),
         _timestamp,
       } as OptionalUnlessRequiredId<XyoPayloadWithMeta<T>>
