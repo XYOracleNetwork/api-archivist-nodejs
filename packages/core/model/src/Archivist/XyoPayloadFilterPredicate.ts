@@ -1,6 +1,11 @@
 import { EmptyObject, XyoPayloadFindFilter } from '@xyo-network/sdk-xyo-client-js'
 
-export type XyoPayloadFilterPredicate<T extends EmptyObject = EmptyObject> = Partial<{ archives: string[]; hash: string; schemas: string[] }> &
+export type XyoPayloadFilterPredicate<T extends EmptyObject = EmptyObject> = Partial<{
+  archives: string[]
+  hash: string
+  offset: number
+  schemas: string[]
+}> &
   XyoPayloadFindFilter &
   Partial<T>
 

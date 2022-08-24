@@ -3443,13 +3443,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:^28.1.6, @types/jest@npm:^28.1.7":
-  version: 28.1.7
-  resolution: "@types/jest@npm:28.1.7"
+"@types/jest@npm:^28.1.6, @types/jest@npm:^28.1.8":
+  version: 28.1.8
+  resolution: "@types/jest@npm:28.1.8"
   dependencies:
     expect: ^28.0.0
     pretty-format: ^28.0.0
-  checksum: 17c9bf9667cd4f062eba5aa9eaea248927bf6479da1cc009e0b7d26d501f460f068dd23eddb67d2602264e915a30b63ae7c9cbb516723ffd18589f6f9d267d43
+  checksum: d4cd36158a3ae1d4b42cc48a77c95de74bc56b84cf81e09af3ee0399c34f4a7da8ab9e787570f10004bd642f9e781b0033c37327fbbf4a8e4b6e37e8ee3693a7
   languageName: node
   linkType: hard
 
@@ -3485,12 +3485,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jsonwebtoken@npm:*, @types/jsonwebtoken@npm:^8.5.8":
-  version: 8.5.8
-  resolution: "@types/jsonwebtoken@npm:8.5.8"
+"@types/jsonwebtoken@npm:*, @types/jsonwebtoken@npm:^8.5.9":
+  version: 8.5.9
+  resolution: "@types/jsonwebtoken@npm:8.5.9"
   dependencies:
     "@types/node": "*"
-  checksum: 56738a918c543dba30786066959f801212e7fb5cd4ec53cf7b8d227711ed358834feb9e5141f7f88ec7c642bb39757330a5a8917e3b22e0ff9084940d35f0d70
+  checksum: 33815ab02d1371b423118316b7706d2f2ec03eeee5e1494be72da50425d2384e5e0a09ea193f7a5ab4b4f6a9c5847147305f50e965f3d927a95bdf8adb471b2a
   languageName: node
   linkType: hard
 
@@ -3540,10 +3540,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^18.6.5, @types/node@npm:^18.7.11":
-  version: 18.7.11
-  resolution: "@types/node@npm:18.7.11"
-  checksum: 66f200a5595d94285fa2052d29048b328acd729ace4be3516d3d2c1736ab33b5cbf698bec70afc5c6101e5df6c9867e3ec3a091dd937886c1e7a712ddde60f69
+"@types/node@npm:*, @types/node@npm:^18.6.5, @types/node@npm:^18.7.13":
+  version: 18.7.13
+  resolution: "@types/node@npm:18.7.13"
+  checksum: 45431e7e89ecaf85c7d2c180d801c132a7c59e2f8ad578726b6d71cc74e3267c18f9ccdcad738bc0479790c078f0c79efb0e58da2c6be535c15995dbb19050c9
   languageName: node
   linkType: hard
 
@@ -3656,12 +3656,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/source-map-support@npm:0.5.4":
-  version: 0.5.4
-  resolution: "@types/source-map-support@npm:0.5.4"
+"@types/source-map-support@npm:0.5.5":
+  version: 0.5.5
+  resolution: "@types/source-map-support@npm:0.5.5"
   dependencies:
     source-map: ^0.6.0
-  checksum: 160ff77e8a101b18d9915cb5320fd73d484679aef8518ce007b9b5988e333631778730196c4bb15517ff881bee805663fd8640c0ce2ebfab65f061103c452369
+  checksum: 74d4fdd24f6d1fa92331ba07211ed4a7c60e78dcfd4899cd74a8aeebe2febaf9bac5f25a4a9ac4c9b260f01343df9e0ec01e6233526161cdcf44784e3298eea5
   languageName: node
   linkType: hard
 
@@ -4285,7 +4285,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@xyo-network/archivist-lib@workspace:packages/core/lib"
   dependencies:
-    "@types/source-map-support": 0.5.4
+    "@types/source-map-support": 0.5.5
     "@xyo-network/archivist-model": "workspace:^"
     "@xyo-network/schema-payload-plugin": ^2.27.0-rc.6
     "@xyo-network/sdk-xyo-client-js": ^2.27.0-rc.6
@@ -4306,11 +4306,11 @@ __metadata:
     "@types/bcrypt": ^5.0.0
     "@types/express": 4.17.13
     "@types/express-mung": ^0.5.2
-    "@types/jsonwebtoken": ^8.5.8
+    "@types/jsonwebtoken": ^8.5.9
     "@types/passport": ^1.0.10
     "@types/passport-jwt": ^3.0.6
     "@types/passport-local": ^1.0.34
-    "@types/source-map-support": 0.5.4
+    "@types/source-map-support": 0.5.5
     "@types/swagger-ui-express": ^4.1.3
     "@types/uuid": ^8.3.4
     "@xylabs/sdk-api-express-ecs": ^1.2.4
@@ -4400,7 +4400,7 @@ __metadata:
   resolution: "@xyo-network/archivist-routes@workspace:packages/express/routes"
   dependencies:
     "@types/express": 4.17.13
-    "@types/source-map-support": 0.5.4
+    "@types/source-map-support": 0.5.5
     "@types/uuid": ^8.3.4
     "@xylabs/sdk-api-express-ecs": ^1.2.4
     "@xylabs/sdk-js": ^2.6.7
@@ -4413,7 +4413,6 @@ __metadata:
     "@xyo-network/archivist-types": "workspace:^"
     "@xyo-network/domain-payload-plugin": ^2.27.0-rc.6
     "@xyo-network/sdk-xyo-client-js": ^2.27.0-rc.6
-    "@xyo-network/sdk-xyo-mongo-js": ^2.2.9
     express: ^4.18.1
     http-status-codes: ^2.2.0
     source-map-support: ^0.5.21
@@ -4501,9 +4500,9 @@ __metadata:
   dependencies:
     "@babel/core": ^7.18.13
     "@babel/preset-env": ^7.18.10
-    "@types/jest": ^28.1.7
-    "@types/node": ^18.7.11
-    "@types/source-map-support": 0.5.4
+    "@types/jest": ^28.1.8
+    "@types/node": ^18.7.13
+    "@types/source-map-support": 0.5.5
     "@xylabs/eslint-config": ^2.5.123
     "@xylabs/sdk-api-express-ecs": ^1.2.4
     "@xylabs/ts-scripts-yarn3": ^2.5.123
