@@ -1,14 +1,9 @@
 import 'reflect-metadata'
 
 import { assertEx } from '@xylabs/sdk-js'
-import {
-  SetArchivePermissionsPayload,
-  SetArchivePermissionsPayloadWithMeta,
-  SetArchivePermissionsSchema,
-  setArchivePermissionsSchema,
-} from '@xyo-network/archivist-model'
+import { SetArchivePermissionsPayload, SetArchivePermissionsSchema, setArchivePermissionsSchema } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { XyoAccount, XyoBoundWitness, XyoBoundWitnessBuilder, XyoBoundWitnessWithMeta, XyoPayloadFindFilter } from '@xyo-network/sdk-xyo-client-js'
+import { XyoAccount, XyoBoundWitnessBuilder, XyoBoundWitnessWithMeta, XyoPayloadFindFilter, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter } from 'mongodb'
@@ -23,20 +18,20 @@ const schema: SetArchivePermissionsSchema = setArchivePermissionsSchema
 export class MongoDBArchivePermissionsPayloadPayloadArchivist extends AbstractMongoDBPayloadArchivist<SetArchivePermissionsPayload> {
   constructor(
     @inject(TYPES.Account) protected readonly account: XyoAccount,
-    @inject(MONGO_TYPES.PayloadSdkMongo) protected readonly payloads: BaseMongoSdk<SetArchivePermissionsPayloadWithMeta>,
+    @inject(MONGO_TYPES.PayloadSdkMongo) protected readonly payloads: BaseMongoSdk<XyoPayloadWithMeta<SetArchivePermissionsPayload>>,
     @inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta>,
   ) {
-    super()
+    super(account, payloads, boundWitnesses)
   }
-  find(_filter: XyoPayloadFindFilter): Promise<SetArchivePermissionsPayloadWithMeta[]> {
+  find(_filter: XyoPayloadFindFilter): Promise<XyoPayloadWithMeta<SetArchivePermissionsPayload>[]> {
     throw new Error('Not Implemented')
   }
-  async get(_archive: string): Promise<SetArchivePermissionsPayloadWithMeta[]> {
+  async get(_archive: string): Promise<XyoPayloadWithMeta<SetArchivePermissionsPayload>[]> {
     const addresses: string = assertEx(
       this.account.addressValue.bn.toString('hex'),
       'MongoDBArchivePermissionsPayloadPayloadArchivist: Invalid signing account address',
     )
-    const filter: Filter<XyoBoundWitness> = { _archive, addresses, payload_schemas: schema }
+    const filter: Filter<XyoBoundWitnessWithMeta> = { _archive, addresses, payload_schemas: schema }
     const boundWitnesses = await (await this.boundWitnesses.find(filter)).sort({ _timestamp: -1 }).limit(1).toArray()
     const lastWitnessedPermissions = boundWitnesses.pop()
     if (!lastWitnessedPermissions) return []
@@ -55,10 +50,10 @@ export class MongoDBArchivePermissionsPayloadPayloadArchivist extends AbstractMo
     )
     return [permissions]
   }
-  async insert(items: SetArchivePermissionsPayloadWithMeta[]): Promise<SetArchivePermissionsPayloadWithMeta[]> {
+  async insert(items: XyoPayloadWithMeta<SetArchivePermissionsPayload>[]): Promise<XyoPayloadWithMeta<SetArchivePermissionsPayload>[]> {
     const _timestamp = Date.now()
-    const payloads: SetArchivePermissionsPayloadWithMeta[] = items.map((p) => {
-      return { ...removeId(p), _archive: assertEx(p._archive, 'No archive supplied for SetArchivePermissionsPayloadWithMeta'), _timestamp }
+    const payloads: XyoPayloadWithMeta<SetArchivePermissionsPayload>[] = items.map((p) => {
+      return { ...removeId(p), _archive: assertEx(p._archive, 'No archive supplied for SetArchivePermissionsPayload'), _timestamp }
     })
     const boundWitnesses: XyoBoundWitnessWithMeta[] = payloads.map((p) => {
       const bw = new XyoBoundWitnessBuilder(this.config).witness(this.account).payload(p).build()
