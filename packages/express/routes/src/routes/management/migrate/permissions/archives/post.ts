@@ -10,7 +10,7 @@ export interface MigrateQueryParams extends NoReqQuery {
   offset: string
 }
 
-const defaultLimit = 200
+const defaultLimit = 500
 const defaultOffset = 0
 
 const handler: RequestHandler<NoReqParams, NoResBody, NoReqBody, MigrateQueryParams> = async (req, res) => {
