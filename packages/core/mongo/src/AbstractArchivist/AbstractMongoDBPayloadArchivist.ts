@@ -9,6 +9,7 @@ import {
   XyoBoundWitnessBuilder,
   XyoBoundWitnessBuilderConfig,
   XyoBoundWitnessWithMeta,
+  XyoPayloadFindFilter,
   XyoPayloadWithMeta,
 } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
@@ -34,6 +35,10 @@ export abstract class AbstractMongoDBPayloadArchivist<
   }
 
   public abstract get schema(): string
+
+  find(_filter: XyoPayloadFindFilter): Promise<XyoPayloadWithMeta<T>[]> {
+    throw new Error('AbstractMongoDBPayloadArchivist: Find not implemented')
+  }
 
   async get(_archive: string): Promise<WithoutId<XyoPayloadWithMeta<T>>[]> {
     const addresses: string = assertEx(
