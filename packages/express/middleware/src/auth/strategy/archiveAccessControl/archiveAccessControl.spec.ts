@@ -1,42 +1,65 @@
 import { claimArchive, getArchivist, getTokenForNewUser, setArchiveAccessControl } from '@xyo-network/archivist-test'
 import { StatusCodes } from 'http-status-codes'
 
-const verifyAnonymousRouteAccess = async (archive: string, expectedStatus: StatusCodes = StatusCodes.OK) => {
-  await getArchivist().get(`/archive/${archive}/payload/recent`).expect(expectedStatus)
-}
-
-const verifyAuthorizedRouteAccess = async (token: string, archive: string, expectedStatus: StatusCodes = StatusCodes.OK) => {
-  await getArchivist().get(`/archive/${archive}/payload/recent`).auth(token, { type: 'bearer' }).expect(expectedStatus)
+const attemptRoute = async (archive: string, token: string | undefined = undefined, expectedStatus: StatusCodes = StatusCodes.OK) => {
+  return token
+    ? await getArchivist().get(`/archive/${archive}/payload/recent`).auth(token, { type: 'bearer' }).expect(expectedStatus)
+    : await getArchivist().get(`/archive/${archive}/payload/recent`).expect(expectedStatus)
 }
 describe('ArchiveAccessControlAuthStrategy', () => {
   let token = ''
   let archive = ''
-  beforeEach(async () => {
-    token = await getTokenForNewUser()
-    const response = await claimArchive(token)
-    expect(response.accessControl).toBe(false)
-    archive = response.archive
+  describe('when accessControl not specified', () => {
+    beforeAll(async () => {
+      token = await getTokenForNewUser()
+      const response = await claimArchive(token)
+      expect(response.accessControl).toBe(false)
+      archive = response.archive
+    })
+    it('allows anonymous access', async () => {
+      await attemptRoute(archive)
+    })
+    it('allows owner access', async () => {
+      await attemptRoute(archive, token)
+    })
+    it('allows other user access', async () => {
+      await attemptRoute(archive, await getTokenForNewUser())
+    })
   })
-  it('Allows anonymous access to route if no access control specified', async () => {
-    await verifyAuthorizedRouteAccess(token, archive)
-    await verifyAnonymousRouteAccess(archive)
+  describe('when accessControl is false', () => {
+    beforeAll(async () => {
+      token = await getTokenForNewUser()
+      const response = await claimArchive(token)
+      expect(response.accessControl).toBe(false)
+      archive = response.archive
+      await setArchiveAccessControl(token, archive, { accessControl: false, archive })
+    })
+    it('allows anonymous access', async () => {
+      await attemptRoute(archive)
+    })
+    it('allows owner access', async () => {
+      await attemptRoute(archive, token)
+    })
+    it('allows other user access', async () => {
+      await attemptRoute(archive, await getTokenForNewUser())
+    })
   })
-  it('Allows anonymous access to route if access control specified as false', async () => {
-    const response = await setArchiveAccessControl(token, archive, { accessControl: false, archive })
-    expect(response.accessControl).toBe(false)
-    await verifyAuthorizedRouteAccess(token, archive)
-    await verifyAnonymousRouteAccess(archive)
-  })
-  it('Denys anonymous access to route if access control specified as true', async () => {
-    const response = await setArchiveAccessControl(token, archive, { accessControl: true, archive })
-    expect(response.accessControl).toBe(true)
-    await verifyAuthorizedRouteAccess(token, archive)
-    await verifyAnonymousRouteAccess(archive, StatusCodes.UNAUTHORIZED)
-  })
-  it('Denys access to route if access control specified as true and user not archive owner', async () => {
-    const response = await setArchiveAccessControl(token, archive, { accessControl: true, archive })
-    expect(response.accessControl).toBe(true)
-    await verifyAuthorizedRouteAccess(await getTokenForNewUser(), archive, StatusCodes.FORBIDDEN)
-    await verifyAnonymousRouteAccess(archive, StatusCodes.UNAUTHORIZED)
+  describe('when accessControl is true', () => {
+    beforeAll(async () => {
+      token = await getTokenForNewUser()
+      const response = await claimArchive(token)
+      expect(response.accessControl).toBe(false)
+      archive = response.archive
+      await setArchiveAccessControl(token, archive, { accessControl: true, archive })
+    })
+    it('disallows anonymous access', async () => {
+      await attemptRoute(archive, undefined, StatusCodes.UNAUTHORIZED)
+    })
+    it('allows owner access', async () => {
+      await attemptRoute(archive, token)
+    })
+    it('disallows other user access', async () => {
+      await attemptRoute(archive, await getTokenForNewUser(), StatusCodes.FORBIDDEN)
+    })
   })
 })
