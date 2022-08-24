@@ -8,7 +8,7 @@ import {
   setArchivePermissionsSchema,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { XyoAccount, XyoBoundWitness, XyoBoundWitnessBuilder, XyoPayloadFindFilter } from '@xyo-network/sdk-xyo-client-js'
+import { XyoAccount, XyoBoundWitness, XyoBoundWitnessBuilder, XyoPayloadFindFilter, XyoPayloadWrapper } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 
@@ -31,7 +31,13 @@ export class MongoDBArchivePermissionsPayloadPayloadArchivist extends AbstractMo
     throw new Error('Not Implemented')
   }
   async get(archive: string): Promise<SetArchivePermissionsPayloadWithMeta[]> {
-    return (await this.payloads.find({ _archive: archive, schema })).sort({ _timestamp: -1 }).limit(1).toArray()
+    const _archive = archive
+    const payloads = await (await this.payloads.find({ _archive, schema })).sort({ _timestamp: -1 }).limit(1).toArray()
+    const permissions = payloads.map(removeId).pop()
+    if (!permissions) return []
+    const payload_hashes = new XyoPayloadWrapper(permissions).hash
+    const witness = await this.boundWitnesses.findOne({ _archive, payload_hashes })
+    return witness ? [permissions] : []
   }
   async insert(items: SetArchivePermissionsPayloadWithMeta[]): Promise<SetArchivePermissionsPayloadWithMeta[]> {
     const _timestamp = Date.now()
