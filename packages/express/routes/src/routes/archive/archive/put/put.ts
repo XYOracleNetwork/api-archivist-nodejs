@@ -21,15 +21,14 @@ const handler: RequestHandler<ArchivePathParams, XyoArchive, XyoArchive> = async
     return
   }
 
-  const { archiveArchivist, archivePermissionsArchivist } = req.app
+  const { archiveArchivist: archives, archivePermissionsArchivist: permissions } = req.app
   const accessControl = isLegacyPrivateArchive(req.body)
   try {
     // Create/update archive and set legacy permissions
-    const result = await archiveArchivist.insert({ accessControl, archive, user: user.id })
+    const result = await archives.insert({ accessControl, archive, user: user.id })
     // Set newer permissions
-    accessControl
-      ? await setArchiveAccessPublic(archivePermissionsArchivist, archive)
-      : await setArchiveAccessPrivate(archivePermissionsArchivist, archive)
+    const setArchiveAccess = accessControl ? setArchiveAccessPrivate : setArchiveAccessPublic
+    await setArchiveAccess(permissions, archive)
     res.status(result.updated ? StatusCodes.OK : StatusCodes.CREATED).json(result)
   } catch (error) {
     next({ message: ReasonPhrases.FORBIDDEN, statusCode: StatusCodes.FORBIDDEN })
