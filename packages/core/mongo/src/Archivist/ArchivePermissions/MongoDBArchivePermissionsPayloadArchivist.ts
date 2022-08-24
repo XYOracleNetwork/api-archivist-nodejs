@@ -2,27 +2,15 @@ import 'reflect-metadata'
 
 import { assertEx } from '@xylabs/sdk-js'
 import { SetArchivePermissionsPayload, SetArchivePermissionsSchema, setArchivePermissionsSchema } from '@xyo-network/archivist-model'
-import { TYPES } from '@xyo-network/archivist-types'
-import { XyoAccount, XyoBoundWitnessBuilder, XyoBoundWitnessWithMeta, XyoPayloadFindFilter, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
-import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
-import { inject, injectable } from 'inversify'
+import { XyoBoundWitnessBuilder, XyoBoundWitnessWithMeta, XyoPayloadFindFilter, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { Filter } from 'mongodb'
 
 import { AbstractMongoDBPayloadArchivist } from '../../AbstractArchivist'
 import { removeId } from '../../Mongo'
-import { MONGO_TYPES } from '../../types'
 
 const schema: SetArchivePermissionsSchema = setArchivePermissionsSchema
 
-@injectable()
 export class MongoDBArchivePermissionsPayloadPayloadArchivist extends AbstractMongoDBPayloadArchivist<SetArchivePermissionsPayload> {
-  constructor(
-    @inject(TYPES.Account) protected readonly account: XyoAccount,
-    @inject(MONGO_TYPES.PayloadSdkMongo) protected readonly payloads: BaseMongoSdk<XyoPayloadWithMeta<SetArchivePermissionsPayload>>,
-    @inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta>,
-  ) {
-    super(account, payloads, boundWitnesses)
-  }
   find(_filter: XyoPayloadFindFilter): Promise<XyoPayloadWithMeta<SetArchivePermissionsPayload>[]> {
     throw new Error('Not Implemented')
   }
