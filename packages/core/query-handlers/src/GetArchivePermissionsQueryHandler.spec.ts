@@ -89,5 +89,20 @@ describe('GetArchivePermissionsQueryHandler', () => {
         expectEmptyPermissions(actual)
       })
     })
+    describe('when no archive supplied', () => {
+      beforeEach(() => {
+        archivist = mock<ArchivePermissionsArchivist>()
+        archivist.get.mockResolvedValue([])
+        archivist.find.mockResolvedValue([])
+      })
+      it('returns the empty permissions', async () => {
+        const sut = new GetArchivePermissionsQueryHandler(archivist)
+        const actual = await sut.handle(new GetArchivePermissionsQuery({ _archive, _hash, _timestamp, schema }))
+        expect(actual).toBeTruthy()
+        expect(actual?.schema).toBe(setArchivePermissionsSchema)
+        expect(actual?.addresses).toBeUndefined()
+        expect(actual?.schemas).toBeUndefined()
+      })
+    })
   })
 })
