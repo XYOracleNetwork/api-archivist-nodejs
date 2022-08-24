@@ -19,13 +19,8 @@ const getPublicPermissions = (archive: string) => {
 }
 
 export function setArchiveAccessPublic(archivist: ArchivePermissionsArchivist, archive: string) {
-  return setArchiveAccess(archivist, archive, true)
+  return archivist.insert([getPublicPermissions(archive)])
 }
 export function setArchiveAccessPrivate(archivist: ArchivePermissionsArchivist, archive: string) {
-  return setArchiveAccess(archivist, archive, true)
-}
-
-function setArchiveAccess(archivist: ArchivePermissionsArchivist, archive: string, accessControl: boolean) {
-  const permissions = accessControl ? getPrivatePermissions(archive) : getPublicPermissions(archive)
-  return archivist.insert([permissions])
+  return archivist.insert([getPrivatePermissions(archive)])
 }
