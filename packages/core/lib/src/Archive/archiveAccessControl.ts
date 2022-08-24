@@ -1,18 +1,24 @@
-import { ArchivePermissionsArchivist, SetArchivePermissionsSchema, setArchivePermissionsSchema } from '@xyo-network/archivist-model'
+import {
+  ArchivePermissionsArchivist,
+  SetArchivePermissionsPayload,
+  SetArchivePermissionsSchema,
+  setArchivePermissionsSchema,
+} from '@xyo-network/archivist-model'
+import { XyoPayloadWithPartialMeta } from '@xyo-network/sdk-xyo-client-js'
 
 const schema: SetArchivePermissionsSchema = setArchivePermissionsSchema
 
-const getPrivatePermissions = (_archive: string) => {
+const getPrivatePermissions = (_archive: string): XyoPayloadWithPartialMeta<SetArchivePermissionsPayload> => {
   return {
     _archive,
     _timestamp: Date.now(),
-    allow: {
-      addresses: [],
+    addresses: {
+      allow: [],
     },
     schema,
   }
 }
-const getPublicPermissions = (_archive: string) => {
+const getPublicPermissions = (_archive: string): XyoPayloadWithPartialMeta<SetArchivePermissionsPayload> => {
   return { _archive, _timestamp: Date.now(), schema }
 }
 

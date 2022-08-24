@@ -1,5 +1,5 @@
 import { debugSchema, SetArchivePermissions, SetArchivePermissionsPayload, setArchivePermissionsSchema } from '@xyo-network/archivist-model'
-import { claimArchive, getExistingWeb3User, postCommandsToArchive, signInWeb3User, TestWeb3User } from '@xyo-network/archivist-test'
+import { claimArchive, getExistingUser, postCommandsToArchive, signInUser, TestWeb3User } from '@xyo-network/archivist-test'
 import { XyoBoundWitnessBuilder, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
 import { StatusCodes } from 'http-status-codes'
 
@@ -33,11 +33,11 @@ const postCommandToArchive = (
 }
 
 const initializeTestData = async () => {
-  const owner = await getExistingWeb3User()
-  const ownerToken = await signInWeb3User(owner)
+  const owner = await getExistingUser()
+  const ownerToken = await signInUser(owner)
   const archive = (await claimArchive(ownerToken)).archive
-  const user = await getExistingWeb3User()
-  const userToken = await signInWeb3User(user)
+  const user = await getExistingUser()
+  const userToken = await signInUser(user)
   return {
     archive,
     owner,
@@ -89,12 +89,12 @@ describe('ArchiveAccountStrategy', () => {
       })
       describe('disallows address of', () => {
         it('user not in list', async () => {
-          const other = await getExistingWeb3User()
-          const otherToken = await signInWeb3User(other)
+          const other = await getExistingUser()
+          const otherToken = await signInUser(other)
           await postCommandToArchive(archive, otherToken, allowedSchema, StatusCodes.FORBIDDEN)
         })
         it('anonymous', async () => {
-          await postCommandToArchive(archive, undefined, allowedSchema, StatusCodes.FORBIDDEN)
+          await postCommandToArchive(archive, undefined, allowedSchema, StatusCodes.UNAUTHORIZED)
         })
       })
     })
@@ -137,8 +137,8 @@ describe('ArchiveAccountStrategy', () => {
           await postCommandToArchive(archive, ownerToken)
         })
         it('address not in disallowed list', async () => {
-          const otherUser = await getExistingWeb3User()
-          const otherToken = await signInWeb3User(otherUser)
+          const otherUser = await getExistingUser()
+          const otherToken = await signInUser(otherUser)
           await postCommandToArchive(archive, otherToken)
         })
       })
@@ -147,7 +147,7 @@ describe('ArchiveAccountStrategy', () => {
           await postCommandToArchive(archive, userToken, allowedSchema, StatusCodes.FORBIDDEN)
         })
         it('anonymous', async () => {
-          await postCommandToArchive(archive, undefined, allowedSchema, StatusCodes.FORBIDDEN)
+          await postCommandToArchive(archive, undefined, allowedSchema, StatusCodes.UNAUTHORIZED)
         })
       })
     })

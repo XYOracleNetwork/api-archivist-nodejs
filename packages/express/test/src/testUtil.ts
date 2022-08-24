@@ -72,6 +72,9 @@ export const getSchemaName = (): string => {
   return `${testSchemaPrefix}${v4()}`
 }
 
+/**
+ * @deprecated Use getNewUser instead
+ */
 export const getNewWeb2User = (): TestWeb2User => {
   const user = {
     email: `test-user-${v4()}@test.com`,
@@ -80,13 +83,17 @@ export const getNewWeb2User = (): TestWeb2User => {
   return user
 }
 
-export const getNewWeb3User = (): TestWeb3User => {
+export const getNewUser = (): TestWeb3User => {
   const wallet = Wallet.createRandom()
   const user = { address: wallet.address, privateKey: wallet.privateKey }
   return user
 }
 
+/**
+ * @deprecated Use getExistingUser instead
+ */
 export const getExistingWeb2User = async (
+  // eslint-disable-next-line deprecation/deprecation
   user: TestWeb2User = getNewWeb2User(),
   expectedStatus: StatusCodes = StatusCodes.CREATED,
 ): Promise<TestWeb2User> => {
@@ -95,19 +102,22 @@ export const getExistingWeb2User = async (
   return user
 }
 
+/**
+ * @deprecated Use signInUser instead
+ */
 export const signInWeb2User = async (user: TestWeb2User): Promise<string> => {
   const tokenResponse = await request.post('/user/login').send(user).expect(StatusCodes.OK)
   return tokenResponse.body.data.token
 }
 
-export const getExistingWeb3User = async (expectedStatus: StatusCodes = StatusCodes.CREATED): Promise<TestWeb3User> => {
+export const getExistingUser = async (expectedStatus: StatusCodes = StatusCodes.CREATED): Promise<TestWeb3User> => {
   const apiKey = process.env.API_KEY as string
-  const user = getNewWeb3User()
+  const user = getNewUser()
   await request.post('/user/signup').set('x-api-key', apiKey).send({ address: user.address }).expect(expectedStatus)
   return user
 }
 
-export const signInWeb3User = async (user: TestWeb3User): Promise<string> => {
+export const signInUser = async (user: TestWeb3User): Promise<string> => {
   const challengeResponse = await request.post(`/account/${user.address}/challenge`).send(user).expect(StatusCodes.OK)
   const { state } = challengeResponse.body.data
   const wallet = new Wallet(user.privateKey)
@@ -122,7 +132,7 @@ export const signInWeb3User = async (user: TestWeb3User): Promise<string> => {
 }
 
 export const getTokenForNewUser = async (): Promise<string> => {
-  return signInWeb2User(await getExistingWeb2User())
+  return signInUser(await getExistingUser())
 }
 
 export const invalidateToken = (token: string) => {
@@ -169,7 +179,7 @@ export const setArchiveAccessControl = async (
   const response = await request
     .put(`/archive/${archive}`)
     .auth(token, { type: 'bearer' })
-    .send(data ?? { accessControl: false, archive })
+    .send({ accessControl: false, ...data, archive })
     .expect(expectedStatus)
   return response.body.data
 }
