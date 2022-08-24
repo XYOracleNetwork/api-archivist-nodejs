@@ -1,3 +1,4 @@
+/* eslint-disable deprecation/deprecation */
 import { getExistingUser, getExistingWeb2User, getNewWeb2User } from '@xyo-network/archivist-test'
 import { StatusCodes } from 'http-status-codes'
 
