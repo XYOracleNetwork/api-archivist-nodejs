@@ -1,10 +1,10 @@
 import 'reflect-metadata'
 
-import { ArchiveArchivist, EntityArchive, UpsertResult } from '@xyo-network/archivist-model'
+import { ArchiveArchivist, UpsertResult, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
 import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
-import { WithId } from 'mongodb'
+import { Filter, WithId } from 'mongodb'
 
 import { MONGO_TYPES } from '../../types'
 
@@ -23,8 +23,14 @@ interface UpsertFilter {
 export class MongoDBArchiveArchivist implements ArchiveArchivist {
   constructor(@inject(MONGO_TYPES.ArchiveSdkMongo) protected archives: BaseMongoSdk<Required<XyoArchive>>) {}
 
-  async find(query: Partial<EntityArchive>): Promise<Required<XyoArchive>[]> {
-    return (await this.archives.find(query)).limit(100).toArray()
+  async find(predicate: XyoPayloadFilterPredicate<XyoArchive>): Promise<Required<XyoArchive>[]> {
+    const { archives, limit, order, user } = predicate
+    const parsedLimit = limit || 100
+    const parsedOrder = order || 'desc'
+    const filter: Filter<Required<XyoArchive>> = {}
+    if (archives?.length) filter.archive = { $in: archives }
+    if (user) filter.user = user
+    return (await this.archives.find(filter)).sort({}, parsedOrder).limit(parsedLimit).maxTimeMS(2000).toArray()
   }
 
   get(archive: string): Promise<Required<XyoArchive> | null> {
