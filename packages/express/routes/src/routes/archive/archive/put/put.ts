@@ -1,6 +1,6 @@
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
 import { isLegacyPrivateArchive } from '@xyo-network/archivist-express-lib'
-import { isValidArchiveName, setArchiveAccessPrivate, setArchiveAccessPublic } from '@xyo-network/archivist-lib'
+import { isValidArchiveName, setArchiveAccessPrivate } from '@xyo-network/archivist-lib'
 import { ArchivePathParams } from '@xyo-network/archivist-model'
 import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
@@ -25,8 +25,9 @@ const handler: RequestHandler<ArchivePathParams, XyoArchive, XyoArchive> = async
     // Create/update archive and set legacy permissions
     const result = await archives.insert({ accessControl, archive, user: user.id })
     // Set newer permissions
-    const setArchiveAccess = accessControl ? setArchiveAccessPrivate : setArchiveAccessPublic
-    await setArchiveAccess(permissions, archive)
+    if (accessControl) {
+      await setArchiveAccessPrivate(permissions, archive)
+    }
     res.status(result.updated ? StatusCodes.OK : StatusCodes.CREATED).json(result)
   } catch (error) {
     next({ message: ReasonPhrases.FORBIDDEN, statusCode: StatusCodes.FORBIDDEN })
