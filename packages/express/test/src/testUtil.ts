@@ -93,6 +93,7 @@ export const getNewUser = (): TestWeb3User => {
  * @deprecated Use getExistingUser instead
  */
 export const getExistingWeb2User = async (
+  // eslint-disable-next-line deprecation/deprecation
   user: TestWeb2User = getNewWeb2User(),
   expectedStatus: StatusCodes = StatusCodes.CREATED,
 ): Promise<TestWeb2User> => {
