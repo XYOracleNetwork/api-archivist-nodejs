@@ -4,7 +4,6 @@ import passport from 'passport'
 import {
   adminApiKeyStrategy,
   allowUnauthenticatedStrategyName,
-  archiveAccessControlStrategy,
   archiveAccountStrategy,
   archiveApiKeyStrategy,
   archiveApiKeyStrategyName,

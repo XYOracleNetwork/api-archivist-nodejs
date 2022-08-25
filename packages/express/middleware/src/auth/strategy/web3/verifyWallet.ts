@@ -1,6 +1,5 @@
+import { trimAddressPrefix } from '@xyo-network/archivist-lib'
 import { utils } from 'ethers'
-
-import { trimAddressPrefix } from './addressPrefix'
 
 export const verifyWallet = (message: string, signature: string, address: string) => {
   try {
