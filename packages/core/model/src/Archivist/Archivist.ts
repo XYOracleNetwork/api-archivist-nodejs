@@ -12,10 +12,11 @@ export interface WriteArchivist<TWriteResponse, TWrite> {
 export type ReadWriteArchivist<TWriteResponse, TWrite, TReadResponse = TWriteResponse, TId = string> = ReadArchivist<TReadResponse, TId> &
   WriteArchivist<TWriteResponse, TWrite>
 
-export type Archivist<TWriteResponse, TWrite, TReadResponse = TWriteResponse, TId = string, TQueryResponse = unknown, TQuery = unknown> = ReadWriteArchivist<
+export type Archivist<
   TWriteResponse,
   TWrite,
-  TReadResponse,
-  TId
-> &
-  QueryableArchivist<TQueryResponse, TQuery>
+  TReadResponse = TWriteResponse,
+  TId = string,
+  TQueryResponse = TReadResponse,
+  TQuery = unknown,
+> = ReadWriteArchivist<TWriteResponse, TWrite, TReadResponse, TId> & QueryableArchivist<TQueryResponse, TQuery>

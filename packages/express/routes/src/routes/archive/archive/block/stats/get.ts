@@ -1,24 +1,29 @@
 import 'source-map-support/register'
 
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
-import { getArchivistBoundWitnessesMongoSdk } from '@xyo-network/archivist-lib'
-import { ArchivePathParams } from '@xyo-network/archivist-model'
+import { ArchivePathParams, BoundWitnessStatsPayload, BoundWitnessStatsSchema } from '@xyo-network/archivist-model'
+import { XyoDivinerDivineQuerySchema, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
+
+const unknownCount: BoundWitnessStatsPayload = { count: -1, schema: BoundWitnessStatsSchema }
 
 export interface GetArchiveBlockStats {
   count: number
 }
 
-const getCount = async (archive: string) => {
-  const sdk = getArchivistBoundWitnessesMongoSdk(archive)
-  return await sdk.fetchCount()
-}
-
 const handler: RequestHandler<ArchivePathParams, GetArchiveBlockStats> = async (req, res) => {
   const { archive } = req.params
-  res.json({
-    count: await getCount(archive),
+  const { boundWitnessStatsDiviner: diviner } = req.app
+  const payload: XyoPayload<{ archive: string }> = {
+    archive,
+    schema: 'xyo.network.mongo.archive',
+  }
+  const result = await diviner.query({
+    payloads: [payload],
+    schema: XyoDivinerDivineQuerySchema,
   })
+  const answer: BoundWitnessStatsPayload = (result[1].pop() as BoundWitnessStatsPayload) || unknownCount
+  res.json(answer)
 }
 
 export const getArchiveBlockStats = asyncHandler(handler)

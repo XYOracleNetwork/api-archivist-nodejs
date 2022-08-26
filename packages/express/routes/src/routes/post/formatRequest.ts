@@ -12,6 +12,6 @@ export const formatRequest = (req: PostNodeRequest): XyoBoundWitnessWithMeta[] =
       bw._payloads = bw._payloads?.length ? augmentWithMetadata(bw._payloads, payloadMeta as XyoPayloadMeta) : []
       return bw
     }),
-    boundWitnessMeta
+    boundWitnessMeta,
   )
 }

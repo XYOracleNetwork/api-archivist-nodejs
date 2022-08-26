@@ -1,12 +1,23 @@
+import { QueryConverterRegistry } from '@xyo-network/archivist-express-lib'
 import {
   ArchiveArchivist,
+  ArchiveBoundWitnessesArchivist,
+  ArchiveKeyArchivist,
+  ArchivePayloadsArchivist,
   ArchivePermissionsArchivist,
-  QueryConverterRegistry,
+  ArchiveSchemaCountDiviner,
+  ArchiveSchemaListDiviner,
+  BoundWitnessesArchivist,
+  BoundWitnessStatsDiviner,
+  PayloadsArchivist,
+  PayloadStatsDiviner,
+  Query,
   QueryProcessorRegistry,
   UserManager,
   UserWithoutId,
   WitnessedPayloadArchivist,
 } from '@xyo-network/archivist-model'
+import { IdentifiableHuri, Queue } from '@xyo-network/archivist-queue'
 // NOTE: Required import since passport types (which we need to extend) extend Express
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import passport from 'passport'
@@ -31,10 +42,21 @@ declare global {
 
     interface Application {
       archiveArchivist: ArchiveArchivist
+      archiveBoundWitnessesArchivist: ArchiveBoundWitnessesArchivist
+      archiveKeyArchivist: ArchiveKeyArchivist
+      archivePayloadsArchivist: ArchivePayloadsArchivist
       archivePermissionsArchivist: ArchivePermissionsArchivist
+      archiveSchemaCountDiviner: ArchiveSchemaCountDiviner
+      archiveSchemaListDiviner: ArchiveSchemaListDiviner
       archivistWitnessedPayloadArchivist: WitnessedPayloadArchivist
+      boundWitnessStatsDiviner: BoundWitnessStatsDiviner
+      boundWitnessesArchivist: BoundWitnessesArchivist
+      payloadStatsDiviner: PayloadStatsDiviner
+      payloadsArchivist: PayloadsArchivist
       queryConverters: QueryConverterRegistry
       queryProcessors: QueryProcessorRegistry
+      queryQueue: Queue<Query>
+      responseQueue: Queue<IdentifiableHuri>
       userManager: UserManager
     }
   }

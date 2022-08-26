@@ -2,13 +2,13 @@ import { notImplemented } from '@xylabs/sdk-api-express-ecs'
 import { requireArchiveAccess } from '@xyo-network/archivist-middleware'
 import { Express } from 'express'
 
-import { getArchivePayloadHash, getArchivePayloadRecent, getArchivePayloadRepair, getArchivePayloads, getArchivePayloadStats } from '../routes'
+import { getArchivePayloadHash, getArchivePayloadRecent, getArchivePayloads, getArchivePayloadStats } from '../routes'
 
 export const addPayloadRoutes = (app: Express) => {
   app.get(
     '/archive/:archive/payload',
     requireArchiveAccess,
-    getArchivePayloads
+    getArchivePayloads,
     /* #swagger.tags = ['Payload'] */
     /* #swagger.summary = 'Get payloads' */
   )
@@ -16,7 +16,7 @@ export const addPayloadRoutes = (app: Express) => {
   app.get(
     '/archive/:archive/payload/stats',
     requireArchiveAccess,
-    getArchivePayloadStats
+    getArchivePayloadStats,
     /* #swagger.tags = ['Payload'] */
     /* #swagger.summary = 'Get payload stats' */
   )
@@ -24,16 +24,16 @@ export const addPayloadRoutes = (app: Express) => {
   app.get(
     '/archive/:archive/payload/hash/:hash',
     requireArchiveAccess,
-    getArchivePayloadHash
+    getArchivePayloadHash,
     /* #swagger.tags = ['Payload'] */
     /* #swagger.summary = 'Get payloads by hash' */
   )
 
-  /* Todo: Should this be a POST or PUT instead? */
+  /* TODO: Should this be a POST or PUT instead? */
   app.get(
     '/archive/:archive/payload/hash/:hash/repair',
     requireArchiveAccess,
-    getArchivePayloadRepair
+    notImplemented,
     /* #swagger.tags = ['Payload'] */
     /* #swagger.summary = 'Repair a payload' */
   )
@@ -41,7 +41,7 @@ export const addPayloadRoutes = (app: Express) => {
   app.get(
     '/archive/:archive/payload/recent/:limit?',
     requireArchiveAccess,
-    getArchivePayloadRecent
+    getArchivePayloadRecent,
     /* #swagger.tags = ['Payload'] */
     /* #swagger.summary = 'Get the most recent payloads' */
   )
@@ -49,7 +49,7 @@ export const addPayloadRoutes = (app: Express) => {
   app.get(
     '/archive/:archive/payload/sample/:size?',
     requireArchiveAccess,
-    notImplemented
+    notImplemented,
     /* #swagger.deprecated = true */
     /* #swagger.tags = ['Payload'] */
     /* #swagger.summary = 'Get a random sampling of payloads' */
@@ -58,7 +58,7 @@ export const addPayloadRoutes = (app: Express) => {
   app.get(
     '/archive/:archive/payload/chain/:hash/:limit?',
     requireArchiveAccess,
-    notImplemented
+    notImplemented,
     /* #swagger.deprecated = true */
     /* #swagger.tags = ['Payload'] */
     /* #swagger.summary = 'Get a proof of origin chain starting from a payload hash' */

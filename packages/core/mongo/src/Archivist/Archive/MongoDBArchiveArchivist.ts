@@ -1,11 +1,12 @@
 import 'reflect-metadata'
 
-import { ArchiveArchivist, EntityArchive, UpsertResult } from '@xyo-network/archivist-model'
-import { TYPES } from '@xyo-network/archivist-types'
+import { ArchiveArchivist, UpsertResult, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
 import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
-import { Filter, WithId } from 'mongodb'
+import { Filter, SortDirection, WithId } from 'mongodb'
+
+import { MONGO_TYPES } from '../../types'
 
 interface UpsertFilter {
   $and: [
@@ -14,20 +15,28 @@ interface UpsertFilter {
     },
     {
       user: string
-    }
+    },
   ]
 }
 
 @injectable()
 export class MongoDBArchiveArchivist implements ArchiveArchivist {
-  constructor(@inject(TYPES.ArchiveSdkMongo) protected archives: BaseMongoSdk<Required<XyoArchive>>) {}
+  constructor(@inject(MONGO_TYPES.ArchiveSdkMongo) protected archives: BaseMongoSdk<Required<XyoArchive>>) {}
 
-  async find(query: Filter<EntityArchive>): Promise<XyoArchive[]> {
-    return (await this.archives.find(query)).limit(100).toArray()
+  async find(predicate: XyoPayloadFilterPredicate<XyoArchive>): Promise<Required<XyoArchive>[]> {
+    const { archives, limit, offset, order, user } = predicate
+    const parsedLimit = limit || 100
+    const parsedOrder = order || 'desc'
+    const sort: { [key: string]: SortDirection } = { $natural: parsedOrder === 'asc' ? 1 : -1 }
+    const filter: Filter<Required<XyoArchive>> = {}
+    if (archives?.length) filter.archive = { $in: archives }
+    if (user) filter.user = user
+    const skip = offset && offset > 0 ? offset : 0
+    return (await this.archives.find(filter)).sort(sort).limit(parsedLimit).skip(skip).maxTimeMS(2000).toArray()
   }
 
-  get(name: string): Promise<Required<XyoArchive> | null> {
-    return this.archives.findOne({ archive: name })
+  get(archive: string): Promise<Required<XyoArchive> | null> {
+    return this.archives.findOne({ archive })
   }
 
   async insert(item: Required<XyoArchive>): Promise<WithId<Required<XyoArchive> & UpsertResult>> {

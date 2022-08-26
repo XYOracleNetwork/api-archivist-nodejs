@@ -8,7 +8,7 @@ export const addArchiveSettingsRoutes = (app: Express) => {
   app.get(
     '/archive/:archive/settings/key',
     requireArchiveOwner,
-    getArchiveSettingsKeys
+    getArchiveSettingsKeys,
     /* #swagger.tags = ['Archive'] */
     /* #swagger.summary = 'Gets the list of keys for a specific archive' */
   )
@@ -16,7 +16,7 @@ export const addArchiveSettingsRoutes = (app: Express) => {
   app.post(
     '/archive/:archive/settings/key',
     requireArchiveOwner,
-    postArchiveSettingsKeys
+    postArchiveSettingsKeys,
     /* #swagger.tags = ['Archive'] */
     /* #swagger.summary = 'Sets the list of keys for a specific archive' */
   )
@@ -24,7 +24,7 @@ export const addArchiveSettingsRoutes = (app: Express) => {
   app.delete(
     '/archive/:archive/settings/key',
     requireArchiveOwner,
-    notImplemented
+    notImplemented,
     /* #swagger.deprecated = true */
     /* #swagger.tags = ['Archive'] */
     /* #swagger.summary = 'Deletes a specific key for a specific archive' */
@@ -33,7 +33,7 @@ export const addArchiveSettingsRoutes = (app: Express) => {
   app.get(
     '/archive/:archive/settings/key/:key',
     requireArchiveOwner,
-    notImplemented
+    notImplemented,
     /* #swagger.deprecated = true */
     /* #swagger.tags = ['Archive'] */
     /* #swagger.summary = 'Gets the configuration of a specific key for a specific archive' */
@@ -42,7 +42,7 @@ export const addArchiveSettingsRoutes = (app: Express) => {
   app.post(
     '/archive/:archive/settings/key/:key',
     requireArchiveOwner,
-    notImplemented
+    notImplemented,
     /* #swagger.deprecated = true */
     /* #swagger.tags = ['Archive'] */
     /* #swagger.summary = 'Sets the configuration of a specific key for a specific archive' */
@@ -51,7 +51,7 @@ export const addArchiveSettingsRoutes = (app: Express) => {
   app.delete(
     '/archive/:archive/settings/key/:key',
     requireArchiveOwner,
-    notImplemented
+    notImplemented,
     /* #swagger.deprecated = true */
     /* #swagger.tags = ['Archive'] */
     /* #swagger.summary = 'Deletes a specific key for a specific archive' */

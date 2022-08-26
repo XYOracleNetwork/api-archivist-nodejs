@@ -16,7 +16,7 @@ const strategyOptions: IStrategyOptionsWithRequest = {
 export class LocalStrategy extends Strategy {
   constructor(
     @inject(TYPES.UserManager) public readonly userManager: UserManager,
-    @inject(TYPES.PasswordHasher) public readonly passwordHasher: PasswordHasher<User>
+    @inject(TYPES.PasswordHasher) public readonly passwordHasher: PasswordHasher<User>,
   ) {
     super(strategyOptions, async (req: Request, email, providedPassword, done) => {
       try {

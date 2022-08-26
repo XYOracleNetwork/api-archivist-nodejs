@@ -7,7 +7,7 @@ export const addDomainRoutes = (app: Express) => {
   app.get(
     '/domain/:domain',
     allowAnonymous,
-    getDomain
+    getDomain,
     /* #swagger.tags = ['Domain'] */
     /* #swagger.summary = 'Get specific config for a specific domain' */
   )

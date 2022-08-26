@@ -9,6 +9,7 @@ import { generateArchiveKey } from './generateArchiveKey'
 
 const handler: RequestHandler<ArchivePathParams, XyoArchiveKey> = async (req, res, next) => {
   const { user } = req
+  const { archiveKeyArchivist } = req.app
   if (!user || !user?.id) {
     next({ message: 'Invalid User', statusCode: StatusCodes.UNAUTHORIZED })
     return
@@ -20,8 +21,7 @@ const handler: RequestHandler<ArchivePathParams, XyoArchiveKey> = async (req, re
     return
   }
 
-  const response = await generateArchiveKey(archive)
-  res.json(response)
+  res.json(await archiveKeyArchivist.insert(generateArchiveKey(archive)))
 }
 
 export const postArchiveSettingsKeys = asyncHandler(handler)

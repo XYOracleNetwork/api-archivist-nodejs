@@ -1,10 +1,11 @@
 import 'reflect-metadata'
 
 import { UpsertResult, User, UserArchivist, UserWithoutId } from '@xyo-network/archivist-model'
-import { TYPES } from '@xyo-network/archivist-types'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter, ObjectId, WithId } from 'mongodb'
+
+import { MONGO_TYPES } from '../../types'
 
 interface IUpsertFilter {
   $or: {
@@ -15,10 +16,10 @@ interface IUpsertFilter {
 
 @injectable()
 export class MongoDBUserArchivist implements UserArchivist {
-  constructor(@inject(TYPES.UserSdkMongo) protected readonly db: BaseMongoSdk<User>) {}
+  constructor(@inject(MONGO_TYPES.UserSdkMongo) protected readonly db: BaseMongoSdk<User>) {}
 
   async find(query: Filter<User>): Promise<WithId<User>[]> {
-    return (await this.db.find(query)).limit(100).toArray()
+    return (await this.db.find(query)).limit(20).toArray()
   }
 
   async get(id: string): Promise<WithId<User> | null> {

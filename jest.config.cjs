@@ -1,6 +1,7 @@
 const generateJestConfig = ({ esModules }) => {
   const esModuleslist = Array.isArray(esModules) ? esModules.join('|') : esModules
   return {
+    coveragePathIgnorePatterns: ['./packages/express/test'],
     coverageThreshold: {
       global: {
         branches: 50,
@@ -20,7 +21,7 @@ const generateJestConfig = ({ esModules }) => {
     },
     preset: 'ts-jest/presets/default-esm',
     setupFiles: ['dotenv/config'],
-    setupFilesAfterEnv: ['jest-sorted'],
+    setupFilesAfterEnv: ['jest-extended/all', 'jest-sorted'],
     testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$',
     testTimeout: 15000,
     transform: {

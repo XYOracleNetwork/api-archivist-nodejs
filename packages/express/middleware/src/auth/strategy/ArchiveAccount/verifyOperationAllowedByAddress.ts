@@ -1,5 +1,6 @@
 import { NoReqQuery } from '@xylabs/sdk-api-express-ecs'
-import { isRequestUserOwnerOfRequestedArchive } from '@xyo-network/archivist-lib'
+import { isRequestUserOwnerOfRequestedArchive } from '@xyo-network/archivist-express-lib'
+import { trimAddressPrefix } from '@xyo-network/archivist-lib'
 import { ArchiveLocals, ArchivePathParams, SetArchivePermissions, setArchivePermissionsSchema } from '@xyo-network/archivist-model'
 import { XyoBoundWitness, XyoBoundWitnessWithMeta, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { Request } from 'express'
@@ -24,12 +25,12 @@ const verifyAccountAllowed = (address: string | undefined, permissions: SetArchi
   // If there's rejected addresses
   if (disallowedAddresses) {
     // And this address is one of them
-    if (disallowedAddresses.some((disallowed) => disallowed.toLowerCase() === address?.toLowerCase())) return false
+    if (disallowedAddresses.some((disallowed) => trimAddressPrefix(disallowed.toLowerCase()) === address?.toLowerCase())) return false
   }
   // If there's allowed addresses
   if (allowedAddresses) {
     // Return true if this address is allowed, otherwise false
-    return allowedAddresses.some((allowed) => allowed.toLowerCase() === address?.toLowerCase()) ? true : false
+    return allowedAddresses.some((allowed) => trimAddressPrefix(allowed.toLowerCase()) === address?.toLowerCase()) ? true : false
   }
   return true
 }
@@ -56,16 +57,16 @@ const verifySchemaAllowed = (schema: string, permissions: SetArchivePermissions)
 }
 
 export const verifyOperationAllowedByAddress = async (
-  req: Request<ArchivePathParams, unknown, XyoBoundWitnessWithMeta[], NoReqQuery, ArchiveLocals>
+  req: Request<ArchivePathParams, unknown, XyoBoundWitnessWithMeta[], NoReqQuery, ArchiveLocals>,
 ): Promise<boolean> => {
   // NOTE: Communicate partial success for allowed/disallowed operations
   // Short circuit & reduce all operations to binary success/failure for now
   // Get archive permissions
   const { archive } = req.params
   if (!archive) return false
+  if (isRequestUserOwnerOfRequestedArchive(req)) return true
   const permissions = await getArchivePermissions(req, archive)
-  const address = req?.user?.address
-  if (address && isRequestUserOwnerOfRequestedArchive(req)) return true
+  const address = req?.user?.address ? trimAddressPrefix(req?.user?.address?.toLowerCase()) : undefined
   if (!verifyAccountAllowed(address, permissions)) return false
   for (let i = 0; i < req.body.length; i++) {
     const bw = req.body[i]

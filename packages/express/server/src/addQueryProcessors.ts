@@ -39,13 +39,15 @@ const addDebug = (registry: QueryProcessorRegistry) => {
 
 const addQueries = (registry: QueryProcessorRegistry) => {
   registry.registerProcessorForSchema(setArchivePermissionsSchema, (payload) =>
-    dependencies.get<QueryHandler<Query<XyoPayload>>>(SetArchivePermissionsQueryHandler).handle(payload)
+    dependencies.get<QueryHandler<Query<XyoPayload>>>(SetArchivePermissionsQueryHandler).handle(payload),
   )
   registry.registerProcessorForSchema(getArchivePermissionsSchema, (payload) =>
-    dependencies.get<QueryHandler<Query<XyoPayload>>>(GetArchivePermissionsQueryHandler).handle(payload)
+    dependencies.get<QueryHandler<Query<XyoPayload>>>(GetArchivePermissionsQueryHandler).handle(payload),
   )
   registry.registerProcessorForSchema(getDomainConfigSchema, (payload) =>
-    dependencies.get<QueryHandler<Query<XyoPayload>>>(GetDomainConfigQueryHandler).handle(payload)
+    dependencies.get<QueryHandler<Query<XyoPayload>>>(GetDomainConfigQueryHandler).handle(payload),
   )
-  registry.registerProcessorForSchema(getSchemaSchema, (payload) => dependencies.get<QueryHandler<Query<XyoPayload>>>(GetSchemaQueryHandler).handle(payload))
+  registry.registerProcessorForSchema(getSchemaSchema, (payload) =>
+    dependencies.get<QueryHandler<Query<XyoPayload>>>(GetSchemaQueryHandler).handle(payload),
+  )
 }

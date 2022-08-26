@@ -1,5 +1,13 @@
-import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitness, XyoBoundWitnessWithMeta } from '@xyo-network/sdk-xyo-client-js'
 
-import { PayloadArchivist } from './PayloadArchivist'
+import { Archivist } from './Archivist'
+import { XyoBoundWitnessFilterPredicate } from './XyoBoundWitnessFilterPredicate'
 
-export type BoundWitnessArchivist<TId = string, TQuery = unknown> = PayloadArchivist<XyoBoundWitness, TId, TQuery>
+export type BoundWitnessArchivist<TId = string, TQuery extends XyoBoundWitnessFilterPredicate = XyoBoundWitnessFilterPredicate> = Archivist<
+  XyoBoundWitnessWithMeta[],
+  XyoBoundWitness[],
+  XyoBoundWitnessWithMeta[],
+  TId,
+  XyoBoundWitnessWithMeta[],
+  TQuery
+>

@@ -16,6 +16,6 @@ export const queueQueries = (boundWitnesses: XyoBoundWitnessWithMeta[], req: Pos
           // TODO: Handle unsupported schema here
           return converter(payload, req)
         })
-        .map(enqueue)
+        .map(enqueue),
     )
 }

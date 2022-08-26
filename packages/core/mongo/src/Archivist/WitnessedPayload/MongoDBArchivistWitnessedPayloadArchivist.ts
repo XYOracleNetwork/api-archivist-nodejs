@@ -3,29 +3,28 @@ import 'reflect-metadata'
 import { exists } from '@xylabs/sdk-js'
 import { AbstractPayloadArchivist } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { XyoAccount, XyoBoundWitnessBuilder, XyoBoundWitnessWithMeta, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { XyoAccount, XyoBoundWitnessBuilder, XyoBoundWitnessWithMeta, XyoPayloadFindFilter, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
-import { Filter } from 'mongodb'
 
-import { removeId } from '../../dbSdk'
+import { removeId } from '../../Mongo'
+import { MONGO_TYPES } from '../../types'
 
 const unique = <T>(value: T, index: number, self: T[]) => {
   return self.indexOf(value) === index
 }
 
 @injectable()
-export class MongoDBArchivistWitnessedPayloadArchivist extends AbstractPayloadArchivist<XyoPayloadWithMeta, string, Filter<XyoPayloadWithMeta>> {
+export class MongoDBArchivistWitnessedPayloadArchivist extends AbstractPayloadArchivist<XyoPayloadWithMeta, string> {
   constructor(
     @inject(TYPES.Account) protected readonly account: XyoAccount,
-    @inject(TYPES.PayloadSdkMongo) protected readonly payloads: BaseMongoSdk<XyoPayloadWithMeta>,
-    @inject(TYPES.BoundWitnessSdkMongo) protected readonly boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta>
+    @inject(MONGO_TYPES.PayloadSdkMongo) protected readonly payloads: BaseMongoSdk<XyoPayloadWithMeta>,
+    @inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta>,
   ) {
     super()
   }
-  find(_filter: Filter<XyoPayloadWithMeta>): Promise<XyoPayloadWithMeta[]> {
+  find(_filter: XyoPayloadFindFilter): Promise<XyoPayloadWithMeta[]> {
     throw new Error('Not implemented')
-    // TODO: How to support filtering but add our own filter in aggregation
   }
   async get(hash: string): Promise<XyoPayloadWithMeta[]> {
     // Find bw signed by us that has this hash
