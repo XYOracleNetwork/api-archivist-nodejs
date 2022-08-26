@@ -16,8 +16,8 @@ import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter, OptionalUnlessRequiredId, WithoutId } from 'mongodb'
 
-import { removeId } from '../Mongo'
-import { MONGO_TYPES } from '../types'
+import { removeId } from '../../Mongo'
+import { MONGO_TYPES } from '../../types'
 
 @injectable()
 export abstract class AbstractMongoDBPayloadArchivist<
