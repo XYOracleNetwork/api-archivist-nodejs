@@ -1,7 +1,7 @@
 import 'reflect-metadata'
 
 import { assertEx } from '@xylabs/sdk-js'
-import { AbstractPayloadArchivist } from '@xyo-network/archivist-model'
+import { AbstractPayloadArchivist, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import {
   EmptyObject,
@@ -10,7 +10,6 @@ import {
   XyoBoundWitnessBuilderConfig,
   XyoBoundWitnessWithMeta,
   XyoPayloadBuilder,
-  XyoPayloadFindFilter,
   XyoPayloadWithMeta,
 } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
@@ -22,7 +21,7 @@ import { MONGO_TYPES } from '../types'
 
 @injectable()
 export abstract class AbstractMongoDBPayloadArchivist<
-  T extends EmptyObject = EmptyObject,
+  T extends WithoutId<EmptyObject> = WithoutId<EmptyObject>,
   TId extends string = string,
 > extends AbstractPayloadArchivist<WithoutId<T>, TId> {
   protected readonly config: XyoBoundWitnessBuilderConfig = { inlinePayloads: false }
@@ -37,7 +36,7 @@ export abstract class AbstractMongoDBPayloadArchivist<
 
   public abstract get schema(): string
 
-  find(_filter: XyoPayloadFindFilter): Promise<XyoPayloadWithMeta<T>[]> {
+  find(_filter: XyoPayloadFilterPredicate<T>): Promise<XyoPayloadWithMeta<T>[]> {
     throw new Error('AbstractMongoDBPayloadArchivist: Find not implemented')
   }
 
@@ -59,7 +58,7 @@ export abstract class AbstractMongoDBPayloadArchivist<
       lastWitnessedPermissions.payload_hashes[permissionsPayloadIndex],
       `AbstractMongoDBPayloadArchivist: Missing permissions payload hash in BoundWitness (${lastWitnessedPermissions._hash})`,
     )
-    const payloadFilter: Filter<XyoPayloadWithMeta> = { _archive, _hash, schema: this.schema }
+    const payloadFilter = { _archive, _hash, schema: this.schema } as Filter<XyoPayloadWithMeta<T>>
     const permissions = removeId(
       assertEx(
         await this.payloads.findOne(payloadFilter),
