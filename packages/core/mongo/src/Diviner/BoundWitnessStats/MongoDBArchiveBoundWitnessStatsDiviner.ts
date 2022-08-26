@@ -1,17 +1,10 @@
 import 'reflect-metadata'
 
+import { XyoAccount } from '@xyo-network/account'
 import { BoundWitnessStatsDiviner, BoundWitnessStatsPayload, BoundWitnessStatsSchema } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoArchivistPayloadDivinerConfigSchema, XyoDivinerDivineQuerySchema } from '@xyo-network/diviner'
-import {
-  XyoAccount,
-  XyoBoundWitnessWithMeta,
-  XyoDiviner,
-  XyoPayload,
-  XyoPayloadBuilder,
-  XyoPayloads,
-  XyoPayloadSchema,
-} from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitnessWithMeta, XyoDiviner, XyoPayload, XyoPayloadBuilder, XyoPayloads, XyoPayloadSchema } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 

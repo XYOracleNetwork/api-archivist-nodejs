@@ -1,11 +1,11 @@
 import 'reflect-metadata'
 
 import { assertEx } from '@xylabs/sdk-js'
+import { XyoAccount } from '@xyo-network/account'
 import { AbstractPayloadArchivist, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import {
   EmptyObject,
-  XyoAccount,
   XyoBoundWitnessBuilder,
   XyoBoundWitnessBuilderConfig,
   XyoBoundWitnessWithMeta,

@@ -1,9 +1,9 @@
 import 'reflect-metadata'
 
+import { XyoAccount } from '@xyo-network/account'
 import { PayloadStatsPayload, PayloadStatsSchema } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import {
-  XyoAccount,
   XyoArchivistPayloadDivinerConfigSchema,
   XyoDiviner,
   XyoDivinerDivineQuerySchema,
