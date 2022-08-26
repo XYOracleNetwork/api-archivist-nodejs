@@ -14,7 +14,7 @@ import {
 } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
-import { Filter, OptionalUnlessRequiredId, WithoutId } from 'mongodb'
+import { ExplainVerbosity, Filter, OptionalUnlessRequiredId, WithoutId } from 'mongodb'
 
 import { removeId } from '../../Mongo'
 import { MONGO_TYPES } from '../../types'
@@ -36,17 +36,16 @@ export abstract class AbstractMongoDBPayloadArchivist<
 
   public abstract get schema(): string
 
+  async _findWitnessPlan(_archive: string) {
+    return (await this.findWitnessQuery(_archive)).explain(ExplainVerbosity.allPlansExecution)
+  }
+
   find(_filter: XyoPayloadFilterPredicate<T>): Promise<XyoPayloadWithMeta<T>[]> {
     throw new Error('AbstractMongoDBPayloadArchivist: Find not implemented')
   }
 
   async get(_archive: string): Promise<WithoutId<XyoPayloadWithMeta<T>>[]> {
-    const addresses: string = assertEx(
-      this.account.addressValue.bn.toString('hex'),
-      'AbstractMongoDBPayloadArchivist: Invalid signing account address',
-    )
-    const filter: Filter<XyoBoundWitnessWithMeta> = { _archive, addresses, payload_schemas: this.schema }
-    const boundWitnesses = await (await this.boundWitnesses.find(filter)).sort({ _timestamp: -1 }).limit(1).toArray()
+    const boundWitnesses = await (await this.findWitnessQuery(_archive)).toArray()
     const lastWitness = boundWitnesses.pop()
     if (!lastWitness) return []
     const witnessedPayloadIndex = lastWitness.payload_schemas.findIndex((s) => s === this.schema)
@@ -87,5 +86,14 @@ export abstract class AbstractMongoDBPayloadArchivist<
       throw new Error('AbstractMongoDBPayloadArchivist: Error inserting BoundWitnesses')
 
     return items
+  }
+
+  private async findWitnessQuery(_archive: string) {
+    const addresses: string = assertEx(
+      this.account.addressValue.bn.toString('hex'),
+      'AbstractMongoDBPayloadArchivist: Invalid signing account address',
+    )
+    const filter: Filter<XyoBoundWitnessWithMeta> = { _archive, addresses, payload_schemas: this.schema }
+    return (await this.boundWitnesses.find(filter)).sort({ _timestamp: -1 }).limit(1)
   }
 }

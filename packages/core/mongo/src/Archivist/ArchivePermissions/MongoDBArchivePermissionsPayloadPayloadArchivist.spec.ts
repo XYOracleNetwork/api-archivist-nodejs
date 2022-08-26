@@ -21,6 +21,17 @@ describe('MongoDBArchivePermissionsPayloadPayloadArchivist', () => {
         expect(result).toBeArray()
         expect(result.length).toBe(0)
       })
+      it('uses an index to perform the BoundWitness query', async () => {
+        const payloads: BaseMongoSdk<XyoPayloadWithMeta<SetArchivePermissionsPayload>> =
+          getBaseMongoSdk<XyoPayloadWithMeta<SetArchivePermissionsPayload>>('payloads')
+        const boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta> = getBaseMongoSdk<XyoBoundWitnessWithMeta>('bound_witnesses')
+        const sut = new MongoDBArchivePermissionsPayloadPayloadArchivist(account, payloads, boundWitnesses)
+        const plan = await sut._findWitnessPlan('temp-private')
+        expect(plan?.queryPlanner?.winningPlan?.inputStage?.inputStage?.stage).toBe('IXSCAN')
+        expect(plan?.executionStats?.nReturned).toBeLessThanOrEqual(1)
+        expect(plan?.executionStats?.totalDocsExamined).toBeLessThanOrEqual(1)
+        expect(plan?.executionStats?.totalKeysExamined).toBeLessThanOrEqual(1)
+      })
     })
     describe('with private archive', () => {
       it('returns permissions for the archive', async () => {
@@ -33,6 +44,17 @@ describe('MongoDBArchivePermissionsPayloadPayloadArchivist', () => {
         expect(result.length).toBe(1)
         const permissions = result?.[0]
         expect(permissions).toBeObject()
+      })
+      it('uses an index to perform the BoundWitness query', async () => {
+        const payloads: BaseMongoSdk<XyoPayloadWithMeta<SetArchivePermissionsPayload>> =
+          getBaseMongoSdk<XyoPayloadWithMeta<SetArchivePermissionsPayload>>('payloads')
+        const boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta> = getBaseMongoSdk<XyoBoundWitnessWithMeta>('bound_witnesses')
+        const sut = new MongoDBArchivePermissionsPayloadPayloadArchivist(account, payloads, boundWitnesses)
+        const plan = await sut._findWitnessPlan('temp-private')
+        expect(plan?.queryPlanner?.winningPlan?.inputStage?.inputStage?.stage).toBe('IXSCAN')
+        expect(plan?.executionStats?.nReturned).toBeLessThanOrEqual(1)
+        expect(plan?.executionStats?.totalDocsExamined).toBeLessThanOrEqual(1)
+        expect(plan?.executionStats?.totalKeysExamined).toBeLessThanOrEqual(1)
       })
     })
   })
