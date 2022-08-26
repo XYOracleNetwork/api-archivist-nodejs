@@ -8,7 +8,7 @@ import { removeId } from '../../Mongo'
 import { MONGO_TYPES } from '../../types'
 
 @injectable()
-export class MongoDBPayloadArchivist extends AbstractPayloadArchivist<XyoPayloadWithMeta, string> {
+class MongoDBPayloadArchivist extends AbstractPayloadArchivist<XyoPayloadWithMeta, string> {
   constructor(@inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayloadWithMeta>) {
     super()
   }
@@ -40,3 +40,5 @@ export class MongoDBPayloadArchivist extends AbstractPayloadArchivist<XyoPayload
     return items
   }
 }
+
+exports = { MongoDBPayloadArchivist }

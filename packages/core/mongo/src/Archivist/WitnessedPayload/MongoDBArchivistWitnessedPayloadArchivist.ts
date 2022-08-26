@@ -15,7 +15,7 @@ const unique = <T>(value: T, index: number, self: T[]) => {
 }
 
 @injectable()
-export class MongoDBArchivistWitnessedPayloadArchivist extends AbstractPayloadArchivist<XyoPayloadWithMeta, string> {
+class MongoDBArchivistWitnessedPayloadArchivist extends AbstractPayloadArchivist<XyoPayloadWithMeta, string> {
   constructor(
     @inject(TYPES.Account) protected readonly account: XyoAccount,
     @inject(MONGO_TYPES.PayloadSdkMongo) protected readonly payloads: BaseMongoSdk<XyoPayloadWithMeta>,
@@ -52,3 +52,5 @@ export class MongoDBArchivistWitnessedPayloadArchivist extends AbstractPayloadAr
     return payloads
   }
 }
+
+exports = { MongoDBArchivistWitnessedPayloadArchivist }

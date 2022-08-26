@@ -19,7 +19,7 @@ const getEmptyPermissions = (query: GetArchivePermissionsQuery): XyoPayloadWithM
 }
 
 @injectable()
-export class GetArchivePermissionsQueryHandler implements QueryHandler<GetArchivePermissionsQuery, SetArchivePermissionsPayload> {
+class GetArchivePermissionsQueryHandler implements QueryHandler<GetArchivePermissionsQuery, SetArchivePermissionsPayload> {
   constructor(@inject(TYPES.ArchivePermissionsArchivist) protected readonly archivePermissionsArchivist: ArchivePermissionsArchivist) {}
   async handle(query: GetArchivePermissionsQuery): Promise<XyoPayloadWithMeta<SetArchivePermissionsPayload>> {
     if (!query.payload._archive) {
@@ -29,3 +29,5 @@ export class GetArchivePermissionsQueryHandler implements QueryHandler<GetArchiv
     return (permissions?.[0] || getEmptyPermissions(query)) as WithAdditional<XyoPayloadWithMeta<SetArchivePermissionsPayload>>
   }
 }
+
+exports = { GetArchivePermissionsQueryHandler }

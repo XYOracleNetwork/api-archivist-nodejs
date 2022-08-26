@@ -9,7 +9,7 @@ import { removeId } from '../../Mongo'
 import { MONGO_TYPES } from '../../types'
 
 @injectable()
-export class MongoDBArchivePayloadsArchivist implements ArchivePayloadsArchivist {
+class MongoDBArchivePayloadsArchivist implements ArchivePayloadsArchivist {
   constructor(@inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayloadWithMeta>) {}
   async find(predicate: XyoArchivePayloadFilterPredicate): Promise<XyoPayloadWithMeta[]> {
     const { archive, hash, limit, order, schema, schemas, timestamp, ...props } = predicate
@@ -40,3 +40,5 @@ export class MongoDBArchivePayloadsArchivist implements ArchivePayloadsArchivist
     return items
   }
 }
+
+exports = { MongoDBArchivePayloadsArchivist }

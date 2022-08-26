@@ -11,7 +11,7 @@ import { verifyUuid } from './verifyUuid'
 import { verifyWallet } from './verifyWallet'
 
 @injectable()
-export class Web3AuthStrategy extends Strategy {
+class Web3AuthStrategy extends Strategy {
   constructor(@inject(TYPES.Logger) public readonly logger: Logger, @inject(TYPES.UserManager) public readonly userManager: UserManager) {
     super()
   }
@@ -53,3 +53,5 @@ export class Web3AuthStrategy extends Strategy {
     }
   }
 }
+
+exports = { Web3AuthStrategy }

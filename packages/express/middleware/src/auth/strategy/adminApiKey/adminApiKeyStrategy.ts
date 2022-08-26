@@ -7,7 +7,7 @@ import { inject, injectable } from 'inversify'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'
 
 @injectable()
-export class AdminApiKeyStrategy extends Strategy {
+class AdminApiKeyStrategy extends Strategy {
   constructor(
     @inject(TYPES.ApiKey) public readonly apiKey: string,
     @inject(TYPES.Logger) public readonly logger: Logger,
@@ -30,3 +30,5 @@ export class AdminApiKeyStrategy extends Strategy {
     }
   }
 }
+
+exports = { AdminApiKeyStrategy }

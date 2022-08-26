@@ -18,7 +18,7 @@ const defaults: StrategyOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
 }
 
-export const verifyCallbackWithRequest: VerifyCallbackWithRequest = (token, done) => {
+const verifyCallbackWithRequest: VerifyCallbackWithRequest = (token, done) => {
   try {
     return done(null, token.user)
   } catch (error) {
@@ -27,7 +27,7 @@ export const verifyCallbackWithRequest: VerifyCallbackWithRequest = (token, done
 }
 
 @injectable()
-export class JwtStrategy extends Strategy {
+class JwtStrategy extends Strategy {
   constructor(@inject(TYPES.JwtSecret) public readonly secretOrKey: string) {
     super({ ...defaults, secretOrKey }, verifyCallbackWithRequest)
   }
@@ -36,3 +36,5 @@ export class JwtStrategy extends Strategy {
     return getJwtRequestHandler(this.secretOrKey, { audience, issuer })
   }
 }
+
+exports = { JwtStrategy, verifyCallbackWithRequest }

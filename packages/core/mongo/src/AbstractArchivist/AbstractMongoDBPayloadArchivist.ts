@@ -20,7 +20,7 @@ import { removeId } from '../Mongo'
 import { MONGO_TYPES } from '../types'
 
 @injectable()
-export abstract class AbstractMongoDBPayloadArchivist<
+abstract class AbstractMongoDBPayloadArchivist<
   T extends WithoutId<EmptyObject> = WithoutId<EmptyObject>,
   TId extends string = string,
 > extends AbstractPayloadArchivist<WithoutId<T>, TId> {
@@ -92,3 +92,5 @@ export abstract class AbstractMongoDBPayloadArchivist<
     return items
   }
 }
+
+exports = { AbstractMongoDBPayloadArchivist }

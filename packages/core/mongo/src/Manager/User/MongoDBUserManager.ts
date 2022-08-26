@@ -28,7 +28,7 @@ const toDbEntity = (user: UserWithoutId) => {
 }
 
 @injectable()
-export class MongoDBUserManager implements UserManager {
+class MongoDBUserManager implements UserManager {
   constructor(
     @inject(MONGO_TYPES.UserArchivistMongoDb) protected readonly mongo: MongoDBUserArchivist,
     @inject(TYPES.PasswordHasher) protected readonly passwordHasher: PasswordHasher<User>,
@@ -55,3 +55,4 @@ export class MongoDBUserManager implements UserManager {
     return user.length ? fromDbEntity(user[0]) : null
   }
 }
+exports = { MongoDBUserManager }

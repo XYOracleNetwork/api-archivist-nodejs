@@ -7,8 +7,10 @@ import { BoundWitnessArchivist } from './BoundWitnessArchivist'
 import { XyoBoundWitnessFilterPredicate } from './XyoBoundWitnessFilterPredicate'
 
 @injectable()
-export abstract class AbstractBoundWitnessArchivist<TId> implements BoundWitnessArchivist<TId> {
+abstract class AbstractBoundWitnessArchivist<TId> implements BoundWitnessArchivist<TId> {
   abstract find(query: XyoBoundWitnessFilterPredicate): Promise<XyoBoundWitnessWithMeta<EmptyObject, XyoPayloadWithPartialMeta<EmptyObject>>[]>
   abstract get(id: TId): Promise<XyoBoundWitnessWithMeta<EmptyObject, XyoPayloadWithPartialMeta<EmptyObject>>[]>
   abstract insert(item: XyoBoundWitness[]): Promise<XyoBoundWitnessWithMeta<EmptyObject, XyoPayloadWithPartialMeta<EmptyObject>>[]>
 }
+
+exports = { AbstractBoundWitnessArchivist }

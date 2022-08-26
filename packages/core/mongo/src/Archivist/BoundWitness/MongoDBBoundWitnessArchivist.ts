@@ -7,7 +7,7 @@ import { Filter, SortDirection } from 'mongodb'
 import { MONGO_TYPES } from '../../types'
 
 @injectable()
-export class MongoDBBoundWitnessArchivist extends AbstractBoundWitnessArchivist<string> {
+class MongoDBBoundWitnessArchivist extends AbstractBoundWitnessArchivist<string> {
   constructor(@inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly sdk: BaseMongoSdk<XyoBoundWitnessWithMeta>) {
     super()
   }
@@ -46,3 +46,5 @@ export class MongoDBBoundWitnessArchivist extends AbstractBoundWitnessArchivist<
     return items
   }
 }
+
+exports = { MongoDBBoundWitnessArchivist }

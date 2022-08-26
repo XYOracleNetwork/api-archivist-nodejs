@@ -20,7 +20,7 @@ interface UpsertFilter {
 }
 
 @injectable()
-export class MongoDBArchiveArchivist implements ArchiveArchivist {
+class MongoDBArchiveArchivist implements ArchiveArchivist {
   constructor(@inject(MONGO_TYPES.ArchiveSdkMongo) protected archives: BaseMongoSdk<Required<XyoArchive>>) {}
 
   async find(predicate: XyoPayloadFilterPredicate<XyoArchive>): Promise<Required<XyoArchive>[]> {
@@ -55,3 +55,5 @@ export class MongoDBArchiveArchivist implements ArchiveArchivist {
     })
   }
 }
+
+exports = { MongoDBArchiveArchivist }

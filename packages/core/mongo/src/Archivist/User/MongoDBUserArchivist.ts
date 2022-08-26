@@ -15,7 +15,7 @@ interface IUpsertFilter {
 }
 
 @injectable()
-export class MongoDBUserArchivist implements UserArchivist {
+class MongoDBUserArchivist implements UserArchivist {
   constructor(@inject(MONGO_TYPES.UserSdkMongo) protected readonly db: BaseMongoSdk<User>) {}
 
   async find(query: Filter<User>): Promise<WithId<User>[]> {
@@ -49,3 +49,5 @@ export class MongoDBUserArchivist implements UserArchivist {
     })
   }
 }
+
+exports = { MongoDBUserArchivist }

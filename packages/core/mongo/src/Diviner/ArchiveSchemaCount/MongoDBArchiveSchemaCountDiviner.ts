@@ -13,7 +13,7 @@ interface PayloadSchemaCountsAggregateResult {
 }
 
 @injectable()
-export class MongoDBArchiveSchemaCountDiviner implements ArchiveSchemaCountDiviner {
+class MongoDBArchiveSchemaCountDiviner implements ArchiveSchemaCountDiviner {
   constructor(@inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayload>) {}
   async find(archive: string): Promise<Record<string, number>> {
     const result: PayloadSchemaCountsAggregateResult[] = await this.sdk.useCollection((collection) => {
@@ -32,3 +32,5 @@ export class MongoDBArchiveSchemaCountDiviner implements ArchiveSchemaCountDivin
     return result.reduce((o, schemaCount) => ({ ...o, [schemaCount._id]: schemaCount.count }), {})
   }
 }
+
+exports = { MongoDBArchiveSchemaCountDiviner }

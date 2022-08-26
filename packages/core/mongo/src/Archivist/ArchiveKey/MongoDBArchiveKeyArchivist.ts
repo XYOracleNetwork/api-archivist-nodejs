@@ -15,7 +15,7 @@ const fromDb = (k: WithId<XyoArchiveKey>) => {
 }
 
 @injectable()
-export class MongoDBArchiveKeyArchivist implements ArchiveKeyArchivist {
+class MongoDBArchiveKeyArchivist implements ArchiveKeyArchivist {
   constructor(@inject(MONGO_TYPES.ArchiveKeySdkMongo) protected readonly keys: BaseMongoSdk<XyoArchiveKey>) {}
   async find(filter: Filter<XyoArchiveKey>): Promise<XyoArchiveKey[]> {
     return (await (await this.keys.find(filter)).toArray()).map(fromDb)
@@ -38,3 +38,5 @@ export class MongoDBArchiveKeyArchivist implements ArchiveKeyArchivist {
     })
   }
 }
+
+exports = { MongoDBArchiveKeyArchivist }

@@ -29,7 +29,7 @@ const validateArraysAreDistinct = (allowed?: string[], disallowed?: string[]) =>
 }
 
 @injectable()
-export class SetArchivePermissionsQueryHandler implements QueryHandler<SetArchivePermissionsQuery, SetArchivePermissionsPayload> {
+class SetArchivePermissionsQueryHandler implements QueryHandler<SetArchivePermissionsQuery, SetArchivePermissionsPayload> {
   constructor(@inject(TYPES.ArchivePermissionsArchivist) protected readonly archivePermissionsArchivist: ArchivePermissionsArchivist) {}
   async handle(query: SetArchivePermissionsQuery): Promise<SetArchivePermissionsPayload> {
     const archive = assertEx(query.payload._archive)
@@ -43,3 +43,5 @@ export class SetArchivePermissionsQueryHandler implements QueryHandler<SetArchiv
       .build()
   }
 }
+
+exports = { SetArchivePermissionsQueryHandler }

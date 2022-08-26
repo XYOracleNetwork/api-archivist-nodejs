@@ -13,7 +13,7 @@ const strategyOptions: IStrategyOptionsWithRequest = {
 }
 
 @injectable()
-export class LocalStrategy extends Strategy {
+class LocalStrategy extends Strategy {
   constructor(
     @inject(TYPES.UserManager) public readonly userManager: UserManager,
     @inject(TYPES.PasswordHasher) public readonly passwordHasher: PasswordHasher<User>,
@@ -38,3 +38,5 @@ export class LocalStrategy extends Strategy {
     })
   }
 }
+
+exports = { LocalStrategy }

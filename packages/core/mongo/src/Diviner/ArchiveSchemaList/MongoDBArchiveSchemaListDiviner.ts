@@ -8,7 +8,7 @@ import { inject, injectable } from 'inversify'
 import { MONGO_TYPES } from '../../types'
 
 @injectable()
-export class MongoDBArchiveSchemaListDiviner implements ArchiveSchemaListDiviner {
+class MongoDBArchiveSchemaListDiviner implements ArchiveSchemaListDiviner {
   constructor(@inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayload>) {}
   async find(archive: string): Promise<string[]> {
     return await this.sdk.useCollection((collection) => {
@@ -16,3 +16,4 @@ export class MongoDBArchiveSchemaListDiviner implements ArchiveSchemaListDiviner
     })
   }
 }
+exports = { MongoDBArchiveSchemaListDiviner }
