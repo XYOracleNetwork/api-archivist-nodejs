@@ -47,25 +47,22 @@ export abstract class AbstractMongoDBPayloadArchivist<
     )
     const filter: Filter<XyoBoundWitnessWithMeta> = { _archive, addresses, payload_schemas: this.schema }
     const boundWitnesses = await (await this.boundWitnesses.find(filter)).sort({ _timestamp: -1 }).limit(1).toArray()
-    const lastWitnessedPermissions = boundWitnesses.pop()
-    if (!lastWitnessedPermissions) return []
-    const permissionsPayloadIndex = lastWitnessedPermissions.payload_schemas.findIndex((s) => s === this.schema)
-    assertEx(
-      permissionsPayloadIndex > -1,
-      `AbstractMongoDBPayloadArchivist: Invalid permissions index in BoundWitness (${lastWitnessedPermissions._hash})`,
-    )
+    const lastWitness = boundWitnesses.pop()
+    if (!lastWitness) return []
+    const witnessedPayloadIndex = lastWitness.payload_schemas.findIndex((s) => s === this.schema)
+    assertEx(witnessedPayloadIndex > -1, `AbstractMongoDBPayloadArchivist: Invalid permissions index in BoundWitness (${lastWitness._hash})`)
     const _hash = assertEx(
-      lastWitnessedPermissions.payload_hashes[permissionsPayloadIndex],
-      `AbstractMongoDBPayloadArchivist: Missing permissions payload hash in BoundWitness (${lastWitnessedPermissions._hash})`,
+      lastWitness.payload_hashes[witnessedPayloadIndex],
+      `AbstractMongoDBPayloadArchivist: Missing permissions payload hash in BoundWitness (${lastWitness._hash})`,
     )
     const payloadFilter = { _archive, _hash, schema: this.schema } as Filter<XyoPayloadWithMeta<T>>
-    const permissions = removeId(
+    const payload = removeId(
       assertEx(
         await this.payloads.findOne(payloadFilter),
-        `AbstractMongoDBPayloadArchivist: Missing Payload (${_hash}) from BoundWitness (${lastWitnessedPermissions._hash})`,
+        `AbstractMongoDBPayloadArchivist: Missing Payload (${_hash}) from BoundWitness (${lastWitness._hash})`,
       ),
     )
-    return [permissions]
+    return [payload]
   }
   async insert(items: XyoPayloadWithMeta<T>[]): Promise<XyoPayloadWithMeta<T>[]> {
     const _timestamp = Date.now()
