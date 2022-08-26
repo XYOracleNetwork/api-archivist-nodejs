@@ -31,4 +31,4 @@ class AdminApiKeyStrategy extends Strategy {
   }
 }
 
-exports = { AdminApiKeyStrategy }
+export { AdminApiKeyStrategy }

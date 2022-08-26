@@ -12,4 +12,4 @@ class GetSchemaQueryHandler implements QueryHandler<GetSchemaQuery, XyoSchemaPay
   }
 }
 
-exports = { GetSchemaQueryHandler }
+export { GetSchemaQueryHandler }

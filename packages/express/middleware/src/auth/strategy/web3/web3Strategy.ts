@@ -54,4 +54,4 @@ class Web3AuthStrategy extends Strategy {
   }
 }
 
-exports = { Web3AuthStrategy }
+export { Web3AuthStrategy }

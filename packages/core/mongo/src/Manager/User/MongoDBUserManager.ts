@@ -55,4 +55,4 @@ class MongoDBUserManager implements UserManager {
     return user.length ? fromDbEntity(user[0]) : null
   }
 }
-exports = { MongoDBUserManager }
+export { MongoDBUserManager }

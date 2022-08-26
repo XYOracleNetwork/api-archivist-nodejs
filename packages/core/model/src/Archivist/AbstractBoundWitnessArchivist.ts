@@ -13,4 +13,4 @@ abstract class AbstractBoundWitnessArchivist<TId> implements BoundWitnessArchivi
   abstract insert(item: XyoBoundWitness[]): Promise<XyoBoundWitnessWithMeta<EmptyObject, XyoPayloadWithPartialMeta<EmptyObject>>[]>
 }
 
-exports = { AbstractBoundWitnessArchivist }
+export { AbstractBoundWitnessArchivist }

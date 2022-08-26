@@ -37,4 +37,4 @@ class JwtStrategy extends Strategy {
   }
 }
 
-exports = { JwtStrategy, verifyCallbackWithRequest }
+export { JwtStrategy, verifyCallbackWithRequest }

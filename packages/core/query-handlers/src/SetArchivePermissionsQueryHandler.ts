@@ -44,4 +44,4 @@ class SetArchivePermissionsQueryHandler implements QueryHandler<SetArchivePermis
   }
 }
 
-exports = { SetArchivePermissionsQueryHandler }
+export { SetArchivePermissionsQueryHandler }

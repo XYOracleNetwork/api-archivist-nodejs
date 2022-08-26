@@ -50,4 +50,4 @@ class MongoDBUserArchivist implements UserArchivist {
   }
 }
 
-exports = { MongoDBUserArchivist }
+export { MongoDBUserArchivist }

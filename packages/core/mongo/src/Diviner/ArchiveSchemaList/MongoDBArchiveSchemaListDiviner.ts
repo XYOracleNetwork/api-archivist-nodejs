@@ -16,4 +16,4 @@ class MongoDBArchiveSchemaListDiviner implements ArchiveSchemaListDiviner {
     })
   }
 }
-exports = { MongoDBArchiveSchemaListDiviner }
+export { MongoDBArchiveSchemaListDiviner }

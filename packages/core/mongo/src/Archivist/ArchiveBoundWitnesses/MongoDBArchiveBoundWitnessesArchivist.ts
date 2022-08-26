@@ -50,4 +50,4 @@ class MongoDBArchiveBoundWitnessesArchivist implements ArchiveBoundWitnessesArch
   }
 }
 
-exports = { MongoDBArchiveBoundWitnessesArchivist }
+export { MongoDBArchiveBoundWitnessesArchivist }

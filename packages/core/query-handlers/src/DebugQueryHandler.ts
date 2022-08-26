@@ -12,4 +12,4 @@ class DebugQueryHandler implements QueryHandler<DebugQuery, DebugPayload> {
     return new XyoPayloadBuilder<DebugPayload>({ schema: debugSchema }).fields(query.payload).build()
   }
 }
-exports = { DebugQueryHandler }
+export { DebugQueryHandler }

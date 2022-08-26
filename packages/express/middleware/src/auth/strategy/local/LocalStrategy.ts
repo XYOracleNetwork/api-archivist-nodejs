@@ -39,4 +39,4 @@ class LocalStrategy extends Strategy {
   }
 }
 
-exports = { LocalStrategy }
+export { LocalStrategy }

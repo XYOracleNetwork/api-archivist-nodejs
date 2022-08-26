@@ -30,4 +30,4 @@ class GetArchivePermissionsQueryHandler implements QueryHandler<GetArchivePermis
   }
 }
 
-exports = { GetArchivePermissionsQueryHandler }
+export { GetArchivePermissionsQueryHandler }

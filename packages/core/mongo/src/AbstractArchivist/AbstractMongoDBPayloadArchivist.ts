@@ -93,4 +93,4 @@ abstract class AbstractMongoDBPayloadArchivist<
   }
 }
 
-exports = { AbstractMongoDBPayloadArchivist }
+export { AbstractMongoDBPayloadArchivist }

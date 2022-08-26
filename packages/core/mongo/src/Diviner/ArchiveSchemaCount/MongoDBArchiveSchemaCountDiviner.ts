@@ -33,4 +33,4 @@ class MongoDBArchiveSchemaCountDiviner implements ArchiveSchemaCountDiviner {
   }
 }
 
-exports = { MongoDBArchiveSchemaCountDiviner }
+export { MongoDBArchiveSchemaCountDiviner }

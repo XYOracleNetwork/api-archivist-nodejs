@@ -41,4 +41,4 @@ class MongoDBPayloadArchivist extends AbstractPayloadArchivist<XyoPayloadWithMet
   }
 }
 
-exports = { MongoDBPayloadArchivist }
+export { MongoDBPayloadArchivist }

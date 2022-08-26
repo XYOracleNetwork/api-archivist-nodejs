@@ -41,4 +41,4 @@ class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, ArchiveCo
   }
 }
 
-exports = { MongoDBArchivePayloadStatsDiviner }
+export { MongoDBArchivePayloadStatsDiviner }

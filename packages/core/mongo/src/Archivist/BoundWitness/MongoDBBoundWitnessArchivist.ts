@@ -47,4 +47,4 @@ class MongoDBBoundWitnessArchivist extends AbstractBoundWitnessArchivist<string>
   }
 }
 
-exports = { MongoDBBoundWitnessArchivist }
+export { MongoDBBoundWitnessArchivist }

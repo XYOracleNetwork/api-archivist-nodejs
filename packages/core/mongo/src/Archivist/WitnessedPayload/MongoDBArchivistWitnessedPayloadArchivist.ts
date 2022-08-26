@@ -53,4 +53,4 @@ class MongoDBArchivistWitnessedPayloadArchivist extends AbstractPayloadArchivist
   }
 }
 
-exports = { MongoDBArchivistWitnessedPayloadArchivist }
+export { MongoDBArchivistWitnessedPayloadArchivist }

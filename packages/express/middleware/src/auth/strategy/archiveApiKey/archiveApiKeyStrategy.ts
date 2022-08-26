@@ -59,4 +59,4 @@ class ArchiveApiKeyStrategy extends Strategy {
   }
 }
 
-exports = { ArchiveApiKeyStrategy }
+export { ArchiveApiKeyStrategy }

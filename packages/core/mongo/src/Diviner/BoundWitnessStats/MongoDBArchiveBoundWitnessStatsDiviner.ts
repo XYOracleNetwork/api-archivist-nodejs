@@ -44,4 +44,4 @@ class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner<XyoPayload, Arch
     return result
   }
 }
-exports = { MongoDBArchiveBoundWitnessStatsDiviner }
+export { MongoDBArchiveBoundWitnessStatsDiviner }

@@ -41,4 +41,4 @@ class MongoDBArchivePayloadsArchivist implements ArchivePayloadsArchivist {
   }
 }
 
-exports = { MongoDBArchivePayloadsArchivist }
+export { MongoDBArchivePayloadsArchivist }

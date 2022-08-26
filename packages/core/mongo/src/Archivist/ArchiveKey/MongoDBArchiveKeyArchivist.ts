@@ -39,4 +39,4 @@ class MongoDBArchiveKeyArchivist implements ArchiveKeyArchivist {
   }
 }
 
-exports = { MongoDBArchiveKeyArchivist }
+export { MongoDBArchiveKeyArchivist }

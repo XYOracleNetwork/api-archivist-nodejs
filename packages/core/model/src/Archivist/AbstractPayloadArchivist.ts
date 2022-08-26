@@ -13,4 +13,4 @@ abstract class AbstractPayloadArchivist<T extends EmptyObject = EmptyObject, TId
   abstract insert(items: T[]): Promise<XyoPayloadWithMeta<T>[]>
 }
 
-exports = { AbstractPayloadArchivist }
+export { AbstractPayloadArchivist }
