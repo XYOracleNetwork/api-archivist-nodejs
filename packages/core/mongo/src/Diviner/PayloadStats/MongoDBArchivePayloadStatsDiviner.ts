@@ -3,15 +3,8 @@ import 'reflect-metadata'
 import { XyoAccount } from '@xyo-network/account'
 import { PayloadStatsPayload, PayloadStatsSchema } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import {
-  XyoArchivistPayloadDivinerConfigSchema,
-  XyoDiviner,
-  XyoDivinerDivineQuerySchema,
-  XyoPayload,
-  XyoPayloadBuilder,
-  XyoPayloads,
-  XyoPayloadSchema,
-} from '@xyo-network/sdk-xyo-client-js'
+import { XyoDiviner, XyoDivinerDivineQuerySchema } from '@xyo-network/diviner'
+import { XyoArchivistPayloadDivinerConfigSchema, XyoPayload, XyoPayloadBuilder, XyoPayloads, XyoPayloadSchema } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 
