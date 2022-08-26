@@ -31,7 +31,9 @@
     "@xyo-network/account": "^2.28.1",
     "@xyo-network/archivist-model": "workspace:^",
     "@xyo-network/archivist-types": "workspace:^",
+    "@xyo-network/boundwitness": "^2.28.1",
     "@xyo-network/diviner": "^2.28.1",
+    "@xyo-network/payload": "^2.28.1",
     "@xyo-network/sdk-xyo-client-js": "^2.28.1",
     "@xyo-network/sdk-xyo-mongo-js": "^2.2.9",
     "inversify": "^6.0.1",
@@ -39,5 +41,8 @@
     "reflect-metadata": "^0.1.13"
   },
   "private": true,
-  "types": "dist/esm/index.d.ts"
+  "types": "dist/esm/index.d.ts",
+  "devDependencies": {
+    "jest-mock-extended": "^2.0.7"
+  }
 }

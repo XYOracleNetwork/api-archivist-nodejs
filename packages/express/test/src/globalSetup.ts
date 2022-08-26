@@ -3,7 +3,7 @@ config()
 import { assertEx } from '@xylabs/sdk-js'
 import { XyoAccount, XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 
-import { claimArchive, getArchive, getTokenForNewUser, setArchiveAccessControl, signInUser } from './testUtil'
+import { claimArchive, getArchive, setArchiveAccessControl, signInUser } from './testUtil'
 
 /**
  * Jest global setup method run before
