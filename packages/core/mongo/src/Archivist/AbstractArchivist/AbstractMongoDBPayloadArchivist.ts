@@ -1,28 +1,27 @@
 import 'reflect-metadata'
 
 import { assertEx } from '@xylabs/sdk-js'
-import { AbstractPayloadArchivist } from '@xyo-network/archivist-model'
+import { XyoAccount } from '@xyo-network/account'
+import { AbstractPayloadArchivist, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import {
   EmptyObject,
-  XyoAccount,
   XyoBoundWitnessBuilder,
   XyoBoundWitnessBuilderConfig,
   XyoBoundWitnessWithMeta,
   XyoPayloadBuilder,
-  XyoPayloadFindFilter,
   XyoPayloadWithMeta,
 } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
-import { Filter, OptionalUnlessRequiredId, WithoutId } from 'mongodb'
+import { ExplainVerbosity, Filter, OptionalUnlessRequiredId, WithoutId } from 'mongodb'
 
-import { removeId } from '../Mongo'
-import { MONGO_TYPES } from '../types'
+import { removeId } from '../../Mongo'
+import { MONGO_TYPES } from '../../types'
 
 @injectable()
 export abstract class AbstractMongoDBPayloadArchivist<
-  T extends EmptyObject = EmptyObject,
+  T extends WithoutId<EmptyObject> = WithoutId<EmptyObject>,
   TId extends string = string,
 > extends AbstractPayloadArchivist<WithoutId<T>, TId> {
   protected readonly config: XyoBoundWitnessBuilderConfig = { inlinePayloads: false }
@@ -37,36 +36,32 @@ export abstract class AbstractMongoDBPayloadArchivist<
 
   public abstract get schema(): string
 
-  find(_filter: XyoPayloadFindFilter): Promise<XyoPayloadWithMeta<T>[]> {
+  async _findWitnessPlan(_archive: string) {
+    return (await this.findWitnessQuery(_archive)).explain(ExplainVerbosity.allPlansExecution)
+  }
+
+  find(_filter: XyoPayloadFilterPredicate<T>): Promise<XyoPayloadWithMeta<T>[]> {
     throw new Error('AbstractMongoDBPayloadArchivist: Find not implemented')
   }
 
   async get(_archive: string): Promise<WithoutId<XyoPayloadWithMeta<T>>[]> {
-    const addresses: string = assertEx(
-      this.account.addressValue.bn.toString('hex'),
-      'AbstractMongoDBPayloadArchivist: Invalid signing account address',
-    )
-    const filter: Filter<XyoBoundWitnessWithMeta> = { _archive, addresses, payload_schemas: this.schema }
-    const boundWitnesses = await (await this.boundWitnesses.find(filter)).sort({ _timestamp: -1 }).limit(1).toArray()
-    const lastWitnessedPermissions = boundWitnesses.pop()
-    if (!lastWitnessedPermissions) return []
-    const permissionsPayloadIndex = lastWitnessedPermissions.payload_schemas.findIndex((s) => s === this.schema)
-    assertEx(
-      permissionsPayloadIndex > -1,
-      `AbstractMongoDBPayloadArchivist: Invalid permissions index in BoundWitness (${lastWitnessedPermissions._hash})`,
-    )
+    const boundWitnesses = await (await this.findWitnessQuery(_archive)).toArray()
+    const lastWitness = boundWitnesses.pop()
+    if (!lastWitness) return []
+    const witnessedPayloadIndex = lastWitness.payload_schemas.findIndex((s) => s === this.schema)
+    assertEx(witnessedPayloadIndex > -1, `AbstractMongoDBPayloadArchivist: Invalid permissions index in BoundWitness (${lastWitness._hash})`)
     const _hash = assertEx(
-      lastWitnessedPermissions.payload_hashes[permissionsPayloadIndex],
-      `AbstractMongoDBPayloadArchivist: Missing permissions payload hash in BoundWitness (${lastWitnessedPermissions._hash})`,
+      lastWitness.payload_hashes[witnessedPayloadIndex],
+      `AbstractMongoDBPayloadArchivist: Missing permissions payload hash in BoundWitness (${lastWitness._hash})`,
     )
-    const payloadFilter: Filter<XyoPayloadWithMeta> = { _archive, _hash, schema: this.schema }
-    const permissions = removeId(
+    const payloadFilter = { _archive, _hash, schema: this.schema } as Filter<XyoPayloadWithMeta<T>>
+    const payload = removeId(
       assertEx(
         await this.payloads.findOne(payloadFilter),
-        `AbstractMongoDBPayloadArchivist: Missing Payload (${_hash}) from BoundWitness (${lastWitnessedPermissions._hash})`,
+        `AbstractMongoDBPayloadArchivist: Missing Payload (${_hash}) from BoundWitness (${lastWitness._hash})`,
       ),
     )
-    return [permissions]
+    return [payload]
   }
   async insert(items: XyoPayloadWithMeta<T>[]): Promise<XyoPayloadWithMeta<T>[]> {
     const _timestamp = Date.now()
@@ -91,5 +86,14 @@ export abstract class AbstractMongoDBPayloadArchivist<
       throw new Error('AbstractMongoDBPayloadArchivist: Error inserting BoundWitnesses')
 
     return items
+  }
+
+  private async findWitnessQuery(_archive: string) {
+    const addresses: string = assertEx(
+      this.account.addressValue.bn.toString('hex'),
+      'AbstractMongoDBPayloadArchivist: Invalid signing account address',
+    )
+    const filter: Filter<XyoBoundWitnessWithMeta> = { _archive, addresses, payload_schemas: this.schema }
+    return (await this.boundWitnesses.find(filter)).sort({ _timestamp: -1 }).limit(1)
   }
 }

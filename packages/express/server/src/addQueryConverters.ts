@@ -20,9 +20,11 @@ import {
   setArchivePermissionsSchema,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { XyoPayload, XyoQueryPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 import { Request } from 'express'
 import { v4 } from 'uuid'
+
+import { XyoQueryPayloadWithMeta } from './XyoQueryPayloadWithMeta'
 
 const debugCommandConverter = (payload: XyoPayload, _req: Request): Query => {
   return {
