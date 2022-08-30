@@ -5,7 +5,7 @@ import { Container } from 'inversify'
 
 import { COLLECTIONS } from '../collections'
 import { MONGO_TYPES } from '../types'
-import { getBaseMongoSdk } from '.'
+import { getBaseMongoSdk } from './getBaseMongoSdk'
 
 export const addMongoSdks = (container: Container) => {
   container

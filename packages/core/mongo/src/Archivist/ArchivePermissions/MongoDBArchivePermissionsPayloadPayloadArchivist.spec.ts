@@ -3,7 +3,6 @@ import { SetArchivePermissionsPayload } from '@xyo-network/archivist-model'
 import { XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
 import { XyoPayloadWithMeta } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
-import { Collection } from 'mongodb'
 
 import { COLLECTIONS } from '../../collections'
 import { getBaseMongoSdk } from '../../Mongo'
