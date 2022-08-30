@@ -12,6 +12,18 @@ services:
       MONGO_INITDB_DATABASE: archivist
     volumes:
       - ./scripts/mongo/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./scripts/mongo/usr/local/etc/:/usr/local/etc/
+    # healthcheck:
+    #   test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo -u mongo -p mongo --quiet) -eq 1
+    #   interval: 10s
+    #   start_period: 30s
+    command: [
+        "--config",
+        "/usr/local/etc/mongod.conf",
+        # "--replSet",
+        # "dbrs",
+        "--bind_ip_all",
+      ]
   archivist:
     container_name: archivist
     build: .
