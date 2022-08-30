@@ -1,7 +1,8 @@
-import { XyoPayload, XyoQueryPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
 
 import { ArchivePermissions } from '../Domain'
 import { Query } from './Query'
+import { XyoQueryPayloadWithMeta } from './XyoQueryPayloadWithMeta'
 
 export const setArchivePermissionsSchema = 'network.xyo.security.archive.permissions.set'
 export type SetArchivePermissionsSchema = typeof setArchivePermissionsSchema
