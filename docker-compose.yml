@@ -12,19 +12,24 @@ services:
       MONGO_INITDB_DATABASE: archivist
     volumes:
       - ./scripts/mongo/etc/mongodb:/etc/mongodb
+      - ./scripts/mongo/healthcheck:/healthcheck
       - ./scripts/mongo/usr/local/etc:/usr/local/etc
       - ./scripts/mongo/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-    # healthcheck:
-    #   test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo -u mongo -p mongo --quiet) -eq 1
-    #   interval: 10s
-    #   start_period: 30s
-    command: [
+    healthcheck:
+      # HACK: We're using the healthcheck to init our Replica Set because
+      # the default cointainer boostrap scripts strip away our replSet
+      # CLI arguments
+      # https://github.com/docker-library/mongo/blob/ee1d6955bcc15c4a74ef6fcc60a5a5bc37739bf7/6.0/docker-entrypoint.sh#L310
+      test: mongosh -u root -p example --quiet /healthcheck/healthcheck.js
+      interval: 10s
+    command:
+      [
         "--auth",
         "--bind_ip_all",
         "--config",
         "/usr/local/etc/mongod.conf",
-        # "--replSet",
-        # "dbrs",
+        "--replSet",
+        "dbrs",
       ]
   archivist:
     container_name: archivist
