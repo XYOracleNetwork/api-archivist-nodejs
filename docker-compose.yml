@@ -11,8 +11,9 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: example
       MONGO_INITDB_DATABASE: archivist
     volumes:
-      - ./scripts/mongo/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./scripts/mongo/etc/mongodb/:/etc/mongodb/
       - ./scripts/mongo/usr/local/etc/:/usr/local/etc/
+      - ./scripts/mongo/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     # healthcheck:
     #   test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo -u mongo -p mongo --quiet) -eq 1
     #   interval: 10s
