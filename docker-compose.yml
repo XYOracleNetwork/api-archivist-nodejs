@@ -21,8 +21,8 @@ services:
     command: [
         "--auth",
         "--bind_ip_all",
-        # "--config",
-        # "/usr/local/etc/mongod.conf",
+        "--config",
+        "/usr/local/etc/mongod.conf",
         # "--replSet",
         # "dbrs",
       ]
