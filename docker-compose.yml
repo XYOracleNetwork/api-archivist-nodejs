@@ -12,7 +12,7 @@ services:
       MONGO_INITDB_DATABASE: archivist
     volumes:
       - ./scripts/mongo/etc/mongodb:/etc/mongodb
-      - ./scripts/mongo/healthcheck:/healthcheck
+      - ./scripts/mongo/opt/mongo:/opt/mongo
       - ./scripts/mongo/usr/local/etc:/usr/local/etc
       - ./scripts/mongo/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     command:
