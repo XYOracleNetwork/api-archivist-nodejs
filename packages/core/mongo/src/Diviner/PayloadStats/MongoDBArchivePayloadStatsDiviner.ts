@@ -23,6 +23,7 @@ import { MONGO_TYPES } from '../../types'
 import { MongoArchivePayload, MongoArchiveSchema } from '../MongoArchivePayload'
 import { ArchiveConfigPayload } from '../Payloads'
 
+const $inc = { [`${COLLECTIONS.Payloads}.count`]: 1 }
 const updateOptions: UpdateOptions = { upsert: true }
 
 @injectable()
@@ -54,7 +55,6 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
     const archive = change.fullDocument._archive
     if (archive) {
       await this.sdk.useMongo(async (mongo) => {
-        const $inc = { [`${COLLECTIONS.Payloads}.count`]: 1 }
         await mongo.db(DBS.Archivist).collection(COLLECTIONS.ArchivistStats).updateOne({ archive }, { $inc }, updateOptions)
       })
     }
