@@ -21,6 +21,7 @@ const updateOptions: UpdateOptions = { upsert: true }
 
 @injectable()
 export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner<XyoPayload, ArchiveConfigPayload> implements BoundWitnessStatsDiviner {
+  protected pendingCounts: Record<string, number> = {}
   protected resumeAfter: ResumeToken | undefined = undefined
 
   constructor(
@@ -50,11 +51,8 @@ export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner<XyoPayloa
   private processChange = async (change: ChangeStreamInsertDocument<XyoBoundWitnessWithMeta>) => {
     this.resumeAfter = change._id
     const archive = change.fullDocument._archive
-    if (archive) {
-      await this.sdk.useMongo(async (mongo) => {
-        await mongo.db(DATABASES.Archivist).collection(COLLECTIONS.ArchivistStats).updateOne({ archive }, { $inc }, updateOptions)
-      })
-    }
+    if (archive) this.pendingCounts[archive] = (this.pendingCounts[archive] || 0) + 1
+    await this.updateChanges()
   }
 
   private registerWithChangeStream = async () => {
@@ -66,5 +64,22 @@ export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner<XyoPayloa
     const changeStream = collection.watch([], opts)
     changeStream.on('change', this.processChange)
     changeStream.on('error', this.registerWithChangeStream)
+  }
+
+  private updateChanges = async () => {
+    for (const archive in this.pendingCounts) {
+      if (Object.prototype.hasOwnProperty.call(this.pendingCounts, archive)) {
+        const count = this.pendingCounts[archive]
+        const $inc = { [`${COLLECTIONS.Payloads}.count`]: count }
+        try {
+          await this.sdk.useMongo(async (mongo) => {
+            await mongo.db(DATABASES.Archivist).collection(COLLECTIONS.ArchivistStats).updateOne({ archive }, { $inc }, updateOptions)
+          })
+          this.pendingCounts[archive] = 0
+        } catch (_error) {
+          /* TODO: Log */
+        }
+      }
+    }
   }
 }
