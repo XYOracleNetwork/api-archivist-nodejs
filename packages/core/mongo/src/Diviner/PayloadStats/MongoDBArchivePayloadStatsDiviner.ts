@@ -12,6 +12,7 @@ import { ChangeStreamInsertDocument, ChangeStreamOptions, ResumeToken, UpdateOpt
 
 import { COLLECTIONS } from '../../collections'
 import { DATABASES } from '../../databases'
+import { Task } from '../../Job'
 import { MONGO_TYPES } from '../../types'
 import { MongoArchivePayload, MongoArchiveSchema } from '../MongoArchivePayload'
 import { ArchiveConfigPayload } from '../Payloads'
@@ -30,6 +31,10 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
 
   get queries() {
     return [XyoDivinerDivineQuerySchema]
+  }
+
+  get task(): Task {
+    return async () => await this.updateChanges()
   }
 
   public async divine(payloads?: XyoPayloads): Promise<XyoPayload | null> {
@@ -56,7 +61,6 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
     this.resumeAfter = change._id
     const archive = change.fullDocument._archive
     if (archive) this.pendingCounts[archive] = (this.pendingCounts[archive] || 0) + 1
-    // await this.updateChanges()
   }
 
   private registerWithChangeStream = async () => {
