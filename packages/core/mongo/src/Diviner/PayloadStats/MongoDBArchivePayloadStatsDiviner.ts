@@ -2,7 +2,7 @@ import 'reflect-metadata'
 
 import { assertEx } from '@xylabs/sdk-js'
 import { XyoAccount } from '@xyo-network/account'
-import { PayloadStatsPayload, PayloadStatsSchema } from '@xyo-network/archivist-model'
+import { PayloadStatsPayload, PayloadStatsSchema, Task } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoArchivistPayloadDivinerConfigSchema, XyoDiviner, XyoDivinerDivineQuerySchema } from '@xyo-network/diviner'
 import { XyoPayload, XyoPayloadBuilder, XyoPayloads, XyoPayloadSchema, XyoPayloadWithMeta } from '@xyo-network/payload'
@@ -12,7 +12,6 @@ import { ChangeStreamInsertDocument, ChangeStreamOptions, ResumeToken, UpdateOpt
 
 import { COLLECTIONS } from '../../collections'
 import { DATABASES } from '../../databases'
-import { Task } from '../../Job'
 import { MONGO_TYPES } from '../../types'
 import { MongoArchivePayload, MongoArchiveSchema } from '../MongoArchivePayload'
 import { ArchiveConfigPayload } from '../Payloads'
