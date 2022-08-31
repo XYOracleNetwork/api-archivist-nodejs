@@ -8,6 +8,9 @@
 # so that it can run succesfully
 join_replica_set() {
   echo "Sleeping to allow server to start"
+  # TODO: Instead of hardcoded sleep we could grab the forked PID
+  # and wait for it to transition from running to <defunct>. Do so
+  # if this becomes problematic.
   sleep 5
   echo "Joining replica set"
   mongosh -u "${MONGO_INITDB_ROOT_USERNAME}" -p "${MONGO_INITDB_ROOT_PASSWORD}" --quiet /opt/mongo/joinReplicaSet.js
