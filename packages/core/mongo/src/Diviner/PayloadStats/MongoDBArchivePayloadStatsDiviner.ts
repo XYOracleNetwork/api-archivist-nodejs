@@ -15,13 +15,15 @@ import {
 } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk, MongoClientWrapper } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
-import { ChangeStreamInsertDocument, ChangeStreamOptions, ResumeToken } from 'mongodb'
+import { ChangeStreamInsertDocument, ChangeStreamOptions, ResumeToken, UpdateOptions } from 'mongodb'
 
 import { COLLECTIONS } from '../../collections'
 import { DBS } from '../../dbs'
 import { MONGO_TYPES } from '../../types'
 import { MongoArchivePayload, MongoArchiveSchema } from '../MongoArchivePayload'
 import { ArchiveConfigPayload } from '../Payloads'
+
+const updateOptions: UpdateOptions = { upsert: true }
 
 @injectable()
 export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, ArchiveConfigPayload> {
@@ -53,7 +55,7 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
     if (archive) {
       await this.sdk.useMongo(async (mongo) => {
         const $inc = { [`${COLLECTIONS.Payloads}.count`]: 1 }
-        await mongo.db(DBS.Archivist).collection(COLLECTIONS.Stats).updateOne({ archive }, { $inc }, { upsert: true })
+        await mongo.db(DBS.Archivist).collection(COLLECTIONS.Stats).updateOne({ archive }, { $inc }, updateOptions)
       })
     }
   }
