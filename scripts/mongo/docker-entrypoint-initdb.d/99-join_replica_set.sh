@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -eux
 
 # HACK: We're backgrounding the join to our Replica Set because
 # the default cointainer boostrap scripts strip away our replSet
@@ -13,6 +13,8 @@ join_replica_set() {
   mongosh -u "${MONGO_INITDB_ROOT_USERNAME}" -p "${MONGO_INITDB_ROOT_PASSWORD}" --quiet /opt/mongo/joinReplicaSet.js
   echo "Joined replica set"
 }
+
+chmod 600 /etc/mongodb/mongodb.key
 
 # Background the function execution to allow the script to complete
 join_replica_set &
