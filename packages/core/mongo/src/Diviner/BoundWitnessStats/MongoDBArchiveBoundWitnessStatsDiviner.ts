@@ -11,7 +11,7 @@ import { inject, injectable } from 'inversify'
 import { ChangeStreamInsertDocument, ChangeStreamOptions, ResumeToken, UpdateOptions } from 'mongodb'
 
 import { COLLECTIONS } from '../../collections'
-import { DBS } from '../../dbs'
+import { DATABASES } from '../../databases'
 import { MONGO_TYPES } from '../../types'
 import { MongoArchivePayload, MongoArchiveSchema } from '../MongoArchivePayload'
 import { ArchiveConfigPayload } from '../Payloads'
@@ -52,7 +52,7 @@ export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner<XyoPayloa
     const archive = change.fullDocument._archive
     if (archive) {
       await this.sdk.useMongo(async (mongo) => {
-        await mongo.db(DBS.Archivist).collection(COLLECTIONS.ArchivistStats).updateOne({ archive }, { $inc }, updateOptions)
+        await mongo.db(DATABASES.Archivist).collection(COLLECTIONS.ArchivistStats).updateOne({ archive }, { $inc }, updateOptions)
       })
     }
   }
@@ -61,7 +61,7 @@ export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner<XyoPayloa
     const wrapper = MongoClientWrapper.get(this.sdk.uri, this.sdk.config.maxPoolSize)
     const connection = await wrapper.connect()
     assertEx(connection, 'Connection failed')
-    const collection = connection.db(DBS.Archivist).collection(COLLECTIONS.BoundWitnesses)
+    const collection = connection.db(DATABASES.Archivist).collection(COLLECTIONS.BoundWitnesses)
     const opts: ChangeStreamOptions = this.resumeAfter ? { resumeAfter: this.resumeAfter } : {}
     const changeStream = collection.watch([], opts)
     changeStream.on('change', this.processChange)

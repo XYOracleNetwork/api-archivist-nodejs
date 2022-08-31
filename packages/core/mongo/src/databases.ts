@@ -1,3 +1,3 @@
-export const DBS = {
+export const DATABASES = {
   Archivist: 'archivist',
 }
