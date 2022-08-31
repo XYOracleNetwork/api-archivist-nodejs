@@ -47,10 +47,18 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
     return result
   }
 
-  private processChange = (change: ChangeStreamInsertDocument<XyoPayloadWithMeta>) => {
+  private processChange = async (change: ChangeStreamInsertDocument<XyoPayloadWithMeta>) => {
     this.resumeAfter = change._id
-    // const payload: XyoPayloadWithMeta = change.fullDocument
-    // TODO: Increment counts in DB
+    const payload: XyoPayloadWithMeta = change.fullDocument
+    const archive = payload._archive
+    if (archive) {
+      await this.sdk.useMongo(async (mongo) => {
+        await mongo
+          .db(DBS.Archivist)
+          .collection('stats')
+          .updateOne({ archive }, { $inc: { 'payloads.count': 1 } }, { upsert: true })
+      })
+    }
   }
 
   private registerWithChangeStream = async () => {
