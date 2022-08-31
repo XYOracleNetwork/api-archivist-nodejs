@@ -17,6 +17,8 @@ import { BaseMongoSdk, MongoClientWrapper } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { ChangeStreamInsertDocument, ChangeStreamOptions, ResumeToken } from 'mongodb'
 
+import { COLLECTIONS } from '../../collections'
+import { DBS } from '../../dbs'
 import { MONGO_TYPES } from '../../types'
 import { MongoArchivePayload, MongoArchiveSchema } from '../MongoArchivePayload'
 import { ArchiveConfigPayload } from '../Payloads'
@@ -25,11 +27,7 @@ import { ArchiveConfigPayload } from '../Payloads'
 export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, ArchiveConfigPayload> {
   protected resumeAfter: ResumeToken | undefined = undefined
 
-  constructor(
-    @inject(TYPES.Account) account: XyoAccount,
-    @inject(TYPES.Logger) protected logger: Console, // TODO: Use interface from SDK JS
-    @inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayload>,
-  ) {
+  constructor(@inject(TYPES.Account) account: XyoAccount, @inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayload>) {
     super({ account, schema: XyoArchivistPayloadDivinerConfigSchema, targetSchema: XyoPayloadSchema })
     void this.registerWithChangeStream()
   }
@@ -50,29 +48,19 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
   }
 
   private processChange = (change: ChangeStreamInsertDocument<XyoPayloadWithMeta>) => {
-    this.logger.log('processing change from change stream')
     this.resumeAfter = change._id
-    const payload: XyoPayloadWithMeta = change.fullDocument
-    this.logger.log(payload.schema)
+    // const payload: XyoPayloadWithMeta = change.fullDocument
     // TODO: Increment counts in DB
-    this.logger.log('processed change from change stream')
   }
 
   private registerWithChangeStream = async () => {
-    this.logger.log('registering with change stream')
     const wrapper = MongoClientWrapper.get(this.sdk.uri, this.sdk.config.maxPoolSize)
     const connection = await wrapper.connect()
     assertEx(connection, 'Connection failed')
-    const collection = connection.db('archivist').collection('payloads')
+    const collection = connection.db(DBS.Archivist).collection(COLLECTIONS.Payloads)
     const opts: ChangeStreamOptions = this.resumeAfter ? { resumeAfter: this.resumeAfter } : {}
     const changeStream = collection.watch([], opts)
     changeStream.on('change', this.processChange)
-    changeStream.on('error', (e) => {
-      this.logger.log(e)
-      this.logger.log('re-registering with change stream')
-      this.registerWithChangeStream
-      this.logger.log('re-registered with change stream')
-    })
-    this.logger.log('registered with change stream')
+    changeStream.on('error', this.registerWithChangeStream)
   }
 }
