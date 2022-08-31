@@ -1,6 +1,6 @@
+import { Job, JobQueue } from '@xyo-network/archivist-model'
 import { mock, MockProxy } from 'jest-mock-extended'
 
-import { Job, JobQueue } from '../Model'
 import { scheduleJobs } from './scheduleJobs'
 
 describe('scheduleJobs', () => {

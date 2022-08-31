@@ -1,6 +1,5 @@
+import { Job, JobQueue } from '@xyo-network/archivist-model'
 import { DefineOptions } from 'agenda'
-
-import { Job, JobQueue } from '../Model'
 
 // TODO: Depends on job schedule, calculate dynamically
 // to something like 25% of schedule to allow for retries

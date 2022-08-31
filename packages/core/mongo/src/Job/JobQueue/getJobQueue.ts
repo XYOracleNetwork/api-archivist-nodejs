@@ -1,6 +1,6 @@
+import { JobQueue } from '@xyo-network/archivist-model'
 import { Agenda } from 'agenda'
 
-import { JobQueue } from '../Model'
 import { getName } from './getName'
 
 /**

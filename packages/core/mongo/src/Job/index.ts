@@ -1,3 +1,3 @@
 export * from './JobQueue'
 export * from './Jobs'
-export * from './Model'
+export * from '@xyo-network/archivist-model'
