@@ -9,7 +9,10 @@ import { getName } from './getName'
 const collection = 'node'
 
 export const getJobQueue = (): JobQueue => {
-  const address = process.env.MONGO_CONNECTION_STRING || 'mongodb://root:example@localhost:27017/job?authSource=admin'
+  // TODO: Custom ENV VAR to differentiate from default connection
+  // or build conn-string from ENV VARs
+  // const address = process.env.MONGO_CONNECTION_STRING || 'mongodb://root:example@localhost:27017/job?authSource=admin'
+  const address = 'mongodb://root:example@localhost:27017/job?authSource=admin'
   const db = { address, collection }
   const name = getName()
   const jobQueue = new Agenda({ db, name })

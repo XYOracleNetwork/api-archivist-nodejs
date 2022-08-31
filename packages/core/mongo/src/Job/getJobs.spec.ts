@@ -1,4 +1,4 @@
-import { addJobs } from './addJobs'
+import { addJobs } from './getJobs'
 
 describe('getJobs', () => {
   it('gets the jobs', () => {
