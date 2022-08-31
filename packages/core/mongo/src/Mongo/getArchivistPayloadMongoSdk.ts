@@ -1,6 +1,7 @@
 import { assertEx } from '@xylabs/sdk-js'
-import { XyoArchivistPayloadMongoSdk, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
+import { XyoArchivistPayloadMongoSdk } from '@xyo-network/storage'
 
 import { COLLECTIONS } from '../collections'
 import { getMongoDBConfig } from './getMongoDBConfig'

@@ -4,8 +4,9 @@ import { assertEx } from '@xylabs/sdk-js'
 import { XyoAccount } from '@xyo-network/account'
 import { BoundWitnessStatsDiviner, BoundWitnessStatsPayload, BoundWitnessStatsSchema } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
+import { XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
 import { XyoArchivistPayloadDivinerConfigSchema, XyoDiviner, XyoDivinerDivineQuerySchema } from '@xyo-network/diviner'
-import { XyoBoundWitnessWithMeta, XyoPayload, XyoPayloadBuilder, XyoPayloads, XyoPayloadSchema } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload, XyoPayloadBuilder, XyoPayloads, XyoPayloadSchema } from '@xyo-network/payload'
 import { BaseMongoSdk, MongoClientWrapper } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { ChangeStreamInsertDocument, ChangeStreamOptions, ResumeToken, UpdateOptions } from 'mongodb'
@@ -35,7 +36,7 @@ export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner<XyoPayloa
     return [XyoDivinerDivineQuerySchema]
   }
 
-  override async divine(payloads?: XyoPayloads<MongoArchivePayload>): Promise<XyoPayload> {
+  override async divine(payloads?: XyoPayloads): Promise<XyoPayload> {
     const archivePayload = payloads?.find((payload): payload is MongoArchivePayload => payload?.schema === MongoArchiveSchema)
     const archive = archivePayload?.archive ?? this.config.archive
     const count = archive ? await this.divineArchive(archive) : await this.divineArchives()
@@ -55,11 +56,11 @@ export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner<XyoPayloa
 
   private divineArchives = () => this.sdk.useCollection((collection) => collection.estimatedDocumentCount())
 
-  private processChange = async (change: ChangeStreamInsertDocument<XyoBoundWitnessWithMeta>) => {
+  private processChange = (change: ChangeStreamInsertDocument<XyoBoundWitnessWithMeta>) => {
     this.resumeAfter = change._id
     const archive = change.fullDocument._archive
     if (archive) this.pendingCounts[archive] = (this.pendingCounts[archive] || 0) + 1
-    await this.updateChanges()
+    // await this.updateChanges()
   }
 
   private registerWithChangeStream = async () => {

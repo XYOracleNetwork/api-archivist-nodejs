@@ -1,5 +1,5 @@
+import { XyoArchiveKey } from '@xyo-network/api'
 import { ArchiveKeyArchivist } from '@xyo-network/archivist-model'
-import { XyoArchiveKey } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Collection, Filter, WithId } from 'mongodb'

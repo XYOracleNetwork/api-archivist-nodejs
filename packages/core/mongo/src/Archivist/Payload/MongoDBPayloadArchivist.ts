@@ -1,5 +1,6 @@
 import { AbstractPayloadArchivist, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
-import { EmptyObject, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { EmptyObject } from '@xyo-network/core'
+import { XyoPayloadWithMeta } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter, SortDirection } from 'mongodb'

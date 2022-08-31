@@ -1,13 +1,7 @@
 import 'source-map-support/register'
 
-import {
-  XyoBoundWitnessMeta,
-  XyoBoundWitnessWithMeta,
-  XyoPayload,
-  XyoPayloadMeta,
-  XyoPayloadWithMeta,
-  XyoPayloadWrapper,
-} from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitnessMeta, XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
+import { XyoPayload, XyoPayloadMeta, XyoPayloadWithMeta, XyoPayloadWrapper } from '@xyo-network/payload'
 
 export interface PrepareBoundWitnessesResult {
   payloads: XyoPayloadWithMeta[]

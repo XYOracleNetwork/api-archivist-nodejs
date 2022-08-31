@@ -1,6 +1,7 @@
 import { assertEx } from '@xylabs/sdk-js'
-import { XyoArchivistBoundWitnessMongoSdk, XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
+import { XyoArchivistBoundWitnessMongoSdk } from '@xyo-network/storage'
 
 import { COLLECTIONS } from '../collections'
 import { getMongoDBConfig } from './getMongoDBConfig'
