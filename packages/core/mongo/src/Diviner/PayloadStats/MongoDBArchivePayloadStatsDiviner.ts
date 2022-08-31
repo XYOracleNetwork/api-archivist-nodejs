@@ -39,7 +39,7 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
     return [XyoDivinerDivineQuerySchema]
   }
 
-  public async divine(payloads: XyoPayloads): Promise<XyoPayload | null> {
+  public async divine(payloads?: XyoPayloads<MongoArchivePayload>): Promise<XyoPayload | null> {
     const archivePayload = payloads?.find((payload): payload is MongoArchivePayload => payload?.schema === MongoArchiveSchema)
     const archive = archivePayload?.archive ?? this.config.archive
 
