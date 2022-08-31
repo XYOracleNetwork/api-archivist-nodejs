@@ -1,3 +1,4 @@
+import { delay } from '@xylabs/sdk-js'
 import { debugSchema, SetArchivePermissions, SetArchivePermissionsPayload, setArchivePermissionsSchema } from '@xyo-network/archivist-model'
 import { claimArchive, getExistingUser, postCommandsToArchive, signInUser, TestWeb3User } from '@xyo-network/archivist-test'
 import { XyoBoundWitnessBuilder, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
@@ -5,6 +6,10 @@ import { StatusCodes } from 'http-status-codes'
 
 const allowedSchema = debugSchema
 const otherSchema = 'network.xyo.test'
+
+const processingDelay = () => {
+  return delay(2000)
+}
 
 type TestSchemaTypes = typeof allowedSchema | typeof otherSchema
 
@@ -55,6 +60,7 @@ describe('ArchiveAccountStrategy', () => {
   describe('with no archive permissions', () => {
     beforeAll(async () => {
       ;({ archive, ownerToken, user, userToken } = await initializeTestData())
+      await processingDelay()
     })
     describe('allows', () => {
       it('owner', async () => {
@@ -78,6 +84,7 @@ describe('ArchiveAccountStrategy', () => {
           },
           schema: setArchivePermissionsSchema,
         })
+        await processingDelay()
       })
       describe('allows address of', () => {
         it('owner', async () => {
@@ -107,6 +114,7 @@ describe('ArchiveAccountStrategy', () => {
             allow: [allowedSchema],
           },
         })
+        await processingDelay()
       })
       describe('allows schema', () => {
         it('in list', async () => {
@@ -131,6 +139,7 @@ describe('ArchiveAccountStrategy', () => {
           },
           schema: setArchivePermissionsSchema,
         })
+        await processingDelay()
       })
       describe('allows', () => {
         it('owner', async () => {
@@ -160,6 +169,7 @@ describe('ArchiveAccountStrategy', () => {
             reject: [otherSchema],
           },
         })
+        await processingDelay()
       })
       describe('allows', () => {
         it('owner to perform schema in disallowed list', async () => {
