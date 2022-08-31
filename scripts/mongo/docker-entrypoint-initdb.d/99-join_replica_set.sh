@@ -6,10 +6,11 @@
 # so that it can run succesfully
 join_replica_set() {
   echo "Sleeping to allow server to start"
-  sleep 10
+  sleep 5
   echo "Joining replica set"
-  mongosh -u root -p example --quiet /healthcheck/healthcheck.js
+  mongosh -u ${MONGO_INITDB_ROOT_USERNAME} -p ${MONGO_INITDB_ROOT_PASSWORD} --quiet /opt/mongo/joinReplicaSet.js
   echo "Joined replica set"
 }
 
+# Background the function execution to allow the script to complete
 join_replica_set &
