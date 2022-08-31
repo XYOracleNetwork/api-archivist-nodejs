@@ -23,11 +23,11 @@ import { MONGO_TYPES } from '../../types'
 import { MongoArchivePayload, MongoArchiveSchema } from '../MongoArchivePayload'
 import { ArchiveConfigPayload } from '../Payloads'
 
-const $inc = { [`${COLLECTIONS.Payloads}.count`]: 1 }
 const updateOptions: UpdateOptions = { upsert: true }
 
 @injectable()
 export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, ArchiveConfigPayload> {
+  protected pendingCounts: Record<string, number> = {}
   protected resumeAfter: ResumeToken | undefined = undefined
 
   constructor(@inject(TYPES.Account) account: XyoAccount, @inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayload>) {
@@ -53,11 +53,8 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
   private processChange = async (change: ChangeStreamInsertDocument<XyoPayloadWithMeta>) => {
     this.resumeAfter = change._id
     const archive = change.fullDocument._archive
-    if (archive) {
-      await this.sdk.useMongo(async (mongo) => {
-        await mongo.db(DATABASES.Archivist).collection(COLLECTIONS.ArchivistStats).updateOne({ archive }, { $inc }, updateOptions)
-      })
-    }
+    if (archive) this.pendingCounts[archive] = (this.pendingCounts[archive] || 0) + 1
+    await this.updateChanges()
   }
 
   private registerWithChangeStream = async () => {
@@ -69,5 +66,22 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
     const changeStream = collection.watch([], opts)
     changeStream.on('change', this.processChange)
     changeStream.on('error', this.registerWithChangeStream)
+  }
+
+  private updateChanges = async () => {
+    for (const archive in this.pendingCounts) {
+      if (Object.prototype.hasOwnProperty.call(this.pendingCounts, archive)) {
+        const count = this.pendingCounts[archive]
+        const $inc = { [`${COLLECTIONS.Payloads}.count`]: count }
+        try {
+          await this.sdk.useMongo(async (mongo) => {
+            await mongo.db(DATABASES.Archivist).collection(COLLECTIONS.ArchivistStats).updateOne({ archive }, { $inc }, updateOptions)
+          })
+          this.pendingCounts[archive] = 0
+        } catch (_error) {
+          /* TODO: Log */
+        }
+      }
+    }
   }
 }
