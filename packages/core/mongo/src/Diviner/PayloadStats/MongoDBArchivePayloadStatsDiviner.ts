@@ -63,12 +63,12 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
     const opts: ChangeStreamOptions = this.resumeAfter ? { resumeAfter: this.resumeAfter } : {}
     const changeStream = collection.watch([], opts)
     changeStream.on('change', this.processChange)
-    // changeStream.on('error', (e) => {
-    //   console.log(e)
-    //   console.log('re-registering with change stream')
-    //   this.registerWithChangeStream
-    //   console.log('re-registered with change stream')
-    // })
+    changeStream.on('error', (e) => {
+      console.log(e)
+      console.log('re-registering with change stream')
+      this.registerWithChangeStream
+      console.log('re-registered with change stream')
+    })
     console.log('registered with change stream')
   }
 }
