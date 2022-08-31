@@ -16,6 +16,7 @@ import { MONGO_TYPES } from '../../types'
 import { MongoArchivePayload, MongoArchiveSchema } from '../MongoArchivePayload'
 import { ArchiveConfigPayload } from '../Payloads'
 
+const $inc = { [`${COLLECTIONS.BoundWitnesses}.count`]: 1 }
 const updateOptions: UpdateOptions = { upsert: true }
 
 @injectable()
@@ -51,7 +52,6 @@ export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner<XyoPayloa
     const archive = change.fullDocument._archive
     if (archive) {
       await this.sdk.useMongo(async (mongo) => {
-        const $inc = { [`${COLLECTIONS.BoundWitnesses}.count`]: 1 }
         await mongo.db(DBS.Archivist).collection(COLLECTIONS.ArchivistStats).updateOne({ archive }, { $inc }, updateOptions)
       })
     }
