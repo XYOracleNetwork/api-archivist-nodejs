@@ -16,7 +16,6 @@ import { MONGO_TYPES } from '../../types'
 import { MongoArchivePayload, MongoArchiveSchema } from '../MongoArchivePayload'
 import { ArchiveConfigPayload } from '../Payloads'
 
-const $inc = { [`${COLLECTIONS.BoundWitnesses}.count`]: 1 }
 const updateOptions: UpdateOptions = { upsert: true }
 
 @injectable()
