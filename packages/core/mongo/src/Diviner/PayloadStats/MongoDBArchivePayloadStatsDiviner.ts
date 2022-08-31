@@ -45,7 +45,7 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
       await mongo
         .db(DATABASES.Archivist)
         .collection(COLLECTIONS.ArchivistStats)
-        .updateOne({ archive }, { [`${COLLECTIONS.Payloads}.count`]: count }, updateOptions)
+        .updateOne({ archive }, { $set: { [`${COLLECTIONS.Payloads}.count`]: count } }, updateOptions)
     })
     return count
   }

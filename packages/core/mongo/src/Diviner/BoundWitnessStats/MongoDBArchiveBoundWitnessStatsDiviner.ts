@@ -49,7 +49,7 @@ export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner<XyoPayloa
       await mongo
         .db(DATABASES.Archivist)
         .collection(COLLECTIONS.ArchivistStats)
-        .updateOne({ archive }, { [`${COLLECTIONS.BoundWitnesses}.count`]: count }, updateOptions)
+        .updateOne({ archive }, { $set: { [`${COLLECTIONS.BoundWitnesses}.count`]: count } }, updateOptions)
     })
     return count
   }
