@@ -10,6 +10,7 @@ export const TYPES = {
   ArchiveSchemaListDiviner: Symbol('ArchiveSchemaListDiviner'),
   BoundWitnessStatsDiviner: Symbol('BoundWitnessStatsDiviner'),
   BoundWitnessesArchivist: Symbol('BoundWitnessesArchivist'),
+  JobQueue: Symbol('JobQueue'),
   JwtSecret: Symbol('JwtSecret'),
   Logger: Symbol('Logger'),
   PasswordHasher: Symbol('PasswordHasher'),

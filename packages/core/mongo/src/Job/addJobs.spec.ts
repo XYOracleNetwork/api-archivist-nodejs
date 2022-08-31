@@ -1,8 +1,8 @@
-import { getJobs } from './getJobs'
+import { addJobs } from './addJobs'
 
 describe('getJobs', () => {
   it('gets the jobs', () => {
-    const jobs = getJobs()
+    const jobs = addJobs()
     expect(jobs).toBeArray()
     expect(jobs.length).toBeGreaterThan(0)
   })
