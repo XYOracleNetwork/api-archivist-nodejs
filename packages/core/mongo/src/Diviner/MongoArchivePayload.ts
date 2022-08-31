@@ -1,4 +1,4 @@
-import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload } from '@xyo-network/payload'
 
 export type MongoArchiveSchema = 'xyo.network.mongo.archive'
 export const MongoArchiveSchema = 'xyo.network.mongo.archive'
