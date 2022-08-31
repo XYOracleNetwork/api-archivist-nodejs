@@ -4396,6 +4396,7 @@ __metadata:
     "@xyo-network/payload": ^2.29.2
     "@xyo-network/sdk-xyo-mongo-js": ^2.2.9
     "@xyo-network/storage": ^2.29.2
+    agenda: ^4.3.0
     inversify: ^6.0.1
     mongodb: ^4.9.1
     reflect-metadata: ^0.1.13
@@ -5130,6 +5131,20 @@ __metadata:
   version: 3.0.0
   resolution: "aes-js@npm:3.0.0"
   checksum: 251e26d533cd1a915b44896b17d5ed68c24a02484cfdd2e74ec700a309267db96651ea4eb657bf20aac32a3baa61f6e34edf8e2fec2de440a655da9942d334b8
+  languageName: node
+  linkType: hard
+
+"agenda@npm:^4.3.0":
+  version: 4.3.0
+  resolution: "agenda@npm:4.3.0"
+  dependencies:
+    cron-parser: ^3.0.0
+    date.js: ~0.3.3
+    debug: ~4.3.0
+    human-interval: ~2.0.0
+    moment-timezone: ~0.5.27
+    mongodb: ^4.1.0
+  checksum: 259eb1954a41f9fb97b6c035f5f0c3ec126555847accb6a8a5ac27a013221fe6bbce65d71355b67d837b585ea6729b2951908317a41b4e2dc8390bed1faaf404
   languageName: node
   linkType: hard
 
@@ -6661,6 +6676,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cron-parser@npm:^3.0.0":
+  version: 3.5.0
+  resolution: "cron-parser@npm:3.5.0"
+  dependencies:
+    is-nan: ^1.3.2
+    luxon: ^1.26.0
+  checksum: 80096ac1c30fa4017648ad2fa062ae002e6c0d7775b96a00dbadf1e2d7f9e01b3db0324eef2a33fe6136363be3ffb0d6065cf1b91e6a13fd5ed4d3c168abbc69
+  languageName: node
+  linkType: hard
+
 "cross-spawn@npm:^6.0.5":
   version: 6.0.5
   resolution: "cross-spawn@npm:6.0.5"
@@ -6728,6 +6753,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"date.js@npm:~0.3.3":
+  version: 0.3.3
+  resolution: "date.js@npm:0.3.3"
+  dependencies:
+    debug: ~3.1.0
+  checksum: 1d776c544675204f4146c9d57b0ba67b77fb30c084fe5bfd99bfd463df2859bfd924207ac0e1de9f8a1bec168d529f70bf3d6f4be68940fe21d72a9883a8e0ff
+  languageName: node
+  linkType: hard
+
 "debug@npm:2.6.9, debug@npm:^2.2.0, debug@npm:^2.3.3, debug@npm:^2.6.9":
   version: 2.6.9
   resolution: "debug@npm:2.6.9"
@@ -6737,7 +6771,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debug@npm:4, debug@npm:^4.0.0, debug@npm:^4.0.1, debug@npm:^4.1.0, debug@npm:^4.1.1, debug@npm:^4.2.0, debug@npm:^4.3.1, debug@npm:^4.3.2, debug@npm:^4.3.4":
+"debug@npm:4, debug@npm:^4.0.0, debug@npm:^4.0.1, debug@npm:^4.1.0, debug@npm:^4.1.1, debug@npm:^4.2.0, debug@npm:^4.3.1, debug@npm:^4.3.2, debug@npm:^4.3.4, debug@npm:~4.3.0":
   version: 4.3.4
   resolution: "debug@npm:4.3.4"
   dependencies:
@@ -6755,6 +6789,15 @@ __metadata:
   dependencies:
     ms: ^2.1.1
   checksum: b3d8c5940799914d30314b7c3304a43305fd0715581a919dacb8b3176d024a782062368405b47491516d2091d6462d4d11f2f4974a405048094f8bfebfa3071c
+  languageName: node
+  linkType: hard
+
+"debug@npm:~3.1.0":
+  version: 3.1.0
+  resolution: "debug@npm:3.1.0"
+  dependencies:
+    ms: 2.0.0
+  checksum: 0b52718ab957254a5b3ca07fc34543bc778f358620c206a08452251eb7fc193c3ea3505072acbf4350219c14e2d71ceb7bdaa0d3370aa630b50da790458d08b3
   languageName: node
   linkType: hard
 
@@ -8966,6 +9009,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"human-interval@npm:~2.0.0":
+  version: 2.0.1
+  resolution: "human-interval@npm:2.0.1"
+  dependencies:
+    numbered: ^1.1.0
+  checksum: 8f1b37485f554d1f7a3fa2cefdbd9cee2df3ff2cfb86ae1db9f58f2db9d524d44863c2d291f04c810317f2fa7ceeda2188281985c7d65b3774d53c9e835ed55c
+  languageName: node
+  linkType: hard
+
 "human-signals@npm:^2.1.0":
   version: 2.1.0
   resolution: "human-signals@npm:2.1.0"
@@ -9481,6 +9533,16 @@ __metadata:
   version: 1.0.1
   resolution: "is-lambda@npm:1.0.1"
   checksum: 93a32f01940220532e5948538699ad610d5924ac86093fcee83022252b363eb0cc99ba53ab084a04e4fb62bf7b5731f55496257a4c38adf87af9c4d352c71c35
+  languageName: node
+  linkType: hard
+
+"is-nan@npm:^1.3.2":
+  version: 1.3.2
+  resolution: "is-nan@npm:1.3.2"
+  dependencies:
+    call-bind: ^1.0.0
+    define-properties: ^1.1.3
+  checksum: 5dfadcef6ad12d3029d43643d9800adbba21cf3ce2ec849f734b0e14ee8da4070d82b15fdb35138716d02587c6578225b9a22779cab34888a139cc43e4e3610a
   languageName: node
   linkType: hard
 
@@ -10878,6 +10940,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"luxon@npm:^1.26.0":
+  version: 1.28.0
+  resolution: "luxon@npm:1.28.0"
+  checksum: 5250cb9f138b6048eeb0b3a9044a4ac994d0058f680c72a0da4b6aeaec8612460385639cba2b1052ef6d5564879e9ed144d686f26d9d97b38ab920d82e18281c
+  languageName: node
+  linkType: hard
+
 "magic-string@npm:^0.25.7":
   version: 0.25.7
   resolution: "magic-string@npm:0.25.7"
@@ -11710,6 +11779,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"moment-timezone@npm:~0.5.27":
+  version: 0.5.37
+  resolution: "moment-timezone@npm:0.5.37"
+  dependencies:
+    moment: ">= 2.9.0"
+  checksum: b3fc24848a396ee3801331a4b5511591df0e22241e59f55200a475603f23a8429f01887294c7a0c005dae25b8e4bef20472fbc875ff20080f26fded066559f1a
+  languageName: node
+  linkType: hard
+
+"moment@npm:>= 2.9.0":
+  version: 2.29.4
+  resolution: "moment@npm:2.29.4"
+  checksum: 0ec3f9c2bcba38dc2451b1daed5daded747f17610b92427bebe1d08d48d8b7bdd8d9197500b072d14e326dd0ccf3e326b9e3d07c5895d3d49e39b6803b76e80e
+  languageName: node
+  linkType: hard
+
 "mongodb-connection-string-url@npm:^2.5.3":
   version: 2.5.3
   resolution: "mongodb-connection-string-url@npm:2.5.3"
@@ -11720,7 +11805,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mongodb@npm:^4.8.0, mongodb@npm:^4.9.0, mongodb@npm:^4.9.1":
+"mongodb@npm:^4.1.0, mongodb@npm:^4.8.0, mongodb@npm:^4.9.0, mongodb@npm:^4.9.1":
   version: 4.9.1
   resolution: "mongodb@npm:4.9.1"
   dependencies:
@@ -12226,6 +12311,13 @@ __metadata:
     gauge: ^4.0.0
     set-blocking: ^2.0.0
   checksum: 33d8a7fe3d63bf83b16655b6588ae7ba10b5f37b067a661e7cab6508660d7c3204ae716ee2c5ce4eb9626fd1489cf2fa7645d789bc3b704f8c3ccb04a532a50b
+  languageName: node
+  linkType: hard
+
+"numbered@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "numbered@npm:1.1.0"
+  checksum: cdc238990fe29818cb603ac8d4050ff82a05b63e10d8848d1ff1e315231e94813c48b405e651b22d32edc8ccf1f323920d1182ea02c081f11d94ea22b1f8c17a
   languageName: node
   linkType: hard
 
