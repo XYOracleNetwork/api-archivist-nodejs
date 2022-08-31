@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # HACK: We're backgrounding the join to our Replica Set because
 # the default cointainer boostrap scripts strip away our replSet
 # CLI arguments causing it fail.
@@ -8,7 +10,7 @@ join_replica_set() {
   echo "Sleeping to allow server to start"
   sleep 5
   echo "Joining replica set"
-  mongosh -u ${MONGO_INITDB_ROOT_USERNAME} -p ${MONGO_INITDB_ROOT_PASSWORD} --quiet /opt/mongo/joinReplicaSet.js
+  mongosh -u "${MONGO_INITDB_ROOT_USERNAME}" -p "${MONGO_INITDB_ROOT_PASSWORD}" --quiet /opt/mongo/joinReplicaSet.js
   echo "Joined replica set"
 }
 
