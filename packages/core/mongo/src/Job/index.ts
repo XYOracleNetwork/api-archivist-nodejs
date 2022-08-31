@@ -1,3 +1,2 @@
-export * from './Job'
 export * from './JobQueue'
-export * from './Task'
+export * from './Model'
