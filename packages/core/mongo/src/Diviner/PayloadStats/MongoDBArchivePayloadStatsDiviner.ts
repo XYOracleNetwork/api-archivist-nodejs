@@ -42,12 +42,19 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
   public async divine(payloads?: XyoPayloads<MongoArchivePayload>): Promise<XyoPayload | null> {
     const archivePayload = payloads?.find((payload): payload is MongoArchivePayload => payload?.schema === MongoArchiveSchema)
     const archive = archivePayload?.archive ?? this.config.archive
+    const count = archive ? await this.divineOne(archive) : await this.sdk.useCollection((collection) => collection.estimatedDocumentCount())
+    return new XyoPayloadBuilder<PayloadStatsPayload>({ schema: PayloadStatsSchema }).fields({ count }).build()
+  }
 
-    const count = archive
-      ? await this.sdk.useCollection((collection) => collection.countDocuments({ _archive: archive }))
-      : await this.sdk.useCollection((collection) => collection.estimatedDocumentCount())
-    const result = new XyoPayloadBuilder<PayloadStatsPayload>({ schema: PayloadStatsSchema }).fields({ count }).build()
-    return result
+  private divineOne = async (archive: string) => {
+    const count = await this.sdk.useCollection((collection) => collection.countDocuments({ _archive: archive }))
+    await this.sdk.useMongo(async (mongo) => {
+      await mongo
+        .db(DATABASES.Archivist)
+        .collection(COLLECTIONS.ArchivistStats)
+        .updateOne({ archive }, { [`${COLLECTIONS.Payloads}.count`]: count }, updateOptions)
+    })
+    return count
   }
 
   private processChange = async (change: ChangeStreamInsertDocument<XyoPayloadWithMeta>) => {
