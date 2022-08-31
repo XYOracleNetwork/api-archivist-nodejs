@@ -49,14 +49,11 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
 
   private processChange = async (change: ChangeStreamInsertDocument<XyoPayloadWithMeta>) => {
     this.resumeAfter = change._id
-    const payload: XyoPayloadWithMeta = change.fullDocument
-    const archive = payload._archive
+    const archive = change.fullDocument._archive
     if (archive) {
       await this.sdk.useMongo(async (mongo) => {
-        await mongo
-          .db(DBS.Archivist)
-          .collection(COLLECTIONS.Stats)
-          .updateOne({ archive }, { $inc: { 'payloads.count': 1 } }, { upsert: true })
+        const $inc = { [`${COLLECTIONS.Payloads}.count`]: 1 }
+        await mongo.db(DBS.Archivist).collection(COLLECTIONS.Stats).updateOne({ archive }, { $inc }, { upsert: true })
       })
     }
   }

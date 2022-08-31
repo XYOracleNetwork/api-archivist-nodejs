@@ -50,8 +50,8 @@ export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner<XyoPayloa
     this.resumeAfter = change._id
     const archive = change.fullDocument._archive
     if (archive) {
-      const $inc = { [`${COLLECTIONS.BoundWitnesses}.count`]: 1 }
       await this.sdk.useMongo(async (mongo) => {
+        const $inc = { [`${COLLECTIONS.BoundWitnesses}.count`]: 1 }
         await mongo.db(DBS.Archivist).collection(COLLECTIONS.Stats).updateOne({ archive }, { $inc }, updateOptions)
       })
     }
