@@ -35,7 +35,7 @@ export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner<XyoPayloa
     return [XyoDivinerDivineQuerySchema]
   }
 
-  override async divine(payloads?: XyoPayloads | undefined): Promise<XyoPayload> {
+  override async divine(payloads?: XyoPayloads<MongoArchivePayload>): Promise<XyoPayload> {
     const archivePayload = payloads?.find((payload): payload is MongoArchivePayload => payload?.schema === MongoArchiveSchema)
     const archive = archivePayload?.archive ?? this.config.archive
 
