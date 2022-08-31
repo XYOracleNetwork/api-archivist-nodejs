@@ -77,7 +77,7 @@ export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner<XyoPayloa
     for (const archive in this.pendingCounts) {
       if (Object.prototype.hasOwnProperty.call(this.pendingCounts, archive)) {
         const count = this.pendingCounts[archive]
-        const $inc = { [`${COLLECTIONS.Payloads}.count`]: count }
+        const $inc = { [`${COLLECTIONS.BoundWitnesses}.count`]: count }
         try {
           await this.sdk.useMongo(async (mongo) => {
             await mongo.db(DATABASES.Archivist).collection(COLLECTIONS.ArchivistStats).updateOne({ archive }, { $inc }, updateOptions)
