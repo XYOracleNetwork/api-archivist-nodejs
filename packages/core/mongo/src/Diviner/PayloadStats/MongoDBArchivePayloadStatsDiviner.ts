@@ -25,7 +25,11 @@ import { ArchiveConfigPayload } from '../Payloads'
 export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, ArchiveConfigPayload> {
   protected resumeAfter: ResumeToken | undefined = undefined
 
-  constructor(@inject(TYPES.Account) account: XyoAccount, @inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayload>) {
+  constructor(
+    @inject(TYPES.Account) account: XyoAccount,
+    @inject(TYPES.Logger) protected logger: Console, // TODO: Use interface from SDK JS
+    @inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayload>,
+  ) {
     super({ account, schema: XyoArchivistPayloadDivinerConfigSchema, targetSchema: XyoPayloadSchema })
     void this.registerWithChangeStream()
   }
@@ -46,16 +50,16 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
   }
 
   private processChange = (change: ChangeStreamInsertDocument<XyoPayloadWithMeta>) => {
-    console.log('processing change from change stream')
+    this.logger.log('processing change from change stream')
     this.resumeAfter = change._id
     const payload: XyoPayloadWithMeta = change.fullDocument
-    console.log(payload.schema)
+    this.logger.log(payload.schema)
     // TODO: Increment counts in DB
-    console.log('processed change from change stream')
+    this.logger.log('processed change from change stream')
   }
 
   private registerWithChangeStream = async () => {
-    console.log('registering with change stream')
+    this.logger.log('registering with change stream')
     const wrapper = MongoClientWrapper.get(this.sdk.uri, this.sdk.config.maxPoolSize)
     const connection = await wrapper.connect()
     assertEx(connection, 'Connection failed')
@@ -64,11 +68,11 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
     const changeStream = collection.watch([], opts)
     changeStream.on('change', this.processChange)
     changeStream.on('error', (e) => {
-      console.log(e)
-      console.log('re-registering with change stream')
+      this.logger.log(e)
+      this.logger.log('re-registering with change stream')
       this.registerWithChangeStream
-      console.log('re-registered with change stream')
+      this.logger.log('re-registered with change stream')
     })
-    console.log('registered with change stream')
+    this.logger.log('registered with change stream')
   }
 }
