@@ -1,3 +1,4 @@
+import { assertEx } from '@xylabs/sdk-js'
 import { JobQueue } from '@xyo-network/archivist-model'
 import { Agenda } from 'agenda'
 
@@ -8,11 +9,16 @@ import { getName } from './getName'
  */
 const collection = 'node'
 
+/**
+ * DB to use for managing jobs
+ */
+const dbName = 'job'
+
 export const getJobQueue = (): JobQueue => {
-  // TODO: Custom ENV VAR to differentiate from default connection
-  // or build conn-string from ENV VARs
-  // const address = process.env.MONGO_CONNECTION_STRING || 'mongodb://root:example@localhost:27017/job?authSource=admin'
-  const address = 'mongodb://root:example@localhost:27017/job?authSource=admin'
+  const dbDomain = assertEx(process.env.MONGO_DOMAIN, 'Missing Mongo Domain')
+  const dbPassword = assertEx(process.env.MONGO_PASSWORD, 'Missing Mongo Password')
+  const dbUserName = assertEx(process.env.MONGO_USERNAME, 'Missing Mongo Username')
+  const address = `mongodb://${dbUserName}:${dbPassword}@${dbDomain}/${dbName}?authSource=admin`
   const db = { address, collection }
   const name = getName()
   const jobQueue = new Agenda({ db, name })
