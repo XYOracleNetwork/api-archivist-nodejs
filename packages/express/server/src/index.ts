@@ -17,7 +17,7 @@ import { addQueryProcessing } from './addQueryProcessing'
 import { addQueryProcessors } from './addQueryProcessors'
 
 export const getApp = async (): Promise<Express> => {
-  configure()
+  await configure()
   const app = express()
   app.set('etag', false)
 

@@ -6,11 +6,11 @@ import { addJobQueue } from './JobQueue'
 import { addManagers } from './Manager'
 import { addMongoSdks } from './Mongo'
 
-export const addMongo = (container: Container) => {
+export const addMongo = async (container: Container) => {
   addMongoSdks(container)
   addMongoArchivists(container)
   addArchivists(container)
   addDiviners(container)
   addManagers(container)
-  addJobQueue(container)
+  await addJobQueue(container)
 }

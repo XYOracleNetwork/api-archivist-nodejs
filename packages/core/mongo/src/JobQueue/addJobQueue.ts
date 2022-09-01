@@ -14,10 +14,9 @@ export const addDistributedJobs = async (jobQueue: JobQueue, jobs: Job[]) => {
   await scheduleJobs(jobQueue, jobs)
 }
 
-export const addJobQueue = (container: Container) => {
+export const addJobQueue = async (container: Container) => {
   const jobQueue = getJobQueue()
   const jobs = getJobs(container)
-  // TODO: await and enable async init of dependencies?
-  void addDistributedJobs(jobQueue, jobs)
+  await addDistributedJobs(jobQueue, jobs)
   container.bind<JobQueue>(TYPES.JobQueue).toConstantValue(jobQueue)
 }
