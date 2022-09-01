@@ -2,7 +2,7 @@ import 'reflect-metadata'
 
 import { assertEx } from '@xylabs/sdk-js'
 import { XyoAccount } from '@xyo-network/account'
-import { ArchiveArchivist, Job, PayloadStatsPayload, PayloadStatsSchema } from '@xyo-network/archivist-model'
+import { ArchiveArchivist, Job, JobProvider, PayloadStatsDiviner, PayloadStatsPayload, PayloadStatsSchema } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoArchivistPayloadDivinerConfigSchema, XyoDiviner, XyoDivinerDivineQuerySchema } from '@xyo-network/diviner'
 import { XyoPayload, XyoPayloadBuilder, XyoPayloads, XyoPayloadSchema, XyoPayloadWithMeta } from '@xyo-network/payload'
@@ -26,7 +26,7 @@ interface Stats {
 }
 
 @injectable()
-export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, ArchiveConfigPayload> {
+export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, ArchiveConfigPayload> implements PayloadStatsDiviner, JobProvider {
   protected readonly batchLimit = 100
   protected nextOffset = 0
   protected pendingCounts: Record<string, number> = {}
