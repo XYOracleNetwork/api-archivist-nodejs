@@ -2,7 +2,7 @@ import 'reflect-metadata'
 
 import { assertEx } from '@xylabs/sdk-js'
 import { XyoAccount } from '@xyo-network/account'
-import { BoundWitnessStatsDiviner, BoundWitnessStatsPayload, BoundWitnessStatsSchema, Task } from '@xyo-network/archivist-model'
+import { BoundWitnessStatsDiviner, BoundWitnessStatsPayload, BoundWitnessStatsSchema, Job } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
 import { XyoArchivistPayloadDivinerConfigSchema, XyoDiviner, XyoDivinerDivineQuerySchema } from '@xyo-network/diviner'
@@ -39,12 +39,21 @@ export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner<XyoPayloa
     void this.registerWithChangeStream()
   }
 
-  get queries() {
-    return [XyoDivinerDivineQuerySchema]
+  get jobs(): Job[] {
+    return [
+      {
+        name: 'MongoDBArchiveBoundWitnessStatsDiviner.UpdateChanges',
+        onSuccess: () => {
+          this.pendingCounts = {}
+        },
+        schedule: '1 minute',
+        task: async () => await this.updateChanges(),
+      },
+    ]
   }
 
-  get task(): Task {
-    return async () => await this.updateChanges()
+  get queries() {
+    return [XyoDivinerDivineQuerySchema]
   }
 
   override async divine(payloads?: XyoPayloads): Promise<XyoPayload> {

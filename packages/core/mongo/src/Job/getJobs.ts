@@ -1,18 +1,13 @@
-import { Job, Task } from '@xyo-network/archivist-model'
+import { Job } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { Container } from 'inversify'
 
-interface TaskProvider {
-  get task(): Task
+interface JobProvider {
+  get jobs(): Job[]
 }
 
-const schedule = '1 minute'
-
 export const getJobs = (container: Container): Job[] => {
-  const boundWitnessStatsDiviner = container.get<TaskProvider>(TYPES.BoundWitnessStatsDiviner)
-  const payloadStatsDiviner = container.get<TaskProvider>(TYPES.PayloadStatsDiviner)
-  return [
-    { name: 'boundWitnessStatsDiviner', schedule, task: boundWitnessStatsDiviner.task },
-    { name: 'payloadStatsDiviner', schedule, task: payloadStatsDiviner.task },
-  ]
+  const boundWitnessStatsDiviner = container.get<JobProvider>(TYPES.BoundWitnessStatsDiviner)
+  const payloadStatsDiviner = container.get<JobProvider>(TYPES.PayloadStatsDiviner)
+  return [...boundWitnessStatsDiviner.jobs, ...payloadStatsDiviner.jobs]
 }
