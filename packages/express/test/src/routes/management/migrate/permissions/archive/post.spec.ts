@@ -3,7 +3,7 @@ import { DebugPayload, debugSchema, SetArchivePermissionsPayload } from '@xyo-ne
 import { XyoArchive, XyoBoundWitnessBuilder, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
 import { StatusCodes } from 'http-status-codes'
 
-import { claimArchive, getArchivist, getTokenForNewUser, postCommandsToArchive, setArchiveAccessControl } from '../../../../../testUtil'
+import { claimArchive, getRequest, getTokenForNewUser, postCommandsToArchive, setArchiveAccessControl } from '../../../../../testUtil'
 
 interface MigrationResponse {
   archive: XyoArchive
@@ -21,7 +21,7 @@ const postCommandToArchive = async (archive: string, token?: string, expectedSta
 const migrateArchive = async (archive: string): Promise<MigrationResponse> => {
   const path = `/management/migrate/permissions/archives/${archive}`
   const header = { 'x-api-key': process.env.API_KEY }
-  const response = await getArchivist().post(path).set(header).expect(StatusCodes.OK)
+  const response = await (await getRequest()).post(path).set(header).expect(StatusCodes.OK)
   const result: MigrationResponse = response.body.data
   expect(result).toBeDefined()
   expect(result.archive).toBeDefined()

@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes'
 
-import { claimArchive, getArchiveName, getArchivist, getTokenForNewUser } from '../../../../testUtil'
+import { claimArchive, getArchiveName, getRequest, getTokenForNewUser } from '../../../../testUtil'
 
 describe('/archive', () => {
   let token = ''
@@ -31,7 +31,7 @@ describe('/archive', () => {
 
       // User 2 attempts to claim archive
       const user2Token = await getTokenForNewUser()
-      await getArchivist().put(`/archive/${archive}`).auth(user2Token, { type: 'bearer' }).expect(StatusCodes.FORBIDDEN)
+      await (await getRequest()).put(`/archive/${archive}`).auth(user2Token, { type: 'bearer' }).expect(StatusCodes.FORBIDDEN)
     })
   })
 })

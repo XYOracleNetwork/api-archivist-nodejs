@@ -14,8 +14,8 @@ import { request } from './Server'
 
 config()
 
-export const getArchivist = (): SuperTest<Test> => {
-  return supertest(getApp())
+export const getRequest = async (): Promise<SuperTest<Test>> => {
+  return await Promise.resolve(supertest(getApp()))
 }
 
 export const getArchives = async (token?: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoArchive[]> => {
