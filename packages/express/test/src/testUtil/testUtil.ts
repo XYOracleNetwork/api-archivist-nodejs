@@ -20,6 +20,9 @@ import { StatusCodes } from 'http-status-codes'
 import supertest, { SuperTest, Test } from 'supertest'
 import { v4 } from 'uuid'
 
+import { TestWeb2User, TestWeb3User } from './Model'
+import { getNewUser, getNewWeb2User } from './User'
+
 config()
 
 const request = supertest(getApp())
@@ -49,15 +52,6 @@ export const knownPayloadHash = new XyoPayloadWrapper(knownPayload).hash
 export const knownBlock = new XyoBoundWitnessBuilder({ inlinePayloads: true }).witness(XyoAccount.random()).payload(knownPayload).build()
 export const knownBlockHash = knownBlock._hash || ''
 
-export interface TestWeb2User {
-  email: string
-  password: string
-}
-export interface TestWeb3User {
-  address: string
-  privateKey: string
-}
-
 export const getArchivist = (): SuperTest<Test> => {
   return supertest(getApp())
 }
@@ -70,23 +64,6 @@ export const getArchiveName = (): string => {
 export const testSchemaPrefix = 'network.xyo.schema.test.'
 export const getSchemaName = (): string => {
   return `${testSchemaPrefix}${v4()}`
-}
-
-/**
- * @deprecated Use getNewUser instead
- */
-export const getNewWeb2User = (): TestWeb2User => {
-  const user = {
-    email: `test-user-${v4()}@test.com`,
-    password: 'password',
-  }
-  return user
-}
-
-export const getNewUser = (): TestWeb3User => {
-  const wallet = Wallet.createRandom()
-  const user = { address: wallet.address, privateKey: wallet.privateKey }
-  return user
 }
 
 /**
