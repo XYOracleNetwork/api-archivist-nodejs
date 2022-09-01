@@ -18,11 +18,6 @@ export const getArchivist = (): SuperTest<Test> => {
   return supertest(getApp())
 }
 
-export const invalidateToken = (token: string) => {
-  const half = Math.floor(token.length / 2)
-  return token.substring(0, half) + 'foo' + token.substring(half)
-}
-
 export const getArchives = async (token?: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoArchive[]> => {
   const response = token
     ? await (await request()).get('/archive').auth(token, { type: 'bearer' }).expect(expectedStatus)
