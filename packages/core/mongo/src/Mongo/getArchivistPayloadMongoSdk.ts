@@ -1,7 +1,9 @@
 import { assertEx } from '@xylabs/sdk-js'
-import { XyoArchivistPayloadMongoSdk, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
+import { XyoArchivistPayloadMongoSdk } from '@xyo-network/storage'
 
+import { COLLECTIONS } from '../collections'
 import { getMongoDBConfig } from './getMongoDBConfig'
 
 export const getArchivistPayloadMongoSdk = (archive: string) => {
@@ -9,7 +11,7 @@ export const getArchivistPayloadMongoSdk = (archive: string) => {
 
   return new XyoArchivistPayloadMongoSdk(
     {
-      collection: 'payloads',
+      collection: COLLECTIONS.Payloads,
       dbConnectionString: env.MONGO_CONNECTION_STRING,
       dbDomain: assertEx(env.MONGO_DOMAIN, 'Missing Mongo Domain'),
       dbName: assertEx(env.MONGO_DATABASE, 'Missing Mongo Database'),
@@ -24,7 +26,7 @@ export const getArchivistAllPayloadMongoSdk = () => {
   const env = getMongoDBConfig()
 
   return new BaseMongoSdk<XyoPayload>({
-    collection: 'payloads',
+    collection: COLLECTIONS.Payloads,
     dbConnectionString: env.MONGO_CONNECTION_STRING,
     dbDomain: assertEx(env.MONGO_DOMAIN, 'Missing Mongo Domain'),
     dbName: assertEx(env.MONGO_DATABASE, 'Missing Mongo Database'),

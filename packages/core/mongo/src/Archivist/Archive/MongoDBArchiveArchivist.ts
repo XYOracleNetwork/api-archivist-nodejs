@@ -1,7 +1,7 @@
 import 'reflect-metadata'
 
+import { XyoArchive } from '@xyo-network/api'
 import { ArchiveArchivist, UpsertResult, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
-import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter, SortDirection, WithId } from 'mongodb'

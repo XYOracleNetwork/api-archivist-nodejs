@@ -1,9 +1,9 @@
 import { config } from 'dotenv'
 config()
 import { assertEx } from '@xylabs/sdk-js'
-import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
+import { XyoAccount, XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 
-import { claimArchive, getArchive, getTokenForNewUser } from './testUtil'
+import { claimArchive, getArchive, setArchiveAccessControl, signInUser } from './testUtil'
 
 /**
  * Jest global setup method run before
@@ -11,17 +11,29 @@ import { claimArchive, getArchive, getTokenForNewUser } from './testUtil'
  * https://jestjs.io/docs/configuration#globalsetup-string
  */
 module.exports = async () => {
-  const name = 'temp'
-  let archive: XyoArchive
-  try {
-    archive = await getArchive(name)
-  } catch (error) {
-    // TODO: Should we create archive as owned by
-    // unit test account if non-existent
-    console.log('Temp archive does not exist, creating...')
-    const token = await getTokenForNewUser()
-    archive = await claimArchive(token, name)
+  const testArchives = [
+    { accessControl: false, name: 'temp' },
+    { accessControl: true, name: 'temp-private' },
+  ]
+  for (const testArchive of testArchives) {
+    let archive: XyoArchive
+    const { name, accessControl } = testArchive
+    const phrase = process.env.ACCOUNT_SEED
+    const account = new XyoAccount({ phrase })
+    const token = await signInUser({
+      address: account.addressValue.bn.toString('hex'),
+      privateKey: account.private.bn.toString('hex'),
+    })
+    try {
+      archive = await getArchive(name, token)
+    } catch (error) {
+      console.log(`${name} archive does not exist, creating...`)
+      archive = await claimArchive(token, name)
+      if (accessControl) {
+        archive = await setArchiveAccessControl(token, name, { accessControl, archive: name })
+      }
+    }
+    assertEx(archive.archive === name, `ERROR: ${name} archive does not exist`)
+    assertEx(archive.accessControl === accessControl, `ERROR: ${name} archive has incorrect permissions`)
   }
-  assertEx(archive.archive === name, 'ERROR: Temp archive does not exist')
-  assertEx(!archive.accessControl, 'ERROR: Temp archive must be public')
 }

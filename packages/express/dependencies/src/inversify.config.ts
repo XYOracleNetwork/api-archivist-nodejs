@@ -27,8 +27,10 @@ export const dependencies = new Container({
   // https://github.com/inversify/InversifyJS/issues/522#issuecomment-682246076
   skipBaseClassChecks: true,
 })
+
 let configured = false
-export const configure = () => {
+
+export const configureDependencies = async () => {
   if (configured) return
   configured = true
 
@@ -43,7 +45,7 @@ export const configure = () => {
   dependencies.bind<Logger>(TYPES.Logger).toConstantValue(getDefaultLogger())
   dependencies.bind<XyoAccount>(TYPES.Account).toConstantValue(new XyoAccount({ phrase }))
 
-  addMongo(dependencies)
+  await addMongo(dependencies)
   addAuth(dependencies)
   addPayloadHandlers(dependencies)
   addInMemoryQueueing(dependencies)

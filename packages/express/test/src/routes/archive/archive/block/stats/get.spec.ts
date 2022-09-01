@@ -1,12 +1,12 @@
 import { StatusCodes } from 'http-status-codes'
 
-import { claimArchive, getArchivist, getNewBlockWithPayloads, getTokenForNewUser, postBlock } from '../../../../../testUtil'
+import { claimArchive, getBlockWithPayloads, getTokenForNewUser, postBlock, request } from '../../../../../testUtil'
 
 const blocksPosted = 5
 
 const postBlocksToArchive = async (archive: string, token: string, count = blocksPosted) => {
   for (let blockCount = 0; blockCount < count; blockCount++) {
-    const block = getNewBlockWithPayloads()
+    const block = getBlockWithPayloads()
     const blockResponse = await postBlock(block, archive)
     expect(blockResponse.length).toBe(1)
   }
@@ -24,7 +24,7 @@ describe('/archive/:archive/block/stats', () => {
     }
   }, 25000)
   it('Returns stats on the desired archive', async () => {
-    const response = await getArchivist().get(`/archive/${archive}/block/stats`).expect(StatusCodes.OK)
+    const response = await (await request()).get(`/archive/${archive}/block/stats`).expect(StatusCodes.OK)
     const stats = response.body.data
     expect(stats).toBeTruthy()
     expect(typeof stats?.count).toBe('number')
