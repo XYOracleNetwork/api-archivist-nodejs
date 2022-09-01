@@ -54,9 +54,6 @@ export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner<XyoPayloa
       },
       {
         name: 'MongoDBArchiveBoundWitnessStatsDiviner.DivineArchivesBatch',
-        onSuccess: () => {
-          this.pendingCounts = {}
-        },
         schedule: '10 minute',
         task: async () => await this.divineArchivesBatch(),
       },
