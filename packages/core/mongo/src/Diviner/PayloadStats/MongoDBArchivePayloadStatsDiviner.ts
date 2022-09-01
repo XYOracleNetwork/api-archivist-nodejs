@@ -53,9 +53,6 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
       },
       {
         name: 'MongoDBArchivePayloadStatsDiviner.DivineArchivesBatch',
-        onSuccess: () => {
-          this.pendingCounts = {}
-        },
         schedule: '10 minute',
         task: async () => await this.divineArchivesBatch(),
       },
