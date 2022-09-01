@@ -27,6 +27,8 @@ interface Stats {
 
 @injectable()
 export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, ArchiveConfigPayload> {
+  protected readonly batchLimit = 100
+  protected nextOffset = 0
   protected pendingCounts: Record<string, number> = {}
   protected resumeAfter: ResumeToken | undefined = undefined
 
@@ -49,7 +51,14 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
         schedule: '1 minute',
         task: async () => await this.updateChanges(),
       },
-      // TODO: Add job for full reconciliation
+      {
+        name: 'MongoDBArchivePayloadStatsDiviner.DivineArchivesBatch',
+        onSuccess: () => {
+          this.pendingCounts = {}
+        },
+        schedule: '10 minute',
+        task: async () => await this.divineArchivesBatch(),
+      },
     ]
   }
 
@@ -77,13 +86,15 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
 
   private divineArchiveFull = async (archive: string) => {
     const count = await this.sdk.useCollection((collection) => collection.countDocuments({ _archive: archive }))
-    await this.sdk.useMongo(async (mongo) => {
-      await mongo
-        .db(DATABASES.Archivist)
-        .collection(COLLECTIONS.ArchivistStats)
-        .updateOne({ archive }, { $set: { [`${COLLECTIONS.Payloads}.count`]: count } }, updateOptions)
-    })
+    await this.storeDivinedResult(archive, count)
     return count
+  }
+
+  private divineArchivesBatch = async () => {
+    const result = await this.archiveArchivist.find({ limit: this.batchLimit, offset: this.nextOffset })
+    const archives = result.map((archive) => archive.archive)
+    this.nextOffset = archives.length < this.batchLimit ? 0 : this.nextOffset + this.batchLimit
+    await Promise.allSettled(archives.map(this.divineArchiveFull))
   }
 
   private processChange = (change: ChangeStreamInsertDocument<XyoPayloadWithMeta>) => {
@@ -101,6 +112,16 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
     const changeStream = collection.watch([], opts)
     changeStream.on('change', this.processChange)
     changeStream.on('error', this.registerWithChangeStream)
+  }
+
+  private storeDivinedResult = async (archive: string, count: number) => {
+    await this.sdk.useMongo(async (mongo) => {
+      await mongo
+        .db(DATABASES.Archivist)
+        .collection(COLLECTIONS.ArchivistStats)
+        .updateOne({ archive }, { $set: { [`${COLLECTIONS.Payloads}.count`]: count } }, updateOptions)
+    })
+    this.pendingCounts[archive] = 0
   }
 
   private updateChanges = async () => {
