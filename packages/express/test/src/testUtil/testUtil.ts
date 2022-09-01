@@ -4,30 +4,19 @@ import { XyoDomainPayload } from '@xyo-network/domain-payload-plugin'
 import { XyoSchemaPayload } from '@xyo-network/schema-payload-plugin'
 import { XyoArchive, XyoArchiveKey, XyoBoundWitness, XyoBoundWitnessWithMeta, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { config } from 'dotenv'
-import { Wallet } from 'ethers'
 import { StatusCodes } from 'http-status-codes'
 import supertest, { SuperTest, Test } from 'supertest'
-import { v4 } from 'uuid'
 
-import { TestWeb2User, TestWeb3User } from './Model'
+import { getArchiveName } from './Archive'
+import { TestWeb2User } from './Model'
 import { request } from './Server'
 // eslint-disable-next-line deprecation/deprecation
-import { getNewUser, getNewWeb2User } from './User'
+import { getNewWeb2User } from './User'
 
 config()
 
 export const getArchivist = (): SuperTest<Test> => {
   return supertest(getApp())
-}
-
-const testArchivePrefix = 'test-'
-export const getArchiveName = (): string => {
-  return `${testArchivePrefix}${v4()}`
-}
-
-export const testSchemaPrefix = 'network.xyo.schema.test.'
-export const getSchemaName = (): string => {
-  return `${testSchemaPrefix}${v4()}`
 }
 
 /**
@@ -49,31 +38,6 @@ export const getExistingWeb2User = async (
 export const signInWeb2User = async (user: TestWeb2User): Promise<string> => {
   const tokenResponse = await (await request()).post('/user/login').send(user).expect(StatusCodes.OK)
   return tokenResponse.body.data.token
-}
-
-export const getExistingUser = async (expectedStatus: StatusCodes = StatusCodes.CREATED): Promise<TestWeb3User> => {
-  const apiKey = process.env.API_KEY as string
-  const user = getNewUser()
-  await (await request()).post('/user/signup').set('x-api-key', apiKey).send({ address: user.address }).expect(expectedStatus)
-  return user
-}
-
-export const signInUser = async (user: TestWeb3User): Promise<string> => {
-  const challengeResponse = await (await request()).post(`/account/${user.address}/challenge`).send(user).expect(StatusCodes.OK)
-  const { state } = challengeResponse.body.data
-  const wallet = new Wallet(user.privateKey)
-  const signature = await wallet.signMessage(state)
-  const verifyBody = {
-    address: wallet.address,
-    message: state,
-    signature,
-  }
-  const tokenResponse = await (await request()).post(`/account/${wallet.address}/verify`).send(verifyBody).expect(StatusCodes.OK)
-  return tokenResponse.body.data.token
-}
-
-export const getTokenForNewUser = async (): Promise<string> => {
-  return signInUser(await getExistingUser())
 }
 
 export const invalidateToken = (token: string) => {
