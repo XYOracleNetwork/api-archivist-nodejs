@@ -1,12 +1,12 @@
 import { StatusCodes } from 'http-status-codes'
 
-import { claimArchive, getArchivist, getNewBlockWithPayloads, getTokenForNewUser, postBlock } from '../../../../../testUtil'
+import { claimArchive, getArchivist, getBlockWithPayloads, getTokenForNewUser, postBlock } from '../../../../../testUtil'
 
 const blocksPosted = 5
 
 const postBlocksToArchive = async (archive: string, token: string, count = blocksPosted) => {
   for (let blockCount = 0; blockCount < count; blockCount++) {
-    const block = getNewBlockWithPayloads()
+    const block = getBlockWithPayloads()
     const blockResponse = await postBlock(block, archive)
     expect(blockResponse.length).toBe(1)
   }

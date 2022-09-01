@@ -1,11 +1,4 @@
-import {
-  claimArchive,
-  getNewBlock,
-  getNewBlockWithBoundWitnessesWithPayloads,
-  getPayloadByBlockHash,
-  getTokenForNewUser,
-  postBlock,
-} from '../../../../../../testUtil'
+import { claimArchive, getBlock, getBlocksWithPayloads, getPayloadByBlockHash, getTokenForNewUser, postBlock } from '../../../../../../testUtil'
 
 describe('/archive/:archive/block/hash/:hash/payloads', () => {
   let token = ''
@@ -15,7 +8,7 @@ describe('/archive/:archive/block/hash/:hash/payloads', () => {
     archive = (await claimArchive(token)).archive
   })
   it('Retrieves the single payload for the specified block hash', async () => {
-    const block = getNewBlockWithBoundWitnessesWithPayloads(1, 1)
+    const block = getBlocksWithPayloads(1, 1)
     const hash = block[0]._hash || ''
     await postBlock(block, archive)
     const response = await getPayloadByBlockHash(token, archive, hash)
@@ -25,7 +18,7 @@ describe('/archive/:archive/block/hash/:hash/payloads', () => {
     expect(payloads).toBeTruthy()
   })
   it('Retrieves the array of payloads for the specified block hash', async () => {
-    const block = getNewBlockWithBoundWitnessesWithPayloads(1, 2)
+    const block = getBlocksWithPayloads(1, 2)
     const hash = block[0]._hash || ''
     await postBlock(block, archive)
     const response = await getPayloadByBlockHash(token, archive, hash)
@@ -35,7 +28,7 @@ describe('/archive/:archive/block/hash/:hash/payloads', () => {
     expect(received).toBeTruthy()
   })
   it('Returns an empty array if no payload was posted for the specified block hash', async () => {
-    const block = getNewBlock()
+    const block = getBlock()
     const hash = block._hash || ''
     await postBlock(block, archive)
     const response = await getPayloadByBlockHash(token, archive, hash)

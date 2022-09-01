@@ -6,8 +6,8 @@ import {
   claimArchive,
   getArchiveName,
   getArchivist,
+  getBlock,
   getBlocksByTimestamp,
-  getNewBlock,
   getPayloads,
   getRecentBlocks,
   getTokenForNewUser,
@@ -30,7 +30,7 @@ describe('/archive/:archive/block', () => {
       const now = Date.now()
       const payloads = getPayloads(1)
       payloads[0].timestamp = now
-      const block = getNewBlock(...payloads)
+      const block = getBlock(...payloads)
       block.timestamp = now
       const blockResponse = await postBlock(block, archive)
       expect(blockResponse.length).toBe(1)

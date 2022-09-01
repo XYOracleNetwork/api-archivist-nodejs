@@ -1,7 +1,7 @@
 import {
   claimArchive,
   getArchiveSchemaPayloadsRecent,
-  getNewBlock,
+  getBlock,
   getPayloads,
   getSchemaName,
   getTokenForNewUser,
@@ -25,7 +25,7 @@ describe('/archive/:archive/schema/:schema/recent', () => {
       if (payloads?.[0]?.schema) {
         payloads[0].schema = schema
       }
-      const block = getNewBlock(...payloads)
+      const block = getBlock(...payloads)
       block._archive = archive
       block.payload_schemas = [schema]
       const response = await postBlock(block, archive)

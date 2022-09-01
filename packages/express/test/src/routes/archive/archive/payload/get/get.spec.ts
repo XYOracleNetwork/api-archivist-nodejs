@@ -6,7 +6,7 @@ import {
   claimArchive,
   getArchiveName,
   getArchivist,
-  getNewBlock,
+  getBlock,
   getPayload,
   getPayloadsByTimestamp,
   getTokenForNewUser,
@@ -27,7 +27,7 @@ describe('/archive/:archive/payload', () => {
     for (let blockCount = 0; blockCount < blocksPosted; blockCount++) {
       const payload = getPayload()
       payload.timestamp = Date.now()
-      const block = getNewBlock(payload)
+      const block = getBlock(payload)
       const blockResponse = await postBlock(block, archive)
       expect(blockResponse.length).toBe(1)
     }
