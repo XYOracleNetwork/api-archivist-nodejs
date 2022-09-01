@@ -1,7 +1,7 @@
 import 'reflect-metadata'
 
 import { assertEx } from '@xylabs/sdk-js'
-import { ArchiveArchivist, ArchiveSchemaCountDiviner, Job } from '@xyo-network/archivist-model'
+import { ArchiveArchivist, ArchiveSchemaCountDiviner, Job, JobProvider } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoPayload, XyoPayloadWithMeta } from '@xyo-network/payload'
 import { BaseMongoSdk, MongoClientWrapper } from '@xyo-network/sdk-xyo-mongo-js'
@@ -28,7 +28,7 @@ interface Stats {
 }
 
 @injectable()
-export class MongoDBArchiveSchemaCountDiviner implements ArchiveSchemaCountDiviner {
+export class MongoDBArchiveSchemaCountDiviner implements ArchiveSchemaCountDiviner, JobProvider {
   protected readonly batchLimit = 100
   protected nextOffset = 0
   protected pendingCounts: Record<string, Record<string, number>> = {}
