@@ -127,12 +127,17 @@ export class MongoDBArchiveSchemaCountDiviner implements ArchiveSchemaCountDivin
     changeStream.on('error', this.registerWithChangeStream)
   }
 
-  private storeDivinedResult = async (archive: string, count: Record<string, number>) => {
+  private storeDivinedResult = async (archive: string, counts: Record<string, number>) => {
+    const sanitizedCounts: Record<string, number> = Object.fromEntries(
+      Object.entries(counts).map(([schema, count]) => {
+        return [toDbProperty(schema), count]
+      }),
+    )
     await this.sdk.useMongo(async (mongo) => {
       await mongo
         .db(DATABASES.Archivist)
         .collection(COLLECTIONS.ArchivistStats)
-        .updateOne({ archive }, { $set: { ['schema.count']: count } }, updateOptions)
+        .updateOne({ archive }, { $set: { ['schema.count']: sanitizedCounts } }, updateOptions)
     })
     this.pendingCounts[archive] = {}
   }
