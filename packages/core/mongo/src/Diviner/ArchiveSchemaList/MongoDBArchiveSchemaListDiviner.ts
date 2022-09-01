@@ -11,6 +11,7 @@ import { ChangeStreamInsertDocument, ChangeStreamOptions, ResumeToken, UpdateOpt
 import { COLLECTIONS } from '../../collections'
 import { DATABASES } from '../../databases'
 import { MONGO_TYPES } from '../../types'
+import { toDbProperty } from '../../Util'
 
 const updateOptions: UpdateOptions = { upsert: true }
 
@@ -78,12 +79,9 @@ export class MongoDBArchiveSchemaListDiviner implements ArchiveSchemaListDiviner
     const updates = Object.keys(this.pendingCounts).map((archive) => {
       const $inc = Object.keys(this.pendingCounts[archive])
         .map((schema) => {
-          const sanitizedSchemaName = schema.replaceAll('.', '#')
-          return { [`schema.count.${sanitizedSchemaName}`]: this.pendingCounts[archive][schema] }
+          return { [`schema.count.${toDbProperty(schema)}`]: this.pendingCounts[archive][schema] }
         })
-        .reduce((prev, curr) => {
-          return Object.assign(prev, curr)
-        }, {})
+        .reduce((prev, curr) => Object.assign(prev, curr), {})
       this.pendingCounts[archive] = {}
       return this.sdk.useMongo(async (mongo) => {
         await mongo.db(DATABASES.Archivist).collection(COLLECTIONS.ArchivistStats).updateOne({ archive }, { $inc }, updateOptions)
