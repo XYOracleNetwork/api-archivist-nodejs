@@ -18,6 +18,13 @@ import { ArchiveConfigPayload } from '../Payloads'
 
 const updateOptions: UpdateOptions = { upsert: true }
 
+interface Stats {
+  archive: string
+  payloads?: {
+    count?: number
+  }
+}
+
 @injectable()
 export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, ArchiveConfigPayload> {
   protected pendingCounts: Record<string, number> = {}
@@ -44,6 +51,15 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
   }
 
   private divineArchive = async (archive: string) => {
+    const stats = await this.sdk.useMongo(async (mongo) => {
+      return await mongo.db(DATABASES.Archivist).collection<Stats>(COLLECTIONS.ArchivistStats).findOne({ archive })
+    })
+    const remote = stats?.payloads?.count || 0
+    const local = this.pendingCounts[archive] || 0
+    return remote + local
+  }
+
+  private divineArchiveFull = async (archive: string) => {
     const count = await this.sdk.useCollection((collection) => collection.countDocuments({ _archive: archive }))
     await this.sdk.useMongo(async (mongo) => {
       await mongo

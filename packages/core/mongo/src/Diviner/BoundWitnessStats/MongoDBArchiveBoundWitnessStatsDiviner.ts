@@ -19,6 +19,13 @@ import { ArchiveConfigPayload } from '../Payloads'
 
 const updateOptions: UpdateOptions = { upsert: true }
 
+interface Stats {
+  archive: string
+  bound_witnesses?: {
+    count?: number
+  }
+}
+
 @injectable()
 export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner<XyoPayload, ArchiveConfigPayload> implements BoundWitnessStatsDiviner {
   protected pendingCounts: Record<string, number> = {}
@@ -48,6 +55,15 @@ export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner<XyoPayloa
   }
 
   private divineArchive = async (archive: string) => {
+    const stats = await this.sdk.useMongo(async (mongo) => {
+      return await mongo.db(DATABASES.Archivist).collection<Stats>(COLLECTIONS.ArchivistStats).findOne({ archive })
+    })
+    const remote = stats?.bound_witnesses?.count || 0
+    const local = this.pendingCounts[archive] || 0
+    return remote + local
+  }
+
+  private divineArchiveFull = async (archive: string) => {
     const count = await this.sdk.useCollection((collection) => collection.countDocuments({ _archive: archive }))
     await this.sdk.useMongo(async (mongo) => {
       await mongo
@@ -64,7 +80,6 @@ export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner<XyoPayloa
     this.resumeAfter = change._id
     const archive = change.fullDocument._archive
     if (archive) this.pendingCounts[archive] = (this.pendingCounts[archive] || 0) + 1
-    // await this.updateChanges()
   }
 
   private registerWithChangeStream = async () => {
