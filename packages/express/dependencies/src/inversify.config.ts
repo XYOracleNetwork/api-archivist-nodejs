@@ -30,7 +30,7 @@ export const dependencies = new Container({
 
 let configured = false
 
-export const configure = async () => {
+export const configureDependencies = async () => {
   if (configured) return
   configured = true
 
