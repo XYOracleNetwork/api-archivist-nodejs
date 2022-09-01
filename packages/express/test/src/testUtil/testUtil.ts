@@ -1,43 +1,21 @@
 import { SortDirection } from '@xyo-network/archivist-model'
 import { getApp } from '@xyo-network/archivist-server'
+import { XyoBoundWitness, XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
 import { XyoDomainPayload } from '@xyo-network/domain-payload-plugin'
+import { XyoPayloadWithMeta } from '@xyo-network/payload'
 import { XyoSchemaPayload } from '@xyo-network/schema-payload-plugin'
-import { XyoArchive, XyoArchiveKey, XyoBoundWitness, XyoBoundWitnessWithMeta, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { XyoArchive, XyoArchiveKey } from '@xyo-network/sdk-xyo-client-js'
 import { config } from 'dotenv'
 import { StatusCodes } from 'http-status-codes'
 import supertest, { SuperTest, Test } from 'supertest'
 
 import { getArchiveName } from './Archive'
-import { TestWeb2User } from './Model'
 import { request } from './Server'
-// eslint-disable-next-line deprecation/deprecation
-import { getNewWeb2User } from './User'
 
 config()
 
 export const getArchivist = (): SuperTest<Test> => {
   return supertest(getApp())
-}
-
-/**
- * @deprecated Use getExistingUser instead
- */
-export const getExistingWeb2User = async (
-  // eslint-disable-next-line deprecation/deprecation
-  user: TestWeb2User = getNewWeb2User(),
-  expectedStatus: StatusCodes = StatusCodes.CREATED,
-): Promise<TestWeb2User> => {
-  const apiKey = process.env.API_KEY as string
-  await (await request()).post('/user/signup').set('x-api-key', apiKey).send(user).expect(expectedStatus)
-  return user
-}
-
-/**
- * @deprecated Use signInUser instead
- */
-export const signInWeb2User = async (user: TestWeb2User): Promise<string> => {
-  const tokenResponse = await (await request()).post('/user/login').send(user).expect(StatusCodes.OK)
-  return tokenResponse.body.data.token
 }
 
 export const invalidateToken = (token: string) => {
