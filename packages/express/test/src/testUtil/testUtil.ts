@@ -94,44 +94,6 @@ export const postBlock = async (
   return response.body.data
 }
 
-export const getBlockByHash = async (
-  token: string,
-  archive: string,
-  hash: string,
-  expectedStatus: StatusCodes = StatusCodes.OK,
-): Promise<XyoPayloadWithMeta[]> => {
-  const response = await (await request()).get(`/archive/${archive}/block/hash/${hash}`).auth(token, { type: 'bearer' }).expect(expectedStatus)
-  return response.body.data
-}
-
-export const getBlocksByTimestamp = async (
-  token: string,
-  archive: string,
-  timestamp: number,
-  limit = 10,
-  order: SortDirection = 'asc',
-  expectedStatus: StatusCodes = StatusCodes.OK,
-): Promise<XyoBoundWitnessWithMeta[]> => {
-  const response = await (await request())
-    .get(`/archive/${archive}/block`)
-    .query({ limit, order, timestamp })
-    .auth(token, { type: 'bearer' })
-    .expect(expectedStatus)
-  return response.body.data
-}
-
-export const getRecentBlocks = async (
-  archive: string,
-  token?: string,
-  expectedStatus: StatusCodes = StatusCodes.OK,
-): Promise<XyoBoundWitnessWithMeta[]> => {
-  const path = `/archive/${archive}/block/recent`
-  const response = token
-    ? await (await request()).get(path).auth(token, { type: 'bearer' }).expect(expectedStatus)
-    : await (await request()).get(path).expect(expectedStatus)
-  return response.body.data
-}
-
 export const getPayloadByHash = async (
   token: string,
   archive: string,

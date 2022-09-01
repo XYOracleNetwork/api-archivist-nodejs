@@ -1,2 +1,6 @@
 export * from './getBlock'
+export * from './getBlockByHash'
 export * from './getBlocks'
+export * from './getBlocksByTimestamp'
+export * from './getRecentBlocks'
+export * from './getRecentBlocks'
