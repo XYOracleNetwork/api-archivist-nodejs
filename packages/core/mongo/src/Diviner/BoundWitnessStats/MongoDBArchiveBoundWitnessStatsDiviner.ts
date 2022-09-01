@@ -49,6 +49,7 @@ export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner<XyoPayloa
         schedule: '1 minute',
         task: async () => await this.updateChanges(),
       },
+      // TODO: Add job for full reconciliation
     ]
   }
 
@@ -103,19 +104,14 @@ export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner<XyoPayloa
   }
 
   private updateChanges = async () => {
-    for (const archive in this.pendingCounts) {
-      if (Object.prototype.hasOwnProperty.call(this.pendingCounts, archive)) {
-        const count = this.pendingCounts[archive]
-        const $inc = { [`${COLLECTIONS.BoundWitnesses}.count`]: count }
-        try {
-          await this.sdk.useMongo(async (mongo) => {
-            await mongo.db(DATABASES.Archivist).collection(COLLECTIONS.ArchivistStats).updateOne({ archive }, { $inc }, updateOptions)
-          })
-          this.pendingCounts[archive] = 0
-        } catch (_error) {
-          /* TODO: Log */
-        }
-      }
-    }
+    const updates = Object.keys(this.pendingCounts).map((archive) => {
+      const count = this.pendingCounts[archive]
+      this.pendingCounts[archive] = 0
+      const $inc = { [`${COLLECTIONS.BoundWitnesses}.count`]: count }
+      return this.sdk.useMongo(async (mongo) => {
+        await mongo.db(DATABASES.Archivist).collection(COLLECTIONS.ArchivistStats).updateOne({ archive }, { $inc }, updateOptions)
+      })
+    })
+    await Promise.allSettled(updates)
   }
 }
