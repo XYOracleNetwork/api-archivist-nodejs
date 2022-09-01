@@ -4,7 +4,7 @@ import { XyoBoundWitnessBuilder, XyoPayload, XyoPayloadBuilder } from '@xyo-netw
 import { StatusCodes } from 'http-status-codes'
 import { v4 } from 'uuid'
 
-import { claimArchive, getRequest, getTokenForNewUser, postCommandsToArchive, queryCommandResult } from '../../../testUtil'
+import { claimArchive, getTokenForNewUser, postCommandsToArchive, queryCommandResult, request } from '../../../testUtil'
 
 const schema = debugSchema
 
@@ -36,7 +36,7 @@ describe('/query/:hash', () => {
       await delay(100)
     })
     it('returns accepted', async () => {
-      await (await getRequest()).get(`/query/${id}`).expect(StatusCodes.ACCEPTED)
+      await (await request()).get(`/query/${id}`).expect(StatusCodes.ACCEPTED)
     })
   })
   describe('for non-existent query', () => {
@@ -46,7 +46,7 @@ describe('/query/:hash', () => {
     // NOTE: Skipping because we're running in-memory query processing and
     // we'll get mixed results until we use distributed state/transport
     it.skip('returns not found', async () => {
-      await (await getRequest()).get(`/query/${id}`).expect(StatusCodes.NOT_FOUND)
+      await (await request()).get(`/query/${id}`).expect(StatusCodes.NOT_FOUND)
     })
   })
   describe('for completed query', () => {
@@ -56,7 +56,7 @@ describe('/query/:hash', () => {
       await delay(1000)
     })
     it('redirects to HURI', async () => {
-      await (await getRequest()).get(`/query/${id}`).expect(StatusCodes.MOVED_TEMPORARILY)
+      await (await request()).get(`/query/${id}`).expect(StatusCodes.MOVED_TEMPORARILY)
     })
     it('returns query answer', async () => {
       const result = await queryCommandResult(id, token, StatusCodes.OK)

@@ -8,9 +8,9 @@ import {
   getBlock,
   getPayload,
   getPayloadsByTimestamp,
-  getRequest,
   getTokenForNewUser,
   postBlock,
+  request,
 } from '../../../../../testUtil'
 
 const sortDirections: SortDirection[] = ['asc', 'desc']
@@ -33,11 +33,7 @@ describe('/archive/:archive/payload', () => {
     }
   })
   it(`With missing timestamp returns ${ReasonPhrases.OK}`, async () => {
-    await (await getRequest())
-      .get(`/archive/${archive}/block`)
-      .query({ limit: 10, order: 'asc' })
-      .auth(token, { type: 'bearer' })
-      .expect(StatusCodes.OK)
+    await (await request()).get(`/archive/${archive}/block`).query({ limit: 10, order: 'asc' }).auth(token, { type: 'bearer' }).expect(StatusCodes.OK)
   })
   describe('With valid data', () => {
     describe.each(sortDirections)('In %s order', (order: SortDirection) => {

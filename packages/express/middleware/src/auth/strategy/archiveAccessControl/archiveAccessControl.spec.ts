@@ -1,10 +1,10 @@
-import { claimArchive, getRequest, getTokenForNewUser, setArchiveAccessControl } from '@xyo-network/archivist-test'
+import { claimArchive, getTokenForNewUser, request, setArchiveAccessControl } from '@xyo-network/archivist-test'
 import { StatusCodes } from 'http-status-codes'
 
 const attemptRoute = async (archive: string, token: string | undefined = undefined, expectedStatus: StatusCodes = StatusCodes.OK) => {
   return token
-    ? await (await getRequest()).get(`/archive/${archive}/payload/recent`).auth(token, { type: 'bearer' }).expect(expectedStatus)
-    : await (await getRequest()).get(`/archive/${archive}/payload/recent`).expect(expectedStatus)
+    ? await (await request()).get(`/archive/${archive}/payload/recent`).auth(token, { type: 'bearer' }).expect(expectedStatus)
+    : await (await request()).get(`/archive/${archive}/payload/recent`).expect(expectedStatus)
 }
 describe('ArchiveAccessControlAuthStrategy', () => {
   let token = ''
