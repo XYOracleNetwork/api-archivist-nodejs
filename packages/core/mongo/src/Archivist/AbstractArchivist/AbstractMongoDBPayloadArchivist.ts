@@ -4,14 +4,9 @@ import { assertEx } from '@xylabs/sdk-js'
 import { XyoAccount } from '@xyo-network/account'
 import { AbstractPayloadArchivist, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import {
-  EmptyObject,
-  XyoBoundWitnessBuilder,
-  XyoBoundWitnessBuilderConfig,
-  XyoBoundWitnessWithMeta,
-  XyoPayloadBuilder,
-  XyoPayloadWithMeta,
-} from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitnessBuilder, XyoBoundWitnessBuilderConfig, XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
+import { EmptyObject } from '@xyo-network/core'
+import { XyoPayloadBuilder, XyoPayloadWithMeta } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { ExplainVerbosity, Filter, OptionalUnlessRequiredId, WithoutId } from 'mongodb'

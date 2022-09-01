@@ -4,6 +4,7 @@ import { XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
 import { XyoPayloadWithMeta } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 
+import { COLLECTIONS } from '../../collections'
 import { getBaseMongoSdk } from '../../Mongo'
 import { MongoDBArchivePermissionsPayloadPayloadArchivist } from './MongoDBArchivePermissionsPayloadArchivist'
 
@@ -13,18 +14,20 @@ describe('MongoDBArchivePermissionsPayloadPayloadArchivist', () => {
   describe('get', () => {
     describe('with public archive', () => {
       it('returns no permissions for the archive', async () => {
-        const payloads: BaseMongoSdk<XyoPayloadWithMeta<SetArchivePermissionsPayload>> =
-          getBaseMongoSdk<XyoPayloadWithMeta<SetArchivePermissionsPayload>>('payloads')
-        const boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta> = getBaseMongoSdk<XyoBoundWitnessWithMeta>('bound_witnesses')
+        const payloads: BaseMongoSdk<XyoPayloadWithMeta<SetArchivePermissionsPayload>> = getBaseMongoSdk<
+          XyoPayloadWithMeta<SetArchivePermissionsPayload>
+        >(COLLECTIONS.Payloads)
+        const boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta> = getBaseMongoSdk<XyoBoundWitnessWithMeta>(COLLECTIONS.BoundWitnesses)
         const sut = new MongoDBArchivePermissionsPayloadPayloadArchivist(account, payloads, boundWitnesses)
         const result = await sut.get('temp')
         expect(result).toBeArray()
         expect(result.length).toBe(0)
       })
       it('uses an index to perform the BoundWitness query', async () => {
-        const payloads: BaseMongoSdk<XyoPayloadWithMeta<SetArchivePermissionsPayload>> =
-          getBaseMongoSdk<XyoPayloadWithMeta<SetArchivePermissionsPayload>>('payloads')
-        const boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta> = getBaseMongoSdk<XyoBoundWitnessWithMeta>('bound_witnesses')
+        const payloads: BaseMongoSdk<XyoPayloadWithMeta<SetArchivePermissionsPayload>> = getBaseMongoSdk<
+          XyoPayloadWithMeta<SetArchivePermissionsPayload>
+        >(COLLECTIONS.Payloads)
+        const boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta> = getBaseMongoSdk<XyoBoundWitnessWithMeta>(COLLECTIONS.BoundWitnesses)
         const sut = new MongoDBArchivePermissionsPayloadPayloadArchivist(account, payloads, boundWitnesses)
         const plan = await sut._findWitnessPlan('temp-private')
         expect(plan?.queryPlanner?.winningPlan?.inputStage?.inputStage?.stage).toBe('IXSCAN')
@@ -35,9 +38,10 @@ describe('MongoDBArchivePermissionsPayloadPayloadArchivist', () => {
     })
     describe('with private archive', () => {
       it('returns permissions for the archive', async () => {
-        const payloads: BaseMongoSdk<XyoPayloadWithMeta<SetArchivePermissionsPayload>> =
-          getBaseMongoSdk<XyoPayloadWithMeta<SetArchivePermissionsPayload>>('payloads')
-        const boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta> = getBaseMongoSdk<XyoBoundWitnessWithMeta>('bound_witnesses')
+        const payloads: BaseMongoSdk<XyoPayloadWithMeta<SetArchivePermissionsPayload>> = getBaseMongoSdk<
+          XyoPayloadWithMeta<SetArchivePermissionsPayload>
+        >(COLLECTIONS.Payloads)
+        const boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta> = getBaseMongoSdk<XyoBoundWitnessWithMeta>(COLLECTIONS.BoundWitnesses)
         const sut = new MongoDBArchivePermissionsPayloadPayloadArchivist(account, payloads, boundWitnesses)
         const result = await sut.get('temp-private')
         expect(result).toBeArray()
@@ -46,9 +50,10 @@ describe('MongoDBArchivePermissionsPayloadPayloadArchivist', () => {
         expect(permissions).toBeObject()
       })
       it('uses an index to perform the BoundWitness query', async () => {
-        const payloads: BaseMongoSdk<XyoPayloadWithMeta<SetArchivePermissionsPayload>> =
-          getBaseMongoSdk<XyoPayloadWithMeta<SetArchivePermissionsPayload>>('payloads')
-        const boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta> = getBaseMongoSdk<XyoBoundWitnessWithMeta>('bound_witnesses')
+        const payloads: BaseMongoSdk<XyoPayloadWithMeta<SetArchivePermissionsPayload>> = getBaseMongoSdk<
+          XyoPayloadWithMeta<SetArchivePermissionsPayload>
+        >(COLLECTIONS.Payloads)
+        const boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta> = getBaseMongoSdk<XyoBoundWitnessWithMeta>(COLLECTIONS.BoundWitnesses)
         const sut = new MongoDBArchivePermissionsPayloadPayloadArchivist(account, payloads, boundWitnesses)
         const plan = await sut._findWitnessPlan('temp-private')
         expect(plan?.queryPlanner?.winningPlan?.inputStage?.inputStage?.stage).toBe('IXSCAN')

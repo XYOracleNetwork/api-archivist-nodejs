@@ -43,7 +43,8 @@ jobs:
       - name: copy env file
         run: cp .example.env .env
       - name: setup test db
-        run: docker compose up -d mongo
+        # TODO: Remove hardcoded delay and actually wait for healthy containers
+        run: docker compose up -d mongo && sleep 30
       - name: test
         run: yarn test:ci --forceExit --coverage
         env:

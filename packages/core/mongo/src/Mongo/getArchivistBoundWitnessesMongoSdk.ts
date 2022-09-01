@@ -1,14 +1,16 @@
 import { assertEx } from '@xylabs/sdk-js'
-import { XyoArchivistBoundWitnessMongoSdk, XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
+import { XyoArchivistBoundWitnessMongoSdk } from '@xyo-network/storage'
 
+import { COLLECTIONS } from '../collections'
 import { getMongoDBConfig } from './getMongoDBConfig'
 
 export const getArchivistBoundWitnessesMongoSdk = (archive: string) => {
   const env = getMongoDBConfig()
   return new XyoArchivistBoundWitnessMongoSdk(
     {
-      collection: 'bound_witnesses',
+      collection: COLLECTIONS.BoundWitnesses,
       dbConnectionString: env.MONGO_CONNECTION_STRING,
       dbDomain: assertEx(env.MONGO_DOMAIN, 'Missing Mongo Domain'),
       dbName: assertEx(env.MONGO_DATABASE, 'Missing Mongo Database'),
@@ -22,7 +24,7 @@ export const getArchivistBoundWitnessesMongoSdk = (archive: string) => {
 export const getArchivistAllBoundWitnessesMongoSdk = () => {
   const env = getMongoDBConfig()
   return new BaseMongoSdk<XyoBoundWitness>({
-    collection: 'bound_witnesses',
+    collection: COLLECTIONS.BoundWitnesses,
     dbConnectionString: env.MONGO_CONNECTION_STRING,
     dbDomain: assertEx(env.MONGO_DOMAIN, 'Missing Mongo Domain'),
     dbName: assertEx(env.MONGO_DATABASE, 'Missing Mongo Database'),

@@ -4,7 +4,7 @@ import {
   SetArchivePermissionsSchema,
   setArchivePermissionsSchema,
 } from '@xyo-network/archivist-model'
-import { XyoPayloadWithPartialMeta } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayloadWithPartialMeta } from '@xyo-network/payload'
 
 const schema: SetArchivePermissionsSchema = setArchivePermissionsSchema
 
