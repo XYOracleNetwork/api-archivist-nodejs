@@ -2,7 +2,14 @@ import 'reflect-metadata'
 
 import { assertEx } from '@xylabs/sdk-js'
 import { XyoAccount } from '@xyo-network/account'
-import { ArchiveArchivist, BoundWitnessStatsDiviner, BoundWitnessStatsPayload, BoundWitnessStatsSchema, Job } from '@xyo-network/archivist-model'
+import {
+  ArchiveArchivist,
+  BoundWitnessStatsDiviner,
+  BoundWitnessStatsPayload,
+  BoundWitnessStatsSchema,
+  Job,
+  JobProvider,
+} from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
 import { XyoArchivistPayloadDivinerConfigSchema, XyoDiviner, XyoDivinerDivineQuerySchema } from '@xyo-network/diviner'
@@ -27,7 +34,10 @@ interface Stats {
 }
 
 @injectable()
-export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner<XyoPayload, ArchiveConfigPayload> implements BoundWitnessStatsDiviner {
+export class MongoDBArchiveBoundWitnessStatsDiviner
+  extends XyoDiviner<XyoPayload, ArchiveConfigPayload>
+  implements BoundWitnessStatsDiviner, JobProvider
+{
   protected readonly batchLimit = 100
   protected nextOffset = 0
   protected pendingCounts: Record<string, number> = {}
