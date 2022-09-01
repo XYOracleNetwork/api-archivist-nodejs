@@ -1,6 +1,6 @@
 import { XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 
-import { claimArchive, getNewBlockWithPayloads, getRecentPayloads, getTokenForNewUser, postBlock } from '../../../../../testUtil'
+import { claimArchive, getBlockWithPayloads, getRecentPayloads, getTokenForNewUser, postBlock } from '../../../../../testUtil'
 
 const defaultReturnLength = 20
 
@@ -20,7 +20,7 @@ describe('/archive/:archive/payload/recent/:limit', () => {
     token = await getTokenForNewUser()
     archive = (await claimArchive(token)).archive
     for (let i = 0; i < payloadsToPost; i++) {
-      const response = await postBlock(getNewBlockWithPayloads(1), archive)
+      const response = await postBlock(getBlockWithPayloads(1), archive)
       expect(response.length).toBe(1)
     }
   })
@@ -33,7 +33,7 @@ describe('/archive/:archive/payload/recent/:limit', () => {
     // Post some payloads to other archives
     for (let i = 0; i < otherPayloadsToPost; i++) {
       const newArchive = (await claimArchive(token)).archive
-      const response = await postBlock(getNewBlockWithPayloads(1), newArchive)
+      const response = await postBlock(getBlockWithPayloads(1), newArchive)
       expect(response.length).toBe(1)
 
       // Ensure this payload only shows up when getting recent from this archive
