@@ -25,7 +25,9 @@ export class MongoDBArchiveSchemaListDiviner implements ArchiveSchemaListDiviner
   constructor(
     @inject(TYPES.ArchiveArchivist) protected archiveArchivist: ArchiveArchivist,
     @inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayload>,
-  ) {}
+  ) {
+    void this.registerWithChangeStream()
+  }
 
   get jobs(): Job[] {
     return [
@@ -74,9 +76,14 @@ export class MongoDBArchiveSchemaListDiviner implements ArchiveSchemaListDiviner
 
   private updateChanges = async () => {
     const updates = Object.keys(this.pendingCounts).map((archive) => {
-      const $inc = Object.keys(this.pendingCounts[archive]).map((schema) => {
-        return { [`schema.count.${schema}`]: this.pendingCounts[archive][schema] }
-      })
+      const $inc = Object.keys(this.pendingCounts[archive])
+        .map((schema) => {
+          const sanitizedSchemaName = schema.replaceAll('.', '#')
+          return { [`schema.count.${sanitizedSchemaName}`]: this.pendingCounts[archive][schema] }
+        })
+        .reduce((prev, curr) => {
+          return Object.assign(prev, curr)
+        }, {})
       this.pendingCounts[archive] = {}
       return this.sdk.useMongo(async (mongo) => {
         await mongo.db(DATABASES.Archivist).collection(COLLECTIONS.ArchivistStats).updateOne({ archive }, { $inc }, updateOptions)
