@@ -2,7 +2,7 @@ import 'reflect-metadata'
 
 import { assertEx } from '@xylabs/sdk-js'
 import { XyoAccount } from '@xyo-network/account'
-import { BoundWitnessStatsDiviner, BoundWitnessStatsPayload, BoundWitnessStatsSchema, Job } from '@xyo-network/archivist-model'
+import { ArchiveArchivist, BoundWitnessStatsDiviner, BoundWitnessStatsPayload, BoundWitnessStatsSchema, Job } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
 import { XyoArchivistPayloadDivinerConfigSchema, XyoDiviner, XyoDivinerDivineQuerySchema } from '@xyo-network/diviner'
@@ -33,6 +33,7 @@ export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner<XyoPayloa
 
   constructor(
     @inject(TYPES.Account) account: XyoAccount,
+    @inject(TYPES.ArchiveArchivist) protected archiveArchivist: ArchiveArchivist,
     @inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly sdk: BaseMongoSdk<XyoBoundWitnessWithMeta>,
   ) {
     super({ account, schema: XyoArchivistPayloadDivinerConfigSchema, targetSchema: XyoPayloadSchema })
@@ -60,9 +61,11 @@ export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner<XyoPayloa
   override async divine(payloads?: XyoPayloads): Promise<XyoPayload> {
     const archivePayload = payloads?.find((payload): payload is MongoArchivePayload => payload?.schema === MongoArchiveSchema)
     const archive = archivePayload?.archive ?? this.config.archive
-    const count = archive ? await this.divineArchive(archive) : await this.divineArchives()
+    const count = archive ? await this.divineArchive(archive) : await this.divineAllArchives()
     return new XyoPayloadBuilder<BoundWitnessStatsPayload>({ schema: BoundWitnessStatsSchema }).fields({ count }).build()
   }
+
+  private divineAllArchives = () => this.sdk.useCollection((collection) => collection.estimatedDocumentCount())
 
   private divineArchive = async (archive: string) => {
     const stats = await this.sdk.useMongo(async (mongo) => {
@@ -83,8 +86,6 @@ export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner<XyoPayloa
     })
     return count
   }
-
-  private divineArchives = () => this.sdk.useCollection((collection) => collection.estimatedDocumentCount())
 
   private processChange = (change: ChangeStreamInsertDocument<XyoBoundWitnessWithMeta>) => {
     this.resumeAfter = change._id

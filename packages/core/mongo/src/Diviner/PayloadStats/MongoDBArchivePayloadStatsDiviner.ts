@@ -2,7 +2,7 @@ import 'reflect-metadata'
 
 import { assertEx } from '@xylabs/sdk-js'
 import { XyoAccount } from '@xyo-network/account'
-import { Job, PayloadStatsPayload, PayloadStatsSchema } from '@xyo-network/archivist-model'
+import { ArchiveArchivist, Job, PayloadStatsPayload, PayloadStatsSchema } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoArchivistPayloadDivinerConfigSchema, XyoDiviner, XyoDivinerDivineQuerySchema } from '@xyo-network/diviner'
 import { XyoPayload, XyoPayloadBuilder, XyoPayloads, XyoPayloadSchema, XyoPayloadWithMeta } from '@xyo-network/payload'
@@ -30,7 +30,11 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
   protected pendingCounts: Record<string, number> = {}
   protected resumeAfter: ResumeToken | undefined = undefined
 
-  constructor(@inject(TYPES.Account) account: XyoAccount, @inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayload>) {
+  constructor(
+    @inject(TYPES.Account) account: XyoAccount,
+    @inject(TYPES.ArchiveArchivist) protected archiveArchivist: ArchiveArchivist,
+    @inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayload>,
+  ) {
     super({ account, schema: XyoArchivistPayloadDivinerConfigSchema, targetSchema: XyoPayloadSchema })
     void this.registerWithChangeStream()
   }
@@ -56,9 +60,11 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
   public async divine(payloads?: XyoPayloads): Promise<XyoPayload | null> {
     const archivePayload = payloads?.find((payload): payload is MongoArchivePayload => payload?.schema === MongoArchiveSchema)
     const archive = archivePayload?.archive ?? this.config.archive
-    const count = archive ? await this.divineArchive(archive) : await this.divineArchives()
+    const count = archive ? await this.divineArchive(archive) : await this.divineAllArchives()
     return new XyoPayloadBuilder<PayloadStatsPayload>({ schema: PayloadStatsSchema }).fields({ count }).build()
   }
+
+  private divineAllArchives = () => this.sdk.useCollection((collection) => collection.estimatedDocumentCount())
 
   private divineArchive = async (archive: string) => {
     const stats = await this.sdk.useMongo(async (mongo) => {
@@ -79,8 +85,6 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
     })
     return count
   }
-
-  private divineArchives = () => this.sdk.useCollection((collection) => collection.estimatedDocumentCount())
 
   private processChange = (change: ChangeStreamInsertDocument<XyoPayloadWithMeta>) => {
     this.resumeAfter = change._id
