@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes'
 
-import { claimArchive, createArchiveKey, getArchiveKeys, getRequest, getTokenForNewUser } from '../../../../../../testUtil'
+import { claimArchive, createArchiveKey, getArchiveKeys, getTokenForNewUser, request } from '../../../../../../testUtil'
 
 describe('/archive/:archive/settings/key', () => {
   let token = ''
@@ -11,14 +11,14 @@ describe('/archive/:archive/settings/key', () => {
   })
   describe('auth', () => {
     it('is required', async () => {
-      await (await getRequest()).get(`/archive/${archive}/settings/key`).expect(StatusCodes.UNAUTHORIZED)
+      await (await request()).get(`/archive/${archive}/settings/key`).expect(StatusCodes.UNAUTHORIZED)
     })
     it('supports JWT', async () => {
-      await (await getRequest()).get(`/archive/${archive}/settings/key`).auth(token, { type: 'bearer' }).expect(StatusCodes.OK)
+      await (await request()).get(`/archive/${archive}/settings/key`).auth(token, { type: 'bearer' }).expect(StatusCodes.OK)
     })
     it('supports API Key', async () => {
       const createKeyResponse = await createArchiveKey(token, archive)
-      await (await getRequest()).get(`/archive/${archive}/settings/key`).set('x-api-key', createKeyResponse.key).expect(StatusCodes.OK)
+      await (await request()).get(`/archive/${archive}/settings/key`).set('x-api-key', createKeyResponse.key).expect(StatusCodes.OK)
     })
   })
   it('Returns the keys for the archive', async () => {

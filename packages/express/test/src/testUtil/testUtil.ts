@@ -1,5 +1,4 @@
 import { SortDirection } from '@xyo-network/archivist-model'
-import { getApp } from '@xyo-network/archivist-server'
 import { XyoBoundWitness, XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
 import { XyoDomainPayload } from '@xyo-network/domain-payload-plugin'
 import { XyoPayloadWithMeta } from '@xyo-network/payload'
@@ -7,16 +6,11 @@ import { XyoSchemaPayload } from '@xyo-network/schema-payload-plugin'
 import { XyoArchive, XyoArchiveKey } from '@xyo-network/sdk-xyo-client-js'
 import { config } from 'dotenv'
 import { StatusCodes } from 'http-status-codes'
-import supertest, { SuperTest, Test } from 'supertest'
 
 import { getArchiveName } from './Archive'
 import { request } from './Server'
 
 config()
-
-export const getRequest = async (): Promise<SuperTest<Test>> => {
-  return await Promise.resolve(supertest(getApp()))
-}
 
 export const getArchives = async (token?: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoArchive[]> => {
   const response = token

@@ -2,7 +2,7 @@ import { XyoSchemaPayload } from '@xyo-network/schema-payload-plugin'
 import { XyoAccount, XyoBoundWitnessBuilder } from '@xyo-network/sdk-xyo-client-js'
 import { StatusCodes } from 'http-status-codes'
 
-import { claimArchive, getRequest, getSchemaName, getTokenForNewUser, postBlock } from '../../../../../../testUtil'
+import { claimArchive, getSchemaName, getTokenForNewUser, postBlock, request } from '../../../../../../testUtil'
 
 const blocksPosted = 2
 const definition = { $schema: 'http://json-schema.org/draft-07/schema#' }
@@ -37,7 +37,7 @@ describe('/archive/:archive/payload/schema/stats', () => {
     }
   }, 25000)
   it('Returns stats on all payload schemas in archive', async () => {
-    const response = await (await getRequest()).get(`/archive/${archive}/payload/schema/stats`).expect(StatusCodes.OK)
+    const response = await (await request()).get(`/archive/${archive}/payload/schema/stats`).expect(StatusCodes.OK)
     const stats = response.body.data
     expect(stats).toBeTruthy()
     expect(stats.counts).toBeTruthy()
