@@ -2,18 +2,7 @@ import { SortDirection } from '@xyo-network/archivist-model'
 import { getApp } from '@xyo-network/archivist-server'
 import { XyoDomainPayload } from '@xyo-network/domain-payload-plugin'
 import { XyoSchemaPayload } from '@xyo-network/schema-payload-plugin'
-import {
-  XyoAccount,
-  XyoArchive,
-  XyoArchiveKey,
-  XyoBoundWitness,
-  XyoBoundWitnessBuilder,
-  XyoBoundWitnessWithMeta,
-  XyoPayload,
-  XyoPayloadBuilder,
-  XyoPayloadWithMeta,
-  XyoPayloadWrapper,
-} from '@xyo-network/sdk-xyo-client-js'
+import { XyoArchive, XyoArchiveKey, XyoBoundWitness, XyoBoundWitnessWithMeta, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 import { config } from 'dotenv'
 import { Wallet } from 'ethers'
 import { StatusCodes } from 'http-status-codes'
@@ -26,31 +15,6 @@ import { request } from './Server'
 import { getNewUser, getNewWeb2User } from './User'
 
 config()
-
-const schema = 'co.coinapp.current.user.witness'
-export const unitTestSigningAccount = new XyoAccount({ phrase: 'test' })
-const payloadTemplate = {
-  balance: 10000.0,
-  daysOld: 1,
-  deviceId: '77040732-4c6d-47e1-af15-06159b51d879',
-  geomines: 1,
-  planType: 'pro',
-  uid: '',
-}
-
-const knownPayload = new XyoPayloadBuilder({ schema })
-  .fields({
-    balance: 10000.0,
-    daysOld: 1,
-    deviceId: '00000000-0000-0000-0000-000000000000',
-    geomines: 41453,
-    planType: 'pro',
-    uid: '0000000000000000000000000000',
-  })
-  .build()
-export const knownPayloadHash = new XyoPayloadWrapper(knownPayload).hash
-export const knownBlock = new XyoBoundWitnessBuilder({ inlinePayloads: true }).witness(XyoAccount.random()).payload(knownPayload).build()
-export const knownBlockHash = knownBlock._hash || ''
 
 export const getArchivist = (): SuperTest<Test> => {
   return supertest(getApp())
@@ -171,39 +135,6 @@ export const createArchiveKey = async (token: string, archive: string, expectedS
 export const getArchiveKeys = async (token: string, archive: string, expectedStatus: StatusCodes = StatusCodes.OK): Promise<XyoArchiveKey[]> => {
   const response = await (await request()).get(`/archive/${archive}/settings/key`).auth(token, { type: 'bearer' }).expect(expectedStatus)
   return response.body.data
-}
-
-export const getPayload = (): XyoPayload => {
-  return new XyoPayloadBuilder({ schema })
-    .fields({
-      ...payloadTemplate,
-      uid: v4(),
-    })
-    .build()
-}
-
-export const getPayloads = (numPayloads: number) => {
-  return new Array(numPayloads).fill(0).map(getPayload)
-}
-
-export const getNewBlock = (...payloads: XyoPayload[]) => {
-  return new XyoBoundWitnessBuilder({ inlinePayloads: true }).witness(unitTestSigningAccount).payloads(payloads).build()
-}
-
-export const getNewBlockWithPayloads = (numPayloads = 1) => {
-  return getNewBlock(...getPayloads(numPayloads))
-}
-
-export const getNewBlockWithBoundWitnesses = (numBoundWitnesses = 1) => {
-  return new Array(numBoundWitnesses).fill(0).map(() => {
-    return new XyoBoundWitnessBuilder({ inlinePayloads: true }).witness(XyoAccount.random()).build()
-  })
-}
-
-export const getNewBlockWithBoundWitnessesWithPayloads = (numBoundWitnesses = 1, numPayloads = 1) => {
-  return new Array(numBoundWitnesses).fill(0).map(() => {
-    return new XyoBoundWitnessBuilder({ inlinePayloads: true }).witness(XyoAccount.random()).payloads(getPayloads(numPayloads)).build()
-  })
 }
 
 export const getHash = async (
