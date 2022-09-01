@@ -16,7 +16,7 @@ import { addQueryConverters } from './addQueryConverters'
 import { addQueryProcessing } from './addQueryProcessing'
 import { addQueryProcessors } from './addQueryProcessors'
 
-export const getApp = (): Express => {
+export const getApp = async (): Promise<Express> => {
   configure()
   const app = express()
   app.set('etag', false)
@@ -40,7 +40,7 @@ export const getApp = (): Express => {
   addHealthChecks(app)
   addRoutes(app)
   addErrorHandlers(app)
-  return app
+  return await Promise.resolve(app)
 }
 
 export const server = async (port = 80) => {
@@ -53,7 +53,7 @@ export const server = async (port = 80) => {
     Object.assign(process.env, awsEnv)
   }
 
-  const app = getApp()
+  const app = await getApp()
   const logger = dependencies.get<Logger>(TYPES.Logger)
   const host = process.env.PUBLIC_ORIGIN || `http://localhost:${port}`
   await configureDoc(app, { host })
