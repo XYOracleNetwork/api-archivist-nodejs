@@ -2,7 +2,7 @@ import 'reflect-metadata'
 
 import { assertEx } from '@xylabs/sdk-js'
 import { XyoAccount } from '@xyo-network/account'
-import { PayloadStatsPayload, PayloadStatsSchema, Task } from '@xyo-network/archivist-model'
+import { Job, PayloadStatsPayload, PayloadStatsSchema } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoArchivistPayloadDivinerConfigSchema, XyoDiviner, XyoDivinerDivineQuerySchema } from '@xyo-network/diviner'
 import { XyoPayload, XyoPayloadBuilder, XyoPayloads, XyoPayloadSchema, XyoPayloadWithMeta } from '@xyo-network/payload'
@@ -35,12 +35,21 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
     void this.registerWithChangeStream()
   }
 
-  get queries() {
-    return [XyoDivinerDivineQuerySchema]
+  get jobs(): Job[] {
+    return [
+      {
+        name: 'MongoDBArchivePayloadStatsDiviner.UpdateChanges',
+        onSuccess: () => {
+          this.pendingCounts = {}
+        },
+        schedule: '1 minute',
+        task: async () => await this.updateChanges(),
+      },
+    ]
   }
 
-  get task(): Task {
-    return async () => await this.updateChanges()
+  get queries() {
+    return [XyoDivinerDivineQuerySchema]
   }
 
   public async divine(payloads?: XyoPayloads): Promise<XyoPayload | null> {
