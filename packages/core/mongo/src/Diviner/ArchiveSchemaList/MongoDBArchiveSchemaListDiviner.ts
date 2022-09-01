@@ -5,15 +5,23 @@ import { ArchiveArchivist, ArchiveSchemaListDiviner, Job, JobProvider } from '@x
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoPayload, XyoPayloadWithMeta } from '@xyo-network/payload'
 import { BaseMongoSdk, MongoClientWrapper } from '@xyo-network/sdk-xyo-mongo-js'
+import { KeyObject } from 'crypto'
 import { inject, injectable } from 'inversify'
 import { ChangeStreamInsertDocument, ChangeStreamOptions, ResumeToken, UpdateOptions } from 'mongodb'
 
 import { COLLECTIONS } from '../../collections'
 import { DATABASES } from '../../databases'
 import { MONGO_TYPES } from '../../types'
-import { toDbProperty } from '../../Util'
+import { fromDbProperty, toDbProperty } from '../../Util'
 
 const updateOptions: UpdateOptions = { upsert: true }
+
+interface Stats {
+  archive: string
+  schema?: {
+    count?: Record<string, number>
+  }
+}
 
 // TODO: Make into Diviner via plugin interface
 @injectable()
@@ -52,6 +60,22 @@ export class MongoDBArchiveSchemaListDiviner implements ArchiveSchemaListDiviner
     return await this.sdk.useCollection((collection) => {
       return collection.distinct('schema', { _archive: archive })
     })
+  }
+
+  private divineArchive = async (archive: string) => {
+    const stats = await this.sdk.useMongo(async (mongo) => {
+      return await mongo.db(DATABASES.Archivist).collection<Stats>(COLLECTIONS.ArchivistStats).findOne({ archive })
+    })
+    const remote = stats?.schema?.count || {}
+    const local = this.pendingCounts[archive] || {}
+    const keys = [...Object.keys(local), ...Object.keys(remote).map(fromDbProperty)]
+    Object.fromEntries(
+      keys.map((key) => {
+        const value = local[key] || 0 + remote[key] || 0
+        return [key, value]
+      }),
+    )
+    return [remote, local]
   }
 
   private processChange = (change: ChangeStreamInsertDocument<XyoPayloadWithMeta>) => {
