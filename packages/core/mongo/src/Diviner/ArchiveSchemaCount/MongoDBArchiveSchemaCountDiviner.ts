@@ -67,15 +67,22 @@ export class MongoDBArchiveSchemaCountDiviner implements ArchiveSchemaCountDivin
     const stats = await this.sdk.useMongo(async (mongo) => {
       return await mongo.db(DATABASES.Archivist).collection<Stats>(COLLECTIONS.ArchivistStats).findOne({ archive })
     })
-    const remote = stats?.schema?.count || {}
+    const remote = Object.fromEntries(
+      Object.entries(stats?.schema?.count || {}).map(([schema, count]) => {
+        return [fromDbProperty(schema), count]
+      }),
+    )
     const local = this.pendingCounts[archive] || {}
     const keys = [...Object.keys(local), ...Object.keys(remote).map(fromDbProperty)]
-    return Object.fromEntries(
+    const ret = Object.fromEntries(
       keys.map((key) => {
-        const value = local[key] || 0 + remote[key] || 0
+        const localSchemaCount = local[key] || 0
+        const remoteSchemaCount = remote[key] || 0
+        const value = localSchemaCount + remoteSchemaCount
         return [key, value]
       }),
     )
+    return ret
   }
 
   private divineArchiveFull = async (archive: string): Promise<Record<string, number>> => {
