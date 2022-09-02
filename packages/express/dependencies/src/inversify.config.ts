@@ -42,6 +42,7 @@ export const configureDependencies = async () => {
   dependencies.bind<string>(TYPES.ApiKey).toConstantValue(apiKey)
   dependencies.bind<string>(TYPES.JwtSecret).toConstantValue(jwtSecret)
   dependencies.bind<PasswordHasher<User>>(TYPES.PasswordHasher).toConstantValue(passwordHasher)
+  // TODO: Get logger per class instance and configure to augment logger meta with class name
   dependencies.bind<Logger>(TYPES.Logger).toConstantValue(getDefaultLogger())
   dependencies.bind<XyoAccount>(TYPES.Account).toConstantValue(new XyoAccount({ phrase }))
 
