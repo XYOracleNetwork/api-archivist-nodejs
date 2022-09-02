@@ -163,7 +163,9 @@ export class MongoDBArchiveSchemaCountDiviner implements ArchiveSchemaCountDivin
         await mongo.db(DATABASES.Archivist).collection(COLLECTIONS.ArchivistStats).updateOne({ archive }, { $inc }, updateOptions)
       })
     })
-    await Promise.allSettled(updates)
-    this.logger.log('MongoDBArchiveSchemaCountDiviner.UpdateChanges: Updated')
+    const results = await Promise.allSettled(updates)
+    const succeeded = results.filter((result) => result.status === 'fulfilled').length
+    const failed = results.filter((result) => result.status === 'rejected').length
+    this.logger.log(`MongoDBArchiveSchemaCountDiviner.UpdateChanges: Updated - Succeeded: ${succeeded} Failed: ${failed}`)
   }
 }
