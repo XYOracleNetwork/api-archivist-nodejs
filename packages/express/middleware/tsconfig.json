@@ -4,15 +4,15 @@
     "experimentalDecorators": true,
     "outDir": "dist",
     "typeRoots": [
-      "./node_modules/@types",
-      "./types"
+      "./node_modules/@types"
     ],
     "types": [
-      "./types",
+      "@types/jest",
+      "@types/node",
+      "jest-extended",
+      "jest-sorted",
       "jest",
       "node",
-      "@types/jest",
-      "jest-sorted",
       "reflect-metadata"
     ]
   },

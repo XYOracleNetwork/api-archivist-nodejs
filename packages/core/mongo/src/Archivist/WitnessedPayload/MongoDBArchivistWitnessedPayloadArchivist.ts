@@ -1,9 +1,12 @@
 import 'reflect-metadata'
 
 import { exists } from '@xylabs/sdk-js'
+import { XyoAccount } from '@xyo-network/account'
+import { XyoPayloadFindFilter } from '@xyo-network/archivist'
 import { AbstractPayloadArchivist } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { XyoAccount, XyoBoundWitnessBuilder, XyoBoundWitnessWithMeta, XyoPayloadFindFilter, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitnessBuilder, XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
+import { XyoPayloadWithMeta } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 

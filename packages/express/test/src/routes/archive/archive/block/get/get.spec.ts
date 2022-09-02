@@ -5,13 +5,13 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 import {
   claimArchive,
   getArchiveName,
-  getArchivist,
+  getBlock,
   getBlocksByTimestamp,
-  getNewBlock,
   getPayloads,
   getRecentBlocks,
   getTokenForNewUser,
   postBlock,
+  request,
 } from '../../../../../testUtil'
 
 const sortDirections: SortDirection[] = ['asc', 'desc']
@@ -30,7 +30,7 @@ describe('/archive/:archive/block', () => {
       const now = Date.now()
       const payloads = getPayloads(1)
       payloads[0].timestamp = now
-      const block = getNewBlock(...payloads)
+      const block = getBlock(...payloads)
       block.timestamp = now
       const blockResponse = await postBlock(block, archive)
       expect(blockResponse.length).toBe(1)
@@ -43,7 +43,7 @@ describe('/archive/:archive/block', () => {
     expect(stopTime).toBeGreaterThan(startTime)
   })
   it(`With missing timestamp returns ${ReasonPhrases.OK}`, async () => {
-    await getArchivist().get(`/archive/${archive}/block`).query({ limit: 10, order: 'asc' }).auth(token, { type: 'bearer' }).expect(StatusCodes.OK)
+    await (await request()).get(`/archive/${archive}/block`).query({ limit: 10, order: 'asc' }).auth(token, { type: 'bearer' }).expect(StatusCodes.OK)
   })
   describe('With valid data', () => {
     describe.each(sortDirections)('In %s order', (order: SortDirection) => {

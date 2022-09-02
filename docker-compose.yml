@@ -2,7 +2,7 @@ version: "3.1"
 services:
   mongo:
     container_name: mongo
-    image: mongo:4.4
+    image: mongo:6
     restart: always
     ports:
       - "27017:27017"
@@ -11,7 +11,19 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: example
       MONGO_INITDB_DATABASE: archivist
     volumes:
+      - ./scripts/mongo/etc/mongodb:/etc/mongodb
+      - ./scripts/mongo/opt/mongo:/opt/mongo
+      - ./scripts/mongo/usr/local/etc:/usr/local/etc
       - ./scripts/mongo/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    command:
+      [
+        "--auth",
+        "--bind_ip_all",
+        "--config",
+        "/usr/local/etc/mongod.conf",
+        "--replSet",
+        "dbrs",
+      ]
   archivist:
     container_name: archivist
     build: .
