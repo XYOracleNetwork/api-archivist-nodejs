@@ -39,6 +39,7 @@ export const configureDependencies = async () => {
   const apiKey = assertEx(process.env.API_KEY, 'API_KEY ENV VAR required to create Archivist')
   const jwtSecret = assertEx(process.env.JWT_SECRET, 'JWT_SECRET ENV VAR required to create Archivist')
   const passwordHasher = BcryptPasswordHasher
+  const logger = getDefaultLogger()
 
   dependencies.bind<string>(TYPES.ApiKey).toConstantValue(apiKey)
   dependencies.bind<string>(TYPES.JwtSecret).toConstantValue(jwtSecret)
@@ -48,7 +49,7 @@ export const configureDependencies = async () => {
     const service = tryGetParentClassNameFromContext(context)
     const defaultMeta = { service }
     const config = { defaultMeta }
-    return service ? getDefaultLogger() : getDefaultLogger()
+    return service ? logger : logger
   })
   dependencies.bind<XyoAccount>(TYPES.Account).toConstantValue(new XyoAccount({ phrase }))
 
