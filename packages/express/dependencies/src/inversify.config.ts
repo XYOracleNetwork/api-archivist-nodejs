@@ -15,6 +15,7 @@ import { addInMemoryQueueing } from './addInMemoryQueueing'
 import { addPayloadHandlers } from './addPayloadHandlers'
 import { addQueryConverterRegistry } from './addQueryConverterRegistry'
 import { addQueryProcessorRegistry } from './addQueryProcessorRegistry'
+import { tryGetParentClassNameFromContext } from './Util'
 config()
 export const dependencies = new Container({
   autoBindInjectable: true,
@@ -44,11 +45,9 @@ export const configureDependencies = async () => {
 
   dependencies.bind<PasswordHasher<User>>(TYPES.PasswordHasher).toConstantValue(passwordHasher)
   dependencies.bind<Logger>(TYPES.Logger).toDynamicValue((context) => {
-    console.log('=========================================')
-    const parent = context?.currentRequest?.parentRequest?.bindings?.[0]?.implementationType
-    const name = (parent as { name?: string })?.name
-    console.log(name)
-    console.log('=========================================')
+    const name = tryGetParentClassNameFromContext(context)
+    // TODO: Use name for meta
+    if (name) console.log(name)
     return getDefaultLogger()
   })
   dependencies.bind<XyoAccount>(TYPES.Account).toConstantValue(new XyoAccount({ phrase }))
