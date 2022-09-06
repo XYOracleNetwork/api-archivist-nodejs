@@ -4,6 +4,7 @@ import { assertEx } from '@xylabs/sdk-js'
 import { ArchiveArchivist, ArchiveSchemaCountDiviner, Job, JobProvider, Logger } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoPayload, XyoPayloadWithMeta } from '@xyo-network/payload'
+import { Promisable, PromisableArray } from '@xyo-network/promisable'
 import { BaseMongoSdk, MongoClientWrapper } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { ChangeStreamInsertDocument, ChangeStreamOptions, ResumeToken, UpdateOptions } from 'mongodb'
@@ -60,11 +61,11 @@ export class MongoDBArchiveSchemaCountDiviner implements ArchiveSchemaCountDivin
     ]
   }
 
-  async find(archive: string): Promise<Record<string, number>> {
+  async find(archive: string): Promise<Array<Record<string, number>>> {
     return await this.divineArchive(archive)
   }
 
-  private divineArchive = async (archive: string): Promise<Record<string, number>> => {
+  private divineArchive = async (archive: string): Promise<Array<Record<string, number>>> => {
     const stats = await this.sdk.useMongo(async (mongo) => {
       return await mongo.db(DATABASES.Archivist).collection<Stats>(COLLECTIONS.ArchivistStats).findOne({ archive })
     })
@@ -83,7 +84,7 @@ export class MongoDBArchiveSchemaCountDiviner implements ArchiveSchemaCountDivin
         return [key, value]
       }),
     )
-    return ret
+    return [ret]
   }
 
   private divineArchiveFull = async (archive: string): Promise<Record<string, number>> => {
