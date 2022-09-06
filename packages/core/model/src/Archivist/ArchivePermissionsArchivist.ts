@@ -1,7 +1,7 @@
 import { SetArchivePermissions } from '../Query'
-import { Archivist } from './Archivist'
+import { _Archivist } from './Archivist'
 
-export type ArchivePermissionsArchivist = Archivist<
+export type ArchivePermissionsArchivist = _Archivist<
   SetArchivePermissions[],
   SetArchivePermissions[],
   SetArchivePermissions[] | null,
