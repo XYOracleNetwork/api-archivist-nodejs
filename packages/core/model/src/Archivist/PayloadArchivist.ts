@@ -1,6 +1,6 @@
 import { EmptyObject, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 
-import { Archivist } from './Archivist'
+import { _Archivist } from './Archivist'
 import { XyoPayloadFilterPredicate } from './XyoPayloadFilterPredicate'
 
 export type PayloadArchivist<
@@ -8,4 +8,4 @@ export type PayloadArchivist<
   TId = string,
   TQueryResponse = XyoPayloadWithMeta<T>[],
   TQuery = XyoPayloadFilterPredicate<T>,
-> = Archivist<XyoPayloadWithMeta<T>[], T[], XyoPayloadWithMeta<T>[], TId, TQueryResponse, TQuery>
+> = _Archivist<XyoPayloadWithMeta<T>[], T[], XyoPayloadWithMeta<T>[], TId, TQueryResponse, TQuery>

@@ -1,12 +1,12 @@
 import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 
 import { UpsertResult } from '../UpsertResult'
-import { Archivist } from './Archivist'
+import { _Archivist } from './Archivist'
 import { XyoPayloadFilterPredicate } from './XyoPayloadFilterPredicate'
 
 export type EntityArchive = Required<XyoArchive>
 
-export type ArchiveArchivist = Archivist<
+export type ArchiveArchivist = _Archivist<
   EntityArchive & UpsertResult,
   EntityArchive,
   EntityArchive | null,

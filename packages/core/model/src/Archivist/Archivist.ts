@@ -12,7 +12,10 @@ export interface WriteArchivist<TWriteResponse, TWrite> {
 export type ReadWriteArchivist<TWriteResponse, TWrite, TReadResponse = TWriteResponse, TId = string> = ReadArchivist<TReadResponse, TId> &
   WriteArchivist<TWriteResponse, TWrite>
 
-export type Archivist<
+/**
+ * @deprecated Use interface from SDK
+ */
+export type _Archivist<
   TWriteResponse,
   TWrite,
   TReadResponse = TWriteResponse,
