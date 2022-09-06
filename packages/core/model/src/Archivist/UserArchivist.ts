@@ -1,4 +1,5 @@
-import { User, UserWithoutId } from '../Domain'
-import { _Archivist } from './Archivist'
+import { Archivist } from '@xyo-network/sdk-xyo-client-js'
 
-export type UserArchivist = _Archivist<User, UserWithoutId, User | null, string, User[]>
+import { User, UserWithoutId } from '../Domain'
+
+export type UserArchivist = Archivist<User | null, User, UserWithoutId, User[]>
