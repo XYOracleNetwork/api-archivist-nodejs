@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 
-import { getDefaultLogger, Logger } from '@xylabs/sdk-api-express-ecs'
+import { getLogger, Logger, LoggerVerbosity } from '@xylabs/sdk-api-express-ecs'
 import { assertEx } from '@xylabs/sdk-js'
 import { XyoAccount } from '@xyo-network/account'
 import { BcryptPasswordHasher } from '@xyo-network/archivist-middleware'
@@ -39,7 +39,8 @@ export const configureDependencies = async () => {
   const apiKey = assertEx(process.env.API_KEY, 'API_KEY ENV VAR required to create Archivist')
   const jwtSecret = assertEx(process.env.JWT_SECRET, 'JWT_SECRET ENV VAR required to create Archivist')
   const passwordHasher = BcryptPasswordHasher
-  const logger = getDefaultLogger()
+  const verbosity: LoggerVerbosity = (process.env.VERBOSITY as LoggerVerbosity) ?? process.env.NODE_ENV === 'test' ? 'error' : 'info'
+  const logger = getLogger(verbosity)
 
   dependencies.bind<string>(TYPES.ApiKey).toConstantValue(apiKey)
   dependencies.bind<string>(TYPES.JwtSecret).toConstantValue(jwtSecret)
