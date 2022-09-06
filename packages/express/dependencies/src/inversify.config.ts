@@ -15,7 +15,7 @@ import { addInMemoryQueueing } from './addInMemoryQueueing'
 import { addPayloadHandlers } from './addPayloadHandlers'
 import { addQueryConverterRegistry } from './addQueryConverterRegistry'
 import { addQueryProcessorRegistry } from './addQueryProcessorRegistry'
-import { tryGetParentClassNameFromContext } from './Util'
+import { tryGetServiceName } from './Util'
 config()
 export const dependencies = new Container({
   autoBindInjectable: true,
@@ -46,7 +46,7 @@ export const configureDependencies = async () => {
 
   dependencies.bind<PasswordHasher<User>>(TYPES.PasswordHasher).toConstantValue(passwordHasher)
   dependencies.bind<Logger>(TYPES.Logger).toDynamicValue((context) => {
-    const service = tryGetParentClassNameFromContext(context)
+    const service = tryGetServiceName(context)
     // TODO: Configure logger with service name
     // const defaultMeta = { service }
     // const config = { defaultMeta }
