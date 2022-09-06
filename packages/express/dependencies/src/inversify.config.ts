@@ -47,8 +47,9 @@ export const configureDependencies = async () => {
   dependencies.bind<PasswordHasher<User>>(TYPES.PasswordHasher).toConstantValue(passwordHasher)
   dependencies.bind<Logger>(TYPES.Logger).toDynamicValue((context) => {
     const service = tryGetParentClassNameFromContext(context)
-    const defaultMeta = { service }
-    const config = { defaultMeta }
+    // TODO: Configure logger with service name
+    // const defaultMeta = { service }
+    // const config = { defaultMeta }
     return service ? logger : logger
   })
   dependencies.bind<XyoAccount>(TYPES.Account).toConstantValue(new XyoAccount({ phrase }))
