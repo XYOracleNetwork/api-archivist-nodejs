@@ -1,1 +1,1 @@
-export * from './tryGetParentClassNameFromContext'
+export * from './tryGetServiceName'
