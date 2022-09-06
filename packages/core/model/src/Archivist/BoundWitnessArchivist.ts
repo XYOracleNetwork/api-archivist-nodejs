@@ -3,10 +3,10 @@ import { Archivist, XyoBoundWitness, XyoBoundWitnessWithMeta } from '@xyo-networ
 import { XyoBoundWitnessFilterPredicate } from './XyoBoundWitnessFilterPredicate'
 
 export type BoundWitnessArchivist<TId = string, TQuery extends XyoBoundWitnessFilterPredicate = XyoBoundWitnessFilterPredicate> = Archivist<
-  XyoBoundWitnessWithMeta[],
-  XyoBoundWitnessWithMeta[],
-  XyoBoundWitness[],
-  XyoBoundWitnessWithMeta[],
+  XyoBoundWitnessWithMeta,
+  XyoBoundWitnessWithMeta,
+  XyoBoundWitness,
+  XyoBoundWitnessWithMeta,
   TQuery,
   TId
 >
