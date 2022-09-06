@@ -13,7 +13,7 @@ import {
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoArchivistPayloadDivinerConfigSchema, XyoDiviner, XyoDivinerDivineQuerySchema } from '@xyo-network/diviner'
-import { XyoPayload, XyoPayloadBuilder, XyoPayloads, XyoPayloadSchema, XyoPayloadWithMeta } from '@xyo-network/payload'
+import { XyoPayload, XyoPayloadBuilder, XyoPayloads, XyoPayloadWithMeta } from '@xyo-network/payload'
 import { BaseMongoSdk, MongoClientWrapper } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { ChangeStreamInsertDocument, ChangeStreamOptions, ResumeToken, UpdateOptions } from 'mongodb'
@@ -46,7 +46,7 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
     @inject(TYPES.ArchiveArchivist) protected archiveArchivist: ArchiveArchivist,
     @inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayload>,
   ) {
-    super({ account, schema: XyoArchivistPayloadDivinerConfigSchema, targetSchema: XyoPayloadSchema })
+    super({ account, schema: XyoArchivistPayloadDivinerConfigSchema })
     void this.registerWithChangeStream()
   }
 
