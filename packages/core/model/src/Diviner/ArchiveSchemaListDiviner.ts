@@ -1,3 +1,3 @@
-import { QueryableArchivist } from '../Archivist'
+import { FindArchivist } from '@xyo-network/sdk-xyo-client-js'
 
-export type ArchiveSchemaListDiviner = QueryableArchivist<string[], string>
+export type ArchiveSchemaListDiviner = FindArchivist<string[], string>
