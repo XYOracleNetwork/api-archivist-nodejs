@@ -16,10 +16,10 @@ export type ReadWriteArchivist<TWriteResponse, TWrite, TReadResponse = TWriteRes
  * @deprecated Use interface from SDK
  */
 export type _Archivist<
-  TWriteResponse,
-  TWrite,
-  TReadResponse = TWriteResponse,
-  TId = string,
+  TReadResponse,
+  TWriteResponse = TReadResponse,
+  TWrite = TReadResponse,
   TQueryResponse = TReadResponse,
   TQuery = unknown,
+  TId = string,
 > = ReadWriteArchivist<TWriteResponse, TWrite, TReadResponse, TId> & QueryableArchivist<TQueryResponse, TQuery>
