@@ -14,11 +14,19 @@ const collection = 'node'
  */
 const dbName = 'job'
 
+const isLocalhost = (domain: string) => {
+  const d = domain.toLowerCase()
+  return d.includes('127.0.0.1') || d.includes('localhost')
+}
+
 export const getJobQueue = (): JobQueue => {
   const dbDomain = assertEx(process.env.MONGO_DOMAIN, 'Missing Mongo Domain')
   const dbPassword = assertEx(process.env.MONGO_PASSWORD, 'Missing Mongo Password')
   const dbUserName = assertEx(process.env.MONGO_USERNAME, 'Missing Mongo Username')
-  const address = `mongodb://${dbUserName}:${dbPassword}@${dbDomain}/${dbName}?authSource=admin`
+  // TODO: Temp fix to match current ENV VAR format
+  const address = isLocalhost(dbDomain)
+    ? `mongodb://${dbUserName}:${dbPassword}@${dbDomain}/${dbName}?authSource=admin`
+    : `mongodb+srv://${dbUserName}:${dbPassword}@${dbDomain}.mongodb.net/${dbName}?authSource=admin`
   const db = { address, collection }
   const name = getName()
   const jobQueue = new Agenda({ db, name })
