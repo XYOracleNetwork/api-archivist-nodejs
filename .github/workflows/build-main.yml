@@ -49,8 +49,6 @@ jobs:
         run: yarn compile
       - name: copy env file
         run: cp .example.env .env
-      - name: DEBUG Mongo Connection Error
-        run: docker logs mongo
       - name: test
         run: yarn test:ci --forceExit --coverage
         env:
