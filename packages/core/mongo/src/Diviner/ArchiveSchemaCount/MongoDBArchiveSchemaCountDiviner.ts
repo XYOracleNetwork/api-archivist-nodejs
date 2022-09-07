@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 
-import { assertEx } from '@xylabs/sdk-js'
+import { assertEx } from '@xylabs/assert'
 import { ArchiveArchivist, ArchiveSchemaCountDiviner, Job, JobProvider, Logger } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoPayload, XyoPayloadWithMeta } from '@xyo-network/payload'

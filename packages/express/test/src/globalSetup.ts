@@ -1,6 +1,6 @@
 import { config } from 'dotenv'
 config()
-import { assertEx } from '@xylabs/sdk-js'
+import { assertEx } from '@xylabs/assert'
 import { XyoAccount, XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 
 import { claimArchive, getArchive, setArchiveAccessControl, signInUser } from './testUtil'

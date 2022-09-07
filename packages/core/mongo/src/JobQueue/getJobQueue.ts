@@ -1,4 +1,4 @@
-import { assertEx } from '@xylabs/sdk-js'
+import { assertEx } from '@xylabs/assert'
 import { JobQueue } from '@xyo-network/archivist-model'
 import { Agenda } from 'agenda'
 
