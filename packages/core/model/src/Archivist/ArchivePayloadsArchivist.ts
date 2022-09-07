@@ -1,6 +1,7 @@
 import { XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 
 import { PayloadArchivist } from './PayloadArchivist'
+import { XyoArchivePayloadFilterPredicate } from './XyoPayloadFilterPredicate'
 
 export interface ArchivePayloadsArchivistId {
   archive: string
@@ -10,6 +11,7 @@ export interface ArchivePayloadsArchivistId {
 export type ArchivePayloadsArchivist<T extends { schema: string } = { schema: string }> = PayloadArchivist<
   T,
   ArchivePayloadsArchivistId,
-  XyoPayloadWithMeta<T>[],
-  Partial<XyoPayloadWithMeta<T>>
+  XyoPayloadWithMeta<T>,
+  // Partial<XyoPayloadWithMeta<T>>,
+  XyoArchivePayloadFilterPredicate<T>
 >

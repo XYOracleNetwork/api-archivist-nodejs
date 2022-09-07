@@ -1,9 +1,11 @@
 import 'reflect-metadata'
 
+import { assertEx } from '@xylabs/sdk-js'
 import { UpsertResult, User, UserArchivist, UserWithoutId } from '@xyo-network/archivist-model'
+import { PromisableArray } from '@xyo-network/promisable'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
-import { Filter, ObjectId, WithId } from 'mongodb'
+import { ObjectId, WithId } from 'mongodb'
 
 import { MONGO_TYPES } from '../../types'
 
@@ -18,18 +20,22 @@ interface IUpsertFilter {
 export class MongoDBUserArchivist implements UserArchivist {
   constructor(@inject(MONGO_TYPES.UserSdkMongo) protected readonly db: BaseMongoSdk<User>) {}
 
-  async find(query: Filter<User>): Promise<WithId<User>[]> {
-    return (await this.db.find(query)).limit(20).toArray()
+  find(_filter: unknown): PromisableArray<User> {
+    throw new Error('MongoDBUserArchivist.find not implemented.')
   }
 
-  async get(id: string): Promise<WithId<User> | null> {
+  async get(ids: string[]): Promise<Array<WithId<User> | null>> {
+    assertEx(ids.length === 1, 'Retrieval of multiple users not supported')
+    const id = assertEx(ids.pop(), 'Missing user id')
     const user = await this.db.findOne({ _id: new ObjectId(id.toLowerCase()) })
-    return user ? user : null
+    return user ? [user] : [null]
   }
 
-  async insert(user: UserWithoutId): Promise<WithId<User & UpsertResult>> {
+  async insert(users: UserWithoutId[]): Promise<WithId<User & UpsertResult>[]> {
     return await this.db.useCollection(async (collection) => {
       const filter: IUpsertFilter = { $or: [] }
+      assertEx(users.length === 1, 'Insertion of multiple users not supported')
+      const user = assertEx(users.pop(), 'Missing user')
       const { address, email } = user
       if (!address && !email) {
         throw new Error('Invalid user creation attempted. Either email or address is required.')
@@ -43,7 +49,7 @@ export class MongoDBUserArchivist implements UserArchivist {
       const result = await collection.findOneAndUpdate(filter, { $set: user }, { returnDocument: 'after', upsert: true })
       if (result.ok && result.value) {
         const updated = !!result?.lastErrorObject?.updatedExisting || false
-        return { ...result.value, updated }
+        return [{ ...result.value, updated }]
       }
       throw new Error('Insert Failed')
     })

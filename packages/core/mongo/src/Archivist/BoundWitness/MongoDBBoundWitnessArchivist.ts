@@ -1,3 +1,4 @@
+import { assertEx } from '@xylabs/assert'
 import { AbstractBoundWitnessArchivist, XyoBoundWitnessFilterPredicate } from '@xyo-network/archivist-model'
 import { XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
@@ -34,7 +35,9 @@ export class MongoDBBoundWitnessArchivist extends AbstractBoundWitnessArchivist<
     if (payload_schemas?.length) filter.payload_schemas = { $in: payload_schemas }
     return (await this.sdk.find(filter)).sort(sort).limit(parsedLimit).maxTimeMS(2000).toArray()
   }
-  async get(hash: string): Promise<XyoBoundWitnessWithMeta[]> {
+  async get(hashes: string[]): Promise<XyoBoundWitnessWithMeta[]> {
+    assertEx(hashes.length === 1, 'Retrieval of multiple boundwitnesses not supported')
+    const hash = assertEx(hashes.pop(), 'Missing hash')
     return (await this.sdk.find({ _hash: hash })).limit(100).toArray()
   }
   async insert(items: XyoBoundWitnessWithMeta[]): Promise<XyoBoundWitnessWithMeta[]> {

@@ -1,5 +1,6 @@
 import 'reflect-metadata'
 
+import assertEx from '@xylabs/assert'
 import { XyoArchive } from '@xyo-network/api'
 import { ArchiveArchivist, UpsertResult, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
@@ -35,12 +36,17 @@ export class MongoDBArchiveArchivist implements ArchiveArchivist {
     return (await this.archives.find(filter)).sort(sort).limit(parsedLimit).skip(skip).maxTimeMS(2000).toArray()
   }
 
-  get(archive: string): Promise<Required<XyoArchive> | null> {
-    return this.archives.findOne({ archive })
+  async get(archives: string[]): Promise<Array<Required<XyoArchive> | null>> {
+    assertEx(archives.length === 1, 'Retrieval of multiple archives not supported')
+    const archive = assertEx(archives.pop(), 'Missing archive')
+    const result = await this.archives.findOne({ archive })
+    return [result]
   }
 
-  async insert(item: Required<XyoArchive>): Promise<WithId<Required<XyoArchive> & UpsertResult>> {
+  async insert(items: Array<Required<XyoArchive>>): Promise<Array<WithId<Required<XyoArchive> & UpsertResult>>> {
     return await this.archives.useCollection(async (collection) => {
+      assertEx(items.length === 1, 'Insertion of multiple archives not supported')
+      const item = assertEx(items.pop(), 'Missing archive')
       const { archive, user } = item
       if (!archive || !user) {
         throw new Error('Invalid archive creation attempted. Archive and user are required.')
@@ -49,7 +55,7 @@ export class MongoDBArchiveArchivist implements ArchiveArchivist {
       const result = await collection.findOneAndUpdate(filter, { $set: item }, { returnDocument: 'after', upsert: true })
       if (result.ok && result.value) {
         const updated = !!result?.lastErrorObject?.updatedExisting || false
-        return { ...result.value, updated }
+        return [{ ...result.value, updated }]
       }
       throw new Error('Insert Failed')
     })
