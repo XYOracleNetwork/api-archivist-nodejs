@@ -39,7 +39,9 @@ export abstract class AbstractMongoDBPayloadArchivist<
     throw new Error('AbstractMongoDBPayloadArchivist: Find not implemented')
   }
 
-  async get(_archive: string): Promise<WithoutId<XyoPayloadWithMeta<T>>[]> {
+  async get(archives: string[]): Promise<WithoutId<XyoPayloadWithMeta<T>>[]> {
+    assertEx(archives.length === 1, 'Retrieval of multiple payloads not supported')
+    const _archive = assertEx(archives.pop(), 'Missing archive')
     const boundWitnesses = await (await this.findWitnessQuery(_archive)).toArray()
     const lastWitness = boundWitnesses.pop()
     if (!lastWitness) return []
