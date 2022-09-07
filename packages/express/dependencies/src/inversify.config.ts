@@ -1,7 +1,7 @@
 import 'reflect-metadata'
 
+import { assertEx } from '@xylabs/assert'
 import { getLogger, Logger, LoggerVerbosity } from '@xylabs/sdk-api-express-ecs'
-import { assertEx } from '@xylabs/sdk-js'
 import { XyoAccount } from '@xyo-network/account'
 import { BcryptPasswordHasher } from '@xyo-network/archivist-middleware'
 import { PasswordHasher, User } from '@xyo-network/archivist-model'

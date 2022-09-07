@@ -1,4 +1,4 @@
-import { assertEx } from '@xylabs/sdk-js'
+import { assertEx } from '@xylabs/assert'
 import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { SignOptions } from 'jsonwebtoken'

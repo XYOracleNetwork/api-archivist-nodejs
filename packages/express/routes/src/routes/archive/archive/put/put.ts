@@ -1,5 +1,5 @@
+import { assertEx } from '@xylabs/assert'
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
-import { assertEx } from '@xylabs/sdk-js'
 import { isLegacyPrivateArchive } from '@xyo-network/archivist-express-lib'
 import { isValidArchiveName, setArchiveAccessPrivate } from '@xyo-network/archivist-lib'
 import { ArchivePathParams } from '@xyo-network/archivist-model'
