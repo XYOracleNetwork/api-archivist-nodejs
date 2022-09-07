@@ -43,10 +43,12 @@ jobs:
         run: yarn compile
       - name: copy env file
         run: cp .example.env .env
-      - name: setup test db
+      - name: setup test DB
         run: docker compose up -d mongo
-      - name: setup test db file permissions
+      - name: setup test DB file permissions
         run: docker exec mongo /usr/bin/chmod 400 /etc/mongodb/mongodb.key
+      - name: allow test DB to initialize
+        run: sleep 30
       - name: DEBUG Mongo Connection Error
         run: docker logs mongo
       - name: test
