@@ -18,6 +18,7 @@ join_replica_set() {
 }
 
 # Ensure the keyfile has the exact file permissions Mongo requires
+chown mongdb:mongdb /etc/mongodb/mongodb.key
 chmod 600 /etc/mongodb/mongodb.key
 
 # Background the function execution to allow the script to complete
