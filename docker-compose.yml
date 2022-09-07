@@ -28,13 +28,11 @@ services:
       start_period: 1s
     volumes:
       - ./scripts/mongo/opt/mongo:/opt/mongo
-      - ./scripts/mongo/usr/local/etc:/usr/local/etc
       - ./scripts/mongo/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-    command: [
+    command:
+      [
         "--auth",
         "--bind_ip_all",
-        # "--config",
-        # "/usr/local/etc/mongod.conf",
         "--keyFile",
         "/tmp/mongodb.key",
         "--replSet",
