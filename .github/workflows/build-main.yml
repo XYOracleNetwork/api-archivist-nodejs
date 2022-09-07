@@ -37,18 +37,20 @@ jobs:
         with:
           node-version: "16"
           cache: "yarn"
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.8.0
+        with:
+          mongodb-version: 6
+          mongodb-replica-set: dbrs
+          mongodb-port: 27017
+      - name: setup test DB file permissions
+        run: docker exec --tty mongodb $MONGO_CLIENT --port $MONGODB_PORT --eval "db.createUser({ user: 'root', pwd: 'example', roles: [ { role: 'root', db: 'admin' } ] })"
       - name: install
         run: yarn install
       - name: compile
         run: yarn compile
       - name: copy env file
         run: cp .example.env .env
-      - name: setup test DB
-        run: docker compose up -d mongo
-      - name: setup test DB file permissions
-        run: docker exec mongo /usr/bin/chmod 400 /etc/mongodb/mongodb.key
-      - name: allow test DB to initialize
-        run: sleep 30
       - name: DEBUG Mongo Connection Error
         run: docker logs mongo
       - name: test
