@@ -22,3 +22,4 @@ chmod 600 /etc/mongodb/mongodb.key
 
 # Background the function execution to allow the script to complete
 join_replica_set &
+
