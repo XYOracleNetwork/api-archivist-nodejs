@@ -38,7 +38,7 @@ export class MongoDBUserManager implements UserManager {
     if (password) {
       user.passwordHash = await this.passwordHasher.hash(password)
     }
-    const result = await this.mongo.insert(toDbEntity(user))
+    const result = await this.mongo.insert([toDbEntity(user)])
     const created = assertEx(result.pop(), 'Invalid user creation')
     return { ...fromDbEntity(created), updated: created.updated }
   }
