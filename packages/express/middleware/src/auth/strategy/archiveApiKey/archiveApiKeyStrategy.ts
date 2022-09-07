@@ -1,6 +1,7 @@
 import 'reflect-metadata'
 
 import { getHttpHeader } from '@xylabs/sdk-api-express-ecs'
+import { exists } from '@xylabs/sdk-js'
 import { ArchiveArchivist, ArchiveKeyArchivist, UserManager } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { Request } from 'express'
@@ -32,15 +33,16 @@ export class ArchiveApiKeyStrategy extends Strategy {
       }
 
       // Validate API Key is valid for this archive
-      const result = await this.archiveKeyArchivist.get(archive)
-      const keys = result.map((key) => key.key)
+      const result = await this.archiveKeyArchivist.get([archive])
+      const keys = result.filter(exists).map((key) => key.key)
       if (!keys.includes(apiKey)) {
         this.fail('Invalid API key')
         return
       }
 
       // Get the archive owner
-      const existingArchive = await this.archiveArchivist.get(archive)
+      const existingArchives = await this.archiveArchivist.get([archive])
+      const existingArchive = existingArchives.pop()
       if (!existingArchive || !existingArchive?.user) {
         this.fail('Invalid user')
         return

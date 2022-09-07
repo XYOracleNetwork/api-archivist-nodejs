@@ -20,7 +20,7 @@ interface IUpsertFilter {
 export class MongoDBUserArchivist implements UserArchivist {
   constructor(@inject(MONGO_TYPES.UserSdkMongo) protected readonly db: BaseMongoSdk<User>) {}
 
-  find(_filter: unknown): PromisableArray<User> {
+  find(_filter: unknown): PromisableArray<WithId<User>> {
     throw new Error('MongoDBUserArchivist.find not implemented.')
   }
 

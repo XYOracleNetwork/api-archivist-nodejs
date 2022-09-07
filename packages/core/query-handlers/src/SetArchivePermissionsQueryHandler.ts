@@ -36,7 +36,7 @@ export class SetArchivePermissionsQueryHandler implements QueryHandler<SetArchiv
     validateAddresses(query)
     validateSchema(query)
     await this.archivePermissionsArchivist.insert([query.payload])
-    const permissions = await this.archivePermissionsArchivist.get(archive)
+    const permissions = await this.archivePermissionsArchivist.get([archive])
     const currentPermissions = assertEx(permissions?.[0])
     return new XyoPayloadBuilder<SetArchivePermissionsPayloadWithMeta>({ schema: setArchivePermissionsSchema })
       .fields({ ...currentPermissions, _queryId: query.id, _timestamp: Date.now() })
