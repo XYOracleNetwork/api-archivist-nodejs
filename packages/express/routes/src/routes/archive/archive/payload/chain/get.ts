@@ -9,7 +9,7 @@ import { RequestHandler } from 'express'
 import { PayloadChainPathParams } from './payloadChainPathParams'
 
 const getPayloads = async (archivist: ArchivePayloadsArchivist, archive: string, hash: string, payloads: XyoPayload[], limit: number) => {
-  const payload = (await archivist.get({ archive, hash })).pop()
+  const payload = (await archivist.get([{ archive, hash }])).pop()
   if (payload) {
     payloads.push(payload)
     if (payload.previousHash && limit > payloads.length) {
