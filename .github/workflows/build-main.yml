@@ -44,7 +44,7 @@ jobs:
           mongodb-replica-set: dbrs
           mongodb-port: 27017
       - name: setup test DB file permissions
-        run: docker exec --tty mongodb $MONGO_CLIENT --port $MONGODB_PORT --eval "db.createUser({ user: 'root', pwd: 'example', roles: [ { role: 'root', db: 'admin' } ] })"
+        run: docker exec --tty mongodb $MONGO_CLIENT --port $MONGODB_PORT --eval "db.createUser({ \"user\": \"root\", \"pwd\": \"example\", \"roles\": [ { \"role\": \"root\", \"db\": \"admin\" } ] })"
       - name: install
         run: yarn install
       - name: compile
