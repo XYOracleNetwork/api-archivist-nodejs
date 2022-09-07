@@ -4,7 +4,7 @@ import { assertEx } from '@xylabs/sdk-js'
 import { UpsertResult, User, UserArchivist, UserWithoutId } from '@xyo-network/archivist-model'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
-import { ObjectId, WithId } from 'mongodb'
+import { Filter, ObjectId, WithId } from 'mongodb'
 
 import { MONGO_TYPES } from '../../types'
 
@@ -19,8 +19,8 @@ interface IUpsertFilter {
 export class MongoDBUserArchivist implements UserArchivist {
   constructor(@inject(MONGO_TYPES.UserSdkMongo) protected readonly db: BaseMongoSdk<User>) {}
 
-  find(_filter: unknown): Promise<WithId<User>[]> {
-    throw new Error('MongoDBUserArchivist.find not implemented.')
+  async find(query: Filter<User>): Promise<WithId<User>[]> {
+    return (await this.db.find(query)).limit(20).toArray()
   }
 
   async get(ids: string[]): Promise<Array<WithId<User> | null>> {

@@ -19,7 +19,7 @@ describe('MongoDBArchivePermissionsPayloadPayloadArchivist', () => {
         >(COLLECTIONS.Payloads)
         const boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta> = getBaseMongoSdk<XyoBoundWitnessWithMeta>(COLLECTIONS.BoundWitnesses)
         const sut = new MongoDBArchivePermissionsPayloadPayloadArchivist(account, payloads, boundWitnesses)
-        const result = await sut.get('temp')
+        const result = await sut.get(['temp'])
         expect(result).toBeArray()
         expect(result.length).toBe(0)
       })
@@ -43,7 +43,7 @@ describe('MongoDBArchivePermissionsPayloadPayloadArchivist', () => {
         >(COLLECTIONS.Payloads)
         const boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta> = getBaseMongoSdk<XyoBoundWitnessWithMeta>(COLLECTIONS.BoundWitnesses)
         const sut = new MongoDBArchivePermissionsPayloadPayloadArchivist(account, payloads, boundWitnesses)
-        const result = await sut.get('temp-private')
+        const result = await sut.get(['temp-private'])
         expect(result).toBeArray()
         expect(result.length).toBe(1)
         const permissions = result?.[0]
