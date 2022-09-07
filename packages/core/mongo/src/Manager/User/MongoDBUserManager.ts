@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 
-import assertEx from '@xylabs/assert'
+import { assertEx } from '@xylabs/assert'
 import { Identifiable, PasswordHasher, UpsertResult, User, UserManager, UserWithoutId, Web2User, Web3User } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { inject, injectable } from 'inversify'

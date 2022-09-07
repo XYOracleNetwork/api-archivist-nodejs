@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 
-import assertEx from '@xylabs/assert'
+import { assertEx } from '@xylabs/assert'
 import { XyoArchive } from '@xyo-network/api'
 import { ArchiveArchivist, UpsertResult, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
