@@ -44,7 +44,17 @@ jobs:
           mongodb-replica-set: dbrs
           mongodb-port: 27017
       - name: Add Test DB Users
-        run: docker exec --tty mongodb mongosh --port 27017 --eval "db.createUser({ \"user\": \"root\", \"pwd\": \"example\", \"roles\": [ { \"role\": \"root\", \"db\": \"admin\" } ] })"
+        run: |
+          docker exec --tty mongodb mongosh --port 27017 --eval "
+            db.createUser({
+              \"user\": \"root\",
+              \"pwd\": \"example\",
+              \"roles\": [ {
+                \"role\": \"root\",
+                \"db\": \"admin\"
+              } ]
+            })
+          "
       - name: install
         run: yarn install
       - name: compile
