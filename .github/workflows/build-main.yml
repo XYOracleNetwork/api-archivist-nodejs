@@ -28,6 +28,20 @@ jobs:
     runs-on: ubuntu-latest
     env:
       YARN_CACHE_FOLDER: ./.yarn/cache
+    services:
+      mongo:
+        image: mongo:6
+        volumes:
+          - ./scripts/mongo/etc/mongodb:/etc/mongodb
+          - ./scripts/mongo/opt/mongo:/opt/mongo
+          - ./scripts/mongo/usr/local/etc:/usr/local/etc
+          - ./scripts/mongo/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+        command:
+        [
+          "--bind_ip_all",
+          "--replSet",
+          "dbrs",
+        ]
     steps:
       - uses: actions/checkout@v2
         with:
@@ -37,15 +51,9 @@ jobs:
         with:
           node-version: "16"
           cache: "yarn"
-      - name: Start MongoDB
-        uses: supercharge/mongodb-github-action@1.8.0
-        with:
-          mongodb-version: 6
-          mongodb-replica-set: dbrs
-          mongodb-port: 27017
       - name: Add Test DB Users
         run: |
-          docker exec --tty mongodb mongosh admin --host 127.0.0.1 --port 27017 --eval "db.createUser({ \"user\": \"root\", \"pwd\": \"example\", \"roles\": [ { \"role\": \"root\", \"db\": \"admin\" } ] })"
+          docker exec --tty mongodb mongosh admin --host mongo --port 27017 --eval "db.createUser({ \"user\": \"root\", \"pwd\": \"example\", \"roles\": [ { \"role\": \"root\", \"db\": \"admin\" } ] })"
       - name: install
         run: yarn install
       - name: compile
