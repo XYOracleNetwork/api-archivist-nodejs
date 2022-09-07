@@ -10,6 +10,22 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
       MONGO_INITDB_DATABASE: archivist
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "/usr/bin/mongosh",
+          "-u",
+          "root",
+          "-p",
+          "example",
+          "--quiet",
+          "/opt/mongo/joinReplicaSet.js",
+        ]
+      interval: 5s
+      timeout: 10s
+      retries: 3
+      start_period: 1s
     volumes:
       - ./scripts/mongo/etc/mongodb:/etc/mongodb
       - ./scripts/mongo/opt/mongo:/opt/mongo

@@ -10,5 +10,5 @@ const config = {
       },
   ]
 }
-rs.initiate(config, { force: false })
+rs.initiate(config, { force: true })
 rs.status()
