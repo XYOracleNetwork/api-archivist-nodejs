@@ -15,7 +15,8 @@ const handler: RequestHandler<ArchivePathParams, NoResBody, NoReqBody, NoReqQuer
         return
       }
       // Lookup the archive
-      const response = await req.app.archiveArchivist.get(archive)
+      const responses = await req.app.archiveArchivist.get([archive])
+      const response = responses.pop()
       if (!response) {
         // TODO: Uncomment if/when we require a priori archive creation to
         // automatically reject all calls for archives that don't exist

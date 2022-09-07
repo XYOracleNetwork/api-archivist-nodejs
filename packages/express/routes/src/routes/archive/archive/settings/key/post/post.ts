@@ -1,3 +1,4 @@
+import { assertEx } from '@xylabs/assert'
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
 import { isValidArchiveName } from '@xyo-network/archivist-lib'
 import { ArchivePathParams } from '@xyo-network/archivist-model'
@@ -21,7 +22,9 @@ const handler: RequestHandler<ArchivePathParams, XyoArchiveKey> = async (req, re
     return
   }
 
-  res.json(await archiveKeyArchivist.insert(generateArchiveKey(archive)))
+  const result = await archiveKeyArchivist.insert([generateArchiveKey(archive)])
+  const key = assertEx(result.pop(), 'Error inserting key')
+  res.json(key)
 }
 
 export const postArchiveSettingsKeys = asyncHandler(handler)

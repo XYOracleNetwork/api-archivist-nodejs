@@ -25,7 +25,7 @@ export class GetArchivePermissionsQueryHandler implements QueryHandler<GetArchiv
     if (!query.payload._archive) {
       return getEmptyPermissions(query)
     }
-    const permissions = await this.archivePermissionsArchivist.get(query.payload._archive)
+    const permissions = await this.archivePermissionsArchivist.get([query.payload._archive])
     return (permissions?.[0] || getEmptyPermissions(query)) as WithAdditional<XyoPayloadWithMeta<SetArchivePermissionsPayload>>
   }
 }

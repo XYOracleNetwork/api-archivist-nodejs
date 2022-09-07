@@ -1,4 +1,5 @@
-import { assertEx, exists } from '@xylabs/sdk-js'
+import { assertEx } from '@xylabs/assert'
+import { exists } from '@xylabs/sdk-js'
 import {
   isPayloadAddressRule,
   isPayloadArchiveRule,

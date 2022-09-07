@@ -1,4 +1,4 @@
-import { assertEx } from '@xylabs/sdk-js'
+import { assertEx } from '@xylabs/assert'
 import { ArchiveBoundWitnessesArchivist, ArchiveBoundWitnessesArchivistId, XyoArchiveBoundWitnessFilterPredicate } from '@xyo-network/archivist-model'
 import { XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
 import { EmptyObject } from '@xyo-network/core'
@@ -38,7 +38,9 @@ export class MongoDBArchiveBoundWitnessesArchivist implements ArchiveBoundWitnes
     if (payload_schemas?.length) filter.payload_schemas = { $in: payload_schemas }
     return (await this.sdk.find(filter)).sort(sort).limit(parsedLimit).maxTimeMS(2000).toArray()
   }
-  async get(id: ArchiveBoundWitnessesArchivistId): Promise<XyoBoundWitnessWithMeta<EmptyObject, XyoPayloadWithPartialMeta<EmptyObject>>[]> {
+  async get(ids: ArchiveBoundWitnessesArchivistId[]): Promise<XyoBoundWitnessWithMeta<EmptyObject, XyoPayloadWithPartialMeta<EmptyObject>>[]> {
+    assertEx(ids.length === 1, 'Retrieval of multiple Payloads not supported')
+    const id = assertEx(ids.pop(), 'Missing id')
     const predicate = { _archive: assertEx(id.archive), _hash: assertEx(id.hash) }
     return (await this.sdk.find(predicate)).limit(1).toArray()
   }
