@@ -16,7 +16,7 @@ const getBlocks = async (
   blocks: XyoBoundWitness[],
   limit: number,
 ) => {
-  const block = (await archivist.get({ archive, hash })).pop()
+  const block = (await archivist.get([{ archive, hash }])).pop()
   if (block) {
     const addressIndex = block.addresses.findIndex((value) => value === address)
     if (addressIndex !== -1) {
