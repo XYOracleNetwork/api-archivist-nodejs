@@ -31,17 +31,13 @@ jobs:
     services:
       mongo:
         image: mongo:6
+        ports:
+          - "27017:27017"
         volumes:
           - ./scripts/mongo/etc/mongodb:/etc/mongodb
           - ./scripts/mongo/opt/mongo:/opt/mongo
           - ./scripts/mongo/usr/local/etc:/usr/local/etc
           - ./scripts/mongo/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-        command:
-        [
-          "--bind_ip_all",
-          "--replSet",
-          "dbrs",
-        ]
     steps:
       - uses: actions/checkout@v2
         with:
