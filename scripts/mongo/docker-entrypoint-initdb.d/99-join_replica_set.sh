@@ -18,7 +18,6 @@ join_replica_set() {
 }
 
 # Ensure the keyfile has the exact file permissions Mongo requires
-sudo chown mongodb:mongodb /etc/mongodb/mongodb.key
 chmod 400 /etc/mongodb/mongodb.key
 ls -al /etc/mongodb/mongodb.key
 
