@@ -1,4 +1,4 @@
-import { delay } from '@xylabs/sdk-js'
+import { delay } from '@xylabs/delay'
 import { dependencies } from '@xyo-network/archivist-dependencies'
 import { isProduction } from '@xyo-network/archivist-middleware'
 import {

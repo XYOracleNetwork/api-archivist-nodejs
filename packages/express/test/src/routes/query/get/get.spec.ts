@@ -1,4 +1,5 @@
-import { assertEx, delay } from '@xylabs/sdk-js'
+import { assertEx } from '@xylabs/assert'
+import { delay } from '@xylabs/delay'
 import { debugSchema } from '@xyo-network/archivist-model'
 import { XyoBoundWitnessBuilder, XyoPayload, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
 import { StatusCodes } from 'http-status-codes'
