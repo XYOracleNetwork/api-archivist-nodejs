@@ -4,9 +4,10 @@ import { RequestHandler } from 'express'
 
 const handler: RequestHandler<ArchivePathParams, string[]> = async (req, res) => {
   const { archive } = req.params
-  const { archiveSchemaListDiviner } = req.app
-  const result = await archiveSchemaListDiviner.find(archive)
-  const schemas = result.pop() || []
+  const { archiveSchemaCountDiviner } = req.app
+  const result = await archiveSchemaCountDiviner.find(archive)
+  const counts = result?.pop()
+  const schemas = counts ? Object.keys(counts) : []
   res.json(schemas)
 }
 
