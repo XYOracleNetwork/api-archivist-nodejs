@@ -6,7 +6,6 @@ import {
   ArchivePayloadsArchivist,
   ArchivePermissionsArchivist,
   ArchiveSchemaCountDiviner,
-  ArchiveSchemaListDiviner,
   BoundWitnessesArchivist,
   BoundWitnessStatsDiviner,
   PayloadsArchivist,
@@ -47,7 +46,6 @@ declare global {
       archivePayloadsArchivist: ArchivePayloadsArchivist
       archivePermissionsArchivist: ArchivePermissionsArchivist
       archiveSchemaCountDiviner: ArchiveSchemaCountDiviner
-      archiveSchemaListDiviner: ArchiveSchemaListDiviner
       archivistWitnessedPayloadArchivist: WitnessedPayloadArchivist
       boundWitnessStatsDiviner: BoundWitnessStatsDiviner
       boundWitnessesArchivist: BoundWitnessesArchivist

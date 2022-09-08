@@ -46,4 +46,13 @@ describe('/archive/:archive/payload/schema', () => {
       expect(schema.startsWith(testSchemaPrefix)).toBeTruthy()
     })
   })
+  it('Returns empty array if no schemas exist in archive', async () => {
+    const token = await getTokenForNewUser()
+    const archive = (await claimArchive(token)).archive
+    const response = await (await request()).get(`/archive/${archive}/payload/schema`).expect(StatusCodes.OK)
+    const schemas = response.body.data as string[]
+    expect(schemas).toBeTruthy()
+    expect(Array.isArray(schemas)).toBeTruthy()
+    expect(schemas.length).toBe(0)
+  })
 })
