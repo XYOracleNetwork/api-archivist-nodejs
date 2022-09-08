@@ -11,4 +11,5 @@ const handler: RequestHandler<ArchivePathParams, string[]> = async (req, res) =>
   res.json(schemas)
 }
 
+/* @deprecated: Use schema stats instead and just make a list of stats keys */
 export const getArchivePayloadSchemas = asyncHandler(handler)
