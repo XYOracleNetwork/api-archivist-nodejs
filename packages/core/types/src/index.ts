@@ -7,7 +7,6 @@ export const TYPES = {
   ArchivePayloadsArchivist: Symbol('ArchivePayloadsArchivist'),
   ArchivePermissionsArchivist: Symbol('ArchivePermissionsArchivist'),
   ArchiveSchemaCountDiviner: Symbol('ArchiveSchemaCountDiviner'),
-  ArchiveSchemaListDiviner: Symbol('ArchiveSchemaListDiviner'),
   BoundWitnessStatsDiviner: Symbol('BoundWitnessStatsDiviner'),
   BoundWitnessesArchivist: Symbol('BoundWitnessesArchivist'),
   JobQueue: Symbol('JobQueue'),

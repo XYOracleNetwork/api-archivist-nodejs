@@ -8,7 +8,6 @@ import {
   ArchivePayloadsArchivist,
   ArchivePermissionsArchivist,
   ArchiveSchemaCountDiviner,
-  ArchiveSchemaListDiviner,
   BoundWitnessesArchivist,
   BoundWitnessStatsDiviner,
   PayloadsArchivist,
@@ -44,10 +43,6 @@ export const addDependencies = (app: Application) => {
   app.archiveSchemaCountDiviner = assertEx(
     dependencies.get<ArchiveSchemaCountDiviner>(TYPES.ArchiveSchemaCountDiviner),
     'Missing ArchiveSchemaCountDiviner',
-  )
-  app.archiveSchemaListDiviner = assertEx(
-    dependencies.get<ArchiveSchemaListDiviner>(TYPES.ArchiveSchemaListDiviner),
-    'Missing ArchiveSchemaListDiviner',
   )
   app.boundWitnessStatsDiviner = assertEx(
     dependencies.get<BoundWitnessStatsDiviner>(TYPES.BoundWitnessStatsDiviner),
