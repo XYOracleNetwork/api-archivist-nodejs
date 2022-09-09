@@ -1,6 +1,8 @@
 import { ForgetPromise } from '@xylabs/forget'
+import { XyoArchive } from '@xyo-network/api'
 import { DebugPayload, debugSchema, SetArchivePermissionsPayload } from '@xyo-network/archivist-model'
-import { XyoArchive, XyoBoundWitnessBuilder, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
+import { XyoPayloadBuilder } from '@xyo-network/payload'
 import { StatusCodes } from 'http-status-codes'
 
 import { claimArchive, getTokenForNewUser, postCommandsToArchive, request, setArchiveAccessControl } from '../../../../../testUtil'

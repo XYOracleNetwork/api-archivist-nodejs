@@ -1,4 +1,4 @@
-import { XyoBoundWitness, XyoBoundWitnessWrapper } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitness, XyoBoundWitnessWrapper } from '@xyo-network/boundwitness'
 
 export const scrubBoundWitnesses = (boundWitnesses: XyoBoundWitness[]) => {
   return boundWitnesses?.map((boundWitness) => {

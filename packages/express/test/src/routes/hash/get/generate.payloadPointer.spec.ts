@@ -1,5 +1,7 @@
+import { XyoAccount } from '@xyo-network/account'
 import { PayloadAddressRule, PayloadArchiveRule, PayloadPointerBody, payloadPointerSchema, PayloadSchemaRule } from '@xyo-network/archivist-model'
-import { XyoAccount, XyoBoundWitnessBuilder, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
+import { XyoPayloadBuilder } from '@xyo-network/payload'
 
 describe.skip('Generation of automation payload pointers', () => {
   const schemas = [

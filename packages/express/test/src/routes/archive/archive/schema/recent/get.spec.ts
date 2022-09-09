@@ -1,5 +1,7 @@
+import { XyoAccount } from '@xyo-network/account'
+import { XyoBoundWitness, XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
+import { XyoPayloadWithMeta } from '@xyo-network/payload'
 import { XyoSchemaPayload } from '@xyo-network/schema-payload-plugin'
-import { XyoAccount, XyoBoundWitness, XyoBoundWitnessBuilder, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
 
 import { claimArchive, getArchiveSchemaRecent, getTokenForNewUser, postBlock } from '../../../../../testUtil'
 
