@@ -1,5 +1,7 @@
 export * from './DebugQueryHandler'
 export * from './GetArchivePermissionsQueryHandler'
 export * from './GetDomainConfigQueryHandler'
+export * from './GetQueryHandler'
 export * from './GetSchemaQueryHandler'
+export * from './InsertQueryHandler'
 export * from './SetArchivePermissionsQueryHandler'

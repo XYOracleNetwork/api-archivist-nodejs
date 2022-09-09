@@ -1,3 +1,9 @@
+import {
+  XyoArchivistGetQueryPayload,
+  XyoArchivistGetQueryPayloadSchema,
+  XyoArchivistInsertQueryPayload,
+  XyoArchivistInsertQueryPayloadSchema,
+} from '@xyo-network/archivist'
 import { dependencies } from '@xyo-network/archivist-dependencies'
 import { QueryConverterRegistry } from '@xyo-network/archivist-express-lib'
 import { isProduction } from '@xyo-network/archivist-middleware'
@@ -62,5 +68,13 @@ export const addQueryHandlers = (registry: QueryConverterRegistry) => {
   registry.registerConverterForSchema(
     getSchemaSchema,
     (payload: XyoQueryPayloadWithMeta<GetSchemaPayload>, _req: Request) => new GetSchemaQuery(payload),
+  )
+  registry.registerConverterForSchema(
+    XyoArchivistInsertQueryPayloadSchema,
+    (payload: XyoQueryPayloadWithMeta<XyoArchivistInsertQueryPayload>, _req: Request) => new Query<XyoArchivistInsertQueryPayload>(payload),
+  )
+  registry.registerConverterForSchema(
+    XyoArchivistGetQueryPayloadSchema,
+    (payload: XyoQueryPayloadWithMeta<XyoArchivistGetQueryPayload>, _req: Request) => new Query<XyoArchivistGetQueryPayload>(payload),
   )
 }

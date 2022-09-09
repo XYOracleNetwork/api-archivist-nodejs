@@ -1,4 +1,5 @@
 import { delay } from '@xylabs/delay'
+import { XyoArchivistGetQueryPayloadSchema, XyoArchivistInsertQueryPayloadSchema } from '@xyo-network/archivist'
 import { dependencies } from '@xyo-network/archivist-dependencies'
 import { isProduction } from '@xyo-network/archivist-middleware'
 import {
@@ -15,7 +16,9 @@ import {
   DebugQueryHandler,
   GetArchivePermissionsQueryHandler,
   GetDomainConfigQueryHandler,
+  GetQueryHandler,
   GetSchemaQueryHandler,
+  InsertQueryHandler,
   SetArchivePermissionsQueryHandler,
 } from '@xyo-network/archivist-query-handlers'
 import { XyoPayload, XyoPayloadWithMeta } from '@xyo-network/payload'
@@ -49,5 +52,11 @@ const addQueries = (registry: QueryProcessorRegistry) => {
   )
   registry.registerProcessorForSchema(getSchemaSchema, (payload) =>
     dependencies.get<QueryHandler<Query<XyoPayload>>>(GetSchemaQueryHandler).handle(payload),
+  )
+  registry.registerProcessorForSchema(XyoArchivistInsertQueryPayloadSchema, (payload) =>
+    dependencies.get<QueryHandler<Query<XyoPayload>>>(InsertQueryHandler).handle(payload),
+  )
+  registry.registerProcessorForSchema(XyoArchivistGetQueryPayloadSchema, (payload) =>
+    dependencies.get<QueryHandler<Query<XyoPayload>>>(GetQueryHandler).handle(payload),
   )
 }

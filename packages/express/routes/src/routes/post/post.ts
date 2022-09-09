@@ -7,6 +7,7 @@ import { queueQueries } from './queueQueries'
 
 const handler: PostNodeRequestHandler = async (req, res) => {
   const boundWitnesses = formatRequest(req)
+
   // TODO: Validate protocol only here: new XyoBoundWitnessWrapper(bw).validator.all()
   const queued = queueQueries(boundWitnesses, req)
   const result: string[][] = await Promise.all(queued.map(async (x) => await Promise.all(x)))

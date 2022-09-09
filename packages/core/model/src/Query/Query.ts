@@ -1,7 +1,7 @@
 import { assertEx } from '@xylabs/assert'
 import { XyoPayload, XyoPayloadWithPartialMeta, XyoPayloadWrapper } from '@xyo-network/payload'
 
-export abstract class Query<T extends XyoPayload = XyoPayload> {
+export class Query<T extends XyoPayload = XyoPayload> {
   constructor(public readonly payload: XyoPayloadWithPartialMeta<T>) {}
   /**
    * Defaults to returning a concatenated string of the the
