@@ -1,7 +1,8 @@
 import { assertEx } from '@xylabs/assert'
 import { delay } from '@xylabs/delay'
 import { debugSchema } from '@xyo-network/archivist-model'
-import { XyoBoundWitnessBuilder, XyoPayload, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
+import { XyoPayload, XyoPayloadBuilder } from '@xyo-network/payload'
 import { StatusCodes } from 'http-status-codes'
 import { v4 } from 'uuid'
 

@@ -1,7 +1,7 @@
 import { assertEx } from '@xylabs/assert'
 import { asyncHandler, NoReqBody, tryParseInt } from '@xylabs/sdk-api-express-ecs'
 import { ArchiveLocals, ArchivePathParams, XyoArchivePayloadFilterPredicate } from '@xyo-network/archivist-model'
-import { XyoPayload, XyoPayloadWrapper } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload, XyoPayloadWrapper } from '@xyo-network/payload'
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 

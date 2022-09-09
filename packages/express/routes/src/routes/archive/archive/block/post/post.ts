@@ -4,7 +4,8 @@ import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
 import { getRequestMeta } from '@xyo-network/archivist-express-lib'
 import { prepareBoundWitnesses, validatePayloadSchema } from '@xyo-network/archivist-lib'
 import { ArchivePathParams } from '@xyo-network/archivist-model'
-import { XyoBoundWitnessWithMeta, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
+import { XyoPayload } from '@xyo-network/payload'
 import { RequestHandler } from 'express'
 
 const handler: RequestHandler<ArchivePathParams, XyoBoundWitnessWithMeta[], XyoBoundWitnessWithMeta | XyoBoundWitnessWithMeta[]> = async (

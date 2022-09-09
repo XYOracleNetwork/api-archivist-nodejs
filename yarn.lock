@@ -4351,8 +4351,10 @@ __metadata:
     "@types/express": 4.17.13
     "@types/passport": ^1.0.10
     "@xylabs/sdk-api-express-ecs": ^1.2.4
+    "@xyo-network/api": ^2.31.5
     "@xyo-network/archivist-model": "workspace:^"
-    "@xyo-network/sdk-xyo-client-js": ^2.31.5
+    "@xyo-network/boundwitness": ^2.31.5
+    "@xyo-network/payload": ^2.31.5
     express: ^4.18.1
     passport: ^0.6.0
   languageName: unknown
@@ -4367,13 +4369,13 @@ __metadata:
     "@xyo-network/boundwitness": ^2.31.5
     "@xyo-network/payload": ^2.31.5
     "@xyo-network/schema-payload-plugin": ^2.31.5
-    "@xyo-network/sdk-xyo-client-js": ^2.31.5
+    "@xyo-network/utils": ^2.31.5
     ajv: ^8.11.0
     jest: ^29.0.2
     jest-extended: ^3.1.0
     jest-mock-extended: ^2.0.7
     source-map-support: ^0.5.21
-    typescript: ^4.8.2
+    typescript: ^4.8.3
     uuid: ^9.0.0
   languageName: unknown
   linkType: soft
@@ -4400,7 +4402,8 @@ __metadata:
     "@xyo-network/archivist-model": "workspace:^"
     "@xyo-network/archivist-queue": "workspace:^"
     "@xyo-network/archivist-types": "workspace:^"
-    "@xyo-network/sdk-xyo-client-js": ^2.31.5
+    "@xyo-network/boundwitness": ^2.31.5
+    "@xyo-network/payload": ^2.31.5
     bcrypt: ^5.0.1
     ethers: ^5.7.0
     express: ^4.18.1
@@ -4425,6 +4428,12 @@ __metadata:
   resolution: "@xyo-network/archivist-model@workspace:packages/core/model"
   dependencies:
     "@xylabs/assert": ^2.6.7
+    "@xyo-network/api": ^2.31.5
+    "@xyo-network/boundwitness": ^2.31.5
+    "@xyo-network/core": ^2.31.5
+    "@xyo-network/diviner": ^2.31.5
+    "@xyo-network/module": ^2.31.5
+    "@xyo-network/payload": ^2.31.5
     "@xyo-network/sdk-xyo-client-js": ^2.31.5
     ajv: ^8.11.0
     inversify: ^6.0.1
@@ -4464,13 +4473,15 @@ __metadata:
     "@xylabs/delay": ^2.6.7
     "@xyo-network/archivist-model": "workspace:^"
     "@xyo-network/archivist-types": "workspace:^"
+    "@xyo-network/core": ^2.31.5
     "@xyo-network/domain-payload-plugin": ^2.31.5
+    "@xyo-network/payload": ^2.31.5
     "@xyo-network/schema-payload-plugin": ^2.31.5
-    "@xyo-network/sdk-xyo-client-js": ^2.31.5
+    "@xyo-network/utils": ^2.31.5
     inversify: ^6.0.1
     jest: ^29.0.2
     jest-mock-extended: ^2.0.7
-    typescript: ^4.8.2
+    typescript: ^4.8.3
   languageName: unknown
   linkType: soft
 
@@ -4479,7 +4490,7 @@ __metadata:
   resolution: "@xyo-network/archivist-queue@workspace:packages/core/queue"
   dependencies:
     "@xyo-network/archivist-model": "workspace:^"
-    "@xyo-network/sdk-xyo-client-js": ^2.31.5
+    "@xyo-network/payload": ^2.31.5
   languageName: unknown
   linkType: soft
 
@@ -4493,6 +4504,7 @@ __metadata:
     "@xylabs/assert": ^2.6.7
     "@xylabs/sdk-api-express-ecs": ^1.2.4
     "@xylabs/sdk-js": ^2.6.7
+    "@xyo-network/api": ^2.31.5
     "@xyo-network/archivist-dependencies": "workspace:^"
     "@xyo-network/archivist-express-lib": "workspace:^"
     "@xyo-network/archivist-lib": "workspace:^"
@@ -4500,8 +4512,13 @@ __metadata:
     "@xyo-network/archivist-model": "workspace:^"
     "@xyo-network/archivist-queue": "workspace:^"
     "@xyo-network/archivist-types": "workspace:^"
+    "@xyo-network/boundwitness": ^2.31.5
+    "@xyo-network/core": ^2.31.5
+    "@xyo-network/diviner": ^2.31.5
     "@xyo-network/domain-payload-plugin": ^2.31.5
-    "@xyo-network/sdk-xyo-client-js": ^2.31.5
+    "@xyo-network/module": ^2.31.5
+    "@xyo-network/payload": ^2.31.5
+    "@xyo-network/utils": ^2.31.5
     express: ^4.18.1
     http-status-codes: ^2.2.0
     source-map-support: ^0.5.21
@@ -4529,7 +4546,8 @@ __metadata:
     "@xyo-network/archivist-queue": "workspace:^"
     "@xyo-network/archivist-routes": "workspace:^"
     "@xyo-network/archivist-types": "workspace:^"
-    "@xyo-network/sdk-xyo-client-js": ^2.31.5
+    "@xyo-network/module": ^2.31.5
+    "@xyo-network/payload": ^2.31.5
     compression: ^1.7.4
     cors: ^2.8.5
     express: ^4.18.1
@@ -4556,7 +4574,6 @@ __metadata:
     "@xyo-network/domain-payload-plugin": ^2.31.5
     "@xyo-network/payload": ^2.31.5
     "@xyo-network/schema-payload-plugin": ^2.31.5
-    "@xyo-network/sdk-xyo-client-js": ^2.31.5
     dotenv: ^16.0.2
     ethers: ^5.7.0
     http-status-codes: ^2.2.0
@@ -4610,7 +4627,7 @@ __metadata:
     nodemon: ^2.0.19
     ts-jest: ^28.0.8
     ts-node: ^10.9.1
-    typescript: ^4.8.2
+    typescript: ^4.8.3
   languageName: unknown
   linkType: soft
 

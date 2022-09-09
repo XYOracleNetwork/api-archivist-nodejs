@@ -4,7 +4,7 @@ import { dependencies } from '@xyo-network/archivist-dependencies'
 import { Query, QueryProcessorRegistry, WitnessedPayloadArchivist } from '@xyo-network/archivist-model'
 import { IdentifiableHuri, Queue } from '@xyo-network/archivist-queue'
 import { TYPES } from '@xyo-network/archivist-types'
-import { Huri } from '@xyo-network/sdk-xyo-client-js'
+import { Huri } from '@xyo-network/payload'
 
 import { XyoQueryPayloadWithMeta } from './XyoQueryPayloadWithMeta'
 

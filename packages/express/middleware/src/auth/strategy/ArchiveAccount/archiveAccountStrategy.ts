@@ -1,6 +1,6 @@
 import { NoReqQuery } from '@xylabs/sdk-api-express-ecs'
 import { ArchiveLocals, ArchivePathParams } from '@xyo-network/archivist-model'
-import { XyoBoundWitnessWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
 import { Request } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { Strategy, StrategyCreated, StrategyCreatedStatic } from 'passport'

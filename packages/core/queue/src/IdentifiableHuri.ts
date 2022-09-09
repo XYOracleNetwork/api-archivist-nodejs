@@ -1,4 +1,4 @@
-import { Huri } from '@xyo-network/sdk-xyo-client-js'
+import { Huri } from '@xyo-network/payload'
 
 export interface IdentifiableHuri {
   huri: Huri | null

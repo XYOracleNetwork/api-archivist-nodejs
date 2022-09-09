@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 
-import { XyoBoundWitness, XyoBoundWitnessWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitness, XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
 import { injectable } from 'inversify'
 
 import { BoundWitnessArchivist } from './BoundWitnessArchivist'

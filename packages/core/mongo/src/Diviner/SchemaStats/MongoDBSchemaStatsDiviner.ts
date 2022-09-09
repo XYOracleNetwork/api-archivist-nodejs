@@ -1,9 +1,20 @@
 import 'reflect-metadata'
 
 import { assertEx } from '@xylabs/assert'
-import { ArchiveArchivist, ArchiveSchemaCountDiviner, Job, JobProvider, Logger } from '@xyo-network/archivist-model'
+import { XyoAccount } from '@xyo-network/account'
+import {
+  ArchiveArchivist,
+  isSchemaStatsQueryPayload,
+  Job,
+  JobProvider,
+  Logger,
+  SchemaStatsDiviner,
+  SchemaStatsPayload,
+  SchemaStatsSchema,
+} from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { XyoPayload, XyoPayloadWithMeta } from '@xyo-network/payload'
+import { XyoArchivistPayloadDivinerConfigSchema, XyoDiviner, XyoDivinerDivineQuerySchema } from '@xyo-network/diviner'
+import { XyoPayload, XyoPayloadBuilder, XyoPayloads, XyoPayloadWithMeta } from '@xyo-network/payload'
 import { BaseMongoSdk, MongoClientWrapper } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { ChangeStreamInsertDocument, ChangeStreamOptions, ResumeToken, UpdateOptions } from 'mongodb'
@@ -12,6 +23,7 @@ import { COLLECTIONS } from '../../collections'
 import { DATABASES } from '../../databases'
 import { MONGO_TYPES } from '../../types'
 import { fromDbProperty, toDbProperty } from '../../Util'
+import { ArchiveConfigPayload } from '../Payloads'
 
 const updateOptions: UpdateOptions = { upsert: true }
 
@@ -28,7 +40,7 @@ interface Stats {
 }
 
 @injectable()
-export class MongoDBArchiveSchemaCountDiviner implements ArchiveSchemaCountDiviner, JobProvider {
+export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner<XyoPayload, ArchiveConfigPayload> implements SchemaStatsDiviner, JobProvider {
   protected readonly batchLimit = 100
   protected nextOffset = 0
   protected pendingCounts: Record<string, Record<string, number>> = {}
@@ -36,9 +48,11 @@ export class MongoDBArchiveSchemaCountDiviner implements ArchiveSchemaCountDivin
 
   constructor(
     @inject(TYPES.Logger) protected logger: Logger,
+    @inject(TYPES.Account) account: XyoAccount,
     @inject(TYPES.ArchiveArchivist) protected archiveArchivist: ArchiveArchivist,
     @inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayload>,
   ) {
+    super({ account, schema: XyoArchivistPayloadDivinerConfigSchema })
     void this.registerWithChangeStream()
   }
 
@@ -60,11 +74,20 @@ export class MongoDBArchiveSchemaCountDiviner implements ArchiveSchemaCountDivin
     ]
   }
 
-  async find(archive: string): Promise<Array<Record<string, number>>> {
-    return await this.divineArchive(archive)
+  get queries() {
+    return [XyoDivinerDivineQuerySchema]
   }
 
-  private divineArchive = async (archive: string): Promise<Array<Record<string, number>>> => {
+  override async divine(payloads?: XyoPayloads): Promise<SchemaStatsPayload> {
+    const query = payloads?.find(isSchemaStatsQueryPayload)
+    const archive = query?.archive ?? this.config.archive
+    const count = archive ? await this.divineArchive(archive) : await this.divineAllArchives()
+    return new XyoPayloadBuilder<SchemaStatsPayload>({ schema: SchemaStatsSchema }).fields({ count }).build()
+  }
+
+  private divineAllArchives = async () => await Promise.reject('Not implemented')
+
+  private divineArchive = async (archive: string): Promise<Record<string, number>> => {
     const stats = await this.sdk.useMongo(async (mongo) => {
       return await mongo.db(DATABASES.Archivist).collection<Stats>(COLLECTIONS.ArchivistStats).findOne({ archive })
     })
@@ -83,7 +106,7 @@ export class MongoDBArchiveSchemaCountDiviner implements ArchiveSchemaCountDivin
         return [key, value]
       }),
     )
-    return [ret]
+    return ret
   }
 
   private divineArchiveFull = async (archive: string): Promise<Record<string, number>> => {

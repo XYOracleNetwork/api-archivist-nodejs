@@ -1,4 +1,4 @@
-import { XyoPayload, XyoPayloadWithPartialMeta } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload, XyoPayloadWithPartialMeta } from '@xyo-network/payload'
 
 import { Optional } from '../Optional'
 import { Query } from './Query'

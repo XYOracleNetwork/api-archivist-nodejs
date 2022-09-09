@@ -1,6 +1,6 @@
 import { NoReqBody, NoReqQuery } from '@xylabs/sdk-api-express-ecs'
+import { XyoArchive } from '@xyo-network/api'
 import { ArchiveLocals, ArchivePathParams } from '@xyo-network/archivist-model'
-import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 

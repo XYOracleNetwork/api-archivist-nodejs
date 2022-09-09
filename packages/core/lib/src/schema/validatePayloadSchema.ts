@@ -1,5 +1,5 @@
 import { GetValidator } from '@xyo-network/archivist-model'
-import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload } from '@xyo-network/payload'
 
 import { getPayloadValidatorFromSchemaCache } from './getPayloadValidatorFromSchemaCache'
 
