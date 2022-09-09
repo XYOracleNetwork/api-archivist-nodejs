@@ -7,6 +7,7 @@ import {
   BoundWitnessStatsDiviner,
   BoundWitnessStatsPayload,
   BoundWitnessStatsSchema,
+  isBoundWitnessStatsQueryPayload,
   Job,
   JobProvider,
   Logger,
@@ -22,7 +23,6 @@ import { ChangeStreamInsertDocument, ChangeStreamOptions, ResumeToken, UpdateOpt
 import { COLLECTIONS } from '../../collections'
 import { DATABASES } from '../../databases'
 import { MONGO_TYPES } from '../../types'
-import { MongoArchivePayload, MongoArchiveSchema } from '../MongoArchivePayload'
 import { ArchiveConfigPayload } from '../Payloads'
 
 const updateOptions: UpdateOptions = { upsert: true }
@@ -77,7 +77,7 @@ export class MongoDBArchiveBoundWitnessStatsDiviner
   }
 
   override async divine(payloads?: XyoPayloads): Promise<XyoPayload> {
-    const archivePayload = payloads?.find((payload): payload is MongoArchivePayload => payload?.schema === MongoArchiveSchema)
+    const archivePayload = payloads?.find(isBoundWitnessStatsQueryPayload)
     const archive = archivePayload?.archive ?? this.config.archive
     const count = archive ? await this.divineArchive(archive) : await this.divineAllArchives()
     return new XyoPayloadBuilder<BoundWitnessStatsPayload>({ schema: BoundWitnessStatsSchema }).fields({ count }).build()

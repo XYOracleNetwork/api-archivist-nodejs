@@ -23,6 +23,10 @@ export type BoundWitnessStatsDivinerConfig<
 >
 
 export type BoundWitnessStatsPayload = StatsPayload<{ schema: BoundWitnessStatsSchema }>
+export const isBoundWitnessStatsPayload = (x?: XyoPayload | null): x is BoundWitnessStatsPayload => x?.schema === BoundWitnessStatsSchema
+
 export type BoundWitnessStatsQueryPayload = ArchiveStatsQueryPayload<{ schema: BoundWitnessStatsQuerySchema }>
+export const isBoundWitnessStatsQueryPayload = (x?: XyoPayload | null): x is BoundWitnessStatsQueryPayload =>
+  x?.schema === BoundWitnessStatsQuerySchema
 
 export type BoundWitnessStatsDiviner = StatsDiviner
