@@ -3,7 +3,7 @@ import { XyoPayload } from '@xyo-network/payload'
 
 import { ArchivistPayloadStatsDivinerConfig } from './PayloadStatsDiviner'
 import { StatsPayload } from './StatsPayload'
-import { ArchiveStatsQueryPayload } from './StatsQueryPayload'
+import { StatsQueryPayload } from './StatsQueryPayload'
 
 export type BoundWitnessStatsSchema = 'network.xyo.archivist.boundwitness.stats'
 export const BoundWitnessStatsSchema: BoundWitnessStatsSchema = 'network.xyo.archivist.boundwitness.stats'
@@ -27,7 +27,7 @@ export type BoundWitnessStatsDivinerConfig<
 export type BoundWitnessStatsPayload = StatsPayload<{ schema: BoundWitnessStatsSchema }>
 export const isBoundWitnessStatsPayload = (x?: XyoPayload | null): x is BoundWitnessStatsPayload => x?.schema === BoundWitnessStatsSchema
 
-export type BoundWitnessStatsQueryPayload = ArchiveStatsQueryPayload<{ schema: BoundWitnessStatsQuerySchema }>
+export type BoundWitnessStatsQueryPayload = StatsQueryPayload<{ schema: BoundWitnessStatsQuerySchema }>
 export const isBoundWitnessStatsQueryPayload = (x?: XyoPayload | null): x is BoundWitnessStatsQueryPayload =>
   x?.schema === BoundWitnessStatsQuerySchema
 

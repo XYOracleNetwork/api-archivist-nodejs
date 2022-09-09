@@ -2,7 +2,7 @@ import { XyoDiviner } from '@xyo-network/diviner'
 import { XyoPayload } from '@xyo-network/payload'
 
 import { ArchivistPayloadStatsDivinerConfig } from './PayloadStatsDiviner'
-import { ArchiveStatsQueryPayload } from './StatsQueryPayload'
+import { StatsQueryPayload } from './StatsQueryPayload'
 
 export type SchemaStatsSchema = 'network.xyo.archivist.schema.stats'
 export const SchemaStatsSchema: SchemaStatsSchema = 'network.xyo.archivist.schema.stats'
@@ -26,7 +26,7 @@ export type SchemaStatsDivinerConfig<
 export type SchemaStatsPayload = XyoPayload<{ count: Record<string, number>; schema: SchemaStatsSchema }>
 export const isSchemaStatsPayload = (x?: XyoPayload | null): x is SchemaStatsPayload => x?.schema === SchemaStatsSchema
 
-export type SchemaStatsQueryPayload = ArchiveStatsQueryPayload<{ schema: SchemaStatsQuerySchema }>
+export type SchemaStatsQueryPayload = StatsQueryPayload<{ schema: SchemaStatsQuerySchema }>
 export const isSchemaStatsQueryPayload = (x?: XyoPayload | null): x is SchemaStatsQueryPayload => x?.schema === SchemaStatsQuerySchema
 
 export type SchemaStatsDiviner = XyoDiviner
