@@ -1,6 +1,6 @@
 import { NoReqBody, NoReqQuery, NoResBody } from '@xylabs/sdk-api-express-ecs'
+import { XyoArchive } from '@xyo-network/api'
 import { ArchiveLocals, ArchivePathParams } from '@xyo-network/archivist-model'
-import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 import { Request } from 'express'
 
 export const isRequestUserOwnerOfArchive = (req: Request, archive: XyoArchive | null | undefined): boolean => {

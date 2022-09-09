@@ -3,7 +3,7 @@ import 'source-map-support/register'
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
 import { exists } from '@xylabs/sdk-js'
 import { scrubBoundWitnesses } from '@xyo-network/archivist-lib'
-import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { RequestHandler } from 'express'
 
 import { BlockHashPathParams } from './blockHashPathParams'

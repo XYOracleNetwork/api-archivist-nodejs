@@ -18,7 +18,7 @@ import {
   GetSchemaQueryHandler,
   SetArchivePermissionsQueryHandler,
 } from '@xyo-network/archivist-query-handlers'
-import { XyoPayload, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload, XyoPayloadWithMeta } from '@xyo-network/payload'
 import { Application } from 'express'
 
 export const addQueryProcessors = (app: Application) => {

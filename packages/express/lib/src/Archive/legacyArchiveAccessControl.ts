@@ -1,4 +1,4 @@
-import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
+import { XyoArchive } from '@xyo-network/api'
 
 /**
  * Determines if there's no access controls on an archive

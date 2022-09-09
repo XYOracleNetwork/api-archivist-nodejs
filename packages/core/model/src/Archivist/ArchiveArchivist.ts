@@ -1,4 +1,5 @@
-import { Archivist, XyoArchive } from '@xyo-network/sdk-xyo-client-js'
+import { XyoArchive } from '@xyo-network/api'
+import { Archivist } from '@xyo-network/sdk-xyo-client-js'
 
 import { UpsertResult } from '../UpsertResult'
 import { XyoPayloadFilterPredicate } from './XyoPayloadFilterPredicate'

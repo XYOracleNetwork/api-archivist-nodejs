@@ -1,6 +1,6 @@
 import { GetDomainConfigQuery, Optional, QueryHandler } from '@xyo-network/archivist-model'
 import { XyoDomainPayload, XyoDomainPayloadWrapper } from '@xyo-network/domain-payload-plugin'
-import { XyoPartialPayloadMeta } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPartialPayloadMeta } from '@xyo-network/payload'
 
 export class GetDomainConfigQueryHandler implements QueryHandler<GetDomainConfigQuery, XyoDomainPayload> {
   async handle(query: GetDomainConfigQuery): Promise<Optional<XyoPartialPayloadMeta<XyoDomainPayload>>> {

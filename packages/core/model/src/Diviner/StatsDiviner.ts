@@ -1,4 +1,6 @@
-import { XyoDiviner, XyoPayload, XyoQueryPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoDiviner } from '@xyo-network/diviner'
+import { XyoQueryPayload } from '@xyo-network/module'
+import { XyoPayload } from '@xyo-network/payload'
 
 export type StatsPayload<T extends XyoPayload = XyoPayload> = XyoPayload<T & { count: number }>
 

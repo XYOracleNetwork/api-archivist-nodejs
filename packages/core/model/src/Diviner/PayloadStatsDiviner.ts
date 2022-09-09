@@ -1,4 +1,5 @@
-import { XyoDivinerConfig, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoDivinerConfig } from '@xyo-network/diviner'
+import { XyoPayload } from '@xyo-network/payload'
 
 import { ArchiveStatsQueryPayload, StatsDiviner, StatsPayload } from './StatsDiviner'
 

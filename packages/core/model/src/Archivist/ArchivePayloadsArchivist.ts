@@ -1,4 +1,4 @@
-import { XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayloadWithMeta } from '@xyo-network/payload'
 
 import { PayloadArchivist } from './PayloadArchivist'
 import { XyoArchivePayloadFilterPredicate } from './XyoPayloadFilterPredicate'
