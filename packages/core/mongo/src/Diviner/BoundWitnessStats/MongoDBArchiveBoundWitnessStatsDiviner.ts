@@ -77,8 +77,8 @@ export class MongoDBArchiveBoundWitnessStatsDiviner
   }
 
   override async divine(payloads?: XyoPayloads): Promise<BoundWitnessStatsPayload> {
-    const archivePayload = payloads?.find(isBoundWitnessStatsQueryPayload)
-    const archive = archivePayload?.archive ?? this.config.archive
+    const query = payloads?.find(isBoundWitnessStatsQueryPayload)
+    const archive = query?.archive ?? this.config.archive
     const count = archive ? await this.divineArchive(archive) : await this.divineAllArchives()
     return new XyoPayloadBuilder<BoundWitnessStatsPayload>({ schema: BoundWitnessStatsSchema }).fields({ count }).build()
   }

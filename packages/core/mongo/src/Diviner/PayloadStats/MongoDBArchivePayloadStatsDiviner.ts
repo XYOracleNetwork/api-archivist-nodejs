@@ -4,6 +4,7 @@ import { assertEx } from '@xylabs/assert'
 import { XyoAccount } from '@xyo-network/account'
 import {
   ArchiveArchivist,
+  isPayloadStatsQueryPayload,
   Job,
   JobProvider,
   Logger,
@@ -21,7 +22,6 @@ import { ChangeStreamInsertDocument, ChangeStreamOptions, ResumeToken, UpdateOpt
 import { COLLECTIONS } from '../../collections'
 import { DATABASES } from '../../databases'
 import { MONGO_TYPES } from '../../types'
-import { MongoArchivePayload, MongoArchiveSchema } from '../MongoArchivePayload'
 import { ArchiveConfigPayload } from '../Payloads'
 
 const updateOptions: UpdateOptions = { upsert: true }
@@ -72,9 +72,9 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
     return [XyoDivinerDivineQuerySchema]
   }
 
-  public async divine(payloads?: XyoPayloads): Promise<XyoPayload | null> {
-    const archivePayload = payloads?.find((payload): payload is MongoArchivePayload => payload?.schema === MongoArchiveSchema)
-    const archive = archivePayload?.archive ?? this.config.archive
+  public async divine(payloads?: XyoPayloads): Promise<PayloadStatsPayload> {
+    const query = payloads?.find(isPayloadStatsQueryPayload)
+    const archive = query?.archive ?? this.config.archive
     const count = archive ? await this.divineArchive(archive) : await this.divineAllArchives()
     return new XyoPayloadBuilder<PayloadStatsPayload>({ schema: PayloadStatsSchema }).fields({ count }).build()
   }
