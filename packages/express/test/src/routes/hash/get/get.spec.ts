@@ -1,4 +1,5 @@
-import { XyoBoundWitness, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitness } from '@xyo-network/boundwitness'
+import { XyoPayload } from '@xyo-network/payload'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import {

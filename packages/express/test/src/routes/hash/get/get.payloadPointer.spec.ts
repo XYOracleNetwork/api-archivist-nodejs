@@ -1,4 +1,5 @@
 import { assertEx } from '@xylabs/assert'
+import { XyoAccount } from '@xyo-network/account'
 import {
   PayloadArchiveRule,
   PayloadPointerBody,
@@ -7,7 +8,8 @@ import {
   PayloadTimestampDirectionRule,
   SortDirection,
 } from '@xyo-network/archivist-model'
-import { XyoAccount, XyoBoundWitnessWithPartialMeta, XyoPayload, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitnessWithPartialMeta } from '@xyo-network/boundwitness'
+import { XyoPayload, XyoPayloadBuilder } from '@xyo-network/payload'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import {

@@ -6,7 +6,7 @@ import {
   SetArchivePermissionsPayload,
   setArchivePermissionsSchema,
 } from '@xyo-network/archivist-model'
-import { XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayloadWithMeta } from '@xyo-network/payload'
 import { mock, MockProxy } from 'jest-mock-extended'
 
 import { GetArchivePermissionsQueryHandler } from './GetArchivePermissionsQueryHandler'

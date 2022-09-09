@@ -1,4 +1,4 @@
-import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload } from '@xyo-network/payload'
 // eslint-disable-next-line import/no-named-as-default
 import Ajv from 'ajv'
 

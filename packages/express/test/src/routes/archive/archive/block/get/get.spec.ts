@@ -1,5 +1,5 @@
 import { SortDirection } from '@xyo-network/archivist-model'
-import { XyoBoundWitnessWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import {
