@@ -24,7 +24,7 @@ const handler: RequestHandler<ArchivePathParams, GetArchiveBlockStats> = async (
   const payloads: BoundWitnessStatsQueryPayload[] = [{ archive, schema: BoundWitnessStatsQuerySchema }]
   const query = { payloads, schema: XyoDivinerDivineQuerySchema }
   const result = (await diviner.query(query)) as XyoModuleQueryResult<BoundWitnessStatsPayload>
-  const answer: BoundWitnessStatsPayload = result[1].pop() || unknownCount
+  const answer: BoundWitnessStatsPayload = result?.[1]?.[0] || unknownCount
   res.json(answer)
 }
 
