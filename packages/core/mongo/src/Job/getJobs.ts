@@ -8,7 +8,7 @@ import { Container } from 'inversify'
 export const getJobs = (container: Container): Job[] => {
   const boundWitnessStatsDiviner = container.get<JobProvider>(TYPES.BoundWitnessStatsDiviner)
   const payloadStatsDiviner = container.get<JobProvider>(TYPES.PayloadStatsDiviner)
-  const archiveSchemaCountDiviner = container.get<JobProvider>(TYPES.ArchiveSchemaCountDiviner)
-  const jobProviders = [archiveSchemaCountDiviner, boundWitnessStatsDiviner, payloadStatsDiviner]
+  const schemaStatsDiviner = container.get<JobProvider>(TYPES.SchemaStatsDiviner)
+  const jobProviders = [schemaStatsDiviner, boundWitnessStatsDiviner, payloadStatsDiviner]
   return jobProviders.flatMap((provider) => provider.jobs)
 }
