@@ -8,8 +8,10 @@ const oneMinuteInMs = 1 * 60 * 1000
 describe('/archive/:archive/settings/key', () => {
   let token = ''
   let archive = ''
-  beforeEach(async () => {
+  beforeAll(async () => {
     token = await getTokenForNewUser()
+  })
+  beforeEach(async () => {
     archive = (await claimArchive(token)).archive
   })
   it('Creates a key for the archive', async () => {

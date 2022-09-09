@@ -3,8 +3,10 @@ import { claimArchive, getBlock, getBlocksWithPayloads, getPayloadByBlockHash, g
 describe('/archive/:archive/block/hash/:hash/payloads', () => {
   let token = ''
   let archive = ''
-  beforeEach(async () => {
+  beforeAll(async () => {
     token = await getTokenForNewUser()
+  })
+  beforeEach(async () => {
     archive = (await claimArchive(token)).archive
   })
   it('Retrieves the single payload for the specified block hash', async () => {

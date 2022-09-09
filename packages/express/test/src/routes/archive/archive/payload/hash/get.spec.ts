@@ -3,8 +3,10 @@ import { claimArchive, getPayloadByHash, getTokenForNewUser, knownBlock, knownPa
 describe('/archive/:archive/block/payload/:hash', () => {
   let token = ''
   let archive = ''
-  beforeEach(async () => {
+  beforeAll(async () => {
     token = await getTokenForNewUser()
+  })
+  beforeEach(async () => {
     archive = (await claimArchive(token)).archive
     await postBlock(knownBlock, archive)
   })
