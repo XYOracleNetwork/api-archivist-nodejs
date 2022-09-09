@@ -5,8 +5,10 @@ import { claimArchive, getArchiveName, getTokenForNewUser, request } from '../..
 describe('/archive', () => {
   let token = ''
   let archive = ''
-  beforeEach(async () => {
+  beforeAll(async () => {
     token = await getTokenForNewUser()
+  })
+  beforeEach(() => {
     archive = getArchiveName()
   })
   it('Allows user to claim an unclaimed archive', async () => {
