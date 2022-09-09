@@ -1,6 +1,7 @@
 import { asyncHandler, NoReqBody, NoReqQuery } from '@xylabs/sdk-api-express-ecs'
 import { setRawResponseFormat } from '@xyo-network/archivist-middleware'
-import { deepOmitUnderscoreFields, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { deepOmitUnderscoreFields } from '@xyo-network/core'
+import { XyoPayload } from '@xyo-network/payload'
 import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 

@@ -1,4 +1,4 @@
-import { XyoPayload, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload, XyoPayloadWithMeta } from '@xyo-network/payload'
 
 import { Query } from './Query'
 

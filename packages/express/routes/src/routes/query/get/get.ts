@@ -2,7 +2,7 @@ import { asyncHandler, NoReqBody, NoReqQuery } from '@xylabs/sdk-api-express-ecs
 import { dependencies } from '@xyo-network/archivist-dependencies'
 import { IdentifiableHuri, Queue } from '@xyo-network/archivist-queue'
 import { TYPES } from '@xyo-network/archivist-types'
-import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload } from '@xyo-network/payload'
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 

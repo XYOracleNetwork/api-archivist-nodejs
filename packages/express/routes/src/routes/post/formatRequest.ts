@@ -1,6 +1,7 @@
 import { getRequestMeta } from '@xyo-network/archivist-express-lib'
 import { augmentWithMetadata } from '@xyo-network/archivist-lib'
-import { XyoBoundWitnessWithMeta, XyoPayloadMeta } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
+import { XyoPayloadMeta } from '@xyo-network/payload'
 
 import { PostNodeRequest } from './PostNodeRequest'
 

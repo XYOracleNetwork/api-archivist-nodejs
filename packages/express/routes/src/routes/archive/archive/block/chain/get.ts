@@ -3,7 +3,7 @@ import 'source-map-support/register'
 import { assertEx } from '@xylabs/assert'
 import { asyncHandler, tryParseInt } from '@xylabs/sdk-api-express-ecs'
 import { ArchiveBoundWitnessesArchivist } from '@xyo-network/archivist-model'
-import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { RequestHandler } from 'express'
 
 import { BlockChainPathParams } from './blockChainPathParams'

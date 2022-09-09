@@ -1,7 +1,7 @@
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
 import { exists } from '@xylabs/sdk-js'
 import { ArchivePayloadsArchivist } from '@xyo-network/archivist-model'
-import { XyoPartialPayloadMeta, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPartialPayloadMeta, XyoPayloadWithMeta } from '@xyo-network/payload'
 import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 

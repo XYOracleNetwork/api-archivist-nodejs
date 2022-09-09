@@ -20,7 +20,7 @@ import {
   setArchivePermissionsSchema,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload } from '@xyo-network/payload'
 import { Request } from 'express'
 import { v4 } from 'uuid'
 

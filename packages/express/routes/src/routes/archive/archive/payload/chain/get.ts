@@ -3,7 +3,7 @@ import 'source-map-support/register'
 import { assertEx } from '@xylabs/assert'
 import { asyncHandler, tryParseInt } from '@xylabs/sdk-api-express-ecs'
 import { ArchivePayloadsArchivist } from '@xyo-network/archivist-model'
-import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload } from '@xyo-network/payload'
 import { RequestHandler } from 'express'
 
 import { PayloadChainPathParams } from './payloadChainPathParams'

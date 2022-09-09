@@ -2,7 +2,8 @@ import 'source-map-support/register'
 
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
 import { ArchivePathParams, PayloadStatsPayload, PayloadStatsSchema } from '@xyo-network/archivist-model'
-import { XyoDivinerDivineQuerySchema, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoDivinerDivineQuerySchema } from '@xyo-network/diviner'
+import { XyoPayload } from '@xyo-network/payload'
 import { RequestHandler } from 'express'
 
 const unknownCount: PayloadStatsPayload = { count: -1, schema: PayloadStatsSchema }

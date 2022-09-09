@@ -1,4 +1,4 @@
-import { XyoArchiveKey } from '@xyo-network/sdk-xyo-client-js'
+import { XyoArchiveKey } from '@xyo-network/api'
 import { v4 } from 'uuid'
 
 export const generateArchiveKey = (archive: string): XyoArchiveKey => {

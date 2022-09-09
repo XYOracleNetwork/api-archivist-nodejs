@@ -1,4 +1,4 @@
-import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitness } from '@xyo-network/boundwitness'
 
 import { XyoArchivePayloadFilterPredicate, XyoPayloadFilterPredicate } from './XyoPayloadFilterPredicate'
 

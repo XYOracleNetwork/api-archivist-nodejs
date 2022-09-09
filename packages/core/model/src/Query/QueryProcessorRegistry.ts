@@ -1,4 +1,4 @@
-import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload } from '@xyo-network/payload'
 
 import { Query } from './Query'
 import { QueryProcessor } from './QueryProcessor'

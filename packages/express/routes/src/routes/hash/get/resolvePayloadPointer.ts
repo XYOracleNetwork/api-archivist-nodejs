@@ -1,6 +1,6 @@
 import { requestAccessibleArchives } from '@xyo-network/archivist-express-lib'
 import { PayloadPointerPayload } from '@xyo-network/archivist-model'
-import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload } from '@xyo-network/payload'
 import { Request } from 'express'
 
 import { combineRules } from './combineRules'

@@ -1,6 +1,6 @@
 import { requestCanAccessArchive } from '@xyo-network/archivist-express-lib'
 import { PayloadPointerPayload, payloadPointerSchema, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
-import { XyoPayload, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload, XyoPayloadWithMeta } from '@xyo-network/payload'
 import { Request } from 'express'
 
 import { resolvePayloadPointer } from './resolvePayloadPointer'

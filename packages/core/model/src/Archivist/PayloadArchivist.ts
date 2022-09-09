@@ -1,4 +1,6 @@
-import { Archivist, EmptyObject, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { EmptyObject } from '@xyo-network/core'
+import { XyoPayloadWithMeta } from '@xyo-network/payload'
+import { Archivist } from '@xyo-network/sdk-xyo-client-js'
 
 import { XyoPayloadFilterPredicate } from './XyoPayloadFilterPredicate'
 

@@ -8,7 +8,7 @@ import {
   setArchivePermissionsSchema,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayloadBuilder } from '@xyo-network/payload'
 import { inject, injectable } from 'inversify'
 
 const validateAddresses = (query: SetArchivePermissionsQuery) => {
