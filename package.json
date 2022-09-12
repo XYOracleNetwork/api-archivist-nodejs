@@ -33,7 +33,7 @@
     "launch": "node --max-old-space-size=8192 --experimental-specifier-resolution=node ./dist/cjs/index.js",
     "outdated": "yarn workspaces foreach -pv outdated",
     "start": "nodemon",
-    "test": "jest --clearCache && jest --maxWorkers=2 --forceExit",
+    "test": "jest --no-cache --forceExit",
     "test:ci": "jest --runInBand --coverage --forceExit"
   },
   "author": "Arie Trouw",

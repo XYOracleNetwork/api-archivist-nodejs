@@ -52,8 +52,10 @@
         "pauseForSourceMap": true,
         "runtimeArgs": [
           "--inspect-brk",
+          "--max-old-space-size=8192",
           "${workspaceRoot}/node_modules/.bin/jest",
-          "--runInBand"
+          "--forceExit",
+          "--runInBand",
         ]
       },
       "windows": {
