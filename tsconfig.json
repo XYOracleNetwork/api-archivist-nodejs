@@ -2,7 +2,9 @@
   "compilerOptions": {
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "outDir": "dist",
+    "module": "ES2022",
+    "outDir": "./dist/esm",
+    "target": "ES2022",
     "typeRoots": [
       "./node_modules/@types"
     ],
