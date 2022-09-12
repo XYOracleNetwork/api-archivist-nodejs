@@ -21,8 +21,20 @@ const generateJestConfig = ({ esModules }) => {
     testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$',
     testTimeout: 15000,
     transform: {
-      [`(${esModulesList}).+\\.js$`]: ['babel-jest', { babelConfig: 'babel.config.json' }],
-      '^.+\\.tsx?$': ['ts-jest', { tsconfig: 'tsconfig.test.json' }],
+      [`(${esModulesList}).+\\.js$`]: [
+        'babel-jest',
+        {
+          babelConfig: 'babel.config.json',
+          useESM: true,
+        },
+      ],
+      '^.+\\.tsx?$': [
+        'ts-jest',
+        {
+          tsconfig: 'tsconfig.test.json',
+          useESM: true,
+        },
+      ],
     },
     transformIgnorePatterns: [`./node_modules/(?!${esModulesList})`],
   }
