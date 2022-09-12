@@ -9,7 +9,11 @@ const allowedSchema = debugSchema
 const otherSchema = 'network.xyo.test'
 
 const processingDelay = () => {
-  return delay(2000)
+  // NOTE: May need to increase this time if
+  // we start seeing intermittent failures of
+  // these tests as we're waiting for the processing
+  // of the archive permissions on the server side
+  return delay(1)
 }
 
 type TestSchemaTypes = typeof allowedSchema | typeof otherSchema
