@@ -38,29 +38,21 @@ const postCommandToArchive = (
   return postCommandsToArchive([bw], archive, token, expectedStatus)
 }
 
-const initializeTestData = async () => {
-  const owner = await getExistingUser()
-  const ownerToken = await signInUser(owner)
-  const archive = (await claimArchive(ownerToken)).archive
-  const user = await getExistingUser()
-  const userToken = await signInUser(user)
-  return {
-    archive,
-    owner,
-    ownerToken,
-    user,
-    userToken,
-  }
-}
-
 describe('ArchiveAccountStrategy', () => {
   let user: TestWeb3User
-  let ownerToken: string
   let userToken: string
+  let owner: TestWeb3User
+  let ownerToken: string
   let archive: string
+  beforeAll(async () => {
+    owner = await getExistingUser()
+    ownerToken = await signInUser(owner)
+    user = await getExistingUser()
+    userToken = await signInUser(user)
+  })
   describe('with no archive permissions', () => {
     beforeAll(async () => {
-      ;({ archive, ownerToken, user, userToken } = await initializeTestData())
+      archive = (await claimArchive(ownerToken)).archive
       await processingDelay()
     })
     describe('allows', () => {
@@ -78,7 +70,7 @@ describe('ArchiveAccountStrategy', () => {
   describe('with archive permissions', () => {
     describe('for allowing address', () => {
       beforeAll(async () => {
-        ;({ archive, ownerToken, user, userToken } = await initializeTestData())
+        archive = (await claimArchive(ownerToken)).archive
         await setArchivePermissions(archive, ownerToken, {
           addresses: {
             allow: [user.address],
@@ -108,7 +100,7 @@ describe('ArchiveAccountStrategy', () => {
     })
     describe('for allowing schema', () => {
       beforeAll(async () => {
-        ;({ archive, ownerToken, user, userToken } = await initializeTestData())
+        archive = (await claimArchive(ownerToken)).archive
         await setArchivePermissions(archive, ownerToken, {
           schema: setArchivePermissionsSchema,
           schemas: {
@@ -133,7 +125,7 @@ describe('ArchiveAccountStrategy', () => {
     })
     describe('for rejecting address', () => {
       beforeAll(async () => {
-        ;({ archive, ownerToken, user, userToken } = await initializeTestData())
+        archive = (await claimArchive(ownerToken)).archive
         await setArchivePermissions(archive, ownerToken, {
           addresses: {
             reject: [user.address],
@@ -163,7 +155,7 @@ describe('ArchiveAccountStrategy', () => {
     })
     describe('for rejecting schema', () => {
       beforeAll(async () => {
-        ;({ archive, ownerToken, user, userToken } = await initializeTestData())
+        archive = (await claimArchive(ownerToken)).archive
         await setArchivePermissions(archive, ownerToken, {
           schema: setArchivePermissionsSchema,
           schemas: {
