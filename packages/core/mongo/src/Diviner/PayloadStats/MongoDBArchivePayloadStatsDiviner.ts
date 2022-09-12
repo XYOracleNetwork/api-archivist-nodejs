@@ -1,11 +1,20 @@
 import 'reflect-metadata'
 
-import { assertEx } from '@xylabs/sdk-js'
+import { assertEx } from '@xylabs/assert'
 import { XyoAccount } from '@xyo-network/account'
-import { ArchiveArchivist, Job, JobProvider, PayloadStatsDiviner, PayloadStatsPayload, PayloadStatsSchema } from '@xyo-network/archivist-model'
+import {
+  ArchiveArchivist,
+  isPayloadStatsQueryPayload,
+  Job,
+  JobProvider,
+  Logger,
+  PayloadStatsDiviner,
+  PayloadStatsPayload,
+  PayloadStatsSchema,
+} from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoArchivistPayloadDivinerConfigSchema, XyoDiviner, XyoDivinerDivineQuerySchema } from '@xyo-network/diviner'
-import { XyoPayload, XyoPayloadBuilder, XyoPayloads, XyoPayloadSchema, XyoPayloadWithMeta } from '@xyo-network/payload'
+import { XyoPayload, XyoPayloadBuilder, XyoPayloads, XyoPayloadWithMeta } from '@xyo-network/payload'
 import { BaseMongoSdk, MongoClientWrapper } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { ChangeStreamInsertDocument, ChangeStreamOptions, ResumeToken, UpdateOptions } from 'mongodb'
@@ -13,7 +22,6 @@ import { ChangeStreamInsertDocument, ChangeStreamOptions, ResumeToken, UpdateOpt
 import { COLLECTIONS } from '../../collections'
 import { DATABASES } from '../../databases'
 import { MONGO_TYPES } from '../../types'
-import { MongoArchivePayload, MongoArchiveSchema } from '../MongoArchivePayload'
 import { ArchiveConfigPayload } from '../Payloads'
 
 const updateOptions: UpdateOptions = { upsert: true }
@@ -33,11 +41,12 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
   protected resumeAfter: ResumeToken | undefined = undefined
 
   constructor(
+    @inject(TYPES.Logger) protected logger: Logger,
     @inject(TYPES.Account) account: XyoAccount,
     @inject(TYPES.ArchiveArchivist) protected archiveArchivist: ArchiveArchivist,
     @inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayload>,
   ) {
-    super({ account, schema: XyoArchivistPayloadDivinerConfigSchema, targetSchema: XyoPayloadSchema })
+    super({ account, schema: XyoArchivistPayloadDivinerConfigSchema })
     void this.registerWithChangeStream()
   }
 
@@ -63,9 +72,9 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
     return [XyoDivinerDivineQuerySchema]
   }
 
-  public async divine(payloads?: XyoPayloads): Promise<XyoPayload | null> {
-    const archivePayload = payloads?.find((payload): payload is MongoArchivePayload => payload?.schema === MongoArchiveSchema)
-    const archive = archivePayload?.archive ?? this.config.archive
+  public async divine(payloads?: XyoPayloads): Promise<PayloadStatsPayload> {
+    const query = payloads?.find(isPayloadStatsQueryPayload)
+    const archive = query?.archive ?? this.config.archive
     const count = archive ? await this.divineArchive(archive) : await this.divineAllArchives()
     return new XyoPayloadBuilder<PayloadStatsPayload>({ schema: PayloadStatsSchema }).fields({ count }).build()
   }
@@ -88,10 +97,15 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
   }
 
   private divineArchivesBatch = async () => {
+    this.logger.log(`MongoDBArchivePayloadStatsDiviner.DivineArchivesBatch: Divining - Limit: ${this.batchLimit} Offset: ${this.nextOffset}`)
     const result = await this.archiveArchivist.find({ limit: this.batchLimit, offset: this.nextOffset })
     const archives = result.map((archive) => archive.archive)
+    this.logger.log(`MongoDBArchivePayloadStatsDiviner.DivineArchivesBatch: Divining ${archives.length} Archives`)
     this.nextOffset = archives.length < this.batchLimit ? 0 : this.nextOffset + this.batchLimit
-    await Promise.allSettled(archives.map(this.divineArchiveFull))
+    const results = await Promise.allSettled(archives.map(this.divineArchiveFull))
+    const succeeded = results.filter((result) => result.status === 'fulfilled').length
+    const failed = results.filter((result) => result.status === 'rejected').length
+    this.logger.log(`MongoDBArchivePayloadStatsDiviner.DivineArchivesBatch: Divined - Succeeded: ${succeeded} Failed: ${failed}`)
   }
 
   private processChange = (change: ChangeStreamInsertDocument<XyoPayloadWithMeta>) => {
@@ -101,6 +115,7 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
   }
 
   private registerWithChangeStream = async () => {
+    this.logger.log('MongoDBArchivePayloadStatsDiviner.RegisterWithChangeStream: Registering')
     const wrapper = MongoClientWrapper.get(this.sdk.uri, this.sdk.config.maxPoolSize)
     const connection = await wrapper.connect()
     assertEx(connection, 'Connection failed')
@@ -109,6 +124,7 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
     const changeStream = collection.watch([], opts)
     changeStream.on('change', this.processChange)
     changeStream.on('error', this.registerWithChangeStream)
+    this.logger.log('MongoDBArchivePayloadStatsDiviner.RegisterWithChangeStream: Registered')
   }
 
   private storeDivinedResult = async (archive: string, count: number) => {
@@ -122,6 +138,7 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
   }
 
   private updateChanges = async () => {
+    this.logger.log('MongoDBArchivePayloadStatsDiviner.UpdateChanges: Updating')
     const updates = Object.keys(this.pendingCounts).map((archive) => {
       const count = this.pendingCounts[archive]
       this.pendingCounts[archive] = 0
@@ -130,6 +147,9 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
         await mongo.db(DATABASES.Archivist).collection(COLLECTIONS.ArchivistStats).updateOne({ archive }, { $inc }, updateOptions)
       })
     })
-    await Promise.allSettled(updates)
+    const results = await Promise.allSettled(updates)
+    const succeeded = results.filter((result) => result.status === 'fulfilled').length
+    const failed = results.filter((result) => result.status === 'rejected').length
+    this.logger.log(`MongoDBArchivePayloadStatsDiviner.UpdateChanges: Updated - Succeeded: ${succeeded} Failed: ${failed}`)
   }
 }

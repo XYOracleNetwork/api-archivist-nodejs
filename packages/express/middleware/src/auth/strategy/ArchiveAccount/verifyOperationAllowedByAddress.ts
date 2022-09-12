@@ -2,7 +2,8 @@ import { NoReqQuery } from '@xylabs/sdk-api-express-ecs'
 import { isRequestUserOwnerOfRequestedArchive } from '@xyo-network/archivist-express-lib'
 import { trimAddressPrefix } from '@xyo-network/archivist-lib'
 import { ArchiveLocals, ArchivePathParams, SetArchivePermissions, setArchivePermissionsSchema } from '@xyo-network/archivist-model'
-import { XyoBoundWitness, XyoBoundWitnessWithMeta, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitness, XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
+import { XyoPayload } from '@xyo-network/payload'
 import { Request } from 'express'
 
 const defaultArchivePermissions: SetArchivePermissions = {
@@ -10,7 +11,7 @@ const defaultArchivePermissions: SetArchivePermissions = {
 }
 
 const getArchivePermissions = async (req: Request<unknown, unknown, XyoBoundWitness[]>, archive: string): Promise<SetArchivePermissions> => {
-  const permissions = await req.app.archivePermissionsArchivist.get(archive)
+  const permissions = await req.app.archivePermissionsArchivist.get([archive])
   return permissions && permissions?.[0] ? permissions?.[0] : defaultArchivePermissions
 }
 

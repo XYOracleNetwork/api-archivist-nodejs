@@ -1,8 +1,8 @@
+import { assertEx } from '@xylabs/assert'
 import { asyncHandler, NoReqBody, NoReqQuery, tryParseInt } from '@xylabs/sdk-api-express-ecs'
-import { assertEx } from '@xylabs/sdk-js'
 import { scrubBoundWitnesses } from '@xyo-network/archivist-lib'
 import { ArchiveLocals, ArchivePathParams, SortDirection, XyoArchiveBoundWitnessFilterPredicate } from '@xyo-network/archivist-model'
-import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 

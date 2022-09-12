@@ -36,17 +36,16 @@ jobs:
         with:
           node-version: "16"
           cache: "yarn"
+      - name: setup test db
+        run: docker compose up -d mongo
       - name: install
         run: yarn install
-      - name: build
-        run: yarn build
+      - name: compile
+        run: yarn compile
       - name: copy env file
         run: cp .example.env .env
-      - name: setup test db
-        # TODO: Remove hardcoded delay and actually wait for healthy containers
-        run: docker compose up -d mongo && sleep 30
       - name: test
-        run: yarn test:ci --forceExit --coverage
+        run: yarn test:ci
         env:
           # Current max memory size of Linux hosted runner is 7 GB
           # https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources

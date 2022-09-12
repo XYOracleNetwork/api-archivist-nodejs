@@ -1,9 +1,9 @@
 import 'source-map-support/register'
 
+import { assertEx } from '@xylabs/assert'
 import { asyncHandler, tryParseInt } from '@xylabs/sdk-api-express-ecs'
-import { assertEx } from '@xylabs/sdk-js'
 import { ArchiveBoundWitnessesArchivist } from '@xyo-network/archivist-model'
-import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { RequestHandler } from 'express'
 
 import { BlockChainPathParams } from './blockChainPathParams'
@@ -16,7 +16,7 @@ const getBlocks = async (
   blocks: XyoBoundWitness[],
   limit: number,
 ) => {
-  const block = (await archivist.get({ archive, hash })).pop()
+  const block = (await archivist.get([{ archive, hash }])).pop()
   if (block) {
     const addressIndex = block.addresses.findIndex((value) => value === address)
     if (addressIndex !== -1) {

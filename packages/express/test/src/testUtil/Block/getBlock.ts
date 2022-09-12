@@ -1,4 +1,4 @@
-import { assertEx } from '@xylabs/sdk-js'
+import { assertEx } from '@xylabs/assert'
 import { XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { XyoPayload } from '@xyo-network/payload'
 

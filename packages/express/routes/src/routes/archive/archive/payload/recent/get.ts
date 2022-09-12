@@ -1,9 +1,9 @@
 import 'source-map-support/register'
 
+import { assertEx } from '@xylabs/assert'
 import { asyncHandler, tryParseInt } from '@xylabs/sdk-api-express-ecs'
-import { assertEx } from '@xylabs/sdk-js'
 import { XyoArchivePayloadFilterPredicate } from '@xyo-network/archivist-model'
-import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload } from '@xyo-network/payload'
 import { RequestHandler } from 'express'
 
 import { PayloadRecentPathParams } from './payloadRecentPathParams'

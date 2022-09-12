@@ -1,5 +1,5 @@
-import { assertEx } from '@xylabs/sdk-js'
-import { XyoPayload, XyoPayloadWithPartialMeta, XyoPayloadWrapper } from '@xyo-network/sdk-xyo-client-js'
+import { assertEx } from '@xylabs/assert'
+import { XyoPayload, XyoPayloadWithPartialMeta, XyoPayloadWrapper } from '@xyo-network/payload'
 
 export abstract class Query<T extends XyoPayload = XyoPayload> {
   constructor(public readonly payload: XyoPayloadWithPartialMeta<T>) {}

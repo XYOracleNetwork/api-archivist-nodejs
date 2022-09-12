@@ -1,5 +1,6 @@
 import 'reflect-metadata'
 
+import { assertEx } from '@xylabs/assert'
 import { exists } from '@xylabs/sdk-js'
 import { XyoAccount } from '@xyo-network/account'
 import { XyoPayloadFindFilter } from '@xyo-network/archivist'
@@ -29,8 +30,9 @@ export class MongoDBArchivistWitnessedPayloadArchivist extends AbstractPayloadAr
   find(_filter: XyoPayloadFindFilter): Promise<XyoPayloadWithMeta[]> {
     throw new Error('Not implemented')
   }
-  async get(hash: string): Promise<XyoPayloadWithMeta[]> {
+  async get(hashes: string[]): Promise<XyoPayloadWithMeta[]> {
     // Find bw signed by us that has this hash
+    const hash = assertEx(hashes.pop(), 'Missing hash')
     const bound_witnesses = await (await this.boundWitnesses.find({ payload_hashes: hash })).limit(100).toArray()
     const archives = bound_witnesses
       .map((bw) => bw._archive)

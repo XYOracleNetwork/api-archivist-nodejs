@@ -1,5 +1,5 @@
 import { XyoPayload } from '@xyo-network/payload'
-import { XyoSchemaCache, XyoSchemaCacheEntry } from '@xyo-network/sdk-xyo-client-js'
+import { XyoSchemaCache, XyoSchemaCacheEntry } from '@xyo-network/utils'
 
 import { getPayloadValidatorFromSchemaCache } from './getPayloadValidatorFromSchemaCache'
 

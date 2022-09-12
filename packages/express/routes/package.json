@@ -27,8 +27,10 @@
   "author": "Arie Trouw",
   "license": "LGPL-3.0",
   "dependencies": {
+    "@xylabs/assert": "^2.6.7",
     "@xylabs/sdk-api-express-ecs": "^1.2.4",
     "@xylabs/sdk-js": "^2.6.7",
+    "@xyo-network/api": "^2.31.5",
     "@xyo-network/archivist-dependencies": "workspace:^",
     "@xyo-network/archivist-express-lib": "workspace:^",
     "@xyo-network/archivist-lib": "workspace:^",
@@ -36,12 +38,17 @@
     "@xyo-network/archivist-model": "workspace:^",
     "@xyo-network/archivist-queue": "workspace:^",
     "@xyo-network/archivist-types": "workspace:^",
-    "@xyo-network/domain-payload-plugin": "^2.29.2",
-    "@xyo-network/sdk-xyo-client-js": "^2.29.2",
+    "@xyo-network/boundwitness": "^2.31.5",
+    "@xyo-network/core": "^2.31.5",
+    "@xyo-network/diviner": "^2.31.5",
+    "@xyo-network/domain-payload-plugin": "^2.31.5",
+    "@xyo-network/module": "^2.31.5",
+    "@xyo-network/payload": "^2.31.5",
+    "@xyo-network/utils": "^2.31.5",
     "express": "^4.18.1",
     "http-status-codes": "^2.2.0",
     "source-map-support": "^0.5.21",
-    "uuid": "^8.3.2"
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/express": "4.17.13",

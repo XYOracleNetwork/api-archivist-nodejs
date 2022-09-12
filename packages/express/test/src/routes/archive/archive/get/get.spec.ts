@@ -3,7 +3,7 @@ import { claimArchive, getArchive, getArchiveName, getTokenForNewUser } from '..
 describe('/archive', () => {
   let token = ''
   let archive = ''
-  beforeEach(async () => {
+  beforeAll(async () => {
     token = await getTokenForNewUser()
     archive = getArchiveName()
     await claimArchive(token, archive)

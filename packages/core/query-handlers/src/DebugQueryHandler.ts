@@ -1,6 +1,7 @@
-import { assertEx, delay } from '@xylabs/sdk-js'
+import { assertEx } from '@xylabs/assert'
+import { delay } from '@xylabs/delay'
 import { DebugPayload, DebugQuery, debugSchema, QueryHandler } from '@xyo-network/archivist-model'
-import { XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayloadBuilder } from '@xyo-network/payload'
 import { injectable } from 'inversify'
 
 @injectable()

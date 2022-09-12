@@ -1,4 +1,4 @@
-import { delay } from '@xylabs/sdk-js'
+import { delay } from '@xylabs/delay'
 import { dependencies } from '@xyo-network/archivist-dependencies'
 import { isProduction } from '@xyo-network/archivist-middleware'
 import {
@@ -18,7 +18,7 @@ import {
   GetSchemaQueryHandler,
   SetArchivePermissionsQueryHandler,
 } from '@xyo-network/archivist-query-handlers'
-import { XyoPayload, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload, XyoPayloadWithMeta } from '@xyo-network/payload'
 import { Application } from 'express'
 
 export const addQueryProcessors = (app: Application) => {

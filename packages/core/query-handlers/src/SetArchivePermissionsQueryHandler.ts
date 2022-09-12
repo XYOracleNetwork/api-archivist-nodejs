@@ -1,4 +1,4 @@
-import { assertEx } from '@xylabs/sdk-js'
+import { assertEx } from '@xylabs/assert'
 import {
   ArchivePermissionsArchivist,
   QueryHandler,
@@ -8,7 +8,7 @@ import {
   setArchivePermissionsSchema,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayloadBuilder } from '@xyo-network/payload'
 import { inject, injectable } from 'inversify'
 
 const validateAddresses = (query: SetArchivePermissionsQuery) => {
@@ -36,7 +36,7 @@ export class SetArchivePermissionsQueryHandler implements QueryHandler<SetArchiv
     validateAddresses(query)
     validateSchema(query)
     await this.archivePermissionsArchivist.insert([query.payload])
-    const permissions = await this.archivePermissionsArchivist.get(archive)
+    const permissions = await this.archivePermissionsArchivist.get([archive])
     const currentPermissions = assertEx(permissions?.[0])
     return new XyoPayloadBuilder<SetArchivePermissionsPayloadWithMeta>({ schema: setArchivePermissionsSchema })
       .fields({ ...currentPermissions, _queryId: query.id, _timestamp: Date.now() })

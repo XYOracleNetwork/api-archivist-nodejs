@@ -1,4 +1,4 @@
-import { XyoBoundWitnessWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
 
 import { claimArchive, getBlockWithPayloads, getRecentBlocks, getTokenForNewUser, postBlock } from '../../../../../testUtil'
 

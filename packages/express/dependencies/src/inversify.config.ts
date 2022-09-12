@@ -1,7 +1,7 @@
 import 'reflect-metadata'
 
-import { getDefaultLogger, Logger } from '@xylabs/sdk-api-express-ecs'
-import { assertEx } from '@xylabs/sdk-js'
+import { assertEx } from '@xylabs/assert'
+import { getLogger, Logger, LoggerVerbosity } from '@xylabs/sdk-api-express-ecs'
 import { XyoAccount } from '@xyo-network/account'
 import { BcryptPasswordHasher } from '@xyo-network/archivist-middleware'
 import { PasswordHasher, User } from '@xyo-network/archivist-model'
@@ -15,6 +15,7 @@ import { addInMemoryQueueing } from './addInMemoryQueueing'
 import { addPayloadHandlers } from './addPayloadHandlers'
 import { addQueryConverterRegistry } from './addQueryConverterRegistry'
 import { addQueryProcessorRegistry } from './addQueryProcessorRegistry'
+import { tryGetServiceName } from './Util'
 config()
 export const dependencies = new Container({
   autoBindInjectable: true,
@@ -38,11 +39,20 @@ export const configureDependencies = async () => {
   const apiKey = assertEx(process.env.API_KEY, 'API_KEY ENV VAR required to create Archivist')
   const jwtSecret = assertEx(process.env.JWT_SECRET, 'JWT_SECRET ENV VAR required to create Archivist')
   const passwordHasher = BcryptPasswordHasher
+  const verbosity: LoggerVerbosity = (process.env.VERBOSITY as LoggerVerbosity) ?? process.env.NODE_ENV === 'test' ? 'error' : 'info'
+  const logger = getLogger(verbosity)
 
   dependencies.bind<string>(TYPES.ApiKey).toConstantValue(apiKey)
   dependencies.bind<string>(TYPES.JwtSecret).toConstantValue(jwtSecret)
+
   dependencies.bind<PasswordHasher<User>>(TYPES.PasswordHasher).toConstantValue(passwordHasher)
-  dependencies.bind<Logger>(TYPES.Logger).toConstantValue(getDefaultLogger())
+  dependencies.bind<Logger>(TYPES.Logger).toDynamicValue((context) => {
+    const service = tryGetServiceName(context)
+    // TODO: Configure logger with service name
+    // const defaultMeta = { service }
+    // const config = { defaultMeta }
+    return service ? logger : logger
+  })
   dependencies.bind<XyoAccount>(TYPES.Account).toConstantValue(new XyoAccount({ phrase }))
 
   await addMongo(dependencies)

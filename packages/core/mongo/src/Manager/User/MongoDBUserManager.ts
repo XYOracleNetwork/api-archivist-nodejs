@@ -1,5 +1,6 @@
 import 'reflect-metadata'
 
+import { assertEx } from '@xylabs/assert'
 import { Identifiable, PasswordHasher, UpsertResult, User, UserManager, UserWithoutId, Web2User, Web3User } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { inject, injectable } from 'inversify'
@@ -37,7 +38,8 @@ export class MongoDBUserManager implements UserManager {
     if (password) {
       user.passwordHash = await this.passwordHasher.hash(password)
     }
-    const created = await this.mongo.insert(toDbEntity(user))
+    const result = await this.mongo.insert([toDbEntity(user)])
+    const created = assertEx(result.pop(), 'Invalid user creation')
     return { ...fromDbEntity(created), updated: created.updated }
   }
   async findByEmail(email: string): Promise<User | null> {
@@ -46,7 +48,8 @@ export class MongoDBUserManager implements UserManager {
     return user.length ? fromDbEntity(user[0]) : null
   }
   async findById(id: string): Promise<User | null> {
-    const user = await this.mongo.get(id)
+    const users = await this.mongo.get([id])
+    const user = users.pop()
     return user ? fromDbEntity(user) : null
   }
   async findByWallet(address: string): Promise<User | null> {

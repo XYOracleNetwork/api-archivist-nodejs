@@ -5,8 +5,10 @@ import { claimArchive, createArchiveKey, getArchiveKeys, getTokenForNewUser, req
 describe('/archive/:archive/settings/key', () => {
   let token = ''
   let archive = ''
-  beforeEach(async () => {
+  beforeAll(async () => {
     token = await getTokenForNewUser()
+  })
+  beforeEach(async () => {
     archive = (await claimArchive(token)).archive
   })
   describe('auth', () => {

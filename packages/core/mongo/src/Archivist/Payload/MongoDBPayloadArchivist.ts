@@ -1,3 +1,4 @@
+import { assertEx } from '@xylabs/assert'
 import { AbstractPayloadArchivist, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
 import { EmptyObject } from '@xyo-network/core'
 import { XyoPayloadWithMeta } from '@xyo-network/payload'
@@ -30,7 +31,9 @@ export class MongoDBPayloadArchivist extends AbstractPayloadArchivist<XyoPayload
     if (schemas?.length) filter.schema = { $in: schemas }
     return (await this.sdk.find(filter)).sort(sort).limit(parsedLimit).maxTimeMS(2000).toArray()
   }
-  async get(hash: string): Promise<XyoPayloadWithMeta[]> {
+  async get(hashes: string[]): Promise<XyoPayloadWithMeta[]> {
+    assertEx(hashes.length === 1, 'Retrieval of multiple payloads not supported')
+    const hash = assertEx(hashes.pop(), 'Missing hash')
     return (await this.sdk.find({ _hash: hash })).limit(1).toArray()
   }
   async insert(items: XyoPayloadWithMeta[]): Promise<XyoPayloadWithMeta[]> {

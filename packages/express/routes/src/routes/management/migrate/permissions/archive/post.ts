@@ -8,7 +8,8 @@ import { migrateLegacyArchives } from '../migrateLegacyArchives'
 const handler: RequestHandler<ArchivePathParams> = async (req, res, next) => {
   const { archive } = req.params
   const { archivePermissionsArchivist, archiveArchivist } = req.app
-  const entity = await archiveArchivist.get(archive)
+  const result = await archiveArchivist.get([archive])
+  const entity = result.pop()
   if (entity) {
     const result = await migrateLegacyArchives(archivePermissionsArchivist, [entity])
     const migrated = result?.[0]

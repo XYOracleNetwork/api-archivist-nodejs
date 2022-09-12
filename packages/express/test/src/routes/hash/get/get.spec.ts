@@ -1,4 +1,5 @@
-import { XyoBoundWitness, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitness } from '@xyo-network/boundwitness'
+import { XyoPayload } from '@xyo-network/payload'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import {
@@ -13,8 +14,13 @@ import {
 } from '../../../testUtil'
 
 describe('/:hash', () => {
+  let ownerToken = ''
+  let otherUserToken = ''
+  beforeAll(async () => {
+    ownerToken = await getTokenForNewUser()
+    otherUserToken = await getTokenForNewUser()
+  })
   describe('return format is', () => {
-    let token = ''
     let archive = ''
     const block = getBlocksWithPayloads(2, 2)
     expect(block).toBeTruthy()
@@ -27,9 +33,8 @@ describe('/:hash', () => {
     const payloadHash = boundWitness?.payload_hashes?.[0]
     expect(payloadHash).toBeTruthy()
     beforeAll(async () => {
-      token = await getTokenForNewUser()
       archive = getArchiveName()
-      await claimArchive(token, archive)
+      await claimArchive(ownerToken, archive)
       const blockResponse = await postBlock(block, archive)
       expect(blockResponse.length).toBe(2)
     })
@@ -52,7 +57,6 @@ describe('/:hash', () => {
     })
   })
   describe('with public archive', () => {
-    let token = ''
     let archive = ''
     const boundWitness = getBlockWithPayloads(1)
     expect(boundWitness).toBeTruthy()
@@ -63,9 +67,8 @@ describe('/:hash', () => {
     const payloadHash = boundWitness.payload_hashes?.[0]
     expect(payloadHash).toBeTruthy()
     beforeAll(async () => {
-      token = await getTokenForNewUser()
       archive = getArchiveName()
-      await claimArchive(token, archive)
+      await claimArchive(ownerToken, archive)
       const blockResponse = await postBlock(boundWitness, archive)
       expect(blockResponse.length).toBe(1)
     })
@@ -77,17 +80,15 @@ describe('/:hash', () => {
         await getHash(hash, undefined)
       })
       it(`with non-archive owner returns the ${hashKind}`, async () => {
-        const token = await getTokenForNewUser()
-        await getHash(hash, token)
+        await getHash(hash, otherUserToken)
       })
       it(`with archive owner returns the ${hashKind}`, async () => {
-        const result = await getHash(hash, token)
+        const result = await getHash(hash, ownerToken)
         expect(result).toBeTruthy()
       })
     })
   })
   describe('with private archive', () => {
-    let token = ''
     let archive = ''
     const boundWitness = getBlockWithPayloads(1)
     expect(boundWitness).toBeTruthy()
@@ -98,11 +99,10 @@ describe('/:hash', () => {
     const payloadHash = boundWitness.payload_hashes?.[0]
     expect(payloadHash).toBeTruthy()
     beforeAll(async () => {
-      token = await getTokenForNewUser()
       archive = getArchiveName()
-      await claimArchive(token, archive)
-      await setArchiveAccessControl(token, archive, { accessControl: true, archive })
-      const blockResponse = await postBlock(boundWitness, archive, token)
+      await claimArchive(ownerToken, archive)
+      await setArchiveAccessControl(ownerToken, archive, { accessControl: true, archive })
+      const blockResponse = await postBlock(boundWitness, archive, ownerToken)
       expect(blockResponse.length).toBe(1)
     })
     describe.each([
@@ -119,12 +119,11 @@ describe('/:hash', () => {
           await getHash(hash, undefined, StatusCodes.NOT_FOUND)
         })
         it('with non-archive owner', async () => {
-          const token = await getTokenForNewUser()
-          await getHash(hash, token, StatusCodes.NOT_FOUND)
+          await getHash(hash, otherUserToken, StatusCodes.NOT_FOUND)
         })
       })
       it(`with archive owner returns the ${hashKind}`, async () => {
-        const result = await getHash(hash, token)
+        const result = await getHash(hash, ownerToken)
         expect(result).toBeTruthy()
       })
     })

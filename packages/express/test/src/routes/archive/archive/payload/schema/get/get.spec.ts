@@ -1,5 +1,6 @@
+import { XyoAccount } from '@xyo-network/account'
+import { XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { XyoSchemaPayload } from '@xyo-network/schema-payload-plugin'
-import { XyoAccount, XyoBoundWitnessBuilder } from '@xyo-network/sdk-xyo-client-js'
 import { StatusCodes } from 'http-status-codes'
 
 import { claimArchive, getSchemaName, getTokenForNewUser, postBlock, request, testSchemaPrefix } from '../../../../../../testUtil'
@@ -45,5 +46,14 @@ describe('/archive/:archive/payload/schema', () => {
     schemas.forEach((schema) => {
       expect(schema.startsWith(testSchemaPrefix)).toBeTruthy()
     })
+  })
+  it('Returns empty array if no schemas exist in archive', async () => {
+    const token = await getTokenForNewUser()
+    const archive = (await claimArchive(token)).archive
+    const response = await (await request()).get(`/archive/${archive}/payload/schema`).expect(StatusCodes.OK)
+    const schemas = response.body.data as string[]
+    expect(schemas).toBeTruthy()
+    expect(Array.isArray(schemas)).toBeTruthy()
+    expect(schemas.length).toBe(0)
   })
 })

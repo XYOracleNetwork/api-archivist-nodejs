@@ -1,7 +1,8 @@
-import { delay } from '@xylabs/sdk-js'
+import { delay } from '@xylabs/delay'
 import { debugSchema, SetArchivePermissions, SetArchivePermissionsPayload, setArchivePermissionsSchema } from '@xyo-network/archivist-model'
 import { claimArchive, getExistingUser, postCommandsToArchive, signInUser, TestWeb3User } from '@xyo-network/archivist-test'
-import { XyoBoundWitnessBuilder, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
+import { XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
+import { XyoPayloadBuilder } from '@xyo-network/payload'
 import { StatusCodes } from 'http-status-codes'
 
 const allowedSchema = debugSchema
