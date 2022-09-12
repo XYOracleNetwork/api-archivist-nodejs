@@ -61,7 +61,9 @@
       "windows": {
         "runtimeArgs": [
           "--inspect-brk",
+          "--max-old-space-size=8192",
           "${workspaceRoot}/node_modules/jest/bin/jest.js",
+          "--forceExit",
           "--runInBand"
         ]
       },
