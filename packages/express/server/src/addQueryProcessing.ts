@@ -21,8 +21,6 @@ export const addQueryProcessing = () => {
       try {
         const processor = queryProcessors.processors[query.payload.schema]
         if (processor) {
-          // TODO: Validate auth (address/schema allowed)
-
           // Enqueue null in the response queue to indicate we're processing it
           await responseQueue.enqueue({ huri: null, id })
           const result = (await processor(query)) as XyoQueryPayloadWithMeta
