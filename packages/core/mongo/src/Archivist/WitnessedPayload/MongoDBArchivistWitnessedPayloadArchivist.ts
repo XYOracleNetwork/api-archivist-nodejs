@@ -25,7 +25,7 @@ export class MongoDBArchivistWitnessedPayloadArchivist extends AbstractPayloadAr
     @inject(MONGO_TYPES.PayloadSdkMongo) protected readonly payloads: BaseMongoSdk<XyoPayloadWithMeta>,
     @inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta>,
   ) {
-    super()
+    super(account)
   }
   find(_filter: XyoPayloadFindFilter): Promise<XyoPayloadWithMeta[]> {
     throw new Error('Not implemented')

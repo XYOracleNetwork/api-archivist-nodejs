@@ -1,5 +1,7 @@
 import { assertEx } from '@xylabs/assert'
+import { XyoAccount } from '@xyo-network/account'
 import { AbstractPayloadArchivist, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
+import { TYPES } from '@xyo-network/archivist-types'
 import { EmptyObject } from '@xyo-network/core'
 import { XyoPayloadWithMeta } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
@@ -11,8 +13,11 @@ import { MONGO_TYPES } from '../../types'
 
 @injectable()
 export class MongoDBPayloadArchivist extends AbstractPayloadArchivist<XyoPayloadWithMeta, string> {
-  constructor(@inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayloadWithMeta>) {
-    super()
+  constructor(
+    @inject(TYPES.Account) protected readonly account: XyoAccount,
+    @inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayloadWithMeta>,
+  ) {
+    super(account)
   }
   async find(predicate: XyoPayloadFilterPredicate<XyoPayloadWithMeta>): Promise<XyoPayloadWithMeta[]> {
     const { archives, hash, limit, order, schema, schemas, timestamp, ...props } = predicate
