@@ -1,16 +1,27 @@
 import { getRequestMeta } from '@xyo-network/archivist-express-lib'
-import { augmentWithMetadata } from '@xyo-network/archivist-lib'
-import { XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
-import { XyoPayloadMeta } from '@xyo-network/payload'
+import { augmentBoundWitnessWithMetadata, augmentPayloadsWithMetadata } from '@xyo-network/archivist-lib'
+import { XyoBoundWitnessBuilder, XyoBoundWitnessWithMeta, XyoBoundWitnessWithPartialMeta } from '@xyo-network/boundwitness'
+import { XyoPayloadMeta, XyoPayloadWithPartialMeta } from '@xyo-network/payload'
 
 import { PostNodeRequest } from './PostNodeRequest'
 
 export const formatRequest = (req: PostNodeRequest): XyoBoundWitnessWithMeta[] => {
   const [boundWitnessMeta, payloadMeta] = getRequestMeta(req)
-  const boundWitnesses: XyoBoundWitnessWithMeta[] = (Array.isArray(req.body) ? req.body : [req.body]) as XyoBoundWitnessWithMeta[]
-  return augmentWithMetadata(
-    boundWitnesses.map<XyoBoundWitnessWithMeta>((bw) => {
-      bw._payloads = bw._payloads?.length ? augmentWithMetadata(bw._payloads, payloadMeta as XyoPayloadMeta) : []
+  // Make what we received an array
+  const requestArray = (Array.isArray(req.body) ? req.body : [req.body]) as XyoPayloadWithPartialMeta[] | XyoBoundWitnessWithPartialMeta[]
+  // Make what we received BoundWitnesses
+  const boundWitnesses: XyoBoundWitnessWithPartialMeta[] = requestArray.map<XyoBoundWitnessWithPartialMeta>((x) => {
+    return x.schema === 'network.xyo.boundwitness'
+      ? (x as XyoBoundWitnessWithPartialMeta)
+      : // NOTE: This is potentially inefficient as we should just be able
+        // to process payloads. We're witnessing them here as the pipeline
+        // expects BWs but if we can modify the pipeline to accept Payloads
+        // we can remove this overhead.
+        new XyoBoundWitnessBuilder({ inlinePayloads: true }).payload(x).build()
+  })
+  return augmentBoundWitnessWithMetadata(
+    boundWitnesses.map((bw) => {
+      bw._payloads = bw._payloads?.length ? augmentPayloadsWithMetadata(bw._payloads, payloadMeta as XyoPayloadMeta) : []
       return bw
     }),
     boundWitnessMeta,
