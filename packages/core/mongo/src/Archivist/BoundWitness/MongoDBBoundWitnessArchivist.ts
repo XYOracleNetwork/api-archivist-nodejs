@@ -1,5 +1,7 @@
 import { assertEx } from '@xylabs/assert'
+import { XyoAccount } from '@xyo-network/account'
 import { AbstractBoundWitnessArchivist, XyoBoundWitnessFilterPredicate } from '@xyo-network/archivist-model'
+import { TYPES } from '@xyo-network/archivist-types'
 import { XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
@@ -8,9 +10,12 @@ import { Filter, SortDirection } from 'mongodb'
 import { MONGO_TYPES } from '../../types'
 
 @injectable()
-export class MongoDBBoundWitnessArchivist extends AbstractBoundWitnessArchivist<string> {
-  constructor(@inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly sdk: BaseMongoSdk<XyoBoundWitnessWithMeta>) {
-    super()
+export class MongoDBBoundWitnessArchivist extends AbstractBoundWitnessArchivist {
+  constructor(
+    @inject(TYPES.Account) protected readonly account: XyoAccount,
+    @inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly sdk: BaseMongoSdk<XyoBoundWitnessWithMeta>,
+  ) {
+    super(account)
   }
   async find(predicate: XyoBoundWitnessFilterPredicate): Promise<XyoBoundWitnessWithMeta[]> {
     const { archives, addresses, hash, limit, order, payload_hashes, payload_schemas, timestamp, ...props } = predicate
@@ -40,12 +45,12 @@ export class MongoDBBoundWitnessArchivist extends AbstractBoundWitnessArchivist<
     const hash = assertEx(hashes.pop(), 'Missing hash')
     return (await this.sdk.find({ _hash: hash })).limit(100).toArray()
   }
-  async insert(items: XyoBoundWitnessWithMeta[]): Promise<XyoBoundWitnessWithMeta[]> {
+  async insert(items: XyoBoundWitnessWithMeta[]): Promise<XyoBoundWitnessWithMeta> {
     // TODO: Remove _id if present
     const result = await this.sdk.insertMany(items)
     if (result.insertedCount != items.length) {
       throw new Error('Error inserting Payloads')
     }
-    return items
+    return this.bindPayloads(items)
   }
 }
