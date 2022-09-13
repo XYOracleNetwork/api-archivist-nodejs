@@ -1,5 +1,5 @@
+import { Archivist, XyoArchivistQuery } from '@xyo-network/archivist'
 import { XyoBoundWitness, XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
-import { Archivist, XyoArchivistQuery } from '@xyo-network/sdk-xyo-client-js'
 
 import { XyoBoundWitnessFilterPredicate } from './XyoBoundWitnessFilterPredicate'
 
