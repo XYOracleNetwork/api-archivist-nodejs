@@ -2,6 +2,7 @@ import { assertEx } from '@xylabs/assert'
 import { XyoAccount } from '@xyo-network/account'
 import { AbstractPayloadArchivist, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
+import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { EmptyObject } from '@xyo-network/core'
 import { XyoPayloadWithMeta } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
@@ -41,11 +42,11 @@ export class MongoDBPayloadArchivist extends AbstractPayloadArchivist<XyoPayload
     const hash = assertEx(hashes.pop(), 'Missing hash')
     return (await this.sdk.find({ _hash: hash })).limit(1).toArray()
   }
-  async insert(items: XyoPayloadWithMeta[]): Promise<XyoPayloadWithMeta[]> {
+  async insert(items: XyoPayloadWithMeta[]): Promise<XyoBoundWitness> {
     const result = await this.sdk.insertMany(items.map(removeId) as XyoPayloadWithMeta[])
     if (result.insertedCount != items.length) {
       throw new Error('Error inserting Payloads')
     }
-    return items
+    return this.bindPayloads(items)
   }
 }
