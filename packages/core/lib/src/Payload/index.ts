@@ -1,5 +1,3 @@
-export * from './augmentBoundWitnessesWithMetadata'
-export * from './augmentPayloadsWithMetadata'
 export * from './augmentWithMetadata'
 export * from './prepareBoundWitnesses'
 export * from './removePayloads'

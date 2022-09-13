@@ -3,8 +3,7 @@ import 'source-map-support/register'
 import { XyoBoundWitnessMeta, XyoBoundWitnessWithMeta, XyoBoundWitnessWithPartialMeta } from '@xyo-network/boundwitness'
 import { XyoPayloadMeta, XyoPayloadWithMeta } from '@xyo-network/payload'
 
-import { augmentBoundWitnessesWithMetadata } from './augmentBoundWitnessesWithMetadata'
-import { augmentPayloadsWithMetadata } from './augmentPayloadsWithMetadata'
+import { augmentWithMetadata } from '..'
 import { removePayloads } from './removePayloads'
 
 export interface PrepareBoundWitnessesResult {
@@ -17,8 +16,8 @@ export const prepareBoundWitnesses = (
   boundWitnessMetaData: XyoBoundWitnessMeta,
   payloadMetaData: XyoPayloadMeta,
 ): PrepareBoundWitnessesResult => {
-  const sanitized = removePayloads(augmentBoundWitnessesWithMetadata(boundWitnesses, boundWitnessMetaData))
-  const payloads = augmentPayloadsWithMetadata(
+  const sanitized: XyoBoundWitnessWithMeta[] = removePayloads(augmentWithMetadata(boundWitnesses, boundWitnessMetaData))
+  const payloads: XyoPayloadWithMeta[] = augmentWithMetadata(
     boundWitnesses.map((bw) => bw._payloads || []).flatMap((p) => p),
     payloadMetaData,
   )
