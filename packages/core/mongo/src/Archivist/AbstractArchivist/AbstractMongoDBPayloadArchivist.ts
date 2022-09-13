@@ -6,7 +6,7 @@ import { AbstractPayloadArchivist, XyoPayloadFilterPredicate } from '@xyo-networ
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoBoundWitnessBuilder, XyoBoundWitnessBuilderConfig, XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
 import { EmptyObject } from '@xyo-network/core'
-import { XyoPayload, XyoPayloadBuilder, XyoPayloadWithMeta, XyoPayloadWithPartialMeta } from '@xyo-network/payload'
+import { XyoPayloadBuilder, XyoPayloadWithMeta, XyoPayloadWithPartialMeta } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { ExplainVerbosity, Filter, OptionalUnlessRequiredId, WithoutId } from 'mongodb'
@@ -61,7 +61,7 @@ export abstract class AbstractMongoDBPayloadArchivist<
     return [payload]
   }
 
-  async insert(items: XyoPayload<WithoutId<T>>[]): Promise<XyoBoundWitnessWithMeta | null> {
+  async insert(items: XyoPayloadWithPartialMeta<WithoutId<T>>[]): Promise<XyoBoundWitnessWithMeta | null> {
     const _timestamp = Date.now()
     const payloads = items.map((p) => {
       return {
