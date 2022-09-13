@@ -1,5 +1,6 @@
 import 'reflect-metadata'
 
+import { XyoAccount } from '@xyo-network/account'
 import {
   XyoArchivistConfig,
   XyoArchivistFindQuerySchema,
@@ -18,7 +19,10 @@ import { XyoBoundWitnessFilterPredicate } from './XyoBoundWitnessFilterPredicate
 
 @injectable()
 export abstract class AbstractBoundWitnessArchivist extends XyoModule<XyoArchivistConfig, XyoArchivistQuery> implements BoundWitnessArchivist {
-  abstract get address(): string
+  constructor(protected readonly account: XyoAccount) {
+    super(undefined, account)
+  }
+
   public override queries(): XyoArchivistQuerySchema[] {
     return [
       XyoArchivistFindQuerySchema,
