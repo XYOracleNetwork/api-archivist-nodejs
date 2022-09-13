@@ -10,6 +10,7 @@ import {
   Logger,
   PayloadStatsDiviner,
   PayloadStatsPayload,
+  PayloadStatsQueryPayload,
   PayloadStatsSchema,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
@@ -46,7 +47,7 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
     @inject(TYPES.ArchiveArchivist) protected archiveArchivist: ArchiveArchivist,
     @inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayload>,
   ) {
-    super({ account, schema: XyoArchivistPayloadDivinerConfigSchema })
+    super({ schema: XyoArchivistPayloadDivinerConfigSchema }, account)
     void this.registerWithChangeStream()
   }
 
@@ -68,15 +69,15 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
     ]
   }
 
-  get queries() {
-    return [XyoDivinerDivineQuerySchema]
-  }
-
   public async divine(payloads?: XyoPayloads): Promise<PayloadStatsPayload> {
-    const query = payloads?.find(isPayloadStatsQueryPayload)
-    const archive = query?.archive ?? this.config.archive
+    const query = payloads?.find<PayloadStatsQueryPayload>(isPayloadStatsQueryPayload)
+    const archive = query?.archive ?? this?.config?.archive
     const count = archive ? await this.divineArchive(archive) : await this.divineAllArchives()
     return new XyoPayloadBuilder<PayloadStatsPayload>({ schema: PayloadStatsSchema }).fields({ count }).build()
+  }
+
+  queries() {
+    return [XyoDivinerDivineQuerySchema]
   }
 
   private divineAllArchives = () => this.sdk.useCollection((collection) => collection.estimatedDocumentCount())

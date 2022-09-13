@@ -6,6 +6,7 @@ import {
   ArchiveArchivist,
   BoundWitnessStatsDiviner,
   BoundWitnessStatsPayload,
+  BoundWitnessStatsQueryPayload,
   BoundWitnessStatsSchema,
   isBoundWitnessStatsQueryPayload,
   Job,
@@ -50,7 +51,7 @@ export class MongoDBArchiveBoundWitnessStatsDiviner
     @inject(TYPES.ArchiveArchivist) protected archiveArchivist: ArchiveArchivist,
     @inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly sdk: BaseMongoSdk<XyoBoundWitnessWithMeta>,
   ) {
-    super({ account, schema: XyoArchivistPayloadDivinerConfigSchema })
+    super({ schema: XyoArchivistPayloadDivinerConfigSchema }, account)
     void this.registerWithChangeStream()
   }
 
@@ -72,15 +73,15 @@ export class MongoDBArchiveBoundWitnessStatsDiviner
     ]
   }
 
-  get queries() {
-    return [XyoDivinerDivineQuerySchema]
-  }
-
   override async divine(payloads?: XyoPayloads): Promise<BoundWitnessStatsPayload> {
-    const query = payloads?.find(isBoundWitnessStatsQueryPayload)
-    const archive = query?.archive ?? this.config.archive
+    const query = payloads?.find<BoundWitnessStatsQueryPayload>(isBoundWitnessStatsQueryPayload)
+    const archive = query?.archive ?? this?.config?.archive
     const count = archive ? await this.divineArchive(archive) : await this.divineAllArchives()
     return new XyoPayloadBuilder<BoundWitnessStatsPayload>({ schema: BoundWitnessStatsSchema }).fields({ count }).build()
+  }
+
+  queries() {
+    return [XyoDivinerDivineQuerySchema]
   }
 
   private divineAllArchives = () => this.sdk.useCollection((collection) => collection.estimatedDocumentCount())
