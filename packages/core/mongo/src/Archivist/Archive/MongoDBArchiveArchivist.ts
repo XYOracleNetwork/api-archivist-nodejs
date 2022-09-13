@@ -2,10 +2,9 @@ import 'reflect-metadata'
 
 import { assertEx } from '@xylabs/assert'
 import { XyoArchive } from '@xyo-network/api'
-import { XyoArchivistQuery, XyoArchivistQuerySchema } from '@xyo-network/archivist'
+import { XyoArchivistQuery } from '@xyo-network/archivist'
 import { ArchiveArchivist, UpsertResult, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
 import { XyoModuleQueryResult } from '@xyo-network/module'
-import { Promisable, PromisableArray } from '@xyo-network/promisable'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter, SortDirection, WithId } from 'mongodb'
@@ -69,13 +68,13 @@ export class MongoDBArchiveArchivist implements ArchiveArchivist {
     })
   }
 
-  public queries(): XyoArchivistQuerySchema[] {
-    return []
+  queries(): string[] {
+    throw new Error('Module query not implemented for MongoDBArchiveArchivist')
   }
-  public query(_query: XyoArchivistQuery): Promisable<XyoModuleQueryResult> {
-    throw new Error('')
+  query(_query: XyoArchivistQuery): Promise<XyoModuleQueryResult> {
+    throw new Error('Module query not implemented for MongoDBArchiveArchivist')
   }
-  public queryable(_schema: string): boolean {
-    return false
+  queryable(_schema: string): boolean {
+    throw new Error('Module query not implemented for MongoDBArchiveArchivist')
   }
 }
