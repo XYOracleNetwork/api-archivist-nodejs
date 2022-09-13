@@ -19,9 +19,9 @@ import { PayloadArchivist } from './PayloadArchivist'
 import { XyoPayloadFilterPredicate } from './XyoPayloadFilterPredicate'
 
 @injectable()
-export abstract class AbstractPayloadArchivist<T extends EmptyObject = EmptyObject>
+export abstract class AbstractPayloadArchivist<T extends EmptyObject = EmptyObject, TId = string>
   extends XyoModule<XyoArchivistConfig, XyoArchivistQuery>
-  implements PayloadArchivist<T>
+  implements PayloadArchivist<T, TId>
 {
   abstract get address(): string
 
@@ -47,7 +47,9 @@ export abstract class AbstractPayloadArchivist<T extends EmptyObject = EmptyObje
         if (query.filter) payloads.push(...(await this.find(query.filter as XyoPayloadFilterPredicate<T>)))
         break
       case XyoArchivistGetQuerySchema:
-        payloads.push(...(await this.get(query.hashes)))
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // TODO: Make TId generic in Module system
+        payloads.push(...(await this.get(query.hashes as any as TId[])))
         break
       case XyoArchivistInsertQuerySchema:
         payloads.push(await this.insert(query.payloads as XyoPayload<T>[]), ...query.payloads)
@@ -59,6 +61,6 @@ export abstract class AbstractPayloadArchivist<T extends EmptyObject = EmptyObje
   }
 
   abstract find(filter: XyoPayloadFilterPredicate<T>): Promise<XyoPayloadWithMeta<T>[]>
-  abstract get(id: string[]): Promise<Array<XyoPayloadWithMeta<T> | null>>
+  abstract get(id: TId[]): Promise<Array<XyoPayloadWithMeta<T> | null>>
   abstract insert(items: XyoPayload<T>[]): Promisable<XyoBoundWitness | null>
 }
