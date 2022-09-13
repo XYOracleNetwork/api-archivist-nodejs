@@ -18,7 +18,10 @@ import { BoundWitnessArchivist } from './BoundWitnessArchivist'
 import { XyoBoundWitnessFilterPredicate } from './XyoBoundWitnessFilterPredicate'
 
 @injectable()
-export abstract class AbstractBoundWitnessArchivist extends XyoModule<XyoArchivistConfig, XyoArchivistQuery> implements BoundWitnessArchivist {
+export abstract class AbstractBoundWitnessArchivist<TId = string>
+  extends XyoModule<XyoArchivistConfig, XyoArchivistQuery>
+  implements BoundWitnessArchivist<TId>
+{
   constructor(protected readonly account: XyoAccount) {
     super(undefined, account)
   }
@@ -44,7 +47,8 @@ export abstract class AbstractBoundWitnessArchivist extends XyoModule<XyoArchivi
         if (query.filter) payloads.push(...(await this.find(query.filter as XyoBoundWitnessFilterPredicate)))
         break
       case XyoArchivistGetQuerySchema:
-        payloads.push(...(await this.get(query.hashes)))
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        payloads.push(...(await this.get(query.hashes as any as TId[])))
         break
       case XyoArchivistInsertQuerySchema:
         payloads.push(await this.insert(query.payloads as XyoBoundWitness[]), ...query.payloads)
@@ -55,6 +59,6 @@ export abstract class AbstractBoundWitnessArchivist extends XyoModule<XyoArchivi
     return [this.bindPayloads(payloads), payloads]
   }
   abstract find(filter?: XyoBoundWitnessFilterPredicate | undefined): Promise<Array<XyoBoundWitnessWithMeta | null>>
-  abstract get(ids: string[]): Promise<Array<XyoBoundWitnessWithMeta | null>>
+  abstract get(ids: TId[]): Promise<Array<XyoBoundWitnessWithMeta | null>>
   abstract insert(item: XyoBoundWitness[]): Promise<XyoBoundWitnessWithMeta | null>
 }
