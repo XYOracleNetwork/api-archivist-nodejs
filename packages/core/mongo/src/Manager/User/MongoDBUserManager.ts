@@ -4,17 +4,17 @@ import { assertEx } from '@xylabs/assert'
 import { Identifiable, PasswordHasher, UpsertResult, User, UserManager, UserWithoutId, Web2User, Web3User } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { inject, injectable } from 'inversify'
-import { WithId } from 'mongodb'
+import { OptionalId } from 'mongodb'
 
 import { MongoDBUserArchivist } from '../../Archivist'
 import { MONGO_TYPES } from '../../types'
 
-const fromDbEntity = (user: WithId<User>): User => {
+const fromDbEntity = (user: OptionalId<User>): User => {
   const id = user?._id?.toHexString?.()
   if (id) {
     user.id = id
+    delete user?._id
   }
-  delete (user as Partial<WithId<User>>)?._id
   return user
 }
 
@@ -39,7 +39,7 @@ export class MongoDBUserManager implements UserManager {
       user.passwordHash = await this.passwordHasher.hash(password)
     }
     const result = await this.mongo.insert([toDbEntity(user)])
-    const created = assertEx(result.pop(), 'Invalid user creation')
+    const created = assertEx(result, 'Invalid user creation')
     return { ...fromDbEntity(created), updated: created.updated }
   }
   async findByEmail(email: string): Promise<User | null> {
