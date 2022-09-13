@@ -1,13 +1,14 @@
 import { XyoBoundWitness, XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
-import { Archivist } from '@xyo-network/sdk-xyo-client-js'
+import { Archivist, XyoArchivistQuery } from '@xyo-network/sdk-xyo-client-js'
 
 import { XyoBoundWitnessFilterPredicate } from './XyoBoundWitnessFilterPredicate'
 
-export type BoundWitnessArchivist<TId = string, TQuery extends XyoBoundWitnessFilterPredicate = XyoBoundWitnessFilterPredicate> = Archivist<
-  XyoBoundWitnessWithMeta,
-  XyoBoundWitnessWithMeta,
+export type BoundWitnessArchivist = Archivist<
+  XyoBoundWitnessWithMeta | null,
+  XyoBoundWitness | null,
   XyoBoundWitness,
-  XyoBoundWitnessWithMeta,
-  TQuery,
-  TId
+  XyoBoundWitnessWithMeta | null,
+  XyoBoundWitnessFilterPredicate,
+  string,
+  XyoArchivistQuery
 >
