@@ -45,3 +45,17 @@ export const augmentPayloadsWithMetadata = <T extends XyoPayloadWithPartialMeta>
     return { ...payload, ...meta, _hash: wrapper.hash }
   })
 }
+
+export const augmentWithMetadata = <T extends XyoPayloadWithPartialMeta[] | XyoBoundWitnessWithPartialMeta[]>(
+  payloads: T,
+  meta: T extends XyoPayloadWithPartialMeta[] ? XyoPayloadMeta : XyoBoundWitnessMeta,
+): T extends XyoPayloadWithPartialMeta ? XyoPayloadWithMeta[] : XyoBoundWitnessWithMeta[] => {
+  return payloads.map((payload) => {
+    const wrapper = new XyoPayloadWrapper(payload)
+    return {
+      ...payload,
+      ...meta,
+      _hash: wrapper.hash,
+    } as T extends XyoPayloadWithPartialMeta ? XyoPayloadWithMeta : XyoBoundWitnessWithMeta
+  })
+}
