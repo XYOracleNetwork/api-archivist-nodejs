@@ -3382,15 +3382,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/express@npm:*, @types/express@npm:4.17.13":
-  version: 4.17.13
-  resolution: "@types/express@npm:4.17.13"
+"@types/express@npm:*, @types/express@npm:4.17.14":
+  version: 4.17.14
+  resolution: "@types/express@npm:4.17.14"
   dependencies:
     "@types/body-parser": "*"
     "@types/express-serve-static-core": ^4.17.18
     "@types/qs": "*"
     "@types/serve-static": "*"
-  checksum: 12a2a0e6c4b993fc0854bec665906788aea0d8ee4392389d7a98a5de1eefdd33c9e1e40a91f3afd274011119c506f7b4126acb97fae62ae20b654974d44cba12
+  checksum: 15c1af46d02de834e4a225eccaa9d85c0370fdbb3ed4e1bc2d323d24872309961542b993ae236335aeb3e278630224a6ea002078d39e651d78a3b0356b1eaa79
   languageName: node
   linkType: hard
 
@@ -3477,13 +3477,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:^29.0.0, @types/jest@npm:^29.0.1":
-  version: 29.0.1
-  resolution: "@types/jest@npm:29.0.1"
+"@types/jest@npm:^29.0.0, @types/jest@npm:^29.0.2":
+  version: 29.0.2
+  resolution: "@types/jest@npm:29.0.2"
   dependencies:
     expect: ^29.0.0
     pretty-format: ^29.0.0
-  checksum: efd30357c290b5d385382302fae927885f2a9bde0aa45d4c7f970fa6e6d750df83edef73f16d1e9a005e08a5bcd7c6ff56a43f5ac2534a517df9ad1e44dd30c4
+  checksum: 27c46b58fad9791adf88167ba2c14ae3513cb1fe5df038faafe7fc4513ebb230dd8029a1dd0acd1abeb82aa014839ac10e0dcf1bfae9fcc0e69bc1eb1e5204f0
   languageName: node
   linkType: hard
 
@@ -3574,10 +3574,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^18.7.15, @types/node@npm:^18.7.17":
-  version: 18.7.17
-  resolution: "@types/node@npm:18.7.17"
-  checksum: bb1b832f4ad42a106d189d87e95aef117f0026a7ea291f34c5d106a25419d6d4c9d39099688ad46746cc3c2307c263be4adec1049a35dc12c9e48f19975b2dc6
+"@types/node@npm:*, @types/node@npm:^18.7.15, @types/node@npm:^18.7.18":
+  version: 18.7.18
+  resolution: "@types/node@npm:18.7.18"
+  checksum: 8aec61f0f96e2a69ce51f1f40f949ca578bbb4fe05d7c0b8ce3aeeb848e90f755837f17f6ac132ca404d974fe9b2974150ad3b4984fc9dc7c3ceddb10bae0167
   languageName: node
   linkType: hard
 
@@ -4209,7 +4209,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@xyo-network/archivist-express-lib@workspace:packages/express/lib"
   dependencies:
-    "@types/express": 4.17.13
+    "@types/express": 4.17.14
     "@types/passport": ^1.0.11
     "@xylabs/sdk-api-express-ecs": ^1.2.4
     "@xyo-network/api": ^2.32.1
@@ -4234,7 +4234,7 @@ __metadata:
     ajv: ^8.11.0
     jest: ^29.0.3
     jest-extended: ^3.1.0
-    jest-mock-extended: ^2.0.7
+    jest-mock-extended: ^2.0.9
     source-map-support: ^0.5.21
     typescript: ^4.8.3
     uuid: ^9.0.0
@@ -4246,7 +4246,7 @@ __metadata:
   resolution: "@xyo-network/archivist-middleware@workspace:packages/express/middleware"
   dependencies:
     "@types/bcrypt": ^5.0.0
-    "@types/express": 4.17.13
+    "@types/express": 4.17.14
     "@types/express-mung": ^0.5.2
     "@types/jsonwebtoken": ^8.5.9
     "@types/passport": ^1.0.11
@@ -4342,7 +4342,7 @@ __metadata:
     "@xyo-network/utils": ^2.32.1
     inversify: ^6.0.1
     jest: ^29.0.3
-    jest-mock-extended: ^2.0.7
+    jest-mock-extended: ^2.0.9
     typescript: ^4.8.3
   languageName: unknown
   linkType: soft
@@ -4360,7 +4360,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@xyo-network/archivist-routes@workspace:packages/express/routes"
   dependencies:
-    "@types/express": 4.17.13
+    "@types/express": 4.17.14
     "@types/source-map-support": 0.5.6
     "@types/uuid": ^8.3.4
     "@xylabs/assert": ^2.6.7
@@ -4394,7 +4394,7 @@ __metadata:
   dependencies:
     "@types/compression": ^1.7.2
     "@types/cors": ^2.8.12
-    "@types/express": 4.17.13
+    "@types/express": 4.17.14
     "@types/passport": ^1.0.11
     "@types/uuid": ^8.3.4
     "@xylabs/assert": ^2.6.7
@@ -4566,8 +4566,8 @@ __metadata:
   dependencies:
     "@babel/core": ^7.19.0
     "@babel/preset-env": ^7.19.0
-    "@types/jest": ^29.0.1
-    "@types/node": ^18.7.17
+    "@types/jest": ^29.0.2
+    "@types/node": ^18.7.18
     "@types/source-map-support": 0.5.6
     "@xylabs/eslint-config": ^2.7.9
     "@xylabs/sdk-api-express-ecs": ^1.2.4
@@ -4583,7 +4583,7 @@ __metadata:
     jest: ^29.0.3
     jest-extended: ^3.1.0
     nodemon: ^2.0.19
-    ts-jest: ^29.0.0
+    ts-jest: ^29.0.1
     ts-node: ^10.9.1
     typescript: ^4.8.3
   languageName: unknown
@@ -9691,15 +9691,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-mock-extended@npm:^2.0.7":
-  version: 2.0.7
-  resolution: "jest-mock-extended@npm:2.0.7"
+"jest-mock-extended@npm:^2.0.7, jest-mock-extended@npm:^2.0.9":
+  version: 2.0.9
+  resolution: "jest-mock-extended@npm:2.0.9"
   dependencies:
     ts-essentials: ^7.0.3
   peerDependencies:
-    jest: ^24.0.0 || ^25.0.0 || ^26.0.0 || ^27.0.0 || ^28.0.0
+    jest: ^24.0.0 || ^25.0.0 || ^26.0.0 || ^27.0.0 || ^28.0.0 || ^29.0.0
     typescript: ^3.0.0 || ^4.0.0
-  checksum: e9928f1c1e4c9d1bb9746e0f0791e7b0c5b91474d10ed07c6f59e80294830b46b9f6f99b418e4ebcb3641db7957f2014317ab4267e56b676789f7013db72aa8e
+  checksum: 338d556e3c6e25cffb99168bc5a0d4d9dce15e06ccc33dbcb0f4b9e52a452e684337ab42be880b98a6e555fc57f26fb9b02621ab160ac526c3a91b908fe0f82a
   languageName: node
   linkType: hard
 
@@ -15891,9 +15891,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-jest@npm:^29.0.0":
-  version: 29.0.0
-  resolution: "ts-jest@npm:29.0.0"
+"ts-jest@npm:^29.0.1":
+  version: 29.0.1
+  resolution: "ts-jest@npm:29.0.1"
   dependencies:
     bs-logger: 0.x
     fast-json-stable-stringify: 2.x
@@ -15920,7 +15920,7 @@ __metadata:
       optional: true
   bin:
     ts-jest: cli.js
-  checksum: f4e811aa910b7cd2ef6a9269700dda17ccf253ebdb6ba9e596982d238292d6482973e670e7a6875209e7d246cdf575d79590fc503e12e9368e9105d1d74f09fc
+  checksum: f126675beb0d103d440b0297dc331ce37ba0f1e1a8002f4e97bfeb9043cf21b4de03deebf11ac1f08b7e4978d87f6a1c71e398b1c2f8535df3b684338786408e
   languageName: node
   linkType: hard
 
