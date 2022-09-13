@@ -1,5 +1,6 @@
 import { assertEx } from '@xylabs/assert'
 import { asyncHandler, NoReqBody, tryParseInt } from '@xylabs/sdk-api-express-ecs'
+import { exists } from '@xylabs/sdk-js'
 import { ArchiveLocals, ArchivePathParams, XyoArchivePayloadFilterPredicate } from '@xyo-network/archivist-model'
 import { XyoPayload, XyoPayloadWrapper } from '@xyo-network/payload'
 import { RequestHandler } from 'express'
@@ -29,7 +30,7 @@ const handler: RequestHandler<ArchivePathParams, XyoPayload[], NoReqBody, GetArc
   }
   const payloads = await archivePayloadsArchivist.find(predicate)
   if (payloads) {
-    res.json(payloads.map((payload) => new XyoPayloadWrapper(payload).body))
+    res.json(payloads.filter(exists).map((payload) => new XyoPayloadWrapper(payload).body))
   } else {
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
   }
