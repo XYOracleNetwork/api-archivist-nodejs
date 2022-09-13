@@ -1,12 +1,11 @@
 import { assertEx } from '@xylabs/assert'
 import { XyoArchiveKey } from '@xyo-network/api'
-import { XyoArchivist, XyoArchivistQuery } from '@xyo-network/archivist'
+import { XyoArchivistQuery } from '@xyo-network/archivist'
 import { ArchiveKeyArchivist } from '@xyo-network/archivist-model'
-import { Promisable } from '@xyo-network/promisable'
 import { XyoModuleQueryResult } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
-import { Collection, Filter, WithId } from 'mongodb'
+import { Collection, WithId } from 'mongodb'
 
 import { MONGO_TYPES } from '../../types'
 

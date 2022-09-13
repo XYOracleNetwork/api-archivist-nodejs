@@ -51,7 +51,6 @@ export abstract class AbstractPayloadArchivist<T extends EmptyObject = EmptyObje
         break
       case XyoArchivistGetQuerySchema:
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        // TODO: Make TId generic in Module system
         payloads.push(...(await this.get(query.hashes as any as TId[])))
         break
       case XyoArchivistInsertQuerySchema:
