@@ -1,6 +1,9 @@
 import { assertEx } from '@xylabs/assert'
 import { XyoArchiveKey } from '@xyo-network/api'
+import { XyoArchivist, XyoArchivistQuery } from '@xyo-network/archivist'
 import { ArchiveKeyArchivist } from '@xyo-network/archivist-model'
+import { Promisable } from '@xyo-network/promisable'
+import { XyoModuleQueryResult } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Collection, Filter, WithId } from 'mongodb'
@@ -18,7 +21,11 @@ const fromDb = (k: WithId<XyoArchiveKey>) => {
 @injectable()
 export class MongoDBArchiveKeyArchivist implements ArchiveKeyArchivist {
   constructor(@inject(MONGO_TYPES.ArchiveKeySdkMongo) protected readonly keys: BaseMongoSdk<XyoArchiveKey>) {}
-  async find(filter: Filter<XyoArchiveKey>): Promise<XyoArchiveKey[]> {
+  get address(): string {
+    throw new Error('Module query not implemented for MongoDBArchiveKeyArchivist')
+  }
+
+  async find(filter: Partial<XyoArchiveKey>): Promise<XyoArchiveKey[]> {
     return (await (await this.keys.find(filter)).toArray()).map(fromDb)
   }
   async get(archives: string[]): Promise<XyoArchiveKey[]> {
@@ -26,22 +33,31 @@ export class MongoDBArchiveKeyArchivist implements ArchiveKeyArchivist {
     const archive = assertEx(archives.pop(), 'Missing archive')
     return (await (await this.keys.find({ archive })).toArray()).map(fromDb)
   }
-  async insert(items: XyoArchiveKey[]): Promise<XyoArchiveKey[]> {
+  async insert(items: XyoArchiveKey[]): Promise<XyoArchiveKey> {
     assertEx(items.length === 1, 'Insertion of multiple archives keys not supported')
     const item = assertEx(items.pop(), 'Missing archive key')
     return await this.keys.useCollection(async (collection: Collection<XyoArchiveKey>) => {
       const result = await collection.insertOne({ ...item })
       if (result.acknowledged) {
-        return [
-          {
-            archive: item.archive,
-            created: result.insertedId.getTimestamp().getTime(),
-            key: item.key,
-          },
-        ]
+        const key: XyoArchiveKey = {
+          archive: item.archive,
+          created: result.insertedId.getTimestamp().getTime(),
+          key: item.key,
+        }
+        return key
       } else {
         throw new Error('Insert Failed')
       }
     })
+  }
+
+  queries(): string[] {
+    throw new Error('Module query not implemented for MongoDBArchiveKeyArchivist')
+  }
+  query(_query: XyoArchivistQuery): Promise<XyoModuleQueryResult> {
+    throw new Error('Module query not implemented for MongoDBArchiveKeyArchivist')
+  }
+  queryable(_schema: string): boolean {
+    throw new Error('Module query not implemented for MongoDBArchiveKeyArchivist')
   }
 }
