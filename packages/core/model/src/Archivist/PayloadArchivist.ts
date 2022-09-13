@@ -5,12 +5,12 @@ import { XyoPayload, XyoPayloadWithMeta } from '@xyo-network/payload'
 
 import { XyoPayloadFilterPredicate } from './XyoPayloadFilterPredicate'
 
-export type PayloadArchivist<T extends EmptyObject = EmptyObject> = Archivist<
+export type PayloadArchivist<T extends EmptyObject = EmptyObject, TId = string> = Archivist<
   XyoPayloadWithMeta<T> | null,
   XyoBoundWitness | null,
   XyoPayload<T>,
   XyoPayloadWithMeta<T> | null,
   XyoPayloadFilterPredicate<T>,
-  string, // TODO: Make Generic again
+  TId,
   XyoArchivistQuery
 >
