@@ -13,7 +13,6 @@ import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { EmptyObject } from '@xyo-network/core'
 import { XyoModule, XyoModuleQueryResult } from '@xyo-network/module'
 import { XyoPayload, XyoPayloadWithMeta } from '@xyo-network/payload'
-import { Promisable } from '@xyo-network/promisable'
 import { injectable } from 'inversify'
 
 import { PayloadArchivist } from './PayloadArchivist'
@@ -64,5 +63,5 @@ export abstract class AbstractPayloadArchivist<T extends EmptyObject = EmptyObje
 
   abstract find(filter: XyoPayloadFilterPredicate<T>): Promise<XyoPayloadWithMeta<T>[]>
   abstract get(id: TId[]): Promise<Array<XyoPayloadWithMeta<T> | null>>
-  abstract insert(items: XyoPayload<T>[]): Promisable<XyoBoundWitness | null>
+  abstract insert(items: XyoPayload<T>[]): Promise<XyoBoundWitness | null>
 }
