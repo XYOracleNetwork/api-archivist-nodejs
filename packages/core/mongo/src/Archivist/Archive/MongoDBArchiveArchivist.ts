@@ -26,8 +26,8 @@ interface UpsertFilter {
 export class MongoDBArchiveArchivist implements ArchiveArchivist {
   constructor(@inject(MONGO_TYPES.ArchiveSdkMongo) protected archives: BaseMongoSdk<Required<XyoArchive>>) {}
 
-  public get address(): string {
-    return 'TODO'
+  get address(): string {
+    throw new Error('Module query not implemented for MongoDBArchiveArchivist')
   }
 
   async find(predicate?: XyoPayloadFilterPredicate<XyoArchive>): Promise<Required<XyoArchive>[]> {
