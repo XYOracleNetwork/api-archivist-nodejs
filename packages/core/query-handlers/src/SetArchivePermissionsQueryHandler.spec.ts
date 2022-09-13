@@ -5,6 +5,7 @@ import {
   SetArchivePermissionsQuery,
   setArchivePermissionsSchema,
 } from '@xyo-network/archivist-model'
+import { XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { mock, MockProxy } from 'jest-mock-extended'
 
 import { SetArchivePermissionsQueryHandler } from './SetArchivePermissionsQueryHandler'
@@ -48,7 +49,7 @@ describe('SetArchivePermissionsQueryHandler', () => {
     beforeEach(() => {
       archivist = mock<ArchivePermissionsArchivist>()
       archivist.get.mockResolvedValue([getQueryPayload()])
-      archivist.insert.mockResolvedValue([getQueryPayload()])
+      archivist.insert.mockResolvedValue(new XyoBoundWitnessBuilder().payload(getQueryPayload()).build())
       sut = new SetArchivePermissionsQueryHandler(archivist)
     })
     describe('with valid permissions', () => {
