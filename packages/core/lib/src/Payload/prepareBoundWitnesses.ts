@@ -32,10 +32,10 @@ export const removePayloads = (boundWitnesses: XyoBoundWitnessWithMeta[]): XyoBo
 export const augmentBoundWitnessWithMetadata = <T extends XyoBoundWitnessWithPartialMeta>(
   boundWitnesses: T[],
   meta: XyoBoundWitnessMeta,
-): XyoPayloadWithMeta<T>[] => {
-  return boundWitnesses.map((payload) => {
-    const wrapper = new XyoPayloadWrapper(payload)
-    return { ...payload, ...meta, _hash: wrapper.hash }
+): XyoBoundWitnessWithMeta<T>[] => {
+  return boundWitnesses.map((bw) => {
+    const wrapper = new XyoPayloadWrapper(bw)
+    return { ...bw, ...meta, _hash: wrapper.hash }
   })
 }
 
