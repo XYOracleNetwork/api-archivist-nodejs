@@ -1,5 +1,4 @@
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
-import { exists } from '@xylabs/sdk-js'
 import { ArchivePathParams } from '@xyo-network/archivist-model'
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
@@ -13,8 +12,12 @@ const handler: RequestHandler<ArchivePathParams> = async (req, res, next) => {
   const entity = result.pop()
   if (entity) {
     const result = await migrateLegacyArchives(archivePermissionsArchivist, [entity])
-    const migrated = result.filter(exists).length
-    res.status(StatusCodes.OK).json({ archive: entity, migrated })
+    if (result.length !== 1) {
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ archive: entity })
+    } else {
+      const migrated = (await archivePermissionsArchivist.get([archive]))?.[0]
+      res.status(StatusCodes.OK).json({ archive: entity, migrated })
+    }
   } else {
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
   }
