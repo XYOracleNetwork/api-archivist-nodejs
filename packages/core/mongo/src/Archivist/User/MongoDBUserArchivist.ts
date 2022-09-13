@@ -1,9 +1,8 @@
 import 'reflect-metadata'
 
 import { assertEx } from '@xylabs/assert'
-import { XyoArchivistQuery, XyoPayloadFindFilter } from '@xyo-network/archivist'
+import { XyoArchivistQuery } from '@xyo-network/archivist'
 import { UpsertResult, User, UserArchivist, UserWithoutId } from '@xyo-network/archivist-model'
-import { PromisableArray } from '@xyo-network/promisable'
 import { XyoModuleQueryResult } from '@xyo-network/sdk-xyo-client-js'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
