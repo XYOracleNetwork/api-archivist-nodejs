@@ -12,6 +12,6 @@ export abstract class Query<T extends XyoPayload = XyoPayload> {
    * @returns Unique ID for the query
    */
   public get id(): string {
-    return `${this.account.addressValue.bn.toString('hex')}`
+    return `${this.account.addressValue.hex}`
   }
 }
