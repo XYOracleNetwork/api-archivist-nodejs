@@ -1,5 +1,7 @@
 import { assertEx } from '@xylabs/assert'
-import { ArchiveBoundWitnessesArchivist, ArchiveBoundWitnessesArchivistId, XyoArchiveBoundWitnessFilterPredicate } from '@xyo-network/archivist-model'
+import { XyoAccount } from '@xyo-network/account'
+import { AbstractBoundWitnessArchivist, ArchiveBoundWitnessesArchivistId, XyoArchiveBoundWitnessFilterPredicate } from '@xyo-network/archivist-model'
+import { TYPES } from '@xyo-network/archivist-types'
 import { XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
 import { EmptyObject } from '@xyo-network/core'
 import { XyoPayloadWithPartialMeta } from '@xyo-network/payload'
@@ -11,8 +13,14 @@ import { removeId } from '../../Mongo'
 import { MONGO_TYPES } from '../../types'
 
 @injectable()
-export class MongoDBArchiveBoundWitnessesArchivist implements ArchiveBoundWitnessesArchivist {
-  constructor(@inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly sdk: BaseMongoSdk<XyoBoundWitnessWithMeta>) {}
+export class MongoDBArchiveBoundWitnessesArchivist extends AbstractBoundWitnessArchivist<ArchiveBoundWitnessesArchivistId> {
+  constructor(
+    @inject(TYPES.Account) protected readonly account: XyoAccount,
+    @inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly sdk: BaseMongoSdk<XyoBoundWitnessWithMeta>,
+  ) {
+    super(account)
+  }
+
   async find(
     predicate: XyoArchiveBoundWitnessFilterPredicate,
   ): Promise<XyoBoundWitnessWithMeta<EmptyObject, XyoPayloadWithPartialMeta<EmptyObject>>[]> {
@@ -38,18 +46,19 @@ export class MongoDBArchiveBoundWitnessesArchivist implements ArchiveBoundWitnes
     if (payload_schemas?.length) filter.payload_schemas = { $in: payload_schemas }
     return (await this.sdk.find(filter)).sort(sort).limit(parsedLimit).maxTimeMS(2000).toArray()
   }
-  async get(ids: ArchiveBoundWitnessesArchivistId[]): Promise<XyoBoundWitnessWithMeta<EmptyObject, XyoPayloadWithPartialMeta<EmptyObject>>[]> {
-    assertEx(ids.length === 1, 'Retrieval of multiple Payloads not supported')
+  async get(ids: ArchiveBoundWitnessesArchivistId[]): Promise<Array<XyoBoundWitnessWithMeta | null>> {
+    assertEx(ids.length === 1, 'Retrieval of multiple BoundWitnesses not supported')
     const id = assertEx(ids.pop(), 'Missing id')
     const predicate = { _archive: assertEx(id.archive), _hash: assertEx(id.hash) }
     return (await this.sdk.find(predicate)).limit(1).toArray()
   }
-  async insert(items: XyoBoundWitnessWithMeta[]): Promise<XyoBoundWitnessWithMeta[]> {
+
+  async insert(items: XyoBoundWitnessWithMeta[]): Promise<XyoBoundWitnessWithMeta> {
     // TODO: Remove payloads, calculate hash, remove id, etc.
     const result = await this.sdk.insertMany(items.map(removeId) as XyoBoundWitnessWithMeta[])
     if (result.insertedCount != items.length) {
       throw new Error('Error inserting BoundWitnesses')
     }
-    return items
+    return this.bindPayloads(items)
   }
 }

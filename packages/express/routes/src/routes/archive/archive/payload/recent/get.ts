@@ -2,6 +2,7 @@ import 'source-map-support/register'
 
 import { assertEx } from '@xylabs/assert'
 import { asyncHandler, tryParseInt } from '@xylabs/sdk-api-express-ecs'
+import { exists } from '@xylabs/sdk-js'
 import { XyoArchivePayloadFilterPredicate } from '@xyo-network/archivist-model'
 import { XyoPayload } from '@xyo-network/payload'
 import { RequestHandler } from 'express'
@@ -19,7 +20,7 @@ const handler: RequestHandler<PayloadRecentPathParams, XyoPayload[]> = async (re
     order: 'desc',
   }
   const payloads = await archivePayloadsArchivist.find(predicate)
-  res.json(payloads)
+  res.json(payloads.filter(exists))
 }
 
 export const getArchivePayloadRecent = asyncHandler(handler)

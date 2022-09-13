@@ -1,6 +1,9 @@
 import { assertEx } from '@xylabs/assert'
+import { XyoArchivistQuery } from '@xyo-network/archivist'
 import { ArchivePayloadsArchivist, ArchivePayloadsArchivistId, XyoArchivePayloadFilterPredicate } from '@xyo-network/archivist-model'
+import { XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { EmptyObject } from '@xyo-network/core'
+import { XyoModuleQueryResult } from '@xyo-network/module'
 import { XyoPayloadWithMeta } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
@@ -12,6 +15,11 @@ import { MONGO_TYPES } from '../../types'
 @injectable()
 export class MongoDBArchivePayloadsArchivist implements ArchivePayloadsArchivist {
   constructor(@inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayloadWithMeta>) {}
+
+  get address(): string {
+    throw new Error('Module query not implemented for MongoDBArchivePayloadsArchivist')
+  }
+
   async find(predicate: XyoArchivePayloadFilterPredicate): Promise<XyoPayloadWithMeta[]> {
     const { archive, hash, limit, order, schema, schemas, timestamp, ...props } = predicate
     const parsedLimit = limit || 100
@@ -35,11 +43,21 @@ export class MongoDBArchivePayloadsArchivist implements ArchivePayloadsArchivist
     const predicate = { _archive: assertEx(id.archive), _hash: assertEx(id.hash) }
     return (await this.sdk.find(predicate)).limit(1).toArray()
   }
-  async insert(items: XyoPayloadWithMeta[]): Promise<XyoPayloadWithMeta[]> {
+  async insert(items: XyoPayloadWithMeta[]) {
     const result = await this.sdk.insertMany(items.map(removeId) as XyoPayloadWithMeta[])
     if (result.insertedCount != items.length) {
       throw new Error('Error inserting Payloads')
     }
-    return items
+    return new XyoBoundWitnessBuilder({ inlinePayloads: false }).payloads(items).build()
+  }
+
+  queries(): string[] {
+    throw new Error('Module query not implemented for MongoDBArchivePayloadsArchivist')
+  }
+  query(_query: XyoArchivistQuery): Promise<XyoModuleQueryResult> {
+    throw new Error('Module query not implemented for MongoDBArchivePayloadsArchivist')
+  }
+  queryable(_schema: string): boolean {
+    throw new Error('Module query not implemented for MongoDBArchivePayloadsArchivist')
   }
 }

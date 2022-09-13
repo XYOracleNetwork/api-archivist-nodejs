@@ -1,10 +1,12 @@
 import 'reflect-metadata'
 
 import { assertEx } from '@xylabs/assert'
+import { XyoArchivistQuery } from '@xyo-network/archivist'
 import { UpsertResult, User, UserArchivist, UserWithoutId } from '@xyo-network/archivist-model'
+import { XyoModuleQueryResult } from '@xyo-network/module'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
-import { Filter, ObjectId, WithId } from 'mongodb'
+import { ObjectId, WithId } from 'mongodb'
 
 import { MONGO_TYPES } from '../../types'
 
@@ -18,11 +20,14 @@ interface IUpsertFilter {
 @injectable()
 export class MongoDBUserArchivist implements UserArchivist {
   constructor(@inject(MONGO_TYPES.UserSdkMongo) protected readonly db: BaseMongoSdk<User>) {}
-
-  async find(query: Filter<User>): Promise<WithId<User>[]> {
-    return (await this.db.find(query)).limit(20).toArray()
+  get address(): string {
+    throw new Error('Module query not implemented for MongoDBUserArchivist')
   }
 
+  async find(query?: Partial<User>): Promise<User[]> {
+    if (!query) return []
+    return (await this.db.find(query)).limit(1).toArray()
+  }
   async get(ids: string[]): Promise<Array<WithId<User> | null>> {
     assertEx(ids.length === 1, 'Retrieval of multiple users not supported')
     const id = assertEx(ids.pop(), 'Missing user id')
@@ -30,7 +35,7 @@ export class MongoDBUserArchivist implements UserArchivist {
     return user ? [user] : [null]
   }
 
-  async insert(users: UserWithoutId[]): Promise<WithId<User & UpsertResult>[]> {
+  async insert(users: UserWithoutId[]): Promise<WithId<User & UpsertResult>> {
     return await this.db.useCollection(async (collection) => {
       const filter: IUpsertFilter = { $or: [] }
       assertEx(users.length === 1, 'Insertion of multiple users not supported')
@@ -48,9 +53,19 @@ export class MongoDBUserArchivist implements UserArchivist {
       const result = await collection.findOneAndUpdate(filter, { $set: user }, { returnDocument: 'after', upsert: true })
       if (result.ok && result.value) {
         const updated = !!result?.lastErrorObject?.updatedExisting || false
-        return [{ ...result.value, updated }]
+        return { ...result.value, updated }
       }
       throw new Error('Insert Failed')
     })
+  }
+
+  queries(): string[] {
+    throw new Error('Module query not implemented for MongoDBUserArchivist')
+  }
+  query(_query: XyoArchivistQuery): Promise<XyoModuleQueryResult> {
+    throw new Error('Module query not implemented for MongoDBUserArchivist')
+  }
+  queryable(_schema: string): boolean {
+    throw new Error('Module query not implemented for MongoDBUserArchivist')
   }
 }

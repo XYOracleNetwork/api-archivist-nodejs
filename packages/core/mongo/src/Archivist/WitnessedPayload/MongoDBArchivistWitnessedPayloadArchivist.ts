@@ -6,7 +6,7 @@ import { XyoAccount } from '@xyo-network/account'
 import { XyoPayloadFindFilter } from '@xyo-network/archivist'
 import { AbstractPayloadArchivist } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { XyoBoundWitnessBuilder, XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
+import { XyoBoundWitness, XyoBoundWitnessBuilder, XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
 import { XyoPayloadWithMeta } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
@@ -25,7 +25,7 @@ export class MongoDBArchivistWitnessedPayloadArchivist extends AbstractPayloadAr
     @inject(MONGO_TYPES.PayloadSdkMongo) protected readonly payloads: BaseMongoSdk<XyoPayloadWithMeta>,
     @inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta>,
   ) {
-    super()
+    super(account)
   }
   find(_filter: XyoPayloadFindFilter): Promise<XyoPayloadWithMeta[]> {
     throw new Error('Not implemented')
@@ -40,7 +40,8 @@ export class MongoDBArchivistWitnessedPayloadArchivist extends AbstractPayloadAr
       .filter(unique)
     return (await this.payloads.find({ _archive: { $in: archives }, _hash: hash })).limit(100).toArray()
   }
-  async insert(payloads: XyoPayloadWithMeta[]): Promise<XyoPayloadWithMeta[]> {
+
+  async insert(payloads: XyoPayloadWithMeta[]): Promise<XyoBoundWitness | null> {
     // Witness from archivist
     const _timestamp = Date.now()
     const bw = new XyoBoundWitnessBuilder({ inlinePayloads: false }).payloads(payloads).build()
@@ -54,6 +55,6 @@ export class MongoDBArchivistWitnessedPayloadArchivist extends AbstractPayloadAr
     if (result.insertedCount != payloads.length) {
       throw new Error('Error inserting Payloads')
     }
-    return payloads
+    return bw
   }
 }

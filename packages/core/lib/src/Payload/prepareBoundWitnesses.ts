@@ -3,7 +3,7 @@ import 'source-map-support/register'
 import { XyoBoundWitnessMeta, XyoBoundWitnessWithMeta, XyoBoundWitnessWithPartialMeta } from '@xyo-network/boundwitness'
 import { XyoPayloadMeta, XyoPayloadWithMeta } from '@xyo-network/payload'
 
-import { augmentWithMetadata } from '..'
+import { augmentWithMetadata } from './augmentWithMetadata'
 import { removePayloads } from './removePayloads'
 
 export interface PrepareBoundWitnessesResult {

@@ -33,7 +33,7 @@ export const addQueryProcessing = () => {
 
             // Witness result and store result in archive
             const stored = await witnessedPayloadArchivist.insert([result])
-            const hash = stored?.[0]?._hash
+            const hash = stored?.payload_hashes?.[0]
             if (hash) {
               // Store result in response queue
               await responseQueue.enqueue({ huri: new Huri(hash), id })
