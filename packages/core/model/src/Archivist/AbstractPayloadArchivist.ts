@@ -1,5 +1,6 @@
 import 'reflect-metadata'
 
+import { XyoAccount } from '@xyo-network/account'
 import {
   XyoArchivistConfig,
   XyoArchivistFindQuerySchema,
@@ -23,9 +24,11 @@ export abstract class AbstractPayloadArchivist<T extends EmptyObject = EmptyObje
   extends XyoModule<XyoArchivistConfig, XyoArchivistQuery>
   implements PayloadArchivist<T, TId>
 {
-  abstract get address(): string
+  constructor(protected readonly account: XyoAccount) {
+    super(undefined, account)
+  }
 
-  public override queries(): XyoArchivistQuerySchema[] {
+  override queries(): XyoArchivistQuerySchema[] {
     return [
       XyoArchivistFindQuerySchema,
       XyoArchivistGetQuerySchema,

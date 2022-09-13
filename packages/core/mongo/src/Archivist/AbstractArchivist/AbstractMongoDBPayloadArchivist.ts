@@ -26,7 +26,7 @@ export abstract class AbstractMongoDBPayloadArchivist<
     @inject(MONGO_TYPES.PayloadSdkMongo) protected readonly payloads: BaseMongoSdk<XyoPayloadWithMeta<T>>,
     @inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta>,
   ) {
-    super()
+    super(account)
   }
 
   public abstract get schema(): string
