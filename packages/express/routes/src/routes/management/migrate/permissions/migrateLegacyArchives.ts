@@ -14,5 +14,5 @@ export const migrateLegacyArchives = async (archivist: ArchivePermissionsArchivi
     return archivist.insert([{ ...permissions, _archive: archive.archive } as SetArchivePermissionsPayload])
   })
   const results = await Promise.all(migrations)
-  return results.map((result) => result?.[0])
+  return results
 }

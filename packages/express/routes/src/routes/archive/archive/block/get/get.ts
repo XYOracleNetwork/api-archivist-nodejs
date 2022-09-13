@@ -1,5 +1,6 @@
 import { assertEx } from '@xylabs/assert'
 import { asyncHandler, NoReqBody, NoReqQuery, tryParseInt } from '@xylabs/sdk-api-express-ecs'
+import { exists } from '@xylabs/sdk-js'
 import { scrubBoundWitnesses } from '@xyo-network/archivist-lib'
 import { ArchiveLocals, ArchivePathParams, SortDirection, XyoArchiveBoundWitnessFilterPredicate } from '@xyo-network/archivist-model'
 import { XyoBoundWitness } from '@xyo-network/boundwitness'
@@ -40,7 +41,7 @@ const handler: RequestHandler<
   }
   const boundWitnesses = await archiveBoundWitnessesArchivist.find(predicate)
   if (boundWitnesses) {
-    res.json(scrubBoundWitnesses(boundWitnesses))
+    res.json(scrubBoundWitnesses(boundWitnesses.filter(exists)))
   } else {
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
   }

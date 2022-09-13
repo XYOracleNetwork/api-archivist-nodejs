@@ -23,7 +23,7 @@ const handler: RequestHandler<ArchivePathParams, XyoArchiveKey> = async (req, re
   }
 
   const result = await archiveKeyArchivist.insert([generateArchiveKey(archive)])
-  const key = assertEx(result.pop(), 'Error inserting key')
+  const key = assertEx(result, 'Error inserting key')
   res.json(key)
 }
 
