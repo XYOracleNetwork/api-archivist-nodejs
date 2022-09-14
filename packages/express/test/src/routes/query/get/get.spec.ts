@@ -1,6 +1,6 @@
 import { assertEx } from '@xylabs/assert'
 import { delay } from '@xylabs/delay'
-import { debugSchema } from '@xyo-network/archivist-model'
+import { DebugPayloadWithMeta, debugSchema } from '@xyo-network/archivist-model'
 import { XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { XyoPayload, XyoPayloadBuilder } from '@xyo-network/payload'
 import { StatusCodes } from 'http-status-codes'
@@ -12,7 +12,7 @@ const schema = debugSchema
 
 const getTestRequest = (delay = 1): XyoPayload => {
   const fields = { delay, nonce: v4() }
-  return new XyoPayloadBuilder({ schema }).fields(fields).build()
+  return new XyoPayloadBuilder<DebugPayloadWithMeta>({ schema }).fields(fields).build()
 }
 
 const postRequest = async (delay = 1, archive = 'temp', token?: string): Promise<string> => {
