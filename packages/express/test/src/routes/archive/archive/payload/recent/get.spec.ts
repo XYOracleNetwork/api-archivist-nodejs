@@ -17,11 +17,11 @@ describe('/archive/:archive/payload/recent/:limit', () => {
   const otherPayloadsToPost = Math.ceil(defaultReturnLength / 2)
   let token = ''
   let archive = ''
-  let newArchive = ''
+  let otherArchive = ''
   beforeAll(async () => {
     token = await getTokenForNewUser()
     archive = (await claimArchive(token)).archive
-    newArchive = (await claimArchive(token)).archive
+    otherArchive = (await claimArchive(token)).archive
 
     // NOTE: POST in parallel to speed up test
     const postedPayloads = [
@@ -32,24 +32,21 @@ describe('/archive/:archive/payload/recent/:limit', () => {
       }),
       // Post some payloads to another archive
       new Array(otherPayloadsToPost).fill(null).map(async () => {
-        const response = await postBlock(getBlockWithPayloads(1), newArchive)
+        const response = await postBlock(getBlockWithPayloads(1), otherArchive)
         expect(response.length).toBe(1)
       }),
     ]
     await Promise.all(postedPayloads.flatMap((p) => p))
-  }, 20000)
+  })
   it(`With no argument, retrieves the ${defaultReturnLength} most recently posted payloads`, async () => {
+    // Ensure the original payloads only show up when getting recent from that archive
     const recent = await getRecent(archive, token)
     recent.map((block) => expect(block._archive).toBe(archive))
   })
   it('Only retrieves recently posted payloads from the archive specified in the path', async () => {
-    // Ensure the original payloads only show up when getting recent from that archive
-    let recent = await getRecent(archive, token)
-    recent.map((block) => expect(block._archive).toBe(archive))
-
     // Ensure the new payloads only show up when getting recent from that archive
-    recent = await getRecent(newArchive, token, otherPayloadsToPost)
-    recent.map((block) => expect(block._archive).toBe(newArchive))
+    const recent = await getRecent(otherArchive, token, otherPayloadsToPost)
+    recent.map((block) => expect(block._archive).toBe(otherArchive))
   })
   it('When no payloads have been posted to the archive, returns an empty array', async () => {
     await getRecent((await claimArchive(token)).archive, token, 0)
