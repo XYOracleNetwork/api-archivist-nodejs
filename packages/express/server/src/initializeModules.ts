@@ -4,6 +4,7 @@ import { XyoModule } from '@xyo-network/module'
 
 export const initializeModules = async () => {
   const modules: XyoModule[] = dependencies.get(TYPES.Initializable)
+  // TODO: Initialize via Query once SDK updates happen
   // const query: XyoModuleInitializeQuery = {
   //   schema: XyoModuleInitializeQuerySchema,
   // }
