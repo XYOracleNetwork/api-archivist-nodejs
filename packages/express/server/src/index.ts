@@ -16,6 +16,7 @@ import { addQueryConverters } from './addQueryConverters'
 import { addQueryProcessing } from './addQueryProcessing'
 import { addQueryProcessors } from './addQueryProcessors'
 import { configureEnvironment } from './configureEnvironment'
+import { initializeModules } from './initializeModules'
 
 export const getApp = async (): Promise<Express> => {
   await configureEnvironment()
@@ -27,6 +28,7 @@ export const getApp = async (): Promise<Express> => {
   app.use(compression())
 
   addDependencies(app)
+  await initializeModules()
   addMiddleware(app)
   addAuth(app)
   addQueryConverters()
