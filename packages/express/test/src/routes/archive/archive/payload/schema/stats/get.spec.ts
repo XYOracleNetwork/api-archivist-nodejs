@@ -18,25 +18,29 @@ const getNewBlockWithPayloadsOfSchemaType = (schema = getSchemaName()) => {
 describe('/archive/:archive/payload/schema/stats', () => {
   let token = ''
   let archive = ''
+  let otherArchive = ''
   beforeAll(async () => {
     token = await getTokenForNewUser()
     archive = (await claimArchive(token)).archive
-    // Post blocks to one archive
-    for (let blockCount = 0; blockCount < blocksPosted; blockCount++) {
-      const block = getNewBlockWithPayloadsOfSchemaType()
-      const blockResponse = await postBlock(block, archive)
-      expect(blockResponse.length).toBe(1)
-    }
+    otherArchive = (await claimArchive(token)).archive
 
-    // Post blocks to another archive
-    token = await getTokenForNewUser()
-    archive = (await claimArchive(token)).archive
-    for (let blockCount = 0; blockCount < blocksPosted; blockCount++) {
-      const block = getNewBlockWithPayloadsOfSchemaType()
-      const blockResponse = await postBlock(block, archive)
-      expect(blockResponse.length).toBe(1)
-    }
-  }, 25000)
+    // NOTE: POST in parallel to speed up test
+    const postedPayloads = [
+      // POST Payloads to test archive
+      new Array(blocksPosted).fill(null).map(async () => {
+        const block = getNewBlockWithPayloadsOfSchemaType()
+        const response = await postBlock(block, archive)
+        expect(response.length).toBe(1)
+      }),
+      // Post some payloads to another archive
+      new Array(blocksPosted).fill(null).map(async () => {
+        const block = getNewBlockWithPayloadsOfSchemaType()
+        const response = await postBlock(block, otherArchive)
+        expect(response.length).toBe(1)
+      }),
+    ]
+    await Promise.all(postedPayloads.flatMap((p) => p))
+  })
   it('Returns stats on all payload schemas in archive', async () => {
     const response = await (await request()).get(`/archive/${archive}/payload/schema/stats`).expect(StatusCodes.OK)
     const stats = response.body.data
