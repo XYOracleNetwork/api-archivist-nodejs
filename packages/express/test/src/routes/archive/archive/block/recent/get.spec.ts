@@ -24,7 +24,7 @@ describe('/archive/:archive/block/recent/:limit', () => {
     otherArchive = (await claimArchive(token)).archive
 
     // NOTE: POST in parallel to speed up test
-    const postedBlocks = [
+    const posted = [
       // POST Payloads to test archive
       new Array(blocksToPost).fill(null).map(async () => {
         const response = await postBlock(getBlockWithPayloads(1), archive)
@@ -36,7 +36,7 @@ describe('/archive/:archive/block/recent/:limit', () => {
         expect(response.length).toBe(1)
       }),
     ]
-    await Promise.all(postedBlocks.flatMap((p) => p))
+    await Promise.all(posted.flatMap((p) => p))
   })
   it(`With no argument, retrieves the ${defaultReturnLength} most recently posted blocks`, async () => {
     // Ensure the original payloads only show up when getting recent from that archive

@@ -5,23 +5,42 @@ import { XyoSchemaPayload } from '@xyo-network/schema-payload-plugin'
 
 import { claimArchive, getArchiveSchemaRecent, getTokenForNewUser, postBlock } from '../../../../../testUtil'
 
+const schemaToAdd = 5
+
 describe('/archive/:archive/schema/recent', () => {
   const schema = 'network.xyo.schema'
   const definition = { $schema: 'http://json-schema.org/draft-07/schema#' }
-  const schemaToAdd = 5
-  let token: string
-  let archive: string
+  let token = ''
+  let archive = ''
+  let otherArchive = ''
+
   beforeAll(async () => {
     token = await getTokenForNewUser()
     archive = (await claimArchive(token)).archive
-    for (let i = 0; i < schemaToAdd; i++) {
-      const bw = new XyoBoundWitnessBuilder<XyoBoundWitness, XyoSchemaPayload>({ inlinePayloads: true })
-        .payload({ definition, schema })
-        .witness(XyoAccount.random())
-        .build()
-      const response = await postBlock(bw, archive)
-      expect(response).toBeTruthy()
-    }
+    otherArchive = (await claimArchive(token)).archive
+
+    // NOTE: POST in parallel to speed up test
+    const posted = [
+      // POST Payloads to test archive
+      new Array(schemaToAdd).fill(null).map(async () => {
+        const bw = new XyoBoundWitnessBuilder<XyoBoundWitness, XyoSchemaPayload>({ inlinePayloads: true })
+          .payload({ definition, schema })
+          .witness(XyoAccount.random())
+          .build()
+        const response = await postBlock(bw, archive)
+        expect(response).toBeTruthy()
+      }),
+      // Post some payloads to another archive
+      new Array(schemaToAdd).fill(null).map(async () => {
+        const bw = new XyoBoundWitnessBuilder<XyoBoundWitness, XyoSchemaPayload>({ inlinePayloads: true })
+          .payload({ definition, schema })
+          .witness(XyoAccount.random())
+          .build()
+        const response = await postBlock(bw, otherArchive)
+        expect(response).toBeTruthy()
+      }),
+    ]
+    await Promise.all(posted.flatMap((p) => p))
   })
   it('Gets recently uploaded schema for the archive', async () => {
     const response = (await getArchiveSchemaRecent(archive)) as XyoPayloadWithMeta<XyoSchemaPayload>[]
