@@ -14,11 +14,11 @@ import {
   PayloadStatsSchema,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { XyoArchivistPayloadDivinerConfigSchema, XyoDiviner, XyoDivinerDivineQuerySchema } from '@xyo-network/diviner'
+import { XyoArchivistPayloadDivinerConfigSchema, XyoDiviner } from '@xyo-network/diviner'
 import { XyoPayload, XyoPayloadBuilder, XyoPayloads, XyoPayloadWithMeta } from '@xyo-network/payload'
 import { BaseMongoSdk, MongoClientWrapper } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
-import { ChangeStreamInsertDocument, ChangeStreamOptions, ResumeToken, UpdateOptions } from 'mongodb'
+import { ChangeStream, ChangeStreamInsertDocument, ChangeStreamOptions, ResumeToken, UpdateOptions } from 'mongodb'
 
 import { COLLECTIONS } from '../../collections'
 import { DATABASES } from '../../databases'
@@ -37,6 +37,7 @@ interface Stats {
 @injectable()
 export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, ArchiveConfigPayload> implements PayloadStatsDiviner, JobProvider {
   protected readonly batchLimit = 100
+  protected changeStream: ChangeStream | undefined = undefined
   protected nextOffset = 0
   protected pendingCounts: Record<string, number> = {}
   protected resumeAfter: ResumeToken | undefined = undefined
@@ -48,7 +49,6 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
     @inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayload>,
   ) {
     super({ schema: XyoArchivistPayloadDivinerConfigSchema }, account)
-    void this.registerWithChangeStream()
   }
 
   get jobs(): Job[] {
@@ -76,8 +76,12 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
     return new XyoPayloadBuilder<PayloadStatsPayload>({ schema: PayloadStatsSchema }).fields({ count }).build()
   }
 
-  queries() {
-    return [XyoDivinerDivineQuerySchema]
+  override async initialize(): Promise<void> {
+    await this.registerWithChangeStream()
+  }
+
+  override async shutdown(): Promise<void> {
+    await this.changeStream?.close()
   }
 
   private divineAllArchives = () => this.sdk.useCollection((collection) => collection.estimatedDocumentCount())
@@ -122,9 +126,9 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner<XyoPayload, Ar
     assertEx(connection, 'Connection failed')
     const collection = connection.db(DATABASES.Archivist).collection(COLLECTIONS.Payloads)
     const opts: ChangeStreamOptions = this.resumeAfter ? { resumeAfter: this.resumeAfter } : {}
-    const changeStream = collection.watch([], opts)
-    changeStream.on('change', this.processChange)
-    changeStream.on('error', this.registerWithChangeStream)
+    this.changeStream = collection.watch([], opts)
+    this.changeStream.on('change', this.processChange)
+    this.changeStream.on('error', this.registerWithChangeStream)
     this.logger.log('MongoDBArchivePayloadStatsDiviner.RegisterWithChangeStream: Registered')
   }
 
