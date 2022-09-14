@@ -1,25 +1,18 @@
+import { ARCHIVIST_TYPES } from './archivist'
+import { DIVINER_TYPES } from './diviner'
+
 export const TYPES = {
   Account: Symbol('Account'),
   ApiKey: Symbol('ApiKey'),
-  ArchiveArchivist: Symbol('ArchiveArchivist'),
-  ArchiveBoundWitnessesArchivist: Symbol('ArchiveBoundWitnessesArchivist'),
-  ArchiveKeyArchivist: Symbol('ArchiveKeyArchivist'),
-  ArchivePayloadsArchivist: Symbol('ArchivePayloadsArchivist'),
-  ArchivePermissionsArchivist: Symbol('ArchivePermissionsArchivist'),
-  BoundWitnessStatsDiviner: Symbol('BoundWitnessStatsDiviner'),
-  BoundWitnessesArchivist: Symbol('BoundWitnessesArchivist'),
+  ...ARCHIVIST_TYPES,
+  ...DIVINER_TYPES,
   JobQueue: Symbol('JobQueue'),
   JwtSecret: Symbol('JwtSecret'),
   Logger: Symbol('Logger'),
   PasswordHasher: Symbol('PasswordHasher'),
-  PayloadStatsDiviner: Symbol('PayloadStatsDiviner'),
   PayloadToQueryConverterRegistry: Symbol('PayloadToQueryConverterRegistry'),
-  PayloadsArchivist: Symbol('PayloadsArchivist'),
   QueryQueue: Symbol('QueryQueue'),
   ResponseQueue: Symbol('ResponseQueue'),
-  SchemaStatsDiviner: Symbol('SchemaStatsDiviner'),
   SchemaToQueryProcessorRegistry: Symbol('SchemaToQueryProcessorRegistry'),
-  UserArchivist: Symbol('UserArchivist'),
   UserManager: Symbol('UserManager'),
-  WitnessedPayloadArchivist: Symbol('WitnessedPayloadArchivist'),
 }
