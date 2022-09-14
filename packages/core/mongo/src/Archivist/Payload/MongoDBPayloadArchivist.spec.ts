@@ -43,16 +43,27 @@ describe('MongoDBPayloadArchivist', () => {
     })
   })
   describe('find', () => {
-    it('finds payloads', async () => {
+    it('finds payloads by hash', async () => {
       const hash = hashes?.[0]
       expect(hash).not.toBeEmpty()
       const payload = payloads?.[0]
       expect(payload).toBeObject()
-      const predicate: XyoPayloadFilterPredicate<XyoPayloadWithMeta> = { archives: [archive], hash, limit: 1, schema }
+      const predicate: XyoPayloadFilterPredicate<XyoPayloadWithMeta> = { hash, limit: 1 }
       const result = await sut.find(predicate)
       expect(result).toBeArrayOfSize(1)
       expect(result?.[0]).toBeObject()
       expect(result?.[0]).toEqual(payload)
+    })
+    it('finds payloads by schema', async () => {
+      const hash = hashes?.[0]
+      expect(hash).not.toBeEmpty()
+      const payload = payloads?.[0]
+      expect(payload).toBeObject()
+      const predicate: XyoPayloadFilterPredicate<XyoPayloadWithMeta> = { limit: 1, schema }
+      const result = await sut.find(predicate)
+      expect(result).toBeArrayOfSize(1)
+      expect(result?.[0]).toBeObject()
+      expect(result?.[0].schema).toEqual(schema)
     })
   })
   describe('get', () => {
@@ -69,7 +80,7 @@ describe('MongoDBPayloadArchivist', () => {
     it('gets multiple payloads', async () => {
       const result = await sut.get(hashes)
       expect(result).toBeArrayOfSize(count)
-      expect(result).toEqual(payloads)
+      expect(result).toContainValues(payloads)
     })
   })
 })
