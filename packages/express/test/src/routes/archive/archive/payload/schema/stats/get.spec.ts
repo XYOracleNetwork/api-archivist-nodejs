@@ -5,7 +5,7 @@ import { StatusCodes } from 'http-status-codes'
 
 import { claimArchive, getSchemaName, getTokenForNewUser, postBlock, request } from '../../../../../../testUtil'
 
-const blocksPosted = 2
+const count = 2
 const definition = { $schema: 'http://json-schema.org/draft-07/schema#' }
 
 const getNewBlockWithPayloadsOfSchemaType = (schema = getSchemaName()) => {
@@ -18,25 +18,29 @@ const getNewBlockWithPayloadsOfSchemaType = (schema = getSchemaName()) => {
 describe('/archive/:archive/payload/schema/stats', () => {
   let token = ''
   let archive = ''
+  let otherArchive = ''
   beforeAll(async () => {
     token = await getTokenForNewUser()
     archive = (await claimArchive(token)).archive
-    // Post blocks to one archive
-    for (let blockCount = 0; blockCount < blocksPosted; blockCount++) {
-      const block = getNewBlockWithPayloadsOfSchemaType()
-      const blockResponse = await postBlock(block, archive)
-      expect(blockResponse.length).toBe(1)
-    }
+    otherArchive = (await claimArchive(token)).archive
 
-    // Post blocks to another archive
-    token = await getTokenForNewUser()
-    archive = (await claimArchive(token)).archive
-    for (let blockCount = 0; blockCount < blocksPosted; blockCount++) {
-      const block = getNewBlockWithPayloadsOfSchemaType()
-      const blockResponse = await postBlock(block, archive)
-      expect(blockResponse.length).toBe(1)
-    }
-  }, 25000)
+    // NOTE: POST in parallel to speed up test
+    const posted = [
+      // POST Payloads to test archive
+      new Array(count).fill(null).map(async () => {
+        const block = getNewBlockWithPayloadsOfSchemaType()
+        const response = await postBlock(block, archive)
+        expect(response.length).toBe(1)
+      }),
+      // Post some payloads to another archive
+      new Array(count).fill(null).map(async () => {
+        const block = getNewBlockWithPayloadsOfSchemaType()
+        const response = await postBlock(block, otherArchive)
+        expect(response.length).toBe(1)
+      }),
+    ]
+    await Promise.all(posted.flatMap((p) => p))
+  })
   it('Returns stats on all payload schemas in archive', async () => {
     const response = await (await request()).get(`/archive/${archive}/payload/schema/stats`).expect(StatusCodes.OK)
     const stats = response.body.data
@@ -46,9 +50,8 @@ describe('/archive/:archive/payload/schema/stats', () => {
     const { counts } = stats
     const schemas = Object.keys(counts)
     expect(schemas).toBeTruthy()
-    expect(schemas.length).toBe(blocksPosted)
+    expect(schemas.length).toBe(count)
     schemas.forEach((schema) => {
-      // expect(counts).toHaveProperty(schema, 1)
       expect(counts[schema]).toBe(1)
     })
   })
