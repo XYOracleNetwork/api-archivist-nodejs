@@ -1,8 +1,15 @@
 import { XyoAccount } from '@xyo-network/account'
-import { XyoArchivistFindQuery, XyoArchivistFindQuerySchema, XyoArchivistInsertQuery, XyoArchivistInsertQuerySchema } from '@xyo-network/archivist'
+import {
+  XyoArchivistFindQuery,
+  XyoArchivistFindQuerySchema,
+  XyoArchivistGetQuery,
+  XyoArchivistGetQuerySchema,
+  XyoArchivistInsertQuery,
+  XyoArchivistInsertQuerySchema,
+} from '@xyo-network/archivist'
 import { DebugPayload, DebugPayloadWithMeta, debugSchema, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
 import { XyoBoundWitness } from '@xyo-network/boundwitness'
-import { XyoPayload, XyoPayloadBuilder, XyoPayloadWithMeta, XyoPayloadWrapper } from '@xyo-network/payload'
+import { XyoPayloadBuilder, XyoPayloadWithMeta, XyoPayloadWrapper } from '@xyo-network/payload'
 import { v4 } from 'uuid'
 
 import { COLLECTIONS } from '../../collections'
@@ -14,7 +21,7 @@ const schema = debugSchema
 
 const getPayloads = (archive: string, count = 1): XyoPayloadWithMeta<DebugPayload>[] => {
   const payloads: XyoPayloadWithMeta<DebugPayload>[] = []
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < count; i++) {
     const nonce = v4()
     const payload = new XyoPayloadBuilder<DebugPayloadWithMeta>({ schema }).fields({ nonce }).build()
     payload._archive = archive
@@ -28,7 +35,7 @@ describe('MongoDBPayloadArchivist', () => {
   const account = XyoAccount.random()
   const sut = new MongoDBPayloadArchivist(account, sdk)
   const archive = `test-${v4()}`
-  const payloads: XyoPayloadWithMeta<DebugPayload>[] = getPayloads(archive, 2)
+  const payloads: XyoPayloadWithMeta<DebugPayload>[] = getPayloads(archive, count)
   const hashes: string[] = payloads.map((p) => new XyoPayloadWrapper(p).hash)
   const payload = payloads[0]
   const hash = hashes[0]
@@ -39,7 +46,7 @@ describe('MongoDBPayloadArchivist', () => {
       schema: XyoArchivistInsertQuerySchema,
     }
     const result = await sut.query(query)
-    expect(result).toBeArrayOfSize(2)
+    expect(result).toBeArrayOfSize(count)
     const bw: XyoBoundWitness = result?.[0]
     expect(bw).toBeObject()
     expect(bw._signatures).toBeArrayOfSize(1)
@@ -50,16 +57,17 @@ describe('MongoDBPayloadArchivist', () => {
     expect(result?.[1]).toIncludeAllMembers(payloads)
   })
 
-  describe('insert', () => {
+  describe('XyoArchivistInsertQuery', () => {
     it('inserts multiple payloads', async () => {
       // NOTE: Done as part of beforeAll out of necessity
       // for subsequent tests. Not repeated again here for
       // performance.
     })
   })
-  describe('find', () => {
+  describe('XyoArchivistFindQuery', () => {
     it('finds payloads by schema', async () => {
-      const filter: XyoPayloadFilterPredicate<XyoPayloadWithMeta> = { limit: 1, schema }
+      const limit = 1
+      const filter: XyoPayloadFilterPredicate<XyoPayloadWithMeta> = { limit, schema }
       const query: XyoArchivistFindQuery = {
         filter,
         schema: XyoArchivistFindQuerySchema,
@@ -72,11 +80,12 @@ describe('MongoDBPayloadArchivist', () => {
       expect(bw.addresses).toBeArrayOfSize(1)
       expect(bw.addresses).toContain(account.addressValue.hex)
       expect(bw.payload_hashes).toInclude(hash)
-      expect(result?.[1]).toBeArrayOfSize(1)
+      expect(result?.[1]).toBeArrayOfSize(limit)
       expect(result?.[1]).toEqual([payload])
     })
     it('finds payloads by hash', async () => {
-      const filter: XyoPayloadFilterPredicate<XyoPayloadWithMeta> = { hash, limit: 1 }
+      const limit = 1
+      const filter: XyoPayloadFilterPredicate<XyoPayloadWithMeta> = { hash, limit }
       const query: XyoArchivistFindQuery = {
         filter,
         schema: XyoArchivistFindQuerySchema,
@@ -89,21 +98,26 @@ describe('MongoDBPayloadArchivist', () => {
       expect(bw.addresses).toBeArrayOfSize(1)
       expect(bw.addresses).toContain(account.addressValue.hex)
       expect(bw.payload_hashes).toInclude(hash)
-      expect(result?.[1]).toBeArrayOfSize(1)
+      expect(result?.[1]).toBeArrayOfSize(limit)
       expect(result?.[1]).toEqual([payload])
     })
   })
-  describe('get', () => {
-    it('gets single payload', async () => {
-      const result = await sut.get([hash])
-      expect(result).toBeArrayOfSize(1)
-      expect(result?.[0]).toBeObject()
-      expect(result?.[0]).toEqual(payload)
-    })
-    it('gets multiple payloads', async () => {
-      const result = await sut.get(hashes)
-      expect(result).toBeArrayOfSize(count)
-      expect(result).toContainValues(payloads)
+  describe('XyoArchivistGetQuery', () => {
+    it('gets payloads by hashes', async () => {
+      const query: XyoArchivistGetQuery = {
+        hashes,
+        schema: XyoArchivistGetQuerySchema,
+      }
+      const result = await sut.query(query)
+      expect(result).toBeArrayOfSize(2)
+      const bw: XyoBoundWitness = result?.[0]
+      expect(bw).toBeObject()
+      expect(bw._signatures).toBeArrayOfSize(1)
+      expect(bw.addresses).toBeArrayOfSize(1)
+      expect(bw.addresses).toContain(account.addressValue.hex)
+      expect(bw.payload_hashes).toInclude(hash)
+      expect(result?.[1]).toBeArrayOfSize(hashes.length)
+      expect(result?.[1]).toContainValues(payloads)
     })
   })
 })
