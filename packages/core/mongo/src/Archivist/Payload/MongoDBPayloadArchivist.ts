@@ -39,9 +39,11 @@ export class MongoDBPayloadArchivist extends AbstractPayloadArchivist<XyoPayload
     return (await (await this.sdk.find(filter)).sort(sort).limit(parsedLimit).maxTimeMS(2000).toArray()).map(removeId)
   }
   async get(hashes: string[]): Promise<XyoPayloadWithMeta[]> {
-    assertEx(hashes.length === 1, 'Retrieval of multiple payloads not supported')
-    const hash = assertEx(hashes.pop(), 'Missing hash')
-    return (await (await this.sdk.find({ _hash: hash })).limit(1).toArray()).map(removeId)
+    // NOTE: This assumes at most 1 of each hash is stored which is currently not the case
+    const limit = hashes.length
+    assertEx(limit > 0, 'MongoDBPayloadArchivist.get: No hashes supplied')
+    assertEx(limit < 10, 'MongoDBPayloadArchivist.get: Retrieval of > 100 hashes at a time not supported')
+    return (await (await this.sdk.find({ _hash: { $in: hashes } })).sort({ _timestamp: -1 }).limit(limit).toArray()).map(removeId)
   }
   async insert(items: XyoPayloadWithMeta[]): Promise<XyoBoundWitness> {
     const result = await this.sdk.insertMany(items.map(removeId) as XyoPayloadWithMeta[])
