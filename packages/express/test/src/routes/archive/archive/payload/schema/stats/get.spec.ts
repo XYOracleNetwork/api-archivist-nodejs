@@ -5,7 +5,7 @@ import { StatusCodes } from 'http-status-codes'
 
 import { claimArchive, getSchemaName, getTokenForNewUser, postBlock, request } from '../../../../../../testUtil'
 
-const blocksPosted = 2
+const count = 2
 const definition = { $schema: 'http://json-schema.org/draft-07/schema#' }
 
 const getNewBlockWithPayloadsOfSchemaType = (schema = getSchemaName()) => {
@@ -25,21 +25,21 @@ describe('/archive/:archive/payload/schema/stats', () => {
     otherArchive = (await claimArchive(token)).archive
 
     // NOTE: POST in parallel to speed up test
-    const postedPayloads = [
+    const posted = [
       // POST Payloads to test archive
-      new Array(blocksPosted).fill(null).map(async () => {
+      new Array(count).fill(null).map(async () => {
         const block = getNewBlockWithPayloadsOfSchemaType()
         const response = await postBlock(block, archive)
         expect(response.length).toBe(1)
       }),
       // Post some payloads to another archive
-      new Array(blocksPosted).fill(null).map(async () => {
+      new Array(count).fill(null).map(async () => {
         const block = getNewBlockWithPayloadsOfSchemaType()
         const response = await postBlock(block, otherArchive)
         expect(response.length).toBe(1)
       }),
     ]
-    await Promise.all(postedPayloads.flatMap((p) => p))
+    await Promise.all(posted.flatMap((p) => p))
   })
   it('Returns stats on all payload schemas in archive', async () => {
     const response = await (await request()).get(`/archive/${archive}/payload/schema/stats`).expect(StatusCodes.OK)
@@ -50,9 +50,8 @@ describe('/archive/:archive/payload/schema/stats', () => {
     const { counts } = stats
     const schemas = Object.keys(counts)
     expect(schemas).toBeTruthy()
-    expect(schemas.length).toBe(blocksPosted)
+    expect(schemas.length).toBe(count)
     schemas.forEach((schema) => {
-      // expect(counts).toHaveProperty(schema, 1)
       expect(counts[schema]).toBe(1)
     })
   })

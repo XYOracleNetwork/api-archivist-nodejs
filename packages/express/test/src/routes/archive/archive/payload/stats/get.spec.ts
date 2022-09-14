@@ -2,32 +2,38 @@ import { StatusCodes } from 'http-status-codes'
 
 import { claimArchive, getBlockWithPayloads, getTokenForNewUser, postBlock, request } from '../../../../../testUtil'
 
-const blocksPosted = 5
-
-const postBlocksToArchive = async (archive: string, token: string, count = blocksPosted) => {
-  for (let blockCount = 0; blockCount < count; blockCount++) {
-    const block = getBlockWithPayloads()
-    const blockResponse = await postBlock(block, archive)
-    expect(blockResponse.length).toBe(1)
-  }
-}
+const count = 5
 
 describe('/archive/:archive/payload/stats', () => {
   let token = ''
   let archive = ''
+  let otherArchive = ''
   beforeAll(async () => {
     // Post blocks to two different archives
-    for (let i = 0; i < 2; i++) {
-      token = await getTokenForNewUser()
-      archive = (await claimArchive(token)).archive
-      await postBlocksToArchive(archive, token)
-    }
-  }, 25000)
+    token = await getTokenForNewUser()
+    archive = (await claimArchive(token)).archive
+    otherArchive = (await claimArchive(token)).archive
+
+    // NOTE: POST in parallel to speed up test
+    const posted = [
+      // POST Payloads to test archive
+      new Array(count).fill(null).map(async () => {
+        const response = await postBlock(getBlockWithPayloads(), archive)
+        expect(response.length).toBe(1)
+      }),
+      // Post some payloads to another archive
+      new Array(count).fill(null).map(async () => {
+        const response = await postBlock(getBlockWithPayloads(), otherArchive)
+        expect(response.length).toBe(1)
+      }),
+    ]
+    await Promise.all(posted.flatMap((p) => p))
+  })
   it('Returns stats on the desired archive', async () => {
     const response = await (await request()).get(`/archive/${archive}/payload/stats`).expect(StatusCodes.OK)
     const recent = response.body.data
     expect(recent).toBeTruthy()
-    expect(typeof recent?.count).toBe('number')
-    expect(recent.count).toBe(blocksPosted)
+    expect(recent?.count).toBeNumber()
+    expect(recent.count).toBe(count)
   })
 })
