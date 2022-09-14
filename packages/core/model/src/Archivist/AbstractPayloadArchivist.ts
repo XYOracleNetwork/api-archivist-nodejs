@@ -49,8 +49,7 @@ export abstract class AbstractPayloadArchivist<T extends EmptyObject = EmptyObje
         if (query.filter) payloads.push(...(await this.find(query.filter as XyoPayloadFilterPredicate<T>)))
         break
       case XyoArchivistGetQuerySchema:
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        payloads.push(...(await this.get(query.hashes as any as TId[])))
+        payloads.push(...(await this.get(query.hashes as unknown as TId[])))
         break
       case XyoArchivistInsertQuerySchema:
         payloads.push(await this.insert(query.payloads as XyoPayload<T>[]), ...query.payloads)

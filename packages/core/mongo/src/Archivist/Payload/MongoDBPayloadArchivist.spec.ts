@@ -1,8 +1,8 @@
-import { responseProfiler } from '@xylabs/sdk-api-express-ecs'
 import { XyoAccount } from '@xyo-network/account'
+import { XyoArchivistInsertQuery, XyoArchivistInsertQuerySchema } from '@xyo-network/archivist'
 import { DebugPayload, DebugPayloadWithMeta, debugSchema, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
+import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { XyoPayloadBuilder, XyoPayloadWithMeta, XyoPayloadWrapper } from '@xyo-network/payload'
-import exp from 'constants'
 import { v4 } from 'uuid'
 
 import { COLLECTIONS } from '../../collections'
@@ -40,6 +40,22 @@ describe('MongoDBPayloadArchivist', () => {
       // NOTE: Done as part of beforeAll out of necessity
       // for subsequent tests. Not repeated again here for
       // performance.
+    })
+    it('inserts via query', async () => {
+      const query: XyoArchivistInsertQuery = {
+        payloads,
+        schema: XyoArchivistInsertQuerySchema,
+      }
+      const result = await sut.query(query)
+      expect(result).toBeArrayOfSize(2)
+      const bw: XyoBoundWitness = result?.[0]
+      expect(bw).toBeObject()
+      expect(bw._signatures).toBeArrayOfSize(1)
+      expect(bw.addresses).toBeArrayOfSize(1)
+      expect(bw.addresses).toContain(account.addressValue.hex)
+      expect(bw.payload_hashes).toIncludeAllMembers(hashes)
+      expect(result?.[1]).toBeArrayOfSize(1 + payloads.length)
+      expect(result?.[1]).toIncludeAllMembers(payloads)
     })
   })
   describe('find', () => {
