@@ -56,7 +56,7 @@ export class MongoDBBoundWitnessArchivist extends AbstractBoundWitnessArchivist 
       .map((bw) => {
         const _archive = assertEx(bw._archive, 'MongoDBBoundWitnessArchivist.insert: Missing archive')
         const bwMeta: XyoBoundWitnessMeta = { _archive, _hash: new XyoPayloadWrapper(bw).hash, _timestamp }
-        const payloadMeta: XyoPayloadMeta = { _archive, _hash: 'TODO', _timestamp }
+        const payloadMeta: XyoPayloadMeta = { _archive, _hash: '', _timestamp }
         return prepareBoundWitnesses([bw], bwMeta, payloadMeta)
       })
       .map((r) => r.sanitized[0])
