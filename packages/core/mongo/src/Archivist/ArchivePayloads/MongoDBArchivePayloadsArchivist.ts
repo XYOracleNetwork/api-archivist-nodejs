@@ -7,7 +7,6 @@ import {
   XyoArchivePayloadFilterPredicate,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { EmptyObject } from '@xyo-network/core'
 import { XyoPayloadWithMeta } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
@@ -62,10 +61,10 @@ export class MongoDBArchivePayloadsArchivist
   }
 
   async insert(items: XyoPayloadWithMeta[]) {
-    const result = await this.sdk.insertMany(items.map(removeId) as XyoPayloadWithMeta[])
+    const result = await this.sdk.insertMany(items.map(removeId))
     if (result.insertedCount != items.length) {
       throw new Error('MongoDBArchivePayloadsArchivist.insert: Error inserting Payloads')
     }
-    return new XyoBoundWitnessBuilder({ inlinePayloads: false }).payloads(items).build()
+    return this.bindPayloads(items)
   }
 }
