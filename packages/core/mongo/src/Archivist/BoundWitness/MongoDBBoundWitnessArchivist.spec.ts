@@ -30,6 +30,14 @@ const getPayloads = (archive: string, count = 1): XyoPayloadWithMeta<DebugPayloa
   return payloads
 }
 
+const removePayloads = (boundWitnesses: XyoBoundWitnessWithMeta[]) => {
+  return boundWitnesses.map((bw) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { _payloads, _timestamp, ...props } = bw
+    return { ...props, _timestamp: expect.toBeNumber() }
+  })
+}
+
 describe('MongoDBBoundWitnessArchivist', () => {
   const sdk = getBaseMongoSdk<XyoBoundWitnessWithMeta>(COLLECTIONS.BoundWitnesses)
   const account = XyoAccount.random()
@@ -86,13 +94,7 @@ describe('MongoDBBoundWitnessArchivist', () => {
       expect(bw.addresses).toContain(account.addressValue.hex)
       expect(bw.payload_hashes).toInclude(hash)
       expect(result?.[1]).toBeArrayOfSize(limit)
-      expect(result?.[1]).toEqual(
-        [boundWitness].map((bw) => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const { _payloads, _timestamp, ...props } = bw
-          return { ...props, _timestamp: expect.toBeNumber() }
-        }),
-      )
+      expect(result?.[1]).toEqual(removePayloads([boundWitness]))
     })
   })
   describe('XyoArchivistGetQuery', () => {
@@ -110,13 +112,7 @@ describe('MongoDBBoundWitnessArchivist', () => {
       expect(bw.addresses).toContain(account.addressValue.hex)
       expect(bw.payload_hashes).toInclude(hash)
       expect(result?.[1]).toBeArrayOfSize(hashes.length)
-      expect(result?.[1]).toContainValues(
-        [boundWitness].map((bw) => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const { _payloads, _timestamp, ...props } = bw
-          return { ...props, _timestamp: expect.toBeNumber() }
-        }),
-      )
+      expect(result?.[1]).toContainValues(removePayloads([boundWitness]))
     })
   })
 })
