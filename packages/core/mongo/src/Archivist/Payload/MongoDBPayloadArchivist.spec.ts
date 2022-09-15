@@ -81,7 +81,7 @@ describe('MongoDBPayloadArchivist', () => {
       expect(bw.addresses).toContain(account.addressValue.hex)
       expect(bw.payload_hashes).toInclude(hash)
       expect(result?.[1]).toBeArrayOfSize(limit)
-      expect(result?.[1]).toEqual([payload])
+      expect(result?.[1]?.[0]?.schema).toEqual(schema)
     })
     it('finds payloads by hash', async () => {
       const limit = 1
