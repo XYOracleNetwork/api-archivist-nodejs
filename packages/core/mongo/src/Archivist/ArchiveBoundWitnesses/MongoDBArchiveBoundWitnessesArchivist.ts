@@ -55,6 +55,7 @@ export class MongoDBArchiveBoundWitnessesArchivist extends AbstractBoundWitnessA
 
   async insert(items: XyoBoundWitnessWithMeta[]): Promise<XyoBoundWitnessWithMeta> {
     // TODO: Remove payloads, calculate hash, remove id, etc.
+    // TODO: Add timestamp
     const result = await this.sdk.insertMany(items.map(removeId) as XyoBoundWitnessWithMeta[])
     if (result.insertedCount != items.length) {
       throw new Error('Error inserting BoundWitnesses')

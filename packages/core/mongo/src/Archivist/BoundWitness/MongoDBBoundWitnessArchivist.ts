@@ -1,12 +1,15 @@
 import { assertEx } from '@xylabs/assert'
 import { XyoAccount } from '@xyo-network/account'
+import { prepareBoundWitnesses } from '@xyo-network/archivist-lib'
 import { AbstractBoundWitnessArchivist, XyoBoundWitnessFilterPredicate } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
+import { XyoBoundWitnessMeta, XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
+import { XyoPayloadMeta, XyoPayloadWrapper } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter, SortDirection } from 'mongodb'
 
+import { removeId } from '../../Mongo'
 import { MONGO_TYPES } from '../../types'
 
 @injectable()
@@ -38,19 +41,38 @@ export class MongoDBBoundWitnessArchivist extends AbstractBoundWitnessArchivist 
     if (addresses?.length) filter.addresses = { $all: addresses }
     if (payload_hashes?.length) filter.payload_hashes = { $in: payload_hashes }
     if (payload_schemas?.length) filter.payload_schemas = { $in: payload_schemas }
-    return (await this.sdk.find(filter)).sort(sort).limit(parsedLimit).maxTimeMS(2000).toArray()
+    return (await (await this.sdk.find(filter)).sort(sort).limit(parsedLimit).maxTimeMS(2000).toArray()).map(removeId)
   }
   async get(hashes: string[]): Promise<XyoBoundWitnessWithMeta[]> {
-    assertEx(hashes.length === 1, 'Retrieval of multiple boundwitnesses not supported')
-    const hash = assertEx(hashes.pop(), 'Missing hash')
-    return (await this.sdk.find({ _hash: hash })).limit(100).toArray()
+    // NOTE: This assumes at most 1 of each hash is stored which is currently not the case
+    const limit = hashes.length
+    assertEx(limit > 0, 'MongoDBBoundWitnessArchivist.get: No hashes supplied')
+    assertEx(limit < 10, 'MongoDBBoundWitnessArchivist.get: Retrieval of > 100 hashes at a time not supported')
+    return (await (await this.sdk.find({ _hash: { $in: hashes } })).limit(hashes.length).toArray()).map(removeId)
   }
   async insert(items: XyoBoundWitnessWithMeta[]): Promise<XyoBoundWitnessWithMeta> {
-    // TODO: Remove _id if present
-    const result = await this.sdk.insertMany(items)
+    const _timestamp = Date.now()
+    const bws = items
+      .map((bw) => {
+        const archive = bw._archive || 'temp'
+        const boundWitnessMetaData: XyoBoundWitnessMeta = {
+          _archive: archive,
+          _hash: new XyoPayloadWrapper(bw).hash,
+          _timestamp,
+        }
+        const payloadMetaData: XyoPayloadMeta = {
+          _archive: archive,
+          // TODO: Support multiple payloads here
+          _hash: 'TODO',
+          _timestamp,
+        }
+        return prepareBoundWitnesses([bw], boundWitnessMetaData, payloadMetaData)
+      })
+      .map((r) => r.sanitized[0])
+    const result = await this.sdk.insertMany(bws.map(removeId))
     if (result.insertedCount != items.length) {
       throw new Error('Error inserting Payloads')
     }
-    return this.bindPayloads(items)
+    return this.bindPayloads(bws)
   }
 }
