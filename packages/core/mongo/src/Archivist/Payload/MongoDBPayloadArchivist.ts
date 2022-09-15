@@ -48,7 +48,7 @@ export class MongoDBPayloadArchivist extends AbstractPayloadArchivist<XyoPayload
   async insert(items: XyoPayloadWithMeta[]): Promise<XyoBoundWitness> {
     const result = await this.sdk.insertMany(items.map(removeId) as XyoPayloadWithMeta[])
     if (result.insertedCount != items.length) {
-      throw new Error('Error inserting Payloads')
+      throw new Error('MongoDBPayloadArchivist.insert: Error inserting Payloads')
     }
     return this.bindPayloads(items)
   }
