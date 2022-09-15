@@ -2,8 +2,8 @@ import { XyoPayloadWithMeta } from '@xyo-network/payload'
 
 import { Query } from './Query'
 
-export const getArchivePermissionsSchema = 'network.xyo.security.archive.permissions.get'
-export type GetArchivePermissionsSchema = typeof getArchivePermissionsSchema
+export type GetArchivePermissionsSchema = 'network.xyo.security.archive.permissions.get'
+export const GetArchivePermissionsSchema: GetArchivePermissionsSchema = 'network.xyo.security.archive.permissions.get'
 
 export interface GetArchivePermissions {
   schema: GetArchivePermissionsSchema

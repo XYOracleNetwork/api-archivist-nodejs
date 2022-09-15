@@ -1,12 +1,7 @@
-import {
-  ArchivePermissionsArchivist,
-  SetArchivePermissionsPayload,
-  SetArchivePermissionsSchema,
-  setArchivePermissionsSchema,
-} from '@xyo-network/archivist-model'
+import { ArchivePermissionsArchivist, SetArchivePermissionsPayload, SetArchivePermissionsSchema } from '@xyo-network/archivist-model'
 import { XyoPayloadWithPartialMeta } from '@xyo-network/payload'
 
-const schema: SetArchivePermissionsSchema = setArchivePermissionsSchema
+const schema: SetArchivePermissionsSchema = SetArchivePermissionsSchema
 
 const getPrivatePermissions = (_archive: string): XyoPayloadWithPartialMeta<SetArchivePermissionsPayload> => {
   return {

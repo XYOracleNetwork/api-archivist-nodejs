@@ -1,9 +1,9 @@
 import {
   ArchivePermissionsArchivist,
-  debugSchema,
+  DebugSchema,
   SetArchivePermissionsPayloadWithMeta,
   SetArchivePermissionsQuery,
-  setArchivePermissionsSchema,
+  SetArchivePermissionsSchema,
 } from '@xyo-network/archivist-model'
 import { XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { mock, MockProxy } from 'jest-mock-extended'
@@ -16,7 +16,7 @@ const _timestamp = Date.now()
 const allowedAddress = '0x8ba1f109551bd432803012645ac136ddd64dba72'
 const disallowedAddress = '0x0ac1df02185025f65202660f8167210a80dd5086'
 const allowedSchema = 'network.xyo.test'
-const disallowedSchema = debugSchema
+const disallowedSchema = DebugSchema
 const _queryId = '0'
 
 const getQueryPayload = (
@@ -34,7 +34,7 @@ const getQueryPayload = (
       allow: allowedAddresses,
       reject: disallowedAddresses,
     },
-    schema: setArchivePermissionsSchema,
+    schema: SetArchivePermissionsSchema,
     schemas: {
       allow: allowedSchemas,
       reject: disallowedSchemas,
