@@ -7,7 +7,7 @@ import {
   XyoArchivistInsertQuery,
   XyoArchivistInsertQuerySchema,
 } from '@xyo-network/archivist'
-import { DebugPayload, DebugPayloadWithMeta, debugSchema, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
+import { DebugPayload, DebugPayloadWithMeta, DebugSchema, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
 import { XyoBoundWitness, XyoBoundWitnessBuilder, XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
 import { XyoPayloadBuilder, XyoPayloadWithMeta, XyoPayloadWrapper } from '@xyo-network/payload'
 import { v4 } from 'uuid'
@@ -17,7 +17,7 @@ import { getBaseMongoSdk } from '../../Mongo'
 import { MongoDBBoundWitnessArchivist } from './MongoDBBoundWitnessArchivist'
 
 const count = 2
-const schema = debugSchema
+const schema = DebugSchema
 
 const getPayloads = (archive: string, count = 1): XyoPayloadWithMeta<DebugPayload>[] => {
   const payloads: XyoPayloadWithMeta<DebugPayload>[] = []

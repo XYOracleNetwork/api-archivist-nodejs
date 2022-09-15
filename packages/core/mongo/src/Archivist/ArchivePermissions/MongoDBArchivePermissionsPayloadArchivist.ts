@@ -1,11 +1,6 @@
 import 'reflect-metadata'
 
-import {
-  ArchivePermissionsArchivist,
-  SetArchivePermissionsPayload,
-  SetArchivePermissionsSchema,
-  setArchivePermissionsSchema,
-} from '@xyo-network/archivist-model'
+import { ArchivePermissionsArchivist, SetArchivePermissionsPayload, SetArchivePermissionsSchema } from '@xyo-network/archivist-model'
 
 import { AbstractMongoDBPayloadArchivist } from '../AbstractArchivist'
 
@@ -14,6 +9,6 @@ export class MongoDBArchivePermissionsPayloadPayloadArchivist
   implements ArchivePermissionsArchivist
 {
   public get schema(): SetArchivePermissionsSchema {
-    return setArchivePermissionsSchema
+    return SetArchivePermissionsSchema
   }
 }

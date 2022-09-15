@@ -5,7 +5,7 @@ import {
   SetArchivePermissionsPayload,
   SetArchivePermissionsPayloadWithMeta,
   SetArchivePermissionsQuery,
-  setArchivePermissionsSchema,
+  SetArchivePermissionsSchema,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoPayloadBuilder } from '@xyo-network/payload'
@@ -38,7 +38,7 @@ export class SetArchivePermissionsQueryHandler implements QueryHandler<SetArchiv
     await this.archivePermissionsArchivist.insert([query.payload])
     const permissions = await this.archivePermissionsArchivist.get([archive])
     const currentPermissions = assertEx(permissions?.[0])
-    return new XyoPayloadBuilder<SetArchivePermissionsPayloadWithMeta>({ schema: setArchivePermissionsSchema })
+    return new XyoPayloadBuilder<SetArchivePermissionsPayloadWithMeta>({ schema: SetArchivePermissionsSchema })
       .fields({ ...currentPermissions, _queryId: query.id, _timestamp: Date.now() })
       .build()
   }

@@ -2,8 +2,8 @@ import { XyoPayload, XyoPayloadWithMeta } from '@xyo-network/payload'
 
 import { Query } from './Query'
 
-export const getDomainConfigSchema = 'network.xyo.domain.get'
-export type GetDomainConfigSchema = typeof getDomainConfigSchema
+export type GetDomainConfigSchema = 'network.xyo.domain.get'
+export const GetDomainConfigSchema: GetDomainConfigSchema = 'network.xyo.domain.get'
 
 export interface GetDomainConfig {
   domain: string
