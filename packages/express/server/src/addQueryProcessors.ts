@@ -2,14 +2,14 @@ import { delay } from '@xylabs/delay'
 import { dependencies } from '@xyo-network/archivist-dependencies'
 import { isProduction } from '@xyo-network/archivist-middleware'
 import {
-  debugSchema,
-  getArchivePermissionsSchema,
-  getDomainConfigSchema,
-  getSchemaSchema,
+  DebugSchema,
+  GetArchivePermissionsSchema,
+  GetDomainConfigSchema,
+  GetSchemaSchema,
   Query,
   QueryHandler,
   QueryProcessorRegistry,
-  setArchivePermissionsSchema,
+  SetArchivePermissionsSchema,
 } from '@xyo-network/archivist-model'
 import {
   DebugQueryHandler,
@@ -30,7 +30,7 @@ export const addQueryProcessors = (app: Application) => {
 }
 
 const addDebug = (registry: QueryProcessorRegistry) => {
-  registry.registerProcessorForSchema(debugSchema, (payload) => dependencies.get<QueryHandler<Query<XyoPayload>>>(DebugQueryHandler).handle(payload))
+  registry.registerProcessorForSchema(DebugSchema, (payload) => dependencies.get<QueryHandler<Query<XyoPayload>>>(DebugQueryHandler).handle(payload))
   registry.registerProcessorForSchema('network.xyo.test', async () => {
     await delay(1)
     return {} as XyoPayloadWithMeta
@@ -38,16 +38,16 @@ const addDebug = (registry: QueryProcessorRegistry) => {
 }
 
 const addQueries = (registry: QueryProcessorRegistry) => {
-  registry.registerProcessorForSchema(setArchivePermissionsSchema, (payload) =>
+  registry.registerProcessorForSchema(SetArchivePermissionsSchema, (payload) =>
     dependencies.get<QueryHandler<Query<XyoPayload>>>(SetArchivePermissionsQueryHandler).handle(payload),
   )
-  registry.registerProcessorForSchema(getArchivePermissionsSchema, (payload) =>
+  registry.registerProcessorForSchema(GetArchivePermissionsSchema, (payload) =>
     dependencies.get<QueryHandler<Query<XyoPayload>>>(GetArchivePermissionsQueryHandler).handle(payload),
   )
-  registry.registerProcessorForSchema(getDomainConfigSchema, (payload) =>
+  registry.registerProcessorForSchema(GetDomainConfigSchema, (payload) =>
     dependencies.get<QueryHandler<Query<XyoPayload>>>(GetDomainConfigQueryHandler).handle(payload),
   )
-  registry.registerProcessorForSchema(getSchemaSchema, (payload) =>
+  registry.registerProcessorForSchema(GetSchemaSchema, (payload) =>
     dependencies.get<QueryHandler<Query<XyoPayload>>>(GetSchemaQueryHandler).handle(payload),
   )
 }

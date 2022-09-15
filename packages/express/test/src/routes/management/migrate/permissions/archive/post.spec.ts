@@ -1,6 +1,6 @@
 import { ForgetPromise } from '@xylabs/forget'
 import { XyoArchive } from '@xyo-network/api'
-import { DebugPayload, debugSchema, SetArchivePermissionsPayload } from '@xyo-network/archivist-model'
+import { DebugPayload, DebugSchema, SetArchivePermissionsPayload } from '@xyo-network/archivist-model'
 import { XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { XyoPayloadBuilder } from '@xyo-network/payload'
 import { StatusCodes } from 'http-status-codes'
@@ -12,7 +12,7 @@ interface MigrationResponse {
   migrated: SetArchivePermissionsPayload
 }
 
-const schema = debugSchema
+const schema = DebugSchema
 
 const postCommandToArchive = async (archive: string, token?: string, expectedStatus: StatusCodes = StatusCodes.ACCEPTED) => {
   const payload = new XyoPayloadBuilder<DebugPayload>({ schema }).build()

@@ -2,8 +2,8 @@ import { XyoPayload, XyoPayloadWithMeta } from '@xyo-network/payload'
 
 import { Query } from './Query'
 
-export const debugSchema = 'network.xyo.debug'
-export type DebugSchema = typeof debugSchema
+export type DebugSchema = 'network.xyo.debug'
+export const DebugSchema: DebugSchema = 'network.xyo.debug'
 
 export interface Debug {
   delay?: number

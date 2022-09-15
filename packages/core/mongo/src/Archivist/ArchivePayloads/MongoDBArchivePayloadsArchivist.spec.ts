@@ -7,14 +7,14 @@ import {
   XyoArchivistInsertQuery,
   XyoArchivistInsertQuerySchema,
 } from '@xyo-network/archivist'
-import { DebugPayload, DebugPayloadWithMeta, DebugSchema, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
-import { XyoBoundWitness, XyoBoundWitnessBuilder, XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
+import { DebugPayload, DebugPayloadWithMeta, DebugSchema, XyoArchivePayloadFilterPredicate } from '@xyo-network/archivist-model'
+import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { XyoPayloadBuilder, XyoPayloadWithMeta, XyoPayloadWrapper } from '@xyo-network/payload'
 import { v4 } from 'uuid'
 
 import { COLLECTIONS } from '../../collections'
 import { getBaseMongoSdk } from '../../Mongo'
-import { MongoDBBoundWitnessArchivist } from './MongoDBBoundWitnessArchivist'
+import { MongoDBArchivePayloadsArchivist } from './MongoDBArchivePayloadsArchivist'
 
 const count = 2
 const schema = DebugSchema
@@ -30,32 +30,19 @@ const getPayloads = (archive: string, count = 1): XyoPayloadWithMeta<DebugPayloa
   return payloads
 }
 
-const removePayloads = (boundWitnesses: XyoBoundWitnessWithMeta[]) => {
-  return boundWitnesses.map((bw) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { _payloads, _timestamp, ...props } = bw
-    return { ...props, _timestamp: expect.toBeNumber() }
-  })
-}
-
-describe('MongoDBBoundWitnessArchivist', () => {
-  const sdk = getBaseMongoSdk<XyoBoundWitnessWithMeta>(COLLECTIONS.BoundWitnesses)
+describe('MongoDBArchivePayloadsArchivist', () => {
+  const sdk = getBaseMongoSdk<XyoPayloadWithMeta>(COLLECTIONS.Payloads)
   const account = XyoAccount.random()
-  const sut = new MongoDBBoundWitnessArchivist(account, sdk)
+  const sut = new MongoDBArchivePayloadsArchivist(account, sdk)
   const archive = `test-${v4()}`
   const payloads: XyoPayloadWithMeta<DebugPayload>[] = getPayloads(archive, count)
-  const boundWitnesses: XyoBoundWitnessWithMeta[] = payloads
-    .map((p) => new XyoBoundWitnessBuilder({ inlinePayloads: true }).payload(p).build())
-    .map((bw) => {
-      return { ...bw, _archive: archive }
-    })
-  const hashes: string[] = boundWitnesses.map((bw) => new XyoPayloadWrapper(bw).hash)
-  const boundWitness = boundWitnesses[0]
+  const hashes: string[] = payloads.map((p) => new XyoPayloadWrapper(p).hash)
+  const payload = payloads[0]
   const hash = hashes[0]
 
   beforeAll(async () => {
     const query: XyoArchivistInsertQuery = {
-      payloads: boundWitnesses,
+      payloads,
       schema: XyoArchivistInsertQuerySchema,
     }
     const result = await sut.query(query)
@@ -66,21 +53,34 @@ describe('MongoDBBoundWitnessArchivist', () => {
     expect(bw.addresses).toBeArrayOfSize(1)
     expect(bw.addresses).toContain(account.addressValue.hex)
     expect(bw.payload_hashes).toIncludeAllMembers(hashes)
-    expect(result?.[1]).toBeArrayOfSize(1 + boundWitnesses.length)
-    expect(result?.[1]).toIncludeAllMembers(boundWitnesses)
+    expect(result?.[1]).toBeArrayOfSize(1 + payloads.length)
+    expect(result?.[1]).toIncludeAllMembers(payloads)
   })
 
   describe('XyoArchivistInsertQuery', () => {
-    it('inserts multiple boundWitnesses', async () => {
+    it('inserts multiple payloads', async () => {
       // NOTE: Done as part of beforeAll out of necessity
       // for subsequent tests. Not repeated again here for
       // performance.
     })
   })
   describe('XyoArchivistFindQuery', () => {
-    it('finds boundWitnesses by hash', async () => {
+    it('finds payloads by schema', async () => {
       const limit = 1
-      const filter: XyoPayloadFilterPredicate<XyoPayloadWithMeta> = { hash, limit }
+      const filter: XyoArchivePayloadFilterPredicate<XyoPayloadWithMeta> = { archive, limit, schema }
+      const query: XyoArchivistFindQuery = {
+        filter,
+        schema: XyoArchivistFindQuerySchema,
+      }
+      const result = await sut.query(query)
+      expect(result).toBeArrayOfSize(2)
+      const payload = result?.[1]?.[0]
+      expect(payload).toBeObject()
+      expect(payload?.schema).toEqual(schema)
+    })
+    it('finds payloads by hash', async () => {
+      const limit = 1
+      const filter: XyoArchivePayloadFilterPredicate<XyoPayloadWithMeta> = { archive, hash, limit }
       const query: XyoArchivistFindQuery = {
         filter,
         schema: XyoArchivistFindQuerySchema,
@@ -94,13 +94,16 @@ describe('MongoDBBoundWitnessArchivist', () => {
       expect(bw.addresses).toContain(account.addressValue.hex)
       expect(bw.payload_hashes).toInclude(hash)
       expect(result?.[1]).toBeArrayOfSize(limit)
-      expect(result?.[1]).toEqual(removePayloads([boundWitness]))
+      expect(result?.[1]).toEqual([payload])
     })
   })
   describe('XyoArchivistGetQuery', () => {
-    it('gets boundWitnesses by hashes', async () => {
+    it('gets payloads by hashes', async () => {
+      const hashesWithArchive = hashes.map((hash) => {
+        return { archive, hash }
+      })
       const query: XyoArchivistGetQuery = {
-        hashes,
+        hashes: hashesWithArchive as unknown as string[],
         schema: XyoArchivistGetQuerySchema,
       }
       const result = await sut.query(query)
@@ -112,7 +115,7 @@ describe('MongoDBBoundWitnessArchivist', () => {
       expect(bw.addresses).toContain(account.addressValue.hex)
       expect(bw.payload_hashes).toInclude(hash)
       expect(result?.[1]).toBeArrayOfSize(hashes.length)
-      expect(result?.[1]).toContainValues(removePayloads([boundWitness]))
+      expect(result?.[1]).toContainValues(payloads)
     })
   })
 })

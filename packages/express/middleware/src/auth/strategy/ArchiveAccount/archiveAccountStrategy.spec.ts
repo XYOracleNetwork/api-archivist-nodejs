@@ -1,11 +1,11 @@
 import { delay } from '@xylabs/delay'
-import { debugSchema, SetArchivePermissions, SetArchivePermissionsPayload, setArchivePermissionsSchema } from '@xyo-network/archivist-model'
+import { DebugSchema, SetArchivePermissions, SetArchivePermissionsPayload, SetArchivePermissionsSchema } from '@xyo-network/archivist-model'
 import { claimArchive, getExistingUser, postCommandsToArchive, signInUser, TestWeb3User } from '@xyo-network/archivist-test'
 import { XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { XyoPayloadBuilder } from '@xyo-network/payload'
 import { StatusCodes } from 'http-status-codes'
 
-const allowedSchema = debugSchema
+const allowedSchema = DebugSchema
 const otherSchema = 'network.xyo.test'
 
 const processingDelay = () => {
@@ -21,9 +21,9 @@ type TestSchemaTypes = typeof allowedSchema | typeof otherSchema
 const setArchivePermissions = (archive: string, token: string, permissions: SetArchivePermissions) => {
   const data: SetArchivePermissionsPayload = {
     ...permissions,
-    schema: setArchivePermissionsSchema,
+    schema: SetArchivePermissionsSchema,
   }
-  const payload = new XyoPayloadBuilder<SetArchivePermissionsPayload>({ schema: setArchivePermissionsSchema }).fields(data).build()
+  const payload = new XyoPayloadBuilder<SetArchivePermissionsPayload>({ schema: SetArchivePermissionsSchema }).fields(data).build()
   const bw = new XyoBoundWitnessBuilder({ inlinePayloads: true }).payload(payload).build()
   return postCommandsToArchive([bw], archive, token)
 }
@@ -79,7 +79,7 @@ describe('ArchiveAccountStrategy', () => {
           addresses: {
             allow: [user.address],
           },
-          schema: setArchivePermissionsSchema,
+          schema: SetArchivePermissionsSchema,
         })
         await processingDelay()
       })
@@ -106,7 +106,7 @@ describe('ArchiveAccountStrategy', () => {
       beforeAll(async () => {
         archive = (await claimArchive(ownerToken)).archive
         await setArchivePermissions(archive, ownerToken, {
-          schema: setArchivePermissionsSchema,
+          schema: SetArchivePermissionsSchema,
           schemas: {
             allow: [allowedSchema],
           },
@@ -134,7 +134,7 @@ describe('ArchiveAccountStrategy', () => {
           addresses: {
             reject: [user.address],
           },
-          schema: setArchivePermissionsSchema,
+          schema: SetArchivePermissionsSchema,
         })
         await processingDelay()
       })
@@ -161,7 +161,7 @@ describe('ArchiveAccountStrategy', () => {
       beforeAll(async () => {
         archive = (await claimArchive(ownerToken)).archive
         await setArchivePermissions(archive, ownerToken, {
-          schema: setArchivePermissionsSchema,
+          schema: SetArchivePermissionsSchema,
           schemas: {
             reject: [otherSchema],
           },
