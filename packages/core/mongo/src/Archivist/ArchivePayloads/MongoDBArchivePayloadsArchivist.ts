@@ -44,14 +44,21 @@ export class MongoDBArchivePayloadsArchivist
     if (hash) filter._hash = hash
     if (schema) filter.schema = schema
     if (schemas?.length) filter.schema = { $in: schemas }
-    return (await this.sdk.find(filter)).sort(sort).limit(parsedLimit).maxTimeMS(2000).toArray()
+    return (await (await this.sdk.find(filter)).sort(sort).limit(parsedLimit).maxTimeMS(2000).toArray()).map(removeId)
   }
 
-  async get(ids: ArchivePayloadsArchivistId[]): Promise<XyoPayloadWithMeta[]> {
-    assertEx(ids.length === 1, 'Retrieval of multiple Payloads not supported')
-    const id = assertEx(ids.pop(), 'Missing id')
-    const predicate = { _archive: assertEx(id.archive), _hash: assertEx(id.hash) }
-    return (await this.sdk.find(predicate)).limit(1).toArray()
+  async get(ids: ArchivePayloadsArchivistId[]): Promise<Array<XyoPayloadWithMeta | null>> {
+    const predicates = ids.map((id) => {
+      const _archive = assertEx(id.archive, 'Missing archive')
+      const _hash = assertEx(id.hash, 'Missing hash')
+      return { _archive, _hash }
+    })
+    const queries = predicates.map(async (predicate) => {
+      const result = (await (await this.sdk.find(predicate)).limit(1).toArray()).map(removeId)
+      return result?.[0] || null
+    })
+    const results = await Promise.all(queries)
+    return results
   }
 
   async insert(items: XyoPayloadWithMeta[]) {
