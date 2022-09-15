@@ -49,8 +49,8 @@ export class MongoDBArchivePayloadsArchivist
 
   async get(ids: ArchivePayloadsArchivistId[]): Promise<Array<XyoPayloadWithMeta | null>> {
     const predicates = ids.map((id) => {
-      const _archive = assertEx(id.archive, 'Missing archive')
-      const _hash = assertEx(id.hash, 'Missing hash')
+      const _archive = assertEx(id.archive, 'MongoDBArchivePayloadsArchivist.get: Missing archive')
+      const _hash = assertEx(id.hash, 'MongoDBArchivePayloadsArchivist.get: Missing hash')
       return { _archive, _hash }
     })
     const queries = predicates.map(async (predicate) => {
@@ -64,7 +64,7 @@ export class MongoDBArchivePayloadsArchivist
   async insert(items: XyoPayloadWithMeta[]) {
     const result = await this.sdk.insertMany(items.map(removeId) as XyoPayloadWithMeta[])
     if (result.insertedCount != items.length) {
-      throw new Error('Error inserting Payloads')
+      throw new Error('MongoDBArchivePayloadsArchivist.insert: Error inserting Payloads')
     }
     return new XyoBoundWitnessBuilder({ inlinePayloads: false }).payloads(items).build()
   }
