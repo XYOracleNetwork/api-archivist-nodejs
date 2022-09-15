@@ -21,7 +21,7 @@ export class MongoDBPayloadArchivist extends AbstractPayloadArchivist<XyoPayload
     super(account)
   }
   async find(predicate: XyoPayloadFilterPredicate<XyoPayloadWithMeta>): Promise<XyoPayloadWithMeta[]> {
-    const { archives, hash, limit, order, schema, schemas, timestamp, ...props } = predicate
+    const { _archive, archives, hash, limit, order, schema, schemas, timestamp, ...props } = predicate
     const parsedLimit = limit || 100
     const parsedOrder = order || 'desc'
     const sort: { [key: string]: SortDirection } = { _timestamp: parsedOrder === 'asc' ? 1 : -1 }
@@ -31,16 +31,19 @@ export class MongoDBPayloadArchivist extends AbstractPayloadArchivist<XyoPayload
       ...props,
       _timestamp,
     }
+    if (_archive) filter._archive = _archive
     if (archives?.length) filter._archive = { $in: archives }
     if (hash) filter._hash = hash
     if (schema) filter.schema = schema
     if (schemas?.length) filter.schema = { $in: schemas }
-    return (await this.sdk.find(filter)).sort(sort).limit(parsedLimit).maxTimeMS(2000).toArray()
+    return (await (await this.sdk.find(filter)).sort(sort).limit(parsedLimit).maxTimeMS(2000).toArray()).map(removeId)
   }
   async get(hashes: string[]): Promise<XyoPayloadWithMeta[]> {
-    assertEx(hashes.length === 1, 'Retrieval of multiple payloads not supported')
-    const hash = assertEx(hashes.pop(), 'Missing hash')
-    return (await this.sdk.find({ _hash: hash })).limit(1).toArray()
+    // NOTE: This assumes at most 1 of each hash is stored which is currently not the case
+    const limit = hashes.length
+    assertEx(limit > 0, 'MongoDBPayloadArchivist.get: No hashes supplied')
+    assertEx(limit < 10, 'MongoDBPayloadArchivist.get: Retrieval of > 100 hashes at a time not supported')
+    return (await (await this.sdk.find({ _hash: { $in: hashes } })).sort({ _timestamp: -1 }).limit(limit).toArray()).map(removeId)
   }
   async insert(items: XyoPayloadWithMeta[]): Promise<XyoBoundWitness> {
     const result = await this.sdk.insertMany(items.map(removeId) as XyoPayloadWithMeta[])

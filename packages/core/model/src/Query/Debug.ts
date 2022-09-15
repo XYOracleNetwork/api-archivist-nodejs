@@ -7,6 +7,7 @@ export type DebugSchema = typeof debugSchema
 
 export interface Debug {
   delay?: number
+  nonce?: string
   schema: DebugSchema
 }
 
