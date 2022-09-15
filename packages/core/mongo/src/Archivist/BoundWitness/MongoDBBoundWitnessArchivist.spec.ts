@@ -70,7 +70,7 @@ describe('MongoDBBoundWitnessArchivist', () => {
     })
   })
   describe('XyoArchivistFindQuery', () => {
-    it.only('finds boundWitnesses by hash', async () => {
+    it('finds boundWitnesses by hash', async () => {
       const limit = 1
       const filter: XyoPayloadFilterPredicate<XyoPayloadWithMeta> = { hash, limit }
       const query: XyoArchivistFindQuery = {
@@ -90,7 +90,7 @@ describe('MongoDBBoundWitnessArchivist', () => {
         [boundWitness].map((bw) => {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { _payloads, _timestamp, ...props } = bw
-          return props
+          return { ...props, _timestamp: expect.toBeNumber() }
         }),
       )
     })
@@ -110,7 +110,13 @@ describe('MongoDBBoundWitnessArchivist', () => {
       expect(bw.addresses).toContain(account.addressValue.hex)
       expect(bw.payload_hashes).toInclude(hash)
       expect(result?.[1]).toBeArrayOfSize(hashes.length)
-      expect(result?.[1]).toContainValues(boundWitnesses)
+      expect(result?.[1]).toContainValues(
+        [boundWitness].map((bw) => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { _payloads, _timestamp, ...props } = bw
+          return { ...props, _timestamp: expect.toBeNumber() }
+        }),
+      )
     })
   })
 })
