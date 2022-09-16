@@ -15,7 +15,7 @@ import { XyoModule, XyoModuleQueryResult } from '@xyo-network/module'
 import { XyoPayload } from '@xyo-network/payload'
 import { injectable } from 'inversify'
 
-import { XyoPayloadWithMeta, XyoPayloadWithPartialMeta } from '../..'
+import { XyoPayloadWithMeta, XyoPayloadWithPartialMeta } from '../Payload'
 import { PayloadArchivist } from './PayloadArchivist'
 import { XyoPayloadFilterPredicate } from './XyoPayloadFilterPredicate'
 
