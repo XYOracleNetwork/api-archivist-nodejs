@@ -1,12 +1,7 @@
 import { getRequestMeta } from '@xyo-network/archivist-express-lib'
 import { augmentWithMetadata } from '@xyo-network/archivist-lib'
-import {
-  XyoBoundWitnessBuilder,
-  XyoBoundWitnessBuilderConfig,
-  XyoBoundWitnessWithMeta,
-  XyoBoundWitnessWithPartialMeta,
-} from '@xyo-network/boundwitness'
-import { XyoPayloadWithPartialMeta } from '@xyo-network/payload'
+import { XyoBoundWitnessWithMeta, XyoBoundWitnessWithPartialMeta, XyoPayloadWithPartialMeta } from '@xyo-network/archivist-model'
+import { XyoBoundWitnessBuilder, XyoBoundWitnessBuilderConfig } from '@xyo-network/boundwitness'
 
 import { PostNodeRequest } from './PostNodeRequest'
 

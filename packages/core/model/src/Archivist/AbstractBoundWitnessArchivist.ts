@@ -9,11 +9,12 @@ import {
   XyoArchivistQuery,
   XyoArchivistQuerySchema,
 } from '@xyo-network/archivist'
-import { XyoBoundWitness, XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
+import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { XyoModule, XyoModuleQueryResult } from '@xyo-network/module'
 import { XyoPayload } from '@xyo-network/payload'
 import { injectable } from 'inversify'
 
+import { XyoBoundWitnessWithMeta } from '../..'
 import { BoundWitnessArchivist } from './BoundWitnessArchivist'
 import { XyoBoundWitnessFilterPredicate } from './XyoBoundWitnessFilterPredicate'
 

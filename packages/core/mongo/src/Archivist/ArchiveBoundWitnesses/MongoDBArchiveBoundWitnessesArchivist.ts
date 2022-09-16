@@ -6,9 +6,10 @@ import {
   ArchiveBoundWitnessesArchivistId,
   BoundWitnessArchivist,
   XyoArchiveBoundWitnessFilterPredicate,
+  XyoBoundWitnessMeta,
+  XyoBoundWitnessWithMeta,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { XyoBoundWitnessMeta, XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
 import { EmptyObject } from '@xyo-network/core'
 import { XyoPayloadMeta, XyoPayloadWithPartialMeta, XyoPayloadWrapper } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
