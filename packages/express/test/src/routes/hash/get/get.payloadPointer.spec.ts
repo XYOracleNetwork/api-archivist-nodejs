@@ -7,8 +7,8 @@ import {
   PayloadSchemaRule,
   PayloadTimestampDirectionRule,
   SortDirection,
+  XyoBoundWitnessWithPartialMeta,
 } from '@xyo-network/archivist-model'
-import { XyoBoundWitnessWithPartialMeta } from '@xyo-network/boundwitness'
 import { XyoPayload, XyoPayloadBuilder } from '@xyo-network/payload'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 

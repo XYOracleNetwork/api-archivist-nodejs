@@ -1,6 +1,5 @@
 import { XyoAccount } from '@xyo-network/account'
-import { SetArchivePermissionsPayload } from '@xyo-network/archivist-model'
-import { XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
+import { SetArchivePermissionsPayload, XyoBoundWitnessWithMeta } from '@xyo-network/archivist-model'
 import { XyoPayloadWithMeta } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 

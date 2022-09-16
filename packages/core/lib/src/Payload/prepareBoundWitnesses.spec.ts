@@ -1,4 +1,5 @@
-import { XyoBoundWitnessBuilder, XyoBoundWitnessMeta, XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
+import { XyoBoundWitnessMeta, XyoBoundWitnessWithMeta } from '@xyo-network/archivist-model'
+import { XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { XyoPayload, XyoPayloadBuilder, XyoPayloadWrapper } from '@xyo-network/payload'
 import { v4 } from 'uuid'
 
