@@ -1,4 +1,4 @@
-import { XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
+import { XyoBoundWitnessWithMeta } from '@xyo-network/archivist-model'
 
 import { claimArchive, getBlockWithPayloads, getRecentBlocks, getTokenForNewUser, postBlock } from '../../../../../testUtil'
 
