@@ -1,4 +1,4 @@
-import { XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
+import { XyoBoundWitnessWithMeta } from '@xyo-network/archivist-model'
 
 export const removePayloads = (boundWitnesses: XyoBoundWitnessWithMeta[]): Omit<XyoBoundWitnessWithMeta, '_payloads'>[] => {
   return boundWitnesses.map((boundWitness) => {

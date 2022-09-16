@@ -1,8 +1,14 @@
 import { NoReqQuery } from '@xylabs/sdk-api-express-ecs'
 import { isRequestUserOwnerOfRequestedArchive } from '@xyo-network/archivist-express-lib'
 import { trimAddressPrefix } from '@xyo-network/archivist-lib'
-import { ArchiveLocals, ArchivePathParams, SetArchivePermissions, SetArchivePermissionsSchema } from '@xyo-network/archivist-model'
-import { XyoBoundWitness, XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
+import {
+  ArchiveLocals,
+  ArchivePathParams,
+  SetArchivePermissions,
+  SetArchivePermissionsSchema,
+  XyoBoundWitnessWithMeta,
+} from '@xyo-network/archivist-model'
+import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { XyoPayload } from '@xyo-network/payload'
 import { Request } from 'express'
 

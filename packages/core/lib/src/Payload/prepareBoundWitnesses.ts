@@ -1,7 +1,12 @@
 import 'source-map-support/register'
 
-import { XyoBoundWitnessMeta, XyoBoundWitnessWithMeta, XyoBoundWitnessWithPartialMeta } from '@xyo-network/boundwitness'
-import { XyoPayloadMeta, XyoPayloadWithMeta } from '@xyo-network/payload'
+import {
+  XyoBoundWitnessMeta,
+  XyoBoundWitnessWithMeta,
+  XyoBoundWitnessWithPartialMeta,
+  XyoPayloadMeta,
+  XyoPayloadWithMeta,
+} from '@xyo-network/archivist-model'
 
 import { augmentWithMetadata } from './augmentWithMetadata'
 import { removePayloads } from './removePayloads'

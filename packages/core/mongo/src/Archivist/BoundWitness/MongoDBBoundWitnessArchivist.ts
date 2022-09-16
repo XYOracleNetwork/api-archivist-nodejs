@@ -1,9 +1,13 @@
 import { assertEx } from '@xylabs/assert'
 import { XyoAccount } from '@xyo-network/account'
 import { prepareBoundWitnesses } from '@xyo-network/archivist-lib'
-import { AbstractBoundWitnessArchivist, XyoBoundWitnessFilterPredicate } from '@xyo-network/archivist-model'
+import {
+  AbstractBoundWitnessArchivist,
+  XyoBoundWitnessFilterPredicate,
+  XyoBoundWitnessMeta,
+  XyoBoundWitnessWithMeta,
+} from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { XyoBoundWitnessMeta, XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
 import { XyoPayloadMeta, XyoPayloadWrapper } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
