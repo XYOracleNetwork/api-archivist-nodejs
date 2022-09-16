@@ -1,5 +1,4 @@
-import { XyoPayloadWithMeta } from '@xyo-network/payload'
-
+import { XyoPayloadWithMeta } from '../Payload'
 import { Query } from './Query'
 
 export type GetArchivePermissionsSchema = 'network.xyo.security.archive.permissions.get'

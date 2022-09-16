@@ -10,6 +10,7 @@ import {
   QueryHandler,
   QueryProcessorRegistry,
   SetArchivePermissionsSchema,
+  XyoPayloadWithMeta,
 } from '@xyo-network/archivist-model'
 import {
   DebugQueryHandler,
@@ -18,7 +19,7 @@ import {
   GetSchemaQueryHandler,
   SetArchivePermissionsQueryHandler,
 } from '@xyo-network/archivist-query-handlers'
-import { XyoPayload, XyoPayloadWithMeta } from '@xyo-network/payload'
+import { XyoPayload } from '@xyo-network/payload'
 import { Application } from 'express'
 
 export const addQueryProcessors = (app: Application) => {

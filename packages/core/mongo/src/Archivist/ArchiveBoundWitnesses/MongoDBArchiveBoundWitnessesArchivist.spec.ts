@@ -11,8 +11,8 @@ import {
   DebugPayload,
   DebugPayloadWithMeta,
   DebugSchema,
+  XyoArchivePayloadFilterPredicate,
   XyoBoundWitnessWithMeta,
-  XyoPayloadFilterPredicate,
   XyoPayloadWithMeta,
 } from '@xyo-network/archivist-model'
 import { XyoBoundWitness, XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
@@ -21,7 +21,7 @@ import { v4 } from 'uuid'
 
 import { COLLECTIONS } from '../../collections'
 import { getBaseMongoSdk } from '../../Mongo'
-import { MongoDBBoundWitnessArchivist } from './MongoDBBoundWitnessArchivist'
+import { MongoDBArchiveBoundWitnessesArchivist } from './MongoDBArchiveBoundWitnessesArchivist'
 
 const count = 2
 const schema = DebugSchema
@@ -45,10 +45,10 @@ const removePayloads = (boundWitnesses: XyoBoundWitnessWithMeta[]) => {
   })
 }
 
-describe('MongoDBBoundWitnessArchivist', () => {
+describe('MongoDBArchiveBoundWitnessesArchivist', () => {
   const sdk = getBaseMongoSdk<XyoBoundWitnessWithMeta>(COLLECTIONS.BoundWitnesses)
   const account = XyoAccount.random()
-  const sut = new MongoDBBoundWitnessArchivist(account, sdk)
+  const sut = new MongoDBArchiveBoundWitnessesArchivist(account, sdk)
   const archive = `test-${v4()}`
   const payloads: XyoPayloadWithMeta<DebugPayload>[] = getPayloads(archive, count)
   const boundWitnesses: XyoBoundWitnessWithMeta[] = payloads
@@ -87,7 +87,7 @@ describe('MongoDBBoundWitnessArchivist', () => {
   describe('XyoArchivistFindQuery', () => {
     it('finds boundWitnesses by hash', async () => {
       const limit = 1
-      const filter: XyoPayloadFilterPredicate<XyoPayloadWithMeta> = { hash, limit }
+      const filter: XyoArchivePayloadFilterPredicate<XyoPayloadWithMeta> = { archive, hash, limit }
       const query: XyoArchivistFindQuery = {
         filter,
         schema: XyoArchivistFindQuerySchema,
@@ -106,8 +106,11 @@ describe('MongoDBBoundWitnessArchivist', () => {
   })
   describe('XyoArchivistGetQuery', () => {
     it('gets boundWitnesses by hashes', async () => {
+      const hashesWithArchive = hashes.map((hash) => {
+        return { archive, hash }
+      })
       const query: XyoArchivistGetQuery = {
-        hashes,
+        hashes: hashesWithArchive as unknown as string[],
         schema: XyoArchivistGetQuerySchema,
       }
       const result = await sut.query(query)

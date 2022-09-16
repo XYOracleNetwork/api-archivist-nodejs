@@ -1,5 +1,12 @@
-import { XyoBoundWitnessMeta, XyoBoundWitnessWithMeta, XyoBoundWitnessWithPartialMeta } from '@xyo-network/boundwitness'
-import { XyoPayloadMeta, XyoPayloadWithMeta, XyoPayloadWithPartialMeta, XyoPayloadWrapper } from '@xyo-network/payload'
+import {
+  XyoBoundWitnessMeta,
+  XyoBoundWitnessWithMeta,
+  XyoBoundWitnessWithPartialMeta,
+  XyoPayloadMeta,
+  XyoPayloadWithMeta,
+  XyoPayloadWithPartialMeta,
+} from '@xyo-network/archivist-model'
+import { XyoPayloadWrapper } from '@xyo-network/payload'
 
 export const augmentWithMetadata = <T extends XyoPayloadWithPartialMeta[] | XyoBoundWitnessWithPartialMeta[]>(
   payloads: T,

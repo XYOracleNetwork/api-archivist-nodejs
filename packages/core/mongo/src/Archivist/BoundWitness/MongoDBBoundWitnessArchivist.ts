@@ -1,9 +1,13 @@
 import { assertEx } from '@xylabs/assert'
 import { XyoAccount } from '@xyo-network/account'
 import { prepareBoundWitnesses } from '@xyo-network/archivist-lib'
-import { AbstractBoundWitnessArchivist, XyoBoundWitnessFilterPredicate } from '@xyo-network/archivist-model'
+import {
+  AbstractBoundWitnessArchivist,
+  XyoBoundWitnessFilterPredicate,
+  XyoBoundWitnessMeta,
+  XyoBoundWitnessWithMeta,
+} from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { XyoBoundWitnessMeta, XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
 import { XyoPayloadMeta, XyoPayloadWrapper } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
@@ -54,24 +58,16 @@ export class MongoDBBoundWitnessArchivist extends AbstractBoundWitnessArchivist 
     const _timestamp = Date.now()
     const bws = items
       .map((bw) => {
-        const archive = bw._archive || 'temp'
-        const boundWitnessMetaData: XyoBoundWitnessMeta = {
-          _archive: archive,
-          _hash: new XyoPayloadWrapper(bw).hash,
-          _timestamp,
-        }
-        const payloadMetaData: XyoPayloadMeta = {
-          _archive: archive,
-          // TODO: Support multiple payloads here
-          _hash: 'TODO',
-          _timestamp,
-        }
-        return prepareBoundWitnesses([bw], boundWitnessMetaData, payloadMetaData)
+        const _archive = assertEx(bw._archive, 'MongoDBBoundWitnessArchivist.insert: Missing archive')
+        const bwMeta: XyoBoundWitnessMeta = { _archive, _hash: new XyoPayloadWrapper(bw).hash, _timestamp }
+        const payloadMeta: XyoPayloadMeta = { _archive, _hash: '', _timestamp }
+        return prepareBoundWitnesses([bw], bwMeta, payloadMeta)
       })
       .map((r) => r.sanitized[0])
+    // TODO: Should we insert payloads here too?
     const result = await this.sdk.insertMany(bws.map(removeId))
     if (result.insertedCount != items.length) {
-      throw new Error('Error inserting Payloads')
+      throw new Error('MongoDBBoundWitnessArchivist.insert: Error inserting BoundWitnesses')
     }
     return this.bindPayloads(bws)
   }

@@ -1,5 +1,4 @@
-import { XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
-import { XyoPayloadWithMeta } from '@xyo-network/payload'
+import { XyoBoundWitnessWithMeta, XyoPayloadWithMeta } from '@xyo-network/archivist-model'
 import { StatusCodes } from 'http-status-codes'
 
 import { request } from '../Server'
