@@ -1,5 +1,4 @@
-import { SortDirection } from '@xyo-network/archivist-model'
-import { XyoPayloadWithMeta } from '@xyo-network/payload'
+import { SortDirection, XyoPayloadWithMeta } from '@xyo-network/archivist-model'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import {

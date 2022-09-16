@@ -1,6 +1,6 @@
 import { XyoAccount } from '@xyo-network/account'
+import { XyoPayloadWithMeta } from '@xyo-network/archivist-model'
 import { XyoBoundWitness, XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
-import { XyoPayloadWithMeta } from '@xyo-network/payload'
 import { XyoSchemaPayload } from '@xyo-network/schema-payload-plugin'
 
 import { claimArchive, getArchiveSchemaRecent, getTokenForNewUser, postBlock } from '../../../../../testUtil'

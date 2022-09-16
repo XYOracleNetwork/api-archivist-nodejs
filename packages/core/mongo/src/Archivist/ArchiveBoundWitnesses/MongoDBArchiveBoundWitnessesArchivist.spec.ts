@@ -13,9 +13,10 @@ import {
   DebugSchema,
   XyoArchivePayloadFilterPredicate,
   XyoBoundWitnessWithMeta,
+  XyoPayloadWithMeta,
 } from '@xyo-network/archivist-model'
 import { XyoBoundWitness, XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
-import { XyoPayloadBuilder, XyoPayloadWithMeta, XyoPayloadWrapper } from '@xyo-network/payload'
+import { XyoPayloadBuilder, XyoPayloadWrapper } from '@xyo-network/payload'
 import { v4 } from 'uuid'
 
 import { COLLECTIONS } from '../../collections'

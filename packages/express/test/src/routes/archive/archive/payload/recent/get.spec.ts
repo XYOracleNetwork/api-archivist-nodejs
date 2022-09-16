@@ -1,4 +1,4 @@
-import { XyoPayloadWithMeta } from '@xyo-network/payload'
+import { XyoPayloadWithMeta } from '@xyo-network/archivist-model'
 
 import { claimArchive, getBlockWithPayloads, getRecentPayloads, getTokenForNewUser, postBlock } from '../../../../../testUtil'
 
