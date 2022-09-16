@@ -1,5 +1,6 @@
-import { XyoPayload, XyoPayloadWithMeta } from '@xyo-network/payload'
+import { XyoPayload } from '@xyo-network/payload'
 
+import { XyoPayloadWithMeta } from '../Payload'
 import { Query } from './Query'
 
 export type GetDomainConfigSchema = 'network.xyo.domain.get'

@@ -5,10 +5,10 @@ import {
   ArchivePayloadsArchivist,
   ArchivePayloadsArchivistId,
   XyoArchivePayloadFilterPredicate,
+  XyoPayloadWithMeta,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { EmptyObject } from '@xyo-network/core'
-import { XyoPayloadWithMeta } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter, SortDirection } from 'mongodb'

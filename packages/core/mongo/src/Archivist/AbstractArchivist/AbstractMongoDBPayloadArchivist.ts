@@ -2,11 +2,17 @@ import 'reflect-metadata'
 
 import { assertEx } from '@xylabs/assert'
 import { XyoAccount } from '@xyo-network/account'
-import { AbstractPayloadArchivist, XyoBoundWitnessWithMeta, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
+import {
+  AbstractPayloadArchivist,
+  XyoBoundWitnessWithMeta,
+  XyoPayloadFilterPredicate,
+  XyoPayloadWithMeta,
+  XyoPayloadWithPartialMeta,
+} from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoBoundWitnessBuilder, XyoBoundWitnessBuilderConfig } from '@xyo-network/boundwitness'
 import { EmptyObject } from '@xyo-network/core'
-import { XyoPayloadBuilder, XyoPayloadWithMeta, XyoPayloadWithPartialMeta } from '@xyo-network/payload'
+import { XyoPayloadBuilder } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { ExplainVerbosity, Filter, OptionalUnlessRequiredId, WithoutId } from 'mongodb'

@@ -12,9 +12,10 @@ import {
 import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { EmptyObject } from '@xyo-network/core'
 import { XyoModule, XyoModuleQueryResult } from '@xyo-network/module'
-import { XyoPayload, XyoPayloadWithMeta, XyoPayloadWithPartialMeta } from '@xyo-network/payload'
+import { XyoPayload } from '@xyo-network/payload'
 import { injectable } from 'inversify'
 
+import { XyoPayloadWithMeta, XyoPayloadWithPartialMeta } from '../..'
 import { PayloadArchivist } from './PayloadArchivist'
 import { XyoPayloadFilterPredicate } from './XyoPayloadFilterPredicate'
 
