@@ -12,10 +12,11 @@ import {
   SchemaStatsPayload,
   SchemaStatsQueryPayload,
   SchemaStatsSchema,
+  XyoPayloadWithMeta,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoArchivistPayloadDivinerConfigSchema, XyoDiviner } from '@xyo-network/diviner'
-import { XyoPayload, XyoPayloadBuilder, XyoPayloads, XyoPayloadWithMeta } from '@xyo-network/payload'
+import { XyoPayload, XyoPayloadBuilder, XyoPayloads } from '@xyo-network/payload'
 import { BaseMongoSdk, MongoClientWrapper } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { ChangeStream, ChangeStreamInsertDocument, ChangeStreamOptions, ResumeToken, UpdateOptions } from 'mongodb'

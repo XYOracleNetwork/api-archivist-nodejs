@@ -1,5 +1,9 @@
-import { ArchivePermissionsArchivist, SetArchivePermissionsPayload, SetArchivePermissionsSchema } from '@xyo-network/archivist-model'
-import { XyoPayloadWithPartialMeta } from '@xyo-network/payload'
+import {
+  ArchivePermissionsArchivist,
+  SetArchivePermissionsPayload,
+  SetArchivePermissionsSchema,
+  XyoPayloadWithPartialMeta,
+} from '@xyo-network/archivist-model'
 
 const schema: SetArchivePermissionsSchema = SetArchivePermissionsSchema
 
