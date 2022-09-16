@@ -14,7 +14,7 @@ import { XyoModule, XyoModuleQueryResult } from '@xyo-network/module'
 import { XyoPayload } from '@xyo-network/payload'
 import { injectable } from 'inversify'
 
-import { XyoBoundWitnessWithMeta } from '../..'
+import { XyoBoundWitnessWithMeta } from '../BoundWitness'
 import { BoundWitnessArchivist } from './BoundWitnessArchivist'
 import { XyoBoundWitnessFilterPredicate } from './XyoBoundWitnessFilterPredicate'
 
