@@ -2,6 +2,7 @@ import 'source-map-support/register'
 
 import { assertEx } from '@xylabs/assert'
 import { asyncHandler, tryParseInt } from '@xylabs/sdk-api-express-ecs'
+import { XyoArchivistGetQuery, XyoArchivistGetQuerySchema } from '@xyo-network/archivist'
 import { ArchiveBoundWitnessesArchivist } from '@xyo-network/archivist-model'
 import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { RequestHandler } from 'express'
@@ -16,7 +17,12 @@ const getBlocks = async (
   blocks: XyoBoundWitness[],
   limit: number,
 ) => {
-  const block = (await archivist.get([{ archive, hash }])).pop()
+  const query: XyoArchivistGetQuery = {
+    hashes: [hash],
+    schema: XyoArchivistGetQuerySchema,
+  }
+  const result = await archivist.query(query)
+  const block = result?.[1]?.[0] as XyoBoundWitness
   if (block) {
     const addressIndex = block.addresses.findIndex((value) => value === address)
     if (addressIndex !== -1) {
