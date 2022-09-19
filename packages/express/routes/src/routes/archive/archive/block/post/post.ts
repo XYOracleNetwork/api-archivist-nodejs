@@ -37,11 +37,13 @@ const handler: RequestHandler<ArchivePathParams, XyoBoundWitnessWithMeta[], XyoB
   await archiveBoundWitnessesArchivist.query(boundWitnessQuery)
 
   if (payloads.length) {
-    await archivePayloadsArchivist.insert(
-      payloads.map((p) => {
+    const payloadsQuery: XyoArchivistInsertQuery = {
+      payloads: payloads.map((p) => {
         return { ...p, _archive: archive }
       }),
-    )
+      schema: XyoArchivistInsertQuerySchema,
+    }
+    await archivePayloadsArchivist.query(payloadsQuery)
   }
   res.json(sanitized)
 }
