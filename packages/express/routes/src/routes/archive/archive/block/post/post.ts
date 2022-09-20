@@ -1,6 +1,7 @@
 import 'source-map-support/register'
 
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
+import { XyoArchivistInsertQuery, XyoArchivistInsertQuerySchema } from '@xyo-network/archivist'
 import { getRequestMeta } from '@xyo-network/archivist-express-lib'
 import { prepareBoundWitnesses, validatePayloadSchema } from '@xyo-network/archivist-lib'
 import { ArchivePathParams, XyoBoundWitnessWithMeta } from '@xyo-network/archivist-model'
@@ -27,17 +28,22 @@ const handler: RequestHandler<ArchivePathParams, XyoBoundWitnessWithMeta[], XyoB
     }
   })
 
-  await archiveBoundWitnessesArchivist.insert(
-    sanitized.map((bw) => {
+  const boundWitnessQuery: XyoArchivistInsertQuery = {
+    payloads: sanitized.map((bw) => {
       return { ...bw, _archive: archive }
     }),
-  )
+    schema: XyoArchivistInsertQuerySchema,
+  }
+  await archiveBoundWitnessesArchivist.query(boundWitnessQuery)
+
   if (payloads.length) {
-    await archivePayloadsArchivist.insert(
-      payloads.map((p) => {
+    const payloadsQuery: XyoArchivistInsertQuery = {
+      payloads: payloads.map((p) => {
         return { ...p, _archive: archive }
       }),
-    )
+      schema: XyoArchivistInsertQuerySchema,
+    }
+    await archivePayloadsArchivist.query(payloadsQuery)
   }
   res.json(sanitized)
 }

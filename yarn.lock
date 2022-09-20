@@ -3477,13 +3477,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:^29.0.0, @types/jest@npm:^29.0.2":
-  version: 29.0.2
-  resolution: "@types/jest@npm:29.0.2"
+"@types/jest@npm:^29.0.0, @types/jest@npm:^29.0.3":
+  version: 29.0.3
+  resolution: "@types/jest@npm:29.0.3"
   dependencies:
     expect: ^29.0.0
     pretty-format: ^29.0.0
-  checksum: 27c46b58fad9791adf88167ba2c14ae3513cb1fe5df038faafe7fc4513ebb230dd8029a1dd0acd1abeb82aa014839ac10e0dcf1bfae9fcc0e69bc1eb1e5204f0
+  checksum: 14a8ec1954540ec59f4072c3c4dbc6b5d5ff616556c98671aca26606bdf9d49616a3f269f3e488c80cd481ee19880351575c1f6895827628818e193600c121e0
   languageName: node
   linkType: hard
 
@@ -3998,9 +3998,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xylabs/eslint-config@npm:^2.7.12":
-  version: 2.7.12
-  resolution: "@xylabs/eslint-config@npm:2.7.12"
+"@xylabs/eslint-config@npm:^2.7.22":
+  version: 2.7.22
+  resolution: "@xylabs/eslint-config@npm:2.7.22"
   dependencies:
     "@babel/core": ^7.19.0
     "@babel/eslint-parser": ^7.18.9
@@ -4024,7 +4024,7 @@ __metadata:
     typescript: ^4.8.2
   peerDependencies:
     eslint: ^8.23.0
-  checksum: 8cf8a2de8900c588ecc272ace64f63216753e4e65aaf5b811cea6dfc1ce1726fcbd2b0d73cde179b26a1922527e2c6c0f4171cac4e30f01415453c152b193c61
+  checksum: c25e45bf7c7cdfb139a2fd411f756620bcb78d332494f3367b3900f1d5765cc366c19efbc69c08bd4131d7df00e33eaca7dfc773bb7f3ab6def92453e91c7b55
   languageName: node
   linkType: hard
 
@@ -4069,15 +4069,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xylabs/ts-scripts-yarn3@npm:^2.7.12":
-  version: 2.7.12
-  resolution: "@xylabs/ts-scripts-yarn3@npm:2.7.12"
+"@xylabs/ts-scripts-yarn3@npm:^2.7.22":
+  version: 2.7.22
+  resolution: "@xylabs/ts-scripts-yarn3@npm:2.7.22"
   dependencies:
     "@babel/core": ^7.19.0
     "@babel/preset-env": ^7.19.0
     "@types/jest": ^29.0.0
     "@types/node": ^18.7.15
-    "@xylabs/eslint-config": ^2.7.12
+    "@xylabs/eslint-config": ^2.7.22
     chalk: ^4.1.2
     cpy: ^8.1.2
     depcheck: ^1.4.3
@@ -4125,32 +4125,32 @@ __metadata:
     lint-fast: dist/cjs/bin/lint-fast.js
     lint-profile: dist/cjs/bin/lint-profile.js
     package-clean: dist/cjs/bin/package/clean.js
-    "package:compile:cjs": dist/cjs/bin/package/compile-cjs.js
-    "package:compile:esm": dist/cjs/bin/package/compile-esm.js
+    package-compile-cjs: dist/cjs/bin/package/compile-cjs.js
+    package-compile-esm: dist/cjs/bin/package/compile-esm.js
     rebuild: dist/cjs/bin/rebuild.js
     reinstall: dist/cjs/bin/reinstall.js
     relint: dist/cjs/bin/relint.js
     sonar: dist/cjs/bin/sonar.js
     test: dist/cjs/bin/test.js
     tsconfig-gen: dist/cjs/bin/tsconfig-gen.js
-    "tsconfig-gen:cjs": dist/cjs/bin/tsconfig-gen-cjs.js
-    "tsconfig-gen:clean": dist/cjs/bin/tsconfig-gen-clean.js
-    "tsconfig-gen:esm": dist/cjs/bin/tsconfig-gen-esm.js
-    "tsconfig-gen:test": dist/cjs/bin/tsconfig-gen-test.js
+    tsconfig-gen-cjs: dist/cjs/bin/tsconfig-gen-cjs.js
+    tsconfig-gen-clean: dist/cjs/bin/tsconfig-gen-clean.js
+    tsconfig-gen-esm: dist/cjs/bin/tsconfig-gen-esm.js
+    tsconfig-gen-test: dist/cjs/bin/tsconfig-gen-test.js
     up: dist/cjs/bin/up.js
     updo: dist/cjs/bin/updo.js
     xy: dist/cjs/bin/xy
     yarn3only: dist/cjs/bin/yarn3only.js
-  checksum: 1cfa9dafc50358f74a670dde18bcaa5fc0ac308beaeb42573a129a0643ad27183059aad1f10eda52d6e649f5bce77e9fd9e243e879d23769115f503bb48ada95
+  checksum: 6f616de36322fd613be07cbe5f8cc3db22b3a1f17f2b24518bbf680419821d5f4ac974854bb2e9d914f4f79ad0cb2ce81cc3ac72b20e090ec0d9b83b101b9264
   languageName: node
   linkType: hard
 
-"@xylabs/tsconfig@npm:^2.7.12":
-  version: 2.7.12
-  resolution: "@xylabs/tsconfig@npm:2.7.12"
+"@xylabs/tsconfig@npm:^2.7.22":
+  version: 2.7.22
+  resolution: "@xylabs/tsconfig@npm:2.7.22"
   dependencies:
     typescript: ^4.8.2
-  checksum: 8b7d33b1d23092dc6a48706ea915e84a08d02e678aea875a559d412bc04c91a03b42c4d80d5d263def2b321349e3c5f5cb8aef41ea7e7a32c492b906d52f2358
+  checksum: 3f813bd1279f31f3d09b44c9dfdf7a504b1f03ee9adb4a55c170275ad828d8cc3dbbcea5a8de1327447769f8b7a88823b2541ed66910d1199a165725ce35c401
   languageName: node
   linkType: hard
 
@@ -4234,7 +4234,7 @@ __metadata:
     ajv: ^8.11.0
     jest: ^29.0.3
     jest-extended: ^3.1.0
-    jest-mock-extended: ^3.0.0-beta1
+    jest-mock-extended: ^3.0.1
     source-map-support: ^0.5.21
     typescript: ^4.8.3
     uuid: ^9.0.0
@@ -4278,7 +4278,7 @@ __metadata:
     reflect-metadata: ^0.1.13
     rollbar: ^2.25.2
     source-map-support: ^0.5.21
-    swagger-autogen: ^2.21.8
+    swagger-autogen: ^2.21.10
     swagger-ui-express: ^4.5.0
     uuid: ^9.0.0
   languageName: unknown
@@ -4344,7 +4344,7 @@ __metadata:
     "@xyo-network/utils": ^2.32.1
     inversify: ^6.0.1
     jest: ^29.0.3
-    jest-mock-extended: ^3.0.0-beta1
+    jest-mock-extended: ^3.0.1
     typescript: ^4.8.3
   languageName: unknown
   linkType: soft
@@ -4369,6 +4369,7 @@ __metadata:
     "@xylabs/sdk-api-express-ecs": ^1.2.4
     "@xylabs/sdk-js": ^2.6.7
     "@xyo-network/api": ^2.32.1
+    "@xyo-network/archivist": ^2.32.1
     "@xyo-network/archivist-dependencies": "workspace:^"
     "@xyo-network/archivist-express-lib": "workspace:^"
     "@xyo-network/archivist-lib": "workspace:^"
@@ -4569,13 +4570,13 @@ __metadata:
   dependencies:
     "@babel/core": ^7.19.1
     "@babel/preset-env": ^7.19.1
-    "@types/jest": ^29.0.2
+    "@types/jest": ^29.0.3
     "@types/node": ^18.7.18
     "@types/source-map-support": 0.5.6
-    "@xylabs/eslint-config": ^2.7.12
+    "@xylabs/eslint-config": ^2.7.22
     "@xylabs/sdk-api-express-ecs": ^1.2.4
-    "@xylabs/ts-scripts-yarn3": ^2.7.12
-    "@xylabs/tsconfig": ^2.7.12
+    "@xylabs/ts-scripts-yarn3": ^2.7.22
+    "@xylabs/tsconfig": ^2.7.22
     "@xyo-network/account": ^2.32.1
     "@xyo-network/archivist-server": "workspace:^"
     "@xyo-network/archivist-test": "workspace:^"
@@ -4585,7 +4586,7 @@ __metadata:
     dotenv: ^16.0.2
     jest: ^29.0.3
     jest-extended: ^3.1.0
-    nodemon: ^2.0.19
+    nodemon: ^2.0.20
     ts-jest: ^29.0.1
     ts-node: ^10.9.1
     typescript: ^4.8.3
@@ -9705,15 +9706,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-mock-extended@npm:^3.0.0-beta1":
-  version: 3.0.0-beta1
-  resolution: "jest-mock-extended@npm:3.0.0-beta1"
+"jest-mock-extended@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "jest-mock-extended@npm:3.0.1"
   dependencies:
     ts-essentials: ^7.0.3
   peerDependencies:
     jest: ^24.0.0 || ^25.0.0 || ^26.0.0 || ^27.0.0 || ^28.0.0 || ^29.0.0
     typescript: ^3.0.0 || ^4.0.0
-  checksum: 9340c5cf8b337e07f28307feddf23ded0708718c35491f0117afd4a8b8beea7e2fb9a1ecbc7ca5cd97341a6d36b3f2e643ebb75ae97b01fd3348cdb7450ee8e1
+  checksum: 8004e6fe538aa80e8e42faf62aa7c76dae1fd23b3f248cf1e428eca0dc8e3315a5f72b075484a5474983d3c4adf421c2064743d5a8c3a1e58a96ef5c59d8159a
   languageName: node
   linkType: hard
 
@@ -11608,14 +11609,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nodemon@npm:^2.0.19":
-  version: 2.0.19
-  resolution: "nodemon@npm:2.0.19"
+"nodemon@npm:^2.0.20":
+  version: 2.0.20
+  resolution: "nodemon@npm:2.0.20"
   dependencies:
     chokidar: ^3.5.2
     debug: ^3.2.7
     ignore-by-default: ^1.0.1
-    minimatch: ^3.0.4
+    minimatch: ^3.1.2
     pstree.remy: ^1.1.8
     semver: ^5.7.1
     simple-update-notifier: ^1.0.7
@@ -11624,7 +11625,7 @@ __metadata:
     undefsafe: ^2.0.5
   bin:
     nodemon: bin/nodemon.js
-  checksum: c6cf89435a8945693fac2701285eb1f539b5003d943a1be89a9ffbfc9d0275aa7779f85a9eee509e9f19a988d53ce293266d8b35b91010e36ad9e78683f8eb07
+  checksum: 9fe858682414fe703179f4fe36c86e71f40d2693b5345c09803d7b191816a6589c5df8f1f9873bffee92893880183b95a031c86340e46b364ef1b0b7f619edbf
   languageName: node
   linkType: hard
 
@@ -15566,15 +15567,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"swagger-autogen@npm:^2.21.8":
-  version: 2.21.8
-  resolution: "swagger-autogen@npm:2.21.8"
+"swagger-autogen@npm:^2.21.10":
+  version: 2.21.10
+  resolution: "swagger-autogen@npm:2.21.10"
   dependencies:
     acorn: ^7.4.1
     deepmerge: ^4.2.2
     glob: ^7.1.7
     json5: ^2.2.1
-  checksum: 8648baafd2601974314bc18982ab893cd399b91957e0d2670dd8c858e6ea139f25cd227da1b7b326f341528767e50d736c0f5c528840255acf35634b2eb143d9
+  checksum: 7575bc4917071a05e7cf1a1c3447288626a4e3708f3cb6f5f94a5564f49521f6765a31f5d21b9306c648b6eb41f9b97c49f633ca677c53582eadc913e87e454f
   languageName: node
   linkType: hard
 
