@@ -7,7 +7,6 @@ import {
   XyoArchivistGetQuerySchema,
   XyoArchivistInsertQuerySchema,
   XyoArchivistQuery,
-  XyoArchivistQuerySchema,
 } from '@xyo-network/archivist'
 import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { XyoModule, XyoModuleQueryResult } from '@xyo-network/module'
@@ -27,7 +26,7 @@ export abstract class AbstractBoundWitnessArchivist<TId = string>
     super(undefined, account)
   }
 
-  public override queries(): XyoArchivistQuerySchema[] {
+  public override queries() {
     return [
       XyoArchivistFindQuerySchema,
       XyoArchivistGetQuerySchema,
@@ -57,7 +56,7 @@ export abstract class AbstractBoundWitnessArchivist<TId = string>
       default:
         throw new Error(`${query.schema} Not Implemented`)
     }
-    return [this.bindPayloads(payloads), payloads]
+    return this.bindPayloads(payloads)
   }
   abstract find(filter?: XyoBoundWitnessFilterPredicate | undefined): Promise<Array<XyoBoundWitnessWithMeta | null>>
   abstract get(ids: TId[]): Promise<Array<XyoBoundWitnessWithMeta | null>>
