@@ -1,5 +1,5 @@
 import { XyoArchive } from '@xyo-network/api'
-import { Archivist, XyoArchivistQuery } from '@xyo-network/archivist'
+import { Archivist } from '@xyo-network/archivist'
 
 import { UpsertResult } from '../UpsertResult'
 import { XyoPayloadFilterPredicate } from './XyoPayloadFilterPredicate'
@@ -12,6 +12,5 @@ export type ArchiveArchivist = Archivist<
   EntityArchive,
   EntityArchive,
   XyoPayloadFilterPredicate<XyoArchive>,
-  string,
-  XyoArchivistQuery
+  string
 >
