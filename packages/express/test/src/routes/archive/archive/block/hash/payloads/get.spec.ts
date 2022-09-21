@@ -1,3 +1,5 @@
+import { PayloadWrapper } from '@xyo-network/payload'
+
 import { claimArchive, getBlock, getBlocksWithPayloads, getPayloadByBlockHash, getTokenForNewUser, postBlock } from '../../../../../../testUtil'
 
 describe('/archive/:archive/block/hash/:hash/payloads', () => {
@@ -11,7 +13,7 @@ describe('/archive/:archive/block/hash/:hash/payloads', () => {
   })
   it('Retrieves the single payload for the specified block hash', async () => {
     const block = getBlocksWithPayloads(1, 1)
-    const hash = block[0]._hash || ''
+    const hash = new PayloadWrapper(block[0]).hash
     await postBlock(block, archive)
     const response = await getPayloadByBlockHash(token, archive, hash)
     expect(response).toBeTruthy()
@@ -21,7 +23,7 @@ describe('/archive/:archive/block/hash/:hash/payloads', () => {
   })
   it('Retrieves the array of payloads for the specified block hash', async () => {
     const block = getBlocksWithPayloads(1, 2)
-    const hash = block[0]._hash || ''
+    const hash = new PayloadWrapper(block[0]).hash
     await postBlock(block, archive)
     const response = await getPayloadByBlockHash(token, archive, hash)
     expect(response).toBeTruthy()
@@ -31,7 +33,7 @@ describe('/archive/:archive/block/hash/:hash/payloads', () => {
   })
   it('Returns an empty array if no payload was posted for the specified block hash', async () => {
     const block = getBlock()
-    const hash = block._hash || ''
+    const hash = new PayloadWrapper(block).hash
     await postBlock(block, archive)
     const response = await getPayloadByBlockHash(token, archive, hash)
     expect(response).toBeTruthy()
