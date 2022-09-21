@@ -13,7 +13,7 @@ import { XyoModule, XyoModuleQueryResult } from '@xyo-network/module'
 import { XyoPayload } from '@xyo-network/payload'
 import { injectable } from 'inversify'
 
-import { XyoBoundWitnessWithMeta } from '../BoundWitness'
+import { XyoBoundWitnessWithPartialMeta } from '../BoundWitness'
 import { BoundWitnessArchivist } from './BoundWitnessArchivist'
 import { XyoBoundWitnessFilterPredicate } from './XyoBoundWitnessFilterPredicate'
 
@@ -58,7 +58,7 @@ export abstract class AbstractBoundWitnessArchivist<TId = string>
     }
     return this.bindPayloads(payloads)
   }
-  abstract find(filter?: XyoBoundWitnessFilterPredicate | undefined): Promise<Array<XyoBoundWitnessWithMeta | null>>
-  abstract get(ids: TId[]): Promise<Array<XyoBoundWitnessWithMeta | null>>
-  abstract insert(item: XyoBoundWitness[]): Promise<XyoBoundWitnessWithMeta | null>
+  abstract find(filter?: XyoBoundWitnessFilterPredicate | undefined): Promise<Array<XyoBoundWitnessWithPartialMeta | null>>
+  abstract get(ids: TId[]): Promise<Array<XyoBoundWitnessWithPartialMeta | null>>
+  abstract insert(item: XyoBoundWitnessWithPartialMeta[]): Promise<XyoBoundWitness | null>
 }

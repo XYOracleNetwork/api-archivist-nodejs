@@ -12,6 +12,7 @@ import {
   XyoPayloadWithPartialMeta,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
+import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { EmptyObject } from '@xyo-network/core'
 import { PayloadWrapper } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
@@ -72,7 +73,7 @@ export class MongoDBArchiveBoundWitnessesArchivist
     return results
   }
 
-  async insert(items: XyoBoundWitnessWithMeta[]): Promise<XyoBoundWitnessWithMeta> {
+  async insert(items: XyoBoundWitnessWithMeta[]): Promise<XyoBoundWitness | null> {
     const _timestamp = Date.now()
     const bws = items
       .map((bw) => {
@@ -87,6 +88,7 @@ export class MongoDBArchiveBoundWitnessesArchivist
     if (result.insertedCount != items.length) {
       throw new Error('MongoDBArchiveBoundWitnessesArchivist.insert: Error inserting BoundWitnesses')
     }
-    return this.bindPayloads(bws)
+    const [bw] = await this.bindPayloads(bws)
+    return bw
   }
 }

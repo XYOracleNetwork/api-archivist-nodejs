@@ -49,7 +49,7 @@ export class MongoDBArchivistWitnessedPayloadArchivist extends AbstractPayloadAr
   async insert(payloads: XyoPayloadWithMeta[]): Promise<XyoBoundWitness | null> {
     // Witness from archivist
     const _timestamp = Date.now()
-    const bw = new XyoBoundWitnessBuilder({ inlinePayloads: false }).payloads(payloads).build()
+    const bw = new XyoBoundWitnessBuilder({ inlinePayloads: false }).payloads(payloads).build() as XyoBoundWitnessWithMeta & XyoPayloadWithPartialMeta
     bw._timestamp = _timestamp
     const witnessResult = await this.boundWitnesses.insertOne(bw)
     if (!witnessResult.acknowledged || !witnessResult.insertedId) {

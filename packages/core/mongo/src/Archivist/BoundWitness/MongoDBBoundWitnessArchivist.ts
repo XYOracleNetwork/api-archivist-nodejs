@@ -6,9 +6,11 @@ import {
   XyoBoundWitnessFilterPredicate,
   XyoBoundWitnessMeta,
   XyoBoundWitnessWithMeta,
+  XyoPayloadMeta,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { PayloadWrapper, XyoPayloadMeta } from '@xyo-network/payload'
+import { XyoBoundWitness } from '@xyo-network/boundwitness'
+import { PayloadWrapper } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter, SortDirection } from 'mongodb'
@@ -54,7 +56,7 @@ export class MongoDBBoundWitnessArchivist extends AbstractBoundWitnessArchivist 
     assertEx(limit < 10, 'MongoDBBoundWitnessArchivist.get: Retrieval of > 100 hashes at a time not supported')
     return (await (await this.sdk.find({ _hash: { $in: hashes } })).limit(hashes.length).toArray()).map(removeId)
   }
-  async insert(items: XyoBoundWitnessWithMeta[]): Promise<XyoBoundWitnessWithMeta> {
+  async insert(items: XyoBoundWitnessWithMeta[]): Promise<XyoBoundWitness> {
     const _timestamp = Date.now()
     const bws = items
       .map((bw) => {
@@ -69,6 +71,7 @@ export class MongoDBBoundWitnessArchivist extends AbstractBoundWitnessArchivist 
     if (result.insertedCount != items.length) {
       throw new Error('MongoDBBoundWitnessArchivist.insert: Error inserting BoundWitnesses')
     }
-    return this.bindPayloads(bws)
+    const [bw] = await this.bindPayloads(bws)
+    return bw
   }
 }
