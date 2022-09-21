@@ -4,7 +4,13 @@ import { assertEx } from '@xylabs/assert'
 import { exists } from '@xylabs/sdk-js'
 import { XyoAccount } from '@xyo-network/account'
 import { XyoPayloadFindFilter } from '@xyo-network/archivist'
-import { AbstractPayloadArchivist, XyoBoundWitnessWithMeta, XyoPayloadWithMeta } from '@xyo-network/archivist-model'
+import {
+  AbstractPayloadArchivist,
+  XyoBoundWitnessWithMeta,
+  XyoBoundWitnessWithPartialMeta,
+  XyoPayloadWithMeta,
+  XyoPayloadWithPartialMeta,
+} from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoBoundWitness, XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
