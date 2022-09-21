@@ -1,15 +1,14 @@
-import { XyoAccount } from '@xyo-network/account'
 import { XyoBoundWitness, XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { XyoSchemaPayload } from '@xyo-network/schema-payload-plugin'
 
-import { claimArchive, getHash, getSchema, getTokenForNewUser, postBlock } from '../../../../testUtil'
+import { claimArchive, getHash, getSchema, getTokenForNewUser, postBlock, unitTestSigningAccount } from '../../../../testUtil'
 
 describe('/schema/:schema', () => {
   const schema = 'network.xyo.schema'
   const definition = { $schema: 'http://json-schema.org/draft-07/schema#' }
   const bw = new XyoBoundWitnessBuilder<XyoBoundWitness, XyoSchemaPayload>({ inlinePayloads: true })
     .payload({ definition, schema })
-    .witness(XyoAccount.random())
+    .witness(unitTestSigningAccount)
     .build()
   beforeAll(async () => {
     const token = await getTokenForNewUser()

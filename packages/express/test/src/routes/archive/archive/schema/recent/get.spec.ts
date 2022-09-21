@@ -1,9 +1,8 @@
-import { XyoAccount } from '@xyo-network/account'
 import { XyoPayloadWithMeta } from '@xyo-network/archivist-model'
 import { XyoBoundWitness, XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { XyoSchemaPayload } from '@xyo-network/schema-payload-plugin'
 
-import { claimArchive, getArchiveSchemaRecent, getTokenForNewUser, postBlock } from '../../../../../testUtil'
+import { claimArchive, getArchiveSchemaRecent, getTokenForNewUser, postBlock, unitTestSigningAccount } from '../../../../../testUtil'
 
 const schemaToAdd = 5
 
@@ -25,7 +24,7 @@ describe('/archive/:archive/schema/recent', () => {
       new Array(schemaToAdd).fill(null).map(async () => {
         const bw = new XyoBoundWitnessBuilder<XyoBoundWitness, XyoSchemaPayload>({ inlinePayloads: true })
           .payload({ definition, schema })
-          .witness(XyoAccount.random())
+          .witness(unitTestSigningAccount)
           .build()
         const response = await postBlock(bw, archive)
         expect(response).toBeTruthy()
@@ -34,7 +33,7 @@ describe('/archive/:archive/schema/recent', () => {
       new Array(schemaToAdd).fill(null).map(async () => {
         const bw = new XyoBoundWitnessBuilder<XyoBoundWitness, XyoSchemaPayload>({ inlinePayloads: true })
           .payload({ definition, schema })
-          .witness(XyoAccount.random())
+          .witness(unitTestSigningAccount)
           .build()
         const response = await postBlock(bw, otherArchive)
         expect(response).toBeTruthy()
