@@ -8,7 +8,7 @@ import {
   XyoBoundWitnessWithMeta,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { XyoPayloadMeta, XyoPayloadWrapper } from '@xyo-network/payload'
+import { PayloadWrapper, XyoPayloadMeta } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter, SortDirection } from 'mongodb'
@@ -59,7 +59,7 @@ export class MongoDBBoundWitnessArchivist extends AbstractBoundWitnessArchivist 
     const bws = items
       .map((bw) => {
         const _archive = assertEx(bw._archive, 'MongoDBBoundWitnessArchivist.insert: Missing archive')
-        const bwMeta: XyoBoundWitnessMeta = { _archive, _hash: new XyoPayloadWrapper(bw).hash, _timestamp }
+        const bwMeta: XyoBoundWitnessMeta = { _archive, _hash: new PayloadWrapper(bw).hash, _timestamp }
         const payloadMeta: XyoPayloadMeta = { _archive, _hash: '', _timestamp }
         return prepareBoundWitnesses([bw], bwMeta, payloadMeta)
       })

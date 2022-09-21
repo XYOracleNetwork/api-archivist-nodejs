@@ -16,7 +16,7 @@ import {
   XyoPayloadWithMeta,
 } from '@xyo-network/archivist-model'
 import { XyoBoundWitness, XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
-import { XyoPayloadBuilder, XyoPayloadWrapper } from '@xyo-network/payload'
+import { PayloadWrapper, XyoPayloadBuilder } from '@xyo-network/payload'
 import { v4 } from 'uuid'
 
 import { COLLECTIONS } from '../../collections'
@@ -56,7 +56,7 @@ describe('MongoDBArchiveBoundWitnessesArchivist', () => {
     .map((bw) => {
       return { ...bw, _archive: archive }
     })
-  const hashes: string[] = boundWitnesses.map((bw) => new XyoPayloadWrapper(bw).hash)
+  const hashes: string[] = boundWitnesses.map((bw) => new PayloadWrapper(bw).hash)
   const boundWitness = boundWitnesses[0]
   const hash = hashes[0]
 
