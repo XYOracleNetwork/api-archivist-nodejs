@@ -1,6 +1,6 @@
 import { XyoPayloadWithMeta } from '@xyo-network/archivist-model'
 
-import { claimArchive, getBlockWithPayloads, getRecentPayloads, getTokenForNewUser, postBlock } from '../../../../../testUtil'
+import { claimArchive, getBlockWithPayloads, getRecentPayloads, getTokenForUnitTestUser, postBlock } from '../../../../../testUtil'
 
 const defaultReturnLength = 20
 
@@ -19,7 +19,7 @@ describe('/archive/:archive/payload/recent/:limit', () => {
   let archive = ''
   let otherArchive = ''
   beforeAll(async () => {
-    token = await getTokenForNewUser()
+    token = await getTokenForUnitTestUser()
     archive = (await claimArchive(token)).archive
     otherArchive = (await claimArchive(token)).archive
 

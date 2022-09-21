@@ -2,7 +2,7 @@ import { XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { XyoSchemaPayload } from '@xyo-network/schema-payload-plugin'
 import { StatusCodes } from 'http-status-codes'
 
-import { claimArchive, getSchemaName, getTokenForNewUser, postBlock, request, unitTestSigningAccount } from '../../../../../../testUtil'
+import { claimArchive, getSchemaName, getTokenForUnitTestUser, postBlock, request, unitTestSigningAccount } from '../../../../../../testUtil'
 
 const count = 2
 const definition = { $schema: 'http://json-schema.org/draft-07/schema#' }
@@ -19,7 +19,7 @@ describe('/archive/:archive/payload/schema/stats', () => {
   let archive = ''
   let otherArchive = ''
   beforeAll(async () => {
-    token = await getTokenForNewUser()
+    token = await getTokenForUnitTestUser()
     archive = (await claimArchive(token)).archive
     otherArchive = (await claimArchive(token)).archive
 
