@@ -1,4 +1,5 @@
 import { assertEx } from '@xylabs/assert'
+import { XyoArchivistGetQuery, XyoArchivistGetQuerySchema, XyoArchivistInsertQuery, XyoArchivistInsertQuerySchema } from '@xyo-network/archivist'
 import {
   ArchivePermissionsArchivist,
   QueryHandler,
@@ -35,9 +36,21 @@ export class SetArchivePermissionsQueryHandler implements QueryHandler<SetArchiv
     const archive = assertEx(query.payload._archive)
     validateAddresses(query)
     validateSchema(query)
-    await this.archivePermissionsArchivist.insert([query.payload])
-    const permissions = await this.archivePermissionsArchivist.get([archive])
-    const currentPermissions = assertEx(permissions?.[0])
+    const insertQuery: XyoArchivistInsertQuery = {
+      payloads: [query.payload],
+      schema: XyoArchivistInsertQuerySchema,
+    }
+    const insertionResult = await this.archivePermissionsArchivist.query(insertQuery)
+    assertEx(insertionResult, 'SetArchivePermissionsQueryHandler.handle: Error inserting permissions')
+    const getQuery: XyoArchivistGetQuery = {
+      hashes: [archive],
+      schema: XyoArchivistGetQuerySchema,
+    }
+    const getResult = await this.archivePermissionsArchivist.query(getQuery)
+    const currentPermissions = assertEx(
+      getResult?.[1]?.[0],
+      'SetArchivePermissionsQueryHandler.handle: Error getting permissions',
+    ) as SetArchivePermissionsPayload
     return new XyoPayloadBuilder<SetArchivePermissionsPayloadWithMeta>({ schema: SetArchivePermissionsSchema })
       .fields({ ...currentPermissions, _queryId: query.id, _timestamp: Date.now() })
       .build()
