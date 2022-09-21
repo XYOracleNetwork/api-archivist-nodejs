@@ -1,10 +1,18 @@
-import { claimArchive, getBlockByHash, getTokenForNewUser, knownBlock, knownBlockHash, postBlock } from '../../../../../testUtil'
+import {
+  claimArchive,
+  getBlockByHash,
+  getTokenForOtherUnitTestUser,
+  getTokenForUnitTestUser,
+  knownBlock,
+  knownBlockHash,
+  postBlock,
+} from '../../../../../testUtil'
 
 describe('/archive/:archive/block/hash/:hash', () => {
   let token = ''
   let archive = ''
   beforeAll(async () => {
-    token = await getTokenForNewUser()
+    token = await getTokenForUnitTestUser()
   })
   beforeEach(async () => {
     archive = (await claimArchive(token)).archive
@@ -20,7 +28,7 @@ describe('/archive/:archive/block/hash/:hash', () => {
   it('Allows retrieving the same block if posted to multiple archives', async () => {
     const response = await getBlockByHash(token, archive, knownBlockHash)
     expect(response.length).toBe(1)
-    const token2 = await getTokenForNewUser()
+    const token2 = await getTokenForOtherUnitTestUser()
     const archive2 = (await claimArchive(token2)).archive
     await postBlock(knownBlock, archive2)
     const response2 = await getBlockByHash(token2, archive2, knownBlockHash)

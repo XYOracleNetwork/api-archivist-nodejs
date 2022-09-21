@@ -6,6 +6,7 @@ import {
   claimArchive,
   getSchemaName,
   getTokenForNewUser,
+  getTokenForUnitTestUser,
   postBlock,
   request,
   testSchemaPrefix,
@@ -26,7 +27,7 @@ describe('/archive/:archive/payload/schema', () => {
   let token = ''
   let archive = ''
   beforeAll(async () => {
-    token = await getTokenForNewUser()
+    token = await getTokenForUnitTestUser()
     archive = (await claimArchive(token)).archive
     // Post blocks to one archive
     for (let blockCount = 0; blockCount < blocksPosted; blockCount++) {
@@ -36,7 +37,6 @@ describe('/archive/:archive/payload/schema', () => {
     }
 
     // Post blocks to another archive
-    token = await getTokenForNewUser()
     archive = (await claimArchive(token)).archive
     for (let blockCount = 0; blockCount < blocksPosted; blockCount++) {
       const block = getNewBlockWithPayloadsOfSchemaType()

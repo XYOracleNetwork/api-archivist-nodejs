@@ -2,11 +2,15 @@ import { otherUnitTestSigningAccount } from '../Account'
 import { TestWeb3User } from '../Model'
 import { signInUser } from './signInUser'
 
-export const getTokenForOtherUnitTestUser = (): Promise<string> => {
+let token: string | undefined = undefined
+
+export const getTokenForOtherUnitTestUser = async (): Promise<string> => {
+  if (token) return token
   const account = otherUnitTestSigningAccount
   const user: TestWeb3User = {
     address: account.addressValue.hex,
     privateKey: account.private.hex,
   }
-  return signInUser(user)
+  token = await signInUser(user)
+  return token
 }
