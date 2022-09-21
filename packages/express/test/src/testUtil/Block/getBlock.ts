@@ -1,5 +1,5 @@
 import { assertEx } from '@xylabs/assert'
-import { XyoPayloadWithPartialMeta } from '@xyo-network/archivist-model'
+import { XyoBoundWitnessWithPartialMeta, XyoPayloadWithPartialMeta } from '@xyo-network/archivist-model'
 import { XyoBoundWitness, XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { XyoPayload } from '@xyo-network/payload'
 
@@ -12,7 +12,7 @@ export const knownBlock = new XyoBoundWitnessBuilder({ inlinePayloads: true })
   .build() as XyoBoundWitness & XyoPayloadWithPartialMeta
 export const knownBlockHash = assertEx(knownBlock._hash)
 
-export const getBlock = (...payloads: XyoPayload[]) => {
+export const getBlock = (...payloads: XyoPayload[]): XyoBoundWitnessWithPartialMeta & XyoPayloadWithPartialMeta => {
   return new XyoBoundWitnessBuilder({ inlinePayloads: true }).witness(unitTestSigningAccount).payloads(payloads).build()
 }
 
