@@ -26,7 +26,6 @@ import { COLLECTIONS } from '../../collections'
 import { DATABASES } from '../../databases'
 import { MONGO_TYPES } from '../../types'
 import { fromDbProperty, toDbProperty } from '../../Util'
-import { ArchiveConfigPayload } from '../Payloads'
 
 const updateOptions: UpdateOptions = { upsert: true }
 

@@ -7,9 +7,9 @@ import {
   XyoArchivistInsertQuery,
   XyoArchivistInsertQuerySchema,
 } from '@xyo-network/archivist'
-import { DebugPayload, DebugPayloadWithMeta, DebugSchema, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
+import { DebugPayload, DebugPayloadWithMeta, DebugSchema, XyoPayloadFilterPredicate, XyoPayloadWithMeta } from '@xyo-network/archivist-model'
 import { XyoBoundWitness } from '@xyo-network/boundwitness'
-import { PayloadWrapper, XyoPayloadBuilder, XyoPayloadWithMeta } from '@xyo-network/payload'
+import { PayloadWrapper, XyoPayloadBuilder } from '@xyo-network/payload'
 import { v4 } from 'uuid'
 
 import { COLLECTIONS } from '../../collections'
