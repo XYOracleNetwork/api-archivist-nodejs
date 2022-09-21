@@ -7,7 +7,6 @@ import {
   XyoArchivistGetQuerySchema,
   XyoArchivistInsertQuerySchema,
   XyoArchivistQuery,
-  XyoArchivistQuerySchema,
 } from '@xyo-network/archivist'
 import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { EmptyObject } from '@xyo-network/core'
@@ -28,7 +27,7 @@ export abstract class AbstractPayloadArchivist<T extends EmptyObject = EmptyObje
     super(undefined, account)
   }
 
-  override queries(): XyoArchivistQuerySchema[] {
+  override queries() {
     return [
       XyoArchivistFindQuerySchema,
       XyoArchivistGetQuerySchema,
@@ -58,7 +57,7 @@ export abstract class AbstractPayloadArchivist<T extends EmptyObject = EmptyObje
       default:
         throw new Error(`${query.schema} Not Implemented`)
     }
-    return [this.bindPayloads(payloads), payloads]
+    return this.bindPayloads(payloads)
   }
 
   abstract find(filter: XyoPayloadFilterPredicate<T>): Promise<XyoPayloadWithMeta<T>[]>

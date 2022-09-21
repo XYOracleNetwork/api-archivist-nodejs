@@ -9,7 +9,7 @@ import {
 } from '@xyo-network/archivist'
 import { DebugPayload, DebugPayloadWithMeta, DebugSchema, XyoArchivePayloadFilterPredicate, XyoPayloadWithMeta } from '@xyo-network/archivist-model'
 import { XyoBoundWitness } from '@xyo-network/boundwitness'
-import { XyoPayloadBuilder, XyoPayloadWrapper } from '@xyo-network/payload'
+import { PayloadWrapper, XyoPayloadBuilder } from '@xyo-network/payload'
 import { v4 } from 'uuid'
 
 import { COLLECTIONS } from '../../collections'
@@ -36,7 +36,7 @@ describe('MongoDBArchivePayloadsArchivist', () => {
   const sut = new MongoDBArchivePayloadsArchivist(account, sdk)
   const archive = `test-${v4()}`
   const payloads: XyoPayloadWithMeta<DebugPayload>[] = getPayloads(archive, count)
-  const hashes: string[] = payloads.map((p) => new XyoPayloadWrapper(p).hash)
+  const hashes: string[] = payloads.map((p) => new PayloadWrapper(p).hash)
   const payload = payloads[0]
   const hash = hashes[0]
 

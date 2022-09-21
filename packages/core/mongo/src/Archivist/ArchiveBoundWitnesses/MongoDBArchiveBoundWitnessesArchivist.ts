@@ -12,8 +12,9 @@ import {
   XyoPayloadWithPartialMeta,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
+import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { EmptyObject } from '@xyo-network/core'
-import { XyoPayloadWrapper } from '@xyo-network/payload'
+import { PayloadWrapper } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter, SortDirection } from 'mongodb'
@@ -72,12 +73,12 @@ export class MongoDBArchiveBoundWitnessesArchivist
     return results
   }
 
-  async insert(items: XyoBoundWitnessWithMeta[]): Promise<XyoBoundWitnessWithMeta> {
+  async insert(items: XyoBoundWitnessWithMeta[]): Promise<XyoBoundWitness | null> {
     const _timestamp = Date.now()
     const bws = items
       .map((bw) => {
         const _archive = assertEx(bw._archive, 'MongoDBArchiveBoundWitnessesArchivist.insert: Missing archive')
-        const bwMeta: XyoBoundWitnessMeta = { _archive, _hash: new XyoPayloadWrapper(bw).hash, _timestamp }
+        const bwMeta: XyoBoundWitnessMeta = { _archive, _hash: new PayloadWrapper(bw).hash, _timestamp }
         const payloadMeta: XyoPayloadMeta = { _archive, _hash: '', _timestamp }
         return prepareBoundWitnesses([bw], bwMeta, payloadMeta)
       })
@@ -87,6 +88,7 @@ export class MongoDBArchiveBoundWitnessesArchivist
     if (result.insertedCount != items.length) {
       throw new Error('MongoDBArchiveBoundWitnessesArchivist.insert: Error inserting BoundWitnesses')
     }
-    return this.bindPayloads(bws)
+    const [bw] = await this.bindPayloads(bws)
+    return bw
   }
 }

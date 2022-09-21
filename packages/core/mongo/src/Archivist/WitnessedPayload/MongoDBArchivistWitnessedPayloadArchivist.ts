@@ -4,7 +4,13 @@ import { assertEx } from '@xylabs/assert'
 import { exists } from '@xylabs/sdk-js'
 import { XyoAccount } from '@xyo-network/account'
 import { XyoPayloadFindFilter } from '@xyo-network/archivist'
-import { AbstractPayloadArchivist, XyoBoundWitnessWithMeta, XyoPayloadWithMeta } from '@xyo-network/archivist-model'
+import {
+  AbstractPayloadArchivist,
+  WitnessedPayloadArchivist,
+  XyoBoundWitnessWithMeta,
+  XyoPayloadWithMeta,
+  XyoPayloadWithPartialMeta,
+} from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoBoundWitness, XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
@@ -18,7 +24,10 @@ const unique = <T>(value: T, index: number, self: T[]) => {
 }
 
 @injectable()
-export class MongoDBArchivistWitnessedPayloadArchivist extends AbstractPayloadArchivist<XyoPayloadWithMeta, string> {
+export class MongoDBArchivistWitnessedPayloadArchivist
+  extends AbstractPayloadArchivist<XyoPayloadWithMeta, string>
+  implements WitnessedPayloadArchivist
+{
   constructor(
     @inject(TYPES.Account) protected readonly account: XyoAccount,
     @inject(MONGO_TYPES.PayloadSdkMongo) protected readonly payloads: BaseMongoSdk<XyoPayloadWithMeta>,
@@ -40,10 +49,10 @@ export class MongoDBArchivistWitnessedPayloadArchivist extends AbstractPayloadAr
     return (await this.payloads.find({ _archive: { $in: archives }, _hash: hash })).limit(100).toArray()
   }
 
-  async insert(payloads: XyoPayloadWithMeta[]): Promise<XyoBoundWitness | null> {
+  async insert(payloads: XyoPayloadWithMeta[]): Promise<XyoBoundWitness> {
     // Witness from archivist
     const _timestamp = Date.now()
-    const bw = new XyoBoundWitnessBuilder({ inlinePayloads: false }).payloads(payloads).build()
+    const bw = new XyoBoundWitnessBuilder({ inlinePayloads: false }).payloads(payloads).build() as XyoBoundWitnessWithMeta & XyoPayloadWithPartialMeta
     bw._timestamp = _timestamp
     const witnessResult = await this.boundWitnesses.insertOne(bw)
     if (!witnessResult.acknowledged || !witnessResult.insertedId) {

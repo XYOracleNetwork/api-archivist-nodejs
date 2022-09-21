@@ -7,14 +7,13 @@ import {
   XyoArchivistGetQuerySchema,
   XyoArchivistInsertQuerySchema,
   XyoArchivistQuery,
-  XyoArchivistQuerySchema,
 } from '@xyo-network/archivist'
 import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { XyoModule, XyoModuleQueryResult } from '@xyo-network/module'
 import { XyoPayload } from '@xyo-network/payload'
 import { injectable } from 'inversify'
 
-import { XyoBoundWitnessWithMeta } from '../BoundWitness'
+import { XyoBoundWitnessWithPartialMeta } from '../BoundWitness'
 import { BoundWitnessArchivist } from './BoundWitnessArchivist'
 import { XyoBoundWitnessFilterPredicate } from './XyoBoundWitnessFilterPredicate'
 
@@ -27,7 +26,7 @@ export abstract class AbstractBoundWitnessArchivist<TId = string>
     super(undefined, account)
   }
 
-  public override queries(): XyoArchivistQuerySchema[] {
+  public override queries() {
     return [
       XyoArchivistFindQuerySchema,
       XyoArchivistGetQuerySchema,
@@ -57,9 +56,9 @@ export abstract class AbstractBoundWitnessArchivist<TId = string>
       default:
         throw new Error(`${query.schema} Not Implemented`)
     }
-    return [this.bindPayloads(payloads), payloads]
+    return this.bindPayloads(payloads)
   }
-  abstract find(filter?: XyoBoundWitnessFilterPredicate | undefined): Promise<Array<XyoBoundWitnessWithMeta | null>>
-  abstract get(ids: TId[]): Promise<Array<XyoBoundWitnessWithMeta | null>>
-  abstract insert(item: XyoBoundWitness[]): Promise<XyoBoundWitnessWithMeta | null>
+  abstract find(filter?: XyoBoundWitnessFilterPredicate | undefined): Promise<Array<XyoBoundWitnessWithPartialMeta | null>>
+  abstract get(ids: TId[]): Promise<Array<XyoBoundWitnessWithPartialMeta | null>>
+  abstract insert(item: XyoBoundWitnessWithPartialMeta[]): Promise<XyoBoundWitness | null>
 }
