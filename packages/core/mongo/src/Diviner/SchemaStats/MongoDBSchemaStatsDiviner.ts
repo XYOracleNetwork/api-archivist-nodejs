@@ -1,6 +1,7 @@
 import 'reflect-metadata'
 
 import { assertEx } from '@xylabs/assert'
+import { exists } from '@xylabs/sdk-js'
 import { XyoAccount } from '@xyo-network/account'
 import {
   ArchiveArchivist,
@@ -42,7 +43,7 @@ interface Stats {
 }
 
 @injectable()
-export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner<XyoPayload, ArchiveConfigPayload> implements SchemaStatsDiviner, JobProvider {
+export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner implements SchemaStatsDiviner, JobProvider {
   protected readonly batchLimit = 100
   protected changeStream: ChangeStream | undefined = undefined
   protected nextOffset = 0
@@ -78,7 +79,7 @@ export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner<XyoPayload, Arc
 
   override async divine(payloads?: XyoPayloads): Promise<SchemaStatsPayload> {
     const query = payloads?.find<SchemaStatsQueryPayload>(isSchemaStatsQueryPayload)
-    const archive = query?.archive ?? this?.config?.archive
+    const archive = query?.archive
     const count = archive ? await this.divineArchive(archive) : await this.divineAllArchives()
     return new XyoPayloadBuilder<SchemaStatsPayload>({ schema: SchemaStatsSchema }).fields({ count }).build()
   }
@@ -132,7 +133,7 @@ export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner<XyoPayload, Arc
   private divineArchivesBatch = async () => {
     this.logger.log(`MongoDBArchiveSchemaCountDiviner.DivineArchivesBatch: Divining - Limit: ${this.batchLimit} Offset: ${this.nextOffset}`)
     const result = await this.archiveArchivist.find({ limit: this.batchLimit, offset: this.nextOffset })
-    const archives = result.map((archive) => archive.archive)
+    const archives = result.map((archive) => archive?.archive).filter(exists)
     this.logger.log(`MongoDBArchiveSchemaCountDiviner.DivineArchivesBatch: Divining ${archives.length} Archives`)
     this.nextOffset = archives.length < this.batchLimit ? 0 : this.nextOffset + this.batchLimit
     const results = await Promise.allSettled(archives.map(this.divineArchiveFull))
