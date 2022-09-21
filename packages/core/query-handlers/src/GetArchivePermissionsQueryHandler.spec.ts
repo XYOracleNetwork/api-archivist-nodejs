@@ -7,7 +7,7 @@ import {
   SetArchivePermissionsSchema,
   XyoPayloadWithMeta,
 } from '@xyo-network/archivist-model'
-import { XyoBoundWitness, XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
+import { XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { mock, MockProxy } from 'jest-mock-extended'
 
 import { GetArchivePermissionsQueryHandler } from './GetArchivePermissionsQueryHandler'
