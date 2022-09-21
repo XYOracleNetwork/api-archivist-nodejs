@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes'
 
-import { claimArchive, getBlockWithPayloads, getTokenForNewUser, postBlock, request } from '../../../../../testUtil'
+import { claimArchive, getBlockWithPayloads, getTokenForUnitTestUser, postBlock, request } from '../../../../../testUtil'
 
 const count = 5
 
@@ -10,7 +10,7 @@ describe('/archive/:archive/payload/stats', () => {
   let otherArchive = ''
   beforeAll(async () => {
     // Post blocks to two different archives
-    token = await getTokenForNewUser()
+    token = await getTokenForUnitTestUser()
     archive = (await claimArchive(token)).archive
     otherArchive = (await claimArchive(token)).archive
 

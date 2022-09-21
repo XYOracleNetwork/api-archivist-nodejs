@@ -5,7 +5,6 @@ import { StatusCodes } from 'http-status-codes'
 import {
   claimArchive,
   getSchemaName,
-  getTokenForNewUser,
   getTokenForUnitTestUser,
   postBlock,
   request,
@@ -55,7 +54,7 @@ describe('/archive/:archive/payload/schema', () => {
     })
   })
   it('Returns empty array if no schemas exist in archive', async () => {
-    const token = await getTokenForNewUser()
+    const token = await getTokenForUnitTestUser()
     const archive = (await claimArchive(token)).archive
     const response = await (await request()).get(`/archive/${archive}/payload/schema`).expect(StatusCodes.OK)
     const schemas = response.body.data as string[]
