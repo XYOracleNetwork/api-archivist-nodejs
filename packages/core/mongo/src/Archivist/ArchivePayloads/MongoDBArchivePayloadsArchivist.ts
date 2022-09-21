@@ -65,6 +65,7 @@ export class MongoDBArchivePayloadsArchivist
     if (result.insertedCount != items.length) {
       throw new Error('MongoDBArchivePayloadsArchivist.insert: Error inserting Payloads')
     }
-    return this.bindPayloads(items)
+    const [bw] = await this.bindPayloads(items)
+    return bw
   }
 }
