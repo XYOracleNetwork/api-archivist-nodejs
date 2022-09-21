@@ -1,4 +1,4 @@
-import { XyoPayloadBuilder, XyoPayloadWrapper } from '@xyo-network/payload'
+import { PayloadWrapper, XyoPayloadBuilder } from '@xyo-network/payload'
 
 import { schema } from './schema'
 
@@ -13,4 +13,4 @@ export const knownPayload = new XyoPayloadBuilder({ schema })
   })
   .build()
 
-export const knownPayloadHash = new XyoPayloadWrapper(knownPayload).hash
+export const knownPayloadHash = new PayloadWrapper(knownPayload).hash
