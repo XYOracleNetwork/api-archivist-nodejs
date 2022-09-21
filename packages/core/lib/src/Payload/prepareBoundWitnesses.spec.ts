@@ -1,4 +1,10 @@
-import { XyoBoundWitnessMeta, XyoBoundWitnessWithMeta } from '@xyo-network/archivist-model'
+import {
+  XyoBoundWitnessMeta,
+  XyoBoundWitnessWithMeta,
+  XyoBoundWitnessWithPartialMeta,
+  XyoPayloadWithMeta,
+  XyoPayloadWithPartialMeta,
+} from '@xyo-network/archivist-model'
 import { XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { PayloadWrapper, XyoPayload, XyoPayloadBuilder } from '@xyo-network/payload'
 import { v4 } from 'uuid'
@@ -36,13 +42,16 @@ const getPayloads = (numPayloads: number): XyoPayload[] => {
   return new Array(numPayloads).fill(0).map(() => new XyoPayloadBuilder({ schema: 'network.xyo.test' }).fields({ ...payloadMeta, uid: v4() }).build())
 }
 
-const getNewBlockWithBoundWitnessesWithPayloads = (numBoundWitnesses = 1, numPayloads = 1) => {
+const getNewBlockWithBoundWitnessesWithPayloads = (
+  numBoundWitnesses = 1,
+  numPayloads = 1,
+): Array<XyoBoundWitnessWithPartialMeta & XyoPayloadWithPartialMeta> => {
   return new Array(numBoundWitnesses).fill(0).map(() => {
     return new XyoBoundWitnessBuilder({ inlinePayloads: true }).payloads(getPayloads(numPayloads)).build()
   })
 }
 
-const validateBeforeSanitization = (boundWitnesses: XyoBoundWitnessWithMeta[]) => {
+const validateBeforeSanitization = (boundWitnesses: Array<XyoBoundWitnessWithPartialMeta & XyoPayloadWithPartialMeta>) => {
   boundWitnesses.map((bw) => {
     expect(bw._archive).toBeUndefined()
     expect(bw._client).toBe(_client)
