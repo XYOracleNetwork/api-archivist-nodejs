@@ -31,28 +31,28 @@ const validateArraysAreDistinct = (allowed?: string[], disallowed?: string[]) =>
 
 @injectable()
 export class SetArchivePermissionsQueryHandler implements QueryHandler<SetArchivePermissionsQuery, SetArchivePermissionsPayload> {
-  constructor(@inject(TYPES.ArchivePermissionsArchivist) protected readonly archivePermissionsArchivist: ArchivePermissionsArchivist) {}
+  constructor(@inject(TYPES.ArchivePermissionsArchivist) protected readonly archivist: ArchivePermissionsArchivist) {}
   async handle(query: SetArchivePermissionsQuery): Promise<SetArchivePermissionsPayload> {
-    const archive = assertEx(query.payload._archive)
+    const archive = assertEx(query.payload._archive, 'SetArchivePermissionsQueryHandler.handle: Archive not supplied')
     validateAddresses(query)
     validateSchema(query)
     const insertQuery: XyoArchivistInsertQuery = {
       payloads: [query.payload],
       schema: XyoArchivistInsertQuerySchema,
     }
-    const insertionResult = await this.archivePermissionsArchivist.query(insertQuery)
+    const insertionResult = await this.archivist.query(insertQuery)
     assertEx(insertionResult, 'SetArchivePermissionsQueryHandler.handle: Error inserting permissions')
     const getQuery: XyoArchivistGetQuery = {
       hashes: [archive],
       schema: XyoArchivistGetQuerySchema,
     }
-    const getResult = await this.archivePermissionsArchivist.query(getQuery)
-    const currentPermissions = assertEx(
+    const getResult = await this.archivist.query(getQuery)
+    const permissions = assertEx(
       getResult?.[1]?.[0],
       'SetArchivePermissionsQueryHandler.handle: Error getting permissions',
     ) as SetArchivePermissionsPayload
     return new XyoPayloadBuilder<SetArchivePermissionsPayloadWithMeta>({ schema: SetArchivePermissionsSchema })
-      .fields({ ...currentPermissions, _queryId: query.id, _timestamp: Date.now() })
+      .fields({ ...permissions, _queryId: query.id, _timestamp: Date.now() })
       .build()
   }
 }
