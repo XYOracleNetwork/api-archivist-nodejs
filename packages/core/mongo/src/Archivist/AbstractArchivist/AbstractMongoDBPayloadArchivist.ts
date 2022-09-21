@@ -10,7 +10,7 @@ import {
   XyoPayloadWithPartialMeta,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { XyoBoundWitnessBuilder, XyoBoundWitnessBuilderConfig } from '@xyo-network/boundwitness'
+import { XyoBoundWitness, XyoBoundWitnessBuilder, XyoBoundWitnessBuilderConfig } from '@xyo-network/boundwitness'
 import { EmptyObject } from '@xyo-network/core'
 import { XyoPayloadBuilder } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
@@ -24,9 +24,9 @@ const builderConfig: XyoBoundWitnessBuilderConfig = { inlinePayloads: false }
 
 @injectable()
 export abstract class AbstractMongoDBPayloadArchivist<
-  T extends WithoutId<EmptyObject> = WithoutId<EmptyObject>,
+  T extends EmptyObject = EmptyObject,
   TId extends string = string,
-> extends AbstractPayloadArchivist<WithoutId<T>, TId> {
+> extends AbstractPayloadArchivist<T, TId> {
   public constructor(
     @inject(TYPES.Account) protected readonly account: XyoAccount,
     @inject(MONGO_TYPES.PayloadSdkMongo) protected readonly payloads: BaseMongoSdk<XyoPayloadWithMeta<T>>,
@@ -45,9 +45,9 @@ export abstract class AbstractMongoDBPayloadArchivist<
     throw new Error('AbstractMongoDBPayloadArchivist: Find not implemented')
   }
 
-  async get(archives: string[]): Promise<WithoutId<XyoPayloadWithMeta<T>>[]> {
-    assertEx(archives.length === 1, 'Retrieval of multiple payloads not supported')
-    const _archive = assertEx(archives.pop(), 'Missing archive')
+  async get(ids: TId[]): Promise<Array<XyoPayloadWithMeta<T>>> {
+    assertEx(ids.length === 1, 'Retrieval of multiple payloads not supported')
+    const _archive = assertEx(ids.pop(), 'Missing archive')
     const boundWitnesses = await (await this.findWitnessQuery(_archive)).toArray()
     const lastWitness = boundWitnesses.pop()
     if (!lastWitness) return []
@@ -63,11 +63,11 @@ export abstract class AbstractMongoDBPayloadArchivist<
         await this.payloads.findOne(payloadFilter),
         `AbstractMongoDBPayloadArchivist: Missing Payload (${_hash}) from BoundWitness (${lastWitness._hash})`,
       ),
-    )
+    ) as XyoPayloadWithMeta<T>
     return [payload]
   }
 
-  async insert(items: XyoPayloadWithPartialMeta<WithoutId<T>>[]): Promise<XyoBoundWitnessWithMeta | null> {
+  async insert(items: XyoPayloadWithPartialMeta<WithoutId<T>>[]): Promise<XyoBoundWitness | null> {
     const _timestamp = Date.now()
     const payloads = items.map((p) => {
       return {
@@ -79,7 +79,7 @@ export abstract class AbstractMongoDBPayloadArchivist<
     const boundWitnesses: XyoBoundWitnessWithMeta[] = payloads.map((p) => {
       const bw = new XyoBoundWitnessBuilder(builderConfig).witness(this.account).payload(p).build()
       const _archive = p._archive
-      return { ...bw, _archive, _timestamp }
+      return { ...bw, _archive, _timestamp } as XyoBoundWitnessWithMeta
     })
     const payloadsResults = await this.payloads.insertMany(payloads)
     if (!payloadsResults.acknowledged || payloadsResults.insertedCount !== payloads.length)
@@ -89,7 +89,8 @@ export abstract class AbstractMongoDBPayloadArchivist<
     if (!witnessResults.acknowledged || witnessResults.insertedCount !== boundWitnesses.length)
       throw new Error('AbstractMongoDBPayloadArchivist: Error inserting BoundWitnesses')
 
-    return this.bindPayloads(items)
+    const [bw] = await this.bindPayloads(items)
+    return bw
   }
 
   private async findWitnessQuery(_archive: string) {
