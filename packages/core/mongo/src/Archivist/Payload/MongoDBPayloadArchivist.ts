@@ -49,6 +49,7 @@ export class MongoDBPayloadArchivist extends AbstractPayloadArchivist<XyoPayload
     if (result.insertedCount != items.length) {
       throw new Error('MongoDBPayloadArchivist.insert: Error inserting Payloads')
     }
-    return this.bindPayloads(items)
+    const [bw] = await this.bindPayloads(items)
+    return bw
   }
 }
