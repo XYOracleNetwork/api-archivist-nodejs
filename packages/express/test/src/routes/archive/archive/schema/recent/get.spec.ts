@@ -2,7 +2,7 @@ import { XyoPayloadWithMeta } from '@xyo-network/archivist-model'
 import { XyoBoundWitness, XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { XyoSchemaPayload } from '@xyo-network/schema-payload-plugin'
 
-import { claimArchive, getArchiveSchemaRecent, getTokenForNewUser, postBlock, unitTestSigningAccount } from '../../../../../testUtil'
+import { claimArchive, getArchiveSchemaRecent, getTokenForUnitTestUser, postBlock, unitTestSigningAccount } from '../../../../../testUtil'
 
 const schemaToAdd = 5
 
@@ -14,7 +14,7 @@ describe('/archive/:archive/schema/recent', () => {
   let otherArchive = ''
 
   beforeAll(async () => {
-    token = await getTokenForNewUser()
+    token = await getTokenForUnitTestUser()
     archive = (await claimArchive(token)).archive
     otherArchive = (await claimArchive(token)).archive
 

@@ -5,7 +5,14 @@ import { XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { XyoPayloadBuilder } from '@xyo-network/payload'
 import { StatusCodes } from 'http-status-codes'
 
-import { claimArchive, getTokenForNewUser, postCommandsToArchive, request, setArchiveAccessControl } from '../../../../../testUtil'
+import {
+  claimArchive,
+  getTokenForOtherUnitTestUser,
+  getTokenForUnitTestUser,
+  postCommandsToArchive,
+  request,
+  setArchiveAccessControl,
+} from '../../../../../testUtil'
 
 interface MigrationResponse {
   archive: XyoArchive
@@ -39,8 +46,8 @@ describe('/management/migrate/permissions/archives/:archive', () => {
   let otherUserToken: string
   let archive: XyoArchive
   beforeAll(async () => {
-    ownerToken = await getTokenForNewUser()
-    otherUserToken = await getTokenForNewUser()
+    ownerToken = await getTokenForUnitTestUser()
+    otherUserToken = await getTokenForOtherUnitTestUser()
   })
   describe('with public archive', () => {
     beforeAll(async () => {

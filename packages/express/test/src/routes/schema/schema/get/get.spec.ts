@@ -1,7 +1,7 @@
 import { XyoBoundWitness, XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { XyoSchemaPayload } from '@xyo-network/schema-payload-plugin'
 
-import { claimArchive, getHash, getSchema, getTokenForNewUser, postBlock, unitTestSigningAccount } from '../../../../testUtil'
+import { claimArchive, getHash, getSchema, getTokenForUnitTestUser, postBlock, unitTestSigningAccount } from '../../../../testUtil'
 
 describe('/schema/:schema', () => {
   const schema = 'network.xyo.schema'
@@ -11,7 +11,7 @@ describe('/schema/:schema', () => {
     .witness(unitTestSigningAccount)
     .build()
   beforeAll(async () => {
-    const token = await getTokenForNewUser()
+    const token = await getTokenForUnitTestUser()
     const archive = (await claimArchive(token)).archive
     await postBlock(bw, archive)
     const payloadHash = bw.payload_hashes[0]

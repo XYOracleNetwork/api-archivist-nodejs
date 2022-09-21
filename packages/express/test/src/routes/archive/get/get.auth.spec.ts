@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes'
 
-import { claimArchive, getArchives, getTokenForNewUser, invalidateToken, setArchiveAccessControl } from '../../../testUtil'
+import { claimArchive, getArchives, getTokenForUnitTestUser, invalidateToken, setArchiveAccessControl } from '../../../testUtil'
 
 describe('/archive', () => {
   describe('with token', () => {
@@ -8,7 +8,7 @@ describe('/archive', () => {
     let token = ''
     beforeAll(async () => {
       // Create public archive
-      token = await getTokenForNewUser()
+      token = await getTokenForUnitTestUser()
       archive = (await claimArchive(token)).archive
       await setArchiveAccessControl(token, archive, { accessControl: false, archive })
     })
