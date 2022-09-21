@@ -1,5 +1,4 @@
 import { assertEx } from '@xylabs/assert'
-import { XyoAccount } from '@xyo-network/account'
 import {
   PayloadArchiveRule,
   PayloadPointerBody,
@@ -18,7 +17,9 @@ import {
   getBlock,
   getBlockWithPayloads,
   getHash,
-  getTokenForNewUser,
+  getTokenForOtherUnitTestUser,
+  getTokenForUnitTestUser,
+  otherUnitTestSigningAccount,
   postBlock,
   setArchiveAccessControl,
   unitTestSigningAccount,
@@ -48,8 +49,8 @@ describe('/:hash', () => {
   let pointerHash: string
   beforeAll(async () => {
     jest.spyOn(console, 'error').mockImplementation()
-    ownerToken = await getTokenForNewUser()
-    otherUserToken = await getTokenForNewUser()
+    ownerToken = await getTokenForUnitTestUser()
+    otherUserToken = await getTokenForOtherUnitTestUser()
   })
   beforeEach(async () => {
     archive = getArchiveName()
@@ -127,8 +128,7 @@ describe('/:hash', () => {
     })
   })
   it('returns no payloads if not signed by address', async () => {
-    const account = XyoAccount.random()
-    const pointer = getPayloadPointer(archive, payload.schema, Date.now(), 'desc', account.addressValue.hex)
+    const pointer = getPayloadPointer(archive, payload.schema, Date.now(), 'desc', otherUnitTestSigningAccount.addressValue.hex)
     const pointerResponse = await postBlock(getBlock(pointer), archive)
     expect(pointerResponse.length).toBe(1)
     pointerHash = pointerResponse[0].payload_hashes[0]

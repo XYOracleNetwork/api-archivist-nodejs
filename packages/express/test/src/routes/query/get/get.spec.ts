@@ -6,7 +6,7 @@ import { XyoPayload, XyoPayloadBuilder } from '@xyo-network/payload'
 import { StatusCodes } from 'http-status-codes'
 import { v4 } from 'uuid'
 
-import { claimArchive, getTokenForNewUser, postCommandsToArchive, queryCommandResult, request } from '../../../testUtil'
+import { claimArchive, getTokenForUnitTestUser, postCommandsToArchive, queryCommandResult, request } from '../../../testUtil'
 
 const schema = DebugSchema
 
@@ -28,7 +28,7 @@ describe('/query/:hash', () => {
   let token: string
   let archive: string
   beforeAll(async () => {
-    token = await getTokenForNewUser()
+    token = await getTokenForUnitTestUser()
     archive = (await claimArchive(token)).archive
   })
   let id: string

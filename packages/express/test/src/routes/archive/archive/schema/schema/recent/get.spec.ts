@@ -4,7 +4,7 @@ import {
   getBlock,
   getPayloads,
   getSchemaName,
-  getTokenForNewUser,
+  getTokenForUnitTestUser,
   postBlock,
 } from '../../../../../../testUtil'
 
@@ -14,7 +14,7 @@ describe('/archive/:archive/schema/:schema/recent', () => {
   let token: string
   let archive: string
   beforeAll(async () => {
-    token = await getTokenForNewUser()
+    token = await getTokenForUnitTestUser()
     archive = (await claimArchive(token)).archive
     for (let i = 0; i < schemaToAdd; i++) {
       const payloads = getPayloads(1)
