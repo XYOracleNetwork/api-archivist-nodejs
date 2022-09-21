@@ -1,12 +1,12 @@
 import { PayloadWrapper } from '@xyo-network/payload'
 
-import { claimArchive, getBlock, getBlocksWithPayloads, getPayloadByBlockHash, getTokenForNewUser, postBlock } from '../../../../../../testUtil'
+import { claimArchive, getBlock, getBlocksWithPayloads, getPayloadByBlockHash, getTokenForUnitTestUser, postBlock } from '../../../../../../testUtil'
 
 describe('/archive/:archive/block/hash/:hash/payloads', () => {
   let token = ''
   let archive = ''
   beforeAll(async () => {
-    token = await getTokenForNewUser()
+    token = await getTokenForUnitTestUser()
   })
   beforeEach(async () => {
     archive = (await claimArchive(token)).archive
