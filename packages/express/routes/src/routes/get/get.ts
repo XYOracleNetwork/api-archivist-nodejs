@@ -1,5 +1,6 @@
 // import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
 import { NoReqParams } from '@xylabs/sdk-api-express-ecs'
+// import { setRawResponseFormat } from '@xyo-network/archivist-middleware'
 import { Module } from '@xyo-network/module'
 import { RequestHandler } from 'express'
 
@@ -15,6 +16,7 @@ const infoFromModule = (module: Module<never>): NodeInfo => {
 }
 
 const handler: RequestHandler<NoReqParams, NodeInfo> = (req, res) => {
+  // setRawResponseFormat(res)
   res.json(infoFromModule(req.app.payloadsArchivist))
 }
 
