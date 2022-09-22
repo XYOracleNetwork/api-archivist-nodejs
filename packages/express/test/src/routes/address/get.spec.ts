@@ -1,4 +1,4 @@
-import { XyoAccount } from '@xyo-network/account'
+import { assertEx } from '@xylabs/assert'
 import { NodeInfo } from '@xyo-network/archivist-model'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
@@ -9,7 +9,8 @@ describe('/:address', () => {
   beforeAll(async () => {
     const result = await (await request()).get('/')
     const modules: NodeInfo[] = result.body.data
-    const address = modules.pop()?.address
+    const mod: NodeInfo = assertEx(modules.pop())
+    const address = mod?.address
     url = `/${address}`
   })
   it(`returns ${ReasonPhrases.OK}`, async () => {

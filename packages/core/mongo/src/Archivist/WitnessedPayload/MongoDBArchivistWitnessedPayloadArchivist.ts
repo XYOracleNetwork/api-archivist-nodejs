@@ -14,7 +14,7 @@ import {
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoBoundWitness, XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
-import { inject, injectable, named } from 'inversify'
+import { inject, injectable } from 'inversify'
 
 import { removeId } from '../../Mongo'
 import { MONGO_TYPES } from '../../types'
