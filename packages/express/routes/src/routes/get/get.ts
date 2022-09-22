@@ -21,6 +21,8 @@ const nodeDescription: NodeInfo[] = []
 
 let populated = false
 
+// TODO: Handle updates dynamically via Diviner, etc.
+// potentially listening to insertion/removal events
 const populateNodeDescription = (req: Request) => {
   const { payloadsArchivist, boundWitnessesArchivist, schemaStatsDiviner, payloadStatsDiviner, boundWitnessStatsDiviner } = req.app
   nodeDescription.push(
