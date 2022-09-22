@@ -5,6 +5,14 @@ import { getByHash, getQuery, postNode } from '../routes'
 
 export const addNodeRoutes = (app: Express) => {
   app.get(
+    '/',
+    allowAnonymous,
+    getByHash,
+    /* #swagger.tags = ['Node'] */
+    /* #swagger.summary = 'Gets addresses on the Node' */
+  )
+
+  app.get(
     '/:hash',
     allowAnonymous,
     getByHash,
