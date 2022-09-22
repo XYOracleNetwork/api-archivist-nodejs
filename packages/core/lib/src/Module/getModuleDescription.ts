@@ -1,6 +1,5 @@
+import { ModuleDescription } from '@xyo-network/archivist-model'
 import { Module } from '@xyo-network/module'
-
-import { ModuleDescription } from './ModuleDescription'
 
 export const getModuleDescription = (module: Module<never>): ModuleDescription => {
   const { address, queries: getQueries } = module
