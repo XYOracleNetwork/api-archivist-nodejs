@@ -1,7 +1,7 @@
 import { allowAnonymous, archiveLocals, requireAccountOperationAccess } from '@xyo-network/archivist-middleware'
 import { Express } from 'express'
 
-import { getByHash, getNode, getQuery, postNode } from '../routes'
+import { getAddress, getByHash, getNode, getQuery, postNode } from '../routes'
 
 export const addNodeRoutes = (app: Express) => {
   app.get(
@@ -9,7 +9,7 @@ export const addNodeRoutes = (app: Express) => {
     allowAnonymous,
     getNode,
     /* #swagger.tags = ['Node'] */
-    /* #swagger.summary = 'Gets addresses on the Node' */
+    /* #swagger.summary = 'Gets modules on the Node' */
   )
 
   app.post(
@@ -19,6 +19,14 @@ export const addNodeRoutes = (app: Express) => {
     postNode,
     /* #swagger.tags = ['Node'] */
     /* #swagger.summary = 'Execute the supplied queries, contained as Payloads in one or more Bound Witnesses. Implementation is specific to the supplied payload schemas.' */
+  )
+
+  app.get(
+    '/:address',
+    allowAnonymous,
+    getAddress,
+    /* #swagger.tags = ['Node'] */
+    /* #swagger.summary = 'Get the module info for the supplied address' */
   )
 
   app.get(
