@@ -1,12 +1,17 @@
 import { XyoAccount } from '@xyo-network/account'
+import { NodeInfo } from '@xyo-network/archivist-model'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import { request } from '../../testUtil'
 
 describe('/:address', () => {
-  const phrase = process.env.ACCOUNT_SEED
-  const account = new XyoAccount({ phrase })
-  const url = `/${account.addressValue.hex}`
+  let url = ''
+  beforeAll(async () => {
+    const result = await (await request()).get('/')
+    const modules: NodeInfo[] = result.body.data
+    const address = modules.pop()?.address
+    url = `/${address}`
+  })
   it(`returns ${ReasonPhrases.OK}`, async () => {
     const result = await (await request()).get(url)
     expect(result.status).toBe(StatusCodes.OK)
