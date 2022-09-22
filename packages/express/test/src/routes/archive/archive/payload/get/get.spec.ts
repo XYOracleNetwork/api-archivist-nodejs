@@ -7,7 +7,7 @@ import {
   getBlock,
   getPayload,
   getPayloadsByTimestamp,
-  getTokenForNewUser,
+  getTokenForUnitTestUser,
   postBlock,
   request,
 } from '../../../../../testUtil'
@@ -19,7 +19,7 @@ describe('/archive/:archive/payload', () => {
   let archive = ''
   const startTime = Date.now() - 1
   beforeAll(async () => {
-    token = await getTokenForNewUser()
+    token = await getTokenForUnitTestUser()
     archive = getArchiveName()
     await claimArchive(token, archive)
     const blocksPosted = 15

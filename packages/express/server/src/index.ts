@@ -10,7 +10,6 @@ import express, { Express } from 'express'
 import { addAuth } from './addAuth'
 import { addDependencies } from './addDependencies'
 import { addErrorHandlers } from './addErrorHandlers'
-import { addHealthChecks } from './addHealthChecks'
 import { addMiddleware } from './addMiddleware'
 import { addQueryConverters } from './addQueryConverters'
 import { addQueryProcessing } from './addQueryProcessing'
@@ -34,7 +33,6 @@ export const getApp = async (): Promise<Express> => {
   addQueryConverters()
   addQueryProcessors(app)
   addQueryProcessing()
-  addHealthChecks(app)
   addRoutes(app)
   addErrorHandlers(app)
   return app

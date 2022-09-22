@@ -6,7 +6,7 @@ import {
   getBlocksWithPayloads,
   getBlockWithPayloads,
   getPayloads,
-  getTokenForNewUser,
+  getTokenForUnitTestUser,
   postBlock,
 } from '../../../../../testUtil'
 
@@ -15,7 +15,7 @@ describe('/archive/:archive/block', () => {
     let token = ''
     let archive = ''
     beforeAll(async () => {
-      token = await getTokenForNewUser()
+      token = await getTokenForUnitTestUser()
       archive = (await claimArchive(token)).archive
     })
     it('to existing archive', async () => {

@@ -8,7 +8,8 @@ import {
   getBlocksWithPayloads,
   getBlockWithPayloads,
   getHash,
-  getTokenForNewUser,
+  getTokenForOtherUnitTestUser,
+  getTokenForUnitTestUser,
   postBlock,
   setArchiveAccessControl,
 } from '../../../testUtil'
@@ -17,8 +18,8 @@ describe('/:hash', () => {
   let ownerToken = ''
   let otherUserToken = ''
   beforeAll(async () => {
-    ownerToken = await getTokenForNewUser()
-    otherUserToken = await getTokenForNewUser()
+    ownerToken = await getTokenForUnitTestUser()
+    otherUserToken = await getTokenForOtherUnitTestUser()
   })
   describe('return format is', () => {
     let archive = ''

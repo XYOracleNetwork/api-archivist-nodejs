@@ -1,10 +1,10 @@
-import { claimArchive, getArchive, getArchiveName, getTokenForNewUser } from '../../../../testUtil'
+import { claimArchive, getArchive, getArchiveName, getTokenForUnitTestUser } from '../../../../testUtil'
 
 describe('/archive', () => {
   let token = ''
   let archive = ''
   beforeAll(async () => {
-    token = await getTokenForNewUser()
+    token = await getTokenForUnitTestUser()
     archive = getArchiveName()
     await claimArchive(token, archive)
   })

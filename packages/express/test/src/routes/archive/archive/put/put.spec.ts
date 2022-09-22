@@ -1,12 +1,12 @@
 import { StatusCodes } from 'http-status-codes'
 
-import { claimArchive, getArchiveName, getTokenForNewUser, request } from '../../../../testUtil'
+import { claimArchive, getArchiveName, getTokenForOtherUnitTestUser, getTokenForUnitTestUser, request } from '../../../../testUtil'
 
 describe('/archive', () => {
   let token = ''
   let archive = ''
   beforeAll(async () => {
-    token = await getTokenForNewUser()
+    token = await getTokenForUnitTestUser()
   })
   beforeEach(() => {
     archive = getArchiveName()
@@ -32,7 +32,7 @@ describe('/archive', () => {
       await claimArchive(token, archive)
 
       // User 2 attempts to claim archive
-      const user2Token = await getTokenForNewUser()
+      const user2Token = await getTokenForOtherUnitTestUser()
       await (await request()).put(`/archive/${archive}`).auth(user2Token, { type: 'bearer' }).expect(StatusCodes.FORBIDDEN)
     })
   })

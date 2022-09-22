@@ -1,14 +1,21 @@
 import { StatusCodes } from 'http-status-codes'
 
-import { claimArchive, getArchive, getTokenForNewUser, invalidateToken, setArchiveAccessControl } from '../../../../testUtil'
+import {
+  claimArchive,
+  getArchive,
+  getTokenForOtherUnitTestUser,
+  getTokenForUnitTestUser,
+  invalidateToken,
+  setArchiveAccessControl,
+} from '../../../../testUtil'
 
 describe('/archive/{:archive}', () => {
   let archive = ''
   let ownerToken = ''
   let otherUserToken = ''
   beforeAll(async () => {
-    ownerToken = await getTokenForNewUser()
-    otherUserToken = await getTokenForNewUser()
+    ownerToken = await getTokenForUnitTestUser()
+    otherUserToken = await getTokenForOtherUnitTestUser()
   })
   describe('with public archive', () => {
     beforeAll(async () => {

@@ -1,11 +1,11 @@
-import { getDomain, getTokenForNewUser } from '../../../testUtil'
+import { getDomain, getTokenForUnitTestUser } from '../../../testUtil'
 
 const domain = 'network.xyo'
 
 describe('/domain', () => {
   let token = ''
   beforeAll(async () => {
-    token = await getTokenForNewUser()
+    token = await getTokenForUnitTestUser()
   })
   describe('when authorized returns', () => {
     it('retrieve network.xyo', async () => {
