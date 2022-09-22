@@ -6,43 +6,26 @@ import { Request, RequestHandler } from 'express'
 
 interface NodeInfo {
   address: string
-  href: string
   queries: string[]
-  type: string
+  url: string
 }
 
-const nodeInfoFromModule = (module: Module<never>, type: string): NodeInfo => {
+const nodeInfoFromModule = (module: Module<never>): NodeInfo => {
   const { address, queries: getQueries } = module
   const queries = getQueries()
-  const href = `/${address}`
-  return { address, href, queries, type }
+  const url = `/${address}`
+  return { address, queries, url }
 }
 
-type ActiveModules = Record<string, NodeInfo>
-
-interface NodeDescription {
-  archivists: ActiveModules
-  diviners: ActiveModules
-}
-
-const nodeDescription: NodeDescription = {
-  archivists: {},
-  diviners: {},
-}
+const nodeDescription: NodeInfo[] = []
 
 let populated = false
 
 const populateNodeDescription = (req: Request) => {
   const { payloadsArchivist, boundWitnessesArchivist, schemaStatsDiviner, payloadStatsDiviner, boundWitnessStatsDiviner } = req.app
-  nodeDescription.archivists = {
-    boundWitnessesArchivist: nodeInfoFromModule(boundWitnessesArchivist, 'archivist'),
-    payloadsArchivist: nodeInfoFromModule(payloadsArchivist, 'archivist'),
-  }
-  nodeDescription.diviners = {
-    boundWitnessStatsDiviner: nodeInfoFromModule(boundWitnessStatsDiviner, 'diviner'),
-    payloadStatsDiviner: nodeInfoFromModule(payloadStatsDiviner, 'diviner'),
-    schemaStatsDiviner: nodeInfoFromModule(schemaStatsDiviner, 'diviner'),
-  }
+  nodeDescription.push(
+    ...[payloadsArchivist, boundWitnessesArchivist, schemaStatsDiviner, payloadStatsDiviner, boundWitnessStatsDiviner].map(nodeInfoFromModule),
+  )
   populated = true
 }
 
