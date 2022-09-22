@@ -2,7 +2,6 @@ import 'reflect-metadata'
 
 import { assertEx } from '@xylabs/assert'
 import { getLogger, Logger, LoggerVerbosity } from '@xylabs/sdk-api-express-ecs'
-import { XyoAccount } from '@xyo-network/account'
 import { BcryptPasswordHasher } from '@xyo-network/archivist-middleware'
 import { PasswordHasher, User } from '@xyo-network/archivist-model'
 import { addMongo } from '@xyo-network/archivist-mongo'
@@ -10,6 +9,7 @@ import { TYPES } from '@xyo-network/archivist-types'
 import { config } from 'dotenv'
 import { Container } from 'inversify'
 
+import { addAddresses } from './addAddresses'
 import { addAuth } from './addAuth'
 import { addInMemoryQueueing } from './addInMemoryQueueing'
 import { addPayloadHandlers } from './addPayloadHandlers'
@@ -35,7 +35,6 @@ export const configureDependencies = async () => {
   if (configured) return
   configured = true
 
-  const phrase = assertEx(process.env.ACCOUNT_SEED, 'ACCOUNT_SEED ENV VAR required to create Archivist')
   const apiKey = assertEx(process.env.API_KEY, 'API_KEY ENV VAR required to create Archivist')
   const jwtSecret = assertEx(process.env.JWT_SECRET, 'JWT_SECRET ENV VAR required to create Archivist')
   const passwordHasher = BcryptPasswordHasher
@@ -53,8 +52,7 @@ export const configureDependencies = async () => {
     // const config = { defaultMeta }
     return service ? logger : logger
   })
-  dependencies.bind<XyoAccount>(TYPES.Account).toConstantValue(new XyoAccount({ phrase }))
-
+  addAddresses(dependencies)
   await addMongo(dependencies)
   addAuth(dependencies)
   addPayloadHandlers(dependencies)
