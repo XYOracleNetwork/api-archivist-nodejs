@@ -3,12 +3,11 @@ import { Module } from '@xyo-network/module'
 import { Request, RequestHandler } from 'express'
 
 import { AddressPathParams } from './AddressPathParams'
+import { getModuleDescription } from './getModuleDescription'
+import { isModule } from './isModule'
+import { ModuleDescription } from './ModuleDescription'
 
 const activeModules: Record<string, Module<never>> = {}
-
-const isModule = (x: Module<never> | Partial<Module<never>>): x is Module<never> => {
-  return x && x?.address && x?.queries ? true : false
-}
 
 const populateAll = false
 let populated = false
@@ -27,16 +26,14 @@ const populateActiveModules = (req: Request) => {
   populated = true
 }
 
-const handler: RequestHandler<AddressPathParams> = (req, res, next) => {
+const handler: RequestHandler<AddressPathParams, ModuleDescription> = (req, res, next) => {
   if (!populated) populateActiveModules(req)
   const { address } = req.params
   if (address) {
     // TODO: ToLower and remove hex prefix
     const mod = activeModules[address]
     if (mod) {
-      const queries = mod.queries()
-      const info = { address, queries }
-      res.json(info)
+      res.json(getModuleDescription(mod))
       return
     }
   }
