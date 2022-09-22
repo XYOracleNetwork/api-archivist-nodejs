@@ -1,21 +1,9 @@
 // import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
 import { NoReqParams } from '@xylabs/sdk-api-express-ecs'
+import { nodeInfoFromModule } from '@xyo-network/archivist-lib'
+import { NodeInfo } from '@xyo-network/archivist-model'
 // import { setRawResponseFormat } from '@xyo-network/archivist-middleware'
-import { Module } from '@xyo-network/module'
 import { Request, RequestHandler } from 'express'
-
-interface NodeInfo {
-  address: string
-  queries: string[]
-  url: string
-}
-
-const nodeInfoFromModule = (module: Module<never>): NodeInfo => {
-  const { address, queries: getQueries } = module
-  const queries = getQueries()
-  const url = `/${address}`
-  return { address, queries, url }
-}
 
 const nodeDescription: NodeInfo[] = []
 
