@@ -9,20 +9,14 @@ import { ModuleDescription } from './ModuleDescription'
 
 const activeModules: Record<string, Module<never>> = {}
 
-const populateAll = false
 let populated = false
 
 const populateActiveModules = (req: Request) => {
-  if (populateAll) {
-    Object.values(req.app)
-      .filter(isModule)
-      .forEach((mod) => {
-        activeModules[mod.address] = mod
-      })
-  } else {
-    const mod: Module<never> = req.app.payloadsArchivist
+  const { payloadsArchivist, boundWitnessesArchivist, schemaStatsDiviner, payloadStatsDiviner, boundWitnessStatsDiviner } = req.app
+  const modules = [payloadsArchivist, boundWitnessesArchivist, schemaStatsDiviner, payloadStatsDiviner, boundWitnessStatsDiviner]
+  modules.filter(isModule).forEach((mod) => {
     activeModules[mod.address] = mod
-  }
+  })
   populated = true
 }
 
