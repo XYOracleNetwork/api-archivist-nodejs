@@ -1,4 +1,5 @@
 export * from './Address'
 export * from './Archive'
+export * from './Module'
 export * from './Payload'
 export * from './schema'

@@ -1,11 +1,11 @@
 // import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
+import { getModuleDescription } from '@xyo-network/archivist-lib'
+import { ModuleDescription } from '@xyo-network/archivist-model'
 import { Module } from '@xyo-network/module'
 import { Request, RequestHandler } from 'express'
 
 import { AddressPathParams } from './AddressPathParams'
-import { getModuleDescription } from './getModuleDescription'
 import { isModule } from './isModule'
-import { ModuleDescription } from './ModuleDescription'
 
 const activeModules: Record<string, Module<never>> = {}
 
