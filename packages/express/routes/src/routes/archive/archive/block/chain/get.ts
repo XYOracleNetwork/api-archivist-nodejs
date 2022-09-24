@@ -4,7 +4,7 @@ import { assertEx } from '@xylabs/assert'
 import { asyncHandler, tryParseInt } from '@xylabs/sdk-api-express-ecs'
 import { XyoArchivistGetQuery, XyoArchivistGetQuerySchema } from '@xyo-network/archivist'
 import { ArchiveBoundWitnessesArchivist } from '@xyo-network/archivist-model'
-import { XyoBoundWitness } from '@xyo-network/boundwitness'
+import { BoundWitnessBuilder, XyoBoundWitness } from '@xyo-network/boundwitness'
 import { RequestHandler } from 'express'
 
 import { BlockChainPathParams } from './blockChainPathParams'
@@ -21,7 +21,8 @@ const getBlocks = async (
     hashes: [hash],
     schema: XyoArchivistGetQuerySchema,
   }
-  const result = await archivist.query(query)
+  const bw = new BoundWitnessBuilder().payload(query).build()
+  const result = await archivist.query(bw, query)
   const block = result?.[1]?.[0] as XyoBoundWitness
   if (block) {
     const addressIndex = block.addresses.findIndex((value) => value === address)
