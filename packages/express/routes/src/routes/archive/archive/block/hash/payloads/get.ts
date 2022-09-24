@@ -6,6 +6,7 @@ import {
   XyoPartialPayloadMeta,
   XyoPayloadWithPartialMeta,
 } from '@xyo-network/archivist-model'
+import { BoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
@@ -19,7 +20,8 @@ const getPayloadsByHashes = async (archivist: ArchivePayloadsArchivist, archive:
       hashes: [{ archive, hash }] as unknown as string[],
       schema: XyoArchivistGetQuerySchema,
     }
-    const result = await archivist.query(query)
+    const bw = new BoundWitnessBuilder().payload(query).build()
+    const result = await archivist.query(bw, query)
     const payload = (result?.[1]?.[0] as XyoPayloadWithPartialMeta) || undefined
     payloads.push(payload)
   }
@@ -38,10 +40,11 @@ const handler: RequestHandler<BlockHashPathParams, XyoPartialPayloadMeta[][]> = 
     hashes: [{ archive, hash }] as unknown as string[],
     schema: XyoArchivistGetQuerySchema,
   }
-  const result = await archiveBoundWitnessesArchivist.query(query)
-  const bw = (result?.[1]?.[0] as XyoBoundWitnessWithPartialMeta) || undefined
-  if (bw) {
-    res.json(await getPayloadsByHashes(archivePayloadsArchivist, archive, bw.payload_hashes))
+  const bw = new BoundWitnessBuilder().payload(query).build()
+  const result = await archiveBoundWitnessesArchivist.query(bw, query)
+  const block = (result?.[1]?.[0] as XyoBoundWitnessWithPartialMeta) || undefined
+  if (block) {
+    res.json(await getPayloadsByHashes(archivePayloadsArchivist, archive, block.payload_hashes))
   } else {
     next({ message: 'Block not found', statusCode: StatusCodes.NOT_FOUND })
   }
