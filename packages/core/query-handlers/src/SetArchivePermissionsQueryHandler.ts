@@ -9,7 +9,8 @@ import {
   SetArchivePermissionsSchema,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { XyoPayloadBuilder } from '@xyo-network/payload'
+import { BoundWitnessBuilder } from '@xyo-network/boundwitness'
+import { PayloadWrapper, XyoPayloadBuilder } from '@xyo-network/payload'
 import { inject, injectable } from 'inversify'
 
 const validateAddresses = (query: SetArchivePermissionsQuery) => {
@@ -36,17 +37,20 @@ export class SetArchivePermissionsQueryHandler implements QueryHandler<SetArchiv
     const archive = assertEx(query.payload._archive, 'SetArchivePermissionsQueryHandler.handle: Archive not supplied')
     validateAddresses(query)
     validateSchema(query)
+    const insertPayloads = [query.payload]
     const insertQuery: XyoArchivistInsertQuery = {
-      payloads: [query.payload],
+      payloads: insertPayloads.map((p) => new PayloadWrapper(p).hash),
       schema: XyoArchivistInsertQuerySchema,
     }
-    const insertionResult = await this.archivist.query(insertQuery)
+    const insertWitness = new BoundWitnessBuilder().build()
+    const insertionResult = await this.archivist.query(insertWitness, insertQuery, insertPayloads)
     assertEx(insertionResult, 'SetArchivePermissionsQueryHandler.handle: Error inserting permissions')
     const getQuery: XyoArchivistGetQuery = {
       hashes: [archive],
       schema: XyoArchivistGetQuerySchema,
     }
-    const getResult = await this.archivist.query(getQuery)
+    const getWitness = new BoundWitnessBuilder().build()
+    const getResult = await this.archivist.query(getWitness, getQuery)
     const permissions = assertEx(
       getResult?.[1]?.[0],
       'SetArchivePermissionsQueryHandler.handle: Error getting permissions',
