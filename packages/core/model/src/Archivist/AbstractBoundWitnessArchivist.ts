@@ -1,7 +1,6 @@
 import 'reflect-metadata'
 
 import { assertEx } from '@xylabs/assert'
-import { exists } from '@xylabs/sdk-js'
 import { XyoAccount } from '@xyo-network/account'
 import {
   XyoArchivistConfig,
@@ -12,7 +11,7 @@ import {
 } from '@xyo-network/archivist'
 import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { XyoModule, XyoModuleQueryResult, XyoQuery } from '@xyo-network/module'
-import { PayloadWrapper, XyoPayload } from '@xyo-network/payload'
+import { XyoPayload } from '@xyo-network/payload'
 import { injectable } from 'inversify'
 
 import { XyoBoundWitnessWithPartialMeta } from '../BoundWitness'
@@ -54,14 +53,7 @@ export abstract class AbstractBoundWitnessArchivist<TId = string> extends XyoMod
         result.push(...(await this.get(typedQuery.hashes as any as TId[])))
         break
       case XyoArchivistInsertQuerySchema: {
-        const actualHashes = payloads?.map((payload) => PayloadWrapper.hash(payload))
-        const resolvedPayloads = typedQuery.payloads
-          .map((hash) => {
-            const index = actualHashes?.indexOf(hash)
-            return index !== undefined ? (index > -1 ? result?.[index] ?? null : null) : null
-          })
-          .filter(exists) as XyoBoundWitness[]
-        result.push(await this.insert(resolvedPayloads))
+        result.push(await this.insert(payloads as XyoBoundWitnessWithPartialMeta[]))
         break
       }
       default:
