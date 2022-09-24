@@ -1,5 +1,6 @@
 import 'reflect-metadata'
 
+import { assertEx } from '@xylabs/assert'
 import { exists } from '@xylabs/sdk-js'
 import { XyoAccount } from '@xyo-network/account'
 import {
@@ -40,10 +41,9 @@ export abstract class AbstractBoundWitnessArchivist<TId = string> extends XyoMod
     query: T,
     payloads?: XyoPayload[],
   ): Promise<XyoModuleQueryResult<XyoPayload>> {
-    if (!this.queries().find((schema) => schema === query.schema)) {
-      console.error(`Undeclared Module Query: ${query.schema}`)
-    }
+    assertEx(this.queryable(query.schema, bw.addresses))
     const result: (XyoPayload | null)[] = []
+    const queryAccount = new XyoAccount()
     const typedQuery: XyoArchivistQuery = query as XyoArchivistQuery
     switch (typedQuery.schema) {
       case XyoArchivistFindQuerySchema:
@@ -67,7 +67,7 @@ export abstract class AbstractBoundWitnessArchivist<TId = string> extends XyoMod
       default:
         throw new Error(`${typedQuery.schema} Not Implemented`)
     }
-    return this.bindPayloads(result)
+    return this.bindPayloads(result, queryAccount)
   }
   abstract find(filter?: XyoBoundWitnessFilterPredicate | undefined): Promise<Array<XyoBoundWitnessWithPartialMeta | null>>
   abstract get(ids: TId[]): Promise<Array<XyoBoundWitnessWithPartialMeta | null>>
