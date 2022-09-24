@@ -1,6 +1,6 @@
 import { XyoAccount } from '@xyo-network/account'
 import { PayloadAddressRule, PayloadArchiveRule, PayloadPointerBody, payloadPointerSchema, PayloadSchemaRule } from '@xyo-network/archivist-model'
-import { XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
+import { BoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { XyoPayloadBuilder } from '@xyo-network/payload'
 
 describe.skip('Generation of automation payload pointers', () => {
@@ -19,7 +19,7 @@ describe.skip('Generation of automation payload pointers', () => {
     const schemaRule: PayloadSchemaRule = { schema }
     const fields: PayloadPointerBody = { reference: [[addressRule], [archiveRule], [schemaRule]], schema: payloadPointerSchema }
     const payload = new XyoPayloadBuilder<PayloadPointerBody>({ schema: payloadPointerSchema }).fields(fields).build()
-    const bw = new XyoBoundWitnessBuilder({ inlinePayloads: true }).witness(XyoAccount.random()).payload(payload).build()
+    const bw = new BoundWitnessBuilder({ inlinePayloads: true }).witness(XyoAccount.random()).payload(payload).build()
     console.log(`==== ${schema} ====`)
     console.log(JSON.stringify(bw, undefined, 2))
     console.log('===========================================')

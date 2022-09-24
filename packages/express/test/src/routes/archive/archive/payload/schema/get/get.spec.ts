@@ -1,4 +1,4 @@
-import { XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
+import { BoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { XyoSchemaPayload } from '@xyo-network/schema-payload-plugin'
 import { StatusCodes } from 'http-status-codes'
 
@@ -16,7 +16,7 @@ const blocksPosted = 2
 const definition = { $schema: 'http://json-schema.org/draft-07/schema#' }
 
 const getNewBlockWithPayloadsOfSchemaType = (schema = getSchemaName()) => {
-  return new XyoBoundWitnessBuilder({ inlinePayloads: true })
+  return new BoundWitnessBuilder({ inlinePayloads: true })
     .payload({ definition, schema } as XyoSchemaPayload)
     .witness(unitTestSigningAccount)
     .build()

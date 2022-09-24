@@ -1,5 +1,5 @@
 import { XyoPayloadWithMeta } from '@xyo-network/archivist-model'
-import { XyoBoundWitness, XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
+import { BoundWitnessBuilder, XyoBoundWitness } from '@xyo-network/boundwitness'
 import { XyoSchemaPayload } from '@xyo-network/schema-payload-plugin'
 
 import { claimArchive, getArchiveSchemaRecent, getTokenForUnitTestUser, postBlock, unitTestSigningAccount } from '../../../../../testUtil'
@@ -22,7 +22,7 @@ describe('/archive/:archive/schema/recent', () => {
     const posted = [
       // POST Payloads to test archive
       new Array(schemaToAdd).fill(null).map(async () => {
-        const bw = new XyoBoundWitnessBuilder<XyoBoundWitness, XyoSchemaPayload>({ inlinePayloads: true })
+        const bw = new BoundWitnessBuilder<XyoBoundWitness, XyoSchemaPayload>({ inlinePayloads: true })
           .payload({ definition, schema })
           .witness(unitTestSigningAccount)
           .build()
@@ -31,7 +31,7 @@ describe('/archive/:archive/schema/recent', () => {
       }),
       // Post some payloads to another archive
       new Array(schemaToAdd).fill(null).map(async () => {
-        const bw = new XyoBoundWitnessBuilder<XyoBoundWitness, XyoSchemaPayload>({ inlinePayloads: true })
+        const bw = new BoundWitnessBuilder<XyoBoundWitness, XyoSchemaPayload>({ inlinePayloads: true })
           .payload({ definition, schema })
           .witness(unitTestSigningAccount)
           .build()

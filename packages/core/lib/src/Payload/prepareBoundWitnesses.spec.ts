@@ -1,5 +1,5 @@
 import { XyoBoundWitnessMeta, XyoBoundWitnessWithPartialMeta, XyoPayloadWithPartialMeta } from '@xyo-network/archivist-model'
-import { XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
+import { BoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { PayloadWrapper, XyoPayload, XyoPayloadBuilder } from '@xyo-network/payload'
 import { v4 } from 'uuid'
 
@@ -41,7 +41,7 @@ const getNewBlockWithBoundWitnessesWithPayloads = (
   numPayloads = 1,
 ): Array<XyoBoundWitnessWithPartialMeta & XyoPayloadWithPartialMeta> => {
   return new Array(numBoundWitnesses).fill(0).map(() => {
-    return new XyoBoundWitnessBuilder({ inlinePayloads: true }).payloads(getPayloads(numPayloads)).build()
+    return new BoundWitnessBuilder({ inlinePayloads: true }).payloads(getPayloads(numPayloads)).build()
   })
 }
 

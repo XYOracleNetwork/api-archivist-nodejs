@@ -1,7 +1,7 @@
 import { ForgetPromise } from '@xylabs/forget'
 import { XyoArchive } from '@xyo-network/api'
 import { DebugPayload, DebugSchema, SetArchivePermissionsPayload } from '@xyo-network/archivist-model'
-import { XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
+import { BoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { XyoPayloadBuilder } from '@xyo-network/payload'
 import { StatusCodes } from 'http-status-codes'
 
@@ -23,7 +23,7 @@ const schema = DebugSchema
 
 const postCommandToArchive = async (archive: string, token?: string, expectedStatus: StatusCodes = StatusCodes.ACCEPTED) => {
   const payload = new XyoPayloadBuilder<DebugPayload>({ schema }).build()
-  const bw = new XyoBoundWitnessBuilder({ inlinePayloads: true }).payload(payload).build()
+  const bw = new BoundWitnessBuilder({ inlinePayloads: true }).payload(payload).build()
   await postCommandsToArchive([bw], archive, token, expectedStatus)
 }
 
