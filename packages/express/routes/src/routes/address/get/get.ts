@@ -7,7 +7,7 @@ import { Request, RequestHandler } from 'express'
 import { AddressPathParams } from './AddressPathParams'
 import { isModule } from './isModule'
 
-const activeModules: Record<string, Module<never>> = {}
+const activeModules: Record<string, Module> = {}
 
 let populated = false
 
