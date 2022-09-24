@@ -4288,6 +4288,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@xyo-network/archivist-model@workspace:packages/core/model"
   dependencies:
+    "@xylabs/assert": ^2.6.7
+    "@xylabs/sdk-js": ^2.6.7
     "@xyo-network/account": ^2.35.0
     "@xyo-network/api": ^2.35.0
     "@xyo-network/archivist": ^2.35.0
@@ -4338,6 +4340,7 @@ __metadata:
     "@xyo-network/archivist": ^2.35.0
     "@xyo-network/archivist-model": "workspace:^"
     "@xyo-network/archivist-types": "workspace:^"
+    "@xyo-network/boundwitness": ^2.35.0
     "@xyo-network/core": ^2.35.0
     "@xyo-network/domain-payload-plugin": ^2.35.0
     "@xyo-network/payload": ^2.35.0
