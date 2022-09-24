@@ -1,4 +1,4 @@
-import { Archivist, XyoArchivistQuery } from '@xyo-network/archivist'
+import { Archivist } from '@xyo-network/archivist'
 import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { EmptyObject } from '@xyo-network/core'
 import { Module } from '@xyo-network/module'
@@ -14,4 +14,4 @@ export type PayloadArchivist<T extends EmptyObject = EmptyObject, TId = string> 
   XyoPayloadFilterPredicate<T>,
   TId
 > &
-  Module<XyoArchivistQuery>
+  Module

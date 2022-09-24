@@ -1,4 +1,4 @@
-import { Archivist, XyoArchivistQuery } from '@xyo-network/archivist'
+import { Archivist } from '@xyo-network/archivist'
 import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { Module } from '@xyo-network/module'
 
@@ -13,4 +13,4 @@ export type BoundWitnessArchivist<TId = string> = Archivist<
   XyoBoundWitnessFilterPredicate,
   TId
 > &
-  Module<XyoArchivistQuery>
+  Module
