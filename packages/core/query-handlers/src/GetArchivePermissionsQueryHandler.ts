@@ -33,7 +33,7 @@ export class GetArchivePermissionsQueryHandler implements QueryHandler<GetArchiv
       hashes: [archive],
       schema: XyoArchivistGetQuerySchema,
     }
-    const getWitness = new BoundWitnessBuilder().build()
+    const getWitness = new BoundWitnessBuilder().payload(getQuery).build()
     const getResult = await this.archivePermissionsArchivist.query(getWitness, getQuery)
     const permissions = (getResult?.[1]?.[0] as SetArchivePermissionsPayload) || getEmptyPermissions(query)
     return new XyoPayloadBuilder<SetArchivePermissionsPayloadWithMeta>({ schema: SetArchivePermissionsSchema })
