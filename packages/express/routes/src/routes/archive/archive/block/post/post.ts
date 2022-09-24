@@ -28,26 +28,25 @@ const handler: RequestHandler<ArchivePathParams, XyoBoundWitnessWithMeta[], XyoB
       payloadWithExtraMeta._schemaValid = false
     }
   })
-
-  const boundWitnessQuery: XyoArchivistInsertQuery = {
-    payloads: sanitized.map((bw) => bw._hash),
-    schema: XyoArchivistInsertQuerySchema,
-  }
-  const boundWitnessQueryWitness = new BoundWitnessBuilder().payload(boundWitnessQuery).build()
   const boundWitnessQueryPayloads = sanitized.map((bw) => {
     return { ...bw, _archive: archive }
   })
+  const boundWitnessQuery: XyoArchivistInsertQuery = {
+    payloads: boundWitnessQueryPayloads as any as string[],
+    schema: XyoArchivistInsertQuerySchema,
+  }
+  const boundWitnessQueryWitness = new BoundWitnessBuilder().payload(boundWitnessQuery).build()
   await archiveBoundWitnessesArchivist.query(boundWitnessQueryWitness, boundWitnessQuery, boundWitnessQueryPayloads)
 
   if (payloads.length) {
-    const payloadsQuery: XyoArchivistInsertQuery = {
-      payloads: payloads.map((p) => p._hash),
-      schema: XyoArchivistInsertQuerySchema,
-    }
-    const payloadsQueryWitness = new BoundWitnessBuilder().payload(boundWitnessQuery).build()
     const payloadsQueryPayloads = payloads.map((p) => {
       return { ...p, _archive: archive }
     })
+    const payloadsQuery: XyoArchivistInsertQuery = {
+      payloads: payloadsQueryPayloads as any as string[],
+      schema: XyoArchivistInsertQuerySchema,
+    }
+    const payloadsQueryWitness = new BoundWitnessBuilder().payload(boundWitnessQuery).build()
     await archivePayloadsArchivist.query(payloadsQueryWitness, payloadsQuery, payloadsQueryPayloads)
   }
   res.json(sanitized)
