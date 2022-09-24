@@ -76,11 +76,11 @@ export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner implements Sche
     ]
   }
 
-  override async divine(payloads?: XyoPayloads): Promise<SchemaStatsPayload> {
+  override async divine(context?: string, payloads?: XyoPayloads): Promise<XyoPayloads<SchemaStatsPayload>> {
     const query = payloads?.find<SchemaStatsQueryPayload>(isSchemaStatsQueryPayload)
     const archive = query?.archive
     const count = archive ? await this.divineArchive(archive) : await this.divineAllArchives()
-    return new XyoPayloadBuilder<SchemaStatsPayload>({ schema: SchemaStatsSchema }).fields({ count }).build()
+    return [new XyoPayloadBuilder<SchemaStatsPayload>({ schema: SchemaStatsSchema }).fields({ count }).build()]
   }
 
   override async initialize(): Promise<void> {
