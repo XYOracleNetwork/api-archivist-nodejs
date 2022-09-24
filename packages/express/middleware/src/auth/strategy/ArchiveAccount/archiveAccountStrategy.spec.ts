@@ -1,7 +1,7 @@
 import { delay } from '@xylabs/delay'
 import { DebugSchema, SetArchivePermissions, SetArchivePermissionsPayload, SetArchivePermissionsSchema } from '@xyo-network/archivist-model'
 import { claimArchive, getExistingUser, postCommandsToArchive, signInUser, TestWeb3User } from '@xyo-network/archivist-test'
-import { XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
+import { BoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { XyoPayloadBuilder } from '@xyo-network/payload'
 import { StatusCodes } from 'http-status-codes'
 
@@ -24,7 +24,7 @@ const setArchivePermissions = (archive: string, token: string, permissions: SetA
     schema: SetArchivePermissionsSchema,
   }
   const payload = new XyoPayloadBuilder<SetArchivePermissionsPayload>({ schema: SetArchivePermissionsSchema }).fields(data).build()
-  const bw = new XyoBoundWitnessBuilder({ inlinePayloads: true }).payload(payload).build()
+  const bw = new BoundWitnessBuilder({ inlinePayloads: true }).payload(payload).build()
   return postCommandsToArchive([bw], archive, token)
 }
 
@@ -38,7 +38,7 @@ const postCommandToArchive = (
     schema,
   }
   const payload = new XyoPayloadBuilder<{ schema: TestSchemaTypes }>({ schema }).fields(data).build()
-  const bw = new XyoBoundWitnessBuilder({ inlinePayloads: true }).payload(payload).build()
+  const bw = new BoundWitnessBuilder({ inlinePayloads: true }).payload(payload).build()
   return postCommandsToArchive([bw], archive, token, expectedStatus)
 }
 

@@ -1,7 +1,7 @@
 import { assertEx } from '@xylabs/assert'
 import { delay } from '@xylabs/delay'
 import { DebugPayloadWithMeta, DebugSchema } from '@xyo-network/archivist-model'
-import { XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
+import { BoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { XyoPayload, XyoPayloadBuilder } from '@xyo-network/payload'
 import { StatusCodes } from 'http-status-codes'
 import { v4 } from 'uuid'
@@ -17,7 +17,7 @@ const getTestRequest = (delay = 1): XyoPayload => {
 
 const postRequest = async (delay = 1, archive = 'temp', token?: string): Promise<string> => {
   const payload = getTestRequest(delay)
-  const bw = new XyoBoundWitnessBuilder({ inlinePayloads: true }).payload(payload).build()
+  const bw = new BoundWitnessBuilder({ inlinePayloads: true }).payload(payload).build()
   const result = await postCommandsToArchive([bw], archive, token)
   const id = result?.[0]?.[0]
   expect(id).toBeDefined()
