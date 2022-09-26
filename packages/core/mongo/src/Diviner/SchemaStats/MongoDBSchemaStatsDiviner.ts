@@ -155,7 +155,6 @@ export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner implements Sche
           .skip(iteration)
           .limit(this.aggregateLimit)
           .group<PayloadSchemaCountsAggregateResult>({ _id: '$schema', count: { $sum: 1 } })
-          .sort({ count: -1 })
           .maxTimeMS(2000)
           .toArray()
       })
