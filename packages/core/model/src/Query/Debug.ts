@@ -1,12 +1,14 @@
-import { XyoPayload, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload } from '@xyo-network/payload'
 
+import { XyoPayloadWithMeta } from '../Payload'
 import { Query } from './Query'
 
-export const debugSchema = 'network.xyo.debug'
-export type DebugSchema = typeof debugSchema
+export type DebugSchema = 'network.xyo.debug'
+export const DebugSchema: DebugSchema = 'network.xyo.debug'
 
 export interface Debug {
   delay?: number
+  nonce?: string
   schema: DebugSchema
 }
 

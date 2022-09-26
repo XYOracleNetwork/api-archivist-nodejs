@@ -1,7 +1,14 @@
-import { assertEx } from '@xylabs/sdk-js'
-import { ArchivePayloadsArchivist, ArchivePayloadsArchivistId, XyoArchivePayloadFilterPredicate } from '@xyo-network/archivist-model'
+import { assertEx } from '@xylabs/assert'
+import { XyoAccount } from '@xyo-network/account'
+import {
+  AbstractPayloadArchivist,
+  ArchivePayloadsArchivist,
+  ArchivePayloadsArchivistId,
+  XyoArchivePayloadFilterPredicate,
+  XyoPayloadWithMeta,
+} from '@xyo-network/archivist-model'
+import { TYPES } from '@xyo-network/archivist-types'
 import { EmptyObject } from '@xyo-network/core'
-import { XyoPayloadWithMeta } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter, SortDirection } from 'mongodb'
@@ -10,8 +17,17 @@ import { removeId } from '../../Mongo'
 import { MONGO_TYPES } from '../../types'
 
 @injectable()
-export class MongoDBArchivePayloadsArchivist implements ArchivePayloadsArchivist {
-  constructor(@inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayloadWithMeta>) {}
+export class MongoDBArchivePayloadsArchivist
+  extends AbstractPayloadArchivist<XyoPayloadWithMeta, ArchivePayloadsArchivistId>
+  implements ArchivePayloadsArchivist
+{
+  constructor(
+    @inject(TYPES.Account) protected readonly account: XyoAccount,
+    @inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayloadWithMeta>,
+  ) {
+    super(account)
+  }
+
   async find(predicate: XyoArchivePayloadFilterPredicate): Promise<XyoPayloadWithMeta[]> {
     const { archive, hash, limit, order, schema, schemas, timestamp, ...props } = predicate
     const parsedLimit = limit || 100
@@ -27,17 +43,29 @@ export class MongoDBArchivePayloadsArchivist implements ArchivePayloadsArchivist
     if (hash) filter._hash = hash
     if (schema) filter.schema = schema
     if (schemas?.length) filter.schema = { $in: schemas }
-    return (await this.sdk.find(filter)).sort(sort).limit(parsedLimit).maxTimeMS(2000).toArray()
+    return (await (await this.sdk.find(filter)).sort(sort).limit(parsedLimit).maxTimeMS(2000).toArray()).map(removeId)
   }
-  async get(id: ArchivePayloadsArchivistId): Promise<XyoPayloadWithMeta[]> {
-    const predicate = { _archive: assertEx(id.archive), _hash: assertEx(id.hash) }
-    return (await this.sdk.find(predicate)).limit(1).toArray()
+
+  async get(ids: ArchivePayloadsArchivistId[]): Promise<Array<XyoPayloadWithMeta | null>> {
+    const predicates = ids.map((id) => {
+      const _archive = assertEx(id.archive, 'MongoDBArchivePayloadsArchivist.get: Missing archive')
+      const _hash = assertEx(id.hash, 'MongoDBArchivePayloadsArchivist.get: Missing hash')
+      return { _archive, _hash }
+    })
+    const queries = predicates.map(async (predicate) => {
+      const result = (await (await this.sdk.find(predicate)).limit(1).toArray()).map(removeId)
+      return result?.[0] || null
+    })
+    const results = await Promise.all(queries)
+    return results
   }
-  async insert(items: XyoPayloadWithMeta[]): Promise<XyoPayloadWithMeta[]> {
-    const result = await this.sdk.insertMany(items.map(removeId) as XyoPayloadWithMeta[])
+
+  async insert(items: XyoPayloadWithMeta[]) {
+    const result = await this.sdk.insertMany(items.map(removeId))
     if (result.insertedCount != items.length) {
-      throw new Error('Error inserting Payloads')
+      throw new Error('MongoDBArchivePayloadsArchivist.insert: Error inserting Payloads')
     }
-    return items
+    const [bw] = await this.bindPayloads(items)
+    return bw
   }
 }

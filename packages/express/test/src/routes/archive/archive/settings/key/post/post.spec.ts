@@ -1,15 +1,17 @@
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 import { validate } from 'uuid'
 
-import { claimArchive, createArchiveKey, getTokenForNewUser } from '../../../../../../testUtil'
+import { claimArchive, createArchiveKey, getTokenForUnitTestUser } from '../../../../../../testUtil'
 
 const oneMinuteInMs = 1 * 60 * 1000
 
 describe('/archive/:archive/settings/key', () => {
   let token = ''
   let archive = ''
+  beforeAll(async () => {
+    token = await getTokenForUnitTestUser()
+  })
   beforeEach(async () => {
-    token = await getTokenForNewUser()
     archive = (await claimArchive(token)).archive
   })
   it('Creates a key for the archive', async () => {

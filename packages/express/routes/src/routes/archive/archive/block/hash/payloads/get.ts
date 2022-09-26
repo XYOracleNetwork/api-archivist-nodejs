@@ -1,17 +1,29 @@
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
-import { ArchivePayloadsArchivist } from '@xyo-network/archivist-model'
-import { XyoPartialPayloadMeta, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { XyoArchivistGetQuery, XyoArchivistGetQuerySchema } from '@xyo-network/archivist'
+import {
+  ArchivePayloadsArchivist,
+  XyoBoundWitnessWithPartialMeta,
+  XyoPartialPayloadMeta,
+  XyoPayloadWithPartialMeta,
+} from '@xyo-network/archivist-model'
+import { BoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
 import { BlockHashPathParams } from '../blockHashPathParams'
 
 const getPayloadsByHashes = async (archivist: ArchivePayloadsArchivist, archive: string, hashes: string[]) => {
-  const map: Record<string, XyoPartialPayloadMeta[]> = {}
-  const payloads: (XyoPayloadWithMeta | undefined)[] = []
+  const map: Record<string, XyoPayloadWithPartialMeta[]> = {}
+  const payloads: (XyoPayloadWithPartialMeta | undefined)[] = []
   for (const hash of hashes) {
-    const payload = await archivist.get({ archive, hash })
-    payloads.push(payload.pop())
+    const query: XyoArchivistGetQuery = {
+      hashes: [{ archive, hash }] as unknown as string[],
+      schema: XyoArchivistGetQuerySchema,
+    }
+    const bw = new BoundWitnessBuilder().payload(query).build()
+    const result = await archivist.query(bw, query)
+    const payload = (result?.[1]?.[0] as XyoPayloadWithPartialMeta) || undefined
+    payloads.push(payload)
   }
   payloads.forEach((value) => {
     if (value?._hash) {
@@ -24,10 +36,15 @@ const getPayloadsByHashes = async (archivist: ArchivePayloadsArchivist, archive:
 const handler: RequestHandler<BlockHashPathParams, XyoPartialPayloadMeta[][]> = async (req, res, next) => {
   const { archive, hash } = req.params
   const { archivePayloadsArchivist, archiveBoundWitnessesArchivist } = req.app
-  const bw = await archiveBoundWitnessesArchivist.get({ archive, hash })
-  if (bw && bw.length > 0) {
-    // TODO: remove meta
-    res.json(await getPayloadsByHashes(archivePayloadsArchivist, archive, bw[0].payload_hashes))
+  const query: XyoArchivistGetQuery = {
+    hashes: [{ archive, hash }] as unknown as string[],
+    schema: XyoArchivistGetQuerySchema,
+  }
+  const bw = new BoundWitnessBuilder().payload(query).build()
+  const result = await archiveBoundWitnessesArchivist.query(bw, query)
+  const block = (result?.[1]?.[0] as XyoBoundWitnessWithPartialMeta) || undefined
+  if (block) {
+    res.json(await getPayloadsByHashes(archivePayloadsArchivist, archive, block.payload_hashes))
   } else {
     next({ message: 'Block not found', statusCode: StatusCodes.NOT_FOUND })
   }

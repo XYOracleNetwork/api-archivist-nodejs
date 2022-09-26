@@ -1,12 +1,14 @@
 import { StatusCodes } from 'http-status-codes'
 
-import { claimArchive, createArchiveKey, getArchiveKeys, getTokenForNewUser, request } from '../../../../../../testUtil'
+import { claimArchive, createArchiveKey, getArchiveKeys, getTokenForUnitTestUser, request } from '../../../../../../testUtil'
 
 describe('/archive/:archive/settings/key', () => {
   let token = ''
   let archive = ''
+  beforeAll(async () => {
+    token = await getTokenForUnitTestUser()
+  })
   beforeEach(async () => {
-    token = await getTokenForNewUser()
     archive = (await claimArchive(token)).archive
   })
   describe('auth', () => {

@@ -4,23 +4,23 @@ import { isProduction } from '@xyo-network/archivist-middleware'
 import {
   DebugPayload,
   DebugQuery,
-  debugSchema,
+  DebugSchema,
   GetArchivePermissionsPayload,
   GetArchivePermissionsQuery,
-  getArchivePermissionsSchema,
+  GetArchivePermissionsSchema,
   GetDomainConfigPayload,
   GetDomainConfigQuery,
-  getDomainConfigSchema,
+  GetDomainConfigSchema,
   GetSchemaPayload,
   GetSchemaQuery,
-  getSchemaSchema,
+  GetSchemaSchema,
   Query,
   SetArchivePermissionsPayload,
   SetArchivePermissionsQuery,
-  setArchivePermissionsSchema,
+  SetArchivePermissionsSchema,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload } from '@xyo-network/payload'
 import { Request } from 'express'
 import { v4 } from 'uuid'
 
@@ -42,25 +42,25 @@ export const addQueryConverters = () => {
 }
 
 export const addDebugQueries = (registry: QueryConverterRegistry) => {
-  registry.registerConverterForSchema(debugSchema, (payload: XyoQueryPayloadWithMeta<DebugPayload>, _req: Request) => new DebugQuery(payload))
+  registry.registerConverterForSchema(DebugSchema, (payload: XyoQueryPayloadWithMeta<DebugPayload>, _req: Request) => new DebugQuery(payload))
   registry.registerConverterForSchema('network.xyo.test', debugCommandConverter)
 }
 
 export const addQueryHandlers = (registry: QueryConverterRegistry) => {
   registry.registerConverterForSchema(
-    setArchivePermissionsSchema,
+    SetArchivePermissionsSchema,
     (payload: XyoQueryPayloadWithMeta<SetArchivePermissionsPayload>, _req: Request) => new SetArchivePermissionsQuery(payload),
   )
   registry.registerConverterForSchema(
-    getArchivePermissionsSchema,
+    GetArchivePermissionsSchema,
     (payload: XyoQueryPayloadWithMeta<GetArchivePermissionsPayload>, _req: Request) => new GetArchivePermissionsQuery(payload),
   )
   registry.registerConverterForSchema(
-    getDomainConfigSchema,
+    GetDomainConfigSchema,
     (payload: XyoQueryPayloadWithMeta<GetDomainConfigPayload>, _req: Request) => new GetDomainConfigQuery(payload),
   )
   registry.registerConverterForSchema(
-    getSchemaSchema,
+    GetSchemaSchema,
     (payload: XyoQueryPayloadWithMeta<GetSchemaPayload>, _req: Request) => new GetSchemaQuery(payload),
   )
 }

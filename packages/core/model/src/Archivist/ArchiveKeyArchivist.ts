@@ -1,5 +1,4 @@
-import { XyoArchiveKey } from '@xyo-network/sdk-xyo-client-js'
+import { XyoArchiveKey } from '@xyo-network/api'
+import { Archivist } from '@xyo-network/archivist'
 
-import { Archivist } from './Archivist'
-
-export type ArchiveKeyArchivist = Archivist<XyoArchiveKey, XyoArchiveKey, XyoArchiveKey[], string>
+export type ArchiveKeyArchivist = Archivist<XyoArchiveKey, XyoArchiveKey, XyoArchiveKey, XyoArchiveKey, Partial<XyoArchiveKey>, string>

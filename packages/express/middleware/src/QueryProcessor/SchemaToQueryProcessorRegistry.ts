@@ -1,5 +1,4 @@
-import { Query, QueryProcessor, QueryProcessorRegistry } from '@xyo-network/archivist-model'
-import { XyoPayloadWithPartialMeta } from '@xyo-network/sdk-xyo-client-js'
+import { Query, QueryProcessor, QueryProcessorRegistry, XyoPayloadWithPartialMeta } from '@xyo-network/archivist-model'
 
 export class SchemaToQueryProcessorRegistry<T extends Query = Query, R extends XyoPayloadWithPartialMeta = XyoPayloadWithPartialMeta>
   implements QueryProcessorRegistry<T, R>

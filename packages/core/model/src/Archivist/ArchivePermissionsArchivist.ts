@@ -1,10 +1,9 @@
-import { SetArchivePermissions } from '../Query'
-import { Archivist } from './Archivist'
+import { Archivist } from '@xyo-network/archivist'
+import { XyoBoundWitness } from '@xyo-network/boundwitness'
+import { Module } from '@xyo-network/module'
 
-export type ArchivePermissionsArchivist = Archivist<
-  SetArchivePermissions[],
-  SetArchivePermissions[],
-  SetArchivePermissions[] | null,
-  string,
-  SetArchivePermissions[]
->
+import { XyoPayloadWithPartialMeta } from '../Payload'
+import { SetArchivePermissions } from '../Query'
+
+export type ArchivePermissionsArchivist = Archivist<SetArchivePermissions, XyoBoundWitness | null, XyoPayloadWithPartialMeta<SetArchivePermissions>> &
+  Module

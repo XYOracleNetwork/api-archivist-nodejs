@@ -1,4 +1,4 @@
-import { assertEx } from '@xylabs/sdk-js'
+import { assertEx } from '@xylabs/assert'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 
 import { getMongoDBConfig } from './getMongoDBConfig'

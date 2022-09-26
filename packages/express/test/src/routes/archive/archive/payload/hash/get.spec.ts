@@ -1,10 +1,20 @@
-import { claimArchive, getPayloadByHash, getTokenForNewUser, knownBlock, knownPayloadHash, postBlock } from '../../../../../testUtil'
+import {
+  claimArchive,
+  getPayloadByHash,
+  getTokenForOtherUnitTestUser,
+  getTokenForUnitTestUser,
+  knownBlock,
+  knownPayloadHash,
+  postBlock,
+} from '../../../../../testUtil'
 
 describe('/archive/:archive/block/payload/:hash', () => {
   let token = ''
   let archive = ''
+  beforeAll(async () => {
+    token = await getTokenForUnitTestUser()
+  })
   beforeEach(async () => {
-    token = await getTokenForNewUser()
     archive = (await claimArchive(token)).archive
     await postBlock(knownBlock, archive)
   })
@@ -19,7 +29,7 @@ describe('/archive/:archive/block/payload/:hash', () => {
   it('Allows retrieving the same payload if posted to multiple archives', async () => {
     const response = await getPayloadByHash(token, archive, knownPayloadHash)
     expect(response.length).toBe(1)
-    const token2 = await getTokenForNewUser()
+    const token2 = await getTokenForOtherUnitTestUser()
     const archive2 = (await claimArchive(token2)).archive
     await postBlock(knownBlock, archive2)
     const response2 = await getPayloadByHash(token2, archive2, knownPayloadHash)

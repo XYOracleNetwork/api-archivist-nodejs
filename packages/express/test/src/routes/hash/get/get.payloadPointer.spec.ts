@@ -1,4 +1,4 @@
-import { assertEx } from '@xylabs/sdk-js'
+import { assertEx } from '@xylabs/assert'
 import {
   PayloadArchiveRule,
   PayloadPointerBody,
@@ -6,8 +6,9 @@ import {
   PayloadSchemaRule,
   PayloadTimestampDirectionRule,
   SortDirection,
+  XyoBoundWitnessWithPartialMeta,
 } from '@xyo-network/archivist-model'
-import { XyoAccount, XyoBoundWitnessWithPartialMeta, XyoPayload, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload, XyoPayloadBuilder } from '@xyo-network/payload'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import {
@@ -16,7 +17,9 @@ import {
   getBlock,
   getBlockWithPayloads,
   getHash,
-  getTokenForNewUser,
+  getTokenForOtherUnitTestUser,
+  getTokenForUnitTestUser,
+  otherUnitTestSigningAccount,
   postBlock,
   setArchiveAccessControl,
   unitTestSigningAccount,
@@ -38,16 +41,20 @@ const getPayloadPointer = (
 }
 
 describe('/:hash', () => {
-  let token: string
+  let ownerToken: string
+  let otherUserToken: string
   let archive: string
   let block: XyoBoundWitnessWithPartialMeta
   let payload: XyoPayload
   let pointerHash: string
-  beforeAll(() => jest.spyOn(console, 'error').mockImplementation())
+  beforeAll(async () => {
+    jest.spyOn(console, 'error').mockImplementation()
+    ownerToken = await getTokenForUnitTestUser()
+    otherUserToken = await getTokenForOtherUnitTestUser()
+  })
   beforeEach(async () => {
-    token = await getTokenForNewUser()
     archive = getArchiveName()
-    await claimArchive(token, archive)
+    await claimArchive(ownerToken, archive)
     block = getBlockWithPayloads(1)
     payload = assertEx(block._payloads?.[0])
     const blockResponse = await postBlock(block, archive)
@@ -78,18 +85,17 @@ describe('/:hash', () => {
       await getHash(pointerHash, undefined)
     })
     it('with non-archive owner returns the payload', async () => {
-      const token = await getTokenForNewUser()
-      await getHash(pointerHash, token)
+      await getHash(pointerHash, otherUserToken)
     })
     it('with archive owner returns the payload', async () => {
-      const result = await getHash(pointerHash, token)
+      const result = await getHash(pointerHash, ownerToken)
       expect(result).toBeTruthy()
     })
   })
   describe('with private archive', () => {
     beforeEach(async () => {
-      await setArchiveAccessControl(token, archive, { accessControl: true, archive })
-      const blockResponse = await postBlock(block, archive, token)
+      await setArchiveAccessControl(ownerToken, archive, { accessControl: true, archive })
+      const blockResponse = await postBlock(block, archive, ownerToken)
       expect(blockResponse.length).toBe(1)
     })
     describe(`returns ${ReasonPhrases.NOT_FOUND}`, () => {
@@ -97,12 +103,11 @@ describe('/:hash', () => {
         await getHash(pointerHash, undefined, StatusCodes.NOT_FOUND)
       })
       it('with non-archive owner', async () => {
-        const otherToken = await getTokenForNewUser()
-        await getHash(pointerHash, otherToken, StatusCodes.NOT_FOUND)
+        await getHash(pointerHash, otherUserToken, StatusCodes.NOT_FOUND)
       })
     })
     it('with archive owner returns the payload', async () => {
-      const result = await getHash(pointerHash, token)
+      const result = await getHash(pointerHash, ownerToken)
       expect(result).toBeTruthy()
     })
   })
@@ -118,16 +123,15 @@ describe('/:hash', () => {
       const pointerResponse = await postBlock(getBlock(pointer), archive)
       expect(pointerResponse.length).toBe(1)
       pointerHash = pointerResponse[0].payload_hashes[0]
-      const result = await getHash(pointerHash, token)
+      const result = await getHash(pointerHash, ownerToken)
       expect(result).toBeTruthy()
     })
   })
   it('returns no payloads if not signed by address', async () => {
-    const account = XyoAccount.random()
-    const pointer = getPayloadPointer(archive, payload.schema, Date.now(), 'desc', account.addressValue.hex)
+    const pointer = getPayloadPointer(archive, payload.schema, Date.now(), 'desc', otherUnitTestSigningAccount.addressValue.hex)
     const pointerResponse = await postBlock(getBlock(pointer), archive)
     expect(pointerResponse.length).toBe(1)
     pointerHash = pointerResponse[0].payload_hashes[0]
-    await getHash(pointerHash, token, StatusCodes.NOT_FOUND)
+    await getHash(pointerHash, ownerToken, StatusCodes.NOT_FOUND)
   })
 })

@@ -1,4 +1,4 @@
-import { claimArchive, getTokenForNewUser, request, setArchiveAccessControl } from '@xyo-network/archivist-test'
+import { claimArchive, getTokenForOtherUnitTestUser, getTokenForUnitTestUser, request, setArchiveAccessControl } from '@xyo-network/archivist-test'
 import { StatusCodes } from 'http-status-codes'
 
 const attemptRoute = async (archive: string, token: string | undefined = undefined, expectedStatus: StatusCodes = StatusCodes.OK) => {
@@ -7,12 +7,16 @@ const attemptRoute = async (archive: string, token: string | undefined = undefin
     : await (await request()).get(`/archive/${archive}/payload/recent`).expect(expectedStatus)
 }
 describe('ArchiveAccessControlAuthStrategy', () => {
-  let token = ''
+  let ownerToken = ''
+  let otherUserToken = ''
   let archive = ''
+  beforeAll(async () => {
+    ownerToken = await getTokenForUnitTestUser()
+    otherUserToken = await getTokenForOtherUnitTestUser()
+  })
   describe('when accessControl not specified', () => {
     beforeAll(async () => {
-      token = await getTokenForNewUser()
-      const response = await claimArchive(token)
+      const response = await claimArchive(ownerToken)
       expect(response.accessControl).toBe(false)
       archive = response.archive
     })
@@ -20,46 +24,44 @@ describe('ArchiveAccessControlAuthStrategy', () => {
       await attemptRoute(archive)
     })
     it('allows owner access', async () => {
-      await attemptRoute(archive, token)
+      await attemptRoute(archive, ownerToken)
     })
     it('allows other user access', async () => {
-      await attemptRoute(archive, await getTokenForNewUser())
+      await attemptRoute(archive, otherUserToken)
     })
   })
   describe('when accessControl is false', () => {
     beforeAll(async () => {
-      token = await getTokenForNewUser()
-      const response = await claimArchive(token)
+      const response = await claimArchive(ownerToken)
       expect(response.accessControl).toBe(false)
       archive = response.archive
-      await setArchiveAccessControl(token, archive, { accessControl: false, archive })
+      await setArchiveAccessControl(ownerToken, archive, { accessControl: false, archive })
     })
     it('allows anonymous access', async () => {
       await attemptRoute(archive)
     })
     it('allows owner access', async () => {
-      await attemptRoute(archive, token)
+      await attemptRoute(archive, ownerToken)
     })
     it('allows other user access', async () => {
-      await attemptRoute(archive, await getTokenForNewUser())
+      await attemptRoute(archive, otherUserToken)
     })
   })
   describe('when accessControl is true', () => {
     beforeAll(async () => {
-      token = await getTokenForNewUser()
-      const response = await claimArchive(token)
+      const response = await claimArchive(ownerToken)
       expect(response.accessControl).toBe(false)
       archive = response.archive
-      await setArchiveAccessControl(token, archive, { accessControl: true, archive })
+      await setArchiveAccessControl(ownerToken, archive, { accessControl: true, archive })
     })
     it('disallows anonymous access', async () => {
       await attemptRoute(archive, undefined, StatusCodes.UNAUTHORIZED)
     })
     it('allows owner access', async () => {
-      await attemptRoute(archive, token)
+      await attemptRoute(archive, ownerToken)
     })
     it('disallows other user access', async () => {
-      await attemptRoute(archive, await getTokenForNewUser(), StatusCodes.FORBIDDEN)
+      await attemptRoute(archive, otherUserToken, StatusCodes.FORBIDDEN)
     })
   })
 })

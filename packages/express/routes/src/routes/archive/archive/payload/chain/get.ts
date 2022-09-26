@@ -1,15 +1,23 @@
 import 'source-map-support/register'
 
+import { assertEx } from '@xylabs/assert'
 import { asyncHandler, tryParseInt } from '@xylabs/sdk-api-express-ecs'
-import { assertEx } from '@xylabs/sdk-js'
+import { XyoArchivistGetQuery, XyoArchivistGetQuerySchema } from '@xyo-network/archivist'
 import { ArchivePayloadsArchivist } from '@xyo-network/archivist-model'
-import { XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import { BoundWitnessBuilder } from '@xyo-network/boundwitness'
+import { XyoPayload } from '@xyo-network/payload'
 import { RequestHandler } from 'express'
 
 import { PayloadChainPathParams } from './payloadChainPathParams'
 
 const getPayloads = async (archivist: ArchivePayloadsArchivist, archive: string, hash: string, payloads: XyoPayload[], limit: number) => {
-  const payload = (await archivist.get({ archive, hash })).pop()
+  const query: XyoArchivistGetQuery = {
+    hashes: [{ archive, hash }] as unknown as string[],
+    schema: XyoArchivistGetQuerySchema,
+  }
+  const bw = new BoundWitnessBuilder().payload(query).build()
+  const result = await archivist.query(bw, query)
+  const payload = result?.[1]?.[0]
   if (payload) {
     payloads.push(payload)
     if (payload.previousHash && limit > payloads.length) {

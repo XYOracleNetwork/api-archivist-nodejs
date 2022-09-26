@@ -7,13 +7,12 @@ import {
   ArchiveKeyArchivist,
   ArchivePayloadsArchivist,
   ArchivePermissionsArchivist,
-  ArchiveSchemaCountDiviner,
-  ArchiveSchemaListDiviner,
   BoundWitnessesArchivist,
   BoundWitnessStatsDiviner,
   PayloadsArchivist,
   PayloadStatsDiviner,
   Query,
+  SchemaStatsDiviner,
   UserManager,
   WitnessedPayloadArchivist,
 } from '@xyo-network/archivist-model'
@@ -41,14 +40,7 @@ export const addDependencies = (app: Application) => {
     dependencies.get<ArchivePermissionsArchivist>(TYPES.ArchivePermissionsArchivist),
     'Missing ArchivePermissionsArchivist',
   )
-  app.archiveSchemaCountDiviner = assertEx(
-    dependencies.get<ArchiveSchemaCountDiviner>(TYPES.ArchiveSchemaCountDiviner),
-    'Missing ArchiveSchemaCountDiviner',
-  )
-  app.archiveSchemaListDiviner = assertEx(
-    dependencies.get<ArchiveSchemaListDiviner>(TYPES.ArchiveSchemaListDiviner),
-    'Missing ArchiveSchemaListDiviner',
-  )
+  app.schemaStatsDiviner = assertEx(dependencies.get<SchemaStatsDiviner>(TYPES.SchemaStatsDiviner), 'Missing SchemaStatsDiviner')
   app.boundWitnessStatsDiviner = assertEx(
     dependencies.get<BoundWitnessStatsDiviner>(TYPES.BoundWitnessStatsDiviner),
     'Missing BoundWitnessStatsDiviner',

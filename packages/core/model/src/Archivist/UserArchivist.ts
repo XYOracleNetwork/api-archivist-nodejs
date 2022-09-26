@@ -1,4 +1,6 @@
-import { User, UserWithoutId } from '../Domain'
-import { Archivist } from './Archivist'
+import { Archivist } from '@xyo-network/archivist'
 
-export type UserArchivist = Archivist<User, UserWithoutId, User | null, string, User[]>
+import { User, UserWithoutId } from '../Domain'
+import { UpsertResult } from '../UpsertResult'
+
+export type UserArchivist = Archivist<User, User & UpsertResult, UserWithoutId, User, Partial<User>>

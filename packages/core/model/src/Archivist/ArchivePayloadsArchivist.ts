@@ -1,5 +1,3 @@
-import { XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
-
 import { PayloadArchivist } from './PayloadArchivist'
 
 export interface ArchivePayloadsArchivistId {
@@ -7,9 +5,4 @@ export interface ArchivePayloadsArchivistId {
   hash: string
 }
 
-export type ArchivePayloadsArchivist<T extends { schema: string } = { schema: string }> = PayloadArchivist<
-  T,
-  ArchivePayloadsArchivistId,
-  XyoPayloadWithMeta<T>[],
-  Partial<XyoPayloadWithMeta<T>>
->
+export type ArchivePayloadsArchivist<T extends { schema: string } = { schema: string }> = PayloadArchivist<T, ArchivePayloadsArchivistId>

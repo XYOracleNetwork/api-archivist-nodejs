@@ -1,5 +1,4 @@
-import { SortDirection } from '@xyo-network/archivist-model'
-import { XyoBoundWitnessWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { SortDirection, XyoBoundWitnessWithMeta } from '@xyo-network/archivist-model'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import {
@@ -9,7 +8,7 @@ import {
   getBlocksByTimestamp,
   getPayloads,
   getRecentBlocks,
-  getTokenForNewUser,
+  getTokenForUnitTestUser,
   postBlock,
   request,
 } from '../../../../../testUtil'
@@ -22,7 +21,7 @@ describe('/archive/:archive/block', () => {
   const startTime = Date.now()
   let stopTime = Date.now()
   beforeAll(async () => {
-    token = await getTokenForNewUser()
+    token = await getTokenForUnitTestUser()
     archive = getArchiveName()
     await claimArchive(token, archive)
     const blocksPosted = 15

@@ -11,7 +11,8 @@ export const verifyArchiveOwner = async (req: Request): Promise<boolean> => {
   if (!archive) {
     return false
   }
-  const existingArchive = await req.app.archiveArchivist.get(archive)
+  const existingArchives = await req.app.archiveArchivist.get([archive])
+  const existingArchive = existingArchives.pop()
   // Validate user is archive owner
   return !!existingArchive && existingArchive.user === user.id
 }

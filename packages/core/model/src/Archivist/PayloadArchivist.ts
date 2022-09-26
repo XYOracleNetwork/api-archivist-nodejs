@@ -1,11 +1,17 @@
-import { EmptyObject, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { Archivist } from '@xyo-network/archivist'
+import { XyoBoundWitness } from '@xyo-network/boundwitness'
+import { EmptyObject } from '@xyo-network/core'
+import { Module } from '@xyo-network/module'
 
-import { Archivist } from './Archivist'
+import { XyoPayloadWithMeta, XyoPayloadWithPartialMeta } from '../Payload'
 import { XyoPayloadFilterPredicate } from './XyoPayloadFilterPredicate'
 
-export type PayloadArchivist<
-  T extends EmptyObject,
-  TId = string,
-  TQueryResponse = XyoPayloadWithMeta<T>[],
-  TQuery = XyoPayloadFilterPredicate<T>,
-> = Archivist<XyoPayloadWithMeta<T>[], T[], XyoPayloadWithMeta<T>[], TId, TQueryResponse, TQuery>
+export type PayloadArchivist<T extends EmptyObject = EmptyObject, TId = string> = Archivist<
+  XyoPayloadWithMeta<T> | null,
+  XyoBoundWitness | null,
+  XyoPayloadWithPartialMeta<T>,
+  XyoPayloadWithMeta<T> | null,
+  XyoPayloadFilterPredicate<T>,
+  TId
+> &
+  Module

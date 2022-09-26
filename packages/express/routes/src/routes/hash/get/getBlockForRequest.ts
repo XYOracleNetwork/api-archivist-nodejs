@@ -1,15 +1,29 @@
+import { exists } from '@xylabs/sdk-js'
+import { XyoArchivistFindQuery, XyoArchivistFindQuerySchema } from '@xyo-network/archivist'
 import { requestCanAccessArchive } from '@xyo-network/archivist-express-lib'
-import { PayloadPointerPayload, payloadPointerSchema, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
-import { XyoPayload, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { PayloadPointerPayload, payloadPointerSchema, XyoPayloadFilterPredicate, XyoPayloadWithMeta } from '@xyo-network/archivist-model'
+import { BoundWitnessBuilder } from '@xyo-network/boundwitness'
+import { XyoPayload } from '@xyo-network/payload'
 import { Request } from 'express'
 
 import { resolvePayloadPointer } from './resolvePayloadPointer'
 
 const findByHash = async (req: Request, hash: string) => {
   const { payloadsArchivist, boundWitnessesArchivist } = req.app
-  const filter: XyoPayloadFilterPredicate = { hash }
-  const payloads: XyoPayloadWithMeta[] = await payloadsArchivist.find(filter)
-  return payloads.length ? payloads : await boundWitnessesArchivist.find({ ...filter, schema: 'network.xyo.boundwitness' })
+  const payloadFilter: XyoPayloadFilterPredicate = { hash }
+  const payloadQuery: XyoArchivistFindQuery = {
+    filter: payloadFilter,
+    schema: XyoArchivistFindQuerySchema,
+  }
+  const payloadQueryWitness = new BoundWitnessBuilder().payload(payloadQuery).build()
+  const payloads = (await payloadsArchivist.query(payloadQueryWitness, payloadQuery))?.[1].filter(exists) as XyoPayloadWithMeta[]
+  if (payloads.length) return payloads
+  const boundWitnessQuery: XyoArchivistFindQuery = {
+    filter: { ...payloadFilter, schema: 'network.xyo.boundwitness' },
+    schema: XyoArchivistFindQuerySchema,
+  }
+  const boundWitnessQueryWitness = new BoundWitnessBuilder().payload(boundWitnessQuery).build()
+  return (await boundWitnessesArchivist.query(boundWitnessQueryWitness, boundWitnessQuery))?.[1].filter(exists)
 }
 
 export const getBlockForRequest = async (req: Request, hash: string): Promise<XyoPayload | undefined> => {

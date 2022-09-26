@@ -1,8 +1,8 @@
-import { DebugQuery, debugSchema } from '@xyo-network/archivist-model'
+import { DebugQuery, DebugSchema } from '@xyo-network/archivist-model'
 
 import { DebugQueryHandler } from './DebugQueryHandler'
 
-const schema = debugSchema
+const schema = DebugSchema
 
 describe('DebugQueryHandler', () => {
   it('delays for the specified amount of time supplied', async () => {

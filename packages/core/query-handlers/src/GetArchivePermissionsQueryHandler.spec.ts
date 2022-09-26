@@ -1,17 +1,18 @@
 import {
   ArchivePermissionsArchivist,
-  debugSchema,
+  DebugSchema,
   GetArchivePermissionsQuery,
-  getArchivePermissionsSchema,
+  GetArchivePermissionsSchema,
   SetArchivePermissionsPayload,
-  setArchivePermissionsSchema,
+  SetArchivePermissionsSchema,
+  XyoPayloadWithMeta,
 } from '@xyo-network/archivist-model'
-import { XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { BoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { mock, MockProxy } from 'jest-mock-extended'
 
 import { GetArchivePermissionsQueryHandler } from './GetArchivePermissionsQueryHandler'
 
-const schema = getArchivePermissionsSchema
+const schema = GetArchivePermissionsSchema
 const _archive = 'test'
 const _hash = '1234567890'
 const _timestamp = Date.now()
@@ -23,16 +24,16 @@ const permissions: SetArchivePermissionsPayload = {
     allow: ['0x8ba1f109551bd432803012645ac136ddd64dba72'],
     reject: ['0x0ac1df02185025f65202660f8167210a80dd5086'],
   },
-  schema: setArchivePermissionsSchema,
+  schema: SetArchivePermissionsSchema,
   schemas: {
     allow: ['network.xyo.test'],
-    reject: [debugSchema],
+    reject: [DebugSchema],
   },
 }
 
 const expectEmptyPermissions = (actual: XyoPayloadWithMeta<SetArchivePermissionsPayload>) => {
   expect(actual).toBeTruthy()
-  expect(actual?.schema).toBe(setArchivePermissionsSchema)
+  expect(actual?.schema).toBe(SetArchivePermissionsSchema)
   expect(actual?.addresses).toBeUndefined()
   expect(actual?.schemas).toBeUndefined()
 }
@@ -44,14 +45,15 @@ describe('GetArchivePermissionsQueryHandler', () => {
       describe('exist', () => {
         beforeEach(() => {
           archivist = mock<ArchivePermissionsArchivist>()
-          archivist.get.mockResolvedValue([permissions, emptyPermissions])
-          archivist.find.mockResolvedValue([permissions, emptyPermissions])
+          const payloads: SetArchivePermissionsPayload[] = [permissions, emptyPermissions]
+          const boundWitness = new BoundWitnessBuilder().payloads(payloads).build()
+          archivist.query.mockResolvedValue([boundWitness, payloads])
         })
         it('returns the latest archive permissions', async () => {
           const sut = new GetArchivePermissionsQueryHandler(archivist)
           const actual = await sut.handle(new GetArchivePermissionsQuery({ _archive, _hash, _timestamp, schema }))
           expect(actual).toBeTruthy()
-          expect(actual?.schema).toBe(setArchivePermissionsSchema)
+          expect(actual?.schema).toBe(SetArchivePermissionsSchema)
           expect(actual?.addresses).toBeDefined()
           expect(actual?.addresses?.allow).toBeDefined()
           expect(Array.isArray(actual?.addresses?.allow)).toBeTruthy()
@@ -68,8 +70,9 @@ describe('GetArchivePermissionsQueryHandler', () => {
     describe('do not exist', () => {
       beforeEach(() => {
         archivist = mock<ArchivePermissionsArchivist>()
-        archivist.get.mockResolvedValue([])
-        archivist.find.mockResolvedValue([])
+        const payloads: SetArchivePermissionsPayload[] = []
+        const boundWitness = new BoundWitnessBuilder().build()
+        archivist.query.mockResolvedValue([boundWitness, payloads])
       })
       it('returns the empty permissions', async () => {
         const sut = new GetArchivePermissionsQueryHandler(archivist)
@@ -80,28 +83,11 @@ describe('GetArchivePermissionsQueryHandler', () => {
     describe('when archive not supplied', () => {
       beforeEach(() => {
         archivist = mock<ArchivePermissionsArchivist>()
-        archivist.get.mockResolvedValue([])
-        archivist.find.mockResolvedValue([])
       })
-      it('returns the empty permissions', async () => {
+      it('throws', async () => {
         const sut = new GetArchivePermissionsQueryHandler(archivist)
-        const actual = await sut.handle(new GetArchivePermissionsQuery({ _hash, _timestamp, schema }))
-        expectEmptyPermissions(actual)
-      })
-    })
-    describe('when no archive supplied', () => {
-      beforeEach(() => {
-        archivist = mock<ArchivePermissionsArchivist>()
-        archivist.get.mockResolvedValue([])
-        archivist.find.mockResolvedValue([])
-      })
-      it('returns the empty permissions', async () => {
-        const sut = new GetArchivePermissionsQueryHandler(archivist)
-        const actual = await sut.handle(new GetArchivePermissionsQuery({ _archive, _hash, _timestamp, schema }))
-        expect(actual).toBeTruthy()
-        expect(actual?.schema).toBe(setArchivePermissionsSchema)
-        expect(actual?.addresses).toBeUndefined()
-        expect(actual?.schemas).toBeUndefined()
+        const query = new GetArchivePermissionsQuery({ _hash, _timestamp, schema })
+        await expect(sut.handle(query)).rejects.toThrow()
       })
     })
   })

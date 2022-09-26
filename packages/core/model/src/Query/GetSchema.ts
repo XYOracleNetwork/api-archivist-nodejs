@@ -1,9 +1,10 @@
-import { XyoPayload, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { XyoPayload } from '@xyo-network/payload'
 
+import { XyoPayloadWithMeta } from '../Payload'
 import { Query } from './Query'
 
-export const getSchemaSchema = 'network.xyo.schema.get'
-export type GetSchemaSchema = typeof getSchemaSchema
+export type GetSchemaSchema = 'network.xyo.schema.get'
+export const GetSchemaSchema: GetSchemaSchema = 'network.xyo.schema.get'
 
 export interface GetSchema {
   name: string

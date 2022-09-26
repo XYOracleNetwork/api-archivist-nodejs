@@ -1,8 +1,9 @@
+import { assertEx } from '@xylabs/assert'
 import { asyncHandler, NoReqBody, NoReqQuery, tryParseInt } from '@xylabs/sdk-api-express-ecs'
-import { assertEx } from '@xylabs/sdk-js'
+import { XyoArchivistFindQuery, XyoArchivistFindQuerySchema } from '@xyo-network/archivist'
 import { scrubBoundWitnesses } from '@xyo-network/archivist-lib'
 import { ArchiveLocals, ArchivePathParams, SortDirection, XyoArchiveBoundWitnessFilterPredicate } from '@xyo-network/archivist-model'
-import { XyoBoundWitness } from '@xyo-network/sdk-xyo-client-js'
+import { BoundWitnessBuilder, XyoBoundWitness } from '@xyo-network/boundwitness'
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
@@ -27,20 +28,26 @@ const handler: RequestHandler<
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
   }
   const { limit, order, timestamp } = req.query
-  const { archiveBoundWitnessesArchivist } = req.app
+  const { archiveBoundWitnessesArchivist: archivist } = req.app
   const limitNumber = tryParseInt(limit) ?? defaultLimit
   assertEx(limitNumber > 0 && limitNumber <= maxLimit, `limit must be between 1 and ${maxLimit}`)
   const timestampNumber = tryParseInt(timestamp)
   const parsedOrder = order?.toLowerCase?.() === 'asc' ? 'asc' : 'desc'
-  const predicate: XyoArchiveBoundWitnessFilterPredicate = {
+  const filter: XyoArchiveBoundWitnessFilterPredicate = {
     archive: archive.archive,
     limit: limitNumber,
     order: parsedOrder,
     timestamp: timestampNumber,
   }
-  const boundWitnesses = await archiveBoundWitnessesArchivist.find(predicate)
-  if (boundWitnesses) {
-    res.json(scrubBoundWitnesses(boundWitnesses))
+  const query: XyoArchivistFindQuery = {
+    filter,
+    schema: XyoArchivistFindQuerySchema,
+  }
+  const bw = new BoundWitnessBuilder().payload(query).build()
+  const result = await archivist.query(bw, query)
+  const boundWitness = result[1] as XyoBoundWitness[]
+  if (boundWitness) {
+    res.json(scrubBoundWitnesses(boundWitness))
   } else {
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
   }

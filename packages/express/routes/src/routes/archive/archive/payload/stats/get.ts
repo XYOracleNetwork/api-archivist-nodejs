@@ -1,8 +1,16 @@
 import 'source-map-support/register'
 
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
-import { ArchivePathParams, PayloadStatsPayload, PayloadStatsSchema } from '@xyo-network/archivist-model'
-import { XyoDivinerDivineQuerySchema, XyoPayload } from '@xyo-network/sdk-xyo-client-js'
+import {
+  ArchivePathParams,
+  PayloadStatsPayload,
+  PayloadStatsQueryPayload,
+  PayloadStatsQuerySchema,
+  PayloadStatsSchema,
+} from '@xyo-network/archivist-model'
+import { BoundWitnessBuilder } from '@xyo-network/boundwitness'
+import { XyoDivinerDivineQuerySchema } from '@xyo-network/diviner'
+import { XyoModuleQueryResult } from '@xyo-network/module'
 import { RequestHandler } from 'express'
 
 const unknownCount: PayloadStatsPayload = { count: -1, schema: PayloadStatsSchema }
@@ -14,12 +22,11 @@ export interface ArchivePayloadStats {
 const handler: RequestHandler<ArchivePathParams, ArchivePayloadStats> = async (req, res) => {
   const { archive } = req.params
   const { payloadStatsDiviner: diviner } = req.app
-  const payload: XyoPayload<{ archive: string }> = {
-    archive,
-    schema: 'xyo.network.mongo.archive',
-  }
-  const result = await diviner.query({ payloads: [payload], schema: XyoDivinerDivineQuerySchema })
-  const answer: PayloadStatsPayload = (result[1].pop() as PayloadStatsPayload) || unknownCount
+  const payloads: PayloadStatsQueryPayload[] = [{ archive, schema: PayloadStatsQuerySchema }]
+  const query = { payloads, schema: XyoDivinerDivineQuerySchema }
+  const bw = new BoundWitnessBuilder().payload(query).build()
+  const result = (await diviner.query(bw, query)) as XyoModuleQueryResult<PayloadStatsPayload>
+  const answer: PayloadStatsPayload = result?.[1]?.[0] || unknownCount
   res.json(answer)
 }
 

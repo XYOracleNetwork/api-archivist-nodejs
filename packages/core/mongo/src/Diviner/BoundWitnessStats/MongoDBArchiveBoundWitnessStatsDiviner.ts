@@ -1,29 +1,30 @@
 import 'reflect-metadata'
 
-import { assertEx } from '@xylabs/sdk-js'
+import { assertEx } from '@xylabs/assert'
+import { exists } from '@xylabs/sdk-js'
 import { XyoAccount } from '@xyo-network/account'
 import {
   ArchiveArchivist,
   BoundWitnessStatsDiviner,
   BoundWitnessStatsPayload,
+  BoundWitnessStatsQueryPayload,
   BoundWitnessStatsSchema,
+  isBoundWitnessStatsQueryPayload,
   Job,
   JobProvider,
   Logger,
+  XyoBoundWitnessWithMeta,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
-import { XyoArchivistPayloadDivinerConfigSchema, XyoDiviner, XyoDivinerDivineQuerySchema } from '@xyo-network/diviner'
-import { XyoPayload, XyoPayloadBuilder, XyoPayloads } from '@xyo-network/payload'
+import { XyoArchivistPayloadDivinerConfigSchema, XyoDiviner } from '@xyo-network/diviner'
+import { XyoPayloadBuilder, XyoPayloads } from '@xyo-network/payload'
 import { BaseMongoSdk, MongoClientWrapper } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
-import { ChangeStreamInsertDocument, ChangeStreamOptions, ResumeToken, UpdateOptions } from 'mongodb'
+import { ChangeStream, ChangeStreamInsertDocument, ChangeStreamOptions, ResumeToken, UpdateOptions } from 'mongodb'
 
 import { COLLECTIONS } from '../../collections'
 import { DATABASES } from '../../databases'
 import { MONGO_TYPES } from '../../types'
-import { MongoArchivePayload, MongoArchiveSchema } from '../MongoArchivePayload'
-import { ArchiveConfigPayload } from '../Payloads'
 
 const updateOptions: UpdateOptions = { upsert: true }
 
@@ -35,11 +36,9 @@ interface Stats {
 }
 
 @injectable()
-export class MongoDBArchiveBoundWitnessStatsDiviner
-  extends XyoDiviner<XyoPayload, ArchiveConfigPayload>
-  implements BoundWitnessStatsDiviner, JobProvider
-{
+export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner implements BoundWitnessStatsDiviner, JobProvider {
   protected readonly batchLimit = 100
+  protected changeStream: ChangeStream | undefined = undefined
   protected nextOffset = 0
   protected pendingCounts: Record<string, number> = {}
   protected resumeAfter: ResumeToken | undefined = undefined
@@ -50,8 +49,7 @@ export class MongoDBArchiveBoundWitnessStatsDiviner
     @inject(TYPES.ArchiveArchivist) protected archiveArchivist: ArchiveArchivist,
     @inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly sdk: BaseMongoSdk<XyoBoundWitnessWithMeta>,
   ) {
-    super({ account, schema: XyoArchivistPayloadDivinerConfigSchema })
-    void this.registerWithChangeStream()
+    super({ schema: XyoArchivistPayloadDivinerConfigSchema }, account)
   }
 
   get jobs(): Job[] {
@@ -72,15 +70,19 @@ export class MongoDBArchiveBoundWitnessStatsDiviner
     ]
   }
 
-  get queries() {
-    return [XyoDivinerDivineQuerySchema]
+  override async divine(context?: string, payloads?: XyoPayloads): Promise<XyoPayloads<BoundWitnessStatsPayload>> {
+    const query = payloads?.find<BoundWitnessStatsQueryPayload>(isBoundWitnessStatsQueryPayload)
+    const archive = query?.archive
+    const count = archive ? await this.divineArchive(archive) : await this.divineAllArchives()
+    return [new XyoPayloadBuilder<BoundWitnessStatsPayload>({ schema: BoundWitnessStatsSchema }).fields({ count }).build()]
   }
 
-  override async divine(payloads?: XyoPayloads): Promise<XyoPayload> {
-    const archivePayload = payloads?.find((payload): payload is MongoArchivePayload => payload?.schema === MongoArchiveSchema)
-    const archive = archivePayload?.archive ?? this.config.archive
-    const count = archive ? await this.divineArchive(archive) : await this.divineAllArchives()
-    return new XyoPayloadBuilder<BoundWitnessStatsPayload>({ schema: BoundWitnessStatsSchema }).fields({ count }).build()
+  override async initialize(): Promise<void> {
+    await this.registerWithChangeStream()
+  }
+
+  override async shutdown(): Promise<void> {
+    await this.changeStream?.close()
   }
 
   private divineAllArchives = () => this.sdk.useCollection((collection) => collection.estimatedDocumentCount())
@@ -103,7 +105,7 @@ export class MongoDBArchiveBoundWitnessStatsDiviner
   private divineArchivesBatch = async () => {
     this.logger.log(`MongoDBArchiveBoundWitnessStatsDiviner.DivineArchivesBatch: Divining - Limit: ${this.batchLimit} Offset: ${this.nextOffset}`)
     const result = await this.archiveArchivist.find({ limit: this.batchLimit, offset: this.nextOffset })
-    const archives = result.map((archive) => archive.archive)
+    const archives = result.map((archive) => archive?.archive).filter(exists)
     this.logger.log(`MongoDBArchiveBoundWitnessStatsDiviner.DivineArchivesBatch: Divining ${archives.length} Archives`)
     this.nextOffset = archives.length < this.batchLimit ? 0 : this.nextOffset + this.batchLimit
     const results = await Promise.allSettled(archives.map(this.divineArchiveFull))
@@ -125,9 +127,9 @@ export class MongoDBArchiveBoundWitnessStatsDiviner
     assertEx(connection, 'Connection failed')
     const collection = connection.db(DATABASES.Archivist).collection(COLLECTIONS.BoundWitnesses)
     const opts: ChangeStreamOptions = this.resumeAfter ? { resumeAfter: this.resumeAfter } : {}
-    const changeStream = collection.watch([], opts)
-    changeStream.on('change', this.processChange)
-    changeStream.on('error', this.registerWithChangeStream)
+    this.changeStream = collection.watch([], opts)
+    this.changeStream.on('change', this.processChange)
+    this.changeStream.on('error', this.registerWithChangeStream)
     this.logger.log('MongoDBArchiveBoundWitnessStatsDiviner.RegisterWithChangeStream: Registered')
   }
 

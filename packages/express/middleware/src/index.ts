@@ -5,14 +5,13 @@ import {
   ArchiveKeyArchivist,
   ArchivePayloadsArchivist,
   ArchivePermissionsArchivist,
-  ArchiveSchemaCountDiviner,
-  ArchiveSchemaListDiviner,
   BoundWitnessesArchivist,
   BoundWitnessStatsDiviner,
   PayloadsArchivist,
   PayloadStatsDiviner,
   Query,
   QueryProcessorRegistry,
+  SchemaStatsDiviner,
   UserManager,
   UserWithoutId,
   WitnessedPayloadArchivist,
@@ -46,8 +45,6 @@ declare global {
       archiveKeyArchivist: ArchiveKeyArchivist
       archivePayloadsArchivist: ArchivePayloadsArchivist
       archivePermissionsArchivist: ArchivePermissionsArchivist
-      archiveSchemaCountDiviner: ArchiveSchemaCountDiviner
-      archiveSchemaListDiviner: ArchiveSchemaListDiviner
       archivistWitnessedPayloadArchivist: WitnessedPayloadArchivist
       boundWitnessStatsDiviner: BoundWitnessStatsDiviner
       boundWitnessesArchivist: BoundWitnessesArchivist
@@ -57,6 +54,7 @@ declare global {
       queryProcessors: QueryProcessorRegistry
       queryQueue: Queue<Query>
       responseQueue: Queue<IdentifiableHuri>
+      schemaStatsDiviner: SchemaStatsDiviner
       userManager: UserManager
     }
   }

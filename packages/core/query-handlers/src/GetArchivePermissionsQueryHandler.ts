@@ -1,16 +1,22 @@
+import { assertEx } from '@xylabs/assert'
+import { XyoArchivistGetQuery, XyoArchivistGetQuerySchema } from '@xyo-network/archivist'
 import {
   ArchivePermissionsArchivist,
   GetArchivePermissionsQuery,
   QueryHandler,
   SetArchivePermissionsPayload,
-  setArchivePermissionsSchema,
+  SetArchivePermissionsPayloadWithMeta,
+  SetArchivePermissionsSchema,
+  XyoPayloadWithMeta,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { WithAdditional, XyoPayloadBuilder, XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { BoundWitnessBuilder } from '@xyo-network/boundwitness'
+import { WithAdditional } from '@xyo-network/core'
+import { XyoPayloadBuilder } from '@xyo-network/payload'
 import { inject, injectable } from 'inversify'
 
 const getEmptyPermissions = (query: GetArchivePermissionsQuery): XyoPayloadWithMeta<SetArchivePermissionsPayload> => {
-  return new XyoPayloadBuilder<WithAdditional<XyoPayloadWithMeta<SetArchivePermissionsPayload>>>({ schema: setArchivePermissionsSchema })
+  return new XyoPayloadBuilder<WithAdditional<XyoPayloadWithMeta<SetArchivePermissionsPayload>>>({ schema: SetArchivePermissionsSchema })
     .fields({
       _queryId: query.id,
       _timestamp: Date.now(),
@@ -22,10 +28,16 @@ const getEmptyPermissions = (query: GetArchivePermissionsQuery): XyoPayloadWithM
 export class GetArchivePermissionsQueryHandler implements QueryHandler<GetArchivePermissionsQuery, SetArchivePermissionsPayload> {
   constructor(@inject(TYPES.ArchivePermissionsArchivist) protected readonly archivePermissionsArchivist: ArchivePermissionsArchivist) {}
   async handle(query: GetArchivePermissionsQuery): Promise<XyoPayloadWithMeta<SetArchivePermissionsPayload>> {
-    if (!query.payload._archive) {
-      return getEmptyPermissions(query)
+    const archive = assertEx(query.payload._archive, 'GetArchivePermissionsQueryHandler.handle: Archive not supplied')
+    const getQuery: XyoArchivistGetQuery = {
+      hashes: [archive],
+      schema: XyoArchivistGetQuerySchema,
     }
-    const permissions = await this.archivePermissionsArchivist.get(query.payload._archive)
-    return (permissions?.[0] || getEmptyPermissions(query)) as WithAdditional<XyoPayloadWithMeta<SetArchivePermissionsPayload>>
+    const getWitness = new BoundWitnessBuilder().payload(getQuery).build()
+    const getResult = await this.archivePermissionsArchivist.query(getWitness, getQuery)
+    const permissions = (getResult?.[1]?.[0] as SetArchivePermissionsPayload) || getEmptyPermissions(query)
+    return new XyoPayloadBuilder<SetArchivePermissionsPayloadWithMeta>({ schema: SetArchivePermissionsSchema })
+      .fields({ ...permissions, _queryId: query.id, _timestamp: Date.now() })
+      .build()
   }
 }

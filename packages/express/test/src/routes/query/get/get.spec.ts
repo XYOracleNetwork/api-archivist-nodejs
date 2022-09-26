@@ -1,21 +1,23 @@
-import { assertEx, delay } from '@xylabs/sdk-js'
-import { debugSchema } from '@xyo-network/archivist-model'
-import { XyoBoundWitnessBuilder, XyoPayload, XyoPayloadBuilder } from '@xyo-network/sdk-xyo-client-js'
+import { assertEx } from '@xylabs/assert'
+import { delay } from '@xylabs/delay'
+import { DebugPayloadWithMeta, DebugSchema } from '@xyo-network/archivist-model'
+import { BoundWitnessBuilder } from '@xyo-network/boundwitness'
+import { XyoPayload, XyoPayloadBuilder } from '@xyo-network/payload'
 import { StatusCodes } from 'http-status-codes'
 import { v4 } from 'uuid'
 
-import { claimArchive, getTokenForNewUser, postCommandsToArchive, queryCommandResult, request } from '../../../testUtil'
+import { claimArchive, getTokenForUnitTestUser, postCommandsToArchive, queryCommandResult, request } from '../../../testUtil'
 
-const schema = debugSchema
+const schema = DebugSchema
 
 const getTestRequest = (delay = 1): XyoPayload => {
   const fields = { delay, nonce: v4() }
-  return new XyoPayloadBuilder({ schema }).fields(fields).build()
+  return new XyoPayloadBuilder<DebugPayloadWithMeta>({ schema }).fields(fields).build()
 }
 
 const postRequest = async (delay = 1, archive = 'temp', token?: string): Promise<string> => {
   const payload = getTestRequest(delay)
-  const bw = new XyoBoundWitnessBuilder({ inlinePayloads: true }).payload(payload).build()
+  const bw = new BoundWitnessBuilder({ inlinePayloads: true }).payload(payload).build()
   const result = await postCommandsToArchive([bw], archive, token)
   const id = result?.[0]?.[0]
   expect(id).toBeDefined()
@@ -26,7 +28,7 @@ describe('/query/:hash', () => {
   let token: string
   let archive: string
   beforeAll(async () => {
-    token = await getTokenForNewUser()
+    token = await getTokenForUnitTestUser()
     archive = (await claimArchive(token)).archive
   })
   let id: string

@@ -1,7 +1,8 @@
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
+import { exists } from '@xylabs/sdk-js'
+import { XyoArchiveKey } from '@xyo-network/api'
 import { isValidArchiveName } from '@xyo-network/archivist-lib'
 import { ArchivePathParams } from '@xyo-network/archivist-model'
-import { XyoArchiveKey } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
@@ -19,8 +20,8 @@ const handler: RequestHandler<ArchivePathParams, XyoArchiveKey[]> = async (req, 
     return
   }
 
-  const keys = await archiveKeyArchivist.get(req.params.archive)
-  res.json(keys)
+  const keys = await archiveKeyArchivist.get([req.params.archive])
+  res.json(keys.filter(exists))
 }
 
 export const getArchiveSettingsKeys = asyncHandler(handler)

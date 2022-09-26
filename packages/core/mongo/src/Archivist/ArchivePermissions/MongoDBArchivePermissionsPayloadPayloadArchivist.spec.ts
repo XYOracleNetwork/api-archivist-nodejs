@@ -1,7 +1,5 @@
 import { XyoAccount } from '@xyo-network/account'
-import { SetArchivePermissionsPayload } from '@xyo-network/archivist-model'
-import { XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
-import { XyoPayloadWithMeta } from '@xyo-network/payload'
+import { SetArchivePermissionsPayload, XyoBoundWitnessWithMeta, XyoPayloadWithMeta } from '@xyo-network/archivist-model'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 
 import { COLLECTIONS } from '../../collections'
@@ -19,7 +17,7 @@ describe('MongoDBArchivePermissionsPayloadPayloadArchivist', () => {
         >(COLLECTIONS.Payloads)
         const boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta> = getBaseMongoSdk<XyoBoundWitnessWithMeta>(COLLECTIONS.BoundWitnesses)
         const sut = new MongoDBArchivePermissionsPayloadPayloadArchivist(account, payloads, boundWitnesses)
-        const result = await sut.get('temp')
+        const result = await sut.get(['temp'])
         expect(result).toBeArray()
         expect(result.length).toBe(0)
       })
@@ -43,7 +41,7 @@ describe('MongoDBArchivePermissionsPayloadPayloadArchivist', () => {
         >(COLLECTIONS.Payloads)
         const boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta> = getBaseMongoSdk<XyoBoundWitnessWithMeta>(COLLECTIONS.BoundWitnesses)
         const sut = new MongoDBArchivePermissionsPayloadPayloadArchivist(account, payloads, boundWitnesses)
-        const result = await sut.get('temp-private')
+        const result = await sut.get(['temp-private'])
         expect(result).toBeArray()
         expect(result.length).toBe(1)
         const permissions = result?.[0]

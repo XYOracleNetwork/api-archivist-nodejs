@@ -1,4 +1,4 @@
-import { EmptyObject } from '@xyo-network/sdk-xyo-client-js'
+import { EmptyObject } from '@xyo-network/core'
 
 import { PayloadArchivist } from './PayloadArchivist'
 

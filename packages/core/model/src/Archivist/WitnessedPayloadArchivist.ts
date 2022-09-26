@@ -1,5 +1,6 @@
-import { XyoPayloadWithMeta } from '@xyo-network/sdk-xyo-client-js'
+import { Archivist } from '@xyo-network/archivist'
+import { Module } from '@xyo-network/module'
 
-import { Archivist } from './Archivist'
+import { XyoPayloadWithMeta } from '../Payload'
 
-export type WitnessedPayloadArchivist = Archivist<XyoPayloadWithMeta[], XyoPayloadWithMeta[], XyoPayloadWithMeta[] | null, string>
+export type WitnessedPayloadArchivist = Archivist<XyoPayloadWithMeta> & Module

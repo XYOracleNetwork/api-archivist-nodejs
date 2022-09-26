@@ -1,9 +1,9 @@
-import { GetSchemaQuery, getSchemaSchema } from '@xyo-network/archivist-model'
-import { XyoSchemaCache } from '@xyo-network/sdk-xyo-client-js'
+import { GetSchemaQuery, GetSchemaSchema } from '@xyo-network/archivist-model'
+import { XyoSchemaCache } from '@xyo-network/utils'
 
 import { GetSchemaQueryHandler } from './GetSchemaQueryHandler'
 
-const schema = getSchemaSchema
+const schema = GetSchemaSchema
 
 describe('GetSchemaQueryHandler', () => {
   describe('with valid schema', () => {

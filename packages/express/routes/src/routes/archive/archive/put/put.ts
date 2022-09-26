@@ -1,8 +1,9 @@
+import { assertEx } from '@xylabs/assert'
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
+import { XyoArchive } from '@xyo-network/api'
 import { isLegacyPrivateArchive } from '@xyo-network/archivist-express-lib'
 import { isValidArchiveName, setArchiveAccessPrivate } from '@xyo-network/archivist-lib'
 import { ArchivePathParams } from '@xyo-network/archivist-model'
-import { XyoArchive } from '@xyo-network/sdk-xyo-client-js'
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
@@ -23,7 +24,8 @@ const handler: RequestHandler<ArchivePathParams, XyoArchive, XyoArchive> = async
   const accessControl = req.body ? isLegacyPrivateArchive(req.body) : false
   try {
     // Create/update archive and set legacy permissions
-    const result = await archives.insert({ accessControl, archive, user: user.id })
+    const results = await archives.insert([{ accessControl, archive, user: user.id }])
+    const result = assertEx(results, 'Error inserting user')
     // Set newer permissions
     if (accessControl) {
       await setArchiveAccessPrivate(permissions, archive)

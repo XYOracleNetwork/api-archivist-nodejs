@@ -1,7 +1,5 @@
 import { XyoArchive, XyoArchiveKey } from '@xyo-network/api'
-import { EntityArchive, User } from '@xyo-network/archivist-model'
-import { XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
-import { XyoPayloadWithMeta } from '@xyo-network/payload'
+import { EntityArchive, User, XyoBoundWitnessWithMeta, XyoPayloadWithMeta } from '@xyo-network/archivist-model'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { Container } from 'inversify'
 

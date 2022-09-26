@@ -18,7 +18,7 @@ const handler: RequestHandler<NoReqParams, NoResBody, NoReqBody, MigrateQueryPar
   const { archivePermissionsArchivist, archiveArchivist } = req.app
   const parsedLimit = tryParseInt(limit) || defaultLimit
   const parsedOffset = tryParseInt(offset) || defaultOffset
-  const archives = await archiveArchivist.find({ limit: parsedLimit, offset: parsedOffset })
+  const archives = (await archiveArchivist.find({ limit: parsedLimit, offset: parsedOffset })).filter(exists)
   const archiveCount = archives.length
   const migrated = await migrateLegacyArchives(archivePermissionsArchivist, archives)
   const migratedCount = migrated.filter(exists).length
