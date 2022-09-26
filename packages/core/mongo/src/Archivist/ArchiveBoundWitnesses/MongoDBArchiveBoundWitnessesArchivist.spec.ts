@@ -67,18 +67,15 @@ describe('MongoDBArchiveBoundWitnessesArchivist', () => {
       schema: XyoArchivistInsertQuerySchema,
     }
     const queryWitness = new BoundWitnessBuilder().payload(query).build()
-    const result = await sut.query(queryWitness, query, payloads)
+    const result = await sut.query(queryWitness, query, boundWitnesses)
     expect(result).toBeArrayOfSize(count)
     const bw: XyoBoundWitness = result?.[0]
     expect(bw).toBeObject()
-    expect(bw._signatures).toBeArray()
-    expect(bw._signatures.length).toBeGreaterThanOrEqual(1)
-    expect(bw.addresses).toBeArray()
-    expect(bw.addresses.length).toBeGreaterThanOrEqual(1)
+    expect(bw._signatures).toBeArrayOfSize(2)
+    expect(bw.addresses).toBeArrayOfSize(2)
     expect(bw.addresses).toContain(account.addressValue.hex)
-    expect(bw.payload_hashes).toIncludeAllMembers(hashes)
-    expect(result?.[1]).toBeArrayOfSize(1 + boundWitnesses.length)
-    expect(result?.[1]).toIncludeAllMembers(boundWitnesses)
+    expect(result?.[1]).toBeArrayOfSize(1)
+    expect((result?.[1]?.[0] as XyoBoundWitness).payload_hashes).toIncludeAllMembers(hashes)
   })
 
   describe('XyoArchivistInsertQuery', () => {
@@ -101,10 +98,8 @@ describe('MongoDBArchiveBoundWitnessesArchivist', () => {
       expect(result).toBeArrayOfSize(2)
       const bw: XyoBoundWitness = result?.[0]
       expect(bw).toBeObject()
-      expect(bw._signatures).toBeArray()
-      expect(bw._signatures.length).toBeGreaterThanOrEqual(1)
-      expect(bw.addresses).toBeArray()
-      expect(bw.addresses.length).toBeGreaterThanOrEqual(1)
+      expect(bw._signatures).toBeArrayOfSize(2)
+      expect(bw.addresses).toBeArrayOfSize(2)
       expect(bw.addresses).toContain(account.addressValue.hex)
       expect(bw.payload_hashes).toInclude(hash)
       expect(result?.[1]).toBeArrayOfSize(limit)
@@ -125,10 +120,8 @@ describe('MongoDBArchiveBoundWitnessesArchivist', () => {
       expect(result).toBeArrayOfSize(2)
       const bw: XyoBoundWitness = result?.[0]
       expect(bw).toBeObject()
-      expect(bw._signatures).toBeArray()
-      expect(bw._signatures.length).toBeGreaterThanOrEqual(1)
-      expect(bw.addresses).toBeArray()
-      expect(bw.addresses.length).toBeGreaterThanOrEqual(1)
+      expect(bw._signatures).toBeArrayOfSize(2)
+      expect(bw.addresses).toBeArrayOfSize(2)
       expect(bw.addresses).toContain(account.addressValue.hex)
       expect(bw.payload_hashes).toInclude(hash)
       expect(result?.[1]).toBeArrayOfSize(hashes.length)
