@@ -122,6 +122,7 @@ export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner implements Sche
         .match({ _archive: archive })
         .group<PayloadSchemaCountsAggregateResult>({ _id: '$schema', count: { $sum: 1 } })
         .sort({ count: -1 })
+        .maxTimeMS(30000)
         .toArray()
     })
     const count = result.reduce<Record<string, number>>((o, schemaCount) => ({ ...o, [schemaCount._id]: schemaCount.count }), {})
