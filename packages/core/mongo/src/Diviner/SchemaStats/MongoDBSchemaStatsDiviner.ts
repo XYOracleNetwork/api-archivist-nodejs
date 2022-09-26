@@ -43,10 +43,39 @@ interface Stats {
 
 @injectable()
 export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner implements SchemaStatsDiviner, JobProvider {
+  /**
+   * The max number of records to allow for the aggregate query
+   */
+  protected readonly aggregateLimit = 10000
+  /**
+   * The max number of iterations of aggregate queries to allow when
+   * divining the schema stats within an archive
+   */
+  protected readonly aggregateMaxIterations = 10000
+  /**
+   * The amount of time to allow the aggregate query to exec
+   */
+  protected readonly aggregateTimeout = 2000
+  /**
+   * The max number of simultaneous archives to divine at once
+   */
   protected readonly batchLimit = 100
+  /**
+   * The stream with which the diviner is notified of insertions
+   * to the payloads collection
+   */
   protected changeStream: ChangeStream | undefined = undefined
+  /**
+   * The next offset from which to begin batch divining archives
+   */
   protected nextOffset = 0
+  /**
+   * The counts per schema to update on the next update interval
+   */
   protected pendingCounts: Record<string, Record<string, number>> = {}
+  /**
+   * The resume token for listening to insertions into the payload collection
+   */
   protected resumeAfter: ResumeToken | undefined = undefined
 
   constructor(
@@ -116,18 +145,29 @@ export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner implements Sche
   }
 
   private divineArchiveFull = async (archive: string): Promise<Record<string, number>> => {
-    const result: PayloadSchemaCountsAggregateResult[] = await this.sdk.useCollection((collection) => {
-      return collection
-        .aggregate()
-        .match({ _archive: archive })
-        .group<PayloadSchemaCountsAggregateResult>({ _id: '$schema', count: { $sum: 1 } })
-        .sort({ count: -1 })
-        .maxTimeMS(30000)
-        .toArray()
-    })
-    const count = result.reduce<Record<string, number>>((o, schemaCount) => ({ ...o, [schemaCount._id]: schemaCount.count }), {})
-    await this.storeDivinedResult(archive, count)
-    return count
+    const totals: Record<string, number> = {}
+    for (let iteration = 0; iteration < this.aggregateMaxIterations; iteration++) {
+      const result: PayloadSchemaCountsAggregateResult[] = await this.sdk.useCollection((collection) => {
+        return collection
+          .aggregate()
+          .sort({ _archive: -1, _timestamp: -1 })
+          .match({ _archive: archive })
+          .skip(iteration)
+          .limit(this.aggregateLimit)
+          .group<PayloadSchemaCountsAggregateResult>({ _id: '$schema', count: { $sum: 1 } })
+          .sort({ count: -1 })
+          .maxTimeMS(2000)
+          .toArray()
+      })
+      if (result.length < 1) break
+      const count = result.reduce<Record<string, number>>((o, schemaCount) => ({ ...o, [schemaCount._id]: schemaCount.count }), {})
+      // Add current counts to total
+      Object.entries(count).map(([schema, count]) => {
+        totals[schema] = totals[schema] || 0 + count
+      })
+    }
+    await this.storeDivinedResult(archive, totals)
+    return totals
   }
 
   private divineArchivesBatch = async () => {
