@@ -150,7 +150,7 @@ export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner implements Sche
       const result: PayloadSchemaCountsAggregateResult[] = await this.sdk.useCollection((collection) => {
         return collection
           .aggregate()
-          .sort({ _archive: -1, _timestamp: -1 })
+          .sort({ _archive: 1, _timestamp: 1 })
           .match({ _archive: archive })
           .skip(iteration)
           .limit(this.aggregateLimit)
