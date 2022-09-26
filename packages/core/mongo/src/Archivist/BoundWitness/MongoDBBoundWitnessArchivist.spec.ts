@@ -76,9 +76,8 @@ describe('MongoDBBoundWitnessArchivist', () => {
     expect(bw.addresses).toBeArray()
     expect(bw.addresses.length).toBeGreaterThanOrEqual(1)
     expect(bw.addresses).toContain(account.addressValue.hex)
-    expect(bw.payload_hashes).toIncludeAllMembers(hashes)
-    expect(result?.[1]).toBeArrayOfSize(1 + boundWitnesses.length)
-    expect(result?.[1]).toIncludeAllMembers(boundWitnesses)
+    expect(result?.[1]).toBeArrayOfSize(1)
+    expect((result?.[1]?.[0] as XyoBoundWitness).payload_hashes).toIncludeAllMembers(hashes)
   })
 
   describe('XyoArchivistInsertQuery', () => {
