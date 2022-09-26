@@ -90,7 +90,7 @@ export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner implements Sche
   get jobs(): Job[] {
     return [
       {
-        name: 'MongoDBArchiveSchemaCountDiviner.UpdateChanges',
+        name: 'MongoDBArchiveSchemaStatsDiviner.UpdateChanges',
         onSuccess: () => {
           this.pendingCounts = {}
         },
@@ -98,7 +98,7 @@ export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner implements Sche
         task: async () => await this.updateChanges(),
       },
       {
-        name: 'MongoDBArchiveSchemaCountDiviner.DivineArchivesBatch',
+        name: 'MongoDBArchiveSchemaStatsDiviner.DivineArchivesBatch',
         schedule: '10 minute',
         task: async () => await this.divineArchivesBatch(),
       },
