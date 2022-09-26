@@ -1,5 +1,5 @@
 import { assertEx } from '@xylabs/assert'
-import { XyoArchivistGetQuery, XyoArchivistGetQuerySchema, XyoArchivistInsertQuery, XyoArchivistInsertQuerySchema } from '@xyo-network/archivist'
+import { XyoArchivistWrapper } from '@xyo-network/archivist'
 import {
   ArchivePermissionsArchivist,
   QueryHandler,
@@ -9,8 +9,7 @@ import {
   SetArchivePermissionsSchema,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { QueryBoundWitnessBuilder } from '@xyo-network/module'
-import { PayloadWrapper, XyoPayloadBuilder } from '@xyo-network/payload'
+import { XyoPayloadBuilder } from '@xyo-network/payload'
 import { inject, injectable } from 'inversify'
 
 const validateAddresses = (query: SetArchivePermissionsQuery) => {
@@ -37,22 +36,13 @@ export class SetArchivePermissionsQueryHandler implements QueryHandler<SetArchiv
     const archive = assertEx(query.payload._archive, 'SetArchivePermissionsQueryHandler.handle: Archive not supplied')
     validateAddresses(query)
     validateSchema(query)
-    const insertPayloads = [query.payload]
-    const insertQuery: XyoArchivistInsertQuery = {
-      payloads: insertPayloads.map((p) => new PayloadWrapper(p).hash),
-      schema: XyoArchivistInsertQuerySchema,
-    }
-    const insertWitness = new QueryBoundWitnessBuilder().payload(insertQuery).build()
-    const insertionResult = await this.archivist.query(insertWitness, insertPayloads)
-    assertEx(insertionResult, 'SetArchivePermissionsQueryHandler.handle: Error inserting permissions')
-    const getQuery: XyoArchivistGetQuery = {
-      hashes: [archive],
-      schema: XyoArchivistGetQuerySchema,
-    }
-    const getWitness = new QueryBoundWitnessBuilder().payload(getQuery).build()
-    const getResult = await this.archivist.query(getWitness, [getQuery])
+    const wrapper = new XyoArchivistWrapper(this.archivist)
+    const insertResult = await wrapper.insert([query.payload])
+    assertEx(insertResult, 'SetArchivePermissionsQueryHandler.handle: Error inserting permissions')
+
+    const getResult = await wrapper.get([archive])
     const permissions = assertEx(
-      getResult?.[1]?.[0],
+      getResult?.[0],
       'SetArchivePermissionsQueryHandler.handle: Error getting permissions',
     ) as SetArchivePermissionsPayload
     return new XyoPayloadBuilder<SetArchivePermissionsPayloadWithMeta>({ schema: SetArchivePermissionsSchema })
