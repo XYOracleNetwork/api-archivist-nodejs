@@ -4,7 +4,7 @@ import { assertEx } from '@xylabs/assert'
 import { asyncHandler, tryParseInt } from '@xylabs/sdk-api-express-ecs'
 import { XyoArchivistGetQuery, XyoArchivistGetQuerySchema } from '@xyo-network/archivist'
 import { ArchivePayloadsArchivist } from '@xyo-network/archivist-model'
-import { BoundWitnessBuilder } from '@xyo-network/boundwitness'
+import { QueryBoundWitnessBuilder } from '@xyo-network/module'
 import { XyoPayload } from '@xyo-network/payload'
 import { RequestHandler } from 'express'
 
@@ -15,8 +15,8 @@ const getPayloads = async (archivist: ArchivePayloadsArchivist, archive: string,
     hashes: [{ archive, hash }] as unknown as string[],
     schema: XyoArchivistGetQuerySchema,
   }
-  const bw = new BoundWitnessBuilder().payload(query).build()
-  const result = await archivist.query(bw, query)
+  const bw = new QueryBoundWitnessBuilder().payload(query).build()
+  const result = await archivist.query(bw, [query])
   const payload = result?.[1]?.[0]
   if (payload) {
     payloads.push(payload)

@@ -4,7 +4,7 @@ import { assertEx } from '@xylabs/assert'
 import { asyncHandler, tryParseInt } from '@xylabs/sdk-api-express-ecs'
 import { XyoArchivistFindQuery, XyoArchivistFindQuerySchema } from '@xyo-network/archivist'
 import { XyoArchivePayloadFilterPredicate } from '@xyo-network/archivist-model'
-import { BoundWitnessBuilder } from '@xyo-network/boundwitness'
+import { QueryBoundWitnessBuilder } from '@xyo-network/module'
 import { XyoPayload } from '@xyo-network/payload'
 import { RequestHandler } from 'express'
 
@@ -24,8 +24,8 @@ const handler: RequestHandler<PayloadRecentPathParams, (XyoPayload | null)[]> = 
     filter,
     schema: XyoArchivistFindQuerySchema,
   }
-  const bw = new BoundWitnessBuilder().payload(query).build()
-  const result = await archivist.query(bw, query)
+  const bw = new QueryBoundWitnessBuilder().payload(query).build()
+  const result = await archivist.query(bw, [query])
   const payloads = result?.[1]
   res.json(payloads)
 }

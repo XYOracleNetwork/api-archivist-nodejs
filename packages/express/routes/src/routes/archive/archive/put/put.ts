@@ -25,7 +25,7 @@ const handler: RequestHandler<ArchivePathParams, XyoArchive, XyoArchive> = async
   try {
     // Create/update archive and set legacy permissions
     const results = await archives.insert([{ accessControl, archive, user: user.id }])
-    const result = assertEx(results, 'Error inserting user')
+    const result = assertEx(results.pop(), 'Error inserting user')
     // Set newer permissions
     if (accessControl) {
       await setArchiveAccessPrivate(permissions, archive)

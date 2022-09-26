@@ -73,7 +73,7 @@ export class MongoDBArchiveBoundWitnessesArchivist
     return results
   }
 
-  async insert(items: XyoBoundWitnessWithMeta[]): Promise<XyoBoundWitness | null> {
+  async insert(items: XyoBoundWitnessWithMeta[]): Promise<XyoBoundWitness[]> {
     const _timestamp = Date.now()
     const bws = items
       .map((bw) => {
@@ -88,7 +88,7 @@ export class MongoDBArchiveBoundWitnessesArchivist
     if (result.insertedCount != items.length) {
       throw new Error('MongoDBArchiveBoundWitnessesArchivist.insert: Error inserting BoundWitnesses')
     }
-    const [bw] = await this.bindPayloads(bws)
-    return bw
+    const [bw] = await this.bindResult(bws)
+    return [bw]
   }
 }

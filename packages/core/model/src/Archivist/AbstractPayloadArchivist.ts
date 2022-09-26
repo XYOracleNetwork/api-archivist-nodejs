@@ -11,8 +11,8 @@ import {
 } from '@xyo-network/archivist'
 import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { EmptyObject } from '@xyo-network/core'
-import { XyoModule, XyoModuleQueryResult, XyoQuery } from '@xyo-network/module'
-import { XyoPayload } from '@xyo-network/payload'
+import { ModuleQueryResult, QueryBoundWitnessWrapper, XyoModule, XyoQuery } from '@xyo-network/module'
+import { XyoPayload, XyoPayloads } from '@xyo-network/payload'
 import { injectable } from 'inversify'
 
 import { XyoPayloadWithMeta, XyoPayloadWithPartialMeta } from '../Payload'
@@ -38,15 +38,13 @@ export abstract class AbstractPayloadArchivist<T extends EmptyObject = EmptyObje
       // XyoModuleShutdownQuerySchema,
     ]
   }
-  override async query<T extends XyoQuery = XyoQuery>(
-    bw: XyoBoundWitness,
-    query: T,
-    payloads?: XyoPayload[],
-  ): Promise<XyoModuleQueryResult<XyoPayload>> {
-    assertEx(this.queryable(query.schema, bw.addresses))
+  override async query<T extends XyoQuery = XyoQuery>(query: T, payloads?: XyoPayloads): Promise<ModuleQueryResult<XyoPayload>> {
+    const wrapper = QueryBoundWitnessWrapper.parseQuery<XyoArchivistQuery>(query)
+    const typedQuery = wrapper.query.payload
+    assertEx(this.queryable(query.schema, wrapper.addresses))
+
     const result: (XyoPayload | null)[] = []
     const queryAccount = new XyoAccount()
-    const typedQuery = query as XyoArchivistQuery
     switch (typedQuery.schema) {
       case XyoArchivistFindQuerySchema:
         if (typedQuery.filter) {
@@ -58,16 +56,16 @@ export abstract class AbstractPayloadArchivist<T extends EmptyObject = EmptyObje
         result.push(...(await this.get(typedQuery.hashes as unknown as TId[])))
         break
       case XyoArchivistInsertQuerySchema: {
-        result.push(await this.insert(payloads as any))
+        result.push(...(await this.insert(payloads as any)))
         break
       }
       default:
         throw new Error(`${typedQuery.schema} Not Implemented`)
     }
-    return this.bindPayloads(result, queryAccount)
+    return this.bindResult(result, queryAccount)
   }
 
   abstract find(filter: XyoPayloadFilterPredicate<T>): Promise<XyoPayloadWithMeta<T>[]>
   abstract get(id: TId[]): Promise<Array<XyoPayloadWithMeta<T> | null>>
-  abstract insert(items: XyoPayloadWithPartialMeta<T>[]): Promise<XyoBoundWitness | null>
+  abstract insert(items: XyoPayloadWithPartialMeta<T>[]): Promise<XyoBoundWitness[]>
 }
