@@ -14,7 +14,7 @@ import {
 import { TYPES } from '@xyo-network/archivist-types'
 import { BoundWitnessBuilder, XyoBoundWitness } from '@xyo-network/boundwitness'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
-import { inject, injectable } from 'inversify'
+import { inject, injectable, named } from 'inversify'
 
 import { removeId } from '../../Mongo'
 import { MONGO_TYPES } from '../../types'
@@ -29,7 +29,7 @@ export class MongoDBArchivistWitnessedPayloadArchivist
   implements WitnessedPayloadArchivist
 {
   constructor(
-    @inject(TYPES.Account) protected readonly account: XyoAccount,
+    @inject(TYPES.Account) @named('root') protected readonly account: XyoAccount,
     @inject(MONGO_TYPES.PayloadSdkMongo) protected readonly payloads: BaseMongoSdk<XyoPayloadWithMeta>,
     @inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta>,
   ) {
