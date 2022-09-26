@@ -44,7 +44,7 @@ interface Stats {
 @injectable()
 export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner implements SchemaStatsDiviner, JobProvider {
   /**
-   * The max number of records to allow for the aggregate query
+   * The max number of records to search for the aggregate query
    */
   protected readonly aggregateLimit = 10000
   /**
@@ -53,7 +53,7 @@ export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner implements Sche
    */
   protected readonly aggregateMaxIterations = 10000
   /**
-   * The amount of time to allow the aggregate query to exec
+   * The amount of time to allow the aggregate query to execute
    */
   protected readonly aggregateTimeout = 2000
   /**
@@ -145,17 +145,18 @@ export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner implements Sche
   }
 
   private divineArchiveFull = async (archive: string): Promise<Record<string, number>> => {
+    const sortStartTime = Date.now()
     const totals: Record<string, number> = {}
     for (let iteration = 0; iteration < this.aggregateMaxIterations; iteration++) {
       const result: PayloadSchemaCountsAggregateResult[] = await this.sdk.useCollection((collection) => {
         return collection
           .aggregate()
           .sort({ _archive: 1, _timestamp: 1 })
-          .match({ _archive: archive })
+          .match({ _archive: archive, _timestamp: { $lt: sortStartTime } })
           .skip(iteration)
           .limit(this.aggregateLimit)
           .group<PayloadSchemaCountsAggregateResult>({ _id: '$schema', count: { $sum: 1 } })
-          .maxTimeMS(2000)
+          .maxTimeMS(this.aggregateTimeout)
           .toArray()
       })
       if (result.length < 1) break
