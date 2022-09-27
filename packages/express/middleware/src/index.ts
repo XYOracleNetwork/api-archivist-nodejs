@@ -41,9 +41,9 @@ declare global {
 
     interface Application {
       archiveArchivist: ArchiveArchivist
-      ArchiveBoundWitnessArchivist: ArchiveBoundWitnessArchivist
+      // ArchiveBoundWitnessArchivist: ArchiveBoundWitnessArchivist
       archiveKeyArchivist: ArchiveKeyArchivist
-      archivePayloadsArchivist: ArchivePayloadsArchivist
+      // archivePayloadsArchivist: ArchivePayloadsArchivist
       archivePermissionsArchivist: ArchivePermissionsArchivist
       archivistWitnessedPayloadArchivist: WitnessedPayloadArchivist
       boundWitnessStatsDiviner: BoundWitnessStatsDiviner
