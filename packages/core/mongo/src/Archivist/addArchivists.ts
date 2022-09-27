@@ -1,8 +1,6 @@
 import {
   ArchiveArchivist,
-  ArchiveBoundWitnessArchivist,
   ArchiveKeyArchivist,
-  ArchivePayloadsArchivist,
   ArchivePermissionsArchivist,
   BoundWitnessesArchivist,
   PayloadsArchivist,
@@ -13,9 +11,7 @@ import { TYPES } from '@xyo-network/archivist-types'
 import { Container } from 'inversify'
 
 import { MongoDBArchiveArchivist } from './Archive'
-import { MongoDBArchiveBoundWitnessArchivist } from './ArchiveBoundWitness'
 import { MongoDBArchiveKeyArchivist } from './ArchiveKey'
-import { MongoDBArchivePayloadsArchivist } from './ArchivePayloads'
 import { MongoDBArchivePermissionsPayloadPayloadArchivist } from './ArchivePermissions'
 import { MongoDBBoundWitnessArchivist } from './BoundWitness'
 import { MongoDBPayloadArchivist } from './Payload'

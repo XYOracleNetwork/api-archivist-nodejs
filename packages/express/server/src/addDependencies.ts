@@ -3,10 +3,8 @@ import { dependencies } from '@xyo-network/archivist-dependencies'
 import { SchemaToQueryProcessorRegistry, XyoPayloadToQueryConverterRegistry } from '@xyo-network/archivist-middleware'
 import {
   ArchiveArchivist,
-  ArchiveBoundWitnessArchivist,
   ArchiveBoundWitnessArchivistFactory,
   ArchiveKeyArchivist,
-  ArchivePayloadsArchivist,
   ArchivePayloadsArchivistFactory,
   ArchivePermissionsArchivist,
   BoundWitnessesArchivist,
