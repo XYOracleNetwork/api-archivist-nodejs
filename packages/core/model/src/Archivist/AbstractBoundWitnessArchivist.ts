@@ -11,7 +11,7 @@ import {
 } from '@xyo-network/archivist'
 import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { ModuleQueryResult, QueryBoundWitnessWrapper, XyoModule, XyoQuery } from '@xyo-network/module'
-import { XyoPayload, XyoPayloads } from '@xyo-network/payload'
+import { PayloadWrapper, XyoPayload, XyoPayloads } from '@xyo-network/payload'
 import { injectable } from 'inversify'
 
 import { XyoBoundWitnessWithPartialMeta } from '../BoundWitness'
@@ -51,7 +51,11 @@ export abstract class AbstractBoundWitnessArchivist<TId = string> extends XyoMod
         result.push(...(await this.get(typedQuery.hashes as any as TId[])))
         break
       case XyoArchivistInsertQuerySchema: {
-        result.push(...(await this.insert(payloads as XyoBoundWitnessWithPartialMeta[])))
+        const wrappers = payloads?.map((payload) => PayloadWrapper.parse(payload)) ?? []
+        assertEx(typedQuery.payloads, `Missing payloads: ${JSON.stringify(typedQuery, null, 2)}`)
+        const resolvedWrappers = wrappers.filter((wrapper) => typedQuery.payloads.includes(wrapper.hash))
+        assertEx(resolvedWrappers.length === typedQuery.payloads.length, 'Could not find some passed hashes')
+        result.push(...(await this.insert(resolvedWrappers.map((wrapper) => wrapper.payload) as XyoBoundWitnessWithPartialMeta[])))
         break
       }
       default:
