@@ -6,12 +6,12 @@ import { Module } from '@xyo-network/module'
 import { XyoPayloadWithMeta, XyoPayloadWithPartialMeta } from '../Payload'
 import { XyoPayloadFilterPredicate } from './XyoPayloadFilterPredicate'
 
-export type PayloadArchivist<T extends EmptyObject = EmptyObject, TId = string> = Archivist<
+export type PayloadArchivist<T extends EmptyObject = EmptyObject> = Archivist<
   XyoPayloadWithMeta<T> | null,
   XyoBoundWitness | null,
   XyoPayloadWithPartialMeta<T>,
   XyoPayloadWithMeta<T> | null,
   XyoPayloadFilterPredicate<T>,
-  TId
+  string
 > &
   Module
