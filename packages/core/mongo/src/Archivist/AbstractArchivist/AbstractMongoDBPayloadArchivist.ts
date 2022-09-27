@@ -23,10 +23,7 @@ import { MONGO_TYPES } from '../../types'
 const builderConfig: BoundWitnessBuilderConfig = { inlinePayloads: false }
 
 @injectable()
-export abstract class AbstractMongoDBPayloadArchivist<
-  T extends EmptyObject = EmptyObject,
-  TId extends string = string,
-> extends AbstractPayloadArchivist<T, TId> {
+export abstract class AbstractMongoDBPayloadArchivist<T extends EmptyObject = EmptyObject> extends AbstractPayloadArchivist<T> {
   public constructor(
     @inject(TYPES.Account) @named('root') protected readonly account: XyoAccount,
     @inject(MONGO_TYPES.PayloadSdkMongo) protected readonly payloads: BaseMongoSdk<XyoPayloadWithMeta<T>>,
@@ -45,9 +42,9 @@ export abstract class AbstractMongoDBPayloadArchivist<
     throw new Error('AbstractMongoDBPayloadArchivist: Find not implemented')
   }
 
-  async get(ids: TId[]): Promise<Array<XyoPayloadWithMeta<T>>> {
+  async get(ids: string[]): Promise<Array<XyoPayloadWithMeta<T>>> {
     assertEx(ids.length === 1, 'Retrieval of multiple payloads not supported')
-    const _archive = assertEx(ids.pop(), 'Missing archive')
+    const _archive = assertEx(this.config?.archive, 'Missing archive')
     const boundWitnesses = await (await this.findWitnessQuery(_archive)).toArray()
     const lastWitness = boundWitnesses.pop()
     if (!lastWitness) return []
