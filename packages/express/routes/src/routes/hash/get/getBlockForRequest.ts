@@ -3,7 +3,7 @@ import { XyoArchivistFindQuery, XyoArchivistFindQuerySchema } from '@xyo-network
 import { requestCanAccessArchive } from '@xyo-network/archivist-express-lib'
 import { PayloadPointerPayload, payloadPointerSchema, XyoPayloadFilterPredicate, XyoPayloadWithMeta } from '@xyo-network/archivist-model'
 import { QueryBoundWitnessBuilder } from '@xyo-network/module'
-import { XyoPayload } from '@xyo-network/payload'
+import { PayloadWrapper, XyoPayload } from '@xyo-network/payload'
 import { Request } from 'express'
 
 import { resolvePayloadPointer } from './resolvePayloadPointer'
@@ -15,14 +15,14 @@ const findByHash = async (req: Request, hash: string) => {
     filter: payloadFilter,
     schema: XyoArchivistFindQuerySchema,
   }
-  const payloadQueryWitness = new QueryBoundWitnessBuilder().payload(payloadQuery).build()
+  const payloadQueryWitness = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(payloadQuery)).payload(payloadQuery).build()
   const payloads = (await payloadsArchivist.query(payloadQueryWitness, [payloadQuery]))?.[1].filter(exists) as XyoPayloadWithMeta[]
   if (payloads.length) return payloads
   const boundWitnessQuery: XyoArchivistFindQuery = {
     filter: { ...payloadFilter, schema: 'network.xyo.boundwitness' },
     schema: XyoArchivistFindQuerySchema,
   }
-  const boundWitnessQueryWitness = new QueryBoundWitnessBuilder().payload(boundWitnessQuery).build()
+  const boundWitnessQueryWitness = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(boundWitnessQuery)).payload(boundWitnessQuery).build()
   return (await boundWitnessesArchivist.query(boundWitnessQueryWitness, [boundWitnessQuery]))?.[1].filter(exists)
 }
 

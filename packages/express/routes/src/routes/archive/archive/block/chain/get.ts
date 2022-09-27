@@ -6,6 +6,7 @@ import { XyoArchivistGetQuery, XyoArchivistGetQuerySchema } from '@xyo-network/a
 import { ArchiveBoundWitnessesArchivist } from '@xyo-network/archivist-model'
 import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { QueryBoundWitnessBuilder } from '@xyo-network/module'
+import { PayloadWrapper } from '@xyo-network/payload'
 import { RequestHandler } from 'express'
 
 import { BlockChainPathParams } from './blockChainPathParams'
@@ -22,7 +23,7 @@ const getBlocks = async (
     hashes: [hash],
     schema: XyoArchivistGetQuerySchema,
   }
-  const bw = new QueryBoundWitnessBuilder().payload(query).build()
+  const bw = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(query)).payload(query).build()
   const result = await archivist.query(bw, [query])
   const block = result?.[1]?.[0] as XyoBoundWitness
   if (block) {

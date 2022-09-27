@@ -39,7 +39,7 @@ export abstract class AbstractPayloadArchivist<T extends EmptyObject = EmptyObje
     ]
   }
   override async query<T extends XyoQuery = XyoQuery>(query: T, payloads?: XyoPayloads): Promise<ModuleQueryResult<XyoPayload>> {
-    const wrapper = QueryBoundWitnessWrapper.parseQuery<XyoArchivistQuery>(query)
+    const wrapper = QueryBoundWitnessWrapper.parseQuery<XyoArchivistQuery>(query, payloads)
     const typedQuery = wrapper.query.payload
     assertEx(this.queryable(query.schema, wrapper.addresses))
 

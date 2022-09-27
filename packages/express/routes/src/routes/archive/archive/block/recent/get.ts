@@ -6,6 +6,7 @@ import { XyoArchivistFindQuery, XyoArchivistFindQuerySchema } from '@xyo-network
 import { ArchiveBoundWitnessesArchivist, XyoArchiveBoundWitnessFilterPredicate } from '@xyo-network/archivist-model'
 import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { QueryBoundWitnessBuilder } from '@xyo-network/module'
+import { PayloadWrapper } from '@xyo-network/payload'
 import { RequestHandler } from 'express'
 
 import { BlockRecentPathParams } from './BlockRecentPathParams'
@@ -16,7 +17,7 @@ const getBoundWitnesses = (archivist: ArchiveBoundWitnessesArchivist, archive: s
     filter,
     schema: XyoArchivistFindQuerySchema,
   }
-  const bw = new QueryBoundWitnessBuilder().payload(query).build()
+  const bw = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(query)).payload(query).build()
   return archivist.query(bw, [query])
 }
 

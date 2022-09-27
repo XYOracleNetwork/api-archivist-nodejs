@@ -4,8 +4,7 @@ import {
   XyoArchivistFindQuerySchema,
   XyoArchivistGetQuery,
   XyoArchivistGetQuerySchema,
-  XyoArchivistInsertQuery,
-  XyoArchivistInsertQuerySchema,
+  XyoArchivistWrapper,
 } from '@xyo-network/archivist'
 import { DebugPayload, DebugPayloadWithMeta, DebugSchema, XyoPayloadFilterPredicate, XyoPayloadWithMeta } from '@xyo-network/archivist-model'
 import { BoundWitnessBuilder, XyoBoundWitness } from '@xyo-network/boundwitness'
@@ -41,20 +40,15 @@ describe('MongoDBPayloadArchivist', () => {
   const hash = hashes[0]
 
   beforeAll(async () => {
-    const query: XyoArchivistInsertQuery = {
-      payloads: payloads as any,
-      schema: XyoArchivistInsertQuerySchema,
-    }
-    const queryWitness = new BoundWitnessBuilder().payload(query).build()
-    const result = await sut.query(queryWitness, query, payloads)
+    const wrapper = new XyoArchivistWrapper(sut)
+    const result = await wrapper.insert(payloads)
     expect(result).toBeArrayOfSize(count)
-    const bw: XyoBoundWitness = result?.[0]
+    const bw: XyoBoundWitness = result?.pop() as XyoBoundWitness
     expect(bw).toBeObject()
-    expect(bw._signatures).toBeArrayOfSize(2)
-    expect(bw.addresses).toBeArrayOfSize(2)
+    expect(bw._signatures).toBeArrayOfSize(1)
+    expect(bw.addresses).toBeArrayOfSize(1)
     expect(bw.addresses).toContain(account.addressValue.hex)
-    expect(result?.[1]).toBeArrayOfSize(1)
-    expect((result?.[1]?.[0] as XyoBoundWitness).payload_hashes).toIncludeAllMembers(hashes)
+    expect(bw.payload_hashes).toIncludeAllMembers(hashes)
   })
 
   describe('XyoArchivistInsertQuery', () => {
@@ -73,7 +67,7 @@ describe('MongoDBPayloadArchivist', () => {
         schema: XyoArchivistFindQuerySchema,
       }
       const queryWitness = new BoundWitnessBuilder().payload(query).build()
-      const result = await sut.query(queryWitness, query)
+      const result = await sut.query(queryWitness, [query])
       expect(result).toBeArrayOfSize(2)
       const payload = result?.[1]?.[0]
       expect(payload).toBeObject()
@@ -87,7 +81,7 @@ describe('MongoDBPayloadArchivist', () => {
         schema: XyoArchivistFindQuerySchema,
       }
       const queryWitness = new BoundWitnessBuilder().payload(query).build()
-      const result = await sut.query(queryWitness, query)
+      const result = await sut.query(queryWitness, [query])
       expect(result).toBeArrayOfSize(2)
       const bw: XyoBoundWitness = result?.[0]
       expect(bw).toBeObject()
@@ -106,7 +100,7 @@ describe('MongoDBPayloadArchivist', () => {
         schema: XyoArchivistGetQuerySchema,
       }
       const queryWitness = new BoundWitnessBuilder().payload(query).build()
-      const result = await sut.query(queryWitness, query)
+      const result = await sut.query(queryWitness, [query])
       expect(result).toBeArrayOfSize(2)
       const bw: XyoBoundWitness = result?.[0]
       expect(bw).toBeObject()

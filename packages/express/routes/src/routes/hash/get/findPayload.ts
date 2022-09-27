@@ -18,7 +18,7 @@ const isPayloadSignedByAddress = async (archivist: BoundWitnessesArchivist, hash
     filter,
     schema: XyoArchivistFindQuerySchema,
   }
-  const bw = new QueryBoundWitnessBuilder().payload(query).build()
+  const bw = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(query)).payload(query).build()
   const result = await archivist.query(bw, [query])
   return result?.[1].length > 0
 }
@@ -34,7 +34,7 @@ export const findPayload = async (
     filter,
     schema: XyoArchivistFindQuerySchema,
   }
-  const bw = new QueryBoundWitnessBuilder().payload(query).build()
+  const bw = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(query)).payload(query).build()
   const result = await payloadsArchivist.query(bw, [query])
   const payload = result?.[1]?.[0] ?? undefined
   if (payload && addresses.length) {

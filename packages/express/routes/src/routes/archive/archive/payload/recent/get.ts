@@ -5,7 +5,7 @@ import { asyncHandler, tryParseInt } from '@xylabs/sdk-api-express-ecs'
 import { XyoArchivistFindQuery, XyoArchivistFindQuerySchema } from '@xyo-network/archivist'
 import { XyoArchivePayloadFilterPredicate } from '@xyo-network/archivist-model'
 import { QueryBoundWitnessBuilder } from '@xyo-network/module'
-import { XyoPayload } from '@xyo-network/payload'
+import { PayloadWrapper, XyoPayload } from '@xyo-network/payload'
 import { RequestHandler } from 'express'
 
 import { PayloadRecentPathParams } from './payloadRecentPathParams'
@@ -24,7 +24,7 @@ const handler: RequestHandler<PayloadRecentPathParams, (XyoPayload | null)[]> = 
     filter,
     schema: XyoArchivistFindQuerySchema,
   }
-  const bw = new QueryBoundWitnessBuilder().payload(query).build()
+  const bw = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(query)).payload(query).build()
   const result = await archivist.query(bw, [query])
   const payloads = result?.[1]
   res.json(payloads)

@@ -7,6 +7,7 @@ import {
   XyoPayloadWithPartialMeta,
 } from '@xyo-network/archivist-model'
 import { QueryBoundWitnessBuilder } from '@xyo-network/module'
+import { PayloadWrapper } from '@xyo-network/payload'
 import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
@@ -20,7 +21,7 @@ const getPayloadsByHashes = async (archivist: ArchivePayloadsArchivist, archive:
       hashes: [{ archive, hash }] as unknown as string[],
       schema: XyoArchivistGetQuerySchema,
     }
-    const bw = new QueryBoundWitnessBuilder().payload(query).build()
+    const bw = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(query)).payload(query).build()
     const result = await archivist.query(bw, [query])
     const payload = (result?.[1]?.[0] as XyoPayloadWithPartialMeta) || undefined
     payloads.push(payload)
@@ -40,7 +41,7 @@ const handler: RequestHandler<BlockHashPathParams, XyoPartialPayloadMeta[][]> = 
     hashes: [{ archive, hash }] as unknown as string[],
     schema: XyoArchivistGetQuerySchema,
   }
-  const bw = new QueryBoundWitnessBuilder().payload(query).build()
+  const bw = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(query)).payload(query).build()
   const result = await archiveBoundWitnessesArchivist.query(bw, [query])
   const block = (result?.[1]?.[0] as XyoBoundWitnessWithPartialMeta) || undefined
   if (block) {

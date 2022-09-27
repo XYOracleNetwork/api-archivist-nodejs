@@ -39,7 +39,7 @@ const handler: RequestHandler<ArchivePathParams, XyoBoundWitnessWithMeta[], XyoB
     schema: XyoArchivistInsertQuerySchema,
   }
 
-  const boundWitnessQueryWitness = new QueryBoundWitnessBuilder().payload(boundWitnessQuery).build()
+  const boundWitnessQueryWitness = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(boundWitnessQuery)).payload(boundWitnessQuery).build()
   await archiveBoundWitnessesArchivist.query(boundWitnessQueryWitness, [boundWitnessQuery, ...boundWitnessQueryPayloads])
 
   if (payloads.length) {
@@ -50,7 +50,7 @@ const handler: RequestHandler<ArchivePathParams, XyoBoundWitnessWithMeta[], XyoB
       payloads: payloadsQueryPayloads.map((payload) => PayloadWrapper.hash(payload)),
       schema: XyoArchivistInsertQuerySchema,
     }
-    const payloadsQueryWitness = new QueryBoundWitnessBuilder().payload(boundWitnessQuery).build()
+    const payloadsQueryWitness = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(payloadsQuery)).payload(payloadsQuery).build()
     await archivePayloadsArchivist.query(payloadsQueryWitness, [payloadsQuery, ...payloadsQueryPayloads])
   }
   res.json(sanitized)

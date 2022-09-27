@@ -10,6 +10,7 @@ import {
 } from '@xyo-network/archivist-model'
 import { XyoDivinerDivineQuerySchema } from '@xyo-network/diviner'
 import { ModuleQueryResult, QueryBoundWitnessBuilder } from '@xyo-network/module'
+import { PayloadWrapper } from '@xyo-network/payload'
 import { RequestHandler } from 'express'
 
 const unknownCount: PayloadStatsPayload = { count: -1, schema: PayloadStatsSchema }
@@ -23,7 +24,7 @@ const handler: RequestHandler<ArchivePathParams, ArchivePayloadStats> = async (r
   const { payloadStatsDiviner: diviner } = req.app
   const payloads: PayloadStatsQueryPayload[] = [{ archive, schema: PayloadStatsQuerySchema }]
   const query = { payloads, schema: XyoDivinerDivineQuerySchema }
-  const bw = new QueryBoundWitnessBuilder().payload(query).build()
+  const bw = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(query)).payload(query).build()
   const result = (await diviner.query(bw, [query])) as ModuleQueryResult<PayloadStatsPayload>
   const answer: PayloadStatsPayload = result?.[1]?.[0] || unknownCount
   res.json(answer)

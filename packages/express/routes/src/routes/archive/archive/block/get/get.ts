@@ -5,6 +5,7 @@ import { scrubBoundWitnesses } from '@xyo-network/archivist-lib'
 import { ArchiveLocals, ArchivePathParams, SortDirection, XyoArchiveBoundWitnessFilterPredicate } from '@xyo-network/archivist-model'
 import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { QueryBoundWitnessBuilder } from '@xyo-network/module'
+import { PayloadWrapper } from '@xyo-network/payload'
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
@@ -44,7 +45,7 @@ const handler: RequestHandler<
     filter,
     schema: XyoArchivistFindQuerySchema,
   }
-  const bw = new QueryBoundWitnessBuilder().payload(query).build()
+  const bw = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(query)).payload(query).build()
   const result = await archivist.query(bw, [query])
   const boundWitness = result[1] as XyoBoundWitness[]
   if (boundWitness) {
