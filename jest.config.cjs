@@ -19,7 +19,7 @@ const generateJestConfig = ({ esModules }) => {
     setupFiles: ['dotenv/config'],
     setupFilesAfterEnv: ['jest-extended/all', 'jest-sorted'],
     testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$',
-    testTimeout: 15000,
+    testTimeout: 30000,
     transform: {
       [`(${esModulesList}).+\\.js$`]: [
         'babel-jest',

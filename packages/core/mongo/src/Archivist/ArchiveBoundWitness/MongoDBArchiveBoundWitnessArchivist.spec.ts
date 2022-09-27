@@ -21,7 +21,7 @@ import { v4 } from 'uuid'
 
 import { COLLECTIONS } from '../../collections'
 import { getBaseMongoSdk } from '../../Mongo'
-import { MongoDBArchiveBoundWitnessesArchivist } from './MongoDBArchiveBoundWitnessesArchivist'
+import { MongoDBArchiveBoundWitnessArchivist } from './MongoDBArchiveBoundWitnessArchivist'
 
 const count = 2
 const schema = DebugSchema
@@ -45,10 +45,10 @@ const removePayloads = (boundWitnesses: XyoBoundWitnessWithMeta[]) => {
   })
 }
 
-describe('MongoDBArchiveBoundWitnessesArchivist', () => {
+describe('MongoDBArchiveBoundWitnessArchivist', () => {
   const sdk = getBaseMongoSdk<XyoBoundWitnessWithMeta>(COLLECTIONS.BoundWitnesses)
   const account = XyoAccount.random()
-  const sut = new MongoDBArchiveBoundWitnessesArchivist(account, sdk)
+  const sut = new MongoDBArchiveBoundWitnessArchivist(account, sdk)
   const archive = `test-${v4()}`
   const payloads: XyoPayloadWithMeta<DebugPayload>[] = getPayloads(archive, count)
   const boundWitnesses = payloads

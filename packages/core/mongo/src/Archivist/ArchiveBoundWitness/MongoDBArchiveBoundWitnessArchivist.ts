@@ -3,7 +3,8 @@ import { XyoAccount } from '@xyo-network/account'
 import { prepareBoundWitnesses } from '@xyo-network/archivist-lib'
 import {
   AbstractBoundWitnessArchivist,
-  ArchiveBoundWitnessesArchivistId,
+  ArchiveBoundWitnessArchivistId,
+  ArchiveModuleConfig,
   BoundWitnessArchivist,
   XyoArchiveBoundWitnessFilterPredicate,
   XyoBoundWitnessMeta,
@@ -12,9 +13,9 @@ import {
   XyoPayloadWithPartialMeta,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { XyoBoundWitness } from '@xyo-network/boundwitness'
+import { BoundWitnessWrapper, XyoBoundWitness } from '@xyo-network/boundwitness'
 import { EmptyObject } from '@xyo-network/core'
-import { PayloadWrapper } from '@xyo-network/payload'
+import { XyoModuleConfigSchema } from '@xyo-network/module'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter, SortDirection } from 'mongodb'
@@ -23,13 +24,14 @@ import { removeId } from '../../Mongo'
 import { MONGO_TYPES } from '../../types'
 
 @injectable()
-export class MongoDBArchiveBoundWitnessesArchivist
-  extends AbstractBoundWitnessArchivist<ArchiveBoundWitnessesArchivistId>
-  implements BoundWitnessArchivist<ArchiveBoundWitnessesArchivistId>
+export class MongoDBArchiveBoundWitnessArchivist
+  extends AbstractBoundWitnessArchivist<ArchiveBoundWitnessArchivistId>
+  implements BoundWitnessArchivist<ArchiveBoundWitnessArchivistId>
 {
   constructor(
     @inject(TYPES.Account) protected readonly account: XyoAccount,
     @inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly sdk: BaseMongoSdk<XyoBoundWitnessWithMeta>,
+    protected readonly config: ArchiveModuleConfig = { archive: '', schema: XyoModuleConfigSchema },
   ) {
     super(account)
   }
@@ -48,7 +50,7 @@ export class MongoDBArchiveBoundWitnessesArchivist
       _timestamp,
       schema: 'network.xyo.boundwitness',
     }
-    if (archive) filter._archive = archive
+    filter._archive = this.config?.archive || archive
     if (hash) filter._hash = hash
     // NOTE: Defaulting to $all since it makes the most sense when singing addresses are supplied
     // but based on how MongoDB implements multi-key indexes $in might be much faster and we could
@@ -59,10 +61,10 @@ export class MongoDBArchiveBoundWitnessesArchivist
     if (payload_schemas?.length) filter.payload_schemas = { $in: payload_schemas }
     return (await (await this.sdk.find(filter)).sort(sort).limit(parsedLimit).maxTimeMS(2000).toArray()).map(removeId)
   }
-  async get(ids: ArchiveBoundWitnessesArchivistId[]): Promise<Array<XyoBoundWitnessWithMeta | null>> {
+  async get(ids: ArchiveBoundWitnessArchivistId[]): Promise<Array<XyoBoundWitnessWithMeta | null>> {
     const predicates = ids.map((id) => {
-      const _archive = assertEx(id.archive, 'MongoDBArchiveBoundWitnessesArchivist.get: Missing archive')
-      const _hash = assertEx(id.hash, 'MongoDBArchiveBoundWitnessesArchivist.get: Missing hash')
+      const _archive = assertEx(this.config.archive || id.archive, 'MongoDBArchiveBoundWitnessArchivist.get: Missing archive')
+      const _hash = assertEx(id.hash, 'MongoDBArchiveBoundWitnessArchivist.get: Missing hash')
       return { _archive, _hash }
     })
     const queries = predicates.map(async (predicate) => {
@@ -77,8 +79,8 @@ export class MongoDBArchiveBoundWitnessesArchivist
     const _timestamp = Date.now()
     const bws = items
       .map((bw) => {
-        const _archive = assertEx(bw._archive, 'MongoDBArchiveBoundWitnessesArchivist.insert: Missing archive')
-        const bwMeta: XyoBoundWitnessMeta = { _archive, _hash: new PayloadWrapper(bw).hash, _timestamp }
+        const _archive = assertEx(this.config.archive || bw._archive, 'MongoDBArchiveBoundWitnessArchivist.insert: Missing archive')
+        const bwMeta: XyoBoundWitnessMeta = { _archive, _hash: new BoundWitnessWrapper(bw).hash, _timestamp }
         const payloadMeta: XyoPayloadMeta = { _archive, _hash: '', _timestamp }
         return prepareBoundWitnesses([bw], bwMeta, payloadMeta)
       })
@@ -86,7 +88,7 @@ export class MongoDBArchiveBoundWitnessesArchivist
     // TODO: Should we insert payloads here too?
     const result = await this.sdk.insertMany(bws.map(removeId))
     if (result.insertedCount != items.length) {
-      throw new Error('MongoDBArchiveBoundWitnessesArchivist.insert: Error inserting BoundWitnesses')
+      throw new Error('MongoDBArchiveBoundWitnessArchivist.insert: Error inserting BoundWitnesses')
     }
     const [bw] = await this.bindResult(bws)
     return [bw]

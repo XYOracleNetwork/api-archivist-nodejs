@@ -13,7 +13,7 @@ const processingDelay = () => {
   // we start seeing intermittent failures of
   // these tests as we're waiting for the processing
   // of the archive permissions on the server side
-  return delay(1)
+  return delay(100)
 }
 
 type TestSchemaTypes = typeof allowedSchema | typeof otherSchema

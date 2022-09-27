@@ -2,6 +2,7 @@ import { assertEx } from '@xylabs/assert'
 import { XyoAccount } from '@xyo-network/account'
 import {
   AbstractPayloadArchivist,
+  ArchiveModuleConfig,
   ArchivePayloadsArchivist,
   ArchivePayloadsArchivistId,
   XyoArchivePayloadFilterPredicate,
@@ -9,6 +10,7 @@ import {
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { EmptyObject } from '@xyo-network/core'
+import { XyoModuleConfigSchema } from '@xyo-network/module'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter, SortDirection } from 'mongodb'
@@ -24,6 +26,7 @@ export class MongoDBArchivePayloadsArchivist
   constructor(
     @inject(TYPES.Account) protected readonly account: XyoAccount,
     @inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayloadWithMeta>,
+    protected readonly config: ArchiveModuleConfig = { archive: '', schema: XyoModuleConfigSchema },
   ) {
     super(account)
   }
@@ -37,7 +40,7 @@ export class MongoDBArchivePayloadsArchivist
     const _timestamp = parsedOrder === 'desc' ? { $lt: parsedTimestamp } : { $gt: parsedTimestamp }
     const filter: Filter<XyoPayloadWithMeta<EmptyObject>> = {
       ...props,
-      _archive: archive,
+      _archive: this.config.archive || archive,
       _timestamp,
     }
     if (hash) filter._hash = hash
@@ -48,7 +51,7 @@ export class MongoDBArchivePayloadsArchivist
 
   async get(ids: ArchivePayloadsArchivistId[]): Promise<Array<XyoPayloadWithMeta | null>> {
     const predicates = ids.map((id) => {
-      const _archive = assertEx(id.archive, 'MongoDBArchivePayloadsArchivist.get: Missing archive')
+      const _archive = assertEx(this.config.archive || id.archive, 'MongoDBArchivePayloadsArchivist.get: Missing archive')
       const _hash = assertEx(id.hash, 'MongoDBArchivePayloadsArchivist.get: Missing hash')
       return { _archive, _hash }
     })
