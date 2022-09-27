@@ -46,10 +46,10 @@ declare global {
       archivePayloadsArchivistFactory: ArchivePayloadsArchivistFactory
       archivePermissionsArchivist: ArchivePermissionsArchivist
       archivistWitnessedPayloadArchivist: WitnessedPayloadArchivist
+      boundWitnessArchivist: BoundWitnessArchivist
       boundWitnessStatsDiviner: BoundWitnessStatsDiviner
-      boundWitnessesArchivist: BoundWitnessArchivist
+      payloadArchivist: PayloadArchivist
       payloadStatsDiviner: PayloadStatsDiviner
-      payloadsArchivist: PayloadArchivist
       queryConverters: QueryConverterRegistry
       queryProcessors: QueryProcessorRegistry
       queryQueue: Queue<Query>
