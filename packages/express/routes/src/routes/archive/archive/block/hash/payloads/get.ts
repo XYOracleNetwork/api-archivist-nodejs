@@ -35,15 +35,17 @@ const getPayloadsByHashes = async (archivist: ArchivePayloadsArchivist, archive:
 
 const handler: RequestHandler<BlockHashPathParams, XyoPartialPayloadMeta[][]> = async (req, res, next) => {
   const { archive, hash } = req.params
-  const { archivePayloadsArchivist, ArchiveBoundWitnessArchivist } = req.app
+  const { archivePayloadsArchivistFactory, archiveBoundWitnessArchivistFactory } = req.app
   const query: XyoArchivistGetQuery = {
     hashes: [{ archive, hash }] as unknown as string[],
     schema: XyoArchivistGetQuerySchema,
   }
   const bw = new BoundWitnessBuilder().payload(query).build()
-  const result = await ArchiveBoundWitnessArchivist.query(bw, query)
+  const archiveBoundWitnessArchivist = archiveBoundWitnessArchivistFactory(archive)
+  const result = await archiveBoundWitnessArchivist.query(bw, query)
   const block = (result?.[1]?.[0] as XyoBoundWitnessWithPartialMeta) || undefined
   if (block) {
+    const archivePayloadsArchivist = archivePayloadsArchivistFactory(archive)
     res.json(await getPayloadsByHashes(archivePayloadsArchivist, archive, block.payload_hashes))
   } else {
     next({ message: 'Block not found', statusCode: StatusCodes.NOT_FOUND })
