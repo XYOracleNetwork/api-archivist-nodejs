@@ -160,10 +160,9 @@ export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner implements Sche
           .toArray()
       })
       if (result.length < 1) break
-      const count = result.reduce<Record<string, number>>((o, schemaCount) => ({ ...o, [schemaCount._id]: schemaCount.count }), {})
       // Add current counts to total
-      Object.entries(count).map(([schema, count]) => {
-        totals[schema] = totals[schema] || 0 + count
+      result.map((schema) => {
+        totals[schema._id] = totals[schema._id] || 0 + schema.count
       })
     }
     await this.storeDivinedResult(archive, totals)
