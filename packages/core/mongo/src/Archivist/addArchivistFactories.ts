@@ -22,24 +22,24 @@ import { MongoDBArchivePayloadsArchivist } from './ArchivePayloads'
  */
 const max = 1000
 
-let boundWitnessArchivists: LruCache<string, ArchiveBoundWitnessesArchivist> | undefined = undefined
-let payloadArchivists: LruCache<string, ArchivePayloadsArchivist> | undefined = undefined
+let boundWitnessArchivistCache: LruCache<string, ArchiveBoundWitnessesArchivist> | undefined = undefined
+let payloadArchivistCache: LruCache<string, ArchivePayloadsArchivist> | undefined = undefined
 
 export const addArchivistFactories = (container: Container) => {
-  boundWitnessArchivists = new LruCache<string, ArchiveBoundWitnessesArchivist>({ max })
-  payloadArchivists = new LruCache<string, ArchivePayloadsArchivist>({ max })
+  boundWitnessArchivistCache = new LruCache<string, ArchiveBoundWitnessesArchivist>({ max })
+  payloadArchivistCache = new LruCache<string, ArchivePayloadsArchivist>({ max })
 
   container
     .bind<interfaces.Factory<ArchiveBoundWitnessesArchivist>>(TYPES.ArchiveBoundWitnessesArchivistFactory)
     .toFactory<ArchiveBoundWitnessesArchivist, [string]>((context) => {
       return (archive: string) => {
-        const cached = boundWitnessArchivists?.get?.(archive)
+        const cached = boundWitnessArchivistCache?.get?.(archive)
         if (cached) return cached
         const config: ArchiveModuleConfig = { archive, schema: XyoModuleConfigSchema }
         const account = context.container.get<XyoAccount>(TYPES.Account)
         const sdk = context.container.get<BaseMongoSdk<XyoBoundWitnessWithMeta>>(MONGO_TYPES.BoundWitnessSdkMongo)
         const archivist = new MongoDBArchiveBoundWitnessesArchivist(account, sdk, config)
-        boundWitnessArchivists?.set(archive, archivist)
+        boundWitnessArchivistCache?.set(archive, archivist)
         return archivist
       }
     })
@@ -47,13 +47,13 @@ export const addArchivistFactories = (container: Container) => {
     .bind<interfaces.Factory<ArchivePayloadsArchivist>>(TYPES.ArchivePayloadsArchivistFactory)
     .toFactory<ArchivePayloadsArchivist, [string]>((context) => {
       return (archive: string) => {
-        const cached = payloadArchivists?.get?.(archive)
+        const cached = payloadArchivistCache?.get?.(archive)
         if (cached) return cached
         const config: ArchiveModuleConfig = { archive, schema: XyoModuleConfigSchema }
         const account = context.container.get<XyoAccount>(TYPES.Account)
         const sdk = context.container.get<BaseMongoSdk<XyoPayloadWithMeta>>(MONGO_TYPES.PayloadSdkMongo)
         const archivist = new MongoDBArchivePayloadsArchivist(account, sdk, config)
-        payloadArchivists?.set(archive, archivist)
+        payloadArchivistCache?.set(archive, archivist)
         return archivist
       }
     })
