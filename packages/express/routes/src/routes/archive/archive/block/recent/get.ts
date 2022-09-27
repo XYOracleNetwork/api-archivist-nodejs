@@ -21,10 +21,12 @@ const getBoundWitnesses = (archivist: ArchiveBoundWitnessArchivist, archive: str
 
 const handler: RequestHandler<BlockRecentPathParams, (XyoBoundWitness | null)[]> = async (req, res) => {
   const { archive, limit } = req.params
-  const { ArchiveBoundWitnessArchivist: archivist } = req.app
+  const { archiveBoundWitnessArchivistFactory } = req.app
   const limitNumber = tryParseInt(limit) ?? 20
   assertEx(limitNumber > 0 && limitNumber <= 100, 'limit must be between 1 and 100')
-  const boundWitnesses = (await getBoundWitnesses(archivist, archive, limitNumber))?.[1] as (XyoBoundWitness | null)[]
+  const boundWitnesses = (
+    await getBoundWitnesses(archiveBoundWitnessArchivistFactory(archive), archive, limitNumber)
+  )?.[1] as (XyoBoundWitness | null)[]
   res.json(boundWitnesses)
 }
 
