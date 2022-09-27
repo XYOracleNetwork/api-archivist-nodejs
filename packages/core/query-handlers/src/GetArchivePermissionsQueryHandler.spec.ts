@@ -7,7 +7,7 @@ import {
   SetArchivePermissionsSchema,
   XyoPayloadWithMeta,
 } from '@xyo-network/archivist-model'
-import { XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
+import { BoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { mock, MockProxy } from 'jest-mock-extended'
 
 import { GetArchivePermissionsQueryHandler } from './GetArchivePermissionsQueryHandler'
@@ -46,7 +46,7 @@ describe('GetArchivePermissionsQueryHandler', () => {
         beforeEach(() => {
           archivist = mock<ArchivePermissionsArchivist>()
           const payloads: SetArchivePermissionsPayload[] = [permissions, emptyPermissions]
-          const boundWitness = new XyoBoundWitnessBuilder().payloads(payloads).build()
+          const boundWitness = new BoundWitnessBuilder().payloads(payloads).build()
           archivist.query.mockResolvedValue([boundWitness, payloads])
         })
         it('returns the latest archive permissions', async () => {
@@ -71,7 +71,7 @@ describe('GetArchivePermissionsQueryHandler', () => {
       beforeEach(() => {
         archivist = mock<ArchivePermissionsArchivist>()
         const payloads: SetArchivePermissionsPayload[] = []
-        const boundWitness = new XyoBoundWitnessBuilder().build()
+        const boundWitness = new BoundWitnessBuilder().build()
         archivist.query.mockResolvedValue([boundWitness, payloads])
       })
       it('returns the empty permissions', async () => {

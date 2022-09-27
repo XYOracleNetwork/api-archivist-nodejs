@@ -10,6 +10,7 @@ import {
   XyoPayloadWithMeta,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
+import { BoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { WithAdditional } from '@xyo-network/core'
 import { XyoPayloadBuilder } from '@xyo-network/payload'
 import { inject, injectable } from 'inversify'
@@ -32,7 +33,8 @@ export class GetArchivePermissionsQueryHandler implements QueryHandler<GetArchiv
       hashes: [archive],
       schema: XyoArchivistGetQuerySchema,
     }
-    const getResult = await this.archivePermissionsArchivist.query(getQuery)
+    const getWitness = new BoundWitnessBuilder().payload(getQuery).build()
+    const getResult = await this.archivePermissionsArchivist.query(getWitness, getQuery)
     const permissions = (getResult?.[1]?.[0] as SetArchivePermissionsPayload) || getEmptyPermissions(query)
     return new XyoPayloadBuilder<SetArchivePermissionsPayloadWithMeta>({ schema: SetArchivePermissionsSchema })
       .fields({ ...permissions, _queryId: query.id, _timestamp: Date.now() })

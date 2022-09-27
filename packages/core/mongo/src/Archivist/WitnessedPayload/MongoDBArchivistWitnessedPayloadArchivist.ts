@@ -12,9 +12,9 @@ import {
   XyoPayloadWithPartialMeta,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { XyoBoundWitness, XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
+import { BoundWitnessBuilder, XyoBoundWitness } from '@xyo-network/boundwitness'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
-import { inject, injectable } from 'inversify'
+import { inject, injectable, named } from 'inversify'
 
 import { removeId } from '../../Mongo'
 import { MONGO_TYPES } from '../../types'
@@ -29,7 +29,7 @@ export class MongoDBArchivistWitnessedPayloadArchivist
   implements WitnessedPayloadArchivist
 {
   constructor(
-    @inject(TYPES.Account) protected readonly account: XyoAccount,
+    @inject(TYPES.Account) @named('root') protected readonly account: XyoAccount,
     @inject(MONGO_TYPES.PayloadSdkMongo) protected readonly payloads: BaseMongoSdk<XyoPayloadWithMeta>,
     @inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta>,
   ) {
@@ -52,7 +52,7 @@ export class MongoDBArchivistWitnessedPayloadArchivist
   async insert(payloads: XyoPayloadWithMeta[]): Promise<XyoBoundWitness> {
     // Witness from archivist
     const _timestamp = Date.now()
-    const bw = new XyoBoundWitnessBuilder({ inlinePayloads: false }).payloads(payloads).build() as XyoBoundWitnessWithMeta & XyoPayloadWithPartialMeta
+    const bw = new BoundWitnessBuilder({ inlinePayloads: false }).payloads(payloads).build() as XyoBoundWitnessWithMeta & XyoPayloadWithPartialMeta
     bw._timestamp = _timestamp
     const witnessResult = await this.boundWitnesses.insertOne(bw)
     if (!witnessResult.acknowledged || !witnessResult.insertedId) {

@@ -3,7 +3,7 @@ import { asyncHandler, NoReqBody, NoReqQuery, tryParseInt } from '@xylabs/sdk-ap
 import { XyoArchivistFindQuery, XyoArchivistFindQuerySchema } from '@xyo-network/archivist'
 import { scrubBoundWitnesses } from '@xyo-network/archivist-lib'
 import { ArchiveLocals, ArchivePathParams, SortDirection, XyoArchiveBoundWitnessFilterPredicate } from '@xyo-network/archivist-model'
-import { XyoBoundWitness } from '@xyo-network/boundwitness'
+import { BoundWitnessBuilder, XyoBoundWitness } from '@xyo-network/boundwitness'
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
@@ -43,7 +43,8 @@ const handler: RequestHandler<
     filter,
     schema: XyoArchivistFindQuerySchema,
   }
-  const result = await archivist.query(query)
+  const bw = new BoundWitnessBuilder().payload(query).build()
+  const result = await archivist.query(bw, query)
   const boundWitness = result[1] as XyoBoundWitness[]
   if (boundWitness) {
     res.json(scrubBoundWitnesses(boundWitness))

@@ -10,17 +10,17 @@ import {
   XyoPayloadWithPartialMeta,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { XyoBoundWitness, XyoBoundWitnessBuilder, XyoBoundWitnessBuilderConfig } from '@xyo-network/boundwitness'
+import { BoundWitnessBuilder, BoundWitnessBuilderConfig, XyoBoundWitness } from '@xyo-network/boundwitness'
 import { EmptyObject } from '@xyo-network/core'
 import { XyoPayloadBuilder } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
-import { inject, injectable } from 'inversify'
+import { inject, injectable, named } from 'inversify'
 import { ExplainVerbosity, Filter, OptionalUnlessRequiredId, WithoutId } from 'mongodb'
 
 import { removeId } from '../../Mongo'
 import { MONGO_TYPES } from '../../types'
 
-const builderConfig: XyoBoundWitnessBuilderConfig = { inlinePayloads: false }
+const builderConfig: BoundWitnessBuilderConfig = { inlinePayloads: false }
 
 @injectable()
 export abstract class AbstractMongoDBPayloadArchivist<
@@ -28,7 +28,7 @@ export abstract class AbstractMongoDBPayloadArchivist<
   TId extends string = string,
 > extends AbstractPayloadArchivist<T, TId> {
   public constructor(
-    @inject(TYPES.Account) protected readonly account: XyoAccount,
+    @inject(TYPES.Account) @named('root') protected readonly account: XyoAccount,
     @inject(MONGO_TYPES.PayloadSdkMongo) protected readonly payloads: BaseMongoSdk<XyoPayloadWithMeta<T>>,
     @inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta>,
   ) {
@@ -77,7 +77,7 @@ export abstract class AbstractMongoDBPayloadArchivist<
       } as OptionalUnlessRequiredId<XyoPayloadWithMeta<T>>
     })
     const boundWitnesses: XyoBoundWitnessWithMeta[] = payloads.map((p) => {
-      const bw = new XyoBoundWitnessBuilder(builderConfig).witness(this.account).payload(p).build()
+      const bw = new BoundWitnessBuilder(builderConfig).witness(this.account).payload(p).build()
       const _archive = p._archive
       return { ...bw, _archive, _timestamp } as XyoBoundWitnessWithMeta
     })

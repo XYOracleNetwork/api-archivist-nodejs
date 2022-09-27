@@ -1,11 +1,11 @@
 import { getRequestMeta } from '@xyo-network/archivist-express-lib'
 import { augmentWithMetadata } from '@xyo-network/archivist-lib'
 import { XyoBoundWitnessWithMeta, XyoBoundWitnessWithPartialMeta, XyoPayloadWithPartialMeta } from '@xyo-network/archivist-model'
-import { XyoBoundWitnessBuilder, XyoBoundWitnessBuilderConfig } from '@xyo-network/boundwitness'
+import { BoundWitnessBuilder, BoundWitnessBuilderConfig } from '@xyo-network/boundwitness'
 
 import { PostNodeRequest } from './PostNodeRequest'
 
-const config: XyoBoundWitnessBuilderConfig = { inlinePayloads: true }
+const config: BoundWitnessBuilderConfig = { inlinePayloads: true }
 
 export const formatRequest = (req: PostNodeRequest): XyoBoundWitnessWithMeta[] => {
   const [boundWitnessMeta, payloadMeta] = getRequestMeta(req)
@@ -19,7 +19,7 @@ export const formatRequest = (req: PostNodeRequest): XyoBoundWitnessWithMeta[] =
         // to process payloads. We're witnessing them here as the pipeline
         // expects BWs but if we can modify the pipeline to accept BWs or
         // Payloads we can remove this overhead.
-        new XyoBoundWitnessBuilder(config).payload(x).build()
+        new BoundWitnessBuilder(config).payload(x).build()
   })
   return augmentWithMetadata(
     boundWitnesses.map((bw) => {
