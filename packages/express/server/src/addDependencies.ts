@@ -26,14 +26,14 @@ export const addDependencies = (app: Application) => {
     'Missing ArchivistWitnessedPayloadArchivist',
   )
   app.archiveArchivist = assertEx(dependencies.get<ArchiveArchivist>(TYPES.ArchiveArchivist), 'Missing ArchiveArchivist')
-  app.ArchiveBoundWitnessArchivist = assertEx(
-    dependencies.get<ArchiveBoundWitnessArchivist>(TYPES.ArchiveBoundWitnessArchivist),
-    'Missing ArchiveBoundWitnessArchivist',
-  )
-  app.archivePayloadsArchivist = assertEx(
-    dependencies.get<ArchivePayloadsArchivist>(TYPES.ArchivePayloadsArchivist),
-    'Missing ArchivePayloadsArchivist',
-  )
+  // app.ArchiveBoundWitnessArchivist = assertEx(
+  //   dependencies.get<ArchiveBoundWitnessArchivist>(TYPES.ArchiveBoundWitnessArchivist),
+  //   'Missing ArchiveBoundWitnessArchivist',
+  // )
+  // app.archivePayloadsArchivist = assertEx(
+  //   dependencies.get<ArchivePayloadsArchivist>(TYPES.ArchivePayloadsArchivist),
+  //   'Missing ArchivePayloadsArchivist',
+  // )
   app.archiveArchivist = assertEx(dependencies.get<ArchiveArchivist>(TYPES.ArchiveArchivist), 'Missing ArchiveArchivist')
   app.archiveKeyArchivist = assertEx(dependencies.get<ArchiveKeyArchivist>(TYPES.ArchiveKeyArchivist), 'Missing ArchiveKeyArchivist')
   app.archivePermissionsArchivist = assertEx(

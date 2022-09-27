@@ -24,8 +24,8 @@ import { MongoDBArchivistWitnessedPayloadArchivist } from './WitnessedPayload'
 
 export const addArchivists = (container: Container) => {
   container.bind<ArchiveArchivist>(TYPES.ArchiveArchivist).to(MongoDBArchiveArchivist).inSingletonScope()
-  container.bind<ArchivePayloadsArchivist>(TYPES.ArchivePayloadsArchivist).to(MongoDBArchivePayloadsArchivist).inSingletonScope()
-  container.bind<ArchiveBoundWitnessArchivist>(TYPES.ArchiveBoundWitnessArchivist).to(MongoDBArchiveBoundWitnessArchivist).inSingletonScope()
+  // container.bind<ArchivePayloadsArchivist>(TYPES.ArchivePayloadsArchivist).to(MongoDBArchivePayloadsArchivist).inSingletonScope()
+  // container.bind<ArchiveBoundWitnessArchivist>(TYPES.ArchiveBoundWitnessArchivist).to(MongoDBArchiveBoundWitnessArchivist).inSingletonScope()
   container.bind<ArchiveKeyArchivist>(TYPES.ArchiveKeyArchivist).to(MongoDBArchiveKeyArchivist).inSingletonScope()
   container
     .bind<ArchivePermissionsArchivist>(TYPES.ArchivePermissionsArchivist)
