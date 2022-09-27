@@ -14,7 +14,7 @@ import { BoundWitnessBuilder, BoundWitnessBuilderConfig, XyoBoundWitness } from 
 import { EmptyObject } from '@xyo-network/core'
 import { XyoPayloadBuilder } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
-import { inject, injectable } from 'inversify'
+import { inject, injectable, named } from 'inversify'
 import { ExplainVerbosity, Filter, OptionalUnlessRequiredId, WithoutId } from 'mongodb'
 
 import { removeId } from '../../Mongo'
@@ -28,7 +28,7 @@ export abstract class AbstractMongoDBPayloadArchivist<
   TId extends string = string,
 > extends AbstractPayloadArchivist<T, TId> {
   public constructor(
-    @inject(TYPES.Account) protected readonly account: XyoAccount,
+    @inject(TYPES.Account) @named('root') protected readonly account: XyoAccount,
     @inject(MONGO_TYPES.PayloadSdkMongo) protected readonly payloads: BaseMongoSdk<XyoPayloadWithMeta<T>>,
     @inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta>,
   ) {
