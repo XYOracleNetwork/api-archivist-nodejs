@@ -1,8 +1,5 @@
+import { XyoPayload } from '@xyo-network/payload'
+
 import { PayloadArchivist } from './PayloadArchivist'
 
-export interface ArchivePayloadsArchivistId {
-  archive: string
-  hash: string
-}
-
-export type ArchivePayloadsArchivist<T extends { schema: string } = { schema: string }> = PayloadArchivist<T, ArchivePayloadsArchivistId>
+export type ArchivePayloadsArchivist<T extends XyoPayload = XyoPayload> = PayloadArchivist<T>
