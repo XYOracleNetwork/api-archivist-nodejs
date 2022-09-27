@@ -24,10 +24,7 @@ import { removeId } from '../../Mongo'
 import { MONGO_TYPES } from '../../types'
 
 @injectable()
-export class MongoDBArchiveBoundWitnessArchivist
-  extends AbstractBoundWitnessArchivist<ArchiveBoundWitnessArchivistId>
-  implements BoundWitnessArchivist<ArchiveBoundWitnessArchivistId>
-{
+export class MongoDBArchiveBoundWitnessArchivist extends AbstractBoundWitnessArchivist implements BoundWitnessArchivist {
   constructor(
     @inject(TYPES.Account) protected readonly account: XyoAccount,
     @inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly sdk: BaseMongoSdk<XyoBoundWitnessWithMeta>,
