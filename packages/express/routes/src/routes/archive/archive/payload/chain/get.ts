@@ -12,7 +12,7 @@ import { PayloadChainPathParams } from './payloadChainPathParams'
 
 const getPayloads = async (archivist: ArchivePayloadsArchivist, archive: string, hash: string, payloads: XyoPayload[], limit: number) => {
   const query: XyoArchivistGetQuery = {
-    hashes: [{ archive, hash }] as unknown as string[],
+    hashes: [hash],
     schema: XyoArchivistGetQuerySchema,
   }
   const bw = new BoundWitnessBuilder().payload(query).build()

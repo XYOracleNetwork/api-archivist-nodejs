@@ -11,8 +11,8 @@ import {
   DebugPayload,
   DebugPayloadWithMeta,
   DebugSchema,
-  XyoArchivePayloadFilterPredicate,
   XyoBoundWitnessWithMeta,
+  XyoPayloadFilterPredicate,
   XyoPayloadWithMeta,
   XyoPayloadWithPartialMeta,
 } from '@xyo-network/archivist-model'
@@ -63,7 +63,7 @@ describe('MongoDBArchiveBoundWitnessArchivist', () => {
 
   beforeAll(async () => {
     const query: XyoArchivistInsertQuery = {
-      payloads: boundWitnesses as any,
+      payloads: hashes,
       schema: XyoArchivistInsertQuerySchema,
     }
     const queryWitness = new BoundWitnessBuilder().payload(query).build()
@@ -88,7 +88,7 @@ describe('MongoDBArchiveBoundWitnessArchivist', () => {
   describe('XyoArchivistFindQuery', () => {
     it('finds boundWitnesses by hash', async () => {
       const limit = 1
-      const filter: XyoArchivePayloadFilterPredicate<XyoPayloadWithMeta> = { archive, hash, limit }
+      const filter: XyoPayloadFilterPredicate<XyoPayloadWithMeta> = { hash, limit }
       const query: XyoArchivistFindQuery = {
         filter,
         schema: XyoArchivistFindQuerySchema,
@@ -108,11 +108,8 @@ describe('MongoDBArchiveBoundWitnessArchivist', () => {
   })
   describe('XyoArchivistGetQuery', () => {
     it('gets boundWitnesses by hashes', async () => {
-      const hashesWithArchive = hashes.map((hash) => {
-        return { archive, hash }
-      })
       const query: XyoArchivistGetQuery = {
-        hashes: hashesWithArchive as unknown as string[],
+        hashes,
         schema: XyoArchivistGetQuerySchema,
       }
       const queryWitness = new BoundWitnessBuilder().payload(query).build()
