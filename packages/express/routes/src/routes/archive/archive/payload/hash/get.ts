@@ -11,13 +11,13 @@ import { PayloadHashPathParams } from '../payloadHashPathParams'
 
 const handler: RequestHandler<PayloadHashPathParams, XyoPayload[]> = async (req, res) => {
   const { archive, hash } = req.params
-  const { archivePayloadsArchivist: archivist } = req.app
+  const { archivePayloadsArchivistFactory } = req.app
   const query: XyoArchivistGetQuery = {
     hashes: [{ archive, hash }] as unknown as string[],
     schema: XyoArchivistGetQuerySchema,
   }
   const bw = new BoundWitnessBuilder().payload(query).build()
-  const result = await archivist.query(bw, query)
+  const result = await archivePayloadsArchivistFactory(archive).query(bw, query)
   const payload = result?.[1].filter(exists).map((payload) => new PayloadWrapper(payload).body)?.[0]
   res.json(payload ? [payload] : [])
 }
