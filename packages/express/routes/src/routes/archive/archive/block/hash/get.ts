@@ -12,7 +12,7 @@ const handler: RequestHandler<BlockHashPathParams, XyoBoundWitness[]> = async (r
   const { archive, hash } = req.params
   const { archiveBoundWitnessArchivistFactory } = req.app
   const query: XyoArchivistGetQuery = {
-    hashes: [{ archive, hash }] as unknown as string[],
+    hashes: [hash],
     schema: XyoArchivistGetQuerySchema,
   }
   const bw = new BoundWitnessBuilder().payload(query).build()
