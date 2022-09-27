@@ -42,7 +42,7 @@ const handler: RequestHandler<BlockHashPathParams, XyoPartialPayloadMeta[][]> = 
     schema: XyoArchivistGetQuerySchema,
   }
   const bw = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(query)).payload(query).build()
-  const result = await archiveBoundWitnessArchivistFactory(archive).query(bw, query)
+  const result = await archiveBoundWitnessArchivistFactory(archive).query(bw, [query])
   const block = (result?.[1]?.[0] as XyoBoundWitnessWithPartialMeta) || undefined
   if (block) {
     res.json(await getPayloadsByHashes(archivePayloadsArchivistFactory(archive), archive, block.payload_hashes))

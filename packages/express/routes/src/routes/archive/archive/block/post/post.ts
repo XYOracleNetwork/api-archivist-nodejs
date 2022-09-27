@@ -38,11 +38,9 @@ const handler: RequestHandler<ArchivePathParams, XyoBoundWitnessWithMeta[], XyoB
     payloads: boundWitnessQueryPayloads.map((bw) => BoundWitnessWrapper.hash(bw)),
     schema: XyoArchivistInsertQuerySchema,
   }
-  const boundWitnessQueryWitness = new BoundWitnessBuilder().payload(boundWitnessQuery).build()
-  await archiveBoundWitnessArchivistFactory(archive).query(boundWitnessQueryWitness, boundWitnessQuery, boundWitnessQueryPayloads)
 
   const boundWitnessQueryWitness = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(boundWitnessQuery)).payload(boundWitnessQuery).build()
-  await archiveBoundWitnessesArchivist.query(boundWitnessQueryWitness, [boundWitnessQuery, ...boundWitnessQueryPayloads])
+  await archiveBoundWitnessArchivistFactory(archive).query(boundWitnessQueryWitness, [boundWitnessQuery, ...boundWitnessQueryPayloads])
 
   if (payloads.length) {
     const payloadsQueryPayloads = payloads.map((p) => {
@@ -52,8 +50,8 @@ const handler: RequestHandler<ArchivePathParams, XyoBoundWitnessWithMeta[], XyoB
       payloads: payloadsQueryPayloads.map((payload) => PayloadWrapper.hash(payload)),
       schema: XyoArchivistInsertQuerySchema,
     }
-    await archivePayloadsArchivistFactory(archive).query(payloadsQueryWitness, payloadsQuery, payloadsQueryPayloads)
     const payloadsQueryWitness = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(payloadsQuery)).payload(payloadsQuery).build()
+    await archivePayloadsArchivistFactory(archive).query(payloadsQueryWitness, [payloadsQuery, ...payloadsQueryPayloads])
   }
   res.json(sanitized)
 }

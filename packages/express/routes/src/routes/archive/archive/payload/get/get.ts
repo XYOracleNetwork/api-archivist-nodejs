@@ -38,7 +38,7 @@ const handler: RequestHandler<ArchivePathParams, (XyoPayload | null)[], NoReqBod
     schema: XyoArchivistFindQuerySchema,
   }
   const bw = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(query)).payload(query).build()
-  const result = await archivePayloadsArchivistFactory(archive.archive).query(bw, query)
+  const result = await archivePayloadsArchivistFactory(archive.archive).query(bw, [query])
   const payloads = result?.[1]
   if (payloads) {
     res.json(payloads)

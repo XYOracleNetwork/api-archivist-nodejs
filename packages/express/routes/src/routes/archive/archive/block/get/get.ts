@@ -46,7 +46,7 @@ const handler: RequestHandler<
     schema: XyoArchivistFindQuerySchema,
   }
   const bw = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(query)).payload(query).build()
-  const result = await archiveBoundWitnessArchivistFactory(archive.archive).query(bw, query)
+  const result = await archiveBoundWitnessArchivistFactory(archive.archive).query(bw, [query])
   const boundWitness = result[1] as XyoBoundWitness[]
   if (boundWitness) {
     res.json(scrubBoundWitnesses(boundWitness))
