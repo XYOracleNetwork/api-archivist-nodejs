@@ -30,11 +30,11 @@ export const addDependencies = (app: Application) => {
   app.archiveArchivist = assertEx(dependencies.get<ArchiveArchivist>(TYPES.ArchiveArchivist), 'Missing ArchiveArchivist')
   app.archiveBoundWitnessArchivistFactory = assertEx(
     dependencies.get<ArchiveBoundWitnessArchivistFactory>(TYPES.ArchiveBoundWitnessArchivistFactory),
-    'Missing ArchiveBoundWitnessArchivist',
+    'Missing ArchiveBoundWitnessArchivistFactory',
   )
   app.archivePayloadsArchivistFactory = assertEx(
     dependencies.get<ArchivePayloadsArchivistFactory>(TYPES.ArchivePayloadArchivistFactory),
-    'Missing ArchivePayloadsArchivist',
+    'Missing ArchivePayloadsArchivistFactory',
   )
   app.archiveArchivist = assertEx(dependencies.get<ArchiveArchivist>(TYPES.ArchiveArchivist), 'Missing ArchiveArchivist')
   app.archiveKeyArchivist = assertEx(dependencies.get<ArchiveKeyArchivist>(TYPES.ArchiveKeyArchivist), 'Missing ArchiveKeyArchivist')
