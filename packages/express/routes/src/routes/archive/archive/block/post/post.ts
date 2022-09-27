@@ -28,22 +28,16 @@ const handler: RequestHandler<ArchivePathParams, XyoBoundWitnessWithMeta[], XyoB
       payloadWithExtraMeta._schemaValid = false
     }
   })
-  const boundWitnessQueryPayloads = sanitized.map((bw) => {
-    return new BoundWitnessWrapper(bw).hash
-  })
   const boundWitnessQuery: XyoArchivistInsertQuery = {
-    payloads: boundWitnessQueryPayloads,
+    payloads: sanitized.map((bw) => new BoundWitnessWrapper(bw).hash),
     schema: XyoArchivistInsertQuerySchema,
   }
   const boundWitnessQueryWitness = new BoundWitnessBuilder().payload(boundWitnessQuery).build()
   await archiveBoundWitnessArchivistFactory(archive).query(boundWitnessQueryWitness, boundWitnessQuery, sanitized)
 
   if (payloads.length) {
-    const payloadsQueryPayloads = payloads.map((p) => {
-      return new PayloadWrapper(p).hash
-    })
     const payloadsQuery: XyoArchivistInsertQuery = {
-      payloads: payloadsQueryPayloads,
+      payloads: payloads.map((p) => new PayloadWrapper(p).hash),
       schema: XyoArchivistInsertQuerySchema,
     }
     const payloadsQueryWitness = new BoundWitnessBuilder().payload(boundWitnessQuery).build()
