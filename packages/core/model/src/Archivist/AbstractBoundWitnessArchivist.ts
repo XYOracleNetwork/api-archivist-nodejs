@@ -49,7 +49,6 @@ export abstract class AbstractBoundWitnessArchivist extends XyoModule<XyoArchivi
         if (typedQuery.filter) result.push(...(await this.find(typedQuery.filter as XyoBoundWitnessFilterPredicate)))
         break
       case XyoArchivistGetQuerySchema:
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         result.push(...(await this.get(typedQuery.hashes)))
         break
       case XyoArchivistInsertQuerySchema: {
