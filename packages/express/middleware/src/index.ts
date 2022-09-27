@@ -5,9 +5,9 @@ import {
   ArchiveKeyArchivist,
   ArchivePayloadsArchivistFactory,
   ArchivePermissionsArchivist,
-  BoundWitnessesArchivist,
+  BoundWitnessArchivist,
   BoundWitnessStatsDiviner,
-  PayloadsArchivist,
+  PayloadArchivist,
   PayloadStatsDiviner,
   Query,
   QueryProcessorRegistry,
@@ -47,9 +47,9 @@ declare global {
       archivePermissionsArchivist: ArchivePermissionsArchivist
       archivistWitnessedPayloadArchivist: WitnessedPayloadArchivist
       boundWitnessStatsDiviner: BoundWitnessStatsDiviner
-      boundWitnessesArchivist: BoundWitnessesArchivist
+      boundWitnessesArchivist: BoundWitnessArchivist
       payloadStatsDiviner: PayloadStatsDiviner
-      payloadsArchivist: PayloadsArchivist
+      payloadsArchivist: PayloadArchivist
       queryConverters: QueryConverterRegistry
       queryProcessors: QueryProcessorRegistry
       queryQueue: Queue<Query>
