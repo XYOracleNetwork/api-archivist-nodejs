@@ -1,5 +1,5 @@
 import { XyoArchivistFindQuery, XyoArchivistFindQuerySchema } from '@xyo-network/archivist'
-import { BoundWitnessesArchivist, PayloadsArchivist, PayloadSearchCriteria, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
+import { BoundWitnessesArchivist, PayloadArchivist, PayloadSearchCriteria, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
 import { BoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { PayloadWrapper, XyoPayload } from '@xyo-network/payload'
 
@@ -25,7 +25,7 @@ const isPayloadSignedByAddress = async (archivist: BoundWitnessesArchivist, hash
 
 export const findPayload = async (
   boundWitnessesArchivist: BoundWitnessesArchivist,
-  payloadsArchivist: PayloadsArchivist,
+  payloadsArchivist: PayloadArchivist,
   searchCriteria: PayloadSearchCriteria,
 ): Promise<XyoPayload | undefined> => {
   const { addresses } = searchCriteria
