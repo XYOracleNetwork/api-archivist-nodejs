@@ -3,7 +3,6 @@ import { XyoAccount } from '@xyo-network/account'
 import { prepareBoundWitnesses } from '@xyo-network/archivist-lib'
 import {
   AbstractBoundWitnessArchivist,
-  ArchiveBoundWitnessArchivistId,
   ArchiveModuleConfig,
   BoundWitnessArchivist,
   XyoBoundWitnessFilterPredicate,
@@ -56,10 +55,10 @@ export class MongoDBArchiveBoundWitnessArchivist extends AbstractBoundWitnessArc
     if (payload_schemas?.length) filter.payload_schemas = { $in: payload_schemas }
     return (await (await this.sdk.find(filter)).sort(sort).limit(parsedLimit).maxTimeMS(2000).toArray()).map(removeId)
   }
-  async get(ids: ArchiveBoundWitnessArchivistId[]): Promise<Array<XyoBoundWitnessWithMeta | null>> {
-    const predicates = ids.map((id) => {
-      const _archive = assertEx(this.config.archive || id.archive, 'MongoDBArchiveBoundWitnessArchivist.get: Missing archive')
-      const _hash = assertEx(id.hash, 'MongoDBArchiveBoundWitnessArchivist.get: Missing hash')
+  async get(hashes: string[]): Promise<Array<XyoBoundWitnessWithMeta | null>> {
+    const predicates = hashes.map((hash) => {
+      const _archive = assertEx(this.config.archive, 'MongoDBArchiveBoundWitnessArchivist.get: Missing archive')
+      const _hash = assertEx(hash, 'MongoDBArchiveBoundWitnessArchivist.get: Missing hash')
       return { _archive, _hash }
     })
     const queries = predicates.map(async (predicate) => {

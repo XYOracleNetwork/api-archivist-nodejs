@@ -9,7 +9,6 @@ import {
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { EmptyObject } from '@xyo-network/core'
-import { XyoModuleConfigSchema } from '@xyo-network/module'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter, SortDirection } from 'mongodb'
@@ -22,9 +21,9 @@ export class MongoDBArchivePayloadsArchivist extends AbstractPayloadArchivist<Xy
   constructor(
     @inject(TYPES.Account) protected readonly account: XyoAccount,
     @inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayloadWithMeta>,
-    protected readonly config: ArchiveModuleConfig = { archive: '', schema: XyoModuleConfigSchema },
+    protected readonly config: ArchiveModuleConfig,
   ) {
-    super(account)
+    super(account, config)
   }
 
   async find(predicate: XyoPayloadFilterPredicate): Promise<XyoPayloadWithMeta[]> {

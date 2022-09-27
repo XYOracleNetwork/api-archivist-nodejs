@@ -25,7 +25,7 @@ export abstract class AbstractPayloadArchivist<T extends EmptyObject = EmptyObje
   extends XyoModule<XyoArchivistConfig>
   implements PayloadArchivist<T>
 {
-  constructor(protected readonly config: ArchiveModuleConfig, protected readonly account: XyoAccount) {
+  constructor(protected readonly account: XyoAccount, protected readonly config?: ArchiveModuleConfig) {
     super(config, account)
   }
 

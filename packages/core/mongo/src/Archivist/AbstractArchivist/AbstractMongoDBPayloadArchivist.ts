@@ -4,6 +4,7 @@ import { assertEx } from '@xylabs/assert'
 import { XyoAccount } from '@xyo-network/account'
 import {
   AbstractPayloadArchivist,
+  ArchiveModuleConfig,
   XyoBoundWitnessWithMeta,
   XyoPayloadFilterPredicate,
   XyoPayloadWithMeta,
@@ -28,8 +29,9 @@ export abstract class AbstractMongoDBPayloadArchivist<T extends EmptyObject = Em
     @inject(TYPES.Account) @named('root') protected readonly account: XyoAccount,
     @inject(MONGO_TYPES.PayloadSdkMongo) protected readonly payloads: BaseMongoSdk<XyoPayloadWithMeta<T>>,
     @inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta>,
+    protected readonly config?: ArchiveModuleConfig,
   ) {
-    super(account)
+    super(account, config)
   }
 
   public abstract get schema(): string
