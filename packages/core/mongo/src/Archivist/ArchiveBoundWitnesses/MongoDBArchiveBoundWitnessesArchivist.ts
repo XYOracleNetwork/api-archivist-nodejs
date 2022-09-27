@@ -4,6 +4,7 @@ import { prepareBoundWitnesses } from '@xyo-network/archivist-lib'
 import {
   AbstractBoundWitnessArchivist,
   ArchiveBoundWitnessesArchivistId,
+  ArchiveModuleConfig,
   BoundWitnessArchivist,
   XyoArchiveBoundWitnessFilterPredicate,
   XyoBoundWitnessMeta,
@@ -12,9 +13,9 @@ import {
   XyoPayloadWithPartialMeta,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { XyoBoundWitness } from '@xyo-network/boundwitness'
+import { BoundWitnessWrapper, XyoBoundWitness } from '@xyo-network/boundwitness'
 import { EmptyObject } from '@xyo-network/core'
-import { PayloadWrapper } from '@xyo-network/payload'
+import { XyoModuleConfigSchema } from '@xyo-network/module'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter, SortDirection } from 'mongodb'
@@ -30,6 +31,7 @@ export class MongoDBArchiveBoundWitnessesArchivist
   constructor(
     @inject(TYPES.Account) protected readonly account: XyoAccount,
     @inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly sdk: BaseMongoSdk<XyoBoundWitnessWithMeta>,
+    protected readonly config: ArchiveModuleConfig = { archive: '', schema: XyoModuleConfigSchema },
   ) {
     super(account)
   }
@@ -48,7 +50,7 @@ export class MongoDBArchiveBoundWitnessesArchivist
       _timestamp,
       schema: 'network.xyo.boundwitness',
     }
-    if (archive) filter._archive = archive
+    filter._archive = this.config?.archive || archive
     if (hash) filter._hash = hash
     // NOTE: Defaulting to $all since it makes the most sense when singing addresses are supplied
     // but based on how MongoDB implements multi-key indexes $in might be much faster and we could
@@ -61,7 +63,7 @@ export class MongoDBArchiveBoundWitnessesArchivist
   }
   async get(ids: ArchiveBoundWitnessesArchivistId[]): Promise<Array<XyoBoundWitnessWithMeta | null>> {
     const predicates = ids.map((id) => {
-      const _archive = assertEx(id.archive, 'MongoDBArchiveBoundWitnessesArchivist.get: Missing archive')
+      const _archive = assertEx(this.config.archive || id.archive, 'MongoDBArchiveBoundWitnessesArchivist.get: Missing archive')
       const _hash = assertEx(id.hash, 'MongoDBArchiveBoundWitnessesArchivist.get: Missing hash')
       return { _archive, _hash }
     })
@@ -77,8 +79,8 @@ export class MongoDBArchiveBoundWitnessesArchivist
     const _timestamp = Date.now()
     const bws = items
       .map((bw) => {
-        const _archive = assertEx(bw._archive, 'MongoDBArchiveBoundWitnessesArchivist.insert: Missing archive')
-        const bwMeta: XyoBoundWitnessMeta = { _archive, _hash: new PayloadWrapper(bw).hash, _timestamp }
+        const _archive = assertEx(this.config.archive || bw._archive, 'MongoDBArchiveBoundWitnessesArchivist.insert: Missing archive')
+        const bwMeta: XyoBoundWitnessMeta = { _archive, _hash: new BoundWitnessWrapper(bw).hash, _timestamp }
         const payloadMeta: XyoPayloadMeta = { _archive, _hash: '', _timestamp }
         return prepareBoundWitnesses([bw], bwMeta, payloadMeta)
       })
