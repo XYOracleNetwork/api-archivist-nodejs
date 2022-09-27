@@ -41,12 +41,10 @@ const handler: RequestHandler<BlockHashPathParams, XyoPartialPayloadMeta[][]> = 
     schema: XyoArchivistGetQuerySchema,
   }
   const bw = new BoundWitnessBuilder().payload(query).build()
-  const archiveBoundWitnessArchivist = archiveBoundWitnessArchivistFactory(archive)
-  const result = await archiveBoundWitnessArchivist.query(bw, query)
+  const result = await archiveBoundWitnessArchivistFactory(archive).query(bw, query)
   const block = (result?.[1]?.[0] as XyoBoundWitnessWithPartialMeta) || undefined
   if (block) {
-    const archivePayloadsArchivist = archivePayloadsArchivistFactory(archive)
-    res.json(await getPayloadsByHashes(archivePayloadsArchivist, archive, block.payload_hashes))
+    res.json(await getPayloadsByHashes(archivePayloadsArchivistFactory(archive), archive, block.payload_hashes))
   } else {
     next({ message: 'Block not found', statusCode: StatusCodes.NOT_FOUND })
   }

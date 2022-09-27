@@ -16,8 +16,7 @@ const handler: RequestHandler<BlockHashPathParams, XyoBoundWitness[]> = async (r
     schema: XyoArchivistGetQuerySchema,
   }
   const bw = new BoundWitnessBuilder().payload(query).build()
-  const archivist = archiveBoundWitnessArchivistFactory(archive)
-  const result = await archivist.query(bw, query)
+  const result = await archiveBoundWitnessArchivistFactory(archive).query(bw, query)
   const block = result?.[1]?.[0] as unknown as XyoBoundWitness
   res.json(scrubBoundWitnesses(block ? [block] : []))
 }
