@@ -25,19 +25,19 @@ const max = 1000
 let boundWitnessArchivistCache: LruCache<string, ArchiveBoundWitnessesArchivist> | undefined = undefined
 let payloadArchivistCache: LruCache<string, ArchivePayloadsArchivist> | undefined = undefined
 
-export type ArchiveBoundWitnessArchivistFactory = interfaces.Factory<ArchiveBoundWitnessesArchivist>
-export type ArchivePayloadArchivistFactory = interfaces.Factory<ArchivePayloadsArchivist>
+export type BoundWitnessArchivistFactory = interfaces.Factory<ArchiveBoundWitnessesArchivist>
+export type PayloadArchivistFactory = interfaces.Factory<ArchivePayloadsArchivist>
 
 export const addArchivistFactories = (container: Container) => {
   boundWitnessArchivistCache = new LruCache<string, ArchiveBoundWitnessesArchivist>({ max })
   payloadArchivistCache = new LruCache<string, ArchivePayloadsArchivist>({ max })
 
   container
-    .bind<ArchiveBoundWitnessArchivistFactory>(TYPES.ArchiveBoundWitnessesArchivistFactory)
+    .bind<BoundWitnessArchivistFactory>(TYPES.BoundWitnessesArchivistFactory)
     .toFactory<ArchiveBoundWitnessesArchivist, [string]>((context) => {
       return (archive: string) => getBoundWitnessArchivist(context, archive)
     })
-  container.bind<ArchivePayloadArchivistFactory>(TYPES.ArchivePayloadsArchivistFactory).toFactory<ArchivePayloadsArchivist, [string]>((context) => {
+  container.bind<PayloadArchivistFactory>(TYPES.PayloadsArchivistFactory).toFactory<ArchivePayloadsArchivist, [string]>((context) => {
     return (archive: string) => getPayloadArchivist(context, archive)
   })
 }
