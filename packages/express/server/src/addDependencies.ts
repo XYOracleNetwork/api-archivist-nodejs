@@ -3,7 +3,7 @@ import { dependencies } from '@xyo-network/archivist-dependencies'
 import { SchemaToQueryProcessorRegistry, XyoPayloadToQueryConverterRegistry } from '@xyo-network/archivist-middleware'
 import {
   ArchiveArchivist,
-  ArchiveBoundWitnessesArchivist,
+  ArchiveBoundWitnessArchivist,
   ArchiveKeyArchivist,
   ArchivePayloadsArchivist,
   ArchivePermissionsArchivist,
@@ -26,9 +26,9 @@ export const addDependencies = (app: Application) => {
     'Missing ArchivistWitnessedPayloadArchivist',
   )
   app.archiveArchivist = assertEx(dependencies.get<ArchiveArchivist>(TYPES.ArchiveArchivist), 'Missing ArchiveArchivist')
-  app.archiveBoundWitnessesArchivist = assertEx(
-    dependencies.get<ArchiveBoundWitnessesArchivist>(TYPES.ArchiveBoundWitnessesArchivist),
-    'Missing ArchiveBoundWitnessesArchivist',
+  app.ArchiveBoundWitnessArchivist = assertEx(
+    dependencies.get<ArchiveBoundWitnessArchivist>(TYPES.ArchiveBoundWitnessArchivist),
+    'Missing ArchiveBoundWitnessArchivist',
   )
   app.archivePayloadsArchivist = assertEx(
     dependencies.get<ArchivePayloadsArchivist>(TYPES.ArchivePayloadsArchivist),

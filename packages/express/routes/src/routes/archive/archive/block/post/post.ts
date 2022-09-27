@@ -14,7 +14,7 @@ const handler: RequestHandler<ArchivePathParams, XyoBoundWitnessWithMeta[], XyoB
   res,
 ) => {
   const { archive } = req.params || 'temp'
-  const { archiveBoundWitnessesArchivist, archivePayloadsArchivist } = req.app
+  const { ArchiveBoundWitnessArchivist, archivePayloadsArchivist } = req.app
   const [boundWitnessMeta, payloadMeta] = getRequestMeta(req)
 
   // Handle payload of single object or (preferred) array of bound witnesses
@@ -36,7 +36,7 @@ const handler: RequestHandler<ArchivePathParams, XyoBoundWitnessWithMeta[], XyoB
     schema: XyoArchivistInsertQuerySchema,
   }
   const boundWitnessQueryWitness = new BoundWitnessBuilder().payload(boundWitnessQuery).build()
-  await archiveBoundWitnessesArchivist.query(boundWitnessQueryWitness, boundWitnessQuery, boundWitnessQueryPayloads)
+  await ArchiveBoundWitnessArchivist.query(boundWitnessQueryWitness, boundWitnessQuery, boundWitnessQueryPayloads)
 
   if (payloads.length) {
     const payloadsQueryPayloads = payloads.map((p) => {

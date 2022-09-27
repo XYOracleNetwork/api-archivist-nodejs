@@ -10,7 +10,7 @@ import { BlockHashPathParams } from './blockHashPathParams'
 
 const handler: RequestHandler<BlockHashPathParams, XyoBoundWitness[]> = async (req, res) => {
   const { archive, hash } = req.params
-  const { archiveBoundWitnessesArchivist: archivist } = req.app
+  const { ArchiveBoundWitnessArchivist: archivist } = req.app
   const query: XyoArchivistGetQuery = {
     hashes: [{ archive, hash }] as unknown as string[],
     schema: XyoArchivistGetQuerySchema,

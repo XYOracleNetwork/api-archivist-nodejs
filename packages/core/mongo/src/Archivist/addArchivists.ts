@@ -1,6 +1,6 @@
 import {
   ArchiveArchivist,
-  ArchiveBoundWitnessesArchivist,
+  ArchiveBoundWitnessArchivist,
   ArchiveKeyArchivist,
   ArchivePayloadsArchivist,
   ArchivePermissionsArchivist,
@@ -13,7 +13,7 @@ import { TYPES } from '@xyo-network/archivist-types'
 import { Container } from 'inversify'
 
 import { MongoDBArchiveArchivist } from './Archive'
-import { MongoDBArchiveBoundWitnessesArchivist } from './ArchiveBoundWitnesses'
+import { MongoDBArchiveBoundWitnessArchivist } from './ArchiveBoundWitness'
 import { MongoDBArchiveKeyArchivist } from './ArchiveKey'
 import { MongoDBArchivePayloadsArchivist } from './ArchivePayloads'
 import { MongoDBArchivePermissionsPayloadPayloadArchivist } from './ArchivePermissions'
@@ -25,7 +25,7 @@ import { MongoDBArchivistWitnessedPayloadArchivist } from './WitnessedPayload'
 export const addArchivists = (container: Container) => {
   container.bind<ArchiveArchivist>(TYPES.ArchiveArchivist).to(MongoDBArchiveArchivist).inSingletonScope()
   container.bind<ArchivePayloadsArchivist>(TYPES.ArchivePayloadsArchivist).to(MongoDBArchivePayloadsArchivist).inSingletonScope()
-  container.bind<ArchiveBoundWitnessesArchivist>(TYPES.ArchiveBoundWitnessesArchivist).to(MongoDBArchiveBoundWitnessesArchivist).inSingletonScope()
+  container.bind<ArchiveBoundWitnessArchivist>(TYPES.ArchiveBoundWitnessArchivist).to(MongoDBArchiveBoundWitnessArchivist).inSingletonScope()
   container.bind<ArchiveKeyArchivist>(TYPES.ArchiveKeyArchivist).to(MongoDBArchiveKeyArchivist).inSingletonScope()
   container
     .bind<ArchivePermissionsArchivist>(TYPES.ArchivePermissionsArchivist)
