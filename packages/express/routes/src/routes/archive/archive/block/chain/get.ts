@@ -3,14 +3,14 @@ import 'source-map-support/register'
 import { assertEx } from '@xylabs/assert'
 import { asyncHandler, tryParseInt } from '@xylabs/sdk-api-express-ecs'
 import { XyoArchivistGetQuery, XyoArchivistGetQuerySchema } from '@xyo-network/archivist'
-import { ArchiveBoundWitnessesArchivist } from '@xyo-network/archivist-model'
+import { ArchiveBoundWitnessArchivist } from '@xyo-network/archivist-model'
 import { BoundWitnessBuilder, XyoBoundWitness } from '@xyo-network/boundwitness'
 import { RequestHandler } from 'express'
 
 import { BlockChainPathParams } from './blockChainPathParams'
 
 const getBlocks = async (
-  archivist: ArchiveBoundWitnessesArchivist,
+  archivist: ArchiveBoundWitnessArchivist,
   archive: string,
   hash: string,
   address: string,
@@ -38,7 +38,7 @@ const getBlocks = async (
 
 const handler: RequestHandler<BlockChainPathParams, XyoBoundWitness[]> = async (req, res) => {
   const { archive, address, limit, hash } = req.params
-  const { archiveBoundWitnessesArchivist: archivist } = req.app
+  const { ArchiveBoundWitnessArchivist: archivist } = req.app
   const limitNumber = tryParseInt(limit) ?? 20
   assertEx(limitNumber > 0 && limitNumber <= 100, 'limit must be between 1 and 100')
   const blocks: XyoBoundWitness[] = []

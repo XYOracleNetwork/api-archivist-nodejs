@@ -28,7 +28,7 @@ const handler: RequestHandler<
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
   }
   const { limit, order, timestamp } = req.query
-  const { archiveBoundWitnessesArchivist: archivist } = req.app
+  const { ArchiveBoundWitnessArchivist: archivist } = req.app
   const limitNumber = tryParseInt(limit) ?? defaultLimit
   assertEx(limitNumber > 0 && limitNumber <= maxLimit, `limit must be between 1 and ${maxLimit}`)
   const timestampNumber = tryParseInt(timestamp)
