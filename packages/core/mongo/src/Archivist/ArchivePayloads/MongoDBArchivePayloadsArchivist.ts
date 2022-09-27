@@ -9,6 +9,7 @@ import {
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { EmptyObject } from '@xyo-network/core'
+import { PayloadWrapper } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter, SortDirection } from 'mongodb'
@@ -59,7 +60,10 @@ export class MongoDBArchivePayloadsArchivist extends AbstractPayloadArchivist<Xy
   }
 
   async insert(items: XyoPayloadWithMeta[]) {
-    const result = await this.sdk.insertMany(items.map(removeId))
+    const payloads = items.map((p) => {
+      return { ...p, _archive: this.config.archive, _hash: new PayloadWrapper(p).hash }
+    })
+    const result = await this.sdk.insertMany(payloads.map(removeId))
     if (result.insertedCount != items.length) {
       throw new Error('MongoDBArchivePayloadsArchivist.insert: Error inserting Payloads')
     }
