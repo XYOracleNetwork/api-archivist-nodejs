@@ -9,21 +9,21 @@ import { Request } from 'express'
 import { resolvePayloadPointer } from './resolvePayloadPointer'
 
 const findByHash = async (req: Request, hash: string) => {
-  const { payloadsArchivist, boundWitnessesArchivist } = req.app
+  const { payloadArchivist, boundWitnessArchivist } = req.app
   const payloadFilter: XyoPayloadFilterPredicate = { hash }
   const payloadQuery: XyoArchivistFindQuery = {
     filter: payloadFilter,
     schema: XyoArchivistFindQuerySchema,
   }
   const payloadQueryWitness = new BoundWitnessBuilder().payload(payloadQuery).build()
-  const payloads = (await payloadsArchivist.query(payloadQueryWitness, payloadQuery))?.[1].filter(exists) as XyoPayloadWithMeta[]
+  const payloads = (await payloadArchivist.query(payloadQueryWitness, payloadQuery))?.[1].filter(exists) as XyoPayloadWithMeta[]
   if (payloads.length) return payloads
   const boundWitnessQuery: XyoArchivistFindQuery = {
     filter: { ...payloadFilter, schema: 'network.xyo.boundwitness' },
     schema: XyoArchivistFindQuerySchema,
   }
   const boundWitnessQueryWitness = new BoundWitnessBuilder().payload(boundWitnessQuery).build()
-  return (await boundWitnessesArchivist.query(boundWitnessQueryWitness, boundWitnessQuery))?.[1].filter(exists)
+  return (await boundWitnessArchivist.query(boundWitnessQueryWitness, boundWitnessQuery))?.[1].filter(exists)
 }
 
 export const getBlockForRequest = async (req: Request, hash: string): Promise<XyoPayload | undefined> => {
