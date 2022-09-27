@@ -16,6 +16,7 @@ import { XyoPayload } from '@xyo-network/payload'
 import { injectable } from 'inversify'
 
 import { XyoPayloadWithMeta, XyoPayloadWithPartialMeta } from '../Payload'
+import { ArchiveModuleConfig } from './ArchiveModuleConfig'
 import { PayloadArchivist } from './PayloadArchivist'
 import { XyoPayloadFilterPredicate } from './XyoPayloadFilterPredicate'
 
@@ -24,8 +25,8 @@ export abstract class AbstractPayloadArchivist<T extends EmptyObject = EmptyObje
   extends XyoModule<XyoArchivistConfig>
   implements PayloadArchivist<T>
 {
-  constructor(protected readonly account: XyoAccount) {
-    super(undefined, account)
+  constructor(protected readonly config: ArchiveModuleConfig, protected readonly account: XyoAccount) {
+    super(config, account)
   }
 
   override queries() {
