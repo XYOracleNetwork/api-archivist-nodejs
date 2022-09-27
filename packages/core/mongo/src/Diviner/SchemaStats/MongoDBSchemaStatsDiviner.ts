@@ -44,18 +44,18 @@ interface Stats {
 @injectable()
 export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner implements SchemaStatsDiviner, JobProvider {
   /**
-   * The max number of records to search for the aggregate query
+   * The max number of records to search during the aggregate query
    */
-  protected readonly aggregateLimit = 10000
+  protected readonly aggregateLimit = 5_000_000
   /**
    * The max number of iterations of aggregate queries to allow when
    * divining the schema stats within an archive
    */
-  protected readonly aggregateMaxIterations = 10000
+  protected readonly aggregateMaxIterations = 10_000
   /**
    * The amount of time to allow the aggregate query to execute
    */
-  protected readonly aggregateTimeout = 2000
+  protected readonly aggregateTimeoutMs = 10_000
   /**
    * The max number of simultaneous archives to divine at once
    */
@@ -99,7 +99,7 @@ export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner implements Sche
       },
       {
         name: 'MongoDBArchiveSchemaStatsDiviner.DivineArchivesBatch',
-        schedule: '10 minute',
+        schedule: '20 minute',
         task: async () => await this.divineArchivesBatch(),
       },
     ]
@@ -156,7 +156,7 @@ export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner implements Sche
           .skip(iteration)
           .limit(this.aggregateLimit)
           .group<PayloadSchemaCountsAggregateResult>({ _id: '$schema', count: { $sum: 1 } })
-          .maxTimeMS(this.aggregateTimeout)
+          .maxTimeMS(this.aggregateTimeoutMs)
           .toArray()
       })
       if (result.length < 1) break
