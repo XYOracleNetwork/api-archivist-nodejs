@@ -1,7 +1,7 @@
 import { assertEx } from '@xylabs/assert'
 import { XyoArchivistGetQuery, XyoArchivistGetQuerySchema, XyoArchivistInsertQuery, XyoArchivistInsertQuerySchema } from '@xyo-network/archivist'
 import {
-  ArchivePermissionsArchivist,
+  ArchivePermissionsArchivistFactory,
   QueryHandler,
   SetArchivePermissionsPayload,
   SetArchivePermissionsPayloadWithMeta,
@@ -32,7 +32,7 @@ const validateArraysAreDistinct = (allowed?: string[], disallowed?: string[]) =>
 
 @injectable()
 export class SetArchivePermissionsQueryHandler implements QueryHandler<SetArchivePermissionsQuery, SetArchivePermissionsPayload> {
-  constructor(@inject(TYPES.ArchivePermissionsArchivist) protected readonly archivist: ArchivePermissionsArchivist) {}
+  constructor(@inject(TYPES.ArchivePermissionsArchivistFactory) protected readonly archivistFactory: ArchivePermissionsArchivistFactory) {}
   async handle(query: SetArchivePermissionsQuery): Promise<SetArchivePermissionsPayload> {
     const archive = assertEx(query.payload._archive, 'SetArchivePermissionsQueryHandler.handle: Archive not supplied')
     validateAddresses(query)
@@ -43,14 +43,14 @@ export class SetArchivePermissionsQueryHandler implements QueryHandler<SetArchiv
       schema: XyoArchivistInsertQuerySchema,
     }
     const insertWitness = new QueryBoundWitnessBuilder().payload(insertQuery).query(PayloadWrapper.hash(insertQuery)).build()
-    const insertionResult = await this.archivist.query(insertWitness, [insertQuery, ...insertPayloads])
+    const insertionResult = await this.archivistFactory(archive).query(insertWitness, [insertQuery, ...insertPayloads])
     assertEx(insertionResult, 'SetArchivePermissionsQueryHandler.handle: Error inserting permissions')
     const getQuery: XyoArchivistGetQuery = {
       hashes: [archive],
       schema: XyoArchivistGetQuerySchema,
     }
     const getWitness = new QueryBoundWitnessBuilder().payload(getQuery).query(PayloadWrapper.hash(getQuery)).build()
-    const getResult = await this.archivist.query(getWitness, [getQuery])
+    const getResult = await this.archivistFactory(archive).query(getWitness, [getQuery])
     const permissions = assertEx(
       getResult?.[1]?.[0],
       'SetArchivePermissionsQueryHandler.handle: Error getting permissions',

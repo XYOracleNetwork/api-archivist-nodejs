@@ -1,7 +1,7 @@
 import { XyoArchive } from '@xyo-network/api'
 import { isLegacyPrivateArchive } from '@xyo-network/archivist-express-lib'
 import {
-  ArchivePermissionsArchivist,
+  ArchivePermissionsArchivistFactory,
   privateArchivePermissions,
   publicArchivePermissions,
   SetArchivePermissionsPayload,
@@ -9,13 +9,13 @@ import {
 import { XyoBoundWitness } from '@xyo-network/boundwitness'
 
 export const migrateLegacyArchives = async (
-  archivist: ArchivePermissionsArchivist,
+  archivist: ArchivePermissionsArchivistFactory,
   archives: XyoArchive[],
-): Promise<Array<(XyoBoundWitness | null)[]>> => {
+): Promise<Array<XyoBoundWitness | null>> => {
   const migrations = archives.map((archive) => {
     // create a new public/private archive record for the legacy archive
     const permissions: SetArchivePermissionsPayload = isLegacyPrivateArchive(archive) ? privateArchivePermissions : publicArchivePermissions
-    return archivist.insert([{ ...permissions, _archive: archive.archive }])
+    return archivist(archive.archive).insert([{ ...permissions, _archive: archive.archive }])
   })
-  return await Promise.all(migrations)
+  return (await Promise.all(migrations)).flat()
 }

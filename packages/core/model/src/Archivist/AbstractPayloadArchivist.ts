@@ -16,16 +16,17 @@ import { PayloadWrapper, XyoPayload, XyoPayloads } from '@xyo-network/payload'
 import { injectable } from 'inversify'
 
 import { XyoPayloadWithMeta, XyoPayloadWithPartialMeta } from '../Payload'
+import { ArchiveModuleConfig } from './ArchiveModuleConfig'
 import { PayloadArchivist } from './PayloadArchivist'
 import { XyoPayloadFilterPredicate } from './XyoPayloadFilterPredicate'
 
 @injectable()
-export abstract class AbstractPayloadArchivist<T extends EmptyObject = EmptyObject, TId = string>
+export abstract class AbstractPayloadArchivist<T extends EmptyObject = EmptyObject>
   extends XyoModule<XyoArchivistConfig>
-  implements PayloadArchivist<T, TId>
+  implements PayloadArchivist<T>
 {
-  constructor(protected readonly account: XyoAccount) {
-    super(undefined, account)
+  constructor(protected readonly account: XyoAccount, protected readonly config?: ArchiveModuleConfig) {
+    super(config, account)
   }
 
   override queries() {
@@ -53,7 +54,7 @@ export abstract class AbstractPayloadArchivist<T extends EmptyObject = EmptyObje
         }
         break
       case XyoArchivistGetQuerySchema:
-        result.push(...(await this.get(typedQuery.hashes as unknown as TId[])))
+        result.push(...(await this.get(typedQuery.hashes)))
         break
       case XyoArchivistInsertQuerySchema: {
         const wrappers = payloads?.map((payload) => PayloadWrapper.parse(payload)) ?? []
@@ -70,6 +71,6 @@ export abstract class AbstractPayloadArchivist<T extends EmptyObject = EmptyObje
   }
 
   abstract find(filter: XyoPayloadFilterPredicate<T>): Promise<XyoPayloadWithMeta<T>[]>
-  abstract get(id: TId[]): Promise<Array<XyoPayloadWithMeta<T> | null>>
+  abstract get(id: string[]): Promise<Array<XyoPayloadWithMeta<T> | null>>
   abstract insert(items: XyoPayloadWithPartialMeta<T>[]): Promise<XyoBoundWitness[]>
 }

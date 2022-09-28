@@ -3,7 +3,7 @@ import 'source-map-support/register'
 import { assertEx } from '@xylabs/assert'
 import { asyncHandler, tryParseInt } from '@xylabs/sdk-api-express-ecs'
 import { XyoArchivistFindQuery, XyoArchivistFindQuerySchema } from '@xyo-network/archivist'
-import { ArchiveBoundWitnessArchivist, XyoArchiveBoundWitnessFilterPredicate } from '@xyo-network/archivist-model'
+import { ArchiveBoundWitnessArchivist, XyoBoundWitnessFilterPredicate } from '@xyo-network/archivist-model'
 import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { QueryBoundWitnessBuilder } from '@xyo-network/module'
 import { PayloadWrapper } from '@xyo-network/payload'
@@ -12,7 +12,7 @@ import { RequestHandler } from 'express'
 import { BlockRecentPathParams } from './BlockRecentPathParams'
 
 const getBoundWitnesses = (archivist: ArchiveBoundWitnessArchivist, archive: string, limit: number) => {
-  const filter: XyoArchiveBoundWitnessFilterPredicate = { archive, limit }
+  const filter: XyoBoundWitnessFilterPredicate = { limit }
   const query: XyoArchivistFindQuery = {
     filter,
     schema: XyoArchivistFindQuerySchema,

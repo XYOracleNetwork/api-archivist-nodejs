@@ -2,7 +2,7 @@ import { assertEx } from '@xylabs/assert'
 import { asyncHandler, NoReqBody, NoReqQuery, tryParseInt } from '@xylabs/sdk-api-express-ecs'
 import { XyoArchivistFindQuery, XyoArchivistFindQuerySchema } from '@xyo-network/archivist'
 import { scrubBoundWitnesses } from '@xyo-network/archivist-lib'
-import { ArchiveLocals, ArchivePathParams, SortDirection, XyoArchiveBoundWitnessFilterPredicate } from '@xyo-network/archivist-model'
+import { ArchiveLocals, ArchivePathParams, SortDirection, XyoBoundWitnessFilterPredicate } from '@xyo-network/archivist-model'
 import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { QueryBoundWitnessBuilder } from '@xyo-network/module'
 import { PayloadWrapper } from '@xyo-network/payload'
@@ -35,8 +35,7 @@ const handler: RequestHandler<
   assertEx(limitNumber > 0 && limitNumber <= maxLimit, `limit must be between 1 and ${maxLimit}`)
   const timestampNumber = tryParseInt(timestamp)
   const parsedOrder = order?.toLowerCase?.() === 'asc' ? 'asc' : 'desc'
-  const filter: XyoArchiveBoundWitnessFilterPredicate = {
-    archive: archive.archive,
+  const filter: XyoBoundWitnessFilterPredicate = {
     limit: limitNumber,
     order: parsedOrder,
     timestamp: timestampNumber,

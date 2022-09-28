@@ -3,10 +3,9 @@ import { XyoAccount } from '@xyo-network/account'
 import { prepareBoundWitnesses } from '@xyo-network/archivist-lib'
 import {
   AbstractBoundWitnessArchivist,
-  ArchiveBoundWitnessArchivistId,
   ArchiveModuleConfig,
   BoundWitnessArchivist,
-  XyoArchiveBoundWitnessFilterPredicate,
+  XyoBoundWitnessFilterPredicate,
   XyoBoundWitnessMeta,
   XyoBoundWitnessWithMeta,
   XyoPayloadMeta,
@@ -24,10 +23,7 @@ import { removeId } from '../../Mongo'
 import { MONGO_TYPES } from '../../types'
 
 @injectable()
-export class MongoDBArchiveBoundWitnessArchivist
-  extends AbstractBoundWitnessArchivist<ArchiveBoundWitnessArchivistId>
-  implements BoundWitnessArchivist<ArchiveBoundWitnessArchivistId>
-{
+export class MongoDBArchiveBoundWitnessArchivist extends AbstractBoundWitnessArchivist implements BoundWitnessArchivist {
   constructor(
     @inject(TYPES.Account) protected readonly account: XyoAccount,
     @inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly sdk: BaseMongoSdk<XyoBoundWitnessWithMeta>,
@@ -36,10 +32,8 @@ export class MongoDBArchiveBoundWitnessArchivist
     super(account)
   }
 
-  async find(
-    predicate: XyoArchiveBoundWitnessFilterPredicate,
-  ): Promise<XyoBoundWitnessWithMeta<EmptyObject, XyoPayloadWithPartialMeta<EmptyObject>>[]> {
-    const { archive, addresses, hash, limit, order, payload_hashes, payload_schemas, timestamp, ...props } = predicate
+  async find(predicate: XyoBoundWitnessFilterPredicate): Promise<XyoBoundWitnessWithMeta<EmptyObject, XyoPayloadWithPartialMeta<EmptyObject>>[]> {
+    const { addresses, hash, limit, order, payload_hashes, payload_schemas, timestamp, ...props } = predicate
     const parsedLimit = limit || 100
     const parsedOrder = order || 'desc'
     const sort: { [key: string]: SortDirection } = { _timestamp: parsedOrder === 'asc' ? 1 : -1 }
@@ -50,7 +44,7 @@ export class MongoDBArchiveBoundWitnessArchivist
       _timestamp,
       schema: 'network.xyo.boundwitness',
     }
-    filter._archive = this.config?.archive || archive
+    filter._archive = this.config?.archive
     if (hash) filter._hash = hash
     // NOTE: Defaulting to $all since it makes the most sense when singing addresses are supplied
     // but based on how MongoDB implements multi-key indexes $in might be much faster and we could
@@ -62,10 +56,10 @@ export class MongoDBArchiveBoundWitnessArchivist
     const result = (await (await this.sdk.find(filter)).sort(sort).limit(parsedLimit).maxTimeMS(2000).toArray()).map(removeId)
     return result
   }
-  async get(ids: ArchiveBoundWitnessArchivistId[]): Promise<Array<XyoBoundWitnessWithMeta | null>> {
-    const predicates = ids.map((id) => {
-      const _archive = assertEx(this.config.archive || id.archive, 'MongoDBArchiveBoundWitnessArchivist.get: Missing archive')
-      const _hash = assertEx(id.hash, 'MongoDBArchiveBoundWitnessArchivist.get: Missing hash')
+  async get(hashes: string[]): Promise<Array<XyoBoundWitnessWithMeta | null>> {
+    const predicates = hashes.map((hash) => {
+      const _archive = assertEx(this.config.archive, 'MongoDBArchiveBoundWitnessArchivist.get: Missing archive')
+      const _hash = assertEx(hash, 'MongoDBArchiveBoundWitnessArchivist.get: Missing hash')
       return { _archive, _hash }
     })
     const queries = predicates.map(async (predicate) => {
@@ -87,7 +81,7 @@ export class MongoDBArchiveBoundWitnessArchivist
       })
       .map((r) => r.sanitized[0])
     // TODO: Should we insert payloads here too?
-    const result = await this.sdk.insertMany(bws.map(removeId))
+    const result = await this.sdk.insertMany(bws.map<XyoBoundWitnessWithMeta>(removeId))
     if (result.insertedCount != items.length) {
       throw new Error('MongoDBArchiveBoundWitnessArchivist.insert: Error inserting BoundWitnesses')
     }

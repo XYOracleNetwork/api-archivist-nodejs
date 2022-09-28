@@ -18,7 +18,7 @@ const getPayloadsByHashes = async (archivist: ArchivePayloadsArchivist, archive:
   const payloads: (XyoPayloadWithPartialMeta | undefined)[] = []
   for (const hash of hashes) {
     const query: XyoArchivistGetQuery = {
-      hashes: [{ archive, hash }] as unknown as string[],
+      hashes: [hash],
       schema: XyoArchivistGetQuerySchema,
     }
     const bw = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(query)).payload(query).build()
@@ -38,7 +38,7 @@ const handler: RequestHandler<BlockHashPathParams, XyoPartialPayloadMeta[][]> = 
   const { archive, hash } = req.params
   const { archivePayloadsArchivistFactory, archiveBoundWitnessArchivistFactory } = req.app
   const query: XyoArchivistGetQuery = {
-    hashes: [{ archive, hash }] as unknown as string[],
+    hashes: [hash],
     schema: XyoArchivistGetQuerySchema,
   }
   const bw = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(query)).payload(query).build()

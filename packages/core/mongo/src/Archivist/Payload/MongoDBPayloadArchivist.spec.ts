@@ -7,7 +7,7 @@ import {
   XyoArchivistWrapper,
 } from '@xyo-network/archivist'
 import { DebugPayload, DebugPayloadWithMeta, DebugSchema, XyoPayloadFilterPredicate, XyoPayloadWithMeta } from '@xyo-network/archivist-model'
-import { BoundWitnessBuilder, XyoBoundWitness } from '@xyo-network/boundwitness'
+import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { QueryBoundWitnessBuilder } from '@xyo-network/module'
 import { PayloadWrapper, XyoPayloadBuilder } from '@xyo-network/payload'
 import { v4 } from 'uuid'

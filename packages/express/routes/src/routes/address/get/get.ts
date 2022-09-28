@@ -12,8 +12,8 @@ const activeModules: Record<string, Module> = {}
 let populated = false
 
 const populateActiveModules = (req: Request) => {
-  const { payloadsArchivist, boundWitnessesArchivist, schemaStatsDiviner, payloadStatsDiviner, boundWitnessStatsDiviner } = req.app
-  const modules = [payloadsArchivist, boundWitnessesArchivist, schemaStatsDiviner, payloadStatsDiviner, boundWitnessStatsDiviner]
+  const { payloadArchivist, boundWitnessArchivist, schemaStatsDiviner, payloadStatsDiviner, boundWitnessStatsDiviner } = req.app
+  const modules = [payloadArchivist, boundWitnessArchivist, schemaStatsDiviner, payloadStatsDiviner, boundWitnessStatsDiviner]
   modules.filter(isModule).forEach((mod) => {
     activeModules[mod.address] = mod
   })

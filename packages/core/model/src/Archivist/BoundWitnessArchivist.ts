@@ -5,12 +5,12 @@ import { Module } from '@xyo-network/module'
 import { XyoBoundWitnessWithPartialMeta } from '../BoundWitness'
 import { XyoBoundWitnessFilterPredicate } from './XyoBoundWitnessFilterPredicate'
 
-export type BoundWitnessArchivist<TId = string> = Archivist<
+export type BoundWitnessArchivist = Archivist<
   XyoBoundWitnessWithPartialMeta | null,
   XyoBoundWitness | null,
   XyoBoundWitnessWithPartialMeta,
   XyoBoundWitnessWithPartialMeta | null,
   XyoBoundWitnessFilterPredicate,
-  TId
+  string
 > &
   Module

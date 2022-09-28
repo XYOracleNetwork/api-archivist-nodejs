@@ -12,9 +12,9 @@ let populated = false
 // TODO: Handle updates dynamically via Diviner, etc.
 // potentially listening to insertion/removal events
 const populateNodeDescription = (req: Request) => {
-  const { payloadsArchivist, boundWitnessesArchivist, schemaStatsDiviner, payloadStatsDiviner, boundWitnessStatsDiviner } = req.app
+  const { payloadArchivist, boundWitnessArchivist, schemaStatsDiviner, payloadStatsDiviner, boundWitnessStatsDiviner } = req.app
   nodeDescription.push(
-    ...[payloadsArchivist, boundWitnessesArchivist, schemaStatsDiviner, payloadStatsDiviner, boundWitnessStatsDiviner].map(nodeInfoFromModule),
+    ...[payloadArchivist, boundWitnessArchivist, schemaStatsDiviner, payloadStatsDiviner, boundWitnessStatsDiviner].map(nodeInfoFromModule),
   )
   populated = true
 }

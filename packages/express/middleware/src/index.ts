@@ -4,10 +4,10 @@ import {
   ArchiveBoundWitnessArchivistFactory,
   ArchiveKeyArchivist,
   ArchivePayloadsArchivistFactory,
-  ArchivePermissionsArchivist,
-  BoundWitnessesArchivist,
+  ArchivePermissionsArchivistFactory,
+  BoundWitnessArchivist,
   BoundWitnessStatsDiviner,
-  PayloadsArchivist,
+  PayloadArchivist,
   PayloadStatsDiviner,
   Query,
   QueryProcessorRegistry,
@@ -44,12 +44,12 @@ declare global {
       archiveBoundWitnessArchivistFactory: ArchiveBoundWitnessArchivistFactory
       archiveKeyArchivist: ArchiveKeyArchivist
       archivePayloadsArchivistFactory: ArchivePayloadsArchivistFactory
-      archivePermissionsArchivist: ArchivePermissionsArchivist
+      archivePermissionsArchivistFactory: ArchivePermissionsArchivistFactory
       archivistWitnessedPayloadArchivist: WitnessedPayloadArchivist
+      boundWitnessArchivist: BoundWitnessArchivist
       boundWitnessStatsDiviner: BoundWitnessStatsDiviner
-      boundWitnessesArchivist: BoundWitnessesArchivist
+      payloadArchivist: PayloadArchivist
       payloadStatsDiviner: PayloadStatsDiviner
-      payloadsArchivist: PayloadsArchivist
       queryConverters: QueryConverterRegistry
       queryProcessors: QueryProcessorRegistry
       queryQueue: Queue<Query>
