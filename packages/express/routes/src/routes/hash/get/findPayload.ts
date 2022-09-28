@@ -6,7 +6,7 @@ import { PayloadWrapper, XyoPayload } from '@xyo-network/payload'
 const createPayloadFilterFromSearchCriteria = (searchCriteria: PayloadSearchCriteria): XyoPayloadFilterPredicate => {
   const { archives, direction, schemas, timestamp } = searchCriteria
   const order = direction === 'asc' ? 'asc' : 'desc'
-  const query: XyoPayloadFilterPredicate = { order, timestamp }
+  const query: XyoPayloadFilterPredicate = { limit: 1, order, timestamp }
   if (archives?.length) query.archives = archives
   if (schemas?.length) query.schemas = schemas
   return query
