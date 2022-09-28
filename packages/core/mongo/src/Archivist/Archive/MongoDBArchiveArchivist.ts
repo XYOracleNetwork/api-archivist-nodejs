@@ -9,6 +9,7 @@ import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter, SortDirection, WithId } from 'mongodb'
 
+import { DefaultLimit, DefaultOrder } from '../../defaults'
 import { MONGO_TYPES } from '../../types'
 
 interface UpsertFilter {
@@ -33,8 +34,8 @@ export class MongoDBArchiveArchivist implements ArchiveArchivist {
   async find(predicate?: XyoPayloadFilterPredicate<XyoArchive>): Promise<Required<XyoArchive>[]> {
     if (!predicate) return []
     const { archives, limit, offset, order, user } = predicate
-    const parsedLimit = limit || 100
-    const parsedOrder = order || 'desc'
+    const parsedLimit = limit || DefaultLimit
+    const parsedOrder = order || DefaultOrder
     const sort: { [key: string]: SortDirection } = { $natural: parsedOrder === 'asc' ? 1 : -1 }
     const filter: Filter<Required<XyoArchive>> = {}
     if (archives?.length) filter.archive = { $in: archives }

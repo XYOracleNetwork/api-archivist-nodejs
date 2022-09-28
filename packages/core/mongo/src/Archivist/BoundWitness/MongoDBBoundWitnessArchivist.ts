@@ -15,6 +15,7 @@ import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter, SortDirection } from 'mongodb'
 
+import { DefaultLimit, DefaultOrder } from '../../defaults'
 import { removeId } from '../../Mongo'
 import { MONGO_TYPES } from '../../types'
 
@@ -28,8 +29,8 @@ export class MongoDBBoundWitnessArchivist extends AbstractBoundWitnessArchivist 
   }
   async find(predicate: XyoBoundWitnessFilterPredicate): Promise<XyoBoundWitnessWithMeta[]> {
     const { archives, addresses, hash, limit, order, payload_hashes, payload_schemas, timestamp, ...props } = predicate
-    const parsedLimit = limit || 100
-    const parsedOrder = order || 'desc'
+    const parsedLimit = limit || DefaultLimit
+    const parsedOrder = order || DefaultOrder
     const sort: { [key: string]: SortDirection } = { _timestamp: parsedOrder === 'asc' ? 1 : -1 }
     const parsedTimestamp = timestamp ? timestamp : parsedOrder === 'desc' ? Date.now() : 0
     const _timestamp = parsedOrder === 'desc' ? { $lt: parsedTimestamp } : { $gt: parsedTimestamp }
