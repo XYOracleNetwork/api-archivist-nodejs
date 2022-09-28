@@ -43,13 +43,13 @@ describe('MongoDBArchivePayloadsArchivist', () => {
 
   beforeAll(async () => {
     const query: XyoArchivistInsertQuery = {
-      payloads: hashes,
+      payloads: payloads.map((payload) => PayloadWrapper.hash(payload)),
       schema: XyoArchivistInsertQuerySchema,
     }
-    const queryWitness = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(query)).payload(query).build()
+    const queryWitness = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(query)).payloads(payloads).build()
     const result = await sut.query(queryWitness, [query, ...payloads])
     expect(result).toBeArrayOfSize(count)
-    const bw: XyoBoundWitness = result?.[0]
+    const bw: XyoBoundWitness = result?.[1].pop() as XyoBoundWitness
     expect(bw).toBeObject()
     expect(bw._signatures).toBeArrayOfSize(1)
     expect(bw.addresses).toBeArrayOfSize(1)

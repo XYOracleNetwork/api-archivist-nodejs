@@ -67,7 +67,7 @@ describe('MongoDBBoundWitnessArchivist', () => {
       payloads: boundWitnesses.map((payload) => PayloadWrapper.hash(payload)),
       schema: XyoArchivistInsertQuerySchema,
     }
-    const queryWitness = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(query)).payload(query).build()
+    const queryWitness = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(query)).payloads(boundWitnesses).build()
     const result = await sut.query(queryWitness, [query, ...boundWitnesses])
     expect(result).toBeArrayOfSize(count)
     const bw: XyoBoundWitness = result?.[0]

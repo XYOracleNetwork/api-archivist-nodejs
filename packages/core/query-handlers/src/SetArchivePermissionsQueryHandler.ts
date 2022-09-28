@@ -39,10 +39,10 @@ export class SetArchivePermissionsQueryHandler implements QueryHandler<SetArchiv
     validateSchema(query)
     const insertPayloads = [query.payload]
     const insertQuery: XyoArchivistInsertQuery = {
-      payloads: insertPayloads.map((p) => new PayloadWrapper(p).hash),
+      payloads: insertPayloads.map((p) => PayloadWrapper.hash(p)),
       schema: XyoArchivistInsertQuerySchema,
     }
-    const insertWitness = new QueryBoundWitnessBuilder().payload(insertQuery).query(PayloadWrapper.hash(insertQuery)).build()
+    const insertWitness = new QueryBoundWitnessBuilder().payloads(insertPayloads).query(PayloadWrapper.hash(insertQuery)).build()
     const insertionResult = await this.archivistFactory(archive).query(insertWitness, [insertQuery, ...insertPayloads])
     assertEx(insertionResult, 'SetArchivePermissionsQueryHandler.handle: Error inserting permissions')
     const getQuery: XyoArchivistGetQuery = {
