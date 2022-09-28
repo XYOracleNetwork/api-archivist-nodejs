@@ -59,7 +59,8 @@ export class MongoDBArchiveBoundWitnessArchivist
     if (addresses?.length) filter.addresses = { $all: addresses }
     if (payload_hashes?.length) filter.payload_hashes = { $in: payload_hashes }
     if (payload_schemas?.length) filter.payload_schemas = { $in: payload_schemas }
-    return (await (await this.sdk.find(filter)).sort(sort).limit(parsedLimit).maxTimeMS(2000).toArray()).map(removeId)
+    const result = (await (await this.sdk.find(filter)).sort(sort).limit(parsedLimit).maxTimeMS(2000).toArray()).map(removeId)
+    return result
   }
   async get(ids: ArchiveBoundWitnessArchivistId[]): Promise<Array<XyoBoundWitnessWithMeta | null>> {
     const predicates = ids.map((id) => {

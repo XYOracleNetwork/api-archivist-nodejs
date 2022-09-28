@@ -10,8 +10,8 @@ const handler: RequestHandler<ArchivePathParams, string[]> = async (req, res) =>
   const { schemaStatsDiviner: diviner } = req.app
   const payloads: SchemaStatsQueryPayload[] = [{ archive, schema: SchemaStatsQuerySchema }]
   const query = { payloads, schema: XyoDivinerDivineQuerySchema }
-  const bw = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(query)).payload(query).build()
-  const result = (await diviner.query(bw, [query])) as ModuleQueryResult<SchemaStatsPayload>
+  const bw = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(query)).payloads(payloads).build()
+  const result = (await diviner.query(bw, [query, ...payloads])) as ModuleQueryResult<SchemaStatsPayload>
   const counts: Record<string, number> = result?.[1]?.[0]?.count || {}
   const schemas = Object.keys(counts)
   res.json(schemas)

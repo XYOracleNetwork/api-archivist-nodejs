@@ -24,8 +24,8 @@ const handler: RequestHandler<ArchivePathParams, GetArchiveBlockStats> = async (
   const { boundWitnessStatsDiviner: diviner } = req.app
   const payloads: BoundWitnessStatsQueryPayload[] = [{ archive, schema: BoundWitnessStatsQuerySchema }]
   const query = { payloads, schema: XyoDivinerDivineQuerySchema }
-  const bw = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(query)).payload(query).build()
-  const result = (await diviner.query(bw, [query])) as ModuleQueryResult<BoundWitnessStatsPayload>
+  const bw = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(query)).payloads(payloads).build()
+  const result = (await diviner.query(bw, [query, ...payloads])) as ModuleQueryResult<BoundWitnessStatsPayload>
   const answer: BoundWitnessStatsPayload = result?.[1]?.[0] || unknownCount
   res.json(answer)
 }
