@@ -1,14 +1,16 @@
 import { assertEx } from '@xylabs/assert'
+import { XyoArchivistGetQuery, XyoArchivistGetQuerySchema, XyoArchivistInsertQuery, XyoArchivistInsertQuerySchema } from '@xyo-network/archivist'
 import {
-  ArchivePermissionsArchivist,
+  ArchivePermissionsArchivistFactory,
   QueryHandler,
   SetArchivePermissionsPayload,
   SetArchivePermissionsPayloadWithMeta,
   SetArchivePermissionsQuery,
-  setArchivePermissionsSchema,
+  SetArchivePermissionsSchema,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { XyoPayloadBuilder } from '@xyo-network/payload'
+import { BoundWitnessBuilder } from '@xyo-network/boundwitness'
+import { PayloadWrapper, XyoPayloadBuilder } from '@xyo-network/payload'
 import { inject, injectable } from 'inversify'
 
 const validateAddresses = (query: SetArchivePermissionsQuery) => {
@@ -30,16 +32,32 @@ const validateArraysAreDistinct = (allowed?: string[], disallowed?: string[]) =>
 
 @injectable()
 export class SetArchivePermissionsQueryHandler implements QueryHandler<SetArchivePermissionsQuery, SetArchivePermissionsPayload> {
-  constructor(@inject(TYPES.ArchivePermissionsArchivist) protected readonly archivePermissionsArchivist: ArchivePermissionsArchivist) {}
+  constructor(@inject(TYPES.ArchivePermissionsArchivistFactory) protected readonly archivistFactory: ArchivePermissionsArchivistFactory) {}
   async handle(query: SetArchivePermissionsQuery): Promise<SetArchivePermissionsPayload> {
-    const archive = assertEx(query.payload._archive)
+    const archive = assertEx(query.payload._archive, 'SetArchivePermissionsQueryHandler.handle: Archive not supplied')
     validateAddresses(query)
     validateSchema(query)
-    await this.archivePermissionsArchivist.insert([query.payload])
-    const permissions = await this.archivePermissionsArchivist.get([archive])
-    const currentPermissions = assertEx(permissions?.[0])
-    return new XyoPayloadBuilder<SetArchivePermissionsPayloadWithMeta>({ schema: setArchivePermissionsSchema })
-      .fields({ ...currentPermissions, _queryId: query.id, _timestamp: Date.now() })
+    const insertPayloads = [query.payload]
+    const insertQuery: XyoArchivistInsertQuery = {
+      payloads: insertPayloads.map((p) => new PayloadWrapper(p).hash),
+      schema: XyoArchivistInsertQuerySchema,
+    }
+    const insertWitness = new BoundWitnessBuilder().payload(insertQuery).build()
+    const archivist = this.archivistFactory(archive)
+    const insertionResult = await archivist.query(insertWitness, insertQuery, insertPayloads)
+    assertEx(insertionResult, 'SetArchivePermissionsQueryHandler.handle: Error inserting permissions')
+    const getQuery: XyoArchivistGetQuery = {
+      hashes: [archive],
+      schema: XyoArchivistGetQuerySchema,
+    }
+    const getWitness = new BoundWitnessBuilder().payload(getQuery).build()
+    const getResult = await archivist.query(getWitness, getQuery)
+    const permissions = assertEx(
+      getResult?.[1]?.[0],
+      'SetArchivePermissionsQueryHandler.handle: Error getting permissions',
+    ) as SetArchivePermissionsPayload
+    return new XyoPayloadBuilder<SetArchivePermissionsPayloadWithMeta>({ schema: SetArchivePermissionsSchema })
+      .fields({ ...permissions, _queryId: query.id, _timestamp: Date.now() })
       .build()
   }
 }

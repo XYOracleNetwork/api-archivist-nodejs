@@ -1,4 +1,6 @@
-import { XyoQueryPayload } from '@xyo-network/module'
-import { XyoPayload, XyoPayloadWithMeta } from '@xyo-network/payload'
+import { XyoQuery } from '@xyo-network/module'
+import { XyoPayload } from '@xyo-network/payload'
 
-export type XyoQueryPayloadWithMeta<T extends XyoPayload = XyoPayload> = XyoPayloadWithMeta<XyoQueryPayload<T & { _queryId?: string }>>
+import { XyoPayloadWithMeta } from '../Payload'
+
+export type XyoQueryPayloadWithMeta<T extends XyoPayload = XyoPayload> = XyoPayloadWithMeta<XyoQuery<T & { _queryId?: string }>>

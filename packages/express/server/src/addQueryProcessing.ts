@@ -21,8 +21,6 @@ export const addQueryProcessing = () => {
       try {
         const processor = queryProcessors.processors[query.payload.schema]
         if (processor) {
-          // TODO: Validate auth (address/schema allowed)
-
           // Enqueue null in the response queue to indicate we're processing it
           await responseQueue.enqueue({ huri: null, id })
           const result = (await processor(query)) as XyoQueryPayloadWithMeta
@@ -35,7 +33,7 @@ export const addQueryProcessing = () => {
 
             // Witness result and store result in archive
             const stored = await witnessedPayloadArchivist.insert([result])
-            const hash = stored?.[0]?._hash
+            const hash = stored?.payload_hashes?.[0]
             if (hash) {
               // Store result in response queue
               await responseQueue.enqueue({ huri: new Huri(hash), id })

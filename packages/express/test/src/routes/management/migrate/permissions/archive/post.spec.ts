@@ -1,22 +1,29 @@
 import { ForgetPromise } from '@xylabs/forget'
 import { XyoArchive } from '@xyo-network/api'
-import { DebugPayload, debugSchema, SetArchivePermissionsPayload } from '@xyo-network/archivist-model'
-import { XyoBoundWitnessBuilder } from '@xyo-network/boundwitness'
+import { DebugPayload, DebugSchema, SetArchivePermissionsPayload } from '@xyo-network/archivist-model'
+import { BoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { XyoPayloadBuilder } from '@xyo-network/payload'
 import { StatusCodes } from 'http-status-codes'
 
-import { claimArchive, getTokenForNewUser, postCommandsToArchive, request, setArchiveAccessControl } from '../../../../../testUtil'
+import {
+  claimArchive,
+  getTokenForOtherUnitTestUser,
+  getTokenForUnitTestUser,
+  postCommandsToArchive,
+  request,
+  setArchiveAccessControl,
+} from '../../../../../testUtil'
 
 interface MigrationResponse {
   archive: XyoArchive
   migrated: SetArchivePermissionsPayload
 }
 
-const schema = debugSchema
+const schema = DebugSchema
 
 const postCommandToArchive = async (archive: string, token?: string, expectedStatus: StatusCodes = StatusCodes.ACCEPTED) => {
   const payload = new XyoPayloadBuilder<DebugPayload>({ schema }).build()
-  const bw = new XyoBoundWitnessBuilder({ inlinePayloads: true }).payload(payload).build()
+  const bw = new BoundWitnessBuilder({ inlinePayloads: true }).payload(payload).build()
   await postCommandsToArchive([bw], archive, token, expectedStatus)
 }
 
@@ -39,8 +46,8 @@ describe('/management/migrate/permissions/archives/:archive', () => {
   let otherUserToken: string
   let archive: XyoArchive
   beforeAll(async () => {
-    ownerToken = await getTokenForNewUser()
-    otherUserToken = await getTokenForNewUser()
+    ownerToken = await getTokenForUnitTestUser()
+    otherUserToken = await getTokenForOtherUnitTestUser()
   })
   describe('with public archive', () => {
     beforeAll(async () => {

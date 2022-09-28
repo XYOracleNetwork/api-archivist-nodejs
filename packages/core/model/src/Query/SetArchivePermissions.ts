@@ -4,8 +4,8 @@ import { ArchivePermissions } from '../Domain'
 import { Query } from './Query'
 import { XyoQueryPayloadWithMeta } from './XyoQueryPayloadWithMeta'
 
-export const setArchivePermissionsSchema = 'network.xyo.security.archive.permissions.set'
-export type SetArchivePermissionsSchema = typeof setArchivePermissionsSchema
+export type SetArchivePermissionsSchema = 'network.xyo.security.archive.permissions.set'
+export const SetArchivePermissionsSchema: SetArchivePermissionsSchema = 'network.xyo.security.archive.permissions.set'
 
 export interface SetArchivePermissions {
   addresses?: ArchivePermissions
@@ -19,12 +19,12 @@ export type SetArchivePermissionsPayload = XyoPayload<SetArchivePermissions>
 export class SetArchivePermissionsQuery extends Query<SetArchivePermissionsPayload> {}
 
 export const publicArchivePermissions: SetArchivePermissionsPayload = {
-  schema: setArchivePermissionsSchema,
+  schema: SetArchivePermissionsSchema,
 }
 
 export const privateArchivePermissions: SetArchivePermissionsPayload = {
   addresses: {
     allow: [],
   },
-  schema: setArchivePermissionsSchema,
+  schema: SetArchivePermissionsSchema,
 }

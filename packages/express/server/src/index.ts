@@ -10,12 +10,12 @@ import express, { Express } from 'express'
 import { addAuth } from './addAuth'
 import { addDependencies } from './addDependencies'
 import { addErrorHandlers } from './addErrorHandlers'
-import { addHealthChecks } from './addHealthChecks'
 import { addMiddleware } from './addMiddleware'
 import { addQueryConverters } from './addQueryConverters'
 import { addQueryProcessing } from './addQueryProcessing'
 import { addQueryProcessors } from './addQueryProcessors'
 import { configureEnvironment } from './configureEnvironment'
+import { initializeModules } from './initializeModules'
 
 export const getApp = async (): Promise<Express> => {
   await configureEnvironment()
@@ -27,12 +27,12 @@ export const getApp = async (): Promise<Express> => {
   app.use(compression())
 
   addDependencies(app)
+  await initializeModules()
   addMiddleware(app)
   addAuth(app)
   addQueryConverters()
   addQueryProcessors(app)
   addQueryProcessing()
-  addHealthChecks(app)
   addRoutes(app)
   addErrorHandlers(app)
   return app

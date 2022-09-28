@@ -1,4 +1,4 @@
-import { XyoPayloadWithMeta } from '@xyo-network/payload'
+import { XyoPayloadWithMeta } from '@xyo-network/archivist-model'
 import { Request } from 'express'
 
 import { QueryConverter } from './QueryConverter'

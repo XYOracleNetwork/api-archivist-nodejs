@@ -1,5 +1,5 @@
 import { XyoBoundWitness } from '@xyo-network/boundwitness'
-import { XyoPayload } from '@xyo-network/payload'
+import { PayloadWrapper, XyoPayload } from '@xyo-network/payload'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import {
@@ -8,7 +8,8 @@ import {
   getBlocksWithPayloads,
   getBlockWithPayloads,
   getHash,
-  getTokenForNewUser,
+  getTokenForOtherUnitTestUser,
+  getTokenForUnitTestUser,
   postBlock,
   setArchiveAccessControl,
 } from '../../../testUtil'
@@ -17,8 +18,8 @@ describe('/:hash', () => {
   let ownerToken = ''
   let otherUserToken = ''
   beforeAll(async () => {
-    ownerToken = await getTokenForNewUser()
-    otherUserToken = await getTokenForNewUser()
+    ownerToken = await getTokenForUnitTestUser()
+    otherUserToken = await getTokenForOtherUnitTestUser()
   })
   describe('return format is', () => {
     let archive = ''
@@ -26,7 +27,7 @@ describe('/:hash', () => {
     expect(block).toBeTruthy()
     const boundWitness = block[0]
     expect(boundWitness).toBeTruthy()
-    const boundWitnessHash = boundWitness?._hash as string
+    const boundWitnessHash = new PayloadWrapper(boundWitness).hash
     expect(boundWitnessHash).toBeTruthy()
     const payload = boundWitness?._payloads?.[0]
     expect(payload).toBeTruthy()

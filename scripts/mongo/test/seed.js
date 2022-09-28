@@ -1,5 +1,7 @@
 /* eslint-disable */
-const {XyoAddress, XyoBoundWitnessBuilder, XyoPayloadBuilder} = require('@xyo-network/sdk-xyo-client-js')
+const {XyoAddress} = require('@xyo-network/account')
+const {XyoBoundWitnessBuilder} = require('@xyo-network/boundwitness')
+const {XyoPayloadBuilder} = require('@xyo-network/payload')
 
 const schema = 'co.coinapp.current.user.witness'
 const archives = ['testA', 'testB', 'testC', 'testD']

@@ -1,5 +1,5 @@
 import { exists } from '@xylabs/sdk-js'
-import { XyoBoundWitnessWithMeta } from '@xyo-network/boundwitness'
+import { XyoBoundWitnessWithMeta } from '@xyo-network/archivist-model'
 
 import { PostNodeRequest } from './PostNodeRequest'
 

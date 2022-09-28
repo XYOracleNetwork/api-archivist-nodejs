@@ -1,3 +1,3 @@
-import { XyoQueryPayload } from '@xyo-network/module'
+import { XyoQuery } from '@xyo-network/module'
 
-export type StatsQueryPayload<T extends XyoQueryPayload = XyoQueryPayload> = XyoQueryPayload<T & { archive?: string }>
+export type StatsQueryPayload<T extends XyoQuery = XyoQuery> = XyoQuery<T & { archive?: string }>

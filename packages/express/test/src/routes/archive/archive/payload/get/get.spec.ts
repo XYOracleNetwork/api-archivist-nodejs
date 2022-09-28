@@ -1,5 +1,4 @@
-import { SortDirection } from '@xyo-network/archivist-model'
-import { XyoPayloadWithMeta } from '@xyo-network/payload'
+import { SortDirection, XyoPayloadWithMeta } from '@xyo-network/archivist-model'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import {
@@ -8,7 +7,7 @@ import {
   getBlock,
   getPayload,
   getPayloadsByTimestamp,
-  getTokenForNewUser,
+  getTokenForUnitTestUser,
   postBlock,
   request,
 } from '../../../../../testUtil'
@@ -20,7 +19,7 @@ describe('/archive/:archive/payload', () => {
   let archive = ''
   const startTime = Date.now() - 1
   beforeAll(async () => {
-    token = await getTokenForNewUser()
+    token = await getTokenForUnitTestUser()
     archive = getArchiveName()
     await claimArchive(token, archive)
     const blocksPosted = 15

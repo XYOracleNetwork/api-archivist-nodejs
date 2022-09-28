@@ -1,4 +1,4 @@
-import { claimArchive, getTokenForNewUser, request, setArchiveAccessControl } from '@xyo-network/archivist-test'
+import { claimArchive, getTokenForOtherUnitTestUser, getTokenForUnitTestUser, request, setArchiveAccessControl } from '@xyo-network/archivist-test'
 import { StatusCodes } from 'http-status-codes'
 
 const attemptRoute = async (archive: string, token: string | undefined = undefined, expectedStatus: StatusCodes = StatusCodes.OK) => {
@@ -11,8 +11,8 @@ describe('ArchiveAccessControlAuthStrategy', () => {
   let otherUserToken = ''
   let archive = ''
   beforeAll(async () => {
-    ownerToken = await getTokenForNewUser()
-    otherUserToken = await getTokenForNewUser()
+    ownerToken = await getTokenForUnitTestUser()
+    otherUserToken = await getTokenForOtherUnitTestUser()
   })
   describe('when accessControl not specified', () => {
     beforeAll(async () => {
