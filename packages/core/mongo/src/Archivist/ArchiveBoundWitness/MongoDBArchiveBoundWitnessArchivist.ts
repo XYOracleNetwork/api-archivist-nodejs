@@ -38,14 +38,11 @@ export class MongoDBArchiveBoundWitnessArchivist extends AbstractBoundWitnessArc
     const parsedLimit = limit || DefaultLimit
     const parsedOrder = order || DefaultOrder
     const sort: { [key: string]: SortDirection } = { _timestamp: parsedOrder === 'asc' ? 1 : -1 }
-    const parsedTimestamp = timestamp ? timestamp : parsedOrder === 'desc' ? Date.now() : 0
-    const _timestamp = parsedOrder === 'desc' ? { $lt: parsedTimestamp } : { $gt: parsedTimestamp }
-    const filter: Filter<XyoBoundWitnessWithMeta> = {
-      ...props,
-      _timestamp,
-      schema: 'network.xyo.boundwitness',
+    const filter: Filter<XyoBoundWitnessWithMeta> = { _archive: this.config.archive, ...props }
+    if (timestamp) {
+      const parsedTimestamp = timestamp ? timestamp : parsedOrder === 'desc' ? Date.now() : 0
+      filter._timestamp = parsedOrder === 'desc' ? { $lt: parsedTimestamp } : { $gt: parsedTimestamp }
     }
-    filter._archive = this.config?.archive
     if (hash) filter._hash = hash
     // NOTE: Defaulting to $all since it makes the most sense when singing addresses are supplied
     // but based on how MongoDB implements multi-key indexes $in might be much faster and we could
