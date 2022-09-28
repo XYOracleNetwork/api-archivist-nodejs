@@ -1,13 +1,11 @@
 import 'source-map-support/register'
 
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
-import { XyoArchivistInsertQuery, XyoArchivistInsertQuerySchema } from '@xyo-network/archivist'
+import { XyoArchivistWrapper } from '@xyo-network/archivist'
 import { getRequestMeta } from '@xyo-network/archivist-express-lib'
 import { prepareBoundWitnesses, validatePayloadSchema } from '@xyo-network/archivist-lib'
 import { ArchivePathParams, XyoBoundWitnessWithMeta } from '@xyo-network/archivist-model'
-import { BoundWitnessWrapper } from '@xyo-network/boundwitness'
-import { QueryBoundWitnessBuilder } from '@xyo-network/module'
-import { PayloadWrapper, XyoPayload } from '@xyo-network/payload'
+import { XyoPayload } from '@xyo-network/payload'
 import { RequestHandler } from 'express'
 
 const handler: RequestHandler<ArchivePathParams, XyoBoundWitnessWithMeta[], XyoBoundWitnessWithMeta | XyoBoundWitnessWithMeta[]> = async (
@@ -29,20 +27,13 @@ const handler: RequestHandler<ArchivePathParams, XyoBoundWitnessWithMeta[], XyoB
       payloadWithExtraMeta._schemaValid = false
     }
   })
-  const boundWitnessQuery: XyoArchivistInsertQuery = {
-    payloads: sanitized.map((bw) => BoundWitnessWrapper.hash(bw)),
-    schema: XyoArchivistInsertQuerySchema,
-  }
-  const boundWitnessQueryWitness = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(boundWitnessQuery)).payloads(sanitized).build()
-  await archiveBoundWitnessArchivistFactory(archive).query(boundWitnessQueryWitness, [boundWitnessQuery, ...sanitized])
+
+  const wrapper = new XyoArchivistWrapper(archiveBoundWitnessArchivistFactory(archive))
+  await wrapper.insert(sanitized)
 
   if (payloads.length) {
-    const payloadsQuery: XyoArchivistInsertQuery = {
-      payloads: payloads.map((p) => PayloadWrapper.hash(p)),
-      schema: XyoArchivistInsertQuerySchema,
-    }
-    const payloadsQueryWitness = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(payloadsQuery)).payloads(payloads).build()
-    await archivePayloadsArchivistFactory(archive).query(payloadsQueryWitness, [payloadsQuery, ...payloads])
+    const wrapper = new XyoArchivistWrapper(archivePayloadsArchivistFactory(archive))
+    await wrapper.insert(payloads)
   }
   res.json(sanitized)
 }
