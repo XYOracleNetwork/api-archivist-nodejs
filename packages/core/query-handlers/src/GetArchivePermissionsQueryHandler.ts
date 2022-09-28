@@ -1,5 +1,5 @@
 import { assertEx } from '@xylabs/assert'
-import { XyoArchivistWrapper } from '@xyo-network/archivist'
+import { XyoArchivistGetQuery, XyoArchivistGetQuerySchema } from '@xyo-network/archivist'
 import {
   ArchivePermissionsArchivistFactory,
   GetArchivePermissionsQuery,
@@ -11,7 +11,8 @@ import {
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { WithAdditional } from '@xyo-network/core'
-import { XyoPayloadBuilder } from '@xyo-network/payload'
+import { QueryBoundWitnessBuilder } from '@xyo-network/module'
+import { PayloadWrapper, XyoPayloadBuilder } from '@xyo-network/payload'
 import { inject, injectable } from 'inversify'
 
 const getEmptyPermissions = (query: GetArchivePermissionsQuery): XyoPayloadWithMeta<SetArchivePermissionsPayload> => {
@@ -28,11 +29,13 @@ export class GetArchivePermissionsQueryHandler implements QueryHandler<GetArchiv
   constructor(@inject(TYPES.ArchivePermissionsArchivistFactory) protected readonly archivistFactory: ArchivePermissionsArchivistFactory) {}
   async handle(query: GetArchivePermissionsQuery): Promise<XyoPayloadWithMeta<SetArchivePermissionsPayload>> {
     const archive = assertEx(query.payload._archive, 'GetArchivePermissionsQueryHandler.handle: Archive not supplied')
-
-    const wrapper = new XyoArchivistWrapper(this.archivistFactory(archive))
-    const getResult = await wrapper.get([archive])
-
-    const permissions = (getResult?.[0] as SetArchivePermissionsPayload) || getEmptyPermissions(query)
+    const getQuery: XyoArchivistGetQuery = {
+      hashes: [archive],
+      schema: XyoArchivistGetQuerySchema,
+    }
+    const getWitness = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(getQuery)).payload(getQuery).build()
+    const getResult = await this.archivistFactory(archive).query(getWitness, [getQuery])
+    const permissions = (getResult?.[1]?.[0] as SetArchivePermissionsPayload) || getEmptyPermissions(query)
     return new XyoPayloadBuilder<SetArchivePermissionsPayloadWithMeta>({ schema: SetArchivePermissionsSchema })
       .fields({ ...permissions, _queryId: query.id, _timestamp: Date.now() })
       .build()
