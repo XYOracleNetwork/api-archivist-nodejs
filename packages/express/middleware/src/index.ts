@@ -4,7 +4,7 @@ import {
   ArchiveBoundWitnessArchivistFactory,
   ArchiveKeyArchivist,
   ArchivePayloadsArchivistFactory,
-  ArchivePermissionsArchivist,
+  ArchivePermissionsArchivistFactory,
   BoundWitnessArchivist,
   BoundWitnessStatsDiviner,
   PayloadArchivist,
@@ -44,7 +44,7 @@ declare global {
       archiveBoundWitnessArchivistFactory: ArchiveBoundWitnessArchivistFactory
       archiveKeyArchivist: ArchiveKeyArchivist
       archivePayloadsArchivistFactory: ArchivePayloadsArchivistFactory
-      archivePermissionsArchivist: ArchivePermissionsArchivist
+      archivePermissionsArchivistFactory: ArchivePermissionsArchivistFactory
       archivistWitnessedPayloadArchivist: WitnessedPayloadArchivist
       boundWitnessArchivist: BoundWitnessArchivist
       boundWitnessStatsDiviner: BoundWitnessStatsDiviner

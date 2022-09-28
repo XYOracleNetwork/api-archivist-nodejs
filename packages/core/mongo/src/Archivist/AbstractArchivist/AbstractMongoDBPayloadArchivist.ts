@@ -45,9 +45,9 @@ export abstract class AbstractMongoDBPayloadArchivist<T extends EmptyObject = Em
   }
 
   async get(ids: string[]): Promise<Array<XyoPayloadWithMeta<T>>> {
-    assertEx(ids.length === 1, 'Retrieval of multiple payloads not supported')
-    const _archive = assertEx(this.config?.archive, 'Missing archive')
-    const boundWitnesses = await (await this.findWitnessQuery(_archive)).toArray()
+    assertEx(ids.length === 1, 'AbstractMongoDBPayloadArchivist: Retrieval of multiple payloads not supported')
+    const archive: string = assertEx(this.config?.archive, 'AbstractMongoDBPayloadArchivist: Missing archivist')
+    const boundWitnesses = await (await this.findWitnessQuery(archive)).toArray()
     const lastWitness = boundWitnesses.pop()
     if (!lastWitness) return []
     const witnessedPayloadIndex = lastWitness.payload_schemas.findIndex((s) => s === this.schema)
@@ -56,7 +56,7 @@ export abstract class AbstractMongoDBPayloadArchivist<T extends EmptyObject = Em
       lastWitness.payload_hashes[witnessedPayloadIndex],
       `AbstractMongoDBPayloadArchivist: Missing permissions payload hash in BoundWitness (${lastWitness._hash})`,
     )
-    const payloadFilter = { _archive, _hash, schema: this.schema } as Filter<XyoPayloadWithMeta<T>>
+    const payloadFilter = { _archive: archive, _hash, schema: this.schema } as Filter<XyoPayloadWithMeta<T>>
     const payload = removeId(
       assertEx(
         await this.payloads.findOne(payloadFilter),
@@ -92,12 +92,12 @@ export abstract class AbstractMongoDBPayloadArchivist<T extends EmptyObject = Em
     return bw
   }
 
-  private async findWitnessQuery(_archive: string) {
+  private async findWitnessQuery(archive: string) {
     const addresses: string = assertEx(
       this.account.addressValue.bn.toString('hex'),
       'AbstractMongoDBPayloadArchivist: Invalid signing account address',
     )
-    const filter: Filter<XyoBoundWitnessWithMeta> = { _archive, addresses, payload_schemas: this.schema }
+    const filter: Filter<XyoBoundWitnessWithMeta> = { _archive: archive, addresses, payload_schemas: this.schema }
     return (await this.boundWitnesses.find(filter)).sort({ _timestamp: -1 }).limit(1)
   }
 }
