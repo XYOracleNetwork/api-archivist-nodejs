@@ -49,8 +49,8 @@ export abstract class AbstractPayloadArchivist<T extends EmptyObject = EmptyObje
     switch (typedQuery.schema) {
       case XyoArchivistFindQuerySchema:
         if (typedQuery.filter) {
-          const typedFilter = typedQuery.filter as XyoPayloadFilterPredicate<T>
-          result.push(...(await this.find(typedFilter as any)))
+          const typedFilter = typedQuery.filter as XyoPayloadFilterPredicate
+          result.push(...(await this.find(typedFilter)))
         }
         break
       case XyoArchivistGetQuerySchema:
