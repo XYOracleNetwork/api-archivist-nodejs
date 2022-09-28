@@ -3,7 +3,7 @@ import 'source-map-support/register'
 import { assertEx } from '@xylabs/assert'
 import { asyncHandler, tryParseInt } from '@xylabs/sdk-api-express-ecs'
 import { XyoArchivistFindQuery, XyoArchivistFindQuerySchema } from '@xyo-network/archivist'
-import { XyoArchivePayloadFilterPredicate } from '@xyo-network/archivist-model'
+import { XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
 import { BoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { XyoPayload } from '@xyo-network/payload'
 import { RequestHandler } from 'express'
@@ -12,11 +12,10 @@ import { PayloadRecentPathParams } from './payloadRecentPathParams'
 
 const handler: RequestHandler<PayloadRecentPathParams, (XyoPayload | null)[]> = async (req, res) => {
   const { archive, limit } = req.params
-  const { archivePayloadsArchivist: archivist } = req.app
+  const { archivePayloadsArchivistFactory } = req.app
   const limitNumber = tryParseInt(limit) ?? 20
   assertEx(limitNumber > 0 && limitNumber <= 100, 'limit must be between 1 and 100')
-  const filter: XyoArchivePayloadFilterPredicate<XyoPayload> = {
-    archive,
+  const filter: XyoPayloadFilterPredicate<XyoPayload> = {
     limit: limitNumber,
     order: 'desc',
   }
@@ -25,7 +24,7 @@ const handler: RequestHandler<PayloadRecentPathParams, (XyoPayload | null)[]> = 
     schema: XyoArchivistFindQuerySchema,
   }
   const bw = new BoundWitnessBuilder().payload(query).build()
-  const result = await archivist.query(bw, query)
+  const result = await archivePayloadsArchivistFactory(archive).query(bw, query)
   const payloads = result?.[1]
   res.json(payloads)
 }

@@ -1,5 +1,5 @@
 import { XyoArchivistFindQuery, XyoArchivistFindQuerySchema } from '@xyo-network/archivist'
-import { BoundWitnessesArchivist, PayloadsArchivist, PayloadSearchCriteria, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
+import { BoundWitnessesArchivist, PayloadArchivist, PayloadSearchCriteria, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
 import { BoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { PayloadWrapper, XyoPayload } from '@xyo-network/payload'
 
@@ -24,8 +24,8 @@ const isPayloadSignedByAddress = async (archivist: BoundWitnessesArchivist, hash
 }
 
 export const findPayload = async (
-  boundWitnessesArchivist: BoundWitnessesArchivist,
-  payloadsArchivist: PayloadsArchivist,
+  boundWitnessArchivist: BoundWitnessesArchivist,
+  payloadArchivist: PayloadArchivist,
   searchCriteria: PayloadSearchCriteria,
 ): Promise<XyoPayload | undefined> => {
   const { addresses } = searchCriteria
@@ -35,11 +35,11 @@ export const findPayload = async (
     schema: XyoArchivistFindQuerySchema,
   }
   const bw = new BoundWitnessBuilder().payload(query).build()
-  const result = await payloadsArchivist.query(bw, query)
+  const result = await payloadArchivist.query(bw, query)
   const payload = result?.[1]?.[0] ?? undefined
   if (payload && addresses.length) {
     const hash = new PayloadWrapper(payload).hash
-    const signed = await isPayloadSignedByAddress(boundWitnessesArchivist, hash, addresses)
+    const signed = await isPayloadSignedByAddress(boundWitnessArchivist, hash, addresses)
     return signed ? payload : undefined
   } else {
     return payload

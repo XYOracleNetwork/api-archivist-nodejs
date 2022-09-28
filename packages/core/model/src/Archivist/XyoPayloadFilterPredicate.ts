@@ -9,7 +9,3 @@ export type XyoPayloadFilterPredicate<T extends EmptyObject = EmptyObject> = Par
 }> &
   XyoPayloadFindFilter &
   Partial<T>
-
-export type XyoArchivePayloadFilterPredicate<T extends EmptyObject = EmptyObject> = {
-  archive: string
-} & Omit<XyoPayloadFilterPredicate<T>, 'archives'>

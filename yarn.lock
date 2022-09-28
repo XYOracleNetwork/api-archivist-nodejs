@@ -3574,10 +3574,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^18.7.15, @types/node@npm:^18.7.19":
-  version: 18.7.19
-  resolution: "@types/node@npm:18.7.19"
-  checksum: 879366b379599cd0e06bff86973c82497de57d23b113967d20cac94994acdf2c47b6fc5cb92d007a9ff1939bd037257a5f3965e7bbda70cfa6b949a40e4e14a8
+"@types/node@npm:*, @types/node@npm:^18.7.15, @types/node@npm:^18.7.23":
+  version: 18.7.23
+  resolution: "@types/node@npm:18.7.23"
+  checksum: 2c8df0830d8345e5cd1ca17feb9cf43fa667aae749888e0a068c5c1b35eaedd2f9b24ed987a0758078395edf7a03681e5e0b7790a518ff7afe1ff6d8459f7b4a
   languageName: node
   linkType: hard
 
@@ -3974,10 +3974,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xylabs/assert@npm:^2.6.7":
-  version: 2.6.7
-  resolution: "@xylabs/assert@npm:2.6.7"
-  checksum: ef734c1bd0eda615ad8b70f63e0ee3f00838ea47f9d2d7af96a705cef3f66e1c27ee2bb68c5b89533124cba6cfc275936f4cd68b1033f9c6964240dcde78b1c9
+"@xylabs/assert@npm:^2.6.7, @xylabs/assert@npm:^2.6.9":
+  version: 2.6.9
+  resolution: "@xylabs/assert@npm:2.6.9"
+  checksum: 7e99eff0aebab90d51b200750e19146630cf1290cd65bf3565d35d74738b50abc1c427f4dacd5bdff2281cf35202ed1c507854e773c69629fb1b816b5aea7857
+  languageName: node
+  linkType: hard
+
+"@xylabs/bignumber@npm:^2.6.9":
+  version: 2.6.9
+  resolution: "@xylabs/bignumber@npm:2.6.9"
+  dependencies:
+    bn.js: ^5.2.1
+    tslib: ^2.4.0
+  checksum: 142f3897e020958e388b087f263b44294e704300666aec0e8a48877a9f95f281bff90e5a1dba4e8af16d0253b79a9c0d490c12d324f0e531245455b1126f3c4e
   languageName: node
   linkType: hard
 
@@ -3991,10 +4001,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xylabs/delay@npm:^2.6.7":
-  version: 2.6.7
-  resolution: "@xylabs/delay@npm:2.6.7"
-  checksum: 7a24d0c44f11a215bdb29d21a39e1848f8e28831567c93d26538008445e32fe2ffea5e904720f24ea8a54a87f04fda627f98ba3bd4cad13e9bfbf21f61a66be4
+"@xylabs/delay@npm:^2.6.7, @xylabs/delay@npm:^2.6.9":
+  version: 2.6.9
+  resolution: "@xylabs/delay@npm:2.6.9"
+  checksum: ad2cbdbbae4f2e7aee4e1bc29277bf99db0f9f99fafe0f470a96d3d53d8e212d9ad9b34548505338909bff1cd3591d3b3ece0a1e4adeb8bff91965a687d0ae4f
   languageName: node
   linkType: hard
 
@@ -4028,13 +4038,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xylabs/forget@npm:^2.6.7":
-  version: 2.6.7
-  resolution: "@xylabs/forget@npm:2.6.7"
+"@xylabs/exists@npm:^2.6.9":
+  version: 2.6.9
+  resolution: "@xylabs/exists@npm:2.6.9"
+  checksum: 53b997f48825b5576d04fadf28d4706af9bdbcdccd0736cf6f8e19c108a2d0d2885433f109e423461b87a8f8495d642ac5f88eda9ee3504bd8cd7b7621cdd1d2
+  languageName: node
+  linkType: hard
+
+"@xylabs/forget@npm:^2.6.9":
+  version: 2.6.9
+  resolution: "@xylabs/forget@npm:2.6.9"
   dependencies:
-    "@xylabs/delay": ^2.6.7
+    "@xylabs/delay": ^2.6.9
     tslib: ^2.4.0
-  checksum: e31448dd06c472c84732fe2596c27cb3445b843025a9c51c591bfd1b34620c5025d5b7a2d0757e7bb5959d49d42256ee33632f3528934b75cbdc4c493d89e6d0
+  checksum: a3c81639b3434b001c471e9a8f2adb47ed894d56de52839d5c3ed500795b0d8d81de621d916804967f3f08fcba5e03840be68a49aaef52d8ede2ebec241ecb12
   languageName: node
   linkType: hard
 
@@ -4055,17 +4072,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xylabs/sdk-js@npm:^2.5.9, @xylabs/sdk-js@npm:^2.6.7":
-  version: 2.6.7
-  resolution: "@xylabs/sdk-js@npm:2.6.7"
+"@xylabs/sdk-js@npm:^2.5.9, @xylabs/sdk-js@npm:^2.6.7, @xylabs/sdk-js@npm:^2.6.9":
+  version: 2.6.9
+  resolution: "@xylabs/sdk-js@npm:2.6.9"
   dependencies:
-    "@xylabs/assert": ^2.6.7
-    "@xylabs/delay": ^2.6.7
-    "@xylabs/forget": ^2.6.7
+    "@xylabs/assert": ^2.6.9
+    "@xylabs/bignumber": ^2.6.9
+    "@xylabs/delay": ^2.6.9
+    "@xylabs/exists": ^2.6.9
+    "@xylabs/forget": ^2.6.9
     axios: ^0.27.2
-    bn.js: ^5.2.1
-    rollbar: ^2.25.1
-  checksum: 7e2533e84c30db285a9e20cef6930ddfe75c4956b454133c29bdc277a1a8a132348fbad4f87c47e864645a24b1f5b1ccb505f19751cc013f5f9dbecb663fff4e
+    rollbar: ^2.25.2
+  checksum: 265b67eb3ed02accad9bc5dbbf4aa8211d8fed1c3f4eff2e3526634d8f8dba2c774c0e3a582ac858e7680a2f849d387bcf9ecc75a08b6851441b16a5fcc71e29
   languageName: node
   linkType: hard
 
@@ -4188,7 +4206,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@xyo-network/archivist-dependencies@workspace:packages/express/dependencies"
   dependencies:
-    "@xylabs/assert": ^2.6.7
+    "@xylabs/assert": ^2.6.9
     "@xylabs/sdk-api-express-ecs": ^1.2.4
     "@xyo-network/account": ^2.35.0
     "@xyo-network/archivist-express-lib": "workspace:^"
@@ -4255,9 +4273,9 @@ __metadata:
     "@types/source-map-support": 0.5.6
     "@types/swagger-ui-express": ^4.1.3
     "@types/uuid": ^8.3.4
-    "@xylabs/assert": ^2.6.7
+    "@xylabs/assert": ^2.6.9
     "@xylabs/sdk-api-express-ecs": ^1.2.4
-    "@xylabs/sdk-js": ^2.6.7
+    "@xylabs/sdk-js": ^2.6.9
     "@xyo-network/archivist-express-lib": "workspace:^"
     "@xyo-network/archivist-lib": "workspace:^"
     "@xyo-network/archivist-model": "workspace:^"
@@ -4288,7 +4306,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@xyo-network/archivist-model@workspace:packages/core/model"
   dependencies:
-    "@xylabs/assert": ^2.6.7
+    "@xylabs/assert": ^2.6.9
     "@xyo-network/account": ^2.35.0
     "@xyo-network/api": ^2.35.0
     "@xyo-network/archivist": ^2.35.0
@@ -4307,8 +4325,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@xyo-network/archivist-mongo@workspace:packages/core/mongo"
   dependencies:
-    "@xylabs/assert": ^2.6.7
-    "@xylabs/sdk-js": ^2.6.7
+    "@xylabs/assert": ^2.6.9
+    "@xylabs/sdk-js": ^2.6.9
     "@xyo-network/account": ^2.35.0
     "@xyo-network/api": ^2.35.0
     "@xyo-network/archivist": ^2.35.0
@@ -4324,6 +4342,7 @@ __metadata:
     "@xyo-network/storage": ^2.35.0
     agenda: ^4.3.0
     inversify: ^6.0.1
+    lru-cache: ^7.14.0
     mongodb: ^4.10.0
     reflect-metadata: ^0.1.13
     uuid: ^9.0.0
@@ -4334,8 +4353,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@xyo-network/archivist-query-handlers@workspace:packages/core/query-handlers"
   dependencies:
-    "@xylabs/assert": ^2.6.7
-    "@xylabs/delay": ^2.6.7
+    "@xylabs/assert": ^2.6.9
+    "@xylabs/delay": ^2.6.9
     "@xyo-network/archivist": ^2.35.0
     "@xyo-network/archivist-model": "workspace:^"
     "@xyo-network/archivist-types": "workspace:^"
@@ -4368,9 +4387,9 @@ __metadata:
     "@types/express": 4.17.14
     "@types/source-map-support": 0.5.6
     "@types/uuid": ^8.3.4
-    "@xylabs/assert": ^2.6.7
+    "@xylabs/assert": ^2.6.9
     "@xylabs/sdk-api-express-ecs": ^1.2.4
-    "@xylabs/sdk-js": ^2.6.7
+    "@xylabs/sdk-js": ^2.6.9
     "@xyo-network/api": ^2.35.0
     "@xyo-network/archivist": ^2.35.0
     "@xyo-network/archivist-express-lib": "workspace:^"
@@ -4400,8 +4419,8 @@ __metadata:
     "@types/express": 4.17.14
     "@types/passport": ^1.0.11
     "@types/uuid": ^8.3.4
-    "@xylabs/assert": ^2.6.7
-    "@xylabs/delay": ^2.6.7
+    "@xylabs/assert": ^2.6.9
+    "@xylabs/delay": ^2.6.9
     "@xylabs/sdk-api-express-ecs": ^1.2.4
     "@xyo-network/archivist-dependencies": "workspace:^"
     "@xyo-network/archivist-express-lib": "workspace:^"
@@ -4429,8 +4448,8 @@ __metadata:
   dependencies:
     "@types/supertest": ^2.0.12
     "@types/uuid": ^8.3.4
-    "@xylabs/assert": ^2.6.7
-    "@xylabs/forget": ^2.6.7
+    "@xylabs/assert": ^2.6.9
+    "@xylabs/forget": ^2.6.9
     "@xyo-network/account": ^2.35.0
     "@xyo-network/api": ^2.35.0
     "@xyo-network/archivist-model": "workspace:^"
@@ -4576,7 +4595,7 @@ __metadata:
     "@babel/core": ^7.19.1
     "@babel/preset-env": ^7.19.1
     "@types/jest": ^29.0.3
-    "@types/node": ^18.7.19
+    "@types/node": ^18.7.23
     "@types/source-map-support": 0.5.6
     "@xylabs/eslint-config": ^2.7.22
     "@xylabs/sdk-api-express-ecs": ^1.2.4
@@ -14639,7 +14658,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollbar@npm:^2.25.1, rollbar@npm:^2.25.2":
+"rollbar@npm:^2.25.2":
   version: 2.25.2
   resolution: "rollbar@npm:2.25.2"
   dependencies:

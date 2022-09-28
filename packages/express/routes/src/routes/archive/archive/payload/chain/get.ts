@@ -12,7 +12,7 @@ import { PayloadChainPathParams } from './payloadChainPathParams'
 
 const getPayloads = async (archivist: ArchivePayloadsArchivist, archive: string, hash: string, payloads: XyoPayload[], limit: number) => {
   const query: XyoArchivistGetQuery = {
-    hashes: [{ archive, hash }] as unknown as string[],
+    hashes: [hash],
     schema: XyoArchivistGetQuerySchema,
   }
   const bw = new BoundWitnessBuilder().payload(query).build()
@@ -28,11 +28,11 @@ const getPayloads = async (archivist: ArchivePayloadsArchivist, archive: string,
 
 const handler: RequestHandler<PayloadChainPathParams, XyoPayload[]> = async (req, res) => {
   const { archive, limit, hash } = req.params
-  const { archivePayloadsArchivist: archivist } = req.app
+  const { archivePayloadsArchivistFactory } = req.app
   const limitNumber = tryParseInt(limit) ?? 20
   assertEx(limitNumber > 0 && limitNumber <= 100, 'limit must be between 1 and 100')
   const payloads: XyoPayload[] = []
-  await getPayloads(archivist, archive, hash, payloads, limitNumber)
+  await getPayloads(archivePayloadsArchivistFactory(archive), archive, hash, payloads, limitNumber)
   res.json(payloads)
 }
 

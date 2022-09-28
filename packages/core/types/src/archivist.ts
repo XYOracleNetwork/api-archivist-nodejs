@@ -1,11 +1,11 @@
 export const ARCHIVIST_TYPES = {
   ArchiveArchivist: Symbol('ArchiveArchivist'),
-  ArchiveBoundWitnessesArchivist: Symbol('ArchiveBoundWitnessesArchivist'),
+  ArchiveBoundWitnessArchivistFactory: Symbol('ArchiveBoundWitnessArchivistFactory'),
   ArchiveKeyArchivist: Symbol('ArchiveKeyArchivist'),
-  ArchivePayloadsArchivist: Symbol('ArchivePayloadsArchivist'),
-  ArchivePermissionsArchivist: Symbol('ArchivePermissionsArchivist'),
-  BoundWitnessesArchivist: Symbol('BoundWitnessesArchivist'),
-  PayloadsArchivist: Symbol('PayloadsArchivist'),
+  ArchivePayloadArchivistFactory: Symbol('ArchivePayloadArchivistFactory'),
+  ArchivePermissionsArchivistFactory: Symbol('ArchivePermissionsArchivistFactory'),
+  BoundWitnessArchivist: Symbol('BoundWitnessArchivist'),
+  PayloadArchivist: Symbol('PayloadArchivist'),
   UserArchivist: Symbol('UserArchivist'),
   WitnessedPayloadArchivist: Symbol('WitnessedPayloadArchivist'),
 }

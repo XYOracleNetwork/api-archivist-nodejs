@@ -3,16 +3,16 @@ import 'source-map-support/register'
 import { assertEx } from '@xylabs/assert'
 import { asyncHandler, tryParseInt } from '@xylabs/sdk-api-express-ecs'
 import { XyoArchivistFindQuery, XyoArchivistFindQuerySchema } from '@xyo-network/archivist'
-import { ArchivePayloadsArchivist, XyoArchivePayloadFilterPredicate } from '@xyo-network/archivist-model'
+import { ArchivePayloadsArchivist, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
 import { BoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { RequestHandler } from 'express'
 
 import { ArchiveSchemaRecentPathParams } from './ArchiveSchemaRecentPathParams'
 
-const getRecentSchemasForArchive = (archivist: ArchivePayloadsArchivist, archive: string, limit: number) => {
+const getRecentSchemasForArchive = (archivist: ArchivePayloadsArchivist, limit: number) => {
   const order = 'desc'
   const schema = 'network.xyo.schema'
-  const filter: XyoArchivePayloadFilterPredicate = { archive, limit, order, schema }
+  const filter: XyoPayloadFilterPredicate = { limit, order, schema }
   const query: XyoArchivistFindQuery = {
     filter,
     schema: XyoArchivistFindQuerySchema,
@@ -23,10 +23,10 @@ const getRecentSchemasForArchive = (archivist: ArchivePayloadsArchivist, archive
 
 const handler: RequestHandler<ArchiveSchemaRecentPathParams> = async (req, res) => {
   const { archive, limit } = req.params
-  const { archivePayloadsArchivist: archivist } = req.app
+  const { archivePayloadsArchivistFactory } = req.app
   const limitNumber = tryParseInt(limit) ?? 20
   assertEx(limitNumber > 0 && limitNumber <= 100, 'limit must be between 1 and 100')
-  const schemas = (await getRecentSchemasForArchive(archivist, archive, limitNumber))?.[1] || []
+  const schemas = (await getRecentSchemasForArchive(archivePayloadsArchivistFactory(archive), limitNumber))?.[1] || []
   res.json(schemas)
 }
 

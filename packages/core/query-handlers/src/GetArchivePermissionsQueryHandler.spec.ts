@@ -1,5 +1,6 @@
 import {
   ArchivePermissionsArchivist,
+  ArchivePermissionsArchivistFactory,
   DebugSchema,
   GetArchivePermissionsQuery,
   GetArchivePermissionsSchema,
@@ -40,17 +41,19 @@ const expectEmptyPermissions = (actual: XyoPayloadWithMeta<SetArchivePermissions
 
 describe('GetArchivePermissionsQueryHandler', () => {
   describe('handle', () => {
+    let archivistFactory: MockProxy<ArchivePermissionsArchivistFactory>
     let archivist: MockProxy<ArchivePermissionsArchivist>
     describe('when permissions for the archive', () => {
       describe('exist', () => {
         beforeEach(() => {
           archivist = mock<ArchivePermissionsArchivist>()
+          archivistFactory = mock<ArchivePermissionsArchivistFactory>(() => archivist)
           const payloads: SetArchivePermissionsPayload[] = [permissions, emptyPermissions]
           const boundWitness = new BoundWitnessBuilder().payloads(payloads).build()
           archivist.query.mockResolvedValue([boundWitness, payloads])
         })
         it('returns the latest archive permissions', async () => {
-          const sut = new GetArchivePermissionsQueryHandler(archivist)
+          const sut = new GetArchivePermissionsQueryHandler(archivistFactory)
           const actual = await sut.handle(new GetArchivePermissionsQuery({ _archive, _hash, _timestamp, schema }))
           expect(actual).toBeTruthy()
           expect(actual?.schema).toBe(SetArchivePermissionsSchema)
@@ -70,12 +73,13 @@ describe('GetArchivePermissionsQueryHandler', () => {
     describe('do not exist', () => {
       beforeEach(() => {
         archivist = mock<ArchivePermissionsArchivist>()
+        archivistFactory = mock<ArchivePermissionsArchivistFactory>(() => archivist)
         const payloads: SetArchivePermissionsPayload[] = []
         const boundWitness = new BoundWitnessBuilder().build()
         archivist.query.mockResolvedValue([boundWitness, payloads])
       })
       it('returns the empty permissions', async () => {
-        const sut = new GetArchivePermissionsQueryHandler(archivist)
+        const sut = new GetArchivePermissionsQueryHandler(archivistFactory)
         const actual = await sut.handle(new GetArchivePermissionsQuery({ _archive, _hash, _timestamp, schema }))
         expectEmptyPermissions(actual)
       })
@@ -83,9 +87,10 @@ describe('GetArchivePermissionsQueryHandler', () => {
     describe('when archive not supplied', () => {
       beforeEach(() => {
         archivist = mock<ArchivePermissionsArchivist>()
+        archivistFactory = mock<ArchivePermissionsArchivistFactory>(() => archivist)
       })
       it('throws', async () => {
-        const sut = new GetArchivePermissionsQueryHandler(archivist)
+        const sut = new GetArchivePermissionsQueryHandler(archivistFactory)
         const query = new GetArchivePermissionsQuery({ _hash, _timestamp, schema })
         await expect(sut.handle(query)).rejects.toThrow()
       })

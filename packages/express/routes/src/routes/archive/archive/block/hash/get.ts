@@ -10,13 +10,13 @@ import { BlockHashPathParams } from './blockHashPathParams'
 
 const handler: RequestHandler<BlockHashPathParams, XyoBoundWitness[]> = async (req, res) => {
   const { archive, hash } = req.params
-  const { archiveBoundWitnessesArchivist: archivist } = req.app
+  const { archiveBoundWitnessArchivistFactory } = req.app
   const query: XyoArchivistGetQuery = {
-    hashes: [{ archive, hash }] as unknown as string[],
+    hashes: [hash],
     schema: XyoArchivistGetQuerySchema,
   }
   const bw = new BoundWitnessBuilder().payload(query).build()
-  const result = await archivist.query(bw, query)
+  const result = await archiveBoundWitnessArchivistFactory(archive).query(bw, query)
   const block = result?.[1]?.[0] as unknown as XyoBoundWitness
   res.json(scrubBoundWitnesses(block ? [block] : []))
 }

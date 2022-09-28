@@ -3,13 +3,13 @@ import { dependencies } from '@xyo-network/archivist-dependencies'
 import { SchemaToQueryProcessorRegistry, XyoPayloadToQueryConverterRegistry } from '@xyo-network/archivist-middleware'
 import {
   ArchiveArchivist,
-  ArchiveBoundWitnessesArchivist,
+  ArchiveBoundWitnessArchivistFactory,
   ArchiveKeyArchivist,
-  ArchivePayloadsArchivist,
-  ArchivePermissionsArchivist,
-  BoundWitnessesArchivist,
+  ArchivePayloadsArchivistFactory,
+  ArchivePermissionsArchivistFactory,
+  BoundWitnessArchivist,
   BoundWitnessStatsDiviner,
-  PayloadsArchivist,
+  PayloadArchivist,
   PayloadStatsDiviner,
   Query,
   SchemaStatsDiviner,
@@ -26,28 +26,28 @@ export const addDependencies = (app: Application) => {
     'Missing ArchivistWitnessedPayloadArchivist',
   )
   app.archiveArchivist = assertEx(dependencies.get<ArchiveArchivist>(TYPES.ArchiveArchivist), 'Missing ArchiveArchivist')
-  app.archiveBoundWitnessesArchivist = assertEx(
-    dependencies.get<ArchiveBoundWitnessesArchivist>(TYPES.ArchiveBoundWitnessesArchivist),
-    'Missing ArchiveBoundWitnessesArchivist',
+  app.archiveBoundWitnessArchivistFactory = assertEx(
+    dependencies.get<ArchiveBoundWitnessArchivistFactory>(TYPES.ArchiveBoundWitnessArchivistFactory),
+    'Missing ArchiveBoundWitnessArchivistFactory',
   )
-  app.archivePayloadsArchivist = assertEx(
-    dependencies.get<ArchivePayloadsArchivist>(TYPES.ArchivePayloadsArchivist),
-    'Missing ArchivePayloadsArchivist',
+  app.archivePayloadsArchivistFactory = assertEx(
+    dependencies.get<ArchivePayloadsArchivistFactory>(TYPES.ArchivePayloadArchivistFactory),
+    'Missing ArchivePayloadsArchivistFactory',
   )
   app.archiveArchivist = assertEx(dependencies.get<ArchiveArchivist>(TYPES.ArchiveArchivist), 'Missing ArchiveArchivist')
   app.archiveKeyArchivist = assertEx(dependencies.get<ArchiveKeyArchivist>(TYPES.ArchiveKeyArchivist), 'Missing ArchiveKeyArchivist')
-  app.archivePermissionsArchivist = assertEx(
-    dependencies.get<ArchivePermissionsArchivist>(TYPES.ArchivePermissionsArchivist),
-    'Missing ArchivePermissionsArchivist',
+  app.archivePermissionsArchivistFactory = assertEx(
+    dependencies.get<ArchivePermissionsArchivistFactory>(TYPES.ArchivePermissionsArchivistFactory),
+    'Missing ArchivePermissionsArchivistFactory',
   )
   app.schemaStatsDiviner = assertEx(dependencies.get<SchemaStatsDiviner>(TYPES.SchemaStatsDiviner), 'Missing SchemaStatsDiviner')
   app.boundWitnessStatsDiviner = assertEx(
     dependencies.get<BoundWitnessStatsDiviner>(TYPES.BoundWitnessStatsDiviner),
     'Missing BoundWitnessStatsDiviner',
   )
-  app.boundWitnessesArchivist = assertEx(dependencies.get<BoundWitnessesArchivist>(TYPES.BoundWitnessesArchivist), 'Missing BoundWitnessesArchivist')
+  app.boundWitnessArchivist = assertEx(dependencies.get<BoundWitnessArchivist>(TYPES.BoundWitnessArchivist), 'Missing BoundWitnessArchivist')
   app.payloadStatsDiviner = assertEx(dependencies.get<PayloadStatsDiviner>(TYPES.PayloadStatsDiviner), 'Missing PayloadStatsDiviner')
-  app.payloadsArchivist = assertEx(dependencies.get<PayloadsArchivist>(TYPES.PayloadsArchivist), 'Missing PayloadsArchivist')
+  app.payloadArchivist = assertEx(dependencies.get<PayloadArchivist>(TYPES.PayloadArchivist), 'Missing PayloadArchivist')
   app.queryConverters = assertEx(
     dependencies.get<XyoPayloadToQueryConverterRegistry>(TYPES.PayloadToQueryConverterRegistry),
     'Missing QueryConverters',

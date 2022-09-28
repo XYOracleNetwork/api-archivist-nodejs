@@ -2,7 +2,7 @@ import { assertEx } from '@xylabs/assert'
 import { asyncHandler, NoReqBody, NoReqQuery, tryParseInt } from '@xylabs/sdk-api-express-ecs'
 import { XyoArchivistFindQuery, XyoArchivistFindQuerySchema } from '@xyo-network/archivist'
 import { scrubBoundWitnesses } from '@xyo-network/archivist-lib'
-import { ArchiveLocals, ArchivePathParams, SortDirection, XyoArchiveBoundWitnessFilterPredicate } from '@xyo-network/archivist-model'
+import { ArchiveLocals, ArchivePathParams, SortDirection, XyoBoundWitnessFilterPredicate } from '@xyo-network/archivist-model'
 import { BoundWitnessBuilder, XyoBoundWitness } from '@xyo-network/boundwitness'
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
@@ -28,13 +28,12 @@ const handler: RequestHandler<
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
   }
   const { limit, order, timestamp } = req.query
-  const { archiveBoundWitnessesArchivist: archivist } = req.app
+  const { archiveBoundWitnessArchivistFactory } = req.app
   const limitNumber = tryParseInt(limit) ?? defaultLimit
   assertEx(limitNumber > 0 && limitNumber <= maxLimit, `limit must be between 1 and ${maxLimit}`)
   const timestampNumber = tryParseInt(timestamp)
   const parsedOrder = order?.toLowerCase?.() === 'asc' ? 'asc' : 'desc'
-  const filter: XyoArchiveBoundWitnessFilterPredicate = {
-    archive: archive.archive,
+  const filter: XyoBoundWitnessFilterPredicate = {
     limit: limitNumber,
     order: parsedOrder,
     timestamp: timestampNumber,
@@ -44,7 +43,7 @@ const handler: RequestHandler<
     schema: XyoArchivistFindQuerySchema,
   }
   const bw = new BoundWitnessBuilder().payload(query).build()
-  const result = await archivist.query(bw, query)
+  const result = await archiveBoundWitnessArchivistFactory(archive.archive).query(bw, query)
   const boundWitness = result[1] as XyoBoundWitness[]
   if (boundWitness) {
     res.json(scrubBoundWitnesses(boundWitness))

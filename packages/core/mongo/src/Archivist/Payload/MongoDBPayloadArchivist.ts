@@ -12,12 +12,12 @@ import { removeId } from '../../Mongo'
 import { MONGO_TYPES } from '../../types'
 
 @injectable()
-export class MongoDBPayloadArchivist extends AbstractPayloadArchivist<XyoPayloadWithMeta, string> {
+export class MongoDBPayloadArchivist extends AbstractPayloadArchivist<XyoPayloadWithMeta> {
   constructor(
     @inject(TYPES.Account) protected readonly account: XyoAccount,
     @inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayloadWithMeta>,
   ) {
-    super(account)
+    super(account, undefined)
   }
   async find(predicate: XyoPayloadFilterPredicate<XyoPayloadWithMeta>): Promise<XyoPayloadWithMeta[]> {
     const { _archive, archives, hash, limit, order, schema, schemas, timestamp, ...props } = predicate
