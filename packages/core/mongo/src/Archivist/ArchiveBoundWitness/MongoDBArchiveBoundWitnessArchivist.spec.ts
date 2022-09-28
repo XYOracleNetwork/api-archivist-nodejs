@@ -17,6 +17,7 @@ import {
   XyoPayloadWithPartialMeta,
 } from '@xyo-network/archivist-model'
 import { BoundWitnessBuilder, XyoBoundWitness } from '@xyo-network/boundwitness'
+import { XyoModuleConfigSchema } from '@xyo-network/module'
 import { PayloadWrapper, XyoPayloadBuilder } from '@xyo-network/payload'
 import { v4 } from 'uuid'
 
@@ -49,8 +50,9 @@ const removePayloads = (boundWitnesses: XyoBoundWitnessWithMeta[]) => {
 describe('MongoDBArchiveBoundWitnessArchivist', () => {
   const sdk = getBaseMongoSdk<XyoBoundWitnessWithMeta>(COLLECTIONS.BoundWitnesses)
   const account = XyoAccount.random()
-  const sut = new MongoDBArchiveBoundWitnessArchivist(account, sdk)
   const archive = `test-${v4()}`
+  const config = { archive, schema: XyoModuleConfigSchema }
+  const sut = new MongoDBArchiveBoundWitnessArchivist(account, sdk, config)
   const payloads: XyoPayloadWithMeta<DebugPayload>[] = getPayloads(archive, count)
   const boundWitnesses = payloads
     .map((p) => new BoundWitnessBuilder({ inlinePayloads: true }).payload(p).build())
