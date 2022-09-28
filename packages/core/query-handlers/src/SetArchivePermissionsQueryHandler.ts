@@ -1,5 +1,11 @@
 import { assertEx } from '@xylabs/assert'
-import { XyoArchivistGetQuery, XyoArchivistGetQuerySchema, XyoArchivistInsertQuery, XyoArchivistInsertQuerySchema } from '@xyo-network/archivist'
+import {
+  XyoArchivistGetQuery,
+  XyoArchivistGetQuerySchema,
+  XyoArchivistInsertQuery,
+  XyoArchivistInsertQuerySchema,
+  XyoArchivistWrapper,
+} from '@xyo-network/archivist'
 import {
   ArchivePermissionsArchivistFactory,
   QueryHandler,
@@ -37,6 +43,7 @@ export class SetArchivePermissionsQueryHandler implements QueryHandler<SetArchiv
     const archive = assertEx(query.payload._archive, 'SetArchivePermissionsQueryHandler.handle: Archive not supplied')
     validateAddresses(query)
     validateSchema(query)
+    const wrapper = new XyoArchivistWrapper(this.archivistFactory(archive))
     const insertPayloads = [query.payload]
     const insertQuery: XyoArchivistInsertQuery = {
       payloads: insertPayloads.map((p) => PayloadWrapper.hash(p)),
@@ -45,14 +52,10 @@ export class SetArchivePermissionsQueryHandler implements QueryHandler<SetArchiv
     const insertWitness = new QueryBoundWitnessBuilder().payloads(insertPayloads).query(PayloadWrapper.hash(insertQuery)).build()
     const insertionResult = await this.archivistFactory(archive).query(insertWitness, [insertQuery, ...insertPayloads])
     assertEx(insertionResult, 'SetArchivePermissionsQueryHandler.handle: Error inserting permissions')
-    const getQuery: XyoArchivistGetQuery = {
-      hashes: [archive],
-      schema: XyoArchivistGetQuerySchema,
-    }
-    const getWitness = new QueryBoundWitnessBuilder().payload(getQuery).query(PayloadWrapper.hash(getQuery)).build()
-    const getResult = await this.archivistFactory(archive).query(getWitness, [getQuery])
+
+    const getResult = await wrapper.get([archive])
     const permissions = assertEx(
-      getResult?.[1]?.[0],
+      getResult?.[0],
       'SetArchivePermissionsQueryHandler.handle: Error getting permissions',
     ) as SetArchivePermissionsPayload
     return new XyoPayloadBuilder<SetArchivePermissionsPayloadWithMeta>({ schema: SetArchivePermissionsSchema })
