@@ -79,7 +79,7 @@ const getArchivePermissionsArchivist = (context: interfaces.Context, archive: st
   const cached = archivePermissionsArchivistCache?.get?.(archive)
   if (cached) return cached
   const config: ArchiveModuleConfig = { archive, schema: XyoModuleConfigSchema }
-  const account = context.container.get<XyoAccount>(TYPES.Account)
+  const account = context.container.getNamed<XyoAccount>(TYPES.Account, 'root')
   const payloads = context.container.get<BaseMongoSdk<XyoPayloadWithMeta<SetArchivePermissionsPayload>>>(MONGO_TYPES.PayloadSdkMongo)
   const bw = context.container.get<BaseMongoSdk<XyoBoundWitnessWithMeta>>(MONGO_TYPES.BoundWitnessSdkMongo)
   const archivist = new MongoDBArchivePermissionsPayloadPayloadArchivist(account, payloads, bw, config)
