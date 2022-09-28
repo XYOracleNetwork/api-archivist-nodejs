@@ -1,5 +1,5 @@
 import { assertEx } from '@xylabs/assert'
-import { XyoArchivistGetQuery, XyoArchivistGetQuerySchema, XyoArchivistWrapper } from '@xyo-network/archivist'
+import { XyoArchivistWrapper } from '@xyo-network/archivist'
 import {
   ArchivePermissionsArchivistFactory,
   GetArchivePermissionsQuery,

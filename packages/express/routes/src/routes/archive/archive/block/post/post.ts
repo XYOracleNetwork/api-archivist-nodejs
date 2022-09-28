@@ -3,9 +3,8 @@ import 'source-map-support/register'
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
 import { XyoArchivistWrapper } from '@xyo-network/archivist'
 import { getRequestMeta } from '@xyo-network/archivist-express-lib'
-import { prepareBoundWitnesses, validatePayloadSchema } from '@xyo-network/archivist-lib'
+import { prepareBoundWitnesses } from '@xyo-network/archivist-lib'
 import { ArchivePathParams, XyoBoundWitnessWithMeta } from '@xyo-network/archivist-model'
-import { XyoPayload } from '@xyo-network/payload'
 import { RequestHandler } from 'express'
 
 const handler: RequestHandler<ArchivePathParams, XyoBoundWitnessWithMeta[], XyoBoundWitnessWithMeta | XyoBoundWitnessWithMeta[]> = async (
