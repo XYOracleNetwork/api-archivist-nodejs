@@ -1,8 +1,6 @@
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
-import { ArchivePathParams, SchemaStatsPayload, SchemaStatsQueryPayload, SchemaStatsQuerySchema } from '@xyo-network/archivist-model'
-import { XyoDivinerDivineQuerySchema } from '@xyo-network/diviner'
-import { ModuleQueryResult, QueryBoundWitnessBuilder } from '@xyo-network/module'
-import { PayloadWrapper } from '@xyo-network/payload'
+import { ArchivePathParams, SchemaStatsQueryPayload, SchemaStatsQuerySchema } from '@xyo-network/archivist-model'
+import { XyoDivinerWrapper } from '@xyo-network/diviner'
 import { RequestHandler } from 'express'
 
 export interface ArchiveSchemaStatsResponse {
@@ -13,10 +11,9 @@ const handler: RequestHandler<ArchivePathParams, ArchiveSchemaStatsResponse> = a
   const { archive } = req.params
   const { schemaStatsDiviner: diviner } = req.app
   const payloads: SchemaStatsQueryPayload[] = [{ archive, schema: SchemaStatsQuerySchema }]
-  const query = { payloads, schema: XyoDivinerDivineQuerySchema }
-  const bw = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(query)).payloads(payloads).build()
-  const result = (await diviner.query(bw, [query, ...payloads])) as ModuleQueryResult<SchemaStatsPayload>
-  const counts: Record<string, number> = result?.[1]?.[0]?.count || {}
+  const wrapper = new XyoDivinerWrapper(diviner)
+  const result = await wrapper.divine(payloads)
+  const counts = (result?.[0] as unknown as Record<string, number>)?.count || {}
   res.json({ counts })
 }
 

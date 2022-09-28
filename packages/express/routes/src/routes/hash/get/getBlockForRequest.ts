@@ -1,9 +1,8 @@
 import { exists } from '@xylabs/sdk-js'
-import { XyoArchivistFindQuery, XyoArchivistFindQuerySchema } from '@xyo-network/archivist'
+import { XyoArchivistWrapper } from '@xyo-network/archivist'
 import { requestCanAccessArchive } from '@xyo-network/archivist-express-lib'
 import { PayloadPointerPayload, payloadPointerSchema, XyoPayloadFilterPredicate, XyoPayloadWithMeta } from '@xyo-network/archivist-model'
-import { QueryBoundWitnessBuilder } from '@xyo-network/module'
-import { PayloadWrapper, XyoPayload } from '@xyo-network/payload'
+import { XyoPayload } from '@xyo-network/payload'
 import { Request } from 'express'
 
 import { resolvePayloadPointer } from './resolvePayloadPointer'
@@ -11,19 +10,14 @@ import { resolvePayloadPointer } from './resolvePayloadPointer'
 const findByHash = async (req: Request, hash: string) => {
   const { payloadArchivist, boundWitnessArchivist } = req.app
   const payloadFilter: XyoPayloadFilterPredicate = { hash }
-  const payloadQuery: XyoArchivistFindQuery = {
-    filter: payloadFilter,
-    schema: XyoArchivistFindQuerySchema,
-  }
-  const payloadQueryWitness = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(payloadQuery)).payload(payloadQuery).build()
-  const payloads = (await payloadArchivist.query(payloadQueryWitness, [payloadQuery]))?.[1].filter(exists) as XyoPayloadWithMeta[]
+
+  const payloadWrapper = new XyoArchivistWrapper(payloadArchivist)
+  const payloads = (await payloadWrapper.find(payloadFilter)).filter(exists)
+
   if (payloads.length) return payloads
-  const boundWitnessQuery: XyoArchivistFindQuery = {
-    filter: { ...payloadFilter, schema: 'network.xyo.boundwitness' },
-    schema: XyoArchivistFindQuerySchema,
-  }
-  const boundWitnessQueryWitness = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(boundWitnessQuery)).payload(boundWitnessQuery).build()
-  return (await boundWitnessArchivist.query(boundWitnessQueryWitness, [boundWitnessQuery]))?.[1].filter(exists)
+
+  const boundWitnessWrapper = new XyoArchivistWrapper(boundWitnessArchivist)
+  return (await boundWitnessWrapper.find({ ...payloadFilter, schema: 'network.xyo.boundwitness' })).filter(exists)
 }
 
 export const getBlockForRequest = async (req: Request, hash: string): Promise<XyoPayload | undefined> => {
