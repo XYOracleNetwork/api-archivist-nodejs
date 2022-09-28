@@ -33,12 +33,10 @@ export class MongoDBArchivePayloadsArchivist extends AbstractPayloadArchivist<Xy
     const parsedLimit = limit || DefaultLimit
     const parsedOrder = order || DefaultOrder
     const sort: { [key: string]: SortDirection } = { _timestamp: parsedOrder === 'asc' ? 1 : -1 }
-    const parsedTimestamp = timestamp ? timestamp : parsedOrder === 'desc' ? Date.now() : 0
-    const _timestamp = parsedOrder === 'desc' ? { $lt: parsedTimestamp } : { $gt: parsedTimestamp }
-    const filter: Filter<XyoPayloadWithMeta<EmptyObject>> = {
-      ...props,
-      _archive: this.config.archive,
-      _timestamp,
+    const filter: Filter<XyoPayloadWithMeta<EmptyObject>> = { _archive: this.config.archive, ...props }
+    if (timestamp) {
+      const parsedTimestamp = timestamp ? timestamp : parsedOrder === 'desc' ? Date.now() : 0
+      filter._timestamp = parsedOrder === 'desc' ? { $lt: parsedTimestamp } : { $gt: parsedTimestamp }
     }
     if (hash) filter._hash = hash
     if (schema) filter.schema = schema
