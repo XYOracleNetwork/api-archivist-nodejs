@@ -1,5 +1,5 @@
 import {
-  ArchivePermissionsArchivist,
+  ArchivePermissionsArchivistFactory,
   DebugSchema,
   SetArchivePermissionsPayloadWithMeta,
   SetArchivePermissionsQuery,
@@ -43,10 +43,10 @@ const getQueryPayload = (
 
 describe('SetArchivePermissionsQueryHandler', () => {
   describe('handle', () => {
-    let archivist: MockProxy<ArchivePermissionsArchivist>
+    let archivist: MockProxy<ArchivePermissionsArchivistFactory>
     let sut: SetArchivePermissionsQueryHandler
     beforeEach(() => {
-      archivist = mock<ArchivePermissionsArchivist>()
+      archivist = mock<ArchivePermissionsArchivistFactory>()
       sut = new SetArchivePermissionsQueryHandler(archivist)
     })
     describe('with invalid permissions', () => {
