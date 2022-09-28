@@ -6,7 +6,7 @@ import {
   ArchiveBoundWitnessArchivistFactory,
   ArchiveKeyArchivist,
   ArchivePayloadsArchivistFactory,
-  ArchivePermissionsArchivist,
+  ArchivePermissionsArchivistFactory,
   BoundWitnessArchivist,
   BoundWitnessStatsDiviner,
   PayloadArchivist,
@@ -36,9 +36,9 @@ export const addDependencies = (app: Application) => {
   )
   app.archiveArchivist = assertEx(dependencies.get<ArchiveArchivist>(TYPES.ArchiveArchivist), 'Missing ArchiveArchivist')
   app.archiveKeyArchivist = assertEx(dependencies.get<ArchiveKeyArchivist>(TYPES.ArchiveKeyArchivist), 'Missing ArchiveKeyArchivist')
-  app.archivePermissionsArchivist = assertEx(
-    dependencies.get<ArchivePermissionsArchivist>(TYPES.ArchivePermissionsArchivist),
-    'Missing ArchivePermissionsArchivist',
+  app.archivePermissionsArchivistFactory = assertEx(
+    dependencies.get<ArchivePermissionsArchivistFactory>(TYPES.ArchivePermissionsArchivistFactory),
+    'Missing ArchivePermissionsArchivistFactory',
   )
   app.schemaStatsDiviner = assertEx(dependencies.get<SchemaStatsDiviner>(TYPES.SchemaStatsDiviner), 'Missing SchemaStatsDiviner')
   app.boundWitnessStatsDiviner = assertEx(

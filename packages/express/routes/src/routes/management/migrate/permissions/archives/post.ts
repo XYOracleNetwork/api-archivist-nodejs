@@ -15,12 +15,12 @@ const defaultOffset = 0
 
 const handler: RequestHandler<NoReqParams, NoResBody, NoReqBody, MigrateQueryParams> = async (req, res) => {
   const { limit, offset } = req.query
-  const { archivePermissionsArchivist, archiveArchivist } = req.app
+  const { archivePermissionsArchivistFactory, archiveArchivist } = req.app
   const parsedLimit = tryParseInt(limit) || defaultLimit
   const parsedOffset = tryParseInt(offset) || defaultOffset
   const archives = (await archiveArchivist.find({ limit: parsedLimit, offset: parsedOffset })).filter(exists)
   const archiveCount = archives.length
-  const migrated = await migrateLegacyArchives(archivePermissionsArchivist, archives)
+  const migrated = await migrateLegacyArchives(archivePermissionsArchivistFactory, archives)
   const migratedCount = migrated.filter(exists).length
   res.status(StatusCodes.OK).json({ archiveCount, migratedCount })
 }
