@@ -8,6 +8,7 @@ import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter, SortDirection } from 'mongodb'
 
+import { DefaultLimit, DefaultOrder } from '../../defaults'
 import { removeId } from '../../Mongo'
 import { MONGO_TYPES } from '../../types'
 
@@ -21,14 +22,13 @@ export class MongoDBPayloadArchivist extends AbstractPayloadArchivist<XyoPayload
   }
   async find(predicate: XyoPayloadFilterPredicate<XyoPayloadWithMeta>): Promise<XyoPayloadWithMeta[]> {
     const { _archive, archives, hash, limit, order, schema, schemas, timestamp, ...props } = predicate
-    const parsedLimit = limit || 100
-    const parsedOrder = order || 'desc'
+    const parsedLimit = limit || DefaultLimit
+    const parsedOrder = order || DefaultOrder
+    const filter: Filter<XyoPayloadWithMeta<EmptyObject>> = { ...props }
     const sort: { [key: string]: SortDirection } = { _timestamp: parsedOrder === 'asc' ? 1 : -1 }
-    const parsedTimestamp = timestamp ? timestamp : parsedOrder === 'desc' ? Date.now() : 0
-    const _timestamp = parsedOrder === 'desc' ? { $lt: parsedTimestamp } : { $gt: parsedTimestamp }
-    const filter: Filter<XyoPayloadWithMeta<EmptyObject>> = {
-      ...props,
-      _timestamp,
+    if (timestamp) {
+      const parsedTimestamp = timestamp ? timestamp : parsedOrder === 'desc' ? Date.now() : 0
+      filter._timestamp = parsedOrder === 'desc' ? { $lt: parsedTimestamp } : { $gt: parsedTimestamp }
     }
     if (_archive) filter._archive = _archive
     if (archives?.length) filter._archive = { $in: archives }
