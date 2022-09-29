@@ -51,7 +51,8 @@ export class MongoDBArchiveBoundWitnessArchivist extends AbstractBoundWitnessArc
     if (addresses?.length) filter.addresses = { $all: addresses }
     if (payload_hashes?.length) filter.payload_hashes = { $in: payload_hashes }
     if (payload_schemas?.length) filter.payload_schemas = { $in: payload_schemas }
-    return (await (await this.sdk.find(filter)).sort(sort).limit(parsedLimit).maxTimeMS(2000).toArray()).map(removeId)
+    const result = (await (await this.sdk.find(filter)).sort(sort).limit(parsedLimit).maxTimeMS(2000).toArray()).map(removeId)
+    return result
   }
   async get(hashes: string[]): Promise<Array<XyoBoundWitnessWithMeta | null>> {
     const predicates = hashes.map((hash) => {
@@ -67,7 +68,7 @@ export class MongoDBArchiveBoundWitnessArchivist extends AbstractBoundWitnessArc
     return results
   }
 
-  async insert(items: XyoBoundWitnessWithMeta[]): Promise<XyoBoundWitness | null> {
+  async insert(items: XyoBoundWitnessWithMeta[]): Promise<XyoBoundWitness[]> {
     const _timestamp = Date.now()
     const bws = items
       .map((bw) => {
@@ -82,7 +83,7 @@ export class MongoDBArchiveBoundWitnessArchivist extends AbstractBoundWitnessArc
     if (result.insertedCount != items.length) {
       throw new Error('MongoDBArchiveBoundWitnessArchivist.insert: Error inserting BoundWitnesses')
     }
-    const [bw] = await this.bindPayloads(bws)
-    return bw
+    const [bw] = await this.bindResult(bws)
+    return [bw]
   }
 }

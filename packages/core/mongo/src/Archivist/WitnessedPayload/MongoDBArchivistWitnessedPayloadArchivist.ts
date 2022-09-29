@@ -46,7 +46,7 @@ export class MongoDBArchivistWitnessedPayloadArchivist extends AbstractPayloadAr
     return (await this.payloads.find({ _archive: { $in: archives }, _hash: hash })).limit(100).toArray()
   }
 
-  async insert(payloads: XyoPayloadWithMeta[]): Promise<XyoBoundWitness> {
+  async insert(payloads: XyoPayloadWithMeta[]): Promise<XyoBoundWitness[]> {
     // Witness from archivist
     const _timestamp = Date.now()
     const bw = new BoundWitnessBuilder({ inlinePayloads: false }).payloads(payloads).build() as XyoBoundWitnessWithMeta & XyoPayloadWithPartialMeta
@@ -60,6 +60,6 @@ export class MongoDBArchivistWitnessedPayloadArchivist extends AbstractPayloadAr
     if (result.insertedCount != payloads.length) {
       throw new Error('Error inserting Payloads')
     }
-    return bw
+    return [bw]
   }
 }

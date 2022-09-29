@@ -17,6 +17,7 @@ import {
   XyoPayloadWithPartialMeta,
 } from '@xyo-network/archivist-model'
 import { BoundWitnessBuilder, XyoBoundWitness } from '@xyo-network/boundwitness'
+import { QueryBoundWitnessBuilder } from '@xyo-network/module'
 import { PayloadWrapper, XyoPayloadBuilder } from '@xyo-network/payload'
 import { v4 } from 'uuid'
 
@@ -63,11 +64,11 @@ describe('MongoDBBoundWitnessArchivist', () => {
 
   beforeAll(async () => {
     const query: XyoArchivistInsertQuery = {
-      payloads: boundWitnesses as any,
+      payloads: boundWitnesses.map((payload) => PayloadWrapper.hash(payload)),
       schema: XyoArchivistInsertQuerySchema,
     }
-    const queryWitness = new BoundWitnessBuilder().payload(query).build()
-    const result = await sut.query(queryWitness, query, boundWitnesses)
+    const queryWitness = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(query)).payloads(boundWitnesses).build()
+    const result = await sut.query(queryWitness, [query, ...boundWitnesses])
     expect(result).toBeArrayOfSize(count)
     const bw: XyoBoundWitness = result?.[0]
     expect(bw).toBeObject()
@@ -95,8 +96,8 @@ describe('MongoDBBoundWitnessArchivist', () => {
         filter,
         schema: XyoArchivistFindQuerySchema,
       }
-      const queryWitness = new BoundWitnessBuilder().payload(query).build()
-      const result = await sut.query(queryWitness, query)
+      const queryWitness = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(query)).payload(query).build()
+      const result = await sut.query(queryWitness, [query])
       expect(result).toBeArrayOfSize(2)
       const bw: XyoBoundWitness = result?.[0]
       expect(bw).toBeObject()
@@ -116,8 +117,8 @@ describe('MongoDBBoundWitnessArchivist', () => {
         hashes,
         schema: XyoArchivistGetQuerySchema,
       }
-      const queryWitness = new BoundWitnessBuilder().payload(query).build()
-      const result = await sut.query(queryWitness, query)
+      const queryWitness = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(query)).payload(query).build()
+      const result = await sut.query(queryWitness, [query])
       expect(result).toBeArrayOfSize(2)
       const bw: XyoBoundWitness = result?.[0]
       expect(bw).toBeObject()

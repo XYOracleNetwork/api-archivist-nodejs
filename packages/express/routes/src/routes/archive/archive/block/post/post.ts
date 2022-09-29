@@ -1,12 +1,10 @@
 import 'source-map-support/register'
 
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
-import { XyoArchivistInsertQuery, XyoArchivistInsertQuerySchema } from '@xyo-network/archivist'
+import { XyoArchivistWrapper } from '@xyo-network/archivist'
 import { getRequestMeta } from '@xyo-network/archivist-express-lib'
-import { prepareBoundWitnesses, validatePayloadSchema } from '@xyo-network/archivist-lib'
+import { prepareBoundWitnesses } from '@xyo-network/archivist-lib'
 import { ArchivePathParams, XyoBoundWitnessWithMeta } from '@xyo-network/archivist-model'
-import { BoundWitnessBuilder, BoundWitnessWrapper } from '@xyo-network/boundwitness'
-import { PayloadWrapper, XyoPayload } from '@xyo-network/payload'
 import { RequestHandler } from 'express'
 
 const handler: RequestHandler<ArchivePathParams, XyoBoundWitnessWithMeta[], XyoBoundWitnessWithMeta | XyoBoundWitnessWithMeta[]> = async (
@@ -21,6 +19,7 @@ const handler: RequestHandler<ArchivePathParams, XyoBoundWitnessWithMeta[], XyoB
   const body: XyoBoundWitnessWithMeta[] = Array.isArray(req.body) ? req.body : [req.body]
   const { payloads, sanitized } = prepareBoundWitnesses(body, boundWitnessMeta, payloadMeta)
 
+  /*
   payloads.forEach(async (payload) => {
     const valid = await validatePayloadSchema(payload)
     if (!valid) {
@@ -28,20 +27,14 @@ const handler: RequestHandler<ArchivePathParams, XyoBoundWitnessWithMeta[], XyoB
       payloadWithExtraMeta._schemaValid = false
     }
   })
-  const boundWitnessQuery: XyoArchivistInsertQuery = {
-    payloads: sanitized.map((bw) => new BoundWitnessWrapper(bw).hash),
-    schema: XyoArchivistInsertQuerySchema,
-  }
-  const boundWitnessQueryWitness = new BoundWitnessBuilder().payload(boundWitnessQuery).build()
-  await archiveBoundWitnessArchivistFactory(archive).query(boundWitnessQueryWitness, boundWitnessQuery, sanitized)
+  */
+
+  const wrapper = new XyoArchivistWrapper(archiveBoundWitnessArchivistFactory(archive))
+  await wrapper.insert(sanitized)
 
   if (payloads.length) {
-    const payloadsQuery: XyoArchivistInsertQuery = {
-      payloads: payloads.map((p) => new PayloadWrapper(p).hash),
-      schema: XyoArchivistInsertQuerySchema,
-    }
-    const payloadsQueryWitness = new BoundWitnessBuilder().payload(boundWitnessQuery).build()
-    await archivePayloadsArchivistFactory(archive).query(payloadsQueryWitness, payloadsQuery, payloads)
+    const wrapper = new XyoArchivistWrapper(archivePayloadsArchivistFactory(archive))
+    await wrapper.insert(payloads)
   }
   res.json(sanitized)
 }

@@ -32,7 +32,7 @@ export const addQueryProcessing = () => {
             result._timestamp = Date.now()
 
             // Witness result and store result in archive
-            const stored = await witnessedPayloadArchivist.insert([result])
+            const stored = (await witnessedPayloadArchivist.insert([result])).pop()
             const hash = stored?.payload_hashes?.[0]
             if (hash) {
               // Store result in response queue

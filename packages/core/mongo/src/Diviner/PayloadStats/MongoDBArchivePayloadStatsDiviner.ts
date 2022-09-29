@@ -70,7 +70,7 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner implements Pay
     ]
   }
 
-  public async divine(context?: string, payloads?: XyoPayloads): Promise<XyoPayloads<PayloadStatsPayload>> {
+  public async divine(payloads?: XyoPayloads): Promise<XyoPayloads<PayloadStatsPayload>> {
     const query = payloads?.find<PayloadStatsQueryPayload>(isPayloadStatsQueryPayload)
     const archive = query?.archive
     const count = archive ? await this.divineArchive(archive) : await this.divineAllArchives()

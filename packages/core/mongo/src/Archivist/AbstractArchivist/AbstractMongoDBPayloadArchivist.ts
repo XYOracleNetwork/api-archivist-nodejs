@@ -66,7 +66,7 @@ export abstract class AbstractMongoDBPayloadArchivist<T extends EmptyObject = Em
     return [payload]
   }
 
-  async insert(items: XyoPayloadWithPartialMeta<WithoutId<T>>[]): Promise<XyoBoundWitness | null> {
+  async insert(items: XyoPayloadWithPartialMeta<WithoutId<T>>[]): Promise<XyoBoundWitness[]> {
     const _timestamp = Date.now()
     const payloads = items.map((p) => {
       return {
@@ -88,8 +88,8 @@ export abstract class AbstractMongoDBPayloadArchivist<T extends EmptyObject = Em
     if (!witnessResults.acknowledged || witnessResults.insertedCount !== boundWitnesses.length)
       throw new Error('AbstractMongoDBPayloadArchivist: Error inserting BoundWitnesses')
 
-    const [bw] = await this.bindPayloads(items)
-    return bw
+    const [bw] = await this.bindResult(items)
+    return [bw]
   }
 
   private async findWitnessQuery(archive: string) {

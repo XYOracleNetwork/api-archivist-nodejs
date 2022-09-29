@@ -1,12 +1,11 @@
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
-import { XyoArchivistGetQuery, XyoArchivistGetQuerySchema } from '@xyo-network/archivist'
+import { XyoArchivistWrapper } from '@xyo-network/archivist'
 import {
   ArchivePayloadsArchivist,
   XyoBoundWitnessWithPartialMeta,
   XyoPartialPayloadMeta,
   XyoPayloadWithPartialMeta,
 } from '@xyo-network/archivist-model'
-import { BoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
@@ -16,13 +15,9 @@ const getPayloadsByHashes = async (archivist: ArchivePayloadsArchivist, archive:
   const map: Record<string, XyoPayloadWithPartialMeta[]> = {}
   const payloads: (XyoPayloadWithPartialMeta | undefined)[] = []
   for (const hash of hashes) {
-    const query: XyoArchivistGetQuery = {
-      hashes: [hash],
-      schema: XyoArchivistGetQuerySchema,
-    }
-    const bw = new BoundWitnessBuilder().payload(query).build()
-    const result = await archivist.query(bw, query)
-    const payload = (result?.[1]?.[0] as XyoPayloadWithPartialMeta) || undefined
+    const wrapper = new XyoArchivistWrapper(archivist)
+    const result = await wrapper.get([hash])
+    const payload = (result?.[0] as XyoPayloadWithPartialMeta) || undefined
     payloads.push(payload)
   }
   payloads.forEach((value) => {
@@ -36,13 +31,10 @@ const getPayloadsByHashes = async (archivist: ArchivePayloadsArchivist, archive:
 const handler: RequestHandler<BlockHashPathParams, XyoPartialPayloadMeta[][]> = async (req, res, next) => {
   const { archive, hash } = req.params
   const { archivePayloadsArchivistFactory, archiveBoundWitnessArchivistFactory } = req.app
-  const query: XyoArchivistGetQuery = {
-    hashes: [hash],
-    schema: XyoArchivistGetQuerySchema,
-  }
-  const bw = new BoundWitnessBuilder().payload(query).build()
-  const result = await archiveBoundWitnessArchivistFactory(archive).query(bw, query)
-  const block = (result?.[1]?.[0] as XyoBoundWitnessWithPartialMeta) || undefined
+
+  const wrapper = new XyoArchivistWrapper(archiveBoundWitnessArchivistFactory(archive))
+  const result = await wrapper.get([hash])
+  const block = (result?.[0] as XyoBoundWitnessWithPartialMeta) || undefined
   if (block) {
     res.json(await getPayloadsByHashes(archivePayloadsArchivistFactory(archive), archive, block.payload_hashes))
   } else {

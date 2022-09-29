@@ -56,7 +56,7 @@ export class MongoDBBoundWitnessArchivist extends AbstractBoundWitnessArchivist 
     assertEx(limit < 10, 'MongoDBBoundWitnessArchivist.get: Retrieval of > 100 hashes at a time not supported')
     return (await (await this.sdk.find({ _hash: { $in: hashes } })).limit(hashes.length).toArray()).map(removeId)
   }
-  async insert(items: XyoBoundWitnessWithMeta[]): Promise<XyoBoundWitness> {
+  async insert(items: XyoBoundWitnessWithMeta[]): Promise<XyoBoundWitness[]> {
     const _timestamp = Date.now()
     const bws = items
       .map((bw) => {
@@ -71,7 +71,7 @@ export class MongoDBBoundWitnessArchivist extends AbstractBoundWitnessArchivist 
     if (result.insertedCount != items.length) {
       throw new Error('MongoDBBoundWitnessArchivist.insert: Error inserting BoundWitnesses')
     }
-    const [bw] = await this.bindPayloads(bws)
-    return bw
+    const [bw] = await this.bindResult(bws)
+    return [bw]
   }
 }
