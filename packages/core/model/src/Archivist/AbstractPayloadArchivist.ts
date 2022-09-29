@@ -39,7 +39,7 @@ export abstract class AbstractPayloadArchivist<T extends EmptyObject = EmptyObje
       // XyoModuleShutdownQuerySchema,
     ]
   }
-  override async query<T extends XyoQuery = XyoQuery>(query: T, payloads?: XyoPayloads): Promise<ModuleQueryResult<XyoPayload>> {
+  override async query<Q extends XyoQuery = XyoQuery>(query: Q, payloads?: XyoPayloads): Promise<ModuleQueryResult<XyoPayload>> {
     const wrapper = QueryBoundWitnessWrapper.parseQuery<XyoArchivistQuery>(query, payloads)
     const typedQuery = wrapper.query.payload
     assertEx(this.queryable(query.schema, wrapper.addresses))
@@ -61,7 +61,8 @@ export abstract class AbstractPayloadArchivist<T extends EmptyObject = EmptyObje
         assertEx(typedQuery.payloads, `Missing payloads: ${JSON.stringify(typedQuery, null, 2)}`)
         const resolvedWrappers = wrappers.filter((wrapper) => typedQuery.payloads.includes(wrapper.hash))
         assertEx(resolvedWrappers.length === typedQuery.payloads.length, 'Could not find some passed hashes')
-        result.push(...(await this.insert(resolvedWrappers.map((wrapper) => wrapper.payload) as any)))
+        const items = resolvedWrappers.map((wrapper) => wrapper.payload) as XyoPayloadWithPartialMeta<T>[]
+        result.push(...(await this.insert(items)))
         break
       }
       default:
