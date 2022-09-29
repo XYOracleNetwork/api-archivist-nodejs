@@ -19,6 +19,7 @@ import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Filter, SortDirection } from 'mongodb'
 
+import { DefaultLimit, DefaultOrder } from '../../defaults'
 import { removeId } from '../../Mongo'
 import { MONGO_TYPES } from '../../types'
 
@@ -34,17 +35,14 @@ export class MongoDBArchiveBoundWitnessArchivist extends AbstractBoundWitnessArc
 
   async find(predicate: XyoBoundWitnessFilterPredicate): Promise<XyoBoundWitnessWithMeta<EmptyObject, XyoPayloadWithPartialMeta<EmptyObject>>[]> {
     const { addresses, hash, limit, order, payload_hashes, payload_schemas, timestamp, ...props } = predicate
-    const parsedLimit = limit || 100
-    const parsedOrder = order || 'desc'
+    const parsedLimit = limit || DefaultLimit
+    const parsedOrder = order || DefaultOrder
     const sort: { [key: string]: SortDirection } = { _timestamp: parsedOrder === 'asc' ? 1 : -1 }
-    const parsedTimestamp = timestamp ? timestamp : parsedOrder === 'desc' ? Date.now() : 0
-    const _timestamp = parsedOrder === 'desc' ? { $lt: parsedTimestamp } : { $gt: parsedTimestamp }
-    const filter: Filter<XyoBoundWitnessWithMeta> = {
-      ...props,
-      _timestamp,
-      schema: 'network.xyo.boundwitness',
+    const filter: Filter<XyoBoundWitnessWithMeta> = { _archive: this.config.archive, ...props }
+    if (timestamp) {
+      const parsedTimestamp = timestamp ? timestamp : parsedOrder === 'desc' ? Date.now() : 0
+      filter._timestamp = parsedOrder === 'desc' ? { $lt: parsedTimestamp } : { $gt: parsedTimestamp }
     }
-    filter._archive = this.config?.archive
     if (hash) filter._hash = hash
     // NOTE: Defaulting to $all since it makes the most sense when singing addresses are supplied
     // but based on how MongoDB implements multi-key indexes $in might be much faster and we could
@@ -53,7 +51,8 @@ export class MongoDBArchiveBoundWitnessArchivist extends AbstractBoundWitnessArc
     if (addresses?.length) filter.addresses = { $all: addresses }
     if (payload_hashes?.length) filter.payload_hashes = { $in: payload_hashes }
     if (payload_schemas?.length) filter.payload_schemas = { $in: payload_schemas }
-    return (await (await this.sdk.find(filter)).sort(sort).limit(parsedLimit).maxTimeMS(2000).toArray()).map(removeId)
+    const result = (await (await this.sdk.find(filter)).sort(sort).limit(parsedLimit).maxTimeMS(2000).toArray()).map(removeId)
+    return result
   }
   async get(hashes: string[]): Promise<Array<XyoBoundWitnessWithMeta | null>> {
     const predicates = hashes.map((hash) => {
@@ -69,7 +68,7 @@ export class MongoDBArchiveBoundWitnessArchivist extends AbstractBoundWitnessArc
     return results
   }
 
-  async insert(items: XyoBoundWitnessWithMeta[]): Promise<XyoBoundWitness | null> {
+  async insert(items: XyoBoundWitnessWithMeta[]): Promise<XyoBoundWitness[]> {
     const _timestamp = Date.now()
     const bws = items
       .map((bw) => {
@@ -84,7 +83,7 @@ export class MongoDBArchiveBoundWitnessArchivist extends AbstractBoundWitnessArc
     if (result.insertedCount != items.length) {
       throw new Error('MongoDBArchiveBoundWitnessArchivist.insert: Error inserting BoundWitnesses')
     }
-    const [bw] = await this.bindPayloads(bws)
-    return bw
+    const [bw] = await this.bindResult(bws)
+    return [bw]
   }
 }

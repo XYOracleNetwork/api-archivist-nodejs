@@ -2,7 +2,7 @@ import { assertEx } from '@xylabs/assert'
 import { XyoArchiveKey } from '@xyo-network/api'
 import { XyoArchivistQuery } from '@xyo-network/archivist'
 import { ArchiveKeyArchivist } from '@xyo-network/archivist-model'
-import { XyoModuleQueryResult } from '@xyo-network/module'
+import { ModuleQueryResult } from '@xyo-network/module'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { Collection, WithId } from 'mongodb'
@@ -32,7 +32,7 @@ export class MongoDBArchiveKeyArchivist implements ArchiveKeyArchivist {
     const archive = assertEx(archives.pop(), 'Missing archive')
     return (await (await this.keys.find({ archive })).toArray()).map(fromDb)
   }
-  async insert(items: XyoArchiveKey[]): Promise<XyoArchiveKey> {
+  async insert(items: XyoArchiveKey[]): Promise<XyoArchiveKey[]> {
     assertEx(items.length === 1, 'Insertion of multiple archives keys not supported')
     const item = assertEx(items.pop(), 'Missing archive key')
     return await this.keys.useCollection(async (collection: Collection<XyoArchiveKey>) => {
@@ -43,7 +43,7 @@ export class MongoDBArchiveKeyArchivist implements ArchiveKeyArchivist {
           created: result.insertedId.getTimestamp().getTime(),
           key: item.key,
         }
-        return key
+        return [key]
       } else {
         throw new Error('Insert Failed')
       }
@@ -53,7 +53,7 @@ export class MongoDBArchiveKeyArchivist implements ArchiveKeyArchivist {
   queries(): string[] {
     throw new Error('Module query not implemented for MongoDBArchiveKeyArchivist')
   }
-  query(_query: XyoArchivistQuery): Promise<XyoModuleQueryResult> {
+  query(_query: XyoArchivistQuery): Promise<ModuleQueryResult> {
     throw new Error('Module query not implemented for MongoDBArchiveKeyArchivist')
   }
   queryable(_schema: string): boolean {

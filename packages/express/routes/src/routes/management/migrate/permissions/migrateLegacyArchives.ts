@@ -8,7 +8,7 @@ import {
 } from '@xyo-network/archivist-model'
 import { XyoBoundWitness } from '@xyo-network/boundwitness'
 
-export const migrateLegacyArchives = (
+export const migrateLegacyArchives = async (
   archivist: ArchivePermissionsArchivistFactory,
   archives: XyoArchive[],
 ): Promise<Array<XyoBoundWitness | null>> => {
@@ -17,5 +17,5 @@ export const migrateLegacyArchives = (
     const permissions: SetArchivePermissionsPayload = isLegacyPrivateArchive(archive) ? privateArchivePermissions : publicArchivePermissions
     return archivist(archive.archive).insert([{ ...permissions, _archive: archive.archive }])
   })
-  return Promise.all(migrations)
+  return (await Promise.all(migrations)).flat()
 }

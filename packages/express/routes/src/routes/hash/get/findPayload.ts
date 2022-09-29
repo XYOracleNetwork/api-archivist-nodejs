@@ -1,6 +1,5 @@
-import { XyoArchivistFindQuery, XyoArchivistFindQuerySchema } from '@xyo-network/archivist'
+import { XyoArchivistWrapper } from '@xyo-network/archivist'
 import { BoundWitnessesArchivist, PayloadArchivist, PayloadSearchCriteria, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
-import { BoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { PayloadWrapper, XyoPayload } from '@xyo-network/payload'
 
 const createPayloadFilterFromSearchCriteria = (searchCriteria: PayloadSearchCriteria): XyoPayloadFilterPredicate => {
@@ -14,13 +13,11 @@ const createPayloadFilterFromSearchCriteria = (searchCriteria: PayloadSearchCrit
 
 const isPayloadSignedByAddress = async (archivist: BoundWitnessesArchivist, hash: string, addresses: string[]): Promise<boolean> => {
   const filter = { addresses, limit: 1, payload_hashes: [hash] }
-  const query: XyoArchivistFindQuery = {
-    filter,
-    schema: XyoArchivistFindQuerySchema,
-  }
-  const bw = new BoundWitnessBuilder().payload(query).build()
-  const result = await archivist.query(bw, query)
-  return result?.[1].length > 0
+
+  const wrapper = new XyoArchivistWrapper(archivist)
+  const result = await wrapper.find(filter)
+
+  return result?.length > 0
 }
 
 export const findPayload = async (
@@ -30,13 +27,11 @@ export const findPayload = async (
 ): Promise<XyoPayload | undefined> => {
   const { addresses } = searchCriteria
   const filter = createPayloadFilterFromSearchCriteria(searchCriteria)
-  const query: XyoArchivistFindQuery = {
-    filter,
-    schema: XyoArchivistFindQuerySchema,
-  }
-  const bw = new BoundWitnessBuilder().payload(query).build()
-  const result = await payloadArchivist.query(bw, query)
-  const payload = result?.[1]?.[0] ?? undefined
+  const wrapper = new XyoArchivistWrapper(payloadArchivist)
+
+  const result = await wrapper.find(filter)
+
+  const payload = result?.[0] ?? undefined
   if (payload && addresses.length) {
     const hash = new PayloadWrapper(payload).hash
     const signed = await isPayloadSignedByAddress(boundWitnessArchivist, hash, addresses)
