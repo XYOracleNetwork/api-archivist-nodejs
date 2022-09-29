@@ -36,7 +36,7 @@ const getPayloads = (archive: string, count = 1): XyoPayloadWithMeta<DebugPayloa
 const removePayloads = (boundWitnesses: XyoBoundWitnessWithPartialMeta[]) => {
   return boundWitnesses.map((bw) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { _archive, _payloads, _timestamp, ...props } = bw
+    const { _archive, _payloads, _timestamp, timestamp, ...props } = bw
     return { ...props, _archive: expect.toBeString(), _timestamp: expect.toBeNumber() }
   })
 }
