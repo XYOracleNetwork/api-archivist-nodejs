@@ -21,7 +21,7 @@ import { inject, injectable } from 'inversify'
 import { MONGO_TYPES } from '../../types'
 
 @injectable()
-export class MongoDBArchiveElevationDiviner extends XyoDiviner implements ElevationDiviner, JobProvider {
+export class MongoDBElevationDiviner extends XyoDiviner implements ElevationDiviner, JobProvider {
   constructor(
     @inject(TYPES.Logger) protected logger: Logger,
     @inject(TYPES.Account) account: XyoAccount,
@@ -33,7 +33,7 @@ export class MongoDBArchiveElevationDiviner extends XyoDiviner implements Elevat
   get jobs(): Job[] {
     return [
       {
-        name: 'MongoDBArchiveElevationDiviner.DivineElevationBatch',
+        name: 'MongoDBElevationDiviner.DivineElevationBatch',
         schedule: '10 minute',
         task: async () => await this.divineElevationBatch(),
       },
@@ -42,27 +42,34 @@ export class MongoDBArchiveElevationDiviner extends XyoDiviner implements Elevat
 
   public async divine(payloads?: XyoPayloads): Promise<XyoPayloads<ElevationPayload>> {
     const query = payloads?.find<ElevationQueryPayload>(isElevationQueryPayload)
+    // If this is a query we support
     if (query) {
       // TODO: Extract relevant query values here
-      // TODO: Simulate work
+      this.logger.log('MongoDBElevationDiviner.Divine: Processing query')
+      // Simulating work
       await delay(1)
+      this.logger.log('MongoDBElevationDiviner.Divine: Processed query')
       return [new XyoPayloadBuilder<ElevationPayload>({ schema: ElevationSchema }).fields({}).build()]
     }
-    // Else return empty response?  Ignore request completely?
-    return [new XyoPayloadBuilder<ElevationPayload>({ schema: ElevationSchema }).fields({}).build()]
+    // else return empty response
+    return []
   }
 
   override async initialize(): Promise<void> {
+    this.logger.log('MongoDBElevationDiviner.Initialize: Initializing')
     // TODO: Any async init here
     await Promise.resolve()
+    this.logger.log('MongoDBElevationDiviner.Initialize: Initialized')
   }
 
   override async shutdown(): Promise<void> {
+    this.logger.log('MongoDBElevationDiviner.Shutdown: Shutting down')
     // TODO: Any async shutdown
     await Promise.resolve()
+    this.logger.log('MongoDBElevationDiviner.Shutdown: Shutdown')
   }
 
   private divineElevationBatch = async () => {
-    // TODO: Background/batch processing here
+    // TODO: Any background/batch processing here
   }
 }
