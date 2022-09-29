@@ -61,14 +61,14 @@ describe('MongoDBArchiveBoundWitnessArchivist', () => {
     expect(result?.[1].payload_hashes).toIncludeAllMembers(hashes)
   })
 
-  describe('XyoArchivistInsertQuery', () => {
+  describe('insert', () => {
     it('inserts multiple boundWitnesses', async () => {
       // NOTE: Done as part of beforeAll out of necessity
       // for subsequent tests. Not repeated again here for
       // performance.
     })
   })
-  describe('XyoArchivistFindQuery', () => {
+  describe('find', () => {
     it('finds boundWitnesses by hash', async () => {
       const filter: XyoPayloadFilterPredicate<XyoPayloadWithMeta> = { hash, limit }
       const wrapper = new XyoArchivistWrapper(sut)
@@ -77,7 +77,7 @@ describe('MongoDBArchiveBoundWitnessArchivist', () => {
       expect(result).toEqual(removePayloads([boundWitness]))
     })
   })
-  describe('XyoArchivistGetQuery', () => {
+  describe('get', () => {
     it('gets boundWitnesses by hashes', async () => {
       const wrapper = new XyoArchivistWrapper(sut)
       const result = await wrapper.get(hashes)
