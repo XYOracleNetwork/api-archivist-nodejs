@@ -70,6 +70,9 @@ export class MongoDBElevationDiviner extends XyoDiviner implements ElevationDivi
   }
 
   private divineElevationBatch = async () => {
+    this.logger.log('MongoDBElevationDiviner.DivineElevationBatch: Divining elevations for batch')
     // TODO: Any background/batch processing here
+    await Promise.resolve()
+    this.logger.log('MongoDBElevationDiviner.DivineElevationBatch: Divined elevations for batch')
   }
 }
