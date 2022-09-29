@@ -62,7 +62,7 @@ describe('MongoDBArchivePayloadsArchivist', () => {
       const wrapper = new XyoArchivistWrapper(sut)
       const result = await wrapper.find(filter)
       expect(result).toBeArrayOfSize(limit)
-      expect(result?.[0]).toEqual(payload)
+      expect(result).toEqual([payload])
     })
   })
   describe('XyoArchivistGetQuery', () => {
