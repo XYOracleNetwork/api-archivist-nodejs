@@ -1,11 +1,5 @@
 import { XyoAccount } from '@xyo-network/account'
-import {
-  XyoArchivistFindQuery,
-  XyoArchivistFindQuerySchema,
-  XyoArchivistGetQuery,
-  XyoArchivistGetQuerySchema,
-  XyoArchivistWrapper,
-} from '@xyo-network/archivist'
+import { XyoArchivistWrapper } from '@xyo-network/archivist'
 import {
   DebugPayload,
   DebugPayloadWithMeta,
@@ -15,8 +9,7 @@ import {
   XyoPayloadWithMeta,
   XyoPayloadWithPartialMeta,
 } from '@xyo-network/archivist-model'
-import { BoundWitnessBuilder, XyoBoundWitness } from '@xyo-network/boundwitness'
-import { QueryBoundWitnessBuilder } from '@xyo-network/module'
+import { BoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { PayloadWrapper, XyoPayloadBuilder } from '@xyo-network/payload'
 import { v4 } from 'uuid'
 
