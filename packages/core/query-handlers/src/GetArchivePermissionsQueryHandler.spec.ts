@@ -49,7 +49,7 @@ describe('GetArchivePermissionsQueryHandler', () => {
           archivist = mock<ArchivePermissionsArchivist>()
           archivistFactory = mock<ArchivePermissionsArchivistFactory>(() => archivist)
           const payloads: SetArchivePermissionsPayload[] = [permissions, emptyPermissions]
-          const boundWitness = new BoundWitnessBuilder().payloads(payloads).build()
+          const [boundWitness] = new BoundWitnessBuilder().payloads(payloads).build()
           archivist.query.mockResolvedValue([boundWitness, payloads])
         })
         it('returns the latest archive permissions', async () => {
@@ -75,7 +75,7 @@ describe('GetArchivePermissionsQueryHandler', () => {
         archivist = mock<ArchivePermissionsArchivist>()
         archivistFactory = mock<ArchivePermissionsArchivistFactory>(() => archivist)
         const payloads: SetArchivePermissionsPayload[] = []
-        const boundWitness = new BoundWitnessBuilder().build()
+        const [boundWitness] = new BoundWitnessBuilder().build()
         archivist.query.mockResolvedValue([boundWitness, payloads])
       })
       it('returns the empty permissions', async () => {

@@ -47,7 +47,7 @@ describe('MongoDBBoundWitnessArchivist', () => {
   const archive = `test-${v4()}`
   const payloads: XyoPayloadWithMeta<DebugPayload>[] = getPayloads(archive, count)
   const boundWitnesses = payloads
-    .map((p) => new BoundWitnessBuilder({ inlinePayloads: true }).payload(p).build())
+    .map((p) => new BoundWitnessBuilder({ inlinePayloads: true }).payload(p).build())[0]
     .map((bw) => {
       return { ...bw, _archive: archive } as XyoBoundWitnessWithMeta & XyoPayloadWithPartialMeta
     })

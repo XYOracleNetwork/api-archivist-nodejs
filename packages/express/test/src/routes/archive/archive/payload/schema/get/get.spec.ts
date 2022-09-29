@@ -19,7 +19,7 @@ const getNewBlockWithPayloadsOfSchemaType = (schema = getSchemaName()) => {
   return new BoundWitnessBuilder({ inlinePayloads: true })
     .payload({ definition, schema } as XyoSchemaPayload)
     .witness(unitTestSigningAccount)
-    .build()
+    .build()[0]
 }
 
 describe('/archive/:archive/payload/schema', () => {

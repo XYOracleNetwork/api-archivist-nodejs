@@ -41,7 +41,7 @@ const getNewBlockWithBoundWitnessesWithPayloads = (
   numPayloads = 1,
 ): Array<XyoBoundWitnessWithPartialMeta & XyoPayloadWithPartialMeta> => {
   return new Array(numBoundWitnesses).fill(0).map(() => {
-    return new BoundWitnessBuilder({ inlinePayloads: true }).payloads(getPayloads(numPayloads)).build()
+    return new BoundWitnessBuilder({ inlinePayloads: true }).payloads(getPayloads(numPayloads)).build()[0]
   })
 }
 

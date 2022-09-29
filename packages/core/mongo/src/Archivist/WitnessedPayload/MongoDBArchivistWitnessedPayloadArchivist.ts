@@ -13,6 +13,7 @@ import {
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { BoundWitnessBuilder, XyoBoundWitness } from '@xyo-network/boundwitness'
+import { XyoPayloads } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable, named } from 'inversify'
 
@@ -49,7 +50,10 @@ export class MongoDBArchivistWitnessedPayloadArchivist extends AbstractPayloadAr
   async insert(payloads: XyoPayloadWithMeta[]): Promise<XyoBoundWitness[]> {
     // Witness from archivist
     const _timestamp = Date.now()
-    const bw = new BoundWitnessBuilder({ inlinePayloads: false }).payloads(payloads).build() as XyoBoundWitnessWithMeta & XyoPayloadWithPartialMeta
+    const [bw] = new BoundWitnessBuilder({ inlinePayloads: false }).payloads(payloads).build() as [
+      XyoBoundWitnessWithMeta & XyoPayloadWithPartialMeta,
+      XyoPayloads,
+    ]
     bw._timestamp = _timestamp
     const witnessResult = await this.boundWitnesses.insertOne(bw)
     if (!witnessResult.acknowledged || !witnessResult.insertedId) {

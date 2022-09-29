@@ -27,13 +27,13 @@ describe('/archive/:archive/payload/schema/stats', () => {
     const posted = [
       // POST Payloads to test archive
       new Array(count).fill(null).map(async () => {
-        const block = getNewBlockWithPayloadsOfSchemaType()
+        const [block] = getNewBlockWithPayloadsOfSchemaType()
         const response = await postBlock(block, archive)
         expect(response.length).toBe(1)
       }),
       // Post some payloads to another archive
       new Array(count).fill(null).map(async () => {
-        const block = getNewBlockWithPayloadsOfSchemaType()
+        const [block] = getNewBlockWithPayloadsOfSchemaType()
         const response = await postBlock(block, otherArchive)
         expect(response.length).toBe(1)
       }),

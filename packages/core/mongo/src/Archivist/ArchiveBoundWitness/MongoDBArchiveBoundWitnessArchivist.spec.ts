@@ -48,7 +48,7 @@ describe('MongoDBArchiveBoundWitnessArchivist', () => {
   const config = { archive, schema: XyoModuleConfigSchema }
   const sut = new MongoDBArchiveBoundWitnessArchivist(account, sdk, config)
   const payloads: XyoPayloadWithMeta<DebugPayload>[] = getPayloads(archive, count)
-  const boundWitnesses = payloads.map((p) => new BoundWitnessBuilder({ inlinePayloads: true, timestamp: false }).payload(p).build())
+  const boundWitnesses = payloads.map((p) => new BoundWitnessBuilder({ inlinePayloads: true, timestamp: false }).payload(p).build()[0])
   const hashes: string[] = boundWitnesses.map((bw) => new BoundWitnessWrapper(bw).hash)
   const boundWitness = boundWitnesses[0]
   const hash = hashes[0]
