@@ -42,14 +42,14 @@ describe('MongoDBArchivePayloadsArchivist', () => {
     expect(result?.[1].payload_hashes).toIncludeAllMembers(hashes)
   })
 
-  describe('XyoArchivistInsertQuery', () => {
+  describe('insert', () => {
     it('inserts multiple payloads', async () => {
       // NOTE: Done as part of beforeAll out of necessity
       // for subsequent tests. Not repeated again here for
       // performance.
     })
   })
-  describe('XyoArchivistFindQuery', () => {
+  describe('find', () => {
     it('finds payloads by schema', async () => {
       const filter: XyoPayloadFilterPredicate<XyoPayloadWithMeta> = { limit, schema }
       const wrapper = new XyoArchivistWrapper(sut)
@@ -65,7 +65,7 @@ describe('MongoDBArchivePayloadsArchivist', () => {
       expect(result).toEqual([payload])
     })
   })
-  describe('XyoArchivistGetQuery', () => {
+  describe('get', () => {
     it('gets payloads by hashes', async () => {
       const wrapper = new XyoArchivistWrapper(sut)
       const result = await wrapper.get(hashes)
