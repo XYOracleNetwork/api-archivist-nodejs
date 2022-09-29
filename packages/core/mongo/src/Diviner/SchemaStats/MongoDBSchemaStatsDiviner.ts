@@ -105,7 +105,7 @@ export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner implements Sche
     ]
   }
 
-  override async divine(context?: string, payloads?: XyoPayloads): Promise<XyoPayloads<SchemaStatsPayload>> {
+  override async divine(payloads?: XyoPayloads): Promise<XyoPayloads<SchemaStatsPayload>> {
     const query = payloads?.find<SchemaStatsQueryPayload>(isSchemaStatsQueryPayload)
     const archive = query?.archive
     const count = archive ? await this.divineArchive(archive) : await this.divineAllArchives()

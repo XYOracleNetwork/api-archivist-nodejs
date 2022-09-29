@@ -11,8 +11,8 @@ import {
 } from '@xyo-network/archivist'
 import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { EmptyObject } from '@xyo-network/core'
-import { XyoModule, XyoModuleQueryResult, XyoQuery } from '@xyo-network/module'
-import { XyoPayload } from '@xyo-network/payload'
+import { ModuleQueryResult, QueryBoundWitnessWrapper, XyoModule, XyoQuery } from '@xyo-network/module'
+import { PayloadWrapper, XyoPayload, XyoPayloads } from '@xyo-network/payload'
 import { injectable } from 'inversify'
 
 import { XyoPayloadWithMeta, XyoPayloadWithPartialMeta } from '../Payload'
@@ -39,36 +39,39 @@ export abstract class AbstractPayloadArchivist<T extends EmptyObject = EmptyObje
       // XyoModuleShutdownQuerySchema,
     ]
   }
-  override async query<T extends XyoQuery = XyoQuery>(
-    bw: XyoBoundWitness,
-    query: T,
-    payloads?: XyoPayload[],
-  ): Promise<XyoModuleQueryResult<XyoPayload>> {
-    assertEx(this.queryable(query.schema, bw.addresses))
+  override async query<Q extends XyoQuery = XyoQuery>(query: Q, payloads?: XyoPayloads): Promise<ModuleQueryResult<XyoPayload>> {
+    const wrapper = QueryBoundWitnessWrapper.parseQuery<XyoArchivistQuery>(query, payloads)
+    const typedQuery = wrapper.query.payload
+    assertEx(this.queryable(query.schema, wrapper.addresses))
+
     const result: (XyoPayload | null)[] = []
     const queryAccount = new XyoAccount()
-    const typedQuery = query as XyoArchivistQuery
     switch (typedQuery.schema) {
       case XyoArchivistFindQuerySchema:
         if (typedQuery.filter) {
-          const typedFilter = typedQuery.filter as XyoPayloadFilterPredicate<T>
-          result.push(...(await this.find(typedFilter as any)))
+          const typedFilter = typedQuery.filter as XyoPayloadFilterPredicate
+          result.push(...(await this.find(typedFilter)))
         }
         break
       case XyoArchivistGetQuerySchema:
         result.push(...(await this.get(typedQuery.hashes)))
         break
       case XyoArchivistInsertQuerySchema: {
-        result.push(await this.insert(payloads as any))
+        const wrappers = payloads?.map((payload) => PayloadWrapper.parse(payload)) ?? []
+        assertEx(typedQuery.payloads, `Missing payloads: ${JSON.stringify(typedQuery, null, 2)}`)
+        const resolvedWrappers = wrappers.filter((wrapper) => typedQuery.payloads.includes(wrapper.hash))
+        assertEx(resolvedWrappers.length === typedQuery.payloads.length, 'Could not find some passed hashes')
+        const items = resolvedWrappers.map((wrapper) => wrapper.payload) as XyoPayloadWithPartialMeta<T>[]
+        result.push(...(await this.insert(items)))
         break
       }
       default:
         throw new Error(`${typedQuery.schema} Not Implemented`)
     }
-    return this.bindPayloads(result, queryAccount)
+    return this.bindResult(result, queryAccount)
   }
 
   abstract find(filter: XyoPayloadFilterPredicate<T>): Promise<XyoPayloadWithMeta<T>[]>
   abstract get(id: string[]): Promise<Array<XyoPayloadWithMeta<T> | null>>
-  abstract insert(items: XyoPayloadWithPartialMeta<T>[]): Promise<XyoBoundWitness | null>
+  abstract insert(items: XyoPayloadWithPartialMeta<T>[]): Promise<XyoBoundWitness[]>
 }

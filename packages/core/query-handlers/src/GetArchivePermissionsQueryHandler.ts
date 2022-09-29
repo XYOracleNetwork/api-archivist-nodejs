@@ -1,5 +1,5 @@
 import { assertEx } from '@xylabs/assert'
-import { XyoArchivistGetQuery, XyoArchivistGetQuerySchema } from '@xyo-network/archivist'
+import { XyoArchivistWrapper } from '@xyo-network/archivist'
 import {
   ArchivePermissionsArchivistFactory,
   GetArchivePermissionsQuery,
@@ -10,7 +10,6 @@ import {
   XyoPayloadWithMeta,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { BoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { WithAdditional } from '@xyo-network/core'
 import { XyoPayloadBuilder } from '@xyo-network/payload'
 import { inject, injectable } from 'inversify'
@@ -29,13 +28,9 @@ export class GetArchivePermissionsQueryHandler implements QueryHandler<GetArchiv
   constructor(@inject(TYPES.ArchivePermissionsArchivistFactory) protected readonly archivistFactory: ArchivePermissionsArchivistFactory) {}
   async handle(query: GetArchivePermissionsQuery): Promise<XyoPayloadWithMeta<SetArchivePermissionsPayload>> {
     const archive = assertEx(query.payload._archive, 'GetArchivePermissionsQueryHandler.handle: Archive not supplied')
-    const getQuery: XyoArchivistGetQuery = {
-      hashes: [archive],
-      schema: XyoArchivistGetQuerySchema,
-    }
-    const getWitness = new BoundWitnessBuilder().payload(getQuery).build()
-    const getResult = await this.archivistFactory(archive).query(getWitness, getQuery)
-    const permissions = (getResult?.[1]?.[0] as SetArchivePermissionsPayload) || getEmptyPermissions(query)
+    const wrapper = new XyoArchivistWrapper(this.archivistFactory(archive))
+    const getResult = await wrapper.get([archive])
+    const permissions = (getResult?.[0] as SetArchivePermissionsPayload) || getEmptyPermissions(query)
     return new XyoPayloadBuilder<SetArchivePermissionsPayloadWithMeta>({ schema: SetArchivePermissionsSchema })
       .fields({ ...permissions, _queryId: query.id, _timestamp: Date.now() })
       .build()

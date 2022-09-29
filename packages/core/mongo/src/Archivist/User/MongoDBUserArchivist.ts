@@ -3,7 +3,8 @@ import 'reflect-metadata'
 import { assertEx } from '@xylabs/assert'
 import { XyoArchivistQuery } from '@xyo-network/archivist'
 import { UpsertResult, User, UserArchivist, UserWithoutId } from '@xyo-network/archivist-model'
-import { XyoModuleQueryResult } from '@xyo-network/module'
+import { ModuleQueryResult } from '@xyo-network/module'
+import { XyoPayload } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 import { ObjectId, WithId } from 'mongodb'
@@ -35,7 +36,7 @@ export class MongoDBUserArchivist implements UserArchivist {
     return user ? [user] : [null]
   }
 
-  async insert(users: UserWithoutId[]): Promise<WithId<User & UpsertResult>> {
+  async insert(users: UserWithoutId[]): Promise<WithId<User & UpsertResult>[]> {
     return await this.db.useCollection(async (collection) => {
       const filter: IUpsertFilter = { $or: [] }
       assertEx(users.length === 1, 'Insertion of multiple users not supported')
@@ -53,7 +54,7 @@ export class MongoDBUserArchivist implements UserArchivist {
       const result = await collection.findOneAndUpdate(filter, { $set: user }, { returnDocument: 'after', upsert: true })
       if (result.ok && result.value) {
         const updated = !!result?.lastErrorObject?.updatedExisting || false
-        return { ...result.value, updated }
+        return [{ ...result.value, updated }]
       }
       throw new Error('Insert Failed')
     })
@@ -62,7 +63,7 @@ export class MongoDBUserArchivist implements UserArchivist {
   queries(): string[] {
     throw new Error('Module query not implemented for MongoDBUserArchivist')
   }
-  query(_query: XyoArchivistQuery): Promise<XyoModuleQueryResult> {
+  query(_query: XyoArchivistQuery, _payloads: XyoPayload[]): Promise<ModuleQueryResult> {
     throw new Error('Module query not implemented for MongoDBUserArchivist')
   }
   queryable(_schema: string): boolean {
