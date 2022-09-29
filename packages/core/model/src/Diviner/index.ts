@@ -1,4 +1,5 @@
 export * from './BoundWitnessStatsDiviner'
+export * from './ElevationDiviner'
 export * from './PayloadStatsDiviner'
 export * from './SchemaStatsDiviner'
 export * from './StatsPayload'
