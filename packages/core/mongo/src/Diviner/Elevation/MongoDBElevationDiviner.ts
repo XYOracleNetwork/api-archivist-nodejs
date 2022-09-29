@@ -11,10 +11,11 @@ import {
   Job,
   JobProvider,
   Logger,
+  XyoPayloadWithMeta,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoArchivistPayloadDivinerConfigSchema, XyoDiviner } from '@xyo-network/diviner'
-import { XyoPayload, XyoPayloadBuilder, XyoPayloads } from '@xyo-network/payload'
+import { XyoPayloadBuilder, XyoPayloads } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 
@@ -25,7 +26,7 @@ export class MongoDBElevationDiviner extends XyoDiviner implements ElevationDivi
   constructor(
     @inject(TYPES.Logger) protected logger: Logger,
     @inject(TYPES.Account) account: XyoAccount,
-    @inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayload>,
+    @inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayloadWithMeta>,
   ) {
     super({ schema: XyoArchivistPayloadDivinerConfigSchema }, account)
   }
