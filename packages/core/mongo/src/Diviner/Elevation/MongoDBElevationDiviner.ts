@@ -11,6 +11,7 @@ import {
   Job,
   JobProvider,
   Logger,
+  PayloadArchivist,
   XyoPayloadWithMeta,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
@@ -24,9 +25,10 @@ import { MONGO_TYPES } from '../../types'
 @injectable()
 export class MongoDBElevationDiviner extends XyoDiviner implements ElevationDiviner, JobProvider {
   constructor(
-    @inject(TYPES.Logger) protected logger: Logger,
-    @inject(TYPES.Account) account: XyoAccount,
-    @inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayloadWithMeta>,
+    @inject(TYPES.Logger) protected readonly logger: Logger,
+    @inject(TYPES.Account) protected readonly account: XyoAccount,
+    @inject(TYPES.PayloadArchivist) protected readonly payloads: PayloadArchivist,
+    @inject(MONGO_TYPES.PayloadSdkMongo) protected readonly sdk: BaseMongoSdk<XyoPayloadWithMeta>,
   ) {
     super({ schema: XyoArchivistPayloadDivinerConfigSchema }, account)
   }

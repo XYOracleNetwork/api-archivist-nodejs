@@ -5,6 +5,7 @@ import {
   ElevationQuerySchema,
   ElevationSchema,
   Logger,
+  PayloadArchivist,
   XyoPayloadWithMeta,
 } from '@xyo-network/archivist-model'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
@@ -18,12 +19,14 @@ describe('MongoDBElevationDiviner', () => {
   let logger: MockProxy<Logger>
   let account: XyoAccount
   let sdk: BaseMongoSdk<XyoPayloadWithMeta>
+  let payloadsArchivist: MockProxy<PayloadArchivist>
   let sut: MongoDBElevationDiviner
   beforeEach(() => {
     logger = mock<Logger>()
     account = XyoAccount.random()
+    payloadsArchivist = mock<PayloadArchivist>()
     sdk = getBaseMongoSdk<XyoPayloadWithMeta>(COLLECTIONS.Payloads)
-    sut = new MongoDBElevationDiviner(logger, account, sdk)
+    sut = new MongoDBElevationDiviner(logger, account, payloadsArchivist, sdk)
   })
   describe('divine', () => {
     describe('with valid query', () => {
