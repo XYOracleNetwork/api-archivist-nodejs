@@ -4,7 +4,7 @@ import { assertEx } from '@xylabs/assert'
 import { asyncHandler, tryParseInt } from '@xylabs/sdk-api-express-ecs'
 import { XyoArchivistWrapper } from '@xyo-network/archivist'
 import { ArchivePayloadsArchivist } from '@xyo-network/archivist-model'
-import { XyoPayload } from '@xyo-network/payload'
+import { PayloadWrapper, XyoPayload } from '@xyo-network/payload'
 import { RequestHandler } from 'express'
 
 import { PayloadChainPathParams } from './payloadChainPathParams'
@@ -12,9 +12,9 @@ import { PayloadChainPathParams } from './payloadChainPathParams'
 const getPayloads = async (archivist: ArchivePayloadsArchivist, archive: string, hash: string, payloads: XyoPayload[], limit: number) => {
   const wrapper = new XyoArchivistWrapper(archivist)
   const result = await wrapper.get([hash])
-  const payload = result?.[0]
+  const payload = PayloadWrapper.parse(result?.[0])
   if (payload) {
-    payloads.push(payload)
+    payloads.push(payload.payload)
     if (payload.previousHash && limit > payloads.length) {
       await getPayloads(archivist, archive, payload.previousHash, payloads, limit)
     }
