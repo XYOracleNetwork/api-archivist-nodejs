@@ -1,1 +1,1 @@
-export * from './ModuleAddressDiviner'
+export * from './ModuleAddress'
