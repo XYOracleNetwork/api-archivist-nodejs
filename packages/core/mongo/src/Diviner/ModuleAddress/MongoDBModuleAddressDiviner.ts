@@ -25,7 +25,7 @@ import { MONGO_TYPES } from '../../types'
 @injectable()
 export class MongoDBModuleAddressDiviner extends XyoDiviner implements ModuleAddressDiviner, JobProvider {
   constructor(
-    @inject(TYPES.Logger) protected readonly logger: Logger,
+    @inject(TYPES.Logger) public readonly logger: Logger,
     @inject(TYPES.Account) protected readonly account: XyoAccount,
     @inject(TYPES.PayloadArchivist) protected readonly payloads: PayloadArchivist,
     @inject(MONGO_TYPES.PayloadSdkMongo) protected readonly sdk: BaseMongoSdk<XyoPayloadWithMeta>,
