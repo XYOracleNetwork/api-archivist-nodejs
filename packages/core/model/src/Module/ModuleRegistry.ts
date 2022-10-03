@@ -1,6 +1,14 @@
 import { Module } from '@xyo-network/module'
 
 export interface ModuleRegistry {
+  /**
+   * Lists all modules registered to this registry
+   */
+  listModules?: () => Promise<string[]>
+
+  /**
+   * Called when a module is added to the registry
+   */
   onModuleAdded?: (address: string, module: Module) => Promise<void>
 
   /**
@@ -14,4 +22,11 @@ export interface ModuleRegistry {
    * exists at that address
    */
   getModule(address: string): Promise<Module | undefined>
+
+  /**
+   * Returns true if the module is registered with the
+   * registry, false otherwise
+   * @param address The address for the module
+   */
+  hasModule(address: string): Promise<boolean>
 }
