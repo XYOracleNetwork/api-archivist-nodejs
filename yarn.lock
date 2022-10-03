@@ -4213,6 +4213,7 @@ __metadata:
     "@xyo-network/archivist-express-lib": "workspace:^"
     "@xyo-network/archivist-middleware": "workspace:^"
     "@xyo-network/archivist-model": "workspace:^"
+    "@xyo-network/archivist-module": "workspace:^"
     "@xyo-network/archivist-mongo": "workspace:^"
     "@xyo-network/archivist-query-handlers": "workspace:^"
     "@xyo-network/archivist-queue": "workspace:^"
@@ -4322,7 +4323,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@xyo-network/archivist-module@workspace:packages/core/module":
+"@xyo-network/archivist-module@workspace:^, @xyo-network/archivist-module@workspace:packages/core/module":
   version: 0.0.0-use.local
   resolution: "@xyo-network/archivist-module@workspace:packages/core/module"
   dependencies:

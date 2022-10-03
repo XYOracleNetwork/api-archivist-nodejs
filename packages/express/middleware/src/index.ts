@@ -7,6 +7,7 @@ import {
   ArchivePermissionsArchivistFactory,
   BoundWitnessArchivist,
   BoundWitnessStatsDiviner,
+  ModuleRegistry,
   PayloadArchivist,
   PayloadStatsDiviner,
   Query,
@@ -48,6 +49,7 @@ declare global {
       archivistWitnessedPayloadArchivist: WitnessedPayloadArchivist
       boundWitnessArchivist: BoundWitnessArchivist
       boundWitnessStatsDiviner: BoundWitnessStatsDiviner
+      moduleRegistry: ModuleRegistry
       payloadArchivist: PayloadArchivist
       payloadStatsDiviner: PayloadStatsDiviner
       queryConverters: QueryConverterRegistry
