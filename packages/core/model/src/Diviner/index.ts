@@ -1,4 +1,5 @@
 export * from './BoundWitnessStatsDiviner'
+export * from './coin'
 export * from './ElevationDiviner'
 export * from './ModuleAddressDiviner'
 export * from './PayloadStatsDiviner'
