@@ -7,7 +7,6 @@ export const addInitializables = (container: Container) => {
     const initializables = [
       context.container.get(TYPES.BoundWitnessStatsDiviner),
       context.container.get(TYPES.ElevationDiviner),
-      context.container.get(TYPES.ModuleAddressDiviner),
       context.container.get(TYPES.PayloadStatsDiviner),
       context.container.get(TYPES.SchemaStatsDiviner),
     ]
