@@ -3,8 +3,9 @@ import 'source-map-support/register'
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
 import { XyoArchivistWrapper } from '@xyo-network/archivist'
 import { getRequestMeta } from '@xyo-network/archivist-express-lib'
-import { prepareBoundWitnesses } from '@xyo-network/archivist-lib'
+import { prepareBoundWitnesses, validatePayloadSchema } from '@xyo-network/archivist-lib'
 import { ArchivePathParams, XyoBoundWitnessWithMeta } from '@xyo-network/archivist-model'
+import { XyoPayload } from '@xyo-network/payload'
 import { RequestHandler } from 'express'
 
 const handler: RequestHandler<ArchivePathParams, XyoBoundWitnessWithMeta[], XyoBoundWitnessWithMeta | XyoBoundWitnessWithMeta[]> = async (
@@ -19,7 +20,6 @@ const handler: RequestHandler<ArchivePathParams, XyoBoundWitnessWithMeta[], XyoB
   const body: XyoBoundWitnessWithMeta[] = Array.isArray(req.body) ? req.body : [req.body]
   const { payloads, sanitized } = prepareBoundWitnesses(body, boundWitnessMeta, payloadMeta)
 
-  /*
   payloads.forEach(async (payload) => {
     const valid = await validatePayloadSchema(payload)
     if (!valid) {
@@ -27,7 +27,6 @@ const handler: RequestHandler<ArchivePathParams, XyoBoundWitnessWithMeta[], XyoB
       payloadWithExtraMeta._schemaValid = false
     }
   })
-  */
 
   const wrapper = new XyoArchivistWrapper(archiveBoundWitnessArchivistFactory(archive))
   await wrapper.insert(sanitized)

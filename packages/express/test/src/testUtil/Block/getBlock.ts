@@ -9,11 +9,11 @@ import { getPayloads, knownPayload } from '../Payload'
 export const knownBlock = new BoundWitnessBuilder({ inlinePayloads: true })
   .witness(unitTestSigningAccount)
   .payload(knownPayload)
-  .build() as XyoBoundWitness & XyoPayloadWithPartialMeta
+  .build()[0] as XyoBoundWitness & XyoPayloadWithPartialMeta
 export const knownBlockHash = assertEx(knownBlock._hash)
 
 export const getBlock = (...payloads: XyoPayload[]): XyoBoundWitnessWithPartialMeta & XyoPayloadWithPartialMeta => {
-  return new BoundWitnessBuilder({ inlinePayloads: true }).witness(unitTestSigningAccount).payloads(payloads).build()
+  return new BoundWitnessBuilder({ inlinePayloads: true }).witness(unitTestSigningAccount).payloads(payloads).build()[0]
 }
 
 export const getBlockWithPayloads = (numPayloads = 1) => {

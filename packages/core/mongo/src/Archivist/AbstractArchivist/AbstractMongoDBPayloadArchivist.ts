@@ -76,7 +76,7 @@ export abstract class AbstractMongoDBPayloadArchivist<T extends EmptyObject = Em
       } as OptionalUnlessRequiredId<XyoPayloadWithMeta<T>>
     })
     const boundWitnesses: XyoBoundWitnessWithMeta[] = payloads.map((p) => {
-      const bw = new BoundWitnessBuilder(builderConfig).witness(this.account).payload(p).build()
+      const [bw] = new BoundWitnessBuilder(builderConfig).witness(this.account).payload(p).build()
       const _archive = p._archive
       return { ...bw, _archive, _timestamp } as XyoBoundWitnessWithMeta
     })
