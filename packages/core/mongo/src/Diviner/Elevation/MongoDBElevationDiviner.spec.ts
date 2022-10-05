@@ -1,13 +1,6 @@
 import { XyoAccount } from '@xyo-network/account'
-import {
-  ElevationPayload,
-  ElevationQueryPayload,
-  ElevationQuerySchema,
-  ElevationSchema,
-  Logger,
-  PayloadArchivist,
-  XyoPayloadWithMeta,
-} from '@xyo-network/archivist-model'
+import { ElevationPayload, ElevationSchema, Logger, PayloadArchivist, XyoPayloadWithMeta } from '@xyo-network/archivist-model'
+import { XyoLocationPayload } from '@xyo-network/location-payload-plugin'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { mock, MockProxy } from 'jest-mock-extended'
 
@@ -31,8 +24,8 @@ describe('MongoDBElevationDiviner', () => {
   describe('divine', () => {
     describe('with valid query', () => {
       it('divines', async () => {
-        const query: ElevationQueryPayload = { schema: ElevationQuerySchema }
-        const result = await sut.divine([query])
+        const locations: XyoLocationPayload[] = []
+        const result = await sut.divine(locations)
         expect(result).toBeArrayOfSize(1)
         const actual = result[0] as ElevationPayload
         expect(actual).toBeObject()

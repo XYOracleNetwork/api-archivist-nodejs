@@ -1,5 +1,6 @@
 import 'reflect-metadata'
 
+import { assertEx } from '@xylabs/assert'
 import { XyoAccount } from '@xyo-network/account'
 import { BoundWitnessesArchivist, Job, JobProvider, Logger, PayloadArchivist, XyoPayloadWithMeta } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
@@ -71,7 +72,7 @@ export class CoinUserLocationsDiviner extends XyoDiviner implements CoinUserLoca
       // TODO: Extract relevant query values here
       this.logger.log('CoinUserLocationsDiviner.Divine: Processing query')
       // Simulating work
-      const bwList = await this.bws.find({ payload_hashes: [wrapper.hash] })
+      const bwList = (await this.bws.find({ payload_hashes: [wrapper.hash] })) ?? []
       const locationHashes = bwList
         .map((bw) => {
           const locations: string[] = []
