@@ -5,9 +5,7 @@ import { XyoAccount } from '@xyo-network/account'
 import {
   ElevationDiviner,
   ElevationPayload,
-  ElevationQueryPayload,
   ElevationSchema,
-  isElevationQueryPayload,
   Job,
   JobProvider,
   Logger,
@@ -16,6 +14,7 @@ import {
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoArchivistPayloadDivinerConfigSchema, XyoDiviner } from '@xyo-network/diviner'
+import { XyoLocationPayload, XyoLocationSchema } from '@xyo-network/location-payload-plugin'
 import { XyoPayloadBuilder, XyoPayloads } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
@@ -44,11 +43,9 @@ export class MongoDBElevationDiviner extends XyoDiviner implements ElevationDivi
   }
 
   public async divine(payloads?: XyoPayloads): Promise<XyoPayloads<ElevationPayload>> {
-    const query = payloads?.find<ElevationQueryPayload>(isElevationQueryPayload)
+    const query = payloads?.filter<XyoLocationPayload>((payload): payload is XyoLocationPayload => payload?.schema === XyoLocationSchema)
     // If this is a query we support
     if (query) {
-      // TODO: Extract relevant query values here
-      this.logger.log('MongoDBElevationDiviner.Divine: Processing query')
       // Simulating work
       await delay(1)
       this.logger.log('MongoDBElevationDiviner.Divine: Processed query')

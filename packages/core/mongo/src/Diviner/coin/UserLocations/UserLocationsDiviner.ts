@@ -62,7 +62,9 @@ export class CoinUserLocationsDiviner extends XyoDiviner implements CoinUserLoca
   }
 
   public async divine(payloads?: XyoPayloads): Promise<XyoPayloads<XyoLocationPayload>> {
-    const user = payloads?.find((payload) => payload?.schema === CoinCurrentUserWitnessSchema)
+    const user = payloads?.find<CoinCurrentUserWitnessPayload>(
+      (payload): payload is CoinCurrentUserWitnessPayload => payload?.schema === CoinCurrentUserWitnessSchema,
+    )
     // If this is a query we support
     if (user) {
       const wrapper = new PayloadWrapper(user)
@@ -75,7 +77,7 @@ export class CoinUserLocationsDiviner extends XyoDiviner implements CoinUserLoca
           const locations: string[] = []
           for (let i = 0; i < bwList.length; i++) {
             if (bw?.payload_schemas[i] === CoinCurrentLocationWitnessSchema) {
-              locations.push(bw?.payload_hashes[i])
+              locations.push(assertEx(bw?.payload_hashes[i], 'Missing hash'))
             }
           }
           return locations
