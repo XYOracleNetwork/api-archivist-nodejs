@@ -1,7 +1,5 @@
 import { XyoAccount } from '@xyo-network/account'
 import { BoundWitnessArchivist, Logger, PayloadArchivist, XyoPayloadWithMeta } from '@xyo-network/archivist-model'
-import { XyoLocationSchema } from '@xyo-network/location-payload-plugin'
-import { XyoPayload } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { mock, MockProxy } from 'jest-mock-extended'
 

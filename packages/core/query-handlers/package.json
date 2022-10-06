@@ -29,15 +29,19 @@
   "dependencies": {
     "@xylabs/assert": "^2.6.9",
     "@xylabs/delay": "^2.6.9",
-    "@xyo-network/archivist": "^2.37.1",
+    "@xyo-network/archivist": "^2.37.3",
     "@xyo-network/archivist-model": "workspace:^",
     "@xyo-network/archivist-types": "workspace:^",
-    "@xyo-network/core": "^2.37.1",
-    "@xyo-network/domain-payload-plugin": "^2.37.1",
-    "@xyo-network/payload": "^2.37.1",
-    "@xyo-network/schema-payload-plugin": "^2.37.1",
-    "@xyo-network/utils": "^2.37.1",
+    "@xyo-network/core": "^2.37.3",
+    "@xyo-network/domain-payload-plugin": "^2.37.3",
+    "@xyo-network/payload": "^2.37.3",
+    "@xyo-network/schema-payload-plugin": "^2.37.3",
+    "@xyo-network/utils": "^2.37.3",
     "inversify": "^6.0.1"
+  },
+  "peerDependencies": {
+    "axios": "*",
+    "pako": "*"
   },
   "devDependencies": {
     "jest": "^29.1.2",
