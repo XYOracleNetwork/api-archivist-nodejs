@@ -34,7 +34,6 @@ describe('MongoDBLocationCertaintyDiviner', () => {
         const locationsResult = await sut.divine(locations)
         expect(locationsResult).toBeArrayOfSize(1)
         const actual = locationsResult[0] as LocationCertaintyPayload
-        console.log(`locationsResult: ${JSON.stringify(locationsResult, null, 2)}`)
         expect(actual).toBeObject()
         expect(actual.schema).toBe(LocationCertaintySchema)
       })

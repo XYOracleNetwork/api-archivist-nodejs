@@ -15,6 +15,7 @@ import {
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoArchivistPayloadDivinerConfigSchema, XyoDiviner } from '@xyo-network/diviner'
 import {
+  XyoLocationElevationPayload,
   XyoLocationElevationSchema,
   XyoLocationElevationWitness,
   XyoLocationElevationWitnessConfigSchema,
@@ -47,6 +48,46 @@ export class MongoDBLocationCertaintyDiviner extends XyoDiviner implements Locat
     ]
   }
 
+  /* Given an array of numbers, find the min/max/mean */
+  private static calcHeuristic(heuristic: (number | null)[]): LocationCertaintyHeuristic {
+    return {
+      max: heuristic.reduce<number>((prev, value) => {
+        return value !== null ? (value > prev ? value : prev) : prev
+      }, -Infinity),
+      mean: (() => {
+        const values = heuristic.reduce<number[]>(
+          (prev, value) => {
+            return value !== null ? [value + prev[0], prev[1] + 1] : prev
+          },
+          [0, 0],
+        )
+        return values[0] / values[1]
+      })(),
+      min: heuristic.reduce<number>((prev, value) => {
+        return value !== null ? (value < prev ? value : prev) : prev
+      }, Infinity),
+    }
+  }
+
+  /* Given elevation and location payloads, generate heuristic arrays */
+  private static locationsToHeuristics(elevations: XyoLocationElevationPayload[], locations: XyoLocationPayload[]) {
+    const heuristics = elevations.reduce<{ altitude: (number | null)[]; elevation: number[]; variance: (number | null)[] }>(
+      (prev, elev, index) => {
+        const elevation = elev.elevation
+        if (elevation === undefined || elevation === null) {
+          throw Error('Invalid Elevation')
+        }
+        const altitude = locations[index].altitude
+        prev.altitude.push(altitude ?? null)
+        prev.elevation.push(elevation)
+        prev.variance.push(altitude !== undefined && altitude !== null ? altitude - elevation : null)
+        return prev
+      },
+      { altitude: [], elevation: [], variance: [] },
+    )
+    return heuristics
+  }
+
   /** @description Given a set of locations, get the expected elevations (witness if needed), and return score/variance */
   public async divine(payloads?: XyoPayloads): Promise<XyoPayloads<LocationCertaintyPayload>> {
     const locations = payloads?.filter<XyoLocationPayload>((payload): payload is XyoLocationPayload => payload?.schema === XyoLocationSchema)
@@ -59,46 +100,13 @@ export class MongoDBLocationCertaintyDiviner extends XyoDiviner implements Locat
       })
       const elevations = await elevationWitness.observe()
 
-      const heuristics = elevations.reduce<{ altitude: (number | null)[]; elevation: number[]; variance: (number | null)[] }>(
-        (prev, elev, index) => {
-          const elevation = elev.elevation
-          if (elevation === undefined || elevation === null) {
-            throw Error('Invalid Elevation')
-          }
-          const altitude = locations[index].altitude
-          prev.altitude.push(altitude ?? null)
-          prev.elevation.push(elevation)
-          prev.variance.push(altitude !== undefined && altitude !== null ? altitude - elevation : null)
-          return prev
-        },
-        { altitude: [], elevation: [], variance: [] },
-      )
-
-      const calcHeuristic = (heuristic: (number | null)[]): LocationCertaintyHeuristic => {
-        return {
-          max: heuristic.reduce<number>((prev, value) => {
-            return value !== null ? (value > prev ? value : prev) : prev
-          }, -Infinity),
-          mean: (() => {
-            const values = heuristic.reduce<number[]>(
-              (prev, value) => {
-                return value !== null ? [value + prev[0], prev[1] + 1] : prev
-              },
-              [0, 0],
-            )
-            return values[0] / values[1]
-          })(),
-          min: heuristic.reduce<number>((prev, value) => {
-            return value !== null ? (value < prev ? value : prev) : prev
-          }, Infinity),
-        }
-      }
+      const heuristics = MongoDBLocationCertaintyDiviner.locationsToHeuristics(elevations, locations)
 
       const result = new XyoPayloadBuilder<LocationCertaintyPayload>({ schema: LocationCertaintySchema })
         .fields({
-          altitude: calcHeuristic(heuristics.altitude),
-          elevation: calcHeuristic(heuristics.elevation),
-          variance: calcHeuristic(heuristics.variance),
+          altitude: MongoDBLocationCertaintyDiviner.calcHeuristic(heuristics.altitude),
+          elevation: MongoDBLocationCertaintyDiviner.calcHeuristic(heuristics.elevation),
+          variance: MongoDBLocationCertaintyDiviner.calcHeuristic(heuristics.variance),
         })
         .build()
 
