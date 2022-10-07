@@ -27,10 +27,14 @@ describe('MongoDBLocationCertaintyDiviner', () => {
         const noLocations: XyoLocationPayload[] = []
         const noLocationsResult = await sut.divine(noLocations)
         expect(noLocationsResult).toBeArrayOfSize(0)
-        const locations: XyoLocationPayload[] = [{ quadkey: '0203', schema: XyoLocationSchema }]
+        const locations: XyoLocationPayload[] = [
+          { altitude: 5, quadkey: '0203', schema: XyoLocationSchema },
+          { altitude: 300, quadkey: '0102', schema: XyoLocationSchema },
+        ]
         const locationsResult = await sut.divine(locations)
         expect(locationsResult).toBeArrayOfSize(1)
         const actual = locationsResult[0] as LocationCertaintyPayload
+        console.log(`locationsResult: ${JSON.stringify(locationsResult, null, 2)}`)
         expect(actual).toBeObject()
         expect(actual.schema).toBe(LocationCertaintySchema)
       })

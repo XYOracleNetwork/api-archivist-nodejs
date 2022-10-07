@@ -1,6 +1,5 @@
 import 'reflect-metadata'
 
-import { assertEx } from '@xylabs/assert'
 import { XyoAccount } from '@xyo-network/account'
 import {
   Job,
@@ -62,11 +61,14 @@ export class MongoDBLocationCertaintyDiviner extends XyoDiviner implements Locat
 
       const heuristics = elevations.reduce<{ altitude: (number | null)[]; elevation: number[]; variance: (number | null)[] }>(
         (prev, elev, index) => {
-          const elevation = assertEx(elev.elevation)
+          const elevation = elev.elevation
+          if (elevation === undefined || elevation === null) {
+            throw Error('Invalid Elevation')
+          }
           const altitude = locations[index].altitude
           prev.altitude.push(altitude ?? null)
           prev.elevation.push(elevation)
-          prev.variance.push(altitude ? altitude - elevation : null)
+          prev.variance.push(altitude !== undefined && altitude !== null ? altitude - elevation : null)
           return prev
         },
         { altitude: [], elevation: [], variance: [] },
@@ -75,19 +77,19 @@ export class MongoDBLocationCertaintyDiviner extends XyoDiviner implements Locat
       const calcHeuristic = (heuristic: (number | null)[]): LocationCertaintyHeuristic => {
         return {
           max: heuristic.reduce<number>((prev, value) => {
-            return value ? (value > prev ? value : prev) : prev
+            return value !== null ? (value > prev ? value : prev) : prev
           }, -Infinity),
           mean: (() => {
             const values = heuristic.reduce<number[]>(
               (prev, value) => {
-                return value ? [value + prev[0], prev[1] + 1] : prev
+                return value !== null ? [value + prev[0], prev[1] + 1] : prev
               },
               [0, 0],
             )
             return values[0] / values[1]
           })(),
           min: heuristic.reduce<number>((prev, value) => {
-            return value ? (value < prev ? value : prev) : prev
+            return value !== null ? (value < prev ? value : prev) : prev
           }, Infinity),
         }
       }
