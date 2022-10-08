@@ -1,21 +1,18 @@
-import { NextFunction, Request, Response } from 'express'
-import Rollbar, { ExpressErrorHandler } from 'rollbar'
+import { Logger } from '@xyo-network/archivist-model'
+import { ErrorRequestHandler, NextFunction, Request, Response } from 'express'
 
-const defaultEnvironment = 'development'
-
-const noOpErrorHandler: ExpressErrorHandler = (err, _req: Request, _res: Response, next: NextFunction) => {
-  if (_res.headersSent) {
-    return next()
-  }
-  return next(err)
-}
-
-export const rollbarErrorHandler = (): ExpressErrorHandler => {
-  const accessToken = process.env.ROLLBAR_ACCESS_TOKEN
-  if (accessToken) {
-    const environment = process.env.ROLLBAR_ENVIRONMENT || defaultEnvironment
-    return new Rollbar({ accessToken, environment }).errorHandler
-  } else {
-    return noOpErrorHandler
+export const loggingErrorHandler = (logger: Logger): ErrorRequestHandler => {
+  return (err: { message?: string; statusCode?: number }, req: Request, res: Response, next: NextFunction) => {
+    if (res.headersSent) {
+      return next()
+    }
+    if (err.statusCode && err.message) {
+      if (err.statusCode > 499) {
+        logger.error(err)
+      } else if (err.statusCode > 399) {
+        logger.warn(err)
+      }
+    }
+    return next(err)
   }
 }
