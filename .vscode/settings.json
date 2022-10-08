@@ -5,9 +5,11 @@
     ".svn": true,
     ".hg": true,
     ".DS_Store": true,
-    "node_modules": true,
-    "build": true,
-    "dist": true,
+    "**/node_modules": true,
+    "**/build": true,
+    "**/dist": true,
+    "**/.eslintcache": true,
+    "**/.tsconfig.*": true,
     ".webpack": true,
     ".serverless": true,
     ".rollup.cache": true,
@@ -47,6 +49,7 @@
   },
   "typescript.tsdk": "node_modules/typescript/lib",
   "cSpell.words": [
+    "pako",
     "quadkey",
     "staker"
   ],
