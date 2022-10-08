@@ -1,7 +1,7 @@
 import { Logger } from '@xyo-network/archivist-model'
 import { ErrorRequestHandler, NextFunction, Request, Response } from 'express'
 
-export const loggingErrorHandler = (logger: Logger): ErrorRequestHandler => {
+export const getLoggingErrorHandler = (logger: Logger): ErrorRequestHandler => {
   return (err: { message?: string; statusCode?: number }, req: Request, res: Response, next: NextFunction) => {
     if (res.headersSent) {
       return next()

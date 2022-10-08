@@ -7,6 +7,7 @@ import {
   ArchivePermissionsArchivistFactory,
   BoundWitnessArchivist,
   BoundWitnessStatsDiviner,
+  Logger,
   ModuleAddressDiviner,
   ModuleRegistry,
   PayloadArchivist,
@@ -50,6 +51,7 @@ declare global {
       archivistWitnessedPayloadArchivist: WitnessedPayloadArchivist
       boundWitnessArchivist: BoundWitnessArchivist
       boundWitnessStatsDiviner: BoundWitnessStatsDiviner
+      logger: Logger
       moduleAddressDiviner: ModuleAddressDiviner
       moduleRegistry: ModuleRegistry
       payloadArchivist: PayloadArchivist
@@ -67,9 +69,9 @@ declare global {
 export * from './archiveLocals'
 export * from './auth'
 export * from './doc'
+export * from './LoggingErrorHandler'
 export * from './nodeEnv'
 export * from './PasswordHasher'
 export * from './QueryProcessor'
 export * from './RequestToQueryConverter'
-export * from './rollbar'
 export * from './standardResponses'
