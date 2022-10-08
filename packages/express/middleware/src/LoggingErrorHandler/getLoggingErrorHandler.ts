@@ -9,7 +9,7 @@ export const getLoggingErrorHandler = (logger: Logger): ErrorRequestHandler => {
     if (res.headersSent) {
       return next()
     }
-    // Log any errors thrown
+    // Logs any errors issued by our code via next({statusCode: 500, message: 'Internal Server Error'})
     const statusCode = (err as ExpressError)?.statusCode
     if (statusCode && err?.message) {
       if (statusCode > 499) {
@@ -17,6 +17,7 @@ export const getLoggingErrorHandler = (logger: Logger): ErrorRequestHandler => {
       } else if (statusCode > 399) {
         logger.warn(err?.message)
       }
+      // Logs an uncaught errors thrown by DB query, for example
     } else if (err instanceof Error) {
       logger.error(err.message)
     }
