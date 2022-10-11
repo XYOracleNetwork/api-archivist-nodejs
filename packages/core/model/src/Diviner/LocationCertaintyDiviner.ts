@@ -21,6 +21,8 @@ export interface LocationCertaintyHeuristic {
 
 export type LocationCertaintyPayload = XyoPayload<{
   altitude: LocationCertaintyHeuristic
+  /** @field Value between 0 and 100 - Certainty Score */
+  certainty: number
   elevation: LocationCertaintyHeuristic
   schema: LocationCertaintySchema
   variance: LocationCertaintyHeuristic
