@@ -6,12 +6,12 @@ import { getPayloads } from '../Payload'
 
 export const getBlocks = (numBoundWitnesses = 1): Array<XyoBoundWitnessWithPartialMeta & XyoPayloadWithPartialMeta> => {
   return new Array(numBoundWitnesses).fill(0).map(() => {
-    return new BoundWitnessBuilder({ inlinePayloads: true }).witness(unitTestSigningAccount).build()
+    return new BoundWitnessBuilder({ inlinePayloads: true }).witness(unitTestSigningAccount).build()[0]
   })
 }
 
 export const getBlocksWithPayloads = (numBoundWitnesses = 1, numPayloads = 1): Array<XyoBoundWitnessWithPartialMeta & XyoPayloadWithPartialMeta> => {
   return new Array(numBoundWitnesses).fill(0).map(() => {
-    return new BoundWitnessBuilder({ inlinePayloads: true }).witness(unitTestSigningAccount).payloads(getPayloads(numPayloads)).build()
+    return new BoundWitnessBuilder({ inlinePayloads: true }).witness(unitTestSigningAccount).payloads(getPayloads(numPayloads)).build()[0]
   })
 }

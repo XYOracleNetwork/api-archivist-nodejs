@@ -1,14 +1,6 @@
 import { XyoAccount } from '@xyo-network/account'
-import {
-  XyoArchivistFindQuery,
-  XyoArchivistFindQuerySchema,
-  XyoArchivistGetQuery,
-  XyoArchivistGetQuerySchema,
-  XyoArchivistWrapper,
-} from '@xyo-network/archivist'
+import { XyoArchivistWrapper } from '@xyo-network/archivist'
 import { DebugPayload, DebugPayloadWithMeta, DebugSchema, XyoPayloadFilterPredicate, XyoPayloadWithMeta } from '@xyo-network/archivist-model'
-import { XyoBoundWitness } from '@xyo-network/boundwitness'
-import { QueryBoundWitnessBuilder } from '@xyo-network/module'
 import { PayloadWrapper, XyoPayloadBuilder } from '@xyo-network/payload'
 import { v4 } from 'uuid'
 
@@ -18,6 +10,7 @@ import { MongoDBPayloadArchivist } from './MongoDBPayloadArchivist'
 
 const count = 2
 const schema = DebugSchema
+const limit = 1
 
 const getPayloads = (archive: string, count = 1): XyoPayloadWithMeta<DebugPayload>[] => {
   const payloads: XyoPayloadWithMeta<DebugPayload>[] = []
@@ -44,73 +37,39 @@ describe('MongoDBPayloadArchivist', () => {
     const wrapper = new XyoArchivistWrapper(sut)
     const result = await wrapper.insert(payloads)
     expect(result).toBeArrayOfSize(count)
-    const bw: XyoBoundWitness = result?.pop() as XyoBoundWitness
-    expect(bw).toBeObject()
-    expect(bw._signatures).toBeArrayOfSize(1)
-    expect(bw.addresses).toBeArrayOfSize(1)
-    expect(bw.addresses).toContain(account.addressValue.hex)
-    expect(bw.payload_hashes).toIncludeAllMembers(hashes)
+    expect(result?.[0].addresses).toContain(account.addressValue.hex)
+    expect(result?.[1].payload_hashes).toIncludeAllMembers(hashes)
   })
 
-  describe('XyoArchivistInsertQuery', () => {
+  describe('insert', () => {
     it('inserts multiple payloads', async () => {
       // NOTE: Done as part of beforeAll out of necessity
       // for subsequent tests. Not repeated again here for
       // performance.
     })
   })
-  describe('XyoArchivistFindQuery', () => {
+  describe('find', () => {
     it('finds payloads by schema', async () => {
-      const limit = 1
       const filter: XyoPayloadFilterPredicate<XyoPayloadWithMeta> = { limit, schema }
-      const query: XyoArchivistFindQuery = {
-        filter,
-        schema: XyoArchivistFindQuerySchema,
-      }
-      const queryWitness = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(query)).payload(query).build()
-      const result = await sut.query(queryWitness, [query])
-      expect(result).toBeArrayOfSize(2)
-      const payload = result?.[1]?.[0]
-      expect(payload).toBeObject()
-      expect(payload?.schema).toEqual(schema)
+      const wrapper = new XyoArchivistWrapper(sut)
+      const result = await wrapper.find(filter)
+      expect(result).toBeArrayOfSize(limit)
+      expect(result?.[0]?.schema).toEqual(schema)
     })
     it('finds payloads by hash', async () => {
-      const limit = 1
       const filter: XyoPayloadFilterPredicate<XyoPayloadWithMeta> = { hash, limit }
-      const query: XyoArchivistFindQuery = {
-        filter,
-        schema: XyoArchivistFindQuerySchema,
-      }
-      const queryWitness = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(query)).payload(query).build()
-      const result = await sut.query(queryWitness, [query])
-      expect(result).toBeArrayOfSize(2)
-      const bw: XyoBoundWitness = result?.[0]
-      expect(bw).toBeObject()
-      expect(bw._signatures).toBeArrayOfSize(2)
-      expect(bw.addresses).toBeArrayOfSize(2)
-      expect(bw.addresses).toContain(account.addressValue.hex)
-      expect(bw.payload_hashes).toInclude(hash)
-      expect(result?.[1]).toBeArrayOfSize(limit)
-      expect(result?.[1]).toEqual([payload])
+      const wrapper = new XyoArchivistWrapper(sut)
+      const result = await wrapper.find(filter)
+      expect(result).toBeArrayOfSize(limit)
+      expect(result).toEqual([payload])
     })
   })
-  describe('XyoArchivistGetQuery', () => {
+  describe('get', () => {
     it('gets payloads by hashes', async () => {
-      const query: XyoArchivistGetQuery = {
-        hashes,
-        schema: XyoArchivistGetQuerySchema,
-      }
-      const queryWitness = new QueryBoundWitnessBuilder().query(PayloadWrapper.hash(query)).payload(query).build()
-      const result = await sut.query(queryWitness, [query])
-      expect(result).toBeArrayOfSize(2)
-      const bw: XyoBoundWitness = result?.[0]
-      expect(bw).toBeObject()
-      expect(bw._signatures).toBeArrayOfSize(2)
-      expect(bw.addresses).toBeArrayOfSize(2)
-      expect(bw.addresses).toContain(account.addressValue.hex)
-      expect(bw.payload_hashes).toInclude(hash)
-      expect(result?.[1]).toBeArrayOfSize(hashes.length)
-      expect(result?.[1]).toContainValues(payloads)
+      const wrapper = new XyoArchivistWrapper(sut)
+      const result = await wrapper.get(hashes)
+      expect(result).toBeArrayOfSize(count)
+      expect(result).toContainValues(payloads)
     })
   })
 })

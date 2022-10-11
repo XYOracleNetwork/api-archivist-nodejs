@@ -28,8 +28,8 @@ export class MongoDBArchivePayloadsArchivist extends AbstractPayloadArchivist<Xy
     super(account, config)
   }
 
-  async find(predicate: XyoPayloadFilterPredicate): Promise<XyoPayloadWithMeta[]> {
-    const { hash, limit, order, schema, schemas, timestamp, ...props } = predicate
+  async find(predicate?: XyoPayloadFilterPredicate): Promise<XyoPayloadWithMeta[]> {
+    const { hash, limit, order, schema, schemas, timestamp, ...props } = predicate ?? {}
     const parsedLimit = limit || DefaultLimit
     const parsedOrder = order || DefaultOrder
     const sort: { [key: string]: SortDirection } = { _timestamp: parsedOrder === 'asc' ? 1 : -1 }

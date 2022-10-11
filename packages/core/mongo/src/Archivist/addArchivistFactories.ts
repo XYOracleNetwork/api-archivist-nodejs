@@ -41,7 +41,11 @@ export const addArchivistFactories = (container: Container) => {
   container
     .bind<ArchiveBoundWitnessArchivistFactory>(TYPES.ArchiveBoundWitnessArchivistFactory)
     .toFactory<ArchiveBoundWitnessArchivist, [string]>((context) => {
-      return (archive: string) => getBoundWitnessArchivist(context, archive)
+      return (archive: string) => {
+        const archivist = getBoundWitnessArchivist(context, archive)
+        // TODO: Initialize or add to bus
+        return archivist
+      }
     })
   container.bind<ArchivePayloadArchivistFactory>(TYPES.ArchivePayloadArchivistFactory).toFactory<ArchivePayloadsArchivist, [string]>((context) => {
     return (archive: string) => getPayloadArchivist(context, archive)

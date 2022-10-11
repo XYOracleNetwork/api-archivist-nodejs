@@ -19,7 +19,7 @@ export const formatRequest = (req: PostNodeRequest): XyoBoundWitnessWithMeta[] =
         // to process payloads. We're witnessing them here as the pipeline
         // expects BWs but if we can modify the pipeline to accept BWs or
         // Payloads we can remove this overhead.
-        new BoundWitnessBuilder(config).payload(x).build()
+        new BoundWitnessBuilder(config).payload(x).build()[0]
   })
   return augmentWithMetadata(
     boundWitnesses.map((bw) => {

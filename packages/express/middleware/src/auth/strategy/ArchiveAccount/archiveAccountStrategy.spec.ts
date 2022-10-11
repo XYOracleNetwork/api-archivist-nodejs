@@ -24,7 +24,7 @@ const setArchivePermissions = (archive: string, token: string, permissions: SetA
     schema: SetArchivePermissionsSchema,
   }
   const payload = new XyoPayloadBuilder<SetArchivePermissionsPayload>({ schema: SetArchivePermissionsSchema }).fields(data).build()
-  const bw = new BoundWitnessBuilder({ inlinePayloads: true }).payload(payload).build()
+  const [bw] = new BoundWitnessBuilder({ inlinePayloads: true }).payload(payload).build()
   return postCommandsToArchive([bw], archive, token)
 }
 
@@ -38,7 +38,7 @@ const postCommandToArchive = (
     schema,
   }
   const payload = new XyoPayloadBuilder<{ schema: TestSchemaTypes }>({ schema }).fields(data).build()
-  const bw = new BoundWitnessBuilder({ inlinePayloads: true }).payload(payload).build()
+  const [bw] = new BoundWitnessBuilder({ inlinePayloads: true }).payload(payload).build()
   return postCommandsToArchive([bw], archive, token, expectedStatus)
 }
 

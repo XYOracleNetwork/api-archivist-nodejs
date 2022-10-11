@@ -23,7 +23,7 @@ const schema = DebugSchema
 
 const postCommandToArchive = async (archive: string, token?: string, expectedStatus: StatusCodes = StatusCodes.ACCEPTED) => {
   const payload = new XyoPayloadBuilder<DebugPayload>({ schema }).build()
-  const bw = new BoundWitnessBuilder({ inlinePayloads: true }).payload(payload).build()
+  const [bw] = new BoundWitnessBuilder({ inlinePayloads: true }).payload(payload).build()
   await postCommandsToArchive([bw], archive, token, expectedStatus)
 }
 
