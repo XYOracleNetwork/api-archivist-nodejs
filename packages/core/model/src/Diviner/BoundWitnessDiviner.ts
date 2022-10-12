@@ -16,7 +16,7 @@ export const BoundWitnessConfigSchema: BoundWitnessConfigSchema = 'network.xyo.d
 export type BoundWitnessPayload = XyoPayload<{ schema: BoundWitnessSchema }>
 export const isBoundWitnessPayload = (x?: XyoPayload | null): x is BoundWitnessPayload => x?.schema === BoundWitnessSchema
 
-export type BoundWitnessQueryPayload = ArchiveQueryPayload<{ schema: string } & XyoBoundWitnessDivinerPredicate>
+export type BoundWitnessQueryPayload = ArchiveQueryPayload<{ schema: BoundWitnessQuerySchema } & XyoBoundWitnessDivinerPredicate>
 export const isBoundWitnessQueryPayload = (x?: XyoPayload | null): x is BoundWitnessQueryPayload => x?.schema === BoundWitnessQuerySchema
 
 export type BoundWitnessDiviner = XyoDiviner
