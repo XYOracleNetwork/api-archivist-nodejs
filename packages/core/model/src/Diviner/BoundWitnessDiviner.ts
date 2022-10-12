@@ -2,7 +2,7 @@ import { XyoDiviner } from '@xyo-network/diviner'
 import { XyoPayload } from '@xyo-network/payload'
 
 import { XyoBoundWitnessWithMeta } from '../BoundWitness'
-import { StatsQueryPayload } from './StatsQueryPayload'
+import { ArchiveQueryPayload } from './ArchiveQueryPayload'
 
 export type BoundWitnessSchema = 'network.xyo.diviner.boundwitness.'
 export const BoundWitnessSchema: BoundWitnessSchema = 'network.xyo.diviner.boundwitness.'
@@ -16,7 +16,7 @@ export const BoundWitnessConfigSchema: BoundWitnessConfigSchema = 'network.xyo.d
 export type BoundWitnessPayload = XyoPayload<{ schema: BoundWitnessSchema }>
 export const isBoundWitnessPayload = (x?: XyoPayload | null): x is BoundWitnessPayload => x?.schema === BoundWitnessSchema
 
-export type BoundWitnessQueryPayload = StatsQueryPayload<{ schema: string } & Partial<XyoBoundWitnessWithMeta>>
+export type BoundWitnessQueryPayload = ArchiveQueryPayload<{ schema: string } & Partial<XyoBoundWitnessWithMeta>>
 export const isBoundWitnessQueryPayload = (x?: XyoPayload | null): x is BoundWitnessQueryPayload => x?.schema === BoundWitnessQuerySchema
 
 export type BoundWitnessDiviner = XyoDiviner
