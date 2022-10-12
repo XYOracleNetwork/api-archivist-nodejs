@@ -1,3 +1,4 @@
+export * from './BoundWitnessDiviner'
 export * from './BoundWitnessStatsDiviner'
 export * from './coin'
 export * from './LocationCertaintyDiviner'
