@@ -7,7 +7,6 @@ import {
   ArchivePermissionsArchivistFactory,
   BoundWitnessArchivist,
   BoundWitnessStatsDiviner,
-  Logger,
   ModuleAddressDiviner,
   ModuleRegistry,
   PayloadArchivist,
@@ -20,6 +19,7 @@ import {
   WitnessedPayloadArchivist,
 } from '@xyo-network/archivist-model'
 import { IdentifiableHuri, Queue } from '@xyo-network/archivist-queue'
+import { Logger } from '@xyo-network/shared'
 // NOTE: Required import since passport types (which we need to extend) extend Express
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import passport from 'passport'

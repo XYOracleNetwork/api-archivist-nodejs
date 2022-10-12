@@ -2,13 +2,10 @@ import 'reflect-metadata'
 
 import { XyoAccount } from '@xyo-network/account'
 import {
-  Job,
-  JobProvider,
   LocationCertaintyDiviner,
   LocationCertaintyHeuristic,
   LocationCertaintyPayload,
   LocationCertaintySchema,
-  Logger,
   PayloadArchivist,
   XyoPayloadWithMeta,
 } from '@xyo-network/archivist-model'
@@ -23,6 +20,7 @@ import {
 import { XyoLocationPayload, XyoLocationSchema } from '@xyo-network/location-payload-plugin'
 import { XyoPayloadBuilder, XyoPayloads } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
+import { Job, JobProvider, Logger } from '@xyo-network/shared'
 import { inject, injectable } from 'inversify'
 
 import { MONGO_TYPES } from '../../types'

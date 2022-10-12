@@ -1,5 +1,6 @@
-import { Job, JobQueue } from '@xyo-network/archivist-model'
+import { JobQueue } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
+import { Job } from '@xyo-network/shared'
 import { Container } from 'inversify'
 
 import { getJobs } from '../Job'

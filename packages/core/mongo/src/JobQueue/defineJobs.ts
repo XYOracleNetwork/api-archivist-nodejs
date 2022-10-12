@@ -1,4 +1,5 @@
-import { Job, JobQueue } from '@xyo-network/archivist-model'
+import { JobQueue } from '@xyo-network/archivist-model'
+import { Job } from '@xyo-network/shared'
 import { DefineOptions } from 'agenda'
 
 // TODO: Depends on job schedule, calculate dynamically

@@ -1,4 +1,5 @@
-import { Logger, ModuleRegistry } from '@xyo-network/archivist-model'
+import { ModuleRegistry } from '@xyo-network/archivist-model'
+import { Logger } from '@xyo-network/shared'
 import { mock, MockProxy } from 'jest-mock-extended'
 
 import { InMemoryModuleRegistry } from './InMemoryModuleRegistry'

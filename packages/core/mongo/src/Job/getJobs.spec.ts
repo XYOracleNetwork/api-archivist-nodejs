@@ -1,4 +1,4 @@
-import { Job } from '@xyo-network/archivist-model'
+import { Job } from '@xyo-network/shared'
 import { Container } from 'inversify'
 import { mock, MockProxy } from 'jest-mock-extended'
 

@@ -9,7 +9,6 @@ import {
   ArchivePermissionsArchivistFactory,
   BoundWitnessArchivist,
   BoundWitnessStatsDiviner,
-  Logger,
   ModuleAddressDiviner,
   ModuleRegistry,
   PayloadArchivist,
@@ -21,6 +20,7 @@ import {
 } from '@xyo-network/archivist-model'
 import { IdentifiableHuri, Queue } from '@xyo-network/archivist-queue'
 import { TYPES } from '@xyo-network/archivist-types'
+import { Logger } from '@xyo-network/shared'
 import { Application } from 'express'
 
 export const addDependencies = (app: Application) => {

@@ -1,6 +1,5 @@
 import { XyoAccount } from '@xyo-network/account'
 import {
-  Logger,
   ModuleAddressPayload,
   ModuleAddressQueryPayload,
   ModuleAddressQuerySchema,
@@ -9,6 +8,7 @@ import {
   XyoPayloadWithMeta,
 } from '@xyo-network/archivist-model'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
+import { Logger } from '@xyo-network/shared'
 import { mock, MockProxy } from 'jest-mock-extended'
 
 import { COLLECTIONS } from '../../collections'
