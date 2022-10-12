@@ -23,12 +23,6 @@ import { DefaultLimit, DefaultMaxTimeMS } from '../../defaults'
 import { removeId } from '../../Mongo'
 import { MONGO_TYPES } from '../../types'
 
-/**
- * The number of most recently used entries to keep
- * in the cache
- */
-const max = 1000
-
 const builderConfig: BoundWitnessBuilderConfig = { inlinePayloads: false }
 
 const valid = (bw: XyoBoundWitness) => {
@@ -37,7 +31,7 @@ const valid = (bw: XyoBoundWitness) => {
 
 @injectable()
 export abstract class AbstractMongoDBPayloadArchivist<T extends EmptyObject = EmptyObject> extends AbstractPayloadArchivist<T> {
-  protected readonly witnessedPayloads: LruCache<string, XyoPayloadWithMeta<T>> = new LruCache({ max })
+  protected readonly witnessedPayloads: LruCache<string, XyoPayloadWithMeta<T>> = new LruCache({ max: 1, ttl: 10000 })
 
   public constructor(
     @inject(TYPES.Account) @named('root') protected readonly account: XyoAccount,
