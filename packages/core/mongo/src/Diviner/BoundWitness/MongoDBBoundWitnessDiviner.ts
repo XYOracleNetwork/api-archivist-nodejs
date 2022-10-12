@@ -5,18 +5,17 @@ import { exists } from '@xylabs/sdk-js'
 import { XyoAccount } from '@xyo-network/account'
 import {
   BoundWitnessDiviner,
-  BoundWitnessStatsPayload,
-  BoundWitnessStatsQueryPayload,
-  BoundWitnessStatsSchema,
-  isBoundWitnessStatsQueryPayload,
+  BoundWitnessQueryPayload,
+  isBoundWitnessQueryPayload,
   Job,
   JobProvider,
   Logger,
   XyoBoundWitnessWithMeta,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
+import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { XyoArchivistPayloadDivinerConfigSchema, XyoDiviner } from '@xyo-network/diviner'
-import { XyoPayloadBuilder, XyoPayloads } from '@xyo-network/payload'
+import { XyoPayloads } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable } from 'inversify'
 
@@ -44,10 +43,10 @@ export class MongoDBBoundWitnessDiviner extends XyoDiviner implements BoundWitne
     ]
   }
 
-  override divine(payloads?: XyoPayloads): Promise<XyoPayloads<BoundWitnessStatsPayload>> {
-    const query = payloads?.find<BoundWitnessStatsQueryPayload>(isBoundWitnessStatsQueryPayload)
+  override divine(payloads?: XyoPayloads): Promise<XyoPayloads<XyoBoundWitness>> {
+    const query = payloads?.find<BoundWitnessQueryPayload>(isBoundWitnessQueryPayload)
     const archive = assertEx(query?.archive, 'Query missing archive')
-    return Promise.resolve([new XyoPayloadBuilder<BoundWitnessStatsPayload>({ schema: BoundWitnessStatsSchema }).fields({}).build()])
+    return Promise.resolve([])
   }
 
   override async initialize(): Promise<void> {
