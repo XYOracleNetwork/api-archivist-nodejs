@@ -4398,6 +4398,7 @@ __metadata:
     "@xyo-network/core": ^2.37.6
     "@xyo-network/diviner": ^2.37.6
     "@xyo-network/elevation-payload-plugin": ^2.37.6
+    "@xyo-network/location-certainty-payload-plugin": ^2.37.6
     "@xyo-network/location-payload-plugin": ^2.37.6
     "@xyo-network/module": ^2.37.6
     "@xyo-network/payload": ^2.37.6
@@ -4537,6 +4538,7 @@ __metadata:
     "@xyo-network/archivist-types": "workspace:^"
     "@xyo-network/module": ^2.37.6
     "@xyo-network/payload": ^2.37.6
+    "@xyo-network/shared": ^2.37.6
     compression: ^1.7.4
     cors: ^2.8.5
     express: ^4.18.2
@@ -4690,6 +4692,24 @@ __metadata:
     axios: ^0.27.2
     pako: ^2.0.4
   checksum: dff8a0f2513ed832a8c54cd286caf159c2b30c11119b3e97aeae00476336052948a366c0ef434e841cae416c6f09b360e5a0bbda6c6de2b7d465e97ac3e90270
+  languageName: node
+  linkType: hard
+
+"@xyo-network/location-certainty-payload-plugin@npm:^2.37.6":
+  version: 2.37.6
+  resolution: "@xyo-network/location-certainty-payload-plugin@npm:2.37.6"
+  dependencies:
+    "@xyo-network/diviner": ^2.37.6
+    "@xyo-network/elevation-payload-plugin": ^2.37.6
+    "@xyo-network/location-payload-plugin": ^2.37.6
+    "@xyo-network/payload": ^2.37.6
+    "@xyo-network/payload-plugin": ^2.37.6
+    "@xyo-network/shared": ^2.37.6
+    tslib: ^2.4.0
+  peerDependencies:
+    axios: ^0.27.2
+    pako: ^2.0.4
+  checksum: cf58e3ff824fd3cfd111fc838685c9487f4573e6b1750e209fefa52ec3d95315309bb7fafba312f5c5cfe771781ef12cf72af3bde68aefa1d261b4187fa2e55c
   languageName: node
   linkType: hard
 

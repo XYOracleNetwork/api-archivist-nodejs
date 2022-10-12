@@ -1,20 +1,13 @@
 import 'reflect-metadata'
 
 import { XyoAccount } from '@xyo-network/account'
-import {
-  BoundWitnessDiviner,
-  BoundWitnessQueryPayload,
-  isBoundWitnessQueryPayload,
-  Job,
-  JobProvider,
-  Logger,
-  XyoBoundWitnessWithMeta,
-} from '@xyo-network/archivist-model'
+import { BoundWitnessDiviner, BoundWitnessQueryPayload, isBoundWitnessQueryPayload, XyoBoundWitnessWithMeta } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { XyoArchivistPayloadDivinerConfigSchema, XyoDiviner } from '@xyo-network/diviner'
 import { XyoPayloads } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
+import { Job, JobProvider, Logger } from '@xyo-network/shared'
 import { inject, injectable } from 'inversify'
 import { Filter, SortDirection } from 'mongodb'
 
