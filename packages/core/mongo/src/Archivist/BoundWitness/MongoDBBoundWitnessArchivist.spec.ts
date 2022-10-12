@@ -1,9 +1,11 @@
+import { assertEx } from '@xylabs/assert'
 import { XyoAccount } from '@xyo-network/account'
 import { XyoArchivistWrapper } from '@xyo-network/archivist'
 import {
   DebugPayload,
   DebugPayloadWithMeta,
   DebugSchema,
+  XyoBoundWitnessFilterPredicate,
   XyoBoundWitnessWithMeta,
   XyoPayloadFilterPredicate,
   XyoPayloadWithMeta,
@@ -32,12 +34,10 @@ const getPayloads = (archive: string, count = 1): XyoPayloadWithMeta<DebugPayloa
   return payloads
 }
 
-const removePayloads = (boundWitnesses: XyoBoundWitnessWithMeta[]) => {
-  return boundWitnesses.map((bw) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { _payloads, _timestamp, timestamp, ...props } = bw
-    return { ...props, _timestamp: expect.toBeNumber(), timestamp: expect.toBeNumber() }
-  })
+const removePayloads = (boundWitness: XyoBoundWitnessWithMeta) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { _payloads, _timestamp, timestamp, ...props } = boundWitness
+  return { ...props, _timestamp: expect.toBeNumber(), timestamp: expect.toBeNumber() }
 }
 
 describe('MongoDBBoundWitnessArchivist', () => {
@@ -47,13 +47,14 @@ describe('MongoDBBoundWitnessArchivist', () => {
   const archive = `test-${v4()}`
   const payloads: XyoPayloadWithMeta<DebugPayload>[] = getPayloads(archive, count)
   const boundWitnesses = payloads
-    .map((p) => new BoundWitnessBuilder({ inlinePayloads: true }).payload(p).build())[0]
+    .map((p) => new BoundWitnessBuilder({ inlinePayloads: true }).witness(account).payload(p).build())
+    .map((buildResult) => buildResult[0])
     .map((bw) => {
       return { ...bw, _archive: archive } as XyoBoundWitnessWithMeta & XyoPayloadWithPartialMeta
     })
   const hashes: string[] = boundWitnesses.map((bw) => new PayloadWrapper(bw).hash)
-  const boundWitness = boundWitnesses[0]
-  const hash = hashes[0]
+  const boundWitness = assertEx(boundWitnesses.at(-1))
+  const hash = assertEx(hashes.at(-1))
 
   beforeAll(async () => {
     const wrapper = new XyoArchivistWrapper(sut)
@@ -76,7 +77,15 @@ describe('MongoDBBoundWitnessArchivist', () => {
       const wrapper = new XyoArchivistWrapper(sut)
       const result = await wrapper.find(filter)
       expect(result).toBeArrayOfSize(limit)
-      expect(result).toEqual(removePayloads([boundWitness]))
+      expect(result).toEqual([boundWitness].map(removePayloads))
+    })
+    it('finds boundWitnesses by address', async () => {
+      const addresses = [`${account.addressValue.hex}`]
+      const filter: XyoBoundWitnessFilterPredicate = { addresses, limit }
+      const wrapper = new XyoArchivistWrapper(sut)
+      const result = await wrapper.find(filter)
+      expect(result).toBeArrayOfSize(limit)
+      expect(result).toEqual([boundWitness].map(removePayloads))
     })
   })
   describe('get', () => {
@@ -84,7 +93,7 @@ describe('MongoDBBoundWitnessArchivist', () => {
       const wrapper = new XyoArchivistWrapper(sut)
       const result = await wrapper.get(hashes)
       expect(result).toBeArrayOfSize(count)
-      expect(result).toContainValues(removePayloads([boundWitness]))
+      expect(result).toContainValues([boundWitness].map(removePayloads))
     })
   })
 })
