@@ -1,13 +1,16 @@
+import { assertEx } from '@xylabs/assert'
 import { XyoAccount } from '@xyo-network/account'
 import { XyoArchivistWrapper } from '@xyo-network/archivist'
 import {
   DebugPayload,
   DebugPayloadWithMeta,
   DebugSchema,
+  XyoBoundWitnessFilterPredicate,
   XyoBoundWitnessWithMeta,
   XyoBoundWitnessWithPartialMeta,
   XyoPayloadFilterPredicate,
   XyoPayloadWithMeta,
+  XyoPayloadWithPartialMeta,
 } from '@xyo-network/archivist-model'
 import { BoundWitnessBuilder, BoundWitnessWrapper } from '@xyo-network/boundwitness'
 import { XyoModuleConfigSchema } from '@xyo-network/module'
@@ -33,12 +36,10 @@ const getPayloads = (archive: string, count = 1): XyoPayloadWithMeta<DebugPayloa
   return payloads
 }
 
-const removePayloads = (boundWitnesses: XyoBoundWitnessWithPartialMeta[]) => {
-  return boundWitnesses.map((bw) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { _archive, _payloads, _timestamp, timestamp, ...props } = bw
-    return { ...props, _archive: expect.toBeString(), _timestamp: expect.toBeNumber() }
-  })
+const removePayloads = (boundWitness: XyoBoundWitnessWithPartialMeta) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { _archive, _payloads, _timestamp, timestamp, ...props } = boundWitness
+  return { ...props, _archive: expect.toBeString(), _timestamp: expect.toBeNumber(), timestamp: expect.toBeNumber() }
 }
 
 describe('MongoDBArchiveBoundWitnessArchivist', () => {
@@ -48,10 +49,15 @@ describe('MongoDBArchiveBoundWitnessArchivist', () => {
   const config = { archive, schema: XyoModuleConfigSchema }
   const sut = new MongoDBArchiveBoundWitnessArchivist(account, sdk, config)
   const payloads: XyoPayloadWithMeta<DebugPayload>[] = getPayloads(archive, count)
-  const boundWitnesses = payloads.map((p) => new BoundWitnessBuilder({ inlinePayloads: true, timestamp: false }).payload(p).build()[0])
+  const boundWitnesses = payloads
+    .map((p) => new BoundWitnessBuilder({ inlinePayloads: true }).witness(account).payload(p).build())
+    .map((buildResult) => buildResult[0])
+    .map((bw) => {
+      return { ...bw, _archive: archive } as XyoBoundWitnessWithMeta & XyoPayloadWithPartialMeta
+    })
   const hashes: string[] = boundWitnesses.map((bw) => new BoundWitnessWrapper(bw).hash)
-  const boundWitness = boundWitnesses[0]
-  const hash = hashes[0]
+  const boundWitness = assertEx(boundWitnesses.at(-1))
+  const hash = assertEx(hashes.at(-1))
 
   beforeAll(async () => {
     const wrapper = new XyoArchivistWrapper(sut)
@@ -74,7 +80,15 @@ describe('MongoDBArchiveBoundWitnessArchivist', () => {
       const wrapper = new XyoArchivistWrapper(sut)
       const result = await wrapper.find(filter)
       expect(result).toBeArrayOfSize(limit)
-      expect(result).toEqual(removePayloads([boundWitness]))
+      expect(result).toEqual([boundWitness].map(removePayloads))
+    })
+    it('finds boundWitnesses by address', async () => {
+      const addresses = [`${account.addressValue.hex}`]
+      const filter: XyoBoundWitnessFilterPredicate = { addresses, limit }
+      const wrapper = new XyoArchivistWrapper(sut)
+      const result = await wrapper.find(filter)
+      expect(result).toBeArrayOfSize(limit)
+      expect(result).toEqual([boundWitness].map(removePayloads))
     })
   })
   describe('get', () => {
@@ -82,7 +96,7 @@ describe('MongoDBArchiveBoundWitnessArchivist', () => {
       const wrapper = new XyoArchivistWrapper(sut)
       const result = await wrapper.get(hashes)
       expect(result).toBeArrayOfSize(count)
-      expect(result).toContainValues(removePayloads([boundWitness]))
+      expect(result).toContainValues([boundWitness].map(removePayloads))
     })
   })
 })
