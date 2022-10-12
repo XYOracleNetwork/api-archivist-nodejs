@@ -27,7 +27,7 @@ describe('MongoDBBoundWitnessDiviner', () => {
   describe('divine', () => {
     describe('with valid query', () => {
       it('divines', async () => {
-        const query: BoundWitnessQueryPayload = { schema: BoundWitnessQuerySchema }
+        const query: BoundWitnessQueryPayload = { limit: 1, schema: BoundWitnessQuerySchema }
         const result = await sut.divine([query])
         expect(result).toBeArrayOfSize(1)
         const actual = result[0] as XyoBoundWitnessWithPartialMeta
