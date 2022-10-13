@@ -1,7 +1,7 @@
 import { XyoArchive, XyoArchiveKey } from '@xyo-network/api'
 import { EntityArchive, User, XyoBoundWitnessWithMeta, XyoPayloadWithMeta } from '@xyo-network/archivist-model'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
-import { Container } from 'inversify'
+import { Container, ContainerModule, interfaces } from 'inversify'
 
 import { COLLECTIONS } from '../collections'
 import { MONGO_TYPES } from '../types'
@@ -20,3 +20,13 @@ export const addMongoSdks = (container: Container) => {
     .toConstantValue(getBaseMongoSdk<XyoBoundWitnessWithMeta>(COLLECTIONS.BoundWitnesses))
   container.bind<BaseMongoSdk<User>>(MONGO_TYPES.UserSdkMongo).toConstantValue(getBaseMongoSdk<User>(COLLECTIONS.Users))
 }
+
+export const mongoSdks = new ContainerModule((bind: interfaces.Bind, _unbind: interfaces.Unbind) => {
+  bind<BaseMongoSdk<Required<XyoArchive>>>(MONGO_TYPES.ArchiveSdkMongo).toConstantValue(getBaseMongoSdk<EntityArchive>(COLLECTIONS.Archives))
+  bind<BaseMongoSdk<XyoArchiveKey>>(MONGO_TYPES.ArchiveKeySdkMongo).toConstantValue(getBaseMongoSdk<XyoArchiveKey>(COLLECTIONS.ArchiveKeys))
+  bind<BaseMongoSdk<XyoPayloadWithMeta>>(MONGO_TYPES.PayloadSdkMongo).toConstantValue(getBaseMongoSdk<XyoPayloadWithMeta>(COLLECTIONS.Payloads))
+  bind<BaseMongoSdk<XyoBoundWitnessWithMeta>>(MONGO_TYPES.BoundWitnessSdkMongo).toConstantValue(
+    getBaseMongoSdk<XyoBoundWitnessWithMeta>(COLLECTIONS.BoundWitnesses),
+  )
+  bind<BaseMongoSdk<User>>(MONGO_TYPES.UserSdkMongo).toConstantValue(getBaseMongoSdk<User>(COLLECTIONS.Users))
+})
