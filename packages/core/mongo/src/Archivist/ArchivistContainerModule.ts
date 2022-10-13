@@ -16,7 +16,7 @@ import { MongoDBPayloadArchivist } from './Payload'
 import { MongoDBUserArchivist } from './User'
 import { MongoDBArchivistWitnessedPayloadArchivist } from './WitnessedPayload'
 
-export const archivists = new ContainerModule((bind: interfaces.Bind, _unbind: interfaces.Unbind) => {
+export const ArchivistContainerModule = new ContainerModule((bind: interfaces.Bind, _unbind: interfaces.Unbind) => {
   bind(MongoDBArchiveArchivist).to(MongoDBArchiveArchivist).inSingletonScope()
   bind<ArchiveArchivist>(TYPES.ArchiveArchivist).toService(MongoDBArchiveArchivist)
 
