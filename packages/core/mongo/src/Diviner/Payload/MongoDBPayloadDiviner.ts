@@ -38,7 +38,8 @@ export class MongoDBPayloadDiviner extends XyoDiviner implements PayloadDiviner,
     const query = payloads?.find<PayloadQueryPayload>(isPayloadQueryPayload)
     // TODO: Support multiple queries
     if (!query) return []
-    const { archive, archives, hash, limit, order, schema, timestamp, ...props } = query
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { archive, archives, hash, limit, order, schema, schemas, timestamp, ...props } = query
     const parsedLimit = limit || DefaultLimit
     const parsedOrder = order || DefaultOrder
     const sort: { [key: string]: SortDirection } = { _timestamp: parsedOrder === 'asc' ? 1 : -1 }
@@ -50,7 +51,8 @@ export class MongoDBPayloadDiviner extends XyoDiviner implements PayloadDiviner,
     if (archive) filter._archive = archive
     if (archives?.length) filter._archive = { $in: archives }
     if (hash) filter._hash = hash
-    if (schema) filter.schema = schema
+    // TODO: Optimize for single schema supplied too
+    if (schemas?.length) filter.schema = { $in: schemas }
     return (await (await this.sdk.find(filter)).sort(sort).limit(parsedLimit).maxTimeMS(DefaultMaxTimeMS).toArray()).map(removeId)
   }
 

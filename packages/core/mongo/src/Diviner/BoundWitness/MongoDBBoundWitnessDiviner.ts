@@ -39,20 +39,8 @@ export class MongoDBBoundWitnessDiviner extends XyoDiviner implements BoundWitne
     const query = payloads?.find<BoundWitnessQueryPayload>(isBoundWitnessQueryPayload)
     // TODO: Support multiple queries
     if (!query) return []
-    const {
-      archive,
-      archives,
-      addresses,
-      hash,
-      limit,
-      order,
-      payload_hashes,
-      payload_schemas,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      schema,
-      timestamp,
-      ...props
-    } = query
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { archive, archives, addresses, hash, limit, order, payload_hashes, payload_schemas, schema, timestamp, ...props } = query
     const parsedLimit = limit || DefaultLimit
     const parsedOrder = order || DefaultOrder
     const sort: { [key: string]: SortDirection } = { _timestamp: parsedOrder === 'asc' ? 1 : -1 }
