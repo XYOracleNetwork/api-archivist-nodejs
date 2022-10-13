@@ -1,9 +1,9 @@
 import { UserManager } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
-import { Container } from 'inversify'
+import { ContainerModule, interfaces } from 'inversify'
 
 import { MongoDBUserManager } from './User'
 
-export const addManagers = (container: Container) => {
-  container.bind<UserManager>(TYPES.UserManager).to(MongoDBUserManager).inSingletonScope()
-}
+export const managers = new ContainerModule((bind: interfaces.Bind, _unbind: interfaces.Unbind) => {
+  bind<UserManager>(TYPES.UserManager).to(MongoDBUserManager).inSingletonScope()
+})
