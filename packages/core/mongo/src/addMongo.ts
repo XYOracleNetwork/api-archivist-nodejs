@@ -7,6 +7,8 @@ import { addJobQueue } from './JobQueue'
 import { addManagers } from './Manager'
 import { addMongoSdks } from './Mongo'
 
+// TODO: Move from the addX pattern to using Container Modules
+// https://github.com/inversify/InversifyJS/blob/master/wiki/container_modules.md
 export const addMongo = async (container: Container) => {
   addMongoSdks(container)
   addMongoArchivists(container)
