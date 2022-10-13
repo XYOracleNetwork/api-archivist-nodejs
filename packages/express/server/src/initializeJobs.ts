@@ -1,4 +1,4 @@
-import { exists } from '@xylabs/sdk-js'
+import { exists } from '@xylabs/exists'
 import { dependencies } from '@xyo-network/archivist-dependencies'
 import { JobQueue } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
