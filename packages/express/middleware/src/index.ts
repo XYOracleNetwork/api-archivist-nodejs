@@ -11,6 +11,7 @@ import {
   ModuleAddressDiviner,
   ModuleRegistry,
   PayloadArchivist,
+  PayloadDiviner,
   PayloadStatsDiviner,
   Query,
   QueryProcessorRegistry,
@@ -57,6 +58,7 @@ declare global {
       moduleAddressDiviner: ModuleAddressDiviner
       moduleRegistry: ModuleRegistry
       payloadArchivist: PayloadArchivist
+      payloadDiviner: PayloadDiviner
       payloadStatsDiviner: PayloadStatsDiviner
       queryConverters: QueryConverterRegistry
       queryProcessors: QueryProcessorRegistry

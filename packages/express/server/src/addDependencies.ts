@@ -13,6 +13,7 @@ import {
   ModuleAddressDiviner,
   ModuleRegistry,
   PayloadArchivist,
+  PayloadDiviner,
   PayloadStatsDiviner,
   Query,
   SchemaStatsDiviner,
@@ -64,6 +65,7 @@ const addDiviners = (app: Application) => {
     'Missing BoundWitnessStatsDiviner',
   )
   app.moduleAddressDiviner = assertEx(dependencies.get<ModuleAddressDiviner>(TYPES.ModuleAddressDiviner), 'Missing ModuleAddressDiviner')
+  app.payloadDiviner = assertEx(dependencies.get<PayloadDiviner>(TYPES.PayloadDiviner), 'Missing PayloadDiviner')
   app.payloadStatsDiviner = assertEx(dependencies.get<PayloadStatsDiviner>(TYPES.PayloadStatsDiviner), 'Missing PayloadStatsDiviner')
   app.schemaStatsDiviner = assertEx(dependencies.get<SchemaStatsDiviner>(TYPES.SchemaStatsDiviner), 'Missing SchemaStatsDiviner')
 }
