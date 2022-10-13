@@ -4,9 +4,6 @@ import { delay } from '@xylabs/sdk-js'
 import { XyoAccount } from '@xyo-network/account'
 import {
   isModuleAddressQueryPayload,
-  Job,
-  JobProvider,
-  Logger,
   ModuleAddressDiviner,
   ModuleAddressPayload,
   ModuleAddressQueryPayload,
@@ -18,6 +15,7 @@ import { TYPES } from '@xyo-network/archivist-types'
 import { XyoArchivistPayloadDivinerConfigSchema, XyoDiviner } from '@xyo-network/diviner'
 import { XyoPayloadBuilder, XyoPayloads } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
+import { Job, JobProvider, Logger } from '@xyo-network/shared'
 import { inject, injectable } from 'inversify'
 
 import { MONGO_TYPES } from '../../types'

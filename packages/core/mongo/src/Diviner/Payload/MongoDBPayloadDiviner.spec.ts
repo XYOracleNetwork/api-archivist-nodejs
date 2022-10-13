@@ -1,42 +1,34 @@
 import { XyoAccount } from '@xyo-network/account'
-import {
-  ModuleAddressPayload,
-  ModuleAddressQueryPayload,
-  ModuleAddressQuerySchema,
-  ModuleAddressSchema,
-  PayloadArchivist,
-  XyoPayloadWithMeta,
-} from '@xyo-network/archivist-model'
+import { PayloadQueryPayload, PayloadQuerySchema, XyoBoundWitnessWithPartialMeta, XyoPayloadWithMeta } from '@xyo-network/archivist-model'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { Logger } from '@xyo-network/shared'
 import { mock, MockProxy } from 'jest-mock-extended'
 
 import { COLLECTIONS } from '../../collections'
 import { getBaseMongoSdk } from '../../Mongo'
-import { MongoDBModuleAddressDiviner } from './MongoDBModuleAddressDiviner'
+import { MongoDBPayloadDiviner } from './MongoDBPayloadDiviner'
 
-describe('MongoDBModuleAddressDiviner', () => {
+describe('MongoDBPayloadDiviner', () => {
   let logger: MockProxy<Logger>
   let account: XyoAccount
   let sdk: BaseMongoSdk<XyoPayloadWithMeta>
-  let payloadsArchivist: MockProxy<PayloadArchivist>
-  let sut: MongoDBModuleAddressDiviner
+  let sut: MongoDBPayloadDiviner
   beforeEach(() => {
     logger = mock<Logger>()
     account = XyoAccount.random()
-    payloadsArchivist = mock<PayloadArchivist>()
     sdk = getBaseMongoSdk<XyoPayloadWithMeta>(COLLECTIONS.Payloads)
-    sut = new MongoDBModuleAddressDiviner(logger, account, payloadsArchivist, sdk)
+    sut = new MongoDBPayloadDiviner(logger, account, sdk)
   })
   describe('divine', () => {
     describe('with valid query', () => {
       it('divines', async () => {
-        const query: ModuleAddressQueryPayload = { schema: ModuleAddressQuerySchema }
+        const query: PayloadQueryPayload = { limit: 1, schema: PayloadQuerySchema }
         const result = await sut.divine([query])
         expect(result).toBeArrayOfSize(1)
-        const actual = result[0] as ModuleAddressPayload
+        const actual = result[0] as XyoBoundWitnessWithPartialMeta
         expect(actual).toBeObject()
-        expect(actual.schema).toBe(ModuleAddressSchema)
+        expect(actual.schema).toBeDefined()
+        expect(actual.schema).toBeString()
       })
     })
   })

@@ -6,9 +6,6 @@ import { XyoAccount } from '@xyo-network/account'
 import {
   ArchiveArchivist,
   isSchemaStatsQueryPayload,
-  Job,
-  JobProvider,
-  Logger,
   SchemaStatsDiviner,
   SchemaStatsPayload,
   SchemaStatsQueryPayload,
@@ -19,6 +16,7 @@ import { TYPES } from '@xyo-network/archivist-types'
 import { XyoArchivistPayloadDivinerConfigSchema, XyoDiviner } from '@xyo-network/diviner'
 import { XyoPayload, XyoPayloadBuilder, XyoPayloads } from '@xyo-network/payload'
 import { BaseMongoSdk, MongoClientWrapper } from '@xyo-network/sdk-xyo-mongo-js'
+import { Job, JobProvider, Logger } from '@xyo-network/shared'
 import { inject, injectable } from 'inversify'
 import { ChangeStream, ChangeStreamInsertDocument, ChangeStreamOptions, ResumeToken, UpdateOptions } from 'mongodb'
 

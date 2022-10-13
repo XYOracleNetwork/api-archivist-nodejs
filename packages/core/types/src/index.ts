@@ -8,6 +8,7 @@ export const TYPES = {
   ...MODULE_TYPES,
   Account: Symbol('Account'),
   ApiKey: Symbol('ApiKey'),
+  JobProvider: Symbol('JobProvider'),
   JobQueue: Symbol('JobQueue'),
   JwtSecret: Symbol('JwtSecret'),
   Logger: Symbol('Logger'),

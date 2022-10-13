@@ -1,25 +1,20 @@
 import { XyoAccount } from '@xyo-network/account'
-import { LocationCertaintyPayload, LocationCertaintySchema, Logger, PayloadArchivist, XyoPayloadWithMeta } from '@xyo-network/archivist-model'
+import { LocationCertaintyPayload, LocationCertaintySchema } from '@xyo-network/archivist-model'
 import { XyoLocationPayload, XyoLocationSchema } from '@xyo-network/location-payload-plugin'
-import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
+import { Logger } from '@xyo-network/shared'
 import { mock, MockProxy } from 'jest-mock-extended'
 
-import { COLLECTIONS } from '../../collections'
-import { getBaseMongoSdk } from '../../Mongo'
 import { MongoDBLocationCertaintyDiviner } from './MongoDBLocationCertaintyDiviner'
 
 describe('MongoDBLocationCertaintyDiviner', () => {
   let logger: MockProxy<Logger>
   let account: XyoAccount
-  let sdk: BaseMongoSdk<XyoPayloadWithMeta>
-  let payloadsArchivist: MockProxy<PayloadArchivist>
   let sut: MongoDBLocationCertaintyDiviner
   beforeEach(() => {
     logger = mock<Logger>()
     account = XyoAccount.random()
-    payloadsArchivist = mock<PayloadArchivist>()
-    sdk = getBaseMongoSdk<XyoPayloadWithMeta>(COLLECTIONS.Payloads)
-    sut = new MongoDBLocationCertaintyDiviner(logger, account, payloadsArchivist, sdk)
+
+    sut = new MongoDBLocationCertaintyDiviner(logger, account)
   })
   describe('divine', () => {
     describe('with valid query', () => {
