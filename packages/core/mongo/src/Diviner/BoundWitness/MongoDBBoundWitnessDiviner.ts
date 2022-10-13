@@ -40,7 +40,7 @@ export class MongoDBBoundWitnessDiviner extends XyoDiviner implements BoundWitne
     // TODO: Support multiple queries
     if (!query) return []
     const {
-      _archive,
+      archive,
       archives,
       addresses,
       hash,
@@ -61,7 +61,7 @@ export class MongoDBBoundWitnessDiviner extends XyoDiviner implements BoundWitne
       const parsedTimestamp = timestamp ? timestamp : parsedOrder === 'desc' ? Date.now() : 0
       filter._timestamp = parsedOrder === 'desc' ? { $lt: parsedTimestamp } : { $gt: parsedTimestamp }
     }
-    if (_archive) filter._archive = _archive
+    if (archive) filter._archive = archive
     if (archives?.length) filter._archive = { $in: archives }
     if (hash) filter._hash = hash
     // NOTE: Defaulting to $all since it makes the most sense when singing addresses are supplied
