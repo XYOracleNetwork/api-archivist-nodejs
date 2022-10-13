@@ -6,9 +6,11 @@ import { getJobs } from './getJobs'
 
 describe('getJobs', () => {
   const container: MockProxy<Container> = mock<Container>()
-  container.get.mockReturnValue({
-    jobs: [mock<Job>()],
-  })
+  container.getAll.mockReturnValue([
+    {
+      jobs: [mock<Job>()],
+    },
+  ])
   it('gets the jobs', () => {
     const jobs = getJobs(container)
     expect(jobs).toBeArray()
