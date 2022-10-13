@@ -27,7 +27,8 @@ describe('MongoDBPayloadDiviner', () => {
         expect(result).toBeArrayOfSize(1)
         const actual = result[0] as XyoBoundWitnessWithPartialMeta
         expect(actual).toBeObject()
-        expect(actual.schema).toBe('network.xyo.boundwitness')
+        expect(actual.schema).toBeDefined()
+        expect(actual.schema).toBeString()
       })
     })
   })
