@@ -4,6 +4,7 @@ import { assertEx } from '@xylabs/assert'
 import { asyncHandler, tryParseInt } from '@xylabs/sdk-api-express-ecs'
 import { BoundWitnessQueryPayload, BoundWitnessQuerySchema } from '@xyo-network/archivist-model'
 import { XyoBoundWitness } from '@xyo-network/boundwitness'
+import { XyoDivinerWrapper } from '@xyo-network/diviner'
 import { RequestHandler } from 'express'
 
 import { BlockRecentPathParams } from './BlockRecentPathParams'
@@ -14,7 +15,7 @@ const handler: RequestHandler<BlockRecentPathParams, (XyoBoundWitness | null)[]>
   const limitNumber = tryParseInt(limit) ?? 20
   assertEx(limitNumber > 0 && limitNumber <= 100, 'limit must be between 1 and 100')
   const query: BoundWitnessQueryPayload = { archive, limit: limitNumber, schema: BoundWitnessQuerySchema }
-  const boundWitnesses = (await boundWitnessDiviner.divine([query])) as (XyoBoundWitness | null)[]
+  const boundWitnesses = (await new XyoDivinerWrapper(boundWitnessDiviner).divine([query])) as (XyoBoundWitness | null)[]
   res.json(boundWitnesses)
 }
 
