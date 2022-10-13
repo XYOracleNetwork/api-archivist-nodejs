@@ -3,6 +3,7 @@ export const DIVINER_TYPES = {
   BoundWitnessStatsDiviner: Symbol('BoundWitnessStatsDiviner'),
   ElevationDiviner: Symbol('ElevationDiviner'),
   ModuleAddressDiviner: Symbol('ModuleAddressDiviner'),
+  PayloadDiviner: Symbol('PayloadDiviner'),
   PayloadStatsDiviner: Symbol('PayloadStatsDiviner'),
   SchemaStatsDiviner: Symbol('SchemaStatsDiviner'),
 }

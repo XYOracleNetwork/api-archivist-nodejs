@@ -14,6 +14,7 @@ import { MongoDBBoundWitnessDiviner } from './BoundWitness'
 import { MongoDBArchiveBoundWitnessStatsDiviner } from './BoundWitnessStats'
 import { MongoDBLocationCertaintyDiviner } from './LocationCertainty'
 import { MongoDBModuleAddressDiviner } from './ModuleAddress'
+import { MongoDBPayloadDiviner } from './Payload'
 import { MongoDBArchivePayloadStatsDiviner } from './PayloadStats'
 import { MongoDBArchiveSchemaStatsDiviner } from './SchemaStats'
 
@@ -33,6 +34,10 @@ export const addDiviners = (container: Container) => {
   container.bind(MongoDBModuleAddressDiviner).toSelf().inSingletonScope()
   container.bind<ModuleAddressDiviner>(TYPES.ModuleAddressDiviner).toService(MongoDBModuleAddressDiviner)
   container.bind<JobProvider>(TYPES.JobProvider).toService(MongoDBModuleAddressDiviner)
+
+  container.bind(MongoDBPayloadDiviner).toSelf().inSingletonScope()
+  container.bind<BoundWitnessDiviner>(TYPES.PayloadDiviner).toService(MongoDBPayloadDiviner)
+  container.bind<JobProvider>(TYPES.JobProvider).toService(MongoDBPayloadDiviner)
 
   container.bind(MongoDBArchivePayloadStatsDiviner).toSelf().inSingletonScope()
   container.bind<PayloadStatsDiviner>(TYPES.PayloadStatsDiviner).toService(MongoDBArchivePayloadStatsDiviner)
