@@ -2,7 +2,7 @@ import { Container } from 'inversify'
 
 import { archivistFactories, archivists } from './Archivist'
 import { diviners } from './Diviner'
-import { addInitializables } from './Initializable'
+import { initializables } from './Initializable'
 import { jobQueue } from './JobQueue'
 import { managers } from './Manager'
 import { mongoSdks } from './Mongo'
@@ -16,5 +16,5 @@ export const addMongo = (container: Container) => {
   container.load(diviners)
   container.load(managers)
   container.load(jobQueue)
-  addInitializables(container)
+  container.load(initializables)
 }
