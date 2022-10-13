@@ -20,7 +20,7 @@ import { MongoDBPayloadDiviner } from './Payload'
 import { MongoDBArchivePayloadStatsDiviner } from './PayloadStats'
 import { MongoDBArchiveSchemaStatsDiviner } from './SchemaStats'
 
-export const diviners = new ContainerModule((bind: interfaces.Bind, _unbind: interfaces.Unbind) => {
+export const DivinerContainerModule = new ContainerModule((bind: interfaces.Bind, _unbind: interfaces.Unbind) => {
   bind(MongoDBBoundWitnessDiviner).toSelf().inSingletonScope()
   bind<BoundWitnessDiviner>(TYPES.BoundWitnessDiviner).toService(MongoDBBoundWitnessDiviner)
   bind<JobProvider>(TYPES.JobProvider).toService(MongoDBBoundWitnessDiviner)
