@@ -1,6 +1,6 @@
 import { Container } from 'inversify'
 
-import { addArchivistFactories, archivists } from './Archivist'
+import { archivistFactories, archivists } from './Archivist'
 import { addDiviners } from './Diviner'
 import { addInitializables } from './Initializable'
 import { addJobQueue } from './JobQueue'
@@ -12,7 +12,7 @@ import { mongoSdks } from './Mongo'
 export const addMongo = async (container: Container) => {
   container.load(mongoSdks)
   container.load(archivists)
-  addArchivistFactories(container)
+  container.load(archivistFactories)
   addDiviners(container)
   addManagers(container)
   await addJobQueue(container)

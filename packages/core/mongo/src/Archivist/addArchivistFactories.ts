@@ -11,7 +11,7 @@ import {
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoModuleConfigSchema } from '@xyo-network/module'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
-import { Container, interfaces } from 'inversify'
+import { ContainerModule, interfaces } from 'inversify'
 import LruCache from 'lru-cache'
 
 import { MONGO_TYPES } from '../types'
@@ -33,29 +33,26 @@ type ArchivePermissionsArchivistFactory = interfaces.Factory<ArchivePermissionsA
 type ArchiveBoundWitnessArchivistFactory = interfaces.Factory<ArchiveBoundWitnessArchivist>
 type ArchivePayloadArchivistFactory = interfaces.Factory<ArchivePayloadsArchivist>
 
-export const addArchivistFactories = (container: Container) => {
+export const archivistFactories = new ContainerModule((bind: interfaces.Bind, _unbind: interfaces.Unbind) => {
   archivePermissionsArchivistCache = new LruCache<string, ArchivePermissionsArchivist>({ max })
   boundWitnessArchivistCache = new LruCache<string, ArchiveBoundWitnessArchivist>({ max })
   payloadArchivistCache = new LruCache<string, ArchivePayloadsArchivist>({ max })
-
-  container
-    .bind<ArchiveBoundWitnessArchivistFactory>(TYPES.ArchiveBoundWitnessArchivistFactory)
-    .toFactory<ArchiveBoundWitnessArchivist, [string]>((context) => {
+  bind<ArchiveBoundWitnessArchivistFactory>(TYPES.ArchiveBoundWitnessArchivistFactory).toFactory<ArchiveBoundWitnessArchivist, [string]>(
+    (context) => {
       return (archive: string) => {
         const archivist = getBoundWitnessArchivist(context, archive)
         // TODO: Initialize or add to bus
         return archivist
       }
-    })
-  container.bind<ArchivePayloadArchivistFactory>(TYPES.ArchivePayloadArchivistFactory).toFactory<ArchivePayloadsArchivist, [string]>((context) => {
+    },
+  )
+  bind<ArchivePayloadArchivistFactory>(TYPES.ArchivePayloadArchivistFactory).toFactory<ArchivePayloadsArchivist, [string]>((context) => {
     return (archive: string) => getPayloadArchivist(context, archive)
   })
-  container
-    .bind<ArchivePermissionsArchivistFactory>(TYPES.ArchivePermissionsArchivistFactory)
-    .toFactory<ArchivePermissionsArchivist, [string]>((context) => {
-      return (archive: string) => getArchivePermissionsArchivist(context, archive)
-    })
-}
+  bind<ArchivePermissionsArchivistFactory>(TYPES.ArchivePermissionsArchivistFactory).toFactory<ArchivePermissionsArchivist, [string]>((context) => {
+    return (archive: string) => getArchivePermissionsArchivist(context, archive)
+  })
+})
 
 const getBoundWitnessArchivist = (context: interfaces.Context, archive: string) => {
   const cached = boundWitnessArchivistCache?.get?.(archive)
