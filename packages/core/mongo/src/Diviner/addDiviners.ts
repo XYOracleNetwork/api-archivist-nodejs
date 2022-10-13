@@ -18,21 +18,27 @@ import { MongoDBArchivePayloadStatsDiviner } from './PayloadStats'
 import { MongoDBArchiveSchemaStatsDiviner } from './SchemaStats'
 
 export const addDiviners = (container: Container) => {
-  container.bind<BoundWitnessDiviner>(TYPES.BoundWitnessDiviner).to(MongoDBBoundWitnessDiviner).inSingletonScope()
-  container.bind<JobProvider>(TYPES.JobProvider).toService(TYPES.BoundWitnessDiviner)
+  container.bind(MongoDBBoundWitnessDiviner).toSelf().inSingletonScope()
+  container.bind<BoundWitnessDiviner>(TYPES.BoundWitnessDiviner).toService(MongoDBBoundWitnessDiviner)
+  container.bind<JobProvider>(TYPES.JobProvider).toService(MongoDBBoundWitnessDiviner)
 
-  container.bind<BoundWitnessStatsDiviner>(TYPES.BoundWitnessStatsDiviner).to(MongoDBArchiveBoundWitnessStatsDiviner).inSingletonScope()
-  container.bind<JobProvider>(TYPES.JobProvider).toService(TYPES.BoundWitnessStatsDiviner)
+  container.bind(MongoDBArchiveBoundWitnessStatsDiviner).toSelf().inSingletonScope()
+  container.bind<BoundWitnessStatsDiviner>(TYPES.BoundWitnessStatsDiviner).toService(MongoDBArchiveBoundWitnessStatsDiviner)
+  container.bind<JobProvider>(TYPES.JobProvider).toService(MongoDBArchiveBoundWitnessStatsDiviner)
 
-  container.bind<LocationCertaintyDiviner>(TYPES.ElevationDiviner).to(MongoDBLocationCertaintyDiviner).inSingletonScope()
-  container.bind<JobProvider>(TYPES.JobProvider).toService(TYPES.ElevationDiviner)
+  container.bind(MongoDBLocationCertaintyDiviner).toSelf().inSingletonScope()
+  container.bind<LocationCertaintyDiviner>(TYPES.ElevationDiviner).toService(MongoDBLocationCertaintyDiviner)
+  container.bind<JobProvider>(TYPES.JobProvider).toService(MongoDBLocationCertaintyDiviner)
 
-  container.bind<ModuleAddressDiviner>(TYPES.ModuleAddressDiviner).to(MongoDBModuleAddressDiviner).inSingletonScope()
-  container.bind<JobProvider>(TYPES.JobProvider).toService(TYPES.ModuleAddressDiviner)
+  container.bind(MongoDBModuleAddressDiviner).toSelf().inSingletonScope()
+  container.bind<ModuleAddressDiviner>(TYPES.ModuleAddressDiviner).toService(MongoDBModuleAddressDiviner)
+  container.bind<JobProvider>(TYPES.JobProvider).toService(MongoDBModuleAddressDiviner)
 
-  container.bind<PayloadStatsDiviner>(TYPES.PayloadStatsDiviner).to(MongoDBArchivePayloadStatsDiviner).inSingletonScope()
-  container.bind<JobProvider>(TYPES.JobProvider).toService(TYPES.PayloadStatsDiviner)
+  container.bind(MongoDBArchivePayloadStatsDiviner).toSelf().inSingletonScope()
+  container.bind<PayloadStatsDiviner>(TYPES.PayloadStatsDiviner).toService(MongoDBArchivePayloadStatsDiviner)
+  container.bind<JobProvider>(TYPES.JobProvider).toService(MongoDBArchivePayloadStatsDiviner)
 
-  container.bind<SchemaStatsDiviner>(TYPES.SchemaStatsDiviner).to(MongoDBArchiveSchemaStatsDiviner).inSingletonScope()
-  container.bind<JobProvider>(TYPES.JobProvider).toService(TYPES.SchemaStatsDiviner)
+  container.bind(MongoDBArchiveSchemaStatsDiviner).toSelf().inSingletonScope()
+  container.bind<SchemaStatsDiviner>(TYPES.SchemaStatsDiviner).toService(MongoDBArchiveSchemaStatsDiviner)
+  container.bind<JobProvider>(TYPES.JobProvider).toService(MongoDBArchiveSchemaStatsDiviner)
 }
