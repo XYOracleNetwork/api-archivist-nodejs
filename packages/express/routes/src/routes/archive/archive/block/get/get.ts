@@ -35,6 +35,7 @@ const handler: RequestHandler<
   const timestampNumber = tryParseInt(timestamp)
   const parsedOrder = order?.toLowerCase?.() === 'asc' ? 'asc' : 'desc'
   const query: BoundWitnessQueryPayload = {
+    archive: archive.archive,
     limit: limitNumber,
     order: parsedOrder,
     schema: BoundWitnessQuerySchema,
