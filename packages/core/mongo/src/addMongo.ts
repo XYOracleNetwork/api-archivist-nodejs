@@ -4,7 +4,7 @@ import { archivistFactories, archivists } from './Archivist'
 import { diviners } from './Diviner'
 import { addInitializables } from './Initializable'
 import { addJobQueue } from './JobQueue'
-import { addManagers } from './Manager'
+import { managers } from './Manager'
 import { mongoSdks } from './Mongo'
 
 // TODO: Move from the addX pattern to using Container Modules
@@ -14,7 +14,7 @@ export const addMongo = async (container: Container) => {
   container.load(archivists)
   container.load(archivistFactories)
   container.load(diviners)
-  addManagers(container)
+  container.load(managers)
   await addJobQueue(container)
   addInitializables(container)
 }
