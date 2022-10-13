@@ -4,6 +4,6 @@ import { ContainerModule, interfaces } from 'inversify'
 
 import { MongoDBUserManager } from './User'
 
-export const managers = new ContainerModule((bind: interfaces.Bind, _unbind: interfaces.Unbind) => {
+export const ManagerContainerModule = new ContainerModule((bind: interfaces.Bind, _unbind: interfaces.Unbind) => {
   bind<UserManager>(TYPES.UserManager).to(MongoDBUserManager).inSingletonScope()
 })

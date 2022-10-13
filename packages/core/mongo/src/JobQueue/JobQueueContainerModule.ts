@@ -4,6 +4,6 @@ import { ContainerModule, interfaces } from 'inversify'
 
 import { getJobQueue } from './getJobQueue'
 
-export const jobQueue = new ContainerModule((bind: interfaces.Bind) => {
+export const JobQueueContainerModule = new ContainerModule((bind: interfaces.Bind) => {
   bind<JobQueue>(TYPES.JobQueue).toConstantValue(getJobQueue())
 })

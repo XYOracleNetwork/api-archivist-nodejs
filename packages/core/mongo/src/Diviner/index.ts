@@ -1,1 +1,1 @@
-export * from './addDiviners'
+export * from './DivinerContainerModule'
