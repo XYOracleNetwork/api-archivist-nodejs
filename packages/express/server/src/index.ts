@@ -15,6 +15,7 @@ import { addQueryConverters } from './addQueryConverters'
 import { addQueryProcessing } from './addQueryProcessing'
 import { addQueryProcessors } from './addQueryProcessors'
 import { configureEnvironment } from './configureEnvironment'
+import { initializeJobs } from './initializeJobs'
 import { initializeModules } from './initializeModules'
 
 export const getApp = async (): Promise<Express> => {
@@ -33,6 +34,7 @@ export const getApp = async (): Promise<Express> => {
   addQueryConverters()
   addQueryProcessors(app)
   addQueryProcessing()
+  await initializeJobs()
   addRoutes(app)
   addErrorHandlers(app)
   return app
