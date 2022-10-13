@@ -3,6 +3,7 @@ import {
   BoundWitnessStatsDiviner,
   LocationCertaintyDiviner,
   ModuleAddressDiviner,
+  PayloadDiviner,
   PayloadStatsDiviner,
   SchemaStatsDiviner,
 } from '@xyo-network/archivist-model'
@@ -36,7 +37,7 @@ export const addDiviners = (container: Container) => {
   container.bind<JobProvider>(TYPES.JobProvider).toService(MongoDBModuleAddressDiviner)
 
   container.bind(MongoDBPayloadDiviner).toSelf().inSingletonScope()
-  container.bind<BoundWitnessDiviner>(TYPES.PayloadDiviner).toService(MongoDBPayloadDiviner)
+  container.bind<PayloadDiviner>(TYPES.PayloadDiviner).toService(MongoDBPayloadDiviner)
   container.bind<JobProvider>(TYPES.JobProvider).toService(MongoDBPayloadDiviner)
 
   container.bind(MongoDBArchivePayloadStatsDiviner).toSelf().inSingletonScope()
