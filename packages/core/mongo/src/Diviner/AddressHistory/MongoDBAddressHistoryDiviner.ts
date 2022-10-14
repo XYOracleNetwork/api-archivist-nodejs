@@ -1,6 +1,7 @@
 import 'reflect-metadata'
 
-import { exists } from '@xylabs/sdk-js'
+import { assertEx } from '@xylabs/assert'
+import { exists } from '@xylabs/exists'
 import { XyoAccount } from '@xyo-network/account'
 import {
   AddressHistoryDiviner,
@@ -15,9 +16,8 @@ import { XyoPayloads } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { Job, JobProvider, Logger } from '@xyo-network/shared'
 import { inject, injectable } from 'inversify'
-import { Filter } from 'mongodb'
 
-import { DefaultMaxTimeMS } from '../../defaults'
+import { DefaultLimit, DefaultMaxTimeMS } from '../../defaults'
 import { MONGO_TYPES } from '../../types'
 
 @injectable()
@@ -46,12 +46,11 @@ export class MongoDBAddressHistoryDiviner extends XyoDiviner implements AddressH
     if (!query) return []
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { address, schema, limit, offset, order, ...props } = query
-    const filter: Filter<XyoBoundWitnessWithMeta> = {}
-    if (address) filter.addresses = { $in: ([] as string[]).concat(address) }
-    if (offset) filter._hash === offset
-    const mostRecentBlockByAddress = await (await this.sdk.find(filter)).sort({ _timestamp: -1 }).limit(1).maxTimeMS(DefaultMaxTimeMS).toArray()
-    // TODO: Walk chain backwards
-    return mostRecentBlockByAddress
+    const addresses = sanitizeAddress(address)
+    assertEx(addresses, 'MongoDBAddressHistoryDiviner: Missing address for query')
+    assertEx(typeof offset === 'string', 'MongoDBAddressHistoryDiviner: Supplied offset must be a hash')
+    const hash: string = offset as string
+    return await this.getBlocks(hash, addresses, limit || DefaultLimit)
   }
 
   override async initialize(): Promise<void> {
@@ -61,13 +60,30 @@ export class MongoDBAddressHistoryDiviner extends XyoDiviner implements AddressH
   override async shutdown(): Promise<void> {
     // await this.changeStream?.close()
   }
+
+  private getBlocks = async (hash: string, address: string, limit: number): Promise<XyoBoundWitnessWithMeta[]> => {
+    let nextHash = hash
+    const blocks: XyoBoundWitnessWithMeta[] = []
+    for (let i = 0; i < limit; i++) {
+      const block = (
+        await (await this.sdk.find({ _hash: nextHash, addresses: address })).sort({ _timestamp: -1 }).limit(1).maxTimeMS(DefaultMaxTimeMS).toArray()
+      ).pop()
+      if (!block) break
+      blocks.push(block)
+      const addressIndex = block.addresses.findIndex((value) => value === address)
+      const previousHash = block.previous_hashes[addressIndex]
+      if (!previousHash) break
+      nextHash = previousHash
+    }
+    return blocks
+  }
 }
 
-const concatArrays = (a: string | string[] | undefined, b: string | string[] | undefined): string[] => {
+const sanitizeAddress = (a: string | string[] | undefined): string => {
   return ([] as (string | undefined)[])
     .concat(a)
-    .concat(b)
     .filter(exists)
     .map((x) => x.toLowerCase())
     .map((x) => (x.startsWith('0x') ? x.substring(2) : x))
+    .reduce((x) => x)
 }
