@@ -1,5 +1,4 @@
 export * from './AbstractArchivist'
-export * from './addArchivistFactories'
-export * from './addArchivists'
-export * from './addMongoArchivists'
+export * from './ArchivistContainerModule'
+export * from './ArchivistFactoryContainerModule'
 export * from './User'

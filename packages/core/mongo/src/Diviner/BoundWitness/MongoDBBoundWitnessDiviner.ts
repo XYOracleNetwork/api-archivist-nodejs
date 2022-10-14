@@ -1,5 +1,6 @@
 import 'reflect-metadata'
 
+import { exists } from '@xylabs/sdk-js'
 import { XyoAccount } from '@xyo-network/account'
 import { BoundWitnessDiviner, BoundWitnessQueryPayload, isBoundWitnessQueryPayload, XyoBoundWitnessWithMeta } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
@@ -40,7 +41,7 @@ export class MongoDBBoundWitnessDiviner extends XyoDiviner implements BoundWitne
     // TODO: Support multiple queries
     if (!query) return []
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { archive, archives, addresses, hash, limit, order, payload_hashes, payload_schemas, schema, timestamp, ...props } = query
+    const { archive, archives, address, addresses, hash, limit, order, payload_hashes, payload_schemas, schema, timestamp, ...props } = query
     const parsedLimit = limit || DefaultLimit
     const parsedOrder = order || DefaultOrder
     const sort: { [key: string]: SortDirection } = { _timestamp: parsedOrder === 'asc' ? 1 : -1 }
@@ -56,7 +57,8 @@ export class MongoDBBoundWitnessDiviner extends XyoDiviner implements BoundWitne
     // but based on how MongoDB implements multi-key indexes $in might be much faster and we could
     // solve the multi-sig problem via multiple API calls when multi-sig is desired instead of
     // potentially impacting performance for all single-address queries
-    if (addresses?.length) filter.addresses = { $all: addresses }
+    const allAddresses = concatArrays(address, addresses)
+    if (allAddresses.length) filter.addresses = allAddresses.length === 1 ? allAddresses[0] : { $all: allAddresses }
     if (payload_hashes?.length) filter.payload_hashes = { $in: payload_hashes }
     if (payload_schemas?.length) filter.payload_schemas = { $in: payload_schemas }
     return (await (await this.sdk.find(filter)).sort(sort).limit(parsedLimit).maxTimeMS(DefaultMaxTimeMS).toArray()).map(removeId)
@@ -69,4 +71,13 @@ export class MongoDBBoundWitnessDiviner extends XyoDiviner implements BoundWitne
   override async shutdown(): Promise<void> {
     // await this.changeStream?.close()
   }
+}
+
+const concatArrays = (a: string | string[] | undefined, b: string | string[] | undefined): string[] => {
+  return ([] as (string | undefined)[])
+    .concat(a)
+    .concat(b)
+    .filter(exists)
+    .map((x) => x.toLowerCase())
+    .map((x) => (x.startsWith('0x') ? x.substring(2) : x))
 }

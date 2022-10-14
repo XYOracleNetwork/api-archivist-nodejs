@@ -1,1 +1,1 @@
-export * from './addManagers'
+export * from './ManagerContainerModule'

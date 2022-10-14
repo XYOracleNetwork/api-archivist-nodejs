@@ -1,4 +1,5 @@
 import { SortDirection, XyoBoundWitnessWithMeta } from '@xyo-network/archivist-model'
+import { BoundWitnessBuilder, XyoBoundWitness } from '@xyo-network/boundwitness'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import {
@@ -9,8 +10,10 @@ import {
   getPayloads,
   getRecentBlocks,
   getTokenForUnitTestUser,
+  otherUnitTestSigningAccount,
   postBlock,
   request,
+  unitTestSigningAccount,
 } from '../../../../../testUtil'
 
 const sortDirections: SortDirection[] = ['asc', 'desc']
@@ -29,7 +32,11 @@ describe('/archive/:archive/block', () => {
       const now = Date.now()
       const payloads = getPayloads(1)
       payloads[0].timestamp = now
-      const block = getBlock(...payloads)
+      const block = new BoundWitnessBuilder({ inlinePayloads: true })
+        .witness(unitTestSigningAccount)
+        .witness(otherUnitTestSigningAccount)
+        .payloads(payloads)
+        .build()[0]
       block.timestamp = now
       const blockResponse = await postBlock(block, archive)
       expect(blockResponse.length).toBe(1)
@@ -42,9 +49,39 @@ describe('/archive/:archive/block', () => {
     expect(stopTime).toBeGreaterThan(startTime)
   })
   it(`With missing timestamp returns ${ReasonPhrases.OK}`, async () => {
-    await (await request()).get(`/archive/${archive}/block`).query({ limit: 10, order: 'asc' }).auth(token, { type: 'bearer' }).expect(StatusCodes.OK)
+    await (await request()).get(`/archive/${archive}/block`).query({ limit: 10 }).auth(token, { type: 'bearer' }).expect(StatusCodes.OK)
   })
-  describe('With valid data', () => {
+  describe('With address query', () => {
+    const originalAddress = unitTestSigningAccount.addressValue.hex
+    it.each([originalAddress, originalAddress.toUpperCase(), `0x${originalAddress}`, `0x${originalAddress}`.toUpperCase()])(
+      'Searches by address with form: %s',
+      async (address) => {
+        const result = await (await request())
+          .get(`/archive/${archive}/block`)
+          .query({ address, limit: 10 })
+          .auth(token, { type: 'bearer' })
+          .expect(StatusCodes.OK)
+        expect(result.body).toBeObject()
+        expect(result.body.data).toBeArrayOfSize(10)
+        result.body.data.map((bw: XyoBoundWitness) => expect(bw.addresses).toContain(originalAddress))
+      },
+    )
+    it('Searches by multiple addresses', async () => {
+      const otherAddress = otherUnitTestSigningAccount.addressValue.hex
+      const result = await (
+        await request()
+      )
+        .get(`/archive/${archive}/block`)
+        .query({ address: [originalAddress, otherAddress], limit: 10 })
+        .auth(token, { type: 'bearer' })
+        .expect(StatusCodes.OK)
+      expect(result.body).toBeObject()
+      expect(result.body.data).toBeArrayOfSize(10)
+      result.body.data.map((bw: XyoBoundWitness) => expect(bw.addresses).toContain(originalAddress))
+      result.body.data.map((bw: XyoBoundWitness) => expect(bw.addresses).toContain(otherAddress))
+    })
+  })
+  describe('With valid query', () => {
     describe.each(sortDirections)('In %s order', (order: SortDirection) => {
       let timestamp = 0
       let response: XyoBoundWitnessWithMeta[] = []

@@ -1,21 +1,16 @@
 import { Container } from 'inversify'
 
-import { addArchivistFactories, addArchivists, addMongoArchivists } from './Archivist'
-import { addDiviners } from './Diviner'
-import { addInitializables } from './Initializable'
-import { addJobQueue } from './JobQueue'
-import { addManagers } from './Manager'
-import { addMongoSdks } from './Mongo'
+import { ArchivistContainerModule, ArchivistFactoryContainerModule } from './Archivist'
+import { DivinerContainerModule } from './Diviner'
+import { JobQueueContainerModule } from './JobQueue'
+import { ManagerContainerModule } from './Manager'
+import { MongoSdkContainerModule } from './Mongo'
 
-// TODO: Move from the addX pattern to using Container Modules
-// https://github.com/inversify/InversifyJS/blob/master/wiki/container_modules.md
-export const addMongo = async (container: Container) => {
-  addMongoSdks(container)
-  addMongoArchivists(container)
-  addArchivists(container)
-  addArchivistFactories(container)
-  addDiviners(container)
-  addManagers(container)
-  await addJobQueue(container)
-  addInitializables(container)
+export const addMongo = (container: Container) => {
+  container.load(MongoSdkContainerModule)
+  container.load(ArchivistContainerModule)
+  container.load(ArchivistFactoryContainerModule)
+  container.load(DivinerContainerModule)
+  container.load(ManagerContainerModule)
+  container.load(JobQueueContainerModule)
 }

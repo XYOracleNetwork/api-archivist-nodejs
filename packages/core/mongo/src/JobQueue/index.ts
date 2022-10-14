@@ -1,1 +1,1 @@
-export * from './addJobQueue'
+export * from './JobQueueContainerModule'
