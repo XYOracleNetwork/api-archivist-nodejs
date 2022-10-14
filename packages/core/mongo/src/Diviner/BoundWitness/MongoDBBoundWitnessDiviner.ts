@@ -74,5 +74,10 @@ export class MongoDBBoundWitnessDiviner extends XyoDiviner implements BoundWitne
 }
 
 const concatArrays = (a: string | string[] | undefined, b: string | string[] | undefined): string[] => {
-  return ([] as (string | undefined)[]).concat(a).concat(b).filter(exists)
+  return ([] as (string | undefined)[])
+    .concat(a)
+    .concat(b)
+    .filter(exists)
+    .map((x) => x.toLowerCase())
+    .map((x) => (x.startsWith('0x') ? x.substring(2) : x))
 }
