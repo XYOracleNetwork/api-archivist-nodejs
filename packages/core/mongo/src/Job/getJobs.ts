@@ -1,4 +1,4 @@
-import { exists } from '@xylabs/sdk-js'
+import { exists } from '@xylabs/exists'
 import { TYPES } from '@xyo-network/archivist-types'
 import { Job, JobProvider } from '@xyo-network/shared'
 import { Container } from 'inversify'

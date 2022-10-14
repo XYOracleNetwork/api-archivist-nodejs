@@ -24,7 +24,7 @@ import { MongoDBArchiveSchemaStatsDiviner } from './SchemaStats'
 
 export const DivinerContainerModule = new ContainerModule((bind: interfaces.Bind, _unbind: interfaces.Unbind) => {
   bind(MongoDBAddressHistoryDiviner).toSelf().inSingletonScope()
-  bind<AddressHistoryDiviner>(TYPES.BoundWitnessDiviner).toService(MongoDBAddressHistoryDiviner)
+  bind<AddressHistoryDiviner>(TYPES.AddressHistoryDiviner).toService(MongoDBAddressHistoryDiviner)
   bind<JobProvider>(TYPES.JobProvider).toService(MongoDBAddressHistoryDiviner)
   bind<Module>(TYPES.Module).toService(MongoDBAddressHistoryDiviner)
 
