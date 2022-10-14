@@ -1,8 +1,8 @@
 import 'source-map-support/register'
 
 import { assertEx } from '@xylabs/assert'
+import { exists } from '@xylabs/exists'
 import { asyncHandler, tryParseInt } from '@xylabs/sdk-api-express-ecs'
-import { exists } from '@xylabs/sdk-js'
 import { PayloadQueryPayload, PayloadQuerySchema } from '@xyo-network/archivist-model'
 import { XyoDivinerWrapper } from '@xyo-network/diviner'
 import { XyoPayload } from '@xyo-network/payload'
