@@ -2,7 +2,12 @@ import 'reflect-metadata'
 
 import { exists } from '@xylabs/sdk-js'
 import { XyoAccount } from '@xyo-network/account'
-import { BoundWitnessDiviner, BoundWitnessQueryPayload, isBoundWitnessQueryPayload, XyoBoundWitnessWithMeta } from '@xyo-network/archivist-model'
+import {
+  AddressHistoryDiviner,
+  AddressHistoryQueryPayload,
+  isAddressHistoryQueryPayload,
+  XyoBoundWitnessWithMeta,
+} from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { XyoArchivistPayloadDivinerConfigSchema, XyoDiviner } from '@xyo-network/diviner'
@@ -10,14 +15,13 @@ import { XyoPayloads } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { Job, JobProvider, Logger } from '@xyo-network/shared'
 import { inject, injectable } from 'inversify'
-import { Filter, SortDirection } from 'mongodb'
+import { Filter } from 'mongodb'
 
-import { DefaultLimit, DefaultMaxTimeMS, DefaultOrder } from '../../defaults'
-import { removeId } from '../../Mongo'
+import { DefaultMaxTimeMS } from '../../defaults'
 import { MONGO_TYPES } from '../../types'
 
 @injectable()
-export class MongoDBAddressHistoryDiviner extends XyoDiviner implements BoundWitnessDiviner, JobProvider {
+export class MongoDBAddressHistoryDiviner extends XyoDiviner implements AddressHistoryDiviner, JobProvider {
   constructor(
     @inject(TYPES.Logger) protected logger: Logger,
     @inject(TYPES.Account) account: XyoAccount,
@@ -37,31 +41,17 @@ export class MongoDBAddressHistoryDiviner extends XyoDiviner implements BoundWit
   }
 
   override async divine(payloads?: XyoPayloads): Promise<XyoPayloads<XyoBoundWitness>> {
-    const query = payloads?.find<BoundWitnessQueryPayload>(isBoundWitnessQueryPayload)
+    const query = payloads?.find<AddressHistoryQueryPayload>(isAddressHistoryQueryPayload)
     // TODO: Support multiple queries
     if (!query) return []
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { archive, archives, address, addresses, hash, limit, order, payload_hashes, payload_schemas, schema, timestamp, ...props } = query
-    const parsedLimit = limit || DefaultLimit
-    const parsedOrder = order || DefaultOrder
-    const sort: { [key: string]: SortDirection } = { _timestamp: parsedOrder === 'asc' ? 1 : -1 }
-    const filter: Filter<XyoBoundWitnessWithMeta> = { ...props }
-    if (timestamp) {
-      const parsedTimestamp = timestamp ? timestamp : parsedOrder === 'desc' ? Date.now() : 0
-      filter._timestamp = parsedOrder === 'desc' ? { $lt: parsedTimestamp } : { $gt: parsedTimestamp }
-    }
-    if (archive) filter._archive = archive
-    if (archives?.length) filter._archive = { $in: archives }
-    if (hash) filter._hash = hash
-    // NOTE: Defaulting to $all since it makes the most sense when singing addresses are supplied
-    // but based on how MongoDB implements multi-key indexes $in might be much faster and we could
-    // solve the multi-sig problem via multiple API calls when multi-sig is desired instead of
-    // potentially impacting performance for all single-address queries
-    const allAddresses = concatArrays(address, addresses)
-    if (allAddresses.length) filter.addresses = allAddresses.length === 1 ? allAddresses[0] : { $all: allAddresses }
-    if (payload_hashes?.length) filter.payload_hashes = { $in: payload_hashes }
-    if (payload_schemas?.length) filter.payload_schemas = { $in: payload_schemas }
-    return (await (await this.sdk.find(filter)).sort(sort).limit(parsedLimit).maxTimeMS(DefaultMaxTimeMS).toArray()).map(removeId)
+    const { address, schema, limit, offset, order, ...props } = query
+    const filter: Filter<XyoBoundWitnessWithMeta> = {}
+    if (address) filter.addresses = { $in: ([] as string[]).concat(address) }
+    if (offset) filter._hash === offset
+    const mostRecentBlockByAddress = await (await this.sdk.find(filter)).sort({ _timestamp: -1 }).limit(1).maxTimeMS(DefaultMaxTimeMS).toArray()
+    // TODO: Walk chain backwards
+    return mostRecentBlockByAddress
   }
 
   override async initialize(): Promise<void> {
