@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 
-import { delay } from '@xylabs/sdk-js'
+import { delay } from '@xylabs/delay'
 import { XyoAccount } from '@xyo-network/account'
 import {
   isModuleAddressQueryPayload,

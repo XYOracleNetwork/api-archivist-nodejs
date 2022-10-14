@@ -1,7 +1,7 @@
 import 'source-map-support/register'
 
+import { exists } from '@xylabs/exists'
 import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
-import { exists } from '@xylabs/sdk-js'
 import { XyoArchivistWrapper } from '@xyo-network/archivist'
 import { PayloadWrapper, XyoPayload } from '@xyo-network/payload'
 import { RequestHandler } from 'express'

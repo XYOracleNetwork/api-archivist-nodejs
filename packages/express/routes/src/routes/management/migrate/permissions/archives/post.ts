@@ -1,5 +1,5 @@
+import { exists } from '@xylabs/exists'
 import { asyncHandler, NoReqBody, NoReqParams, NoReqQuery, NoResBody, tryParseInt } from '@xylabs/sdk-api-express-ecs'
-import { exists } from '@xylabs/sdk-js'
 import { RequestHandler } from 'express'
 import { StatusCodes } from 'http-status-codes'
 

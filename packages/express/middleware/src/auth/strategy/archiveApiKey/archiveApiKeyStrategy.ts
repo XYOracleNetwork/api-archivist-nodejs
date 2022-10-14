@@ -1,7 +1,7 @@
 import 'reflect-metadata'
 
+import { exists } from '@xylabs/exists'
 import { getHttpHeader } from '@xylabs/sdk-api-express-ecs'
-import { exists } from '@xylabs/sdk-js'
 import { ArchiveArchivist, ArchiveKeyArchivist, UserManager } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { Request } from 'express'
