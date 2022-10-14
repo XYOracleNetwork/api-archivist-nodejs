@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 
-import { exists } from '@xylabs/sdk-js'
+import { exists } from '@xylabs/exists'
 import { XyoAccount } from '@xyo-network/account'
 import { BoundWitnessDiviner, BoundWitnessQueryPayload, isBoundWitnessQueryPayload, XyoBoundWitnessWithMeta } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
