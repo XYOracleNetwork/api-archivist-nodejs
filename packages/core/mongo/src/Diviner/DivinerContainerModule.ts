@@ -1,4 +1,5 @@
 import {
+  AddressHistoryDiviner,
   BoundWitnessDiviner,
   BoundWitnessStatsDiviner,
   LocationCertaintyDiviner,
@@ -12,6 +13,7 @@ import { Module } from '@xyo-network/module'
 import { JobProvider } from '@xyo-network/shared'
 import { ContainerModule, interfaces } from 'inversify'
 
+import { MongoDBAddressHistoryDiviner } from './AddressHistory'
 import { MongoDBBoundWitnessDiviner } from './BoundWitness'
 import { MongoDBArchiveBoundWitnessStatsDiviner } from './BoundWitnessStats'
 import { MongoDBLocationCertaintyDiviner } from './LocationCertainty'
@@ -21,6 +23,11 @@ import { MongoDBArchivePayloadStatsDiviner } from './PayloadStats'
 import { MongoDBArchiveSchemaStatsDiviner } from './SchemaStats'
 
 export const DivinerContainerModule = new ContainerModule((bind: interfaces.Bind, _unbind: interfaces.Unbind) => {
+  bind(MongoDBAddressHistoryDiviner).toSelf().inSingletonScope()
+  bind<AddressHistoryDiviner>(TYPES.BoundWitnessDiviner).toService(MongoDBAddressHistoryDiviner)
+  bind<JobProvider>(TYPES.JobProvider).toService(MongoDBAddressHistoryDiviner)
+  bind<Module>(TYPES.Module).toService(MongoDBAddressHistoryDiviner)
+
   bind(MongoDBBoundWitnessDiviner).toSelf().inSingletonScope()
   bind<BoundWitnessDiviner>(TYPES.BoundWitnessDiviner).toService(MongoDBBoundWitnessDiviner)
   bind<JobProvider>(TYPES.JobProvider).toService(MongoDBBoundWitnessDiviner)
