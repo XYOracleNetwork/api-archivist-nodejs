@@ -12,6 +12,7 @@ const defaultLimit = 10
 const maxLimit = 100
 
 export interface GetArchiveBlocksQueryParams extends NoReqQuery {
+  address?: string | string[]
   limit?: string
   order?: SortDirection
   timestamp?: string
@@ -28,7 +29,7 @@ const handler: RequestHandler<
   if (!archive) {
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
   }
-  const { limit, order, timestamp } = req.query
+  const { address, limit, order, timestamp } = req.query
   const { boundWitnessDiviner } = req.app
   const limitNumber = tryParseInt(limit) ?? defaultLimit
   assertEx(limitNumber > 0 && limitNumber <= maxLimit, `limit must be between 1 and ${maxLimit}`)
@@ -40,6 +41,9 @@ const handler: RequestHandler<
     order: parsedOrder,
     schema: BoundWitnessQuerySchema,
     timestamp: timestampNumber,
+  }
+  if (address) {
+    query.address = address as string | [string]
   }
   const boundWitness = ((await new XyoDivinerWrapper(boundWitnessDiviner).divine([query])) as (XyoBoundWitness | null)[]).filter(exists)
   if (boundWitness) {
