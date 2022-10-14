@@ -1,4 +1,5 @@
 export const DIVINER_TYPES = {
+  AddressHistoryDiviner: Symbol('AddressHistoryDiviner'),
   BoundWitnessDiviner: Symbol('BoundWitnessDiviner'),
   BoundWitnessStatsDiviner: Symbol('BoundWitnessStatsDiviner'),
   ElevationDiviner: Symbol('ElevationDiviner'),
