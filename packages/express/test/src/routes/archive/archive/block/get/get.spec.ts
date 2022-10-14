@@ -46,16 +46,21 @@ describe('/archive/:archive/block', () => {
   it(`With missing timestamp returns ${ReasonPhrases.OK}`, async () => {
     await (await request()).get(`/archive/${archive}/block`).query({ limit: 10 }).auth(token, { type: 'bearer' }).expect(StatusCodes.OK)
   })
-  it('With address query', async () => {
-    const address = unitTestSigningAccount.addressValue.hex
-    const result = await (await request())
-      .get(`/archive/${archive}/block`)
-      .query({ address, limit: 10 })
-      .auth(token, { type: 'bearer' })
-      .expect(StatusCodes.OK)
-    expect(result.body).toBeObject()
-    expect(result.body.data).toBeArrayOfSize(10)
-    result.body.data.map((bw: XyoBoundWitness) => expect(bw.addresses).toContain(address))
+  describe('With address query', () => {
+    const originalAddress = unitTestSigningAccount.addressValue.hex
+    it.each([originalAddress, originalAddress.toUpperCase(), `0x${originalAddress}`, `0x${originalAddress}`.toUpperCase()])(
+      'Searches by address with form: %s',
+      async (address) => {
+        const result = await (await request())
+          .get(`/archive/${archive}/block`)
+          .query({ address, limit: 10 })
+          .auth(token, { type: 'bearer' })
+          .expect(StatusCodes.OK)
+        expect(result.body).toBeObject()
+        expect(result.body.data).toBeArrayOfSize(10)
+        result.body.data.map((bw: XyoBoundWitness) => expect(bw.addresses).toContain(originalAddress))
+      },
+    )
   })
   describe('With valid query', () => {
     describe.each(sortDirections)('In %s order', (order: SortDirection) => {
