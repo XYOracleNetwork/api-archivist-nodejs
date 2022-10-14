@@ -1,7 +1,7 @@
 import { XyoAccount } from '@xyo-network/account'
 import {
-  BoundWitnessQueryPayload,
-  BoundWitnessQuerySchema,
+  AddressHistoryQueryPayload,
+  AddressHistoryQuerySchema,
   XyoBoundWitnessWithMeta,
   XyoBoundWitnessWithPartialMeta,
 } from '@xyo-network/archivist-model'
@@ -14,6 +14,8 @@ import { getBaseMongoSdk } from '../../Mongo'
 import { MongoDBAddressHistoryDiviner } from './MongoDBAddressHistoryDiviner'
 
 describe('MongoDBAddressHistoryDiviner', () => {
+  const phrase = process.env.ACCOUNT_SEED
+  const address = new XyoAccount({ phrase }).addressValue.hex
   let logger: MockProxy<Logger>
   let account: XyoAccount
   let sdk: BaseMongoSdk<XyoBoundWitnessWithMeta>
@@ -27,7 +29,7 @@ describe('MongoDBAddressHistoryDiviner', () => {
   describe('divine', () => {
     describe('with valid query', () => {
       it('divines', async () => {
-        const query: BoundWitnessQueryPayload = { limit: 1, schema: BoundWitnessQuerySchema }
+        const query: AddressHistoryQueryPayload = { address, limit: 1, schema: AddressHistoryQuerySchema }
         const result = await sut.divine([query])
         expect(result).toBeArrayOfSize(1)
         const actual = result[0] as XyoBoundWitnessWithPartialMeta

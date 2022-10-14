@@ -16,8 +16,10 @@ import { XyoPayloads } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { Job, JobProvider, Logger } from '@xyo-network/shared'
 import { inject, injectable } from 'inversify'
+import { Filter } from 'mongodb'
 
 import { DefaultLimit, DefaultMaxTimeMS } from '../../defaults'
+import { removeId } from '../../Mongo'
 import { MONGO_TYPES } from '../../types'
 
 @injectable()
@@ -48,9 +50,10 @@ export class MongoDBAddressHistoryDiviner extends XyoDiviner implements AddressH
     const { address, schema, limit, offset, order, ...props } = query
     const addresses = sanitizeAddress(address)
     assertEx(addresses, 'MongoDBAddressHistoryDiviner: Missing address for query')
-    assertEx(typeof offset === 'string', 'MongoDBAddressHistoryDiviner: Supplied offset must be a hash')
+    if (offset) assertEx(typeof offset === 'string', 'MongoDBAddressHistoryDiviner: Supplied offset must be a hash')
     const hash: string = offset as string
-    return await this.getBlocks(hash, addresses, limit || DefaultLimit)
+    const blocks = await this.getBlocks(hash, addresses, limit || DefaultLimit)
+    return blocks.map(removeId)
   }
 
   override async initialize(): Promise<void> {
@@ -65,9 +68,9 @@ export class MongoDBAddressHistoryDiviner extends XyoDiviner implements AddressH
     let nextHash = hash
     const blocks: XyoBoundWitnessWithMeta[] = []
     for (let i = 0; i < limit; i++) {
-      const block = (
-        await (await this.sdk.find({ _hash: nextHash, addresses: address })).sort({ _timestamp: -1 }).limit(1).maxTimeMS(DefaultMaxTimeMS).toArray()
-      ).pop()
+      const filter: Filter<XyoBoundWitnessWithMeta> = { addresses: address }
+      if (nextHash) filter._hash = nextHash
+      const block = (await (await this.sdk.find(filter)).sort({ _timestamp: -1 }).limit(1).maxTimeMS(DefaultMaxTimeMS).toArray()).pop()
       if (!block) break
       blocks.push(block)
       const addressIndex = block.addresses.findIndex((value) => value === address)
