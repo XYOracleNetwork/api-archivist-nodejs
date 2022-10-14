@@ -1,4 +1,5 @@
 import { SortDirection, XyoBoundWitnessWithMeta } from '@xyo-network/archivist-model'
+import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 import {
@@ -11,6 +12,7 @@ import {
   getTokenForUnitTestUser,
   postBlock,
   request,
+  unitTestSigningAccount,
 } from '../../../../../testUtil'
 
 const sortDirections: SortDirection[] = ['asc', 'desc']
@@ -42,9 +44,20 @@ describe('/archive/:archive/block', () => {
     expect(stopTime).toBeGreaterThan(startTime)
   })
   it(`With missing timestamp returns ${ReasonPhrases.OK}`, async () => {
-    await (await request()).get(`/archive/${archive}/block`).query({ limit: 10, order: 'asc' }).auth(token, { type: 'bearer' }).expect(StatusCodes.OK)
+    await (await request()).get(`/archive/${archive}/block`).query({ limit: 10 }).auth(token, { type: 'bearer' }).expect(StatusCodes.OK)
   })
-  describe('With valid data', () => {
+  it('With address query', async () => {
+    const address = unitTestSigningAccount.addressValue.hex
+    const result = await (await request())
+      .get(`/archive/${archive}/block`)
+      .query({ address, limit: 10 })
+      .auth(token, { type: 'bearer' })
+      .expect(StatusCodes.OK)
+    expect(result.body).toBeObject()
+    expect(result.body.data).toBeArrayOfSize(10)
+    result.body.data.map((bw: XyoBoundWitness) => expect(bw.addresses).toContain(address))
+  })
+  describe('With valid query', () => {
     describe.each(sortDirections)('In %s order', (order: SortDirection) => {
       let timestamp = 0
       let response: XyoBoundWitnessWithMeta[] = []
