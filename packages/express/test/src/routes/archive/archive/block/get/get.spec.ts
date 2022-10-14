@@ -5,7 +5,6 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 import {
   claimArchive,
   getArchiveName,
-  getBlock,
   getBlocksByTimestamp,
   getPayloads,
   getRecentBlocks,
