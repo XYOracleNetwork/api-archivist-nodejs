@@ -30,7 +30,7 @@ describe('flatMapBoundWitness', () => {
     const payload2: XyoPayload = new XyoPayloadBuilder<DebugPayload>({ schema: DebugSchema }).fields({ nonce: '2' }).build()
     const outer = new BoundWitnessBuilder(config).payloads([payload1, payload2]).build()
     const result = flatMapBoundWitness(outer[0])
-    it('extracts the BoundWitness', () => {
+    it('extracts the BoundWitnesses', () => {
       expect(result).toBeArray()
       expect(result[0]).toBeArray()
       expect(result[0].length).toBe(1)
@@ -45,7 +45,7 @@ describe('flatMapBoundWitness', () => {
   describe('BoundWitness without Payloads', () => {
     const outer = new BoundWitnessBuilder(config).build()
     const result = flatMapBoundWitness(outer[0])
-    it('extracts the BoundWitness', () => {
+    it('extracts the BoundWitnesses', () => {
       expect(result).toBeArray()
       expect(result[0]).toBeArray()
       expect(result[0].length).toBe(1)
