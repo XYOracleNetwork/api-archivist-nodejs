@@ -12,11 +12,11 @@ const activeModules: Record<string, Module> = {}
 let populated = false
 
 const populateActiveModules = (req: Request) => {
-  const { payloadArchivist, boundWitnessArchivist, schemaStatsDiviner, payloadStatsDiviner, boundWitnessStatsDiviner } = req.app
-  const modules = [payloadArchivist, boundWitnessArchivist, schemaStatsDiviner, payloadStatsDiviner, boundWitnessStatsDiviner]
-  modules.filter(isModule).forEach((mod) => {
-    activeModules[mod.address] = mod
-  })
+  Object.values(req.app)
+    .filter(isModule)
+    .forEach((mod) => {
+      activeModules[mod.address] = mod
+    })
   populated = true
 }
 
