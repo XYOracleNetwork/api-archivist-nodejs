@@ -4,7 +4,7 @@ import { ModuleDescription } from '@xyo-network/archivist-model'
 import { Module } from '@xyo-network/module'
 import { Request, RequestHandler } from 'express'
 
-import { AddressPathParams } from './AddressPathParams'
+import { AddressPathParams } from '../AddressPathParams'
 import { isModule } from './isModule'
 
 const activeModules: Record<string, Module> = {}
