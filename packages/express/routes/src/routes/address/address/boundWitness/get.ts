@@ -1,7 +1,7 @@
 import { assertEx } from '@xylabs/assert'
 import { exists } from '@xylabs/exists'
 import { asyncHandler, NoReqBody, NoReqQuery, tryParseInt } from '@xylabs/sdk-api-express-ecs'
-import { scrubBoundWitnesses } from '@xyo-network/archivist-lib'
+import { scrubBoundWitnesses, trimAddressPrefix } from '@xyo-network/archivist-lib'
 import { AddressHistoryQueryPayload, AddressHistoryQuerySchema, ArchiveLocals } from '@xyo-network/archivist-model'
 import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { XyoDivinerWrapper } from '@xyo-network/diviner'
@@ -31,9 +31,10 @@ const handler: RequestHandler<AddressPathParams, XyoBoundWitness[], NoReqBody, G
   const { limit, offset } = req.query
   const { address } = req.params
   const { addressHistoryDiviner } = req.app
+  const normalizedAddress = trimAddressPrefix(address).toLowerCase()
   const limitNumber = tryParseInt(limit) ?? defaultLimit
   assertEx(limitNumber > 0 && limitNumber <= maxLimit, `limit must be between 1 and ${maxLimit}`)
-  const query: AddressHistoryQueryPayload = { address, limit: limitNumber, schema }
+  const query: AddressHistoryQueryPayload = { address: normalizedAddress, limit: limitNumber, schema }
   if (offset) {
     query.offset = offset
   }
