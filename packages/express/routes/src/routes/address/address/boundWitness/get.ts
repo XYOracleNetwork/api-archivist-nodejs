@@ -2,7 +2,7 @@ import { assertEx } from '@xylabs/assert'
 import { exists } from '@xylabs/exists'
 import { asyncHandler, NoReqBody, NoReqQuery, tryParseInt } from '@xylabs/sdk-api-express-ecs'
 import { scrubBoundWitnesses } from '@xyo-network/archivist-lib'
-import { ArchiveLocals, ArchivePathParams, BoundWitnessQueryPayload, BoundWitnessQuerySchema, SortDirection } from '@xyo-network/archivist-model'
+import { AddressHistoryQueryPayload, AddressHistoryQuerySchema, ArchiveLocals } from '@xyo-network/archivist-model'
 import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { XyoDivinerWrapper } from '@xyo-network/diviner'
 import { RequestHandler } from 'express'
@@ -11,41 +11,31 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 import { AddressPathParams } from '../../AddressPathParams'
 
 const defaultLimit = 10
-const maxLimit = 100
+const maxLimit = 20
+const schema = AddressHistoryQuerySchema
 
 export interface GetArchiveBlocksQueryParams extends NoReqQuery {
   limit?: string
   offset?: string
-  order?: SortDirection
 }
 
-const handler: RequestHandler<
-  AddressPathParams,
-  Pick<XyoBoundWitness, keyof XyoBoundWitness>[],
-  NoReqBody,
-  GetArchiveBlocksQueryParams,
-  ArchiveLocals
-> = async (req, res, next) => {
+const handler: RequestHandler<AddressPathParams, XyoBoundWitness[], NoReqBody, GetArchiveBlocksQueryParams, ArchiveLocals> = async (
+  req,
+  res,
+  next,
+) => {
   const { archive } = res.locals
   if (!archive) {
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
   }
-  const { address, limit, order, offset } = req.query
+  const { limit, offset } = req.query
+  const { address } = req.params
   const { boundWitnessDiviner } = req.app
   const limitNumber = tryParseInt(limit) ?? defaultLimit
   assertEx(limitNumber > 0 && limitNumber <= maxLimit, `limit must be between 1 and ${maxLimit}`)
-  const parsedOrder = order?.toLowerCase?.() === 'asc' ? 'asc' : 'desc'
-  const query: BoundWitnessQueryPayload = {
-    archive: archive.archive,
-    limit: limitNumber,
-    order: parsedOrder,
-    schema: BoundWitnessQuerySchema,
-  }
+  const query: AddressHistoryQueryPayload = { address, limit: limitNumber, schema }
   if (offset) {
     query.offset = offset
-  }
-  if (address) {
-    query.address = address as string | [string]
   }
   const boundWitness = ((await new XyoDivinerWrapper(boundWitnessDiviner).divine([query])) as (XyoBoundWitness | null)[]).filter(exists)
   if (boundWitness) {
@@ -55,4 +45,4 @@ const handler: RequestHandler<
   }
 }
 
-export const getArchiveBlocks = asyncHandler(handler)
+export const getAddressHistory = asyncHandler(handler)
