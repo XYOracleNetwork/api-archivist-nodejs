@@ -30,18 +30,19 @@ const handler: RequestHandler<
   if (!archive) {
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
   }
-  const { address, limit, order, timestamp } = req.query
+  const { address, limit, order, offset } = req.query
   const { boundWitnessDiviner } = req.app
   const limitNumber = tryParseInt(limit) ?? defaultLimit
   assertEx(limitNumber > 0 && limitNumber <= maxLimit, `limit must be between 1 and ${maxLimit}`)
-  const timestampNumber = tryParseInt(timestamp)
   const parsedOrder = order?.toLowerCase?.() === 'asc' ? 'asc' : 'desc'
   const query: BoundWitnessQueryPayload = {
     archive: archive.archive,
     limit: limitNumber,
     order: parsedOrder,
     schema: BoundWitnessQuerySchema,
-    timestamp: timestampNumber,
+  }
+  if (offset) {
+    query.offset = offset
   }
   if (address) {
     query.address = address as string | [string]
