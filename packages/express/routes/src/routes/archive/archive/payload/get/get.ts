@@ -18,6 +18,7 @@ const handler: RequestHandler<ArchivePathParams, (XyoPayload | null)[], NoReqBod
   const { archive } = res.locals
   if (!archive) {
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
+    return
   }
   const { limit, order, timestamp, schema } = req.query
   const { payloadDiviner } = req.app
