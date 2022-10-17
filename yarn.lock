@@ -4245,7 +4245,7 @@ __metadata:
     "@xyo-network/archivist-middleware": "workspace:^"
     "@xyo-network/archivist-model": "workspace:^"
     "@xyo-network/archivist-modules-memory": "workspace:^"
-    "@xyo-network/archivist-mongo": "workspace:^"
+    "@xyo-network/archivist-modules-mongo": "workspace:^"
     "@xyo-network/archivist-query-handlers": "workspace:^"
     "@xyo-network/archivist-types": "workspace:^"
     dotenv: ^16.0.3
@@ -4378,9 +4378,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@xyo-network/archivist-mongo@workspace:^, @xyo-network/archivist-mongo@workspace:packages/core/modules-mongo":
+"@xyo-network/archivist-modules-mongo@workspace:^, @xyo-network/archivist-modules-mongo@workspace:packages/core/modules-mongo":
   version: 0.0.0-use.local
-  resolution: "@xyo-network/archivist-mongo@workspace:packages/core/modules-mongo"
+  resolution: "@xyo-network/archivist-modules-mongo@workspace:packages/core/modules-mongo"
   dependencies:
     "@types/lodash": ^4.14.186
     "@xylabs/assert": ^2.6.9
