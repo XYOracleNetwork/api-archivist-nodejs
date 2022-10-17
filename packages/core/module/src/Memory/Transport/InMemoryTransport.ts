@@ -1,5 +1,4 @@
-import { Identifiable } from '@xyo-network/archivist-model'
-import { Transport } from '@xyo-network/archivist-model/src/Transport/Transport'
+import { Identifiable, Transport } from '@xyo-network/archivist-model'
 
 // TODO: Use LRU cache
 export class InMemoryTransport<T extends Identifiable> implements Transport<T> {

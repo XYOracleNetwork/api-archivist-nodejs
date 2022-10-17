@@ -10,17 +10,18 @@ import {
   BoundWitnessArchivist,
   BoundWitnessDiviner,
   BoundWitnessStatsDiviner,
+  IdentifiableHuri,
   ModuleAddressDiviner,
   ModuleRegistry,
   PayloadArchivist,
   PayloadDiviner,
   PayloadStatsDiviner,
   Query,
+  Queue,
   SchemaStatsDiviner,
   UserManager,
   WitnessedPayloadArchivist,
 } from '@xyo-network/archivist-model'
-import { IdentifiableHuri, Queue } from '@xyo-network/archivist-queue'
 import { TYPES } from '@xyo-network/archivist-types'
 import { Logger } from '@xyo-network/shared'
 import { Application } from 'express'
