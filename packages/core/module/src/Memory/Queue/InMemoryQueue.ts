@@ -1,8 +1,6 @@
-import { Identifiable } from '@xyo-network/archivist-model'
-import { Queue } from '@xyo-network/archivist-model/src/Queue'
-import { Transport } from '@xyo-network/archivist-model/src/Transport/Transport'
+import { Identifiable, Queue, Transport } from '@xyo-network/archivist-model'
 
-import { InMemoryTransport } from '../Transport/InMemoryTransport'
+import { InMemoryTransport } from '../Transport'
 
 export class InMemoryQueue<T extends Identifiable> extends Queue<T> {
   constructor(protected transport: Transport<T> = new InMemoryTransport<T>()) {

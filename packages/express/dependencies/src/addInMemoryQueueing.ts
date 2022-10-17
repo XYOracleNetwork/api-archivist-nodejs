@@ -1,5 +1,5 @@
-import { Query } from '@xyo-network/archivist-model'
-import { IdentifiableHuri, InMemoryQueue, Queue } from '@xyo-network/archivist-queue'
+import { IdentifiableHuri, Query, Queue } from '@xyo-network/archivist-model'
+import { InMemoryQueue } from '@xyo-network/archivist-module'
 import { TYPES } from '@xyo-network/archivist-types'
 import { Container } from 'inversify'
 
