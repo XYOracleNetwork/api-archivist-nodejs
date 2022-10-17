@@ -9,19 +9,19 @@ import { isModule } from './isModule'
 
 const activeModules: Record<string, Module> = {}
 
-let populated = false
+let enumerated = false
 
-const populateStaticModules = (req: Request) => {
+const enumerateStaticModules = (req: Request) => {
   Object.values(req.app)
     .filter(isModule)
     .forEach((mod) => {
       activeModules[mod.address] = mod
     })
-  populated = true
+  enumerated = true
 }
 
 const handler: RequestHandler<AddressPathParams, ModuleDescription> = (req, res, next) => {
-  if (!populated) populateStaticModules(req)
+  if (!enumerated) enumerateStaticModules(req)
   const { address } = req.params
   if (address) {
     const normalizedAddress = trimAddressPrefix(address).toLowerCase()
