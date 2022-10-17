@@ -1,5 +1,6 @@
 import { QueryConverterRegistry } from '@xyo-network/archivist-express-lib'
 import {
+  AddressHistoryDiviner,
   ArchiveArchivist,
   ArchiveBoundWitnessArchivistFactory,
   ArchiveKeyArchivist,
@@ -46,6 +47,7 @@ declare global {
     interface AuthInfo extends UserCreationAuthInfo {}
 
     interface Application {
+      addressHistoryDiviner: AddressHistoryDiviner
       archiveArchivist: ArchiveArchivist
       archiveBoundWitnessArchivistFactory: ArchiveBoundWitnessArchivistFactory
       archiveKeyArchivist: ArchiveKeyArchivist
