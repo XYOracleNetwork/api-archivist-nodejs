@@ -24,10 +24,6 @@ const handler: RequestHandler<AddressPathParams, XyoBoundWitness[], NoReqBody, G
   res,
   next,
 ) => {
-  const { archive } = res.locals
-  if (!archive) {
-    next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
-  }
   const { limit, offset } = req.query
   const { address } = req.params
   const { addressHistoryDiviner } = req.app
