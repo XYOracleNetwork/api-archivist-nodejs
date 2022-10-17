@@ -20,8 +20,6 @@ const handler: RequestHandler<ArchivePathParams, XyoBoundWitnessWithMeta[], XyoB
   const body: XyoBoundWitnessWithMeta[] = Array.isArray(req.body) ? req.body : [req.body]
   const { payloads, sanitized } = prepareBoundWitnesses(body, boundWitnessMeta, payloadMeta)
 
-  console.warn('Schema Validation is Commented out!')
-  /*
   payloads.forEach(async (payload) => {
     const valid = await validatePayloadSchema(payload)
     if (!valid) {
@@ -29,7 +27,6 @@ const handler: RequestHandler<ArchivePathParams, XyoBoundWitnessWithMeta[], XyoB
       payloadWithExtraMeta._schemaValid = false
     }
   })
-  */
 
   const wrapper = new XyoArchivistWrapper(archiveBoundWitnessArchivistFactory(archive))
   await wrapper.insert(sanitized)

@@ -8,6 +8,7 @@ import {
   XyoPayloadWithMeta,
 } from '@xyo-network/archivist-model'
 
+import { BoundWitnessMapResult, flatMapBoundWitness } from '../BoundWitness'
 import { augmentWithMetadata } from './augmentWithMetadata'
 import { removePayloads } from './removePayloads'
 
@@ -21,10 +22,10 @@ export const prepareBoundWitnesses = (
   boundWitnessMetaData: XyoBoundWitnessMeta,
   payloadMetaData: XyoPayloadMeta,
 ): PrepareBoundWitnessesResult => {
-  const sanitized: XyoBoundWitnessWithMeta[] = removePayloads(augmentWithMetadata(boundWitnesses, boundWitnessMetaData))
-  const payloads: XyoPayloadWithMeta[] = augmentWithMetadata(
-    boundWitnesses.map((bw) => bw._payloads || []).flatMap((p) => p),
-    payloadMetaData,
-  )
+  const flattened: BoundWitnessMapResult = boundWitnesses
+    .map(flatMapBoundWitness)
+    .reduce((prev, curr) => [prev[0].concat(curr[0]), prev[1].concat(curr[1])], [[], []])
+  const sanitized: XyoBoundWitnessWithMeta[] = removePayloads(augmentWithMetadata(flattened[0], boundWitnessMetaData))
+  const payloads: XyoPayloadWithMeta[] = augmentWithMetadata(flattened[1], payloadMetaData)
   return { payloads, sanitized }
 }

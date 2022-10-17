@@ -1,7 +1,7 @@
 import { assertEx } from '@xylabs/assert'
 import { asyncHandler, NoReqBody, tryParseInt } from '@xylabs/sdk-api-express-ecs'
-import { XyoArchivistWrapper } from '@xyo-network/archivist'
-import { ArchiveLocals, ArchivePathParams, XyoPayloadFilterPredicate } from '@xyo-network/archivist-model'
+import { ArchiveLocals, ArchivePathParams, PayloadQueryPayload, PayloadQuerySchema } from '@xyo-network/archivist-model'
+import { XyoDivinerWrapper } from '@xyo-network/diviner'
 import { XyoPayload } from '@xyo-network/payload'
 import { RequestHandler } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
@@ -20,21 +20,21 @@ const handler: RequestHandler<ArchivePathParams, (XyoPayload | null)[], NoReqBod
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
   }
   const { limit, order, timestamp, schema } = req.query
-  const { archivePayloadsArchivistFactory } = req.app
+  const { payloadDiviner } = req.app
   const limitNumber = tryParseInt(limit) ?? 10
   const timestampNumber = tryParseInt(timestamp)
   assertEx(limitNumber > 0 && limitNumber <= maxLimit, `limit must be between 1 and ${maxLimit}`)
   const parsedOrder = order?.toLowerCase?.() === 'asc' ? 'asc' : 'desc'
-  const filter: XyoPayloadFilterPredicate<XyoPayload> = {
+  const filter: PayloadQueryPayload = {
+    archive: archive.archive,
     limit: limitNumber,
     order: parsedOrder,
-    schema,
+    schema: PayloadQuerySchema,
     timestamp: timestampNumber,
   }
-
-  const wrapper = new XyoArchivistWrapper(archivePayloadsArchivistFactory(archive.archive))
-  const payloads = await wrapper.find(filter)
-
+  if (schema) filter.schemas = [schema]
+  const wrapper = new XyoDivinerWrapper(payloadDiviner)
+  const payloads = await wrapper.divine([filter])
   if (payloads) {
     res.json(payloads)
   } else {

@@ -1,4 +1,4 @@
-import { exists } from '@xylabs/sdk-js'
+import { exists } from '@xylabs/exists'
 import { XyoArchivistWrapper } from '@xyo-network/archivist'
 import { requestCanAccessArchive } from '@xyo-network/archivist-express-lib'
 import { PayloadPointerPayload, payloadPointerSchema, XyoPayloadFilterPredicate, XyoPayloadWithMeta } from '@xyo-network/archivist-model'

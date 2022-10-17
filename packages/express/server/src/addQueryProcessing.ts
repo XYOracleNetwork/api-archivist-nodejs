@@ -1,8 +1,7 @@
 import { assertEx } from '@xylabs/assert'
 import { Logger } from '@xylabs/sdk-api-express-ecs'
 import { dependencies } from '@xyo-network/archivist-dependencies'
-import { Query, QueryProcessorRegistry, WitnessedPayloadArchivist } from '@xyo-network/archivist-model'
-import { IdentifiableHuri, Queue } from '@xyo-network/archivist-queue'
+import { IdentifiableHuri, Query, QueryProcessorRegistry, Queue, WitnessedPayloadArchivist } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { Huri } from '@xyo-network/payload'
 

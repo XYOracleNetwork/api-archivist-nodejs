@@ -6,17 +6,23 @@ import {
   ArchivePayloadsArchivistFactory,
   ArchivePermissionsArchivistFactory,
   BoundWitnessArchivist,
+  BoundWitnessDiviner,
   BoundWitnessStatsDiviner,
+  IdentifiableHuri,
+  ModuleAddressDiviner,
+  ModuleRegistry,
   PayloadArchivist,
+  PayloadDiviner,
   PayloadStatsDiviner,
   Query,
   QueryProcessorRegistry,
+  Queue,
   SchemaStatsDiviner,
   UserManager,
   UserWithoutId,
   WitnessedPayloadArchivist,
 } from '@xyo-network/archivist-model'
-import { IdentifiableHuri, Queue } from '@xyo-network/archivist-queue'
+import { Logger } from '@xyo-network/shared'
 // NOTE: Required import since passport types (which we need to extend) extend Express
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import passport from 'passport'
@@ -47,8 +53,13 @@ declare global {
       archivePermissionsArchivistFactory: ArchivePermissionsArchivistFactory
       archivistWitnessedPayloadArchivist: WitnessedPayloadArchivist
       boundWitnessArchivist: BoundWitnessArchivist
+      boundWitnessDiviner: BoundWitnessDiviner
       boundWitnessStatsDiviner: BoundWitnessStatsDiviner
+      logger: Logger
+      moduleAddressDiviner: ModuleAddressDiviner
+      moduleRegistry: ModuleRegistry
       payloadArchivist: PayloadArchivist
+      payloadDiviner: PayloadDiviner
       payloadStatsDiviner: PayloadStatsDiviner
       queryConverters: QueryConverterRegistry
       queryProcessors: QueryProcessorRegistry
@@ -63,9 +74,9 @@ declare global {
 export * from './archiveLocals'
 export * from './auth'
 export * from './doc'
+export * from './LoggingErrorHandler'
 export * from './nodeEnv'
 export * from './PasswordHasher'
 export * from './QueryProcessor'
 export * from './RequestToQueryConverter'
-export * from './rollbar'
 export * from './standardResponses'

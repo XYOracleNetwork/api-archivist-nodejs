@@ -28,19 +28,23 @@
   "license": "LGPL-3.0",
   "dependencies": {
     "@xylabs/assert": "^2.6.9",
-    "@xylabs/sdk-api-express-ecs": "^1.2.4",
-    "@xyo-network/account": "^2.36.0-rc.2",
+    "@xylabs/sdk-api-express-ecs": "^1.2.5",
+    "@xyo-network/account": "^2.37.6",
     "@xyo-network/archivist-express-lib": "workspace:^",
     "@xyo-network/archivist-middleware": "workspace:^",
     "@xyo-network/archivist-model": "workspace:^",
-    "@xyo-network/archivist-mongo": "workspace:^",
+    "@xyo-network/archivist-modules-memory": "workspace:^",
+    "@xyo-network/archivist-modules-mongo": "workspace:^",
     "@xyo-network/archivist-query-handlers": "workspace:^",
-    "@xyo-network/archivist-queue": "workspace:^",
     "@xyo-network/archivist-types": "workspace:^",
-    "dotenv": "^16.0.2",
-    "express": "^4.18.1",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
     "inversify": "^6.0.1",
     "reflect-metadata": "^0.1.13"
+  },
+  "peerDependencies": {
+    "axios": "*",
+    "pako": "*"
   },
   "private": true,
   "types": "dist/esm/index.d.ts"

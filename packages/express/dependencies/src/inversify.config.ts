@@ -4,13 +4,14 @@ import { assertEx } from '@xylabs/assert'
 import { getLogger, Logger, LoggerVerbosity } from '@xylabs/sdk-api-express-ecs'
 import { BcryptPasswordHasher } from '@xyo-network/archivist-middleware'
 import { PasswordHasher, User } from '@xyo-network/archivist-model'
-import { addMongo } from '@xyo-network/archivist-mongo'
+import { addMongo } from '@xyo-network/archivist-modules-mongo'
 import { TYPES } from '@xyo-network/archivist-types'
 import { config } from 'dotenv'
 import { Container } from 'inversify'
 
 import { addAddresses } from './addAddresses'
 import { addAuth } from './addAuth'
+import { addInMemoryModuleRegistry } from './addInMemoryModuleRegistry'
 import { addInMemoryQueueing } from './addInMemoryQueueing'
 import { addPayloadHandlers } from './addPayloadHandlers'
 import { addQueryConverterRegistry } from './addQueryConverterRegistry'
@@ -56,6 +57,7 @@ export const configureDependencies = async () => {
   await addMongo(dependencies)
   addAuth(dependencies)
   addPayloadHandlers(dependencies)
+  addInMemoryModuleRegistry(dependencies)
   addInMemoryQueueing(dependencies)
   addQueryConverterRegistry(dependencies)
   addQueryProcessorRegistry(dependencies)

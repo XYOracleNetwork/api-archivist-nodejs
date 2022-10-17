@@ -1,4 +1,4 @@
-import { exists } from '@xylabs/sdk-js'
+import { exists } from '@xylabs/exists'
 import { XyoBoundWitnessWithMeta } from '@xyo-network/archivist-model'
 
 import { PostNodeRequest } from './PostNodeRequest'

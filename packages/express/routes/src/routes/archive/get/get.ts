@@ -1,5 +1,5 @@
+import { exists } from '@xylabs/exists'
 import { asyncHandler, NoReqParams } from '@xylabs/sdk-api-express-ecs'
-import { exists } from '@xylabs/sdk-js'
 import { XyoArchive } from '@xyo-network/api'
 import { defaultPublicArchives } from '@xyo-network/archivist-model'
 import { RequestHandler } from 'express'
