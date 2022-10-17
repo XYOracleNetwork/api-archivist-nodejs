@@ -11,7 +11,7 @@ const activeModules: Record<string, Module> = {}
 
 let populated = false
 
-const populateActiveModules = (req: Request) => {
+const populateStaticModules = (req: Request) => {
   Object.values(req.app)
     .filter(isModule)
     .forEach((mod) => {
@@ -21,7 +21,7 @@ const populateActiveModules = (req: Request) => {
 }
 
 const handler: RequestHandler<AddressPathParams, ModuleDescription> = (req, res, next) => {
-  if (!populated) populateActiveModules(req)
+  if (!populated) populateStaticModules(req)
   const { address } = req.params
   if (address) {
     // TODO: ToLower and remove hex prefix
