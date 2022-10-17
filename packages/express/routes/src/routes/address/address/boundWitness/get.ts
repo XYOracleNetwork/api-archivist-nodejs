@@ -14,12 +14,12 @@ const defaultLimit = 10
 const maxLimit = 20
 const schema = AddressHistoryQuerySchema
 
-export interface GetArchiveBlocksQueryParams extends NoReqQuery {
+export interface GetAddressHistoryQueryParams extends NoReqQuery {
   limit?: string
   offset?: string
 }
 
-const handler: RequestHandler<AddressPathParams, XyoBoundWitness[], NoReqBody, GetArchiveBlocksQueryParams, ArchiveLocals> = async (
+const handler: RequestHandler<AddressPathParams, XyoBoundWitness[], NoReqBody, GetAddressHistoryQueryParams, ArchiveLocals> = async (
   req,
   res,
   next,
@@ -30,14 +30,14 @@ const handler: RequestHandler<AddressPathParams, XyoBoundWitness[], NoReqBody, G
   }
   const { limit, offset } = req.query
   const { address } = req.params
-  const { boundWitnessDiviner } = req.app
+  const { addressHistoryDiviner } = req.app
   const limitNumber = tryParseInt(limit) ?? defaultLimit
   assertEx(limitNumber > 0 && limitNumber <= maxLimit, `limit must be between 1 and ${maxLimit}`)
   const query: AddressHistoryQueryPayload = { address, limit: limitNumber, schema }
   if (offset) {
     query.offset = offset
   }
-  const boundWitness = ((await new XyoDivinerWrapper(boundWitnessDiviner).divine([query])) as (XyoBoundWitness | null)[]).filter(exists)
+  const boundWitness = ((await new XyoDivinerWrapper(addressHistoryDiviner).divine([query])) as (XyoBoundWitness | null)[]).filter(exists)
   if (boundWitness) {
     res.json(scrubBoundWitnesses(boundWitness))
   } else {
