@@ -4,9 +4,9 @@ import { StatusCodes } from 'http-status-codes'
 import { claimArchive, getBlockWithPayloads, getTokenForUnitTestUser, postBlock, request, unitTestSigningAccount } from '../../../../testUtil'
 
 const defaultReturnLength = 10
-const address = unitTestSigningAccount.addressValue.hex
+const unitTestAddress = unitTestSigningAccount.addressValue.hex
 
-const getAddressBoundWitnesses = async (expectedReturnLength = defaultReturnLength): Promise<XyoBoundWitness[]> => {
+const getAddressHistory = async (address: string = unitTestAddress, expectedReturnLength = defaultReturnLength): Promise<XyoBoundWitness[]> => {
   const result = await (await request()).get(`/address/${address}/boundwitness`).query({ limit: 10 }).expect(StatusCodes.OK)
   const history = result.body.data
   expect(history).toBeTruthy()
@@ -27,14 +27,19 @@ describe('/address/:address/boundwitness', () => {
       expect(response.length).toBe(1)
     }
   })
-  it(`With no argument, retrieves the ${defaultReturnLength} most recently posted blocks`, async () => {
-    // Ensure the original payloads only show up when getting recent from that archive
-    const recent = await getAddressBoundWitnesses()
-    recent.map((block) => expect(block.addresses).toContain(address))
+  describe('limit', () => {
+    it(`With no argument supplied, retrieves the ${defaultReturnLength} most recently posted blocks`, async () => {
+      const recent = await getAddressHistory()
+      recent.map((block) => expect(block.addresses).toContain(unitTestAddress))
+    })
   })
-  it('Only retrieves recently posted blocks from the address specified in the path', async () => {
-    // Ensure the original blocks only show up when getting recent from that archive
-    const recent = await getAddressBoundWitnesses()
-    recent.map((block) => expect(block.addresses).toContain(address))
+  describe('address', () => {
+    it('with valid address, returns bound witnesses from the address specified', async () => {
+      const recent = await getAddressHistory()
+      recent.map((block) => expect(block.addresses).toContain(unitTestAddress))
+    })
+    it('with non-existent address, returns an empty array', async () => {
+      await getAddressHistory('foo', 0)
+    })
   })
 })
