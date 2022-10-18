@@ -1,46 +1,40 @@
 import { XyoBoundWitness } from '@xyo-network/boundwitness'
+import { StatusCodes } from 'http-status-codes'
 
-import { claimArchive, getBlockWithPayloads, getRecentBlocks, getTokenForUnitTestUser, postBlock } from '../../../../testUtil'
+import { claimArchive, getBlockWithPayloads, getTokenForUnitTestUser, postBlock, request, unitTestSigningAccount } from '../../../../testUtil'
 
 const defaultReturnLength = 10
+const address = unitTestSigningAccount.addressValue.hex
 
-const getAddressBoundWitnesses = async (address: string, token: string, expectedReturnLength = defaultReturnLength): Promise<XyoBoundWitness[]> => {
-  const recent = await getRecentBlocks(address, token)
-  expect(recent).toBeTruthy()
-  expect(Array.isArray(recent)).toBe(true)
-  expect(recent.length).toBe(expectedReturnLength)
-  return recent
+const getAddressBoundWitnesses = async (expectedReturnLength = defaultReturnLength): Promise<XyoBoundWitness[]> => {
+  const result = await (await request()).get(`/address/${address}/boundwitness`).query({ limit: 10 }).expect(StatusCodes.OK)
+  const history = result.body.data
+  expect(history).toBeTruthy()
+  expect(Array.isArray(history)).toBe(true)
+  expect(history.length).toBe(expectedReturnLength)
+  return history
 }
 
 describe('/address/:address/boundwitness', () => {
   const blocksToPost = defaultReturnLength + 5
-  const otherBlocksToPost = Math.ceil(defaultReturnLength / 2)
   let token = ''
   let archive = ''
-  let otherArchive = ''
   beforeAll(async () => {
     token = await getTokenForUnitTestUser()
     archive = (await claimArchive(token)).archive
-    otherArchive = (await claimArchive(token)).archive
-
-    // NOTE: POST in parallel to speed up test
-    const posted = new Array(blocksToPost).fill(null).map(async () => {
+    for (let i = 0; i < blocksToPost; i++) {
       const response = await postBlock(getBlockWithPayloads(1), archive)
       expect(response.length).toBe(1)
-    })
-    await Promise.all(posted)
+    }
   })
   it(`With no argument, retrieves the ${defaultReturnLength} most recently posted blocks`, async () => {
     // Ensure the original payloads only show up when getting recent from that archive
-    const recent = await getAddressBoundWitnesses(archive, token)
-    recent.map((block) => expect(block.addresses).toContain(archive))
+    const recent = await getAddressBoundWitnesses()
+    recent.map((block) => expect(block.addresses).toContain(address))
   })
-  it('Only retrieves recently posted blocks from the archive specified in the path', async () => {
+  it('Only retrieves recently posted blocks from the address specified in the path', async () => {
     // Ensure the original blocks only show up when getting recent from that archive
-    const recent = await getAddressBoundWitnesses(otherArchive, token, otherBlocksToPost)
-    recent.map((block) => expect(block.addresses).toContain(otherArchive))
-  })
-  it('When no blocks have been posted to the archive, returns an empty array', async () => {
-    await getAddressBoundWitnesses((await claimArchive(token)).archive, token, 0)
+    const recent = await getAddressBoundWitnesses()
+    recent.map((block) => expect(block.addresses).toContain(address))
   })
 })
