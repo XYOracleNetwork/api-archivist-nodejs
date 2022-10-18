@@ -1,4 +1,5 @@
-import { XyoBoundWitness } from '@xyo-network/boundwitness'
+import { BoundWitnessWrapper, XyoBoundWitness } from '@xyo-network/boundwitness'
+import exp from 'constants'
 import { StatusCodes } from 'http-status-codes'
 
 import { claimArchive, getBlockWithPayloads, getTokenForUnitTestUser, postBlock, request, unitTestSigningAccount } from '../../../../testUtil'
@@ -34,12 +35,24 @@ describe('/address/:address/boundwitness', () => {
     })
   })
   describe('address', () => {
-    it('with valid address, returns bound witnesses from the address specified', async () => {
-      const recent = await getAddressHistory()
-      recent.map((block) => expect(block.addresses).toContain(unitTestAddress))
+    describe('with valid address', () => {
+      it('returns bound witnesses from the address specified', async () => {
+        const recent = await getAddressHistory()
+        recent.map((block) => expect(block.addresses).toContain(unitTestAddress))
+      })
+      it('returns a block chain in sequential order', async () => {
+        const recent = await getAddressHistory()
+        for (let i = 1; i < recent.length; i++) {
+          const current = recent[i - 1]
+          const previous = recent[i]
+          expect(current.previous_hashes).toContain(new BoundWitnessWrapper(previous).hash)
+        }
+      })
     })
-    it('with non-existent address, returns an empty array', async () => {
-      await getAddressHistory('foo', 0)
+    describe('with non-existent address', () => {
+      it('returns an empty array', async () => {
+        await getAddressHistory('foo', 0)
+      })
     })
   })
 })
