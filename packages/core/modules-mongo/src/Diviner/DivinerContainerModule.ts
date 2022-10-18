@@ -22,7 +22,7 @@ import { MongoDBPayloadDiviner } from './Payload'
 import { MongoDBArchivePayloadStatsDiviner } from './PayloadStats'
 import { MongoDBArchiveSchemaStatsDiviner } from './SchemaStats'
 
-export const DivinerContainerModule = new ContainerModule((bind: interfaces.Bind, _unbind: interfaces.Unbind) => {
+export const DivinerContainerModule = new ContainerModule((bind: interfaces.Bind) => {
   bind(MongoDBAddressHistoryDiviner).toSelf().inSingletonScope()
   bind<AddressHistoryDiviner>(TYPES.AddressHistoryDiviner).toService(MongoDBAddressHistoryDiviner)
   bind<JobProvider>(TYPES.JobProvider).toService(MongoDBAddressHistoryDiviner)
