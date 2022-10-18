@@ -26,7 +26,7 @@ export abstract class AbstractPayloadArchivist<T extends EmptyObject = EmptyObje
   implements PayloadArchivist<T>
 {
   constructor(protected readonly account: XyoAccount, protected readonly config?: ArchiveModuleConfig) {
-    super(config, account)
+    super({ account, config })
   }
 
   override queries() {

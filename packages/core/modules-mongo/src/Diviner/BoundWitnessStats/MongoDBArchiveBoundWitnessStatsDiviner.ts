@@ -42,12 +42,12 @@ export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner implement
   protected resumeAfter: ResumeToken | undefined = undefined
 
   constructor(
-    @inject(TYPES.Logger) protected logger: Logger,
+    @inject(TYPES.Logger) logger: Logger,
     @inject(TYPES.Account) account: XyoAccount,
     @inject(TYPES.ArchiveArchivist) protected archiveArchivist: ArchiveArchivist,
     @inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly sdk: BaseMongoSdk<XyoBoundWitnessWithMeta>,
   ) {
-    super({ schema: XyoArchivistPayloadDivinerConfigSchema }, account)
+    super({ account, config: { schema: XyoArchivistPayloadDivinerConfigSchema }, logger })
   }
 
   get jobs(): Job[] {
@@ -75,12 +75,14 @@ export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner implement
     return [new XyoPayloadBuilder<BoundWitnessStatsPayload>({ schema: BoundWitnessStatsSchema }).fields({ count }).build()]
   }
 
-  override async initialize(): Promise<void> {
+  override async start(): Promise<typeof this> {
     await this.registerWithChangeStream()
+    return await super.start()
   }
 
-  override async shutdown(): Promise<void> {
+  override async stop(): Promise<typeof this> {
     await this.changeStream?.close()
+    return await super.stop()
   }
 
   private divineAllArchives = () => this.sdk.useCollection((collection) => collection.estimatedDocumentCount())
@@ -101,15 +103,15 @@ export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner implement
   }
 
   private divineArchivesBatch = async () => {
-    this.logger.log(`MongoDBArchiveBoundWitnessStatsDiviner.DivineArchivesBatch: Divining - Limit: ${this.batchLimit} Offset: ${this.nextOffset}`)
+    this.logger?.log(`MongoDBArchiveBoundWitnessStatsDiviner.DivineArchivesBatch: Divining - Limit: ${this.batchLimit} Offset: ${this.nextOffset}`)
     const result = await this.archiveArchivist.find({ limit: this.batchLimit, offset: this.nextOffset })
     const archives = result.map((archive) => archive?.archive).filter(exists)
-    this.logger.log(`MongoDBArchiveBoundWitnessStatsDiviner.DivineArchivesBatch: Divining ${archives.length} Archives`)
+    this.logger?.log(`MongoDBArchiveBoundWitnessStatsDiviner.DivineArchivesBatch: Divining ${archives.length} Archives`)
     this.nextOffset = archives.length < this.batchLimit ? 0 : this.nextOffset + this.batchLimit
     const results = await Promise.allSettled(archives.map(this.divineArchiveFull))
     const succeeded = results.filter((result) => result.status === 'fulfilled').length
     const failed = results.filter((result) => result.status === 'rejected').length
-    this.logger.log(`MongoDBArchiveBoundWitnessStatsDiviner.DivineArchivesBatch: Divined - Succeeded: ${succeeded} Failed: ${failed}`)
+    this.logger?.log(`MongoDBArchiveBoundWitnessStatsDiviner.DivineArchivesBatch: Divined - Succeeded: ${succeeded} Failed: ${failed}`)
   }
 
   private processChange = (change: ChangeStreamInsertDocument<XyoBoundWitnessWithMeta>) => {
@@ -119,7 +121,7 @@ export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner implement
   }
 
   private registerWithChangeStream = async () => {
-    this.logger.log('MongoDBArchiveBoundWitnessStatsDiviner.RegisterWithChangeStream: Registering')
+    this.logger?.log('MongoDBArchiveBoundWitnessStatsDiviner.RegisterWithChangeStream: Registering')
     const wrapper = MongoClientWrapper.get(this.sdk.uri, this.sdk.config.maxPoolSize)
     const connection = await wrapper.connect()
     assertEx(connection, 'Connection failed')
@@ -128,7 +130,7 @@ export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner implement
     this.changeStream = collection.watch([], opts)
     this.changeStream.on('change', this.processChange)
     this.changeStream.on('error', this.registerWithChangeStream)
-    this.logger.log('MongoDBArchiveBoundWitnessStatsDiviner.RegisterWithChangeStream: Registered')
+    this.logger?.log('MongoDBArchiveBoundWitnessStatsDiviner.RegisterWithChangeStream: Registered')
   }
 
   private storeDivinedResult = async (archive: string, count: number) => {
@@ -142,7 +144,7 @@ export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner implement
   }
 
   private updateChanges = async () => {
-    this.logger.log('MongoDBArchiveBoundWitnessStatsDiviner.UpdateChanges: Updating')
+    this.logger?.log('MongoDBArchiveBoundWitnessStatsDiviner.UpdateChanges: Updating')
     const updates = Object.keys(this.pendingCounts).map((archive) => {
       const count = this.pendingCounts[archive]
       this.pendingCounts[archive] = 0
@@ -154,6 +156,6 @@ export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner implement
     const results = await Promise.allSettled(updates)
     const succeeded = results.filter((result) => result.status === 'fulfilled').length
     const failed = results.filter((result) => result.status === 'rejected').length
-    this.logger.log(`MongoDBArchiveBoundWitnessStatsDiviner.UpdateChanges: Updated - Succeeded: ${succeeded} Failed: ${failed}`)
+    this.logger?.log(`MongoDBArchiveBoundWitnessStatsDiviner.UpdateChanges: Updated - Succeeded: ${succeeded} Failed: ${failed}`)
   }
 }

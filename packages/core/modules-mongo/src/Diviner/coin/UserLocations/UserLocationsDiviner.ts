@@ -44,13 +44,13 @@ export const isLocationPayload = (x?: XyoPayload | null): x is XyoLocationPayloa
 @injectable()
 export class CoinUserLocationsDiviner extends XyoDiviner implements CoinUserLocationsDiviner, JobProvider {
   constructor(
-    @inject(TYPES.Logger) protected readonly logger: Logger,
+    @inject(TYPES.Logger) logger: Logger,
     @inject(TYPES.Account) protected readonly account: XyoAccount,
     @inject(TYPES.PayloadArchivist) protected readonly payloads: PayloadArchivist,
     @inject(TYPES.BoundWitnessArchivist) protected readonly bws: BoundWitnessesArchivist,
     @inject(MONGO_TYPES.PayloadSdkMongo) protected readonly sdk: BaseMongoSdk<XyoPayloadWithMeta>,
   ) {
-    super({ schema: XyoArchivistPayloadDivinerConfigSchema }, account)
+    super({ account, config: { schema: XyoArchivistPayloadDivinerConfigSchema }, logger })
   }
 
   get jobs(): Job[] {
@@ -71,7 +71,7 @@ export class CoinUserLocationsDiviner extends XyoDiviner implements CoinUserLoca
     if (user) {
       const wrapper = new PayloadWrapper(user)
       // TODO: Extract relevant query values here
-      this.logger.log('CoinUserLocationsDiviner.Divine: Processing query')
+      this.logger?.log('CoinUserLocationsDiviner.Divine: Processing query')
       // Simulating work
       const bwList = (await this.bws.find({ payload_hashes: [wrapper.hash] })) ?? []
       const locationHashes = bwList
@@ -86,31 +86,27 @@ export class CoinUserLocationsDiviner extends XyoDiviner implements CoinUserLoca
         })
         .flat()
       const locations = compact(await this.payloads.get(locationHashes)) as unknown as XyoLocationPayload[]
-      this.logger.log('CoinUserLocationsDiviner.Divine: Processed query')
+      this.logger?.log('CoinUserLocationsDiviner.Divine: Processed query')
       return locations
     }
     // else return empty response
     return []
   }
 
-  override async initialize(): Promise<void> {
-    this.logger.log('CoinUserLocationsDiviner.Initialize: Initializing')
-    // TODO: Any async init here
-    await Promise.resolve()
-    this.logger.log('CoinUserLocationsDiviner.Initialize: Initialized')
+  override async start(): Promise<typeof this> {
+    // await this.registerWithChangeStream()
+    return await super.start()
   }
 
-  override async shutdown(): Promise<void> {
-    this.logger.log('CoinUserLocationsDiviner.Shutdown: Shutting down')
-    // TODO: Any async shutdown
-    await Promise.resolve()
-    this.logger.log('CoinUserLocationsDiviner.Shutdown: Shutdown')
+  override async stop(): Promise<typeof this> {
+    // await this.changeStream?.close()
+    return await super.stop()
   }
 
   private divineUserLocationsBatch = async () => {
-    this.logger.log('CoinUserLocationsDiviner.DivineUserLocationsBatch: Divining user locations for batch')
+    this.logger?.log('CoinUserLocationsDiviner.DivineUserLocationsBatch: Divining user locations for batch')
     // TODO: Any background/batch processing here
     await Promise.resolve()
-    this.logger.log('CoinUserLocationsDiviner.DivineUserLocationsBatch: Divined user locations for batch')
+    this.logger?.log('CoinUserLocationsDiviner.DivineUserLocationsBatch: Divined user locations for batch')
   }
 }

@@ -25,11 +25,11 @@ import { MONGO_TYPES } from '../../types'
 @injectable()
 export class MongoDBAddressHistoryDiviner extends XyoDiviner implements AddressHistoryDiviner, JobProvider {
   constructor(
-    @inject(TYPES.Logger) protected logger: Logger,
+    @inject(TYPES.Logger) logger: Logger,
     @inject(TYPES.Account) account: XyoAccount,
     @inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly sdk: BaseMongoSdk<XyoBoundWitnessWithMeta>,
   ) {
-    super({ schema: XyoArchivistPayloadDivinerConfigSchema }, account)
+    super({ account, config: { schema: XyoArchivistPayloadDivinerConfigSchema }, logger })
   }
 
   get jobs(): Job[] {
@@ -56,12 +56,14 @@ export class MongoDBAddressHistoryDiviner extends XyoDiviner implements AddressH
     return blocks.map(removeId)
   }
 
-  override async initialize(): Promise<void> {
+  override async start(_timeout?: number): Promise<typeof this> {
     // await this.registerWithChangeStream()
+    return await super.start()
   }
 
-  override async shutdown(): Promise<void> {
+  override async stop(_timeout?: number): Promise<typeof this> {
     // await this.changeStream?.close()
+    return await super.stop()
   }
 
   private getBlocks = async (hash: string, address: string, limit: number): Promise<XyoBoundWitnessWithMeta[]> => {

@@ -4,6 +4,6 @@ import { XyoModule } from '@xyo-network/module'
 
 export const initializeModules = async () => {
   const modules: XyoModule[] = dependencies.getAll(TYPES.Module)
-  const initializables = modules.map((mod) => mod.initialize())
+  const initializables = modules.map((mod) => mod.start())
   await Promise.all(initializables)
 }
