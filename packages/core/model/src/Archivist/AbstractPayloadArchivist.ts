@@ -30,14 +30,7 @@ export abstract class AbstractPayloadArchivist<T extends EmptyObject = EmptyObje
   }
 
   override queries() {
-    return [
-      XyoArchivistFindQuerySchema,
-      XyoArchivistGetQuerySchema,
-      XyoArchivistInsertQuerySchema,
-      // TODO: Support initialize, etc.
-      // XyoModuleInitializeQuerySchema,
-      // XyoModuleShutdownQuerySchema,
-    ]
+    return [XyoArchivistFindQuerySchema, XyoArchivistGetQuerySchema, XyoArchivistInsertQuerySchema]
   }
   override async query<Q extends XyoQuery = XyoQuery>(query: Q, payloads?: XyoPayloads): Promise<ModuleQueryResult<XyoPayload>> {
     const wrapper = QueryBoundWitnessWrapper.parseQuery<XyoArchivistQuery>(query, payloads)

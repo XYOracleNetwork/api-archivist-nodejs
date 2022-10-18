@@ -25,14 +25,7 @@ export abstract class AbstractBoundWitnessArchivist extends XyoModule<XyoArchivi
   }
 
   public override queries() {
-    return [
-      XyoArchivistFindQuerySchema,
-      XyoArchivistGetQuerySchema,
-      XyoArchivistInsertQuerySchema,
-      // TODO: Support initialize, etc.
-      // XyoModuleInitializeQuerySchema,
-      // XyoModuleShutdownQuerySchema,
-    ]
+    return [XyoArchivistFindQuerySchema, XyoArchivistGetQuerySchema, XyoArchivistInsertQuerySchema]
   }
 
   override async query<T extends XyoQuery = XyoQuery>(query: T, payloads?: XyoPayloads): Promise<ModuleQueryResult<XyoPayload>> {
