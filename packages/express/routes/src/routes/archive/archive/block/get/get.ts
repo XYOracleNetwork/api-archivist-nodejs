@@ -28,6 +28,7 @@ const handler: RequestHandler<
   const { archive } = res.locals
   if (!archive) {
     next({ message: ReasonPhrases.NOT_FOUND, statusCode: StatusCodes.NOT_FOUND })
+    return
   }
   const { address, limit, order, timestamp } = req.query
   const { boundWitnessDiviner } = req.app

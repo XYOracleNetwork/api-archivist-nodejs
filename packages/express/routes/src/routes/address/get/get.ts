@@ -1,31 +1,31 @@
 // import { asyncHandler } from '@xylabs/sdk-api-express-ecs'
-import { getModuleDescription } from '@xyo-network/archivist-lib'
+import { getModuleDescription, trimAddressPrefix } from '@xyo-network/archivist-lib'
 import { ModuleDescription } from '@xyo-network/archivist-model'
 import { Module } from '@xyo-network/module'
 import { Request, RequestHandler } from 'express'
 
-import { AddressPathParams } from './AddressPathParams'
+import { AddressPathParams } from '../AddressPathParams'
 import { isModule } from './isModule'
 
 const activeModules: Record<string, Module> = {}
 
-let populated = false
+let enumerated = false
 
-const populateActiveModules = (req: Request) => {
-  const { payloadArchivist, boundWitnessArchivist, schemaStatsDiviner, payloadStatsDiviner, boundWitnessStatsDiviner } = req.app
-  const modules = [payloadArchivist, boundWitnessArchivist, schemaStatsDiviner, payloadStatsDiviner, boundWitnessStatsDiviner]
-  modules.filter(isModule).forEach((mod) => {
-    activeModules[mod.address] = mod
-  })
-  populated = true
+const enumerateStaticModules = (req: Request) => {
+  Object.values(req.app)
+    .filter(isModule)
+    .forEach((mod) => {
+      activeModules[mod.address] = mod
+    })
+  enumerated = true
 }
 
 const handler: RequestHandler<AddressPathParams, ModuleDescription> = (req, res, next) => {
-  if (!populated) populateActiveModules(req)
+  if (!enumerated) enumerateStaticModules(req)
   const { address } = req.params
   if (address) {
-    // TODO: ToLower and remove hex prefix
-    const mod = activeModules[address]
+    const normalizedAddress = trimAddressPrefix(address).toLowerCase()
+    const mod = activeModules[normalizedAddress]
     if (mod) {
       res.json(getModuleDescription(mod))
       return

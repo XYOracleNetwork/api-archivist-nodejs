@@ -1,5 +1,6 @@
 import { QueryConverterRegistry } from '@xyo-network/archivist-express-lib'
 import {
+  AddressHistoryDiviner,
   ArchiveArchivist,
   ArchiveBoundWitnessArchivistFactory,
   ArchiveKeyArchivist,
@@ -8,6 +9,7 @@ import {
   BoundWitnessArchivist,
   BoundWitnessDiviner,
   BoundWitnessStatsDiviner,
+  IdentifiableHuri,
   ModuleAddressDiviner,
   ModuleRegistry,
   PayloadArchivist,
@@ -15,12 +17,12 @@ import {
   PayloadStatsDiviner,
   Query,
   QueryProcessorRegistry,
+  Queue,
   SchemaStatsDiviner,
   UserManager,
   UserWithoutId,
   WitnessedPayloadArchivist,
 } from '@xyo-network/archivist-model'
-import { IdentifiableHuri, Queue } from '@xyo-network/archivist-queue'
 import { Logger } from '@xyo-network/shared'
 // NOTE: Required import since passport types (which we need to extend) extend Express
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -45,6 +47,7 @@ declare global {
     interface AuthInfo extends UserCreationAuthInfo {}
 
     interface Application {
+      addressHistoryDiviner: AddressHistoryDiviner
       archiveArchivist: ArchiveArchivist
       archiveBoundWitnessArchivistFactory: ArchiveBoundWitnessArchivistFactory
       archiveKeyArchivist: ArchiveKeyArchivist

@@ -1,5 +1,5 @@
 import { ModuleRegistry } from '@xyo-network/archivist-model'
-import { InMemoryModuleRegistry } from '@xyo-network/archivist-module'
+import { InMemoryModuleRegistry } from '@xyo-network/archivist-modules-memory'
 import { TYPES } from '@xyo-network/archivist-types'
 import { Container } from 'inversify'
 

@@ -2,6 +2,7 @@ import { assertEx } from '@xylabs/assert'
 import { dependencies } from '@xyo-network/archivist-dependencies'
 import { SchemaToQueryProcessorRegistry, XyoPayloadToQueryConverterRegistry } from '@xyo-network/archivist-middleware'
 import {
+  AddressHistoryDiviner,
   ArchiveArchivist,
   ArchiveBoundWitnessArchivistFactory,
   ArchiveKeyArchivist,
@@ -10,17 +11,18 @@ import {
   BoundWitnessArchivist,
   BoundWitnessDiviner,
   BoundWitnessStatsDiviner,
+  IdentifiableHuri,
   ModuleAddressDiviner,
   ModuleRegistry,
   PayloadArchivist,
   PayloadDiviner,
   PayloadStatsDiviner,
   Query,
+  Queue,
   SchemaStatsDiviner,
   UserManager,
   WitnessedPayloadArchivist,
 } from '@xyo-network/archivist-model'
-import { IdentifiableHuri, Queue } from '@xyo-network/archivist-queue'
 import { TYPES } from '@xyo-network/archivist-types'
 import { Logger } from '@xyo-network/shared'
 import { Application } from 'express'
@@ -35,6 +37,7 @@ export const addDependencies = (app: Application) => {
 }
 
 const addArchivists = (app: Application) => {
+  app.addressHistoryDiviner = assertEx(dependencies.get<AddressHistoryDiviner>(TYPES.AddressHistoryDiviner), 'Missing AddressHistoryDiviner')
   app.archiveArchivist = assertEx(dependencies.get<ArchiveArchivist>(TYPES.ArchiveArchivist), 'Missing ArchiveArchivist')
   app.archiveBoundWitnessArchivistFactory = assertEx(
     dependencies.get<ArchiveBoundWitnessArchivistFactory>(TYPES.ArchiveBoundWitnessArchivistFactory),

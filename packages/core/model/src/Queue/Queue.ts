@@ -1,4 +1,4 @@
-import { Transport } from './Transport'
+import { Transport } from '../Transport'
 
 export abstract class Queue<T> {
   public onDequeued?: (id: string) => void
