@@ -31,7 +31,6 @@ const getPayloadsByHashes = async (archivist: ArchivePayloadsArchivist, archive:
 const handler: RequestHandler<BlockHashPathParams, XyoPartialPayloadMeta[][]> = async (req, res, next) => {
   const { archive, hash } = req.params
   const { archivePayloadsArchivistFactory, archiveBoundWitnessArchivistFactory } = req.app
-
   const wrapper = new XyoArchivistWrapper(archiveBoundWitnessArchivistFactory(archive))
   const result = await wrapper.get([hash])
   const block = (result?.[0] as XyoBoundWitnessWithPartialMeta) || undefined

@@ -1,5 +1,6 @@
 import { Express } from 'express'
 
+import { addAddressRoutes } from './addAddressRoutes'
 import { addArchiveRoutes } from './addArchiveRoutes'
 import { addBlockRoutes } from './addBlockRoutes'
 import { addDomainRoutes } from './addDomainRoutes'
@@ -10,6 +11,7 @@ import { addPayloadSchemaRoutes } from './addPayloadSchemaRoutes'
 import { addSchemaRoutes } from './addSchemaRoutes'
 
 export const addRoutes = (app: Express): Express => {
+  addAddressRoutes(app)
   addArchiveRoutes(app)
   addBlockRoutes(app)
   addPayloadRoutes(app)
