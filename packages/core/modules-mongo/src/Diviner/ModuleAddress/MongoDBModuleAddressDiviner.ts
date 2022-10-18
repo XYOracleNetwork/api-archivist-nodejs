@@ -3,12 +3,13 @@ import 'reflect-metadata'
 import { delay } from '@xylabs/delay'
 import { XyoAccount } from '@xyo-network/account'
 import {
+  ArchiveArchivist,
   isModuleAddressQueryPayload,
   ModuleAddressDiviner,
   ModuleAddressPayload,
   ModuleAddressQueryPayload,
   ModuleAddressSchema,
-  PayloadArchivist,
+  XyoBoundWitnessWithMeta,
   XyoPayloadWithMeta,
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
@@ -25,8 +26,9 @@ export class MongoDBModuleAddressDiviner extends XyoDiviner implements ModuleAdd
   constructor(
     @inject(TYPES.Logger) public readonly logger: Logger,
     @inject(TYPES.Account) protected readonly account: XyoAccount,
-    @inject(TYPES.PayloadArchivist) protected readonly payloads: PayloadArchivist,
-    @inject(MONGO_TYPES.PayloadSdkMongo) protected readonly sdk: BaseMongoSdk<XyoPayloadWithMeta>,
+    @inject(TYPES.ArchiveArchivist) protected readonly archives: ArchiveArchivist,
+    @inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta>,
+    @inject(MONGO_TYPES.PayloadSdkMongo) protected readonly payloads: BaseMongoSdk<XyoPayloadWithMeta>,
   ) {
     super({ schema: XyoArchivistPayloadDivinerConfigSchema }, account)
   }
@@ -71,9 +73,9 @@ export class MongoDBModuleAddressDiviner extends XyoDiviner implements ModuleAdd
   }
 
   private divineModuleAddressBatch = async () => {
-    this.logger.log('MongoDBModuleAddressDiviner.DivineModuleAddressBatch: Divining elevations for batch')
+    this.logger.log('MongoDBModuleAddressDiviner.DivineModuleAddressBatch: Divining addresses for batch')
     // TODO: Any background/batch processing here
     await Promise.resolve()
-    this.logger.log('MongoDBModuleAddressDiviner.DivineModuleAddressBatch: Divined elevations for batch')
+    this.logger.log('MongoDBModuleAddressDiviner.DivineModuleAddressBatch: Divined addresses for batch')
   }
 }

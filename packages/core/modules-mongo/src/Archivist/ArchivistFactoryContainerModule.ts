@@ -33,7 +33,7 @@ type ArchivePermissionsArchivistFactory = interfaces.Factory<ArchivePermissionsA
 type ArchiveBoundWitnessArchivistFactory = interfaces.Factory<ArchiveBoundWitnessArchivist>
 type ArchivePayloadArchivistFactory = interfaces.Factory<ArchivePayloadsArchivist>
 
-export const ArchivistFactoryContainerModule = new ContainerModule((bind: interfaces.Bind, _unbind: interfaces.Unbind) => {
+export const ArchivistFactoryContainerModule = new ContainerModule((bind: interfaces.Bind) => {
   archivePermissionsArchivistCache = new LruCache<string, ArchivePermissionsArchivist>({ max })
   boundWitnessArchivistCache = new LruCache<string, ArchiveBoundWitnessArchivist>({ max })
   payloadArchivistCache = new LruCache<string, ArchivePayloadsArchivist>({ max })
