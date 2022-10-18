@@ -49,18 +49,17 @@ describe('/address/:address/boundwitness', () => {
   })
   describe('offset', () => {
     describe('with valid offset', () => {
-      const offset = new BoundWitnessWrapper(blocks[blocks.length / 2]).hash
+      const limit = blocks.length / 2
+      const offset = new BoundWitnessWrapper(blocks[limit]).hash
       it('returns bound witnesses from the offset specified', async () => {
-        const history = await getAddressHistory(unitTestAddress, defaultReturnLength, offset)
+        const history = await getAddressHistory(unitTestAddress, limit, offset)
+        expect(history.length).toBe(limit)
         history.map((block) => expect(block.addresses).toContain(unitTestAddress))
       })
       it('returns a block chain in sequential order', async () => {
-        const history = await getAddressHistory(unitTestAddress, defaultReturnLength, offset)
-        for (let i = 1; i < history.length; i++) {
-          const current = history[i - 1]
-          const previous = history[i]
-          expect(current.previous_hashes).toContain(new BoundWitnessWrapper(previous).hash)
-        }
+        const history = await getAddressHistory(unitTestAddress, limit, offset)
+        expect(history.length).toBe(limit)
+        verifyBlockChainHistory(history)
       })
     })
     describe('with non-existent offset', () => {
@@ -78,11 +77,7 @@ describe('/address/:address/boundwitness', () => {
       })
       it('returns a block chain in sequential order', async () => {
         const history = await getAddressHistory()
-        for (let i = 1; i < history.length; i++) {
-          const current = history[i - 1]
-          const previous = history[i]
-          expect(current.previous_hashes).toContain(new BoundWitnessWrapper(previous).hash)
-        }
+        verifyBlockChainHistory(history)
       })
     })
     describe('with non-existent address', () => {
@@ -93,3 +88,11 @@ describe('/address/:address/boundwitness', () => {
     })
   })
 })
+
+const verifyBlockChainHistory = (history: XyoBoundWitness[]) => {
+  for (let i = 1; i < history.length; i++) {
+    const current = history[i - 1]
+    const previous = history[i]
+    expect(current.previous_hashes).toContain(new BoundWitnessWrapper(previous).hash)
+  }
+}
