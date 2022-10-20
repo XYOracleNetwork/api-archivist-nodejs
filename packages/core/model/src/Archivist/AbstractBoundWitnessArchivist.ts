@@ -31,7 +31,7 @@ export abstract class AbstractBoundWitnessArchivist extends XyoModule<XyoArchivi
   override async query<T extends XyoQuery = XyoQuery>(query: T, payloads?: XyoPayloads): Promise<ModuleQueryResult<XyoPayload>> {
     const wrapper = QueryBoundWitnessWrapper.parseQuery<XyoArchivistQuery>(query, payloads)
     const typedQuery = wrapper.query.payload
-    assertEx(this.queryable(query.schema, wrapper.addresses))
+    // assertEx(this.queryable(query.schema, wrapper.addresses))
 
     const result: (XyoPayload | null)[] = []
     const queryAccount = new XyoAccount()
