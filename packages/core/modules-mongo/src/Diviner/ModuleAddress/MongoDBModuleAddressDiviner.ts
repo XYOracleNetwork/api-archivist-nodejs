@@ -69,9 +69,9 @@ export class MongoDBModuleAddressDiviner extends XyoDiviner implements ModuleAdd
   }
 
   private divineModuleAddressBatch = async () => {
-    this.logger.log('MongoDBModuleAddressDiviner.DivineModuleAddressBatch: Divining addresses for batch')
+    this.logger?.log('MongoDBModuleAddressDiviner.DivineModuleAddressBatch: Divining addresses for batch')
     // TODO: Any background/batch processing here
     await Promise.resolve()
-    this.logger.log('MongoDBModuleAddressDiviner.DivineModuleAddressBatch: Divined addresses for batch')
+    this.logger?.log('MongoDBModuleAddressDiviner.DivineModuleAddressBatch: Divined addresses for batch')
   }
 }
