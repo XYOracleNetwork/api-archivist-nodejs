@@ -2,7 +2,13 @@ import 'reflect-metadata'
 
 import { exists } from '@xylabs/exists'
 import { XyoAccount } from '@xyo-network/account'
-import { BoundWitnessDiviner, BoundWitnessQueryPayload, isBoundWitnessQueryPayload, XyoBoundWitnessWithMeta } from '@xyo-network/archivist-model'
+import {
+  BoundWitnessDiviner,
+  BoundWitnessQueryPayload,
+  Initializable,
+  isBoundWitnessQueryPayload,
+  XyoBoundWitnessWithMeta,
+} from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoBoundWitness } from '@xyo-network/boundwitness'
 import { XyoArchivistPayloadDivinerConfigSchema, XyoDiviner } from '@xyo-network/diviner'
@@ -17,7 +23,7 @@ import { removeId } from '../../Mongo'
 import { MONGO_TYPES } from '../../types'
 
 @injectable()
-export class MongoDBBoundWitnessDiviner extends XyoDiviner implements BoundWitnessDiviner, JobProvider {
+export class MongoDBBoundWitnessDiviner extends XyoDiviner implements BoundWitnessDiviner, Initializable, JobProvider {
   constructor(
     @inject(TYPES.Logger) logger: Logger,
     @inject(TYPES.Account) account: XyoAccount,
@@ -64,14 +70,8 @@ export class MongoDBBoundWitnessDiviner extends XyoDiviner implements BoundWitne
     return (await (await this.sdk.find(filter)).sort(sort).limit(parsedLimit).maxTimeMS(DefaultMaxTimeMS).toArray()).map(removeId)
   }
 
-  override async start(): Promise<typeof this> {
-    // await this.registerWithChangeStream()
-    return await super.start()
-  }
-
-  override async stop(): Promise<typeof this> {
-    // await this.changeStream?.close()
-    return await super.stop()
+  async initialize(): Promise<void> {
+    await this.start()
   }
 }
 

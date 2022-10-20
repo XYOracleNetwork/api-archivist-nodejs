@@ -4,6 +4,7 @@ import { delay } from '@xylabs/delay'
 import { XyoAccount } from '@xyo-network/account'
 import {
   ArchiveArchivist,
+  Initializable,
   isModuleAddressQueryPayload,
   ModuleAddressDiviner,
   ModuleAddressPayload,
@@ -22,7 +23,7 @@ import { inject, injectable } from 'inversify'
 import { MONGO_TYPES } from '../../types'
 
 @injectable()
-export class MongoDBModuleAddressDiviner extends XyoDiviner implements ModuleAddressDiviner, JobProvider {
+export class MongoDBModuleAddressDiviner extends XyoDiviner implements ModuleAddressDiviner, Initializable, JobProvider {
   constructor(
     @inject(TYPES.Logger) logger: Logger,
     @inject(TYPES.Account) protected readonly account: XyoAccount,
@@ -58,14 +59,8 @@ export class MongoDBModuleAddressDiviner extends XyoDiviner implements ModuleAdd
     return []
   }
 
-  override async start(): Promise<typeof this> {
-    // await this.registerWithChangeStream()
-    return await super.start()
-  }
-
-  override async stop(): Promise<typeof this> {
-    // await this.changeStream?.close()
-    return await super.stop()
+  async initialize(): Promise<void> {
+    await this.start()
   }
 
   private divineModuleAddressBatch = async () => {

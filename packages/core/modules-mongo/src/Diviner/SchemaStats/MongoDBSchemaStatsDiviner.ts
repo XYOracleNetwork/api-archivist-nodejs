@@ -5,6 +5,7 @@ import { exists } from '@xylabs/exists'
 import { XyoAccount } from '@xyo-network/account'
 import {
   ArchiveArchivist,
+  Initializable,
   isSchemaStatsQueryPayload,
   SchemaStatsDiviner,
   SchemaStatsPayload,
@@ -40,7 +41,7 @@ interface Stats {
 }
 
 @injectable()
-export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner implements SchemaStatsDiviner, JobProvider {
+export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner implements SchemaStatsDiviner, Initializable, JobProvider {
   /**
    * The max number of records to search during the aggregate query
    */
@@ -110,12 +111,16 @@ export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner implements Sche
     return [new XyoPayloadBuilder<SchemaStatsPayload>({ schema: SchemaStatsSchema }).fields({ count }).build()]
   }
 
-  override async start(): Promise<typeof this> {
+  async initialize(): Promise<void> {
+    await this.start()
+  }
+
+  protected override async start(): Promise<typeof this> {
     await this.registerWithChangeStream()
     return await super.start()
   }
 
-  override async stop(): Promise<typeof this> {
+  protected override async stop(): Promise<typeof this> {
     await this.changeStream?.close()
     return await super.stop()
   }

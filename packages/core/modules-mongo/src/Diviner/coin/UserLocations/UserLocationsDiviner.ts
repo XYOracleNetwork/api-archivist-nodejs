@@ -2,7 +2,7 @@ import 'reflect-metadata'
 
 import { assertEx } from '@xylabs/assert'
 import { XyoAccount } from '@xyo-network/account'
-import { BoundWitnessesArchivist, PayloadArchivist, XyoPayloadWithMeta } from '@xyo-network/archivist-model'
+import { BoundWitnessesArchivist, Initializable, PayloadArchivist, XyoPayloadWithMeta } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoArchivistPayloadDivinerConfigSchema, XyoDiviner } from '@xyo-network/diviner'
 import { XyoLocationPayload, XyoLocationSchema } from '@xyo-network/location-payload-plugin'
@@ -42,7 +42,7 @@ export type CoinCurrentLocationWitnessPayload = XyoPayload<{
 export const isLocationPayload = (x?: XyoPayload | null): x is XyoLocationPayload => x?.schema === XyoLocationSchema
 
 @injectable()
-export class CoinUserLocationsDiviner extends XyoDiviner implements CoinUserLocationsDiviner, JobProvider {
+export class CoinUserLocationsDiviner extends XyoDiviner implements CoinUserLocationsDiviner, Initializable, JobProvider {
   constructor(
     @inject(TYPES.Logger) logger: Logger,
     @inject(TYPES.Account) protected readonly account: XyoAccount,
@@ -93,14 +93,8 @@ export class CoinUserLocationsDiviner extends XyoDiviner implements CoinUserLoca
     return []
   }
 
-  override async start(): Promise<typeof this> {
-    // await this.registerWithChangeStream()
-    return await super.start()
-  }
-
-  override async stop(): Promise<typeof this> {
-    // await this.changeStream?.close()
-    return await super.stop()
+  async initialize(): Promise<void> {
+    await this.start()
   }
 
   private divineUserLocationsBatch = async () => {
