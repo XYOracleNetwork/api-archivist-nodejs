@@ -5,6 +5,7 @@ import { exists } from '@xylabs/exists'
 import { XyoAccount } from '@xyo-network/account'
 import {
   ArchiveArchivist,
+  Initializable,
   isPayloadStatsQueryPayload,
   PayloadStatsDiviner,
   PayloadStatsPayload,
@@ -34,7 +35,7 @@ interface Stats {
 }
 
 @injectable()
-export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner implements PayloadStatsDiviner, JobProvider {
+export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner implements PayloadStatsDiviner, Initializable, JobProvider {
   protected readonly batchLimit = 100
   protected changeStream: ChangeStream | undefined = undefined
   protected nextOffset = 0
@@ -75,12 +76,16 @@ export class MongoDBArchivePayloadStatsDiviner extends XyoDiviner implements Pay
     return [new XyoPayloadBuilder<PayloadStatsPayload>({ schema: PayloadStatsSchema }).fields({ count }).build()]
   }
 
-  override async start(): Promise<typeof this> {
+  async initialize(): Promise<void> {
+    await this.start()
+  }
+
+  protected override async start(): Promise<typeof this> {
     await this.registerWithChangeStream()
     return await super.start()
   }
 
-  override async stop(): Promise<typeof this> {
+  protected override async stop(): Promise<typeof this> {
     await this.changeStream?.close()
     return await super.stop()
   }

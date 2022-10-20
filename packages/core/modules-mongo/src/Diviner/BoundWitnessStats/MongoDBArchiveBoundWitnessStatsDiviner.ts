@@ -9,6 +9,7 @@ import {
   BoundWitnessStatsPayload,
   BoundWitnessStatsQueryPayload,
   BoundWitnessStatsSchema,
+  Initializable,
   isBoundWitnessStatsQueryPayload,
   XyoBoundWitnessWithMeta,
 } from '@xyo-network/archivist-model'
@@ -34,7 +35,7 @@ interface Stats {
 }
 
 @injectable()
-export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner implements BoundWitnessStatsDiviner, JobProvider {
+export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner implements BoundWitnessStatsDiviner, Initializable, JobProvider {
   protected readonly batchLimit = 100
   protected changeStream: ChangeStream | undefined = undefined
   protected nextOffset = 0
@@ -75,12 +76,16 @@ export class MongoDBArchiveBoundWitnessStatsDiviner extends XyoDiviner implement
     return [new XyoPayloadBuilder<BoundWitnessStatsPayload>({ schema: BoundWitnessStatsSchema }).fields({ count }).build()]
   }
 
-  override async start(): Promise<typeof this> {
+  async initialize(): Promise<void> {
+    await this.start()
+  }
+
+  protected override async start(): Promise<typeof this> {
     await this.registerWithChangeStream()
     return await super.start()
   }
 
-  override async stop(): Promise<typeof this> {
+  protected override async stop(): Promise<typeof this> {
     await this.changeStream?.close()
     return await super.stop()
   }
