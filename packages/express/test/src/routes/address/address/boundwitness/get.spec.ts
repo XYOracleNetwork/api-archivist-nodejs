@@ -1,12 +1,13 @@
-import { BoundWitnessWrapper, XyoBoundWitness } from '@xyo-network/boundwitness'
+import { XyoAccount } from '@xyo-network/account'
+import { BoundWitnessBuilder, BoundWitnessWrapper, XyoBoundWitness } from '@xyo-network/boundwitness'
 import { StatusCodes } from 'http-status-codes'
 
-import { claimArchive, getBlockWithPayloads, getTokenForUnitTestUser, postBlock, request, unitTestSigningAccount } from '../../../../testUtil'
+import { claimArchive, getPayloads, getTokenForUnitTestUser, postBlock, request, unitTestSigningAccount } from '../../../../testUtil'
 
+const config = { inlinePayloads: true }
 const defaultReturnLength = 10
-const unitTestAddress = unitTestSigningAccount.addressValue.hex
 
-const getAddressHistory = async (address: string = unitTestAddress, limit?: number, offset?: string): Promise<XyoBoundWitness[]> => {
+const getAddressHistory = async (address: string, limit?: number, offset?: string): Promise<XyoBoundWitness[]> => {
   const query: { limit?: number; offset?: string } = {}
   if (limit) query.limit = limit
   if (offset) query.offset = offset
@@ -18,6 +19,8 @@ const getAddressHistory = async (address: string = unitTestAddress, limit?: numb
 }
 
 describe('/address/:address/boundwitness', () => {
+  const account = XyoAccount.random()
+  const address = account.addressValue.hex
   const blocksToPost = defaultReturnLength + 5
   let token = ''
   let archive = ''
@@ -26,7 +29,7 @@ describe('/address/:address/boundwitness', () => {
     token = await getTokenForUnitTestUser()
     archive = (await claimArchive(token)).archive
     for (let i = 0; i < blocksToPost; i++) {
-      const block = getBlockWithPayloads(1)
+      const block = new BoundWitnessBuilder(config).payloads(getPayloads(1)).witness(account).build()[0]
       blocks.push(block)
       const response = await postBlock(block, archive)
       expect(response.length).toBe(1)
@@ -35,14 +38,14 @@ describe('/address/:address/boundwitness', () => {
   describe('limit', () => {
     describe('with no limit supplied', () => {
       it(`retrieves ${defaultReturnLength} blocks`, async () => {
-        const history = await getAddressHistory()
+        const history = await getAddressHistory(address)
         expect(history.length).toBe(defaultReturnLength)
       })
     })
     describe('with limit supplied', () => {
       it('retrieves the number of blocks equal to the supplied limit', async () => {
         const limit = defaultReturnLength / 2
-        const history = await getAddressHistory(unitTestAddress, limit)
+        const history = await getAddressHistory(address, limit)
         expect(history.length).toBe(limit)
       })
     })
@@ -52,19 +55,19 @@ describe('/address/:address/boundwitness', () => {
       const limit = blocks.length / 2
       const offset = new BoundWitnessWrapper(blocks[limit]).hash
       it('returns bound witnesses from the offset specified', async () => {
-        const history = await getAddressHistory(unitTestAddress, limit, offset)
+        const history = await getAddressHistory(address, limit, offset)
         expect(history.length).toBe(limit)
-        history.map((block) => expect(block.addresses).toContain(unitTestAddress))
+        history.map((block) => expect(block.addresses).toContain(address))
       })
       it('returns a block chain in sequential order', async () => {
-        const history = await getAddressHistory(unitTestAddress, limit, offset)
+        const history = await getAddressHistory(address, limit, offset)
         expect(history.length).toBe(limit)
         verifyBlockChainHistory(history)
       })
     })
     describe('with non-existent offset', () => {
       it('returns an empty array', async () => {
-        const history = await getAddressHistory(unitTestAddress, defaultReturnLength, 'foo')
+        const history = await getAddressHistory(address, defaultReturnLength, 'foo')
         expect(history.length).toBe(0)
       })
     })
@@ -72,11 +75,11 @@ describe('/address/:address/boundwitness', () => {
   describe('address', () => {
     describe('with valid address', () => {
       it('returns bound witnesses from the address specified', async () => {
-        const history = await getAddressHistory()
-        history.map((block) => expect(block.addresses).toContain(unitTestAddress))
+        const history = await getAddressHistory(address)
+        history.map((block) => expect(block.addresses).toContain(address))
       })
       it('returns a block chain in sequential order', async () => {
-        const history = await getAddressHistory()
+        const history = await getAddressHistory(address)
         verifyBlockChainHistory(history)
       })
     })
