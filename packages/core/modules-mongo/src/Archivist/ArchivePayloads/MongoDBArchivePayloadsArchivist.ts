@@ -44,7 +44,7 @@ export class MongoDBArchivePayloadsArchivist extends AbstractPayloadArchivist<Xy
     return (await (await this.sdk.find(filter)).sort(sort).limit(parsedLimit).maxTimeMS(2000).toArray()).map(removeId)
   }
 
-  async get(ids: string[]): Promise<Array<XyoPayloadWithMeta | null>> {
+  async get(ids: string[]): Promise<Array<XyoPayloadWithMeta>> {
     const predicates = ids.map((id) => {
       const _archive = assertEx(this.config.archive, 'MongoDBArchivePayloadsArchivist.get: Missing archive')
       const _hash = assertEx(id, 'MongoDBArchivePayloadsArchivist.get: Missing hash')

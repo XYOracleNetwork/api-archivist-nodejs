@@ -3,7 +3,6 @@ import 'reflect-metadata'
 import { assertEx } from '@xylabs/assert'
 import { exists } from '@xylabs/exists'
 import { XyoAccount } from '@xyo-network/account'
-import { XyoPayloadFindFilter } from '@xyo-network/archivist'
 import {
   AbstractPayloadArchivist,
   WitnessedPayloadArchivist,
@@ -13,7 +12,7 @@ import {
 } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { BoundWitnessBuilder, BoundWitnessValidator, XyoBoundWitness } from '@xyo-network/boundwitness'
-import { XyoPayloads } from '@xyo-network/payload'
+import { XyoPayloadFindFilter, XyoPayloads } from '@xyo-network/payload'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
 import { inject, injectable, named } from 'inversify'
 

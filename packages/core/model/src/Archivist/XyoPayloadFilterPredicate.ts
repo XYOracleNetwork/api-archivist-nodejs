@@ -1,5 +1,5 @@
-import { XyoPayloadFindFilter } from '@xyo-network/archivist'
 import { EmptyObject } from '@xyo-network/core'
+import { XyoPayloadFindFilter } from '@xyo-network/payload'
 
 /* Note: Added Omit to XyoPayloadFindFilter for offset until we support hash based offsets */
 

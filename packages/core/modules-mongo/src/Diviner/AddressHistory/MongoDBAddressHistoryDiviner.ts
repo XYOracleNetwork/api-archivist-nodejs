@@ -6,6 +6,7 @@ import { XyoAccount } from '@xyo-network/account'
 import {
   AddressHistoryDiviner,
   AddressHistoryQueryPayload,
+  Initializable,
   isAddressHistoryQueryPayload,
   XyoBoundWitnessWithMeta,
 } from '@xyo-network/archivist-model'
@@ -23,23 +24,17 @@ import { removeId } from '../../Mongo'
 import { MONGO_TYPES } from '../../types'
 
 @injectable()
-export class MongoDBAddressHistoryDiviner extends XyoDiviner implements AddressHistoryDiviner, JobProvider {
+export class MongoDBAddressHistoryDiviner extends XyoDiviner implements AddressHistoryDiviner, Initializable, JobProvider {
   constructor(
-    @inject(TYPES.Logger) protected logger: Logger,
+    @inject(TYPES.Logger) logger: Logger,
     @inject(TYPES.Account) account: XyoAccount,
     @inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly sdk: BaseMongoSdk<XyoBoundWitnessWithMeta>,
   ) {
-    super({ schema: XyoArchivistPayloadDivinerConfigSchema }, account)
+    super({ account, config: { schema: XyoArchivistPayloadDivinerConfigSchema }, logger })
   }
 
   get jobs(): Job[] {
-    return [
-      // {
-      //   name: 'MongoDBAddressHistoryDiviner.DivineBatch',
-      //   schedule: '10 minute',
-      //   task: async () => await this.divineArchivesBatch(),
-      // },
-    ]
+    return []
   }
 
   override async divine(payloads?: XyoPayloads): Promise<XyoPayloads<XyoBoundWitness>> {
@@ -56,12 +51,8 @@ export class MongoDBAddressHistoryDiviner extends XyoDiviner implements AddressH
     return blocks.map(removeId)
   }
 
-  override async initialize(): Promise<void> {
-    // await this.registerWithChangeStream()
-  }
-
-  override async shutdown(): Promise<void> {
-    // await this.changeStream?.close()
+  async initialize(): Promise<void> {
+    await this.start()
   }
 
   private getBlocks = async (hash: string, address: string, limit: number): Promise<XyoBoundWitnessWithMeta[]> => {

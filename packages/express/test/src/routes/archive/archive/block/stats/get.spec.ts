@@ -1,3 +1,4 @@
+import { delay } from '@xylabs/delay'
 import { StatusCodes } from 'http-status-codes'
 
 import { claimArchive, getBlockWithPayloads, getTokenForUnitTestUser, postBlock, request } from '../../../../../testUtil'
@@ -28,6 +29,7 @@ describe('/archive/:archive/block/stats', () => {
       }),
     ]
     await Promise.all(posted.flatMap((p) => p))
+    await delay(1000)
   })
   it('Returns stats on the desired archive', async () => {
     const response = await (await request()).get(`/archive/${archive}/block/stats`).expect(StatusCodes.OK)
