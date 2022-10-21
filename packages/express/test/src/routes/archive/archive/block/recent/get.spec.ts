@@ -28,7 +28,7 @@ describe('/archive/:archive/block/recent/:limit', () => {
       const response = await postBlock(getBlockWithPayloads(1), archive)
       expect(response.length).toBe(1)
     }
-    // Post some payloads to another archive
+    // POST some payloads to another archive
     for (let i = 0; i < otherBlocksToPost; i++) {
       const response = await postBlock(getBlockWithPayloads(1), otherArchive)
       expect(response.length).toBe(1)
