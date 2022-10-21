@@ -22,22 +22,17 @@ describe('/archive/:archive/payload/recent/:limit', () => {
     token = await getTokenForUnitTestUser()
     archive = (await claimArchive(token)).archive
     otherArchive = (await claimArchive(token)).archive
-
-    // NOTE: POST in parallel to speed up test
-    const posted = [
-      // POST Payloads to test archive
-      new Array(payloadsToPost).fill(null).map(async () => {
-        const response = await postBlock(getBlockWithPayloads(1), archive)
-        expect(response.length).toBe(1)
-      }),
-      // Post some payloads to another archive
-      new Array(otherPayloadsToPost).fill(null).map(async () => {
-        const response = await postBlock(getBlockWithPayloads(1), otherArchive)
-        expect(response.length).toBe(1)
-      }),
-    ]
-    await Promise.all(posted.flatMap((p) => p))
-  })
+    // POST Payloads to test archive
+    for (let i = 0; i < payloadsToPost; i++) {
+      const response = await postBlock(getBlockWithPayloads(1), archive)
+      expect(response.length).toBe(1)
+    }
+    // Post some payloads to another archive
+    for (let i = 0; i < otherPayloadsToPost; i++) {
+      const response = await postBlock(getBlockWithPayloads(1), otherArchive)
+      expect(response.length).toBe(1)
+    }
+  }, 1000 * (payloadsToPost + otherPayloadsToPost))
   it(`With no argument, retrieves the ${defaultReturnLength} most recently posted payloads`, async () => {
     // Ensure the original payloads only show up when getting recent from that archive
     const recent = await getRecent(archive, token)
