@@ -1,7 +1,6 @@
-import { XyoPayloadFindFilter } from '@xyo-network/archivist'
 import { XyoDiviner } from '@xyo-network/diviner'
 import { XyoQuery } from '@xyo-network/module'
-import { XyoPayload } from '@xyo-network/payload'
+import { XyoPayload, XyoPayloadFindFilter } from '@xyo-network/payload'
 
 export type AddressHistorySchema = 'network.xyo.diviner.address'
 export const AddressHistorySchema: AddressHistorySchema = 'network.xyo.diviner.address'

@@ -1,7 +1,7 @@
 import 'reflect-metadata'
 
 import { XyoAccount } from '@xyo-network/account'
-import { isPayloadQueryPayload, PayloadDiviner, PayloadQueryPayload, XyoPayloadWithMeta } from '@xyo-network/archivist-model'
+import { Initializable, isPayloadQueryPayload, PayloadDiviner, PayloadQueryPayload, XyoPayloadWithMeta } from '@xyo-network/archivist-model'
 import { TYPES } from '@xyo-network/archivist-types'
 import { XyoArchivistPayloadDivinerConfigSchema, XyoDiviner } from '@xyo-network/diviner'
 import { XyoPayload, XyoPayloads } from '@xyo-network/payload'
@@ -15,23 +15,16 @@ import { removeId } from '../../Mongo'
 import { MONGO_TYPES } from '../../types'
 
 @injectable()
-export class MongoDBPayloadDiviner extends XyoDiviner implements PayloadDiviner, JobProvider {
+export class MongoDBPayloadDiviner extends XyoDiviner implements PayloadDiviner, Initializable, JobProvider {
   constructor(
-    @inject(TYPES.Logger) protected logger: Logger,
+    @inject(TYPES.Logger) logger: Logger,
     @inject(TYPES.Account) account: XyoAccount,
     @inject(MONGO_TYPES.PayloadSdkMongo) protected readonly sdk: BaseMongoSdk<XyoPayloadWithMeta>,
   ) {
-    super({ schema: XyoArchivistPayloadDivinerConfigSchema }, account)
+    super({ account, config: { schema: XyoArchivistPayloadDivinerConfigSchema }, logger })
   }
-
   get jobs(): Job[] {
-    return [
-      // {
-      //   name: 'MongoDBPayloadDiviner.DivineBatch',
-      //   schedule: '10 minute',
-      //   task: async () => await this.divineArchivesBatch(),
-      // },
-    ]
+    return []
   }
 
   override async divine(payloads?: XyoPayloads): Promise<XyoPayloads<XyoPayload>> {
@@ -56,11 +49,7 @@ export class MongoDBPayloadDiviner extends XyoDiviner implements PayloadDiviner,
     return (await (await this.sdk.find(filter)).sort(sort).limit(parsedLimit).maxTimeMS(DefaultMaxTimeMS).toArray()).map(removeId)
   }
 
-  override async initialize(): Promise<void> {
-    // await this.registerWithChangeStream()
-  }
-
-  override async shutdown(): Promise<void> {
-    // await this.changeStream?.close()
+  async initialize(): Promise<void> {
+    await this.start()
   }
 }

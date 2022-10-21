@@ -54,7 +54,7 @@ export class MongoDBArchiveBoundWitnessArchivist extends AbstractBoundWitnessArc
     const result = (await (await this.sdk.find(filter)).sort(sort).limit(parsedLimit).maxTimeMS(2000).toArray()).map(removeId)
     return result
   }
-  async get(hashes: string[]): Promise<Array<XyoBoundWitnessWithMeta | null>> {
+  async get(hashes: string[]): Promise<Array<XyoBoundWitnessWithMeta>> {
     const predicates = hashes.map((hash) => {
       const _archive = assertEx(this.config.archive, 'MongoDBArchiveBoundWitnessArchivist.get: Missing archive')
       const _hash = assertEx(hash, 'MongoDBArchiveBoundWitnessArchivist.get: Missing hash')

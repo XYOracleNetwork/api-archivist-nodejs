@@ -21,26 +21,19 @@ import { XyoBoundWitnessFilterPredicate } from './XyoBoundWitnessFilterPredicate
 @injectable()
 export abstract class AbstractBoundWitnessArchivist extends XyoModule<XyoArchivistConfig> implements BoundWitnessArchivist {
   constructor(protected readonly account: XyoAccount) {
-    super(undefined, account)
+    super({ account })
   }
 
   public override queries() {
-    return [
-      XyoArchivistFindQuerySchema,
-      XyoArchivistGetQuerySchema,
-      XyoArchivistInsertQuerySchema,
-      // TODO: Support initialize, etc.
-      // XyoModuleInitializeQuerySchema,
-      // XyoModuleShutdownQuerySchema,
-    ]
+    return [XyoArchivistFindQuerySchema, XyoArchivistGetQuerySchema, XyoArchivistInsertQuerySchema]
   }
 
   override async query<T extends XyoQuery = XyoQuery>(query: T, payloads?: XyoPayloads): Promise<ModuleQueryResult<XyoPayload>> {
     const wrapper = QueryBoundWitnessWrapper.parseQuery<XyoArchivistQuery>(query, payloads)
     const typedQuery = wrapper.query.payload
-    assertEx(this.queryable(query.schema, wrapper.addresses))
+    // assertEx(this.queryable(query.schema, wrapper.addresses))
 
-    const result: (XyoPayload | null)[] = []
+    const result: XyoPayload[] = []
     const queryAccount = new XyoAccount()
     switch (typedQuery.schema) {
       case XyoArchivistFindQuerySchema:
@@ -62,7 +55,7 @@ export abstract class AbstractBoundWitnessArchivist extends XyoModule<XyoArchivi
     }
     return this.bindResult(result, queryAccount)
   }
-  abstract find(filter?: XyoBoundWitnessFilterPredicate | undefined): Promise<Array<XyoBoundWitnessWithPartialMeta | null>>
-  abstract get(ids: string[]): Promise<Array<XyoBoundWitnessWithPartialMeta | null>>
+  abstract find(filter?: XyoBoundWitnessFilterPredicate | undefined): Promise<Array<XyoBoundWitnessWithPartialMeta>>
+  abstract get(ids: string[]): Promise<Array<XyoBoundWitnessWithPartialMeta>>
   abstract insert(item: XyoBoundWitnessWithPartialMeta[]): Promise<XyoBoundWitness[]>
 }

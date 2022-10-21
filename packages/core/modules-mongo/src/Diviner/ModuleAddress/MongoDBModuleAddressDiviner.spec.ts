@@ -1,10 +1,11 @@
 import { XyoAccount } from '@xyo-network/account'
 import {
+  ArchiveArchivist,
   ModuleAddressPayload,
   ModuleAddressQueryPayload,
   ModuleAddressQuerySchema,
   ModuleAddressSchema,
-  PayloadArchivist,
+  XyoBoundWitnessWithMeta,
   XyoPayloadWithMeta,
 } from '@xyo-network/archivist-model'
 import { BaseMongoSdk } from '@xyo-network/sdk-xyo-mongo-js'
@@ -18,15 +19,17 @@ import { MongoDBModuleAddressDiviner } from './MongoDBModuleAddressDiviner'
 describe('MongoDBModuleAddressDiviner', () => {
   let logger: MockProxy<Logger>
   let account: XyoAccount
-  let sdk: BaseMongoSdk<XyoPayloadWithMeta>
-  let payloadsArchivist: MockProxy<PayloadArchivist>
+  let payloads: BaseMongoSdk<XyoPayloadWithMeta>
+  let boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta>
+  let archiveArchivist: MockProxy<ArchiveArchivist>
   let sut: MongoDBModuleAddressDiviner
   beforeEach(() => {
     logger = mock<Logger>()
     account = XyoAccount.random()
-    payloadsArchivist = mock<PayloadArchivist>()
-    sdk = getBaseMongoSdk<XyoPayloadWithMeta>(COLLECTIONS.Payloads)
-    sut = new MongoDBModuleAddressDiviner(logger, account, payloadsArchivist, sdk)
+    archiveArchivist = mock<ArchiveArchivist>()
+    payloads = getBaseMongoSdk<XyoPayloadWithMeta>(COLLECTIONS.Payloads)
+    boundWitnesses = getBaseMongoSdk<XyoBoundWitnessWithMeta>(COLLECTIONS.BoundWitnesses)
+    sut = new MongoDBModuleAddressDiviner(logger, account, archiveArchivist, boundWitnesses, payloads)
   })
   describe('divine', () => {
     describe('with valid query', () => {

@@ -5,6 +5,7 @@ import { exists } from '@xylabs/exists'
 import { XyoAccount } from '@xyo-network/account'
 import {
   ArchiveArchivist,
+  Initializable,
   isSchemaStatsQueryPayload,
   SchemaStatsDiviner,
   SchemaStatsPayload,
@@ -40,7 +41,7 @@ interface Stats {
 }
 
 @injectable()
-export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner implements SchemaStatsDiviner, JobProvider {
+export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner implements SchemaStatsDiviner, Initializable, JobProvider {
   /**
    * The max number of records to search during the aggregate query
    */
@@ -77,12 +78,12 @@ export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner implements Sche
   protected resumeAfter: ResumeToken | undefined = undefined
 
   constructor(
-    @inject(TYPES.Logger) protected logger: Logger,
+    @inject(TYPES.Logger) logger: Logger,
     @inject(TYPES.Account) account: XyoAccount,
     @inject(TYPES.ArchiveArchivist) protected archiveArchivist: ArchiveArchivist,
     @inject(MONGO_TYPES.PayloadSdkMongo) protected sdk: BaseMongoSdk<XyoPayload>,
   ) {
-    super({ schema: XyoArchivistPayloadDivinerConfigSchema }, account)
+    super({ account, config: { schema: XyoArchivistPayloadDivinerConfigSchema }, logger })
   }
 
   get jobs(): Job[] {
@@ -110,12 +111,18 @@ export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner implements Sche
     return [new XyoPayloadBuilder<SchemaStatsPayload>({ schema: SchemaStatsSchema }).fields({ count }).build()]
   }
 
-  override async initialize(): Promise<void> {
-    await this.registerWithChangeStream()
+  async initialize(): Promise<void> {
+    await this.start()
   }
 
-  override async shutdown(): Promise<void> {
+  protected override async start(): Promise<typeof this> {
+    await this.registerWithChangeStream()
+    return await super.start()
+  }
+
+  protected override async stop(): Promise<typeof this> {
     await this.changeStream?.close()
+    return await super.stop()
   }
 
   private divineAllArchives = async () => await Promise.reject('Not implemented')
@@ -168,15 +175,15 @@ export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner implements Sche
   }
 
   private divineArchivesBatch = async () => {
-    this.logger.log(`MongoDBArchiveSchemaStatsDiviner.DivineArchivesBatch: Divining - Limit: ${this.batchLimit} Offset: ${this.nextOffset}`)
+    this.logger?.log(`MongoDBArchiveSchemaStatsDiviner.DivineArchivesBatch: Divining - Limit: ${this.batchLimit} Offset: ${this.nextOffset}`)
     const result = await this.archiveArchivist.find({ limit: this.batchLimit, offset: this.nextOffset })
     const archives = result.map((archive) => archive?.archive).filter(exists)
-    this.logger.log(`MongoDBArchiveSchemaStatsDiviner.DivineArchivesBatch: Divining ${archives.length} Archives`)
+    this.logger?.log(`MongoDBArchiveSchemaStatsDiviner.DivineArchivesBatch: Divining ${archives.length} Archives`)
     this.nextOffset = archives.length < this.batchLimit ? 0 : this.nextOffset + this.batchLimit
     const results = await Promise.allSettled(archives.map(this.divineArchiveFull))
     const succeeded = results.filter((result) => result.status === 'fulfilled').length
     const failed = results.filter((result) => result.status === 'rejected').length
-    this.logger.log(`MongoDBArchiveSchemaStatsDiviner.DivineArchivesBatch: Divined - Succeeded: ${succeeded} Failed: ${failed}`)
+    this.logger?.log(`MongoDBArchiveSchemaStatsDiviner.DivineArchivesBatch: Divined - Succeeded: ${succeeded} Failed: ${failed}`)
   }
 
   private processChange = (change: ChangeStreamInsertDocument<XyoPayloadWithMeta>) => {
@@ -190,7 +197,7 @@ export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner implements Sche
   }
 
   private registerWithChangeStream = async () => {
-    this.logger.log('MongoDBArchiveSchemaStatsDiviner.RegisterWithChangeStream: Registering')
+    this.logger?.log('MongoDBArchiveSchemaStatsDiviner.RegisterWithChangeStream: Registering')
     const wrapper = MongoClientWrapper.get(this.sdk.uri, this.sdk.config.maxPoolSize)
     const connection = await wrapper.connect()
     assertEx(connection, 'Connection failed')
@@ -199,7 +206,7 @@ export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner implements Sche
     this.changeStream = collection.watch([], opts)
     this.changeStream.on('change', this.processChange)
     this.changeStream.on('error', this.registerWithChangeStream)
-    this.logger.log('MongoDBArchiveSchemaStatsDiviner.RegisterWithChangeStream: Registered')
+    this.logger?.log('MongoDBArchiveSchemaStatsDiviner.RegisterWithChangeStream: Registered')
   }
 
   private storeDivinedResult = async (archive: string, counts: Record<string, number>) => {
@@ -218,7 +225,7 @@ export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner implements Sche
   }
 
   private updateChanges = async () => {
-    this.logger.log('MongoDBArchiveSchemaStatsDiviner.UpdateChanges: Updating')
+    this.logger?.log('MongoDBArchiveSchemaStatsDiviner.UpdateChanges: Updating')
     const updates = Object.keys(this.pendingCounts).map((archive) => {
       const $inc = Object.keys(this.pendingCounts[archive])
         .map((schema) => {
@@ -233,6 +240,6 @@ export class MongoDBArchiveSchemaStatsDiviner extends XyoDiviner implements Sche
     const results = await Promise.allSettled(updates)
     const succeeded = results.filter((result) => result.status === 'fulfilled').length
     const failed = results.filter((result) => result.status === 'rejected').length
-    this.logger.log(`MongoDBArchiveSchemaStatsDiviner.UpdateChanges: Updated - Succeeded: ${succeeded} Failed: ${failed}`)
+    this.logger?.log(`MongoDBArchiveSchemaStatsDiviner.UpdateChanges: Updated - Succeeded: ${succeeded} Failed: ${failed}`)
   }
 }

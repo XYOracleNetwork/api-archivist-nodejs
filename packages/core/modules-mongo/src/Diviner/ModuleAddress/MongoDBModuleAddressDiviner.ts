@@ -4,6 +4,7 @@ import { delay } from '@xylabs/delay'
 import { XyoAccount } from '@xyo-network/account'
 import {
   ArchiveArchivist,
+  Initializable,
   isModuleAddressQueryPayload,
   ModuleAddressDiviner,
   ModuleAddressPayload,
@@ -22,15 +23,15 @@ import { inject, injectable } from 'inversify'
 import { MONGO_TYPES } from '../../types'
 
 @injectable()
-export class MongoDBModuleAddressDiviner extends XyoDiviner implements ModuleAddressDiviner, JobProvider {
+export class MongoDBModuleAddressDiviner extends XyoDiviner implements ModuleAddressDiviner, Initializable, JobProvider {
   constructor(
-    @inject(TYPES.Logger) public readonly logger: Logger,
+    @inject(TYPES.Logger) logger: Logger,
     @inject(TYPES.Account) protected readonly account: XyoAccount,
     @inject(TYPES.ArchiveArchivist) protected readonly archives: ArchiveArchivist,
     @inject(MONGO_TYPES.BoundWitnessSdkMongo) protected readonly boundWitnesses: BaseMongoSdk<XyoBoundWitnessWithMeta>,
     @inject(MONGO_TYPES.PayloadSdkMongo) protected readonly payloads: BaseMongoSdk<XyoPayloadWithMeta>,
   ) {
-    super({ schema: XyoArchivistPayloadDivinerConfigSchema }, account)
+    super({ account, config: { schema: XyoArchivistPayloadDivinerConfigSchema }, logger })
   }
 
   get jobs(): Job[] {
@@ -48,34 +49,24 @@ export class MongoDBModuleAddressDiviner extends XyoDiviner implements ModuleAdd
     // If this is a query we support
     if (query) {
       // TODO: Extract relevant query values here
-      this.logger.log('MongoDBModuleAddressDiviner.Divine: Processing query')
+      this.logger?.log('MongoDBModuleAddressDiviner.Divine: Processing query')
       // Simulating work
       await delay(1)
-      this.logger.log('MongoDBModuleAddressDiviner.Divine: Processed query')
+      this.logger?.log('MongoDBModuleAddressDiviner.Divine: Processed query')
       return [new XyoPayloadBuilder<ModuleAddressPayload>({ schema: ModuleAddressSchema }).fields({}).build()]
     }
     // else return empty response
     return []
   }
 
-  override async initialize(): Promise<void> {
-    this.logger.log('MongoDBModuleAddressDiviner.Initialize: Initializing')
-    // TODO: Any async init here
-    await Promise.resolve()
-    this.logger.log('MongoDBModuleAddressDiviner.Initialize: Initialized')
-  }
-
-  override async shutdown(): Promise<void> {
-    this.logger.log('MongoDBModuleAddressDiviner.Shutdown: Shutting down')
-    // TODO: Any async shutdown
-    await Promise.resolve()
-    this.logger.log('MongoDBModuleAddressDiviner.Shutdown: Shutdown')
+  async initialize(): Promise<void> {
+    await this.start()
   }
 
   private divineModuleAddressBatch = async () => {
-    this.logger.log('MongoDBModuleAddressDiviner.DivineModuleAddressBatch: Divining addresses for batch')
+    this.logger?.log('MongoDBModuleAddressDiviner.DivineModuleAddressBatch: Divining addresses for batch')
     // TODO: Any background/batch processing here
     await Promise.resolve()
-    this.logger.log('MongoDBModuleAddressDiviner.DivineModuleAddressBatch: Divined addresses for batch')
+    this.logger?.log('MongoDBModuleAddressDiviner.DivineModuleAddressBatch: Divined addresses for batch')
   }
 }

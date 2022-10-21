@@ -26,25 +26,18 @@ export abstract class AbstractPayloadArchivist<T extends EmptyObject = EmptyObje
   implements PayloadArchivist<T>
 {
   constructor(protected readonly account: XyoAccount, protected readonly config?: ArchiveModuleConfig) {
-    super(config, account)
+    super({ account, config })
   }
 
   override queries() {
-    return [
-      XyoArchivistFindQuerySchema,
-      XyoArchivistGetQuerySchema,
-      XyoArchivistInsertQuerySchema,
-      // TODO: Support initialize, etc.
-      // XyoModuleInitializeQuerySchema,
-      // XyoModuleShutdownQuerySchema,
-    ]
+    return [XyoArchivistFindQuerySchema, XyoArchivistGetQuerySchema, XyoArchivistInsertQuerySchema]
   }
   override async query<Q extends XyoQuery = XyoQuery>(query: Q, payloads?: XyoPayloads): Promise<ModuleQueryResult<XyoPayload>> {
     const wrapper = QueryBoundWitnessWrapper.parseQuery<XyoArchivistQuery>(query, payloads)
     const typedQuery = wrapper.query.payload
-    assertEx(this.queryable(query.schema, wrapper.addresses))
+    // assertEx(this.queryable(query.schema, wrapper.addresses))
 
-    const result: (XyoPayload | null)[] = []
+    const result: XyoPayload[] = []
     const queryAccount = new XyoAccount()
     switch (typedQuery.schema) {
       case XyoArchivistFindQuerySchema:
@@ -72,6 +65,6 @@ export abstract class AbstractPayloadArchivist<T extends EmptyObject = EmptyObje
   }
 
   abstract find(filter: XyoPayloadFilterPredicate<T>): Promise<XyoPayloadWithMeta<T>[]>
-  abstract get(id: string[]): Promise<Array<XyoPayloadWithMeta<T> | null>>
+  abstract get(id: string[]): Promise<Array<XyoPayloadWithMeta<T>>>
   abstract insert(items: XyoPayloadWithPartialMeta<T>[]): Promise<XyoBoundWitness[]>
 }
