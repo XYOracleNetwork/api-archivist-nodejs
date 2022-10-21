@@ -1,3 +1,4 @@
+import { delay } from '@xylabs/delay'
 import { BoundWitnessBuilder } from '@xyo-network/boundwitness'
 import { XyoSchemaPayload } from '@xyo-network/schema-payload-plugin'
 import { StatusCodes } from 'http-status-codes'
@@ -39,6 +40,7 @@ describe('/archive/:archive/payload/schema/stats', () => {
       }),
     ]
     await Promise.all(posted.flatMap((p) => p))
+    await delay(1000)
   })
   it('Returns stats on all payload schemas in archive', async () => {
     const response = await (await request()).get(`/archive/${archive}/payload/schema/stats`).expect(StatusCodes.OK)
