@@ -37,7 +37,7 @@ export abstract class AbstractPayloadArchivist<T extends EmptyObject = EmptyObje
     const typedQuery = wrapper.query.payload
     // assertEx(this.queryable(query.schema, wrapper.addresses))
 
-    const result: (XyoPayload | null)[] = []
+    const result: XyoPayload[] = []
     const queryAccount = new XyoAccount()
     switch (typedQuery.schema) {
       case XyoArchivistFindQuerySchema:
@@ -65,6 +65,6 @@ export abstract class AbstractPayloadArchivist<T extends EmptyObject = EmptyObje
   }
 
   abstract find(filter: XyoPayloadFilterPredicate<T>): Promise<XyoPayloadWithMeta<T>[]>
-  abstract get(id: string[]): Promise<Array<XyoPayloadWithMeta<T> | null>>
+  abstract get(id: string[]): Promise<Array<XyoPayloadWithMeta<T>>>
   abstract insert(items: XyoPayloadWithPartialMeta<T>[]): Promise<XyoBoundWitness[]>
 }

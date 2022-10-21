@@ -2,7 +2,7 @@ import { XyoAccount } from '@xyo-network/account'
 import { BoundWitnessBuilder, BoundWitnessWrapper, XyoBoundWitness } from '@xyo-network/boundwitness'
 import { StatusCodes } from 'http-status-codes'
 
-import { claimArchive, getPayloads, getTokenForUnitTestUser, postBlock, request, unitTestSigningAccount } from '../../../../testUtil'
+import { claimArchive, getPayloads, getTokenForUnitTestUser, postBlock, request } from '../../../../testUtil'
 
 const config = { inlinePayloads: true }
 const defaultReturnLength = 10
