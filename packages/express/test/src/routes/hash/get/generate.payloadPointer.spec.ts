@@ -10,10 +10,11 @@ describe.skip('Generation of automation payload pointers', () => {
     'network.xyo.blockchain.ethereum.gas.etherchain.v2',
     'network.xyo.blockchain.ethereum.gas.etherchain.v1',
     'network.xyo.blockchain.ethereum.gas.etherscan',
-    'network.xyo.crypto.asset',
+    // 'network.xyo.crypto.asset',
   ]
   it.each(schemas)('Generates automation witness payload for %s schema', (schema) => {
-    const addressRule: PayloadAddressRule = { address: '1d8cb128afeed493e0c3d9de7bfc415aecfde283' } // Beta
+    // const addressRule: PayloadAddressRule = { address: 'ce2fac75093bfe0a8c87b9e2404cb025c911d852' } // Beta 'network.xyo.crypto.asset'
+    const addressRule: PayloadAddressRule = { address: '277307c04d552aaa0d2bb67fb2722026f2e8a866' } // Beta witnesses ('network.xyo.crypto.market.uniswap')
     // const addressRule: PayloadAddressRule = { address: '4618fce2a84b9cbc64bb07f7249caa6df2a892c7' } // Prod
     const archiveRule: PayloadArchiveRule = { archive: 'crypto-price-witness' }
     const schemaRule: PayloadSchemaRule = { schema }
