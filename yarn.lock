@@ -913,7 +913,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:^7.11.6, @babel/core@npm:^7.12.3, @babel/core@npm:^7.19.6":
+"@babel/core@npm:^7.11.6, @babel/core@npm:^7.12.3, @babel/core@npm:^7.19.6, @babel/core@npm:^7.20.2":
   version: 7.20.2
   resolution: "@babel/core@npm:7.20.2"
   dependencies:
@@ -2051,7 +2051,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/preset-env@npm:^7.19.4":
+"@babel/preset-env@npm:^7.19.4, @babel/preset-env@npm:^7.20.2":
   version: 7.20.2
   resolution: "@babel/preset-env@npm:7.20.2"
   dependencies:
@@ -3561,7 +3561,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:^29.2.0":
+"@types/jest@npm:^29.2.0, @types/jest@npm:^29.2.2":
   version: 29.2.2
   resolution: "@types/jest@npm:29.2.2"
   dependencies:
@@ -3633,7 +3633,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^18.11.3, @types/node@npm:^18.11.5":
+"@types/node@npm:*, @types/node@npm:^18.11.5, @types/node@npm:^18.11.9":
   version: 18.11.9
   resolution: "@types/node@npm:18.11.9"
   checksum: cc0aae109e9b7adefc32eecb838d6fad931663bb06484b5e9cbbbf74865c721b03d16fd8d74ad90e31dbe093d956a7c2c306ba5429ba0c00f3f7505103d7a496
@@ -3966,7 +3966,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xylabs/eslint-config@npm:^2.7.23, @xylabs/eslint-config@npm:^2.7.24":
+"@xylabs/eslint-config@npm:^2.7.24":
   version: 2.7.24
   resolution: "@xylabs/eslint-config@npm:2.7.24"
   dependencies:
@@ -4049,7 +4049,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xylabs/ts-scripts-yarn3@npm:^2.7.23":
+"@xylabs/ts-scripts-yarn3@npm:^2.7.24":
   version: 2.7.24
   resolution: "@xylabs/ts-scripts-yarn3@npm:2.7.24"
   dependencies:
@@ -4125,7 +4125,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xylabs/tsconfig@npm:^2.7.23":
+"@xylabs/tsconfig@npm:^2.7.24":
   version: 2.7.24
   resolution: "@xylabs/tsconfig@npm:2.7.24"
   dependencies:
@@ -4198,27 +4198,27 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@xyo-network/archivist-node@workspace:."
   dependencies:
-    "@babel/core": ^7.19.6
-    "@babel/preset-env": ^7.19.4
-    "@types/jest": ^29.2.0
-    "@types/node": ^18.11.3
+    "@babel/core": ^7.20.2
+    "@babel/preset-env": ^7.20.2
+    "@types/jest": ^29.2.2
+    "@types/node": ^18.11.9
     "@types/source-map-support": 0.5.6
-    "@xylabs/eslint-config": ^2.7.23
+    "@xylabs/eslint-config": ^2.7.24
     "@xylabs/sdk-api-express-ecs": ^1.2.5
-    "@xylabs/ts-scripts-yarn3": ^2.7.23
-    "@xylabs/tsconfig": ^2.7.23
+    "@xylabs/ts-scripts-yarn3": ^2.7.24
+    "@xylabs/tsconfig": ^2.7.24
     "@xyo-network/account": ^2.39.1
     "@xyo-network/boundwitness": ^2.39.1
     "@xyo-network/express-node": next
     "@xyo-network/payload": ^2.39.1
     axios: ^1.1.3
-    babel-jest: ^29.2.1
+    babel-jest: ^29.2.2
     dotenv: ^16.0.3
-    eslint: ~8.26.0
-    jest: ^29.2.1
+    eslint: ~8.27.0
+    jest: ^29.2.2
     jest-extended: ^3.1.0
     nodemon: ^2.0.20
-    pako: ^2.0.4
+    pako: ^2.1.0
     ts-jest: ^29.0.3
     ts-node: ^10.9.1
     typescript: ^4.8.4
@@ -5369,7 +5369,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-jest@npm:^29.2.1, babel-jest@npm:^29.2.2":
+"babel-jest@npm:^29.2.2":
   version: 29.2.2
   resolution: "babel-jest@npm:29.2.2"
   dependencies:
@@ -7495,9 +7495,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^8.26.0, eslint@npm:~8.26.0":
-  version: 8.26.0
-  resolution: "eslint@npm:8.26.0"
+"eslint@npm:^8.26.0, eslint@npm:~8.27.0":
+  version: 8.27.0
+  resolution: "eslint@npm:8.27.0"
   dependencies:
     "@eslint/eslintrc": ^1.3.3
     "@humanwhocodes/config-array": ^0.11.6
@@ -7540,7 +7540,7 @@ __metadata:
     text-table: ^0.2.0
   bin:
     eslint: bin/eslint.js
-  checksum: a2aced939ea060f77d10dcfced5cfeb940f63f383fd7ab1decadea64170ab552582e1c5909db1db641d4283178c9bc569f19b0f8900e00314a5f783e4b3f759d
+  checksum: 153b022d309e1b647a73b1bb0fa98912add699b06e279084155f23c6f2b5fc5abd05411fc1ba81608a24bbfaf044ca079544c16fffa6fc987b8f676c9960a2c4
   languageName: node
   linkType: hard
 
@@ -10122,7 +10122,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest@npm:^29.2.1, jest@npm:^29.2.2":
+"jest@npm:^29.2.2":
   version: 29.2.2
   resolution: "jest@npm:29.2.2"
   dependencies:
@@ -12495,10 +12495,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pako@npm:^2.0.4":
-  version: 2.0.4
-  resolution: "pako@npm:2.0.4"
-  checksum: 82b9b0b99dd830c9103856a6dbd10f0cb2c8c32b9768184727ea381a99666de9a47a069d2e6efe6acf09336f363956b50835c196ef9311b34b7274d420eb0d88
+"pako@npm:^2.0.4, pako@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "pako@npm:2.1.0"
+  checksum: 71666548644c9a4d056bcaba849ca6fd7242c6cf1af0646d3346f3079a1c7f4a66ffec6f7369ee0dc88f61926c10d6ab05da3e1fca44b83551839e89edd75a3e
   languageName: node
   linkType: hard
 
