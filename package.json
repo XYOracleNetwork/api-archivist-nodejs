@@ -31,7 +31,7 @@
     "outdated": "yarn workspaces foreach -pv outdated",
     "start": "nodemon",
     "test": "jest --no-cache --forceExit",
-    "test:ci": "jest --runInBand --coverage --forceExit"
+    "test:ci": "jest --runInBand --coverage --forceExit --passWithNoTests"
   },
   "author": "Arie Trouw",
   "license": "LGPL-3.0",
