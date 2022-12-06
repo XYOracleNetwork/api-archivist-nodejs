@@ -4168,16 +4168,14 @@ __metadata:
     "@types/node": ^18.11.11
     "@types/source-map-support": 0.5.6
     "@xylabs/eslint-config": ^2.7.24
-    "@xylabs/sdk-api-express-ecs": ^1.2.5
     "@xylabs/ts-scripts-yarn3": ^2.7.24
     "@xylabs/tsconfig": ^2.7.24
     "@xyo-network/account": ^2.41.12
     "@xyo-network/boundwitness": ^2.41.12
-    "@xyo-network/express-node": ^2.41.12
+    "@xyo-network/node-app": ^2.41.12
     "@xyo-network/payload": ^2.41.12
     axios: ^1.2.1
     babel-jest: ^29.3.1
-    dotenv: ^16.0.3
     eslint: ~8.29.0
     jest: ^29.3.1
     jest-extended: ^3.2.0
@@ -4479,22 +4477,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xyo-network/express-node@npm:^2.41.12":
-  version: 2.41.12
-  resolution: "@xyo-network/express-node@npm:2.41.12"
-  dependencies:
-    "@xyo-network/express-node-dependencies": ^2.41.12
-    "@xyo-network/express-node-lib": ^2.41.12
-    "@xyo-network/express-node-middleware": ^2.41.12
-    "@xyo-network/express-node-routes": ^2.41.12
-    "@xyo-network/express-node-server": ^2.41.12
-    axios: ~1.2.1
-    pako: ^2.1.0
-    tslib: ^2.4.1
-  checksum: 361d86be6f55f596803a9a935fa24b270cb94de8554ca32489954b872bc8c55c9eadfbd815dbd5cf9229d106fd669a805fef13a647b48b4fd8bf178f37533190
-  languageName: node
-  linkType: hard
-
 "@xyo-network/location-certainty-payload-plugin@npm:^2.41.12":
   version: 2.41.12
   resolution: "@xyo-network/location-certainty-payload-plugin@npm:2.41.12"
@@ -4572,6 +4554,19 @@ __metadata:
     "@xyo-network/payload": ^2.41.12
     tslib: ^2.4.1
   checksum: 4a257ea7e38e1f512c0bddd2dc95d776a500b57b8b1922db177272d9e65eaaa8b9a8eede5e33a887686475edab3e737eb2d55d7235697f594c9cf54597ce08e4
+  languageName: node
+  linkType: hard
+
+"@xyo-network/node-app@npm:^2.41.12":
+  version: 2.41.12
+  resolution: "@xyo-network/node-app@npm:2.41.12"
+  dependencies:
+    "@xylabs/sdk-api-express-ecs": ^1.2.5
+    "@xyo-network/express-node-server": ^2.41.12
+    "@xyo-network/modules": ^2.41.12
+    "@xyo-network/node": ^2.41.12
+    dotenv: ^16.0.3
+  checksum: 90ffdb9d081460bff634852eb9421cdfe221b4614b69646b861c88895da4e21c414d197bf2f1806442c0e5755ebc979a926e5c4d95fbe8c444c331cf1d1842f4
   languageName: node
   linkType: hard
 
