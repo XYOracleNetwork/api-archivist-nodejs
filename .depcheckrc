@@ -1,18 +1,28 @@
 ignores:
   [
+    "@aws-sdk/client-secrets-manager",
     "@types/jest",
     "@types/node",
     "@types/source-map-support",
+    "@xylabs/assert",
     "@xylabs/ts-scripts-yarn3",
     "@xylabs/tsconfig",
     "axios",
     "babel-jest",
+    "body-parser",
     "depcheck",
+    "express-mung",
+    "express",
+    "http-status-codes",
     "jest-extended",
     "jest-mock-extended",
     "jest-sorted",
+    "node-cache",
     "pako",
+    "rollbar",
     "ts-jest",
     "ts-node",
-    "typescript"
+    "typescript",
+    "winston-transport",
+    "winston"
   ]
