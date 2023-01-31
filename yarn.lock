@@ -3933,9 +3933,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xylabs/eslint-config@npm:^2.12.26":
-  version: 2.12.26
-  resolution: "@xylabs/eslint-config@npm:2.12.26"
+"@xylabs/eslint-config@npm:^2.12.29":
+  version: 2.12.29
+  resolution: "@xylabs/eslint-config@npm:2.12.29"
   dependencies:
     "@babel/core": ^7.20.12
     "@babel/eslint-parser": ^7.19.1
@@ -3959,7 +3959,7 @@ __metadata:
     typescript: ^4.9.4
   peerDependencies:
     eslint: ^8.23.0
-  checksum: e90c0bddf133e318de4c9350abb4f7ec078b2c1d73195893e3a6286e826b3d577582a30fa21fee1edf9a7d4effcd78f17356551d479cc5ba632fa8124b0a10ac
+  checksum: 733439e1c7ca399be278c5d954371c77f8bc7056a5aba6ab2d09409fee91a4c053f137e1e7a5508abba06403e0608d23c1c2b0fe3c80d6b54456254b6141e165
   languageName: node
   linkType: hard
 
@@ -4004,16 +4004,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xylabs/ts-scripts-yarn3@npm:^2.12.26":
-  version: 2.12.26
-  resolution: "@xylabs/ts-scripts-yarn3@npm:2.12.26"
+"@xylabs/ts-scripts-yarn3@npm:^2.12.29":
+  version: 2.12.29
+  resolution: "@xylabs/ts-scripts-yarn3@npm:2.12.29"
   dependencies:
     "@babel/core": ^7.20.12
     "@babel/preset-env": ^7.20.2
     "@types/jest": ^29.2.6
     "@types/node": ^18.11.18
-    "@xylabs/eslint-config": ^2.12.26
-    "@xylabs/tsconfig": ^2.12.26
+    "@xylabs/eslint-config": ^2.12.29
+    "@xylabs/tsconfig": ^2.12.29
     chalk: ^4.1.2
     cpy: ^8.1.2
     depcheck: ^1.4.3
@@ -4063,6 +4063,7 @@ __metadata:
     lint-fast: dist/cjs/bin/lint-fast.js
     lint-profile: dist/cjs/bin/lint-profile.js
     package-clean: dist/cjs/bin/package/clean.js
+    package-compile: dist/cjs/bin/package/compile.js
     package-compile-cjs: dist/cjs/bin/package/compile-cjs.js
     package-compile-esm: dist/cjs/bin/package/compile-esm.js
     package-deps: dist/cjs/bin/package/deps.js
@@ -4084,16 +4085,16 @@ __metadata:
     xy: dist/cjs/bin/xy.js
     xy-ts: src/bin/xy-ts.ts
     yarn3only: dist/cjs/bin/yarn3only.js
-  checksum: a11aa0542dac87490bbe8636b544ea7d1e60ed2770454e212200dedfec34e93924fc6dcd560b54f823d80b9ee42a781b1692566acf1720b2d5a07b59bcd50eb8
+  checksum: a83d3dd2f4e974a9ea6c9abd0e89da109d49e48cea49017911b6a98f83ec042c9dceebceb91fa923ab6ab615f785ac785ef27602f8671dcd36321bd57acb0833
   languageName: node
   linkType: hard
 
-"@xylabs/tsconfig@npm:^2.12.26":
-  version: 2.12.26
-  resolution: "@xylabs/tsconfig@npm:2.12.26"
+"@xylabs/tsconfig@npm:^2.12.29":
+  version: 2.12.29
+  resolution: "@xylabs/tsconfig@npm:2.12.29"
   dependencies:
     typescript: ^4.9.4
-  checksum: 4b8aa60784cfb56b96d61438c1da31cd242f320150ba438615b2c37ab4d73ee4bd4621ea9f6774e7d9cda99bd0aeb147e3987ea9077bd9b1061ac4b5ff29cc80
+  checksum: 44a5313e81abcb3a44c69d640e7af992ab107a73b6f8ce7e2bfc08269881219dfd4f459103d34b01337e5f6670f5511100c589042820e06e3cc1ffee53552871
   languageName: node
   linkType: hard
 
@@ -4179,9 +4180,9 @@ __metadata:
     "@types/node": ^18.11.18
     "@types/source-map-support": 0.5.6
     "@xylabs/assert": ^2.6.16
-    "@xylabs/eslint-config": ^2.12.26
-    "@xylabs/ts-scripts-yarn3": ^2.12.26
-    "@xylabs/tsconfig": ^2.12.26
+    "@xylabs/eslint-config": ^2.12.29
+    "@xylabs/ts-scripts-yarn3": ^2.12.29
+    "@xylabs/tsconfig": ^2.12.29
     "@xyo-network/account": ^2.43.17
     "@xyo-network/boundwitness": ^2.43.17
     "@xyo-network/node-app": ^2.43.17
@@ -4190,7 +4191,7 @@ __metadata:
     babel-jest: ^29.4.1
     body-parser: ^1.20.1
     depcheck: ^1.4.3
-    eslint: ~8.32.0
+    eslint: ~8.33.0
     express: ^4.18.2
     express-mung: ^0.5.1
     http-status-codes: ^2.2.0
@@ -4202,7 +4203,7 @@ __metadata:
     rollbar: ^2.26.1
     ts-jest: ^29.0.5
     ts-node: ^10.9.1
-    typescript: ^4.9.4
+    typescript: ^4.9.5
     winston: ^3.8.2
     winston-transport: ^4.5.0
   languageName: unknown
@@ -7772,9 +7773,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^8.32.0, eslint@npm:~8.32.0":
-  version: 8.32.0
-  resolution: "eslint@npm:8.32.0"
+"eslint@npm:^8.32.0, eslint@npm:~8.33.0":
+  version: 8.33.0
+  resolution: "eslint@npm:8.33.0"
   dependencies:
     "@eslint/eslintrc": ^1.4.1
     "@humanwhocodes/config-array": ^0.11.8
@@ -7817,7 +7818,7 @@ __metadata:
     text-table: ^0.2.0
   bin:
     eslint: bin/eslint.js
-  checksum: 23c8fb3c57291eecd9c1448faf603226a8f885022a2cd96e303459bf72e39b7f54987c6fb948f0f9eecaf7085600e6eb0663482a35ea83da12e9f9141a22b91e
+  checksum: 727e63ab8b7acf281442323c5971f6afdd5b656fbcebc4476cf54e35af51b2f180617433fc5e1952f0449ca3f43a905527f9407ea4b8a7ea7562fc9c3f278d4c
   languageName: node
   linkType: hard
 
@@ -16742,23 +16743,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^4.9.4":
-  version: 4.9.4
-  resolution: "typescript@npm:4.9.4"
+"typescript@npm:^4.9.4, typescript@npm:^4.9.5":
+  version: 4.9.5
+  resolution: "typescript@npm:4.9.5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: e782fb9e0031cb258a80000f6c13530288c6d63f1177ed43f770533fdc15740d271554cdae86701c1dd2c83b082cea808b07e97fd68b38a172a83dbf9e0d0ef9
+  checksum: ee000bc26848147ad423b581bd250075662a354d84f0e06eb76d3b892328d8d4440b7487b5a83e851b12b255f55d71835b008a66cbf8f255a11e4400159237db
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^4.9.4#~builtin<compat/typescript>":
-  version: 4.9.4
-  resolution: "typescript@patch:typescript@npm%3A4.9.4#~builtin<compat/typescript>::version=4.9.4&hash=ad5954"
+"typescript@patch:typescript@^4.9.4#~builtin<compat/typescript>, typescript@patch:typescript@^4.9.5#~builtin<compat/typescript>":
+  version: 4.9.5
+  resolution: "typescript@patch:typescript@npm%3A4.9.5#~builtin<compat/typescript>::version=4.9.5&hash=ad5954"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 1caaea6cb7f813e64345190fddc4e6c924d0b698ab81189b503763c4a18f7f5501c69362979d36e19c042d89d936443e768a78b0675690b35eb663d19e0eae71
+  checksum: 8f6260acc86b56bfdda6004bc53f32ea548f543e8baef7071c8e34d29d292f3e375c8416556c8de10b24deef6933cd1c16a8233dc84a3dd43a13a13265d0faab
   languageName: node
   linkType: hard
 
