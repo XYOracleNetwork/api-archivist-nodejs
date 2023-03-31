@@ -1,6 +1,3 @@
-import { config } from 'dotenv'
-config()
-import { tryParseInt } from '@xylabs/sdk-api-express-ecs'
-import { server } from '@xyo-network/express-node'
+import { getNode } from '@xyo-network/node-app'
 
-void server(tryParseInt(process.env.APP_PORT))
+void getNode()
