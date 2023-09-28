@@ -7,24 +7,28 @@
   "version": "2.0.96",
   "description": "XYO Archivist",
   "sideeffects": false,
-  "esm5": "dist/esm/index.js",
   "exports": {
     ".": {
-      "esm5": "./dist/esm/index.js",
       "node": {
-        "import": "./dist/cjs/index.js",
-        "require": "./dist/cjs/index.js"
-      },
-      "default": "./dist/esm/index.js"
+        "import": {
+          "types": "./dist/node/index.d.mts",
+          "default": "./dist/node/index.mjs"
+        },
+        "require": {
+          "types": "./dist/node/index.d.ts",
+          "default": "./dist/node/index.js"
+        }
+      }
     },
     "./package.json": "./package.json"
   },
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
+  "main": "dist/node/index.js",
+  "module": "dist/node/index.mjs",
+  "types": "dist/node/index.d.ts",
   "scripts": {
     "deploy": "echo Deploy not allowed!",
     "deploy3": "echo Deploy3 not allowed!",
-    "launch": "node --max-old-space-size=8192 --experimental-specifier-resolution=node ./dist/cjs/index.js",
+    "launch": "node --max-old-space-size=8192 --experimental-specifier-resolution=node ./dist/node/index.cjs",
     "start": "nodemon",
     "test": "jest --no-cache --forceExit",
     "test:ci": "jest --runInBand --coverage --forceExit --passWithNoTests"
@@ -32,14 +36,14 @@
   "author": "Arie Trouw",
   "license": "LGPL-3.0",
   "dependencies": {
-    "@aws-sdk/client-secrets-manager": "^3.405.0",
-    "@xylabs/assert": "^2.9.3",
-    "@xyo-network/node-app": "^2.72.8",
-    "axios": "^1.5.0",
+    "@aws-sdk/client-secrets-manager": "^3.421.0",
+    "@xylabs/assert": "^2.12.14",
+    "@xyo-network/node-app": "^2.75.4",
+    "axios": "^1.5.1",
     "body-parser": "^1.20.2",
     "express": "^4.18.2",
     "express-mung": "^0.5.1",
-    "http-status-codes": "^2.2.0",
+    "http-status-codes": "^2.3.0",
     "node-cache": "^5.1.2",
     "pako": "^2.1.0",
     "rollbar": "^2.26.2",
@@ -47,18 +51,18 @@
     "winston-transport": "^4.5.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.22.15",
-    "@babel/preset-env": "^7.22.15",
-    "@types/jest": "^29.5.4",
-    "@types/node": "^20.5.9",
-    "@types/source-map-support": "0.5.7",
-    "@xylabs/eslint-config": "^2.19.3",
-    "@xylabs/ts-scripts-yarn3": "^2.19.3",
-    "@xylabs/tsconfig": "^2.19.3",
-    "babel-jest": "^29.6.4",
-    "depcheck": "^1.4.5",
-    "eslint": "~8.48.0",
-    "jest": "^29.6.4",
+    "@babel/core": "^7.23.0",
+    "@babel/preset-env": "^7.22.20",
+    "@types/jest": "^29.5.5",
+    "@types/node": "^20.7.1",
+    "@types/source-map-support": "0.5.8",
+    "@xylabs/eslint-config": "^3.0.79",
+    "@xylabs/ts-scripts-yarn3": "^3.0.79",
+    "@xylabs/tsconfig": "^3.0.79",
+    "babel-jest": "^29.7.0",
+    "depcheck": "^1.4.6",
+    "eslint": "~8.50.0",
+    "jest": "^29.7.0",
     "jest-extended": "^4.0.1",
     "nodemon": "^3.0.1",
     "ts-jest": "^29.1.1",
@@ -71,10 +75,10 @@
   "packageManager": "yarn@3.6.2",
   "private": true,
   "engines": {
-    "node": ">=18.13.0 <19"
+    "node": ">=18.17.1 <19"
   },
   "volta": {
-    "node": "18.13.0",
+    "node": "18.17.1",
     "yarn": "1.22.19"
   }
 }
