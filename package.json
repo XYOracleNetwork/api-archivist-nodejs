@@ -28,7 +28,7 @@
   "scripts": {
     "deploy": "echo Deploy not allowed!",
     "deploy3": "echo Deploy3 not allowed!",
-    "launch": "node --max-old-space-size=8192 --experimental-specifier-resolution=node ./dist/node/index.cjs",
+    "launch": "node --max-old-space-size=8192 --experimental-specifier-resolution=node ./dist/node/index.js",
     "start": "nodemon",
     "test": "jest --no-cache --forceExit",
     "test:ci": "jest --runInBand --coverage --forceExit --passWithNoTests"
