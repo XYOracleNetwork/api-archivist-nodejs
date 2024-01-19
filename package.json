@@ -12,24 +12,26 @@
       "node": {
         "import": {
           "types": "./dist/node/index.d.mts",
-          "default": "./dist/node/index.mjs"
+          "default": "./dist/node/index.js"
         },
         "require": {
-          "types": "./dist/node/index.d.ts",
-          "default": "./dist/node/index.js"
+          "types": "./dist/node/index.d.cts",
+          "default": "./dist/node/index.cjs"
         }
       }
     },
     "./package.json": "./package.json"
   },
-  "main": "dist/node/index.js",
-  "module": "dist/node/index.mjs",
-  "types": "dist/node/index.d.ts",
+  "main": "dist/node/index.cjs",
+  "module": "dist/node/index.js",
+  "types": "dist/node/index.d.cts",
   "scripts": {
     "deploy": "echo Deploy not allowed!",
     "deploy3": "echo Deploy3 not allowed!",
     "launch": "node --max-old-space-size=8192 --experimental-specifier-resolution=node ./dist/node/index.js",
     "start": "nodemon",
+    "start-cjs": "node ./dist/node/index.cjs",
+    "start-esm": "node ./dist/node/index.js",
     "test": "jest --no-cache --forceExit",
     "test:ci": "jest --runInBand --coverage --forceExit --passWithNoTests"
   },
@@ -53,6 +55,7 @@
   "devDependencies": {
     "@babel/core": "^7.23.7",
     "@babel/preset-env": "^7.23.8",
+    "@babel/preset-typescript": "^7.23.3",
     "@types/jest": "^29.5.11",
     "@types/node": "^20.11.5",
     "@types/source-map-support": "0.5.10",
@@ -77,11 +80,11 @@
   "packageManager": "yarn@4.0.2",
   "private": true,
   "engines": {
-    "node": ">=18.17 <19"
+    "node": ">=20.10.0 <21"
   },
   "volta": {
-    "node": "18.17.1",
+    "node": "20.10.0",
     "yarn": "1.22.19"
   },
-  "type": "commonjs"
+  "type": "module"
 }
