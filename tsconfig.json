@@ -9,12 +9,5 @@
   "extends": "@xylabs/tsconfig",
   "include": [
     "./src", "./**/src"
-  ],
-  "ts-node": {
-    "compilerOptions": {
-      "module": "ESNext"
-    },
-    "files": true,
-    "transpileOnly": true
-  }
+  ]
 }
