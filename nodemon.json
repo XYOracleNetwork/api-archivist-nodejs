@@ -2,12 +2,8 @@
   "env": {
     "NODE_ENV": "development"
   },
-  "exec": "node -r ts-node/register ./src/index.ts",
+  "exec": "ts-node-script ./src/index.ts",
   "ext": ".ts",
-  "ignore": [
-    "**/*.spec.ts"
-  ],
-  "watch": [
-    "./src"
-  ]
+  "ignore": ["**/*.spec.ts"],
+  "watch": ["./src"]
 }
