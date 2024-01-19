@@ -9,5 +9,12 @@
   "extends": "@xylabs/tsconfig",
   "include": [
     "./src", "./**/src"
-  ]
+  ],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    },
+    "files": true,
+    "transpileOnly": true
+  }
 }

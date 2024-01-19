@@ -2870,7 +2870,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-typescript@npm:^11.1.5":
+"@rollup/plugin-typescript@npm:^11.1.6":
   version: 11.1.6
   resolution: "@rollup/plugin-typescript@npm:11.1.6"
   dependencies:
@@ -3822,7 +3822,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^20.10.6, @types/node@npm:^20.11.5":
+"@types/node@npm:*, @types/node@npm:^20.11.5":
   version: 20.11.5
   resolution: "@types/node@npm:20.11.5"
   dependencies:
@@ -3931,7 +3931,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/eslint-plugin@npm:^6.18.0":
+"@typescript-eslint/eslint-plugin@npm:^6.19.0":
   version: 6.19.0
   resolution: "@typescript-eslint/eslint-plugin@npm:6.19.0"
   dependencies:
@@ -3956,7 +3956,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/parser@npm:^6.18.0":
+"@typescript-eslint/parser@npm:^6.19.0":
   version: 6.19.0
   resolution: "@typescript-eslint/parser@npm:6.19.0"
   dependencies:
@@ -4181,34 +4181,34 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xylabs/eslint-config@npm:^3.2.41":
-  version: 3.2.41
-  resolution: "@xylabs/eslint-config@npm:3.2.41"
+"@xylabs/eslint-config@npm:^3.2.42":
+  version: 3.2.42
+  resolution: "@xylabs/eslint-config@npm:3.2.42"
   dependencies:
-    "@typescript-eslint/eslint-plugin": "npm:^6.18.0"
-    "@typescript-eslint/parser": "npm:^6.18.0"
+    "@typescript-eslint/eslint-plugin": "npm:^6.19.0"
+    "@typescript-eslint/parser": "npm:^6.19.0"
     eslint-config-prettier: "npm:^9.1.0"
     eslint-import-resolver-typescript: "npm:^3.6.1"
     eslint-plugin-deprecation: "npm:^2.0.0"
     eslint-plugin-import: "npm:^2.29.1"
     eslint-plugin-json-es: "npm:^1.5.7"
-    eslint-plugin-jsonc: "npm:^2.11.2"
+    eslint-plugin-jsonc: "npm:^2.12.2"
     eslint-plugin-md: "npm:^1.0.19"
     eslint-plugin-no-secrets: "npm:^0.8.9"
-    eslint-plugin-prettier: "npm:^5.1.2"
+    eslint-plugin-prettier: "npm:^5.1.3"
     eslint-plugin-simple-import-sort: "npm:^10.0.0"
     eslint-plugin-sort-keys-fix: "npm:^1.1.2"
     eslint-plugin-workspaces: "npm:^0.10.0"
     jsonc-eslint-parser: "npm:^2.4.0"
     lodash: "npm:^4.17.21"
     markdown-eslint-parser: "npm:^1.2.1"
-    prettier: "npm:^3.1.1"
+    prettier: "npm:^3.2.4"
     remark-lint-maximum-line-length: "npm:^3.1.3"
     remark-preset-lint-markdown-style-guide: "npm:^5.1.3"
     typescript: "npm:^5.3.3"
   peerDependencies:
     eslint: ^8.23.0
-  checksum: 1001b393c4e26c1d140076f2827f36faae3fbb2ec49872020821c23c5aff3329b3fbe3ee8063404d901c751bc29eecbf8bd5ca50b83190737c7d970b454e2660
+  checksum: 829afdfc94fae93870b07e82db4865b0c80aa4d449d19d085b292754e5d7e2508506b4bb6c95fd6a91ccf4d0e977a3f12d5fe84edd4c2206405adc14611e7001
   languageName: node
   linkType: hard
 
@@ -4335,27 +4335,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xylabs/ts-scripts-yarn3@npm:^3.2.41":
-  version: 3.2.41
-  resolution: "@xylabs/ts-scripts-yarn3@npm:3.2.41"
+"@xylabs/ts-scripts-yarn3@npm:^3.2.42":
+  version: 3.2.42
+  resolution: "@xylabs/ts-scripts-yarn3@npm:3.2.42"
   dependencies:
     "@rollup/plugin-commonjs": "npm:^25.0.7"
     "@rollup/plugin-json": "npm:^6.1.0"
-    "@rollup/plugin-typescript": "npm:^11.1.5"
-    "@types/node": "npm:^20.10.6"
+    "@rollup/plugin-typescript": "npm:^11.1.6"
+    "@types/node": "npm:^20.11.5"
     "@types/yargs": "npm:^17.0.32"
-    "@typescript-eslint/eslint-plugin": "npm:^6.18.0"
-    "@typescript-eslint/parser": "npm:^6.18.0"
-    "@xylabs/tsconfig": "npm:~3.2.41"
-    async-mutex: "npm:^0.4.0"
+    "@typescript-eslint/eslint-plugin": "npm:^6.19.0"
+    "@typescript-eslint/parser": "npm:^6.19.0"
+    "@xylabs/tsconfig": "npm:~3.2.42"
+    async-mutex: "npm:^0.4.1"
     chalk: "npm:^4.1.2"
-    cosmiconfig: "npm:^8.3.6"
+    cosmiconfig: "npm:^9.0.0"
     cosmiconfig-typescript-loader: "npm:^5.0.0"
     cpy: "npm:^8.1.2"
     depcheck: "npm:^1.4.7"
     eslint: "npm:^8.56.0"
     eslint-config-prettier: "npm:^9.1.0"
-    eslint-plugin-prettier: "npm:^5.1.2"
+    eslint-plugin-prettier: "npm:^5.1.3"
     eslint-plugin-sonarjs: "npm:^0.23.0"
     glob: "npm:^10.3.10"
     jest: "npm:^29.7.0"
@@ -4370,21 +4370,21 @@ __metadata:
     npm-package-json-lint: "npm:^7.1.0"
     npm-package-json-lint-config-default: "npm:^6.0.0"
     parse-git-config: "npm:^3.0.0"
-    prettier: "npm:^3.1.1"
+    prettier: "npm:^3.2.4"
     publint: "npm:^0.2.7"
     reflect-metadata: "npm:^0.2.1"
     rimraf: "npm:^4.4.1"
-    rollup: "npm:^4.9.4"
+    rollup: "npm:^4.9.5"
     rollup-plugin-exclude-dependencies-from-bundle: "npm:^1.1.23"
     rollup-plugin-node-externals: "npm:^6.1.2"
-    supertest: "npm:^6.3.3"
+    supertest: "npm:^6.3.4"
     ts-jest: "npm:^29.1.1"
     ts-node: "npm:^10.9.2"
     ts-prune: "npm:^0.10.3"
     tsc-prog: "npm:^2.3.0"
     tslib: "npm:^2.6.2"
-    tsup: "npm:^7.3.0"
-    typedoc: "npm:^0.25.6"
+    tsup: "npm:^8.0.1"
+    typedoc: "npm:^0.25.7"
     types-package-json: "npm:^2.0.39"
     yargs: "npm:^17.7.2"
   peerDependencies:
@@ -4435,14 +4435,14 @@ __metadata:
     xy: dist/bin/xy.js
     xy-ts: src/bin/xy-ts.ts
     yarn3only: dist/bin/yarn3only.js
-  checksum: 5c2cb32320dc384afeda96f872d5bacd7c77a5924a07e6a4d29a1e9dc53699a6698e4a1f8226e9ea4c17863d677299e32694fb87a5c873c603c43ffb97acfdf4
+  checksum: 7de59838439f8de9bb73ff2dc631b7e6540eb0c87a2c18fd271072c41d2b2d2077eddda35ae0cb419cb0b66df0af83cd476380b6aa93a3a0883609e7f03e56b5
   languageName: node
   linkType: hard
 
-"@xylabs/tsconfig@npm:^3.2.41, @xylabs/tsconfig@npm:~3.2.41":
-  version: 3.2.41
-  resolution: "@xylabs/tsconfig@npm:3.2.41"
-  checksum: 23113749cab28624dd72a8e4a432d1ecb0c5d98ed21bdd3c0f594fb74fc257bc3c15557496821093f68e8f219a3297386079d381228de4d3d66bbc7b7d124acc
+"@xylabs/tsconfig@npm:^3.2.42, @xylabs/tsconfig@npm:~3.2.42":
+  version: 3.2.42
+  resolution: "@xylabs/tsconfig@npm:3.2.42"
+  checksum: 7cdd03e8f8d42241826cbd4a545e1eb93d9f56a26bbb2569a408f73e1d638777f6e60fed9d5c861a3348ec9497b46481203e382edcea0d6d5a140322aa597029
   languageName: node
   linkType: hard
 
@@ -4682,9 +4682,9 @@ __metadata:
     "@types/node": "npm:^20.11.5"
     "@types/source-map-support": "npm:0.5.10"
     "@xylabs/assert": "npm:^2.13.25"
-    "@xylabs/eslint-config": "npm:^3.2.41"
-    "@xylabs/ts-scripts-yarn3": "npm:^3.2.41"
-    "@xylabs/tsconfig": "npm:^3.2.41"
+    "@xylabs/eslint-config": "npm:^3.2.42"
+    "@xylabs/ts-scripts-yarn3": "npm:^3.2.42"
+    "@xylabs/tsconfig": "npm:^3.2.42"
     "@xyo-network/node-app": "npm:^2.83.0"
     axios: "npm:^1.6.5"
     babel-jest: "npm:^29.7.0"
@@ -8711,7 +8711,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cosmiconfig@npm:^8.2.0, cosmiconfig@npm:^8.3.6":
+"cosmiconfig@npm:^8.2.0":
   version: 8.3.6
   resolution: "cosmiconfig@npm:8.3.6"
   dependencies:
@@ -8725,6 +8725,23 @@ __metadata:
     typescript:
       optional: true
   checksum: 91d082baca0f33b1c085bf010f9ded4af43cbedacba8821da0fb5667184d0a848addc52c31fadd080007f904a555319c238cf5f4c03e6d58ece2e4876b2e73d6
+  languageName: node
+  linkType: hard
+
+"cosmiconfig@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "cosmiconfig@npm:9.0.0"
+  dependencies:
+    env-paths: "npm:^2.2.1"
+    import-fresh: "npm:^3.3.0"
+    js-yaml: "npm:^4.1.0"
+    parse-json: "npm:^5.2.0"
+  peerDependencies:
+    typescript: ">=4.9.5"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 8bdf1dfbb6fdb3755195b6886dc0649a3c742ec75afa4cb8da7b070936aed22a4f4e5b7359faafe03180358f311dbc300d248fd6586c458203d376a40cc77826
   languageName: node
   linkType: hard
 
@@ -9323,7 +9340,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"env-paths@npm:^2.2.0":
+"env-paths@npm:^2.2.0, env-paths@npm:^2.2.1":
   version: 2.2.1
   resolution: "env-paths@npm:2.2.1"
   checksum: 65b5df55a8bab92229ab2b40dad3b387fad24613263d103a97f91c9fe43ceb21965cd3392b1ccb5d77088021e525c4e0481adb309625d0cb94ade1d1fb8dc17e
@@ -9732,7 +9749,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-jsonc@npm:^2.11.2":
+"eslint-plugin-jsonc@npm:^2.12.2":
   version: 2.12.2
   resolution: "eslint-plugin-jsonc@npm:2.12.2"
   dependencies:
@@ -9772,7 +9789,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-prettier@npm:^5.1.2":
+"eslint-plugin-prettier@npm:^5.1.3":
   version: 5.1.3
   resolution: "eslint-plugin-prettier@npm:5.1.3"
   dependencies:
@@ -15508,7 +15525,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^3.1.1":
+"prettier@npm:^3.2.4":
   version: 3.2.4
   resolution: "prettier@npm:3.2.4"
   bin:
@@ -17621,7 +17638,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:^4.0.2, rollup@npm:^4.9.4":
+"rollup@npm:^4.0.2, rollup@npm:^4.9.5":
   version: 4.9.5
   resolution: "rollup@npm:4.9.5"
   dependencies:
@@ -18630,7 +18647,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"supertest@npm:^6.3.3":
+"supertest@npm:^6.3.4":
   version: 6.3.4
   resolution: "supertest@npm:6.3.4"
   dependencies:
@@ -19176,9 +19193,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tsup@npm:^7.3.0":
-  version: 7.3.0
-  resolution: "tsup@npm:7.3.0"
+"tsup@npm:^8.0.1":
+  version: 8.0.1
+  resolution: "tsup@npm:8.0.1"
   dependencies:
     bundle-require: "npm:^4.0.0"
     cac: "npm:^6.7.12"
@@ -19195,10 +19212,13 @@ __metadata:
     sucrase: "npm:^3.20.3"
     tree-kill: "npm:^1.2.2"
   peerDependencies:
+    "@microsoft/api-extractor": ^7.36.0
     "@swc/core": ^1
     postcss: ^8.4.12
     typescript: ">=4.5.0"
   peerDependenciesMeta:
+    "@microsoft/api-extractor":
+      optional: true
     "@swc/core":
       optional: true
     postcss:
@@ -19208,7 +19228,7 @@ __metadata:
   bin:
     tsup: dist/cli-default.js
     tsup-node: dist/cli-node.js
-  checksum: 1051bd0d993d058ea7977a3217b4fe68c8fd6cc9e8e900307dd9ab30553749c7a813016ff1dbc854992d08893ede563d04499b2ca9c01af40c0298ef0554cd9f
+  checksum: f5866035ac96c5f421856a3e41ae25afaccae4eba0c9e747626a691be9d017b32b799a533f1e57bf1da6808395452608bb52d16625d2223022448f0d4e42e9ec
   languageName: node
   linkType: hard
 
@@ -19395,7 +19415,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typedoc@npm:^0.25.6":
+"typedoc@npm:^0.25.7":
   version: 0.25.7
   resolution: "typedoc@npm:0.25.7"
   dependencies:
