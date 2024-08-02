@@ -2,8 +2,8 @@
   "env": {
     "NODE_ENV": "development"
   },
-  "exec": "ts-node-script ./src/index.ts",
-  "ext": ".ts",
+  "exec": "node ./dist/node/index.mjs",
+  "ext": "ts, js, json",
   "ignore": ["**/*.spec.ts"],
-  "watch": ["./src"]
+  "watch": ["src"]
 }
