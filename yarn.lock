@@ -4583,6 +4583,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@xylabs/tsconfig-jest@npm:^3.15.5":
+  version: 3.15.5
+  resolution: "@xylabs/tsconfig-jest@npm:3.15.5"
+  dependencies:
+    "@xylabs/tsconfig": "npm:^3.15.5"
+    jest-extended: "npm:^4.0.2"
+    jest-sorted: "npm:^1.0.15"
+  peerDependencies:
+    typescript: ^5
+  checksum: 10/c6aed9f8b596dd49f8e7f7f3907f660a55a03f21fe27dd2b3af5eb4dfc70917638cca9e7eb151d8df1c96cf3fd710d337004ca5c67fd5cdcefa9a092c60be68c
+  languageName: node
+  linkType: hard
+
 "@xylabs/tsconfig@npm:^3.15.5":
   version: 3.15.5
   resolution: "@xylabs/tsconfig@npm:3.15.5"
@@ -4798,6 +4811,7 @@ __metadata:
     "@xylabs/eslint-config-flat": "npm:^3.15.5"
     "@xylabs/ts-scripts-yarn3": "npm:^3.15.5"
     "@xylabs/tsconfig": "npm:^3.15.5"
+    "@xylabs/tsconfig-jest": "npm:^3.15.5"
     "@xyo-network/node-app": "npm:^2.89.1"
     axios: "npm:^1.7.3"
     babel-jest: "npm:^29.7.0"
