@@ -4255,6 +4255,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@xylabs/eslint-config-flat@npm:^3.15.5":
+  version: 3.15.5
+  resolution: "@xylabs/eslint-config-flat@npm:3.15.5"
+  dependencies:
+    "@typescript-eslint/eslint-plugin": "npm:^8.0.0"
+    "@typescript-eslint/parser": "npm:^8.0.0"
+    eslint-config-prettier: "npm:^9.1.0"
+    eslint-plugin-import: "npm:^2.29.1"
+    eslint-plugin-jsonc: "npm:^2.16.0"
+    eslint-plugin-md: "npm:^1.0.19"
+    eslint-plugin-prettier: "npm:^5.2.1"
+    eslint-plugin-simple-import-sort: "npm:^12.1.1"
+    eslint-plugin-sonarjs: "npm:^1.0.4"
+    eslint-plugin-unicorn: "npm:^55.0.0"
+    eslint-plugin-workspaces: "npm:^0.10.1"
+    jsonc-eslint-parser: "npm:^2.4.0"
+    prettier: "npm:^3.3.3"
+  peerDependencies:
+    eslint: ^9
+  checksum: 10/78073a80eed1fcc773cedc769ef720e8ec3919c8810a380909710b690aa0371a3287c4aa7d88dd31e751f1e0a47cd32b5f6d2d96ed9e4f2af6497b92b5efcf44
+  languageName: node
+  linkType: hard
+
 "@xylabs/eslint-config@npm:^3.15.5":
   version: 3.15.5
   resolution: "@xylabs/eslint-config@npm:3.15.5"
@@ -4772,6 +4795,7 @@ __metadata:
     "@types/source-map-support": "npm:0.5.10"
     "@xylabs/assert": "npm:^3.6.8"
     "@xylabs/eslint-config": "npm:^3.15.5"
+    "@xylabs/eslint-config-flat": "npm:^3.15.5"
     "@xylabs/ts-scripts-yarn3": "npm:^3.15.5"
     "@xylabs/tsconfig": "npm:^3.15.5"
     "@xyo-network/node-app": "npm:^2.89.1"
