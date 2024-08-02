@@ -28,7 +28,6 @@
   "scripts": {
     "deploy": "echo Deploy not allowed!",
     "deploy3": "echo Deploy3 not allowed!",
-    "launch": "node --max-old-space-size=8192 --experimental-specifier-resolution=node ./dist/node/index.js",
     "start": "nodemon",
     "start-cjs": "node ./dist/node/index.cjs",
     "start-esm": "node ./dist/node/index.mjs",
