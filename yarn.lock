@@ -117,7 +117,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-secrets-manager@npm:^3.535.0, @aws-sdk/client-secrets-manager@npm:^3.624.0":
+"@aws-sdk/client-secrets-manager@npm:^3.535.0":
   version: 3.624.0
   resolution: "@aws-sdk/client-secrets-manager@npm:3.624.0"
   dependencies:
@@ -4001,7 +4001,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash-es@npm:^4, @types/lodash-es@npm:^4.17.12":
+"@types/lodash-es@npm:^4.17.12":
   version: 4.17.12
   resolution: "@types/lodash-es@npm:4.17.12"
   dependencies:
@@ -5009,15 +5009,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@xyo-network/archivist-node@workspace:."
   dependencies:
-    "@aws-sdk/client-secrets-manager": "npm:^3.624.0"
     "@babel/core": "npm:^7.25.2"
     "@babel/preset-env": "npm:^7.25.3"
     "@babel/preset-typescript": "npm:^7.24.7"
     "@types/jest": "npm:^29.5.12"
-    "@types/lodash-es": "npm:^4"
     "@types/node": "npm:^22.1.0"
     "@types/source-map-support": "npm:0.5.10"
-    "@xylabs/assert": "npm:^3.6.12"
     "@xylabs/eslint-config": "npm:^3.15.16"
     "@xylabs/eslint-config-flat": "npm:^3.15.16"
     "@xylabs/ts-scripts-yarn3": "npm:^3.15.16"
@@ -5026,25 +5023,16 @@ __metadata:
     "@xyo-network/node-app": "npm:^2.89.2"
     axios: "npm:^1.7.3"
     babel-jest: "npm:^29.7.0"
-    body-parser: "npm:^1.20.2"
     depcheck: "npm:^1.4.7"
     eslint: "npm:~9.8.0"
     eslint-plugin-unicorn: "npm:^55.0.0"
-    express: "npm:^4.19.2"
-    express-mung: "npm:^0.5.1"
-    http-status-codes: "npm:^2.3.0"
     jest: "npm:^29.7.0"
     jest-extended: "npm:^4.0.2"
     lodash-es: "npm:^4.17.21"
-    node-cache: "npm:^5.1.2"
     nodemon: "npm:^3.1.4"
-    pako: "npm:^2.1.0"
-    rollbar: "npm:^2.26.4"
     ts-jest: "npm:^29.2.4"
     ts-node: "npm:^10.9.2"
     typescript: "npm:^5.5.4"
-    winston: "npm:^3.14.1"
-    winston-transport: "npm:^4.7.1"
   languageName: unknown
   linkType: soft
 
@@ -7975,7 +7963,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"body-parser@npm:1.20.2, body-parser@npm:^1.20.1, body-parser@npm:^1.20.2":
+"body-parser@npm:1.20.2, body-parser@npm:^1.20.1":
   version: 1.20.2
   resolution: "body-parser@npm:1.20.2"
   dependencies:
@@ -16463,7 +16451,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollbar@npm:^2.26.1, rollbar@npm:^2.26.4":
+"rollbar@npm:^2.26.1":
   version: 2.26.4
   resolution: "rollbar@npm:2.26.4"
   dependencies:
@@ -18716,7 +18704,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"winston-transport@npm:^4.5.0, winston-transport@npm:^4.7.0, winston-transport@npm:^4.7.1":
+"winston-transport@npm:^4.5.0, winston-transport@npm:^4.7.0":
   version: 4.7.1
   resolution: "winston-transport@npm:4.7.1"
   dependencies:
@@ -18727,7 +18715,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"winston@npm:^3.14.1, winston@npm:^3.8.2":
+"winston@npm:^3.8.2":
   version: 3.14.1
   resolution: "winston@npm:3.14.1"
   dependencies:
