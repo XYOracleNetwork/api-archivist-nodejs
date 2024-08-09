@@ -4,6 +4,6 @@
   },
   "exec": "node ./dist/node/index.mjs",
   "ext": "ts, js, json",
-  "ignore": ["**/*.spec.ts"],
+  "ignore": ["dist", "node_modules", "**/*.spec.ts"],
   "watch": ["src"]
 }
