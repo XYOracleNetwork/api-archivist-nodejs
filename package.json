@@ -10,27 +10,27 @@
   "exports": {
     ".": {
       "node": {
-        "import": {
-          "types": "./dist/node/index.d.mts",
-          "default": "./dist/node/index.mjs"
-        },
         "require": {
           "types": "./dist/node/index.d.cts",
-          "default": "./dist/node/index.js"
+          "default": "./dist/node/index.cjs"
+        },
+        "import": {
+          "types": "./dist/node/index.d.ts",
+          "default": "./dist/node/index.cjs"
         }
       }
     },
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./README.md": "./README.md"
   },
-  "main": "dist/node/index.js",
+  "main": "dist/node/index.mjs",
   "module": "dist/node/index.mjs",
   "types": "dist/node/index.d.ts",
   "scripts": {
     "deploy": "echo Deploy not allowed!",
     "deploy3": "echo Deploy3 not allowed!",
-    "launch": "node --max-old-space-size=8192 --experimental-specifier-resolution=node ./dist/node/index.js",
     "start": "nodemon",
-    "start-cjs": "node ./dist/node/index.js",
+    "start-cjs": "node ./dist/node/index.cjs",
     "start-esm": "node ./dist/node/index.mjs",
     "test": "jest --no-cache --forceExit",
     "test:ci": "jest --runInBand --coverage --forceExit --passWithNoTests"
@@ -38,52 +38,40 @@
   "author": "Arie Trouw",
   "license": "LGPL-3.0-only",
   "dependencies": {
-    "@aws-sdk/client-secrets-manager": "^3.600.0",
-    "@xylabs/assert": "^3.5.2",
-    "@xyo-network/node-app": "^2.88.8",
-    "axios": "^1.7.2",
-    "body-parser": "^1.20.2",
-    "express": "^4.19.2",
-    "express-mung": "^0.5.1",
-    "http-status-codes": "^2.3.0",
-    "node-cache": "^5.1.2",
-    "pako": "^2.1.0",
-    "rollbar": "^2.26.4",
-    "winston": "^3.13.0",
-    "winston-transport": "^4.7.0"
+    "@xyo-network/node-app": "^2.89.2",
+    "lodash-es": "^4.17.21"
   },
   "devDependencies": {
-    "@babel/core": "^7.24.7",
-    "@babel/preset-env": "^7.24.7",
+    "@babel/core": "^7.25.2",
+    "@babel/preset-env": "^7.25.3",
     "@babel/preset-typescript": "^7.24.7",
     "@types/jest": "^29.5.12",
-    "@types/node": "^20.14.9",
+    "@types/node": "^22.1.0",
     "@types/source-map-support": "0.5.10",
-    "@xylabs/eslint-config": "^3.11.12",
-    "@xylabs/ts-scripts-yarn3": "^3.11.12",
-    "@xylabs/tsconfig": "^3.11.12",
+    "@xylabs/eslint-config": "^3.15.16",
+    "@xylabs/eslint-config-flat": "^3.15.16",
+    "@xylabs/ts-scripts-yarn3": "^3.15.16",
+    "@xylabs/tsconfig": "^3.15.16",
+    "@xylabs/tsconfig-jest": "^3.15.16",
     "babel-jest": "^29.7.0",
     "depcheck": "^1.4.7",
-    "eslint": "~8.57.0",
-    "eslint-plugin-unicorn": "^53.0.0",
+    "eslint": "~9.8.0",
+    "eslint-plugin-unicorn": "^55.0.0",
     "jest": "^29.7.0",
     "jest-extended": "^4.0.2",
     "nodemon": "^3.1.4",
-    "ts-jest": "^29.1.5",
+    "ts-jest": "^29.2.4",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.2"
+    "typescript": "^5.5.4"
   },
-  "resolutions": {
-    "quick-lru": "5.1.1"
-  },
-  "packageManager": "yarn@4.1.1",
+  "packageManager": "yarn@4.4.0",
   "private": true,
   "engines": {
-    "node": ">=20.10.0 <21"
+    "node": ">=22"
   },
   "volta": {
-    "node": "20.10.0",
-    "yarn": "1.22.19"
+    "node": "22.5.1",
+    "yarn": "4.4.0"
   },
-  "type": "commonjs"
+  "type": "module"
 }
