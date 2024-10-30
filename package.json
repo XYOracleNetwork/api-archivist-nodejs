@@ -10,11 +10,11 @@
   "exports": {
     ".": {
       "node": {
-        "import": {
-          "types": "./dist/node/index.d.ts",
-          "default": "./dist/node/index.mjs"
-        }
-      }
+        "types": "./dist/node/index.d.ts",
+        "default": "./dist/node/index.mjs"
+      },
+      "types": "./dist/node/index.d.ts",
+      "default": "./dist/node/index.mjs"
     },
     "./package.json": "./package.json",
     "./README.md": "./README.md"
@@ -33,31 +33,31 @@
     "test:ci": "jest --runInBand --coverage --forceExit --passWithNoTests"
   },
   "dependencies": {
-    "@xyo-network/node-app": "^3.0.1",
+    "@xyo-network/node-app": "^3.1.1",
     "lodash-es": "^4.17.21"
   },
   "devDependencies": {
-    "@babel/core": "^7.25.2",
-    "@babel/preset-env": "^7.25.4",
-    "@babel/preset-typescript": "^7.24.7",
-    "@types/jest": "^29.5.12",
-    "@types/node": "^22.5.1",
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-typescript": "^7.26.0",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.8.4",
     "@types/source-map-support": "0.5.10",
-    "@typescript-eslint/eslint-plugin": "^8.3.0",
-    "@typescript-eslint/parser": "^8.3.0",
-    "@xylabs/eslint-config-flat": "^4.0.7",
-    "@xylabs/ts-scripts-yarn3": "^4.0.7",
-    "@xylabs/tsconfig": "^4.0.7",
-    "@xylabs/tsconfig-jest": "^4.0.7",
+    "@typescript-eslint/eslint-plugin": "^8.12.2",
+    "@typescript-eslint/parser": "^8.12.2",
+    "@xylabs/eslint-config-flat": "^4.2.3",
+    "@xylabs/ts-scripts-yarn3": "^4.2.3",
+    "@xylabs/tsconfig": "^4.2.3",
+    "@xylabs/tsconfig-jest": "^4.1.0",
     "babel-jest": "^29.7.0",
     "depcheck": "^1.4.7",
-    "eslint": "~9.9.1",
+    "eslint": "^9.13.0",
     "eslint-import-resolver-typescript": "^3.6.3",
     "jest-extended": "^4.0.2",
-    "nodemon": "^3.1.4",
-    "typescript": "^5.5.4"
+    "nodemon": "^3.1.7",
+    "typescript": "^5.6.3"
   },
-  "packageManager": "yarn@4.4.1",
+  "packageManager": "yarn@4.5.1",
   "engines": {
     "node": ">=22"
   },
