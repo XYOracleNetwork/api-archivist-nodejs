@@ -1,13 +1,31 @@
 // eslint.config.mjs
 
-import { config as xylabsConfig } from '@xylabs/eslint-config-flat'
+
+import {   typescriptConfig,
+  unicornConfig,
+  workspacesConfig,
+  rulesConfig,
+  importConfig } from '@xylabs/eslint-config-flat'
 
 export default [
   {
-    ignores: ['.yarn/**', 'jest.config.cjs', '**/dist/**', 'dist', 'build/**', 'coverage', 'node_modules/**'],
+    ignores: ['.yarn/**', 'jest.config.cjs', '**/dist/**', 'dist', 'build/**', 'node_modules/**', 'public', '.storybook', 'storybook-static', 'eslint.config.mjs', 'coverage'],
   },
-  ...xylabsConfig,
+  unicornConfig,
+  workspacesConfig,
+  rulesConfig,
   {
-    rules: {},
+    ...typescriptConfig,
+    rules: {
+      ...typescriptConfig.rules,
+      '@typescript-eslint/consistent-type-imports': ['warn']
+    },
   },
+  {
+    ...importConfig,
+    rules: {
+      ...importConfig.rules,
+      'import-x/no-cycle': ['warn', { maxDepth: 5 }]
+    }
+  }
 ]

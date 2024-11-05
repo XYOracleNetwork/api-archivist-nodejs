@@ -1,71 +1,63 @@
 {
   "$schema": "http://json.schemastore.org/package.json",
   "name": "@xyo-network/archivist-node",
-  "publishConfig": {
-    "access": "public"
-  },
   "version": "2.0.96",
+  "private": true,
   "description": "XYO Archivist",
-  "sideeffects": false,
+  "license": "LGPL-3.0-only",
+  "author": "Arie Trouw",
+  "type": "module",
   "exports": {
     ".": {
       "node": {
-        "require": {
-          "types": "./dist/node/index.d.cts",
-          "default": "./dist/node/index.cjs"
-        },
-        "import": {
-          "types": "./dist/node/index.d.ts",
-          "default": "./dist/node/index.cjs"
-        }
-      }
+        "types": "./dist/node/index.d.ts",
+        "default": "./dist/node/index.mjs"
+      },
+      "types": "./dist/node/index.d.ts",
+      "default": "./dist/node/index.mjs"
     },
     "./package.json": "./package.json",
     "./README.md": "./README.md"
   },
-  "main": "dist/node/index.mjs",
   "module": "dist/node/index.mjs",
   "types": "dist/node/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "deploy": "echo Deploy not allowed!",
     "deploy3": "echo Deploy3 not allowed!",
     "start": "nodemon",
-    "start-cjs": "node ./dist/node/index.cjs",
     "start-esm": "node ./dist/node/index.mjs",
     "test": "jest --no-cache --forceExit",
     "test:ci": "jest --runInBand --coverage --forceExit --passWithNoTests"
   },
-  "author": "Arie Trouw",
-  "license": "LGPL-3.0-only",
   "dependencies": {
-    "@xyo-network/node-app": "^2.89.2",
+    "@xyo-network/node-app": "^3.1.2",
     "lodash-es": "^4.17.21"
   },
   "devDependencies": {
-    "@babel/core": "^7.25.2",
-    "@babel/preset-env": "^7.25.3",
-    "@babel/preset-typescript": "^7.24.7",
-    "@types/jest": "^29.5.12",
-    "@types/node": "^22.1.0",
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-typescript": "^7.26.0",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.8.7",
     "@types/source-map-support": "0.5.10",
-    "@xylabs/eslint-config": "^3.15.16",
-    "@xylabs/eslint-config-flat": "^3.15.16",
-    "@xylabs/ts-scripts-yarn3": "^3.15.16",
-    "@xylabs/tsconfig": "^3.15.16",
-    "@xylabs/tsconfig-jest": "^3.15.16",
+    "@typescript-eslint/eslint-plugin": "^8.12.2",
+    "@typescript-eslint/parser": "^8.12.2",
+    "@xylabs/eslint-config-flat": "^4.2.3",
+    "@xylabs/ts-scripts-yarn3": "^4.2.3",
+    "@xylabs/tsconfig": "^4.2.3",
+    "@xylabs/tsconfig-jest": "^4.1.0",
     "babel-jest": "^29.7.0",
     "depcheck": "^1.4.7",
-    "eslint": "~9.8.0",
-    "eslint-plugin-unicorn": "^55.0.0",
-    "jest": "^29.7.0",
+    "eslint": "^9.14.0",
+    "eslint-import-resolver-typescript": "^3.6.3",
     "jest-extended": "^4.0.2",
-    "nodemon": "^3.1.4",
-    "ts-jest": "^29.2.4",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.5.4"
+    "nodemon": "^3.1.7",
+    "typescript": "^5.6.3"
   },
-  "packageManager": "yarn@4.4.0",
-  "private": true,
+  "packageManager": "yarn@4.5.1",
   "engines": {
     "node": ">=22"
   },
@@ -73,5 +65,8 @@
     "node": "22.5.1",
     "yarn": "4.4.0"
   },
-  "type": "module"
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideeffects": false
 }
