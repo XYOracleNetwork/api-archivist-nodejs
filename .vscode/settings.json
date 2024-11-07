@@ -7,7 +7,7 @@
     ".DS_Store": true,
     "**/node_modules": true,
     "**/build": true,
-    "**/dist": true,
+    "**/dist": false,
     "**/.eslintcache": false,
     "**/.tsconfig.*": true,
     ".webpack": true,
@@ -24,7 +24,7 @@
   "editor.tabSize": 2,
   "editor.suggestSelection": "first",
   "editor.codeActionsOnSave": {
-    "source.fixAll": true
+    "source.fixAll": "explicit"
   },
   "eslint.alwaysShowStatus": true,
   "eslint.format.enable": true,

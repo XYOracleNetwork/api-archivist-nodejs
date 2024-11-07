@@ -1,80 +1,72 @@
 {
   "$schema": "http://json.schemastore.org/package.json",
   "name": "@xyo-network/archivist-node",
-  "publishConfig": {
-    "access": "public"
-  },
   "version": "2.0.96",
+  "private": true,
   "description": "XYO Archivist",
-  "sideeffects": false,
-  "esm5": "dist/esm/index.js",
+  "license": "LGPL-3.0-only",
+  "author": "Arie Trouw",
+  "type": "module",
   "exports": {
     ".": {
-      "esm5": "./dist/esm/index.js",
       "node": {
-        "import": "./dist/cjs/index.js",
-        "require": "./dist/cjs/index.js"
+        "types": "./dist/node/index.d.ts",
+        "default": "./dist/node/index.mjs"
       },
-      "default": "./dist/esm/index.js"
+      "types": "./dist/node/index.d.ts",
+      "default": "./dist/node/index.mjs"
     },
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./README.md": "./README.md"
   },
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
+  "module": "dist/node/index.mjs",
+  "types": "dist/node/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "deploy": "echo Deploy not allowed!",
     "deploy3": "echo Deploy3 not allowed!",
-    "launch": "node --max-old-space-size=8192 --experimental-specifier-resolution=node ./dist/cjs/index.js",
     "start": "nodemon",
+    "start-esm": "node ./dist/node/index.mjs",
     "test": "jest --no-cache --forceExit",
     "test:ci": "jest --runInBand --coverage --forceExit --passWithNoTests"
   },
-  "author": "Arie Trouw",
-  "license": "LGPL-3.0",
   "dependencies": {
-    "@aws-sdk/client-secrets-manager": "^3.326.0",
-    "@xylabs/assert": "^2.7.6",
-    "@xyo-network/node-app": "^2.56.2",
-    "axios": "^1.4.0",
-    "body-parser": "^1.20.2",
-    "express": "^4.18.2",
-    "express-mung": "^0.5.1",
-    "http-status-codes": "^2.2.0",
-    "node-cache": "^5.1.2",
-    "pako": "^2.1.0",
-    "rollbar": "^2.26.1",
-    "winston": "^3.8.2",
-    "winston-transport": "^4.5.0"
+    "@xyo-network/node-app": "^3.1.2",
+    "lodash-es": "^4.17.21"
   },
   "devDependencies": {
-    "@babel/core": "^7.21.8",
-    "@babel/preset-env": "^7.21.5",
-    "@types/jest": "^29.5.1",
-    "@types/node": "^18.16.3",
-    "@types/source-map-support": "0.5.6",
-    "@xylabs/eslint-config": "^2.17.6",
-    "@xylabs/ts-scripts-yarn3": "^2.17.6",
-    "@xylabs/tsconfig": "^2.17.6",
-    "babel-jest": "^29.5.0",
-    "depcheck": "^1.4.3",
-    "eslint": "~8.39.0",
-    "jest": "^29.5.0",
-    "jest-extended": "^3.2.4",
-    "nodemon": "^2.0.22",
-    "ts-jest": "^29.1.0",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.0.4"
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-typescript": "^7.26.0",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.8.7",
+    "@types/source-map-support": "0.5.10",
+    "@typescript-eslint/eslint-plugin": "^8.12.2",
+    "@typescript-eslint/parser": "^8.12.2",
+    "@xylabs/eslint-config-flat": "^4.2.3",
+    "@xylabs/ts-scripts-yarn3": "^4.2.3",
+    "@xylabs/tsconfig": "^4.2.3",
+    "@xylabs/tsconfig-jest": "^4.1.0",
+    "babel-jest": "^29.7.0",
+    "depcheck": "^1.4.7",
+    "eslint": "^9.14.0",
+    "eslint-import-resolver-typescript": "^3.6.3",
+    "jest-extended": "^4.0.2",
+    "nodemon": "^3.1.7",
+    "typescript": "^5.6.3"
   },
-  "resolutions": {
-    "quick-lru": "5.1.1"
-  },
-  "packageManager": "yarn@3.3.1",
-  "private": true,
+  "packageManager": "yarn@4.5.1",
   "engines": {
-    "node": ">=18.13.0 <19"
+    "node": ">=22"
   },
   "volta": {
-    "node": "18.13.0",
-    "yarn": "1.22.19"
-  }
+    "node": "22.5.1",
+    "yarn": "4.4.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideeffects": false
 }

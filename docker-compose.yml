@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  archivist:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
