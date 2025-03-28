@@ -22,7 +22,7 @@ jobs:
       - name: install
         run: yarn install
       - name: build
-        run: yarn build
+        run: yarn xy build
   # test:
   #   runs-on: ubuntu-latest
   #   env:
