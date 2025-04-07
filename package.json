@@ -7,57 +7,29 @@
   "license": "LGPL-3.0-only",
   "author": "Arie Trouw",
   "type": "module",
-  "exports": {
-    ".": {
-      "node": {
-        "types": "./dist/node/index.d.ts",
-        "default": "./dist/node/index.mjs"
-      },
-      "types": "./dist/node/index.d.ts",
-      "default": "./dist/node/index.mjs"
-    },
-    "./package.json": "./package.json",
-    "./README.md": "./README.md"
-  },
-  "module": "dist/node/index.mjs",
-  "types": "dist/node/index.d.ts",
-  "files": [
-    "dist"
-  ],
   "scripts": {
-    "deploy": "echo Deploy not allowed!",
-    "deploy3": "echo Deploy3 not allowed!",
     "start": "nodemon",
-    "start-esm": "node ./dist/node/index.mjs",
-    "test": "jest --no-cache --forceExit",
-    "test:ci": "jest --runInBand --coverage --forceExit --passWithNoTests"
+    "start-esm": "node ./dist/node/index.mjs"
   },
   "dependencies": {
-    "@xyo-network/node-app": "^3.2.3",
-    "lodash-es": "^4.17.21"
+    "@xyo-network/node-app": "^3.4.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.26.0",
-    "@babel/preset-env": "^7.26.0",
-    "@babel/preset-typescript": "^7.26.0",
-    "@types/jest": "^29.5.14",
-    "@types/node": "^22.10.2",
+    "@types/node": "^22.14.0",
     "@types/source-map-support": "0.5.10",
-    "@typescript-eslint/eslint-plugin": "^8.19.0",
-    "@typescript-eslint/parser": "^8.19.0",
-    "@xylabs/eslint-config-flat": "^4.2.6",
-    "@xylabs/ts-scripts-yarn3": "^4.2.6",
-    "@xylabs/tsconfig": "^4.2.6",
-    "@xylabs/tsconfig-jest": "^4.1.0",
-    "babel-jest": "^29.7.0",
+    "@typescript-eslint/eslint-plugin": "^8.29.0",
+    "@typescript-eslint/parser": "^8.29.0",
+    "@xylabs/eslint-config-flat": "^6.2.1",
+    "@xylabs/ts-scripts-yarn3": "^6.2.1",
+    "@xylabs/tsconfig": "^6.2.1",
     "depcheck": "^1.4.7",
-    "eslint": "^9.17.0",
-    "eslint-import-resolver-typescript": "^3.7.0",
-    "jest-extended": "^4.0.2",
+    "eslint": "^9.24.0",
+    "eslint-import-resolver-typescript": "^4.3.1",
+    "knip": "^5.47.0",
     "nodemon": "^3.1.9",
-    "typescript": "^5.7.2"
+    "typescript": "^5.8.3"
   },
-  "packageManager": "yarn@4.6.0",
+  "packageManager": "yarn@4.8.0",
   "engines": {
     "node": ">=22"
   },
