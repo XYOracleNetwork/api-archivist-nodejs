@@ -1,13 +1,4 @@
 {
-  "compilerOptions": {
-    "emitDecoratorMetadata": true,
-    "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "typeRoots": []
-  },
   "exclude": ["./node_modules", "./**/node_modules", "./dist", "./**/dist", "./**/docs", ".*"],
-  "extends": "@xylabs/tsconfig",
-  "include": [
-    "./src", "./**/src"
-  ]
+  "extends": "@xylabs/tsconfig"
 }

@@ -76,7 +76,7 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           kubectl --namespace ${{ vars.NAMESPACE }} set image deployment/deployment app=$ECR_REGISTRY/${ECR_REPOSITORY}:${IMAGE_TAG}
-          kubectl rollout status deployment
+          kubectl --namespace ${{ vars.NAMESPACE }} rollout status deployment/deployment --timeout=5m
 
       - name: invalidate cloudfront distribution and wait for completion
         run: |
