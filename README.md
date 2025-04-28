@@ -9,6 +9,7 @@
 [![codacy-badge][]][codacy-link]
 [![codeclimate-badge][]][codeclimate-link]
 [![codeclimate-coverage-badge][]][codeclimate-coverage-link]
+[![license-badge][]][license-link]
 
 ## Table of Contents
 
@@ -53,3 +54,5 @@ See the [LICENSE](LICENSE) file for license details
 [codeclimate-link]: https://codeclimate.com/github/XYOracleNetwork/api-archivist-nodejs/maintainability
 [codeclimate-coverage-badge]: https://api.codeclimate.com/v1/badges/dc0bb5770f231f22f826/test_coverage
 [codeclimate-coverage-link]: https://codeclimate.com/github/XYOracleNetwork/api-archivist-nodejs/test_coverage
+[license-badge]: https://img.shields.io/github/license/XYOracleNetwork/api-archivist-nodejs
+[license-link]: https://github.com/XYOracleNetwork/api-archivist-nodejs/blob/main/LICENSE
