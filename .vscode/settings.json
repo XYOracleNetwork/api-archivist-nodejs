@@ -15,6 +15,15 @@
     ".rollup.cache": true,
     ".yarn": true
   },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/*.code-search": true,
+    "**/.yarn": true,
+    "**/yarn.lock": true,
+    "**/build": true,
+    "**/dist": true,
+  },
   "editor.formatOnSave": true,
   "editor.quickSuggestions": {
     "comments": "on",
